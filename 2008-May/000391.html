@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Transport Protocol ISO-TP
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Transport%20Protocol%20ISO-TP&In-Reply-To=%3C483C7139.3010306%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000390.html">
+   <LINK REL="Next"  HREF="000387.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Transport Protocol ISO-TP</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Transport%20Protocol%20ISO-TP&In-Reply-To=%3C483C7139.3010306%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Transport Protocol ISO-TP">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue May 27 22:38:17 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000390.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+        <LI>Next message: <A HREF="000387.html">[Socketcan-users] ejectable canyons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#391">[ date ]</a>
+              <a href="thread.html#391">[ thread ]</a>
+              <a href="subject.html#391">[ subject ]</a>
+              <a href="author.html#391">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ren&#233; M&#252;ller wrote:
+&gt;<i> (..) we have the &quot;problems&quot; with the direct feedback, too. That's the 
+</I>&gt;<i> reason why we decided to step away from ISO 15765-2 at this point and 
+</I>&gt;<i> integrate ISO-TP as part of our application. This way we don't need to 
+</I>&gt;<i> implement the feedback as stated in the ISO, but in some proprietary 
+</I>&gt;<i> way. We need ISO-TP only in this application and this approach avoids 
+</I>&gt;<i> headache with the datagram design, as you mentioned already.
+</I>
+:<i>-]
+</I>
+&gt;<i>
+</I>&gt;<i> I know that this proprietary approach is not the best, as the 
+</I>&gt;<i> transport layer is only limited reusable. Maybe we will switch over to 
+</I>&gt;<i> the integration of transport protocols in socketcan at some later 
+</I>&gt;<i> point. At the moment we have some limited time and implementation of 
+</I>&gt;<i> ISO-TP is much easier, when you can do some simplifications.
+</I>&gt;<i>
+</I>&gt;<i> For now, I offer you my help with ISO-TP and socketcan. I'd love to 
+</I>&gt;<i> test your implementation.
+</I>&gt;<i>
+</I>
+Thanks! Somewhat nice to read that you obviously trapped into exactly 
+the problems i expected while reading the spec the first time ... so i 
+can follow your decision to create a different approach very good. I 
+assumed the feedback to the application not to be that important for 
+application programmers as you need to check for timeout conditions 
+anyway (on application level!).
+
+I'll keep you in touch with my approaches &amp; alpha code ;-)
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000390.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+	<LI>Next message: <A HREF="000387.html">[Socketcan-users] ejectable canyons
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#391">[ date ]</a>
+              <a href="thread.html#391">[ thread ]</a>
+              <a href="subject.html#391">[ subject ]</a>
+              <a href="author.html#391">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] data not been recieved correctly
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20data%20not%20been%20recieved%20correctly&In-Reply-To=%3CAANLkTik6jEcpykRZ2ezEpc9CmZrrfPJGmfJdalR6NILA%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001422.html">
+   <LINK REL="Next"  HREF="001424.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] data not been recieved correctly</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20data%20not%20been%20recieved%20correctly&In-Reply-To=%3CAANLkTik6jEcpykRZ2ezEpc9CmZrrfPJGmfJdalR6NILA%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] data not been recieved correctly">nudtrobert at gmail.com
+       </A><BR>
+    <I>Thu Jun 10 06:00:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001422.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+        <LI>Next message: <A HREF="001424.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1423">[ date ]</a>
+              <a href="thread.html#1423">[ thread ]</a>
+              <a href="subject.html#1423">[ subject ]</a>
+              <a href="author.html#1423">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+The bitrate is 500000, the SPI speed is 5*1000*1000. Is That too high?
+ Cansend test is all right, board B showed &quot;can0  123  [0]&quot;.
+
+In Makefile, CONFIG_CAN_CALC_BITTIMING=y, the caculated Tq is 166 ns,
+prop_seg = 4, phase_seg1 = 5, phase_seg2 = 2. However, I found that people
+always set them as follows in 5000000 bitrate: prop_seg = 7, phase_seg1 = 4,
+phase_seg2 = 4. Is that does matter?
+
+I tested many times with different parameters. Two clues are found, one has
+been mentioned before is that if -L does not been set, whenever the error
+appears, the length of the wrong frame is 8 bytes.
+ The other clue is related to the first one,  if -L is set to 4 (or 2, or
+6), such as
+./cangen can0 -D i -L 4 -v -g 20
+or even
+./cangen can0  -D i -L 4 -v -g 1
+Things are OK. But if -L is set to 8 as follows, error happens.
+./dual_cangen can0 -L 8 -I 222 -D i -g 1
+./dual_cangen can0 -L 8 -I 222 -D i -g 4
+./dual_cangen can0 -L 8 -I 222 -D i -g 8
+./dual_cangen can0 -L 8 -I 222 -D i -g 20
+When set -g 20 -L 8, it is 8*50 = 400Bps = 0.4KBps. Error will happen in
+this set.
+When set -g 1 -L 4, it is 4*1000 = 4KBps. No error in this set.
+
+Thanks for your helps!
+
+Regards
+Robert
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100610/9084fde8/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100610/9084fde8/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001422.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+	<LI>Next message: <A HREF="001424.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1423">[ date ]</a>
+              <a href="thread.html#1423">[ thread ]</a>
+              <a href="subject.html#1423">[ subject ]</a>
+              <a href="author.html#1423">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN communication with MCP2515
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Cc79f5d650909301413x1d5ae1aak176c4915e8e808b5%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001061.html">
+   <LINK REL="Next"  HREF="001064.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN communication with MCP2515</H1>
+    <B>Erik Calissendorff</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Cc79f5d650909301413x1d5ae1aak176c4915e8e808b5%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] CAN communication with MCP2515">gumstix at tansaki.com
+       </A><BR>
+    <I>Wed Sep 30 23:13:05 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001061.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+        <LI>Next message: <A HREF="001064.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1062">[ date ]</a>
+              <a href="thread.html#1062">[ thread ]</a>
+              <a href="subject.html#1062">[ subject ]</a>
+              <a href="author.html#1062">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian and thanks for you help.
+
+I have attached your patch to SVN rev 1064, below is the errors that I
+get when activating the interface:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ip link set can0 type can bitrate 250000
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ip link set can0 up
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ------------[ cut here ]------------
+WARNING: at /home/overo-oe/tmp/work/overo-angstrom-linux-gnueabi/socketcan-modules-0.0+svnr1064-r46/trunk/kernel/2.6/drivers/net/can/mcp251x.c:796
+mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x]()
+Modules linked in: mcp251x can_dev
+[&lt;c00f45d4&gt;] (unwind_backtrace+0x0/0xdc) from [&lt;c0116278&gt;]
+(warn_slowpath_common+0x4c/0x80)
+[&lt;c0116278&gt;] (warn_slowpath_common+0x4c/0x80) from [&lt;bf008ef8&gt;]
+(mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x])
+[&lt;bf008ef8&gt;] (mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x]) from
+[&lt;c0126d1c&gt;] (worker_thread+0x19c/0x218)
+[&lt;c0126d1c&gt;] (worker_thread+0x19c/0x218) from [&lt;c012a6b0&gt;] (kthread+0x78/0x80)
+[&lt;c012a6b0&gt;] (kthread+0x78/0x80) from [&lt;c00f0800&gt;] (kernel_thread_exit+0x0/0x8)
+---[ end trace 39731716fb7a3d35 ]---
+------------[ cut here ]------------
+WARNING: at /home/overo-oe/tmp/work/overo-angstrom-linux-gnueabi/socketcan-modules-0.0+svnr1064-r46/trunk/kernel/2.6/drivers/net/can/mcp251x.c:796
+mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x]()
+Modules linked in: mcp251x can_dev
+[&lt;c00f45d4&gt;] (unwind_backtrace+0x0/0xdc) from [&lt;c0116278&gt;]
+(warn_slowpath_common+0x4c/0x80)
+[&lt;c0116278&gt;] (warn_slowpath_common+0x4c/0x80) from [&lt;bf008ef8&gt;]
+(mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x])
+[&lt;bf008ef8&gt;] (mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x]) from
+[&lt;c0126d1c&gt;] (worker_thread+0x19c/0x218)
+[&lt;c0126d1c&gt;] (worker_thread+0x19c/0x218) from [&lt;c012a6b0&gt;] (kthread+0x78/0x80)
+[&lt;c012a6b0&gt;] (kthread+0x78/0x80) from [&lt;c00f0800&gt;] (kernel_thread_exit+0x0/0x8)
+---[ end trace 39731716fb7a3d36 ]---
+
+What I should mention is that I do not have a reset pin to the mcp251x
+so I try to reset it with the SPI message, see my patch to the
+linux-omap3-2.6.31:
+
+---
+diff -Nurd a/arch/arm/mach-omap2/board-overo.c
+b/arch/arm/mach-omap2/board-overo.
+c
+--- a/arch/arm/mach-omap2/board-overo.c 2009-09-26 13:06:18.000000000 +0200
++++ b/arch/arm/mach-omap2/board-overo.c 2009-09-30 16:43:57.000000000 +0200
+@@ -56,6 +56,7 @@
+ #define OVERO_GPIO_BT_XGATE    15
+ #define OVERO_GPIO_W2W_NRESET  16
+ #define OVERO_GPIO_PENDOWN     114
++#define OVERO_GPIO_CAN_INT     114
+ #define OVERO_GPIO_BT_NRESET   164
+ #define OVERO_GPIO_USBH_CPEN   168
+ #define OVERO_GPIO_USBH_NRESET 183
+@@ -95,7 +96,7 @@
+ };
+
+ static void __init overo_ads7846_init(void)
+-{
++{/*
+        if ((gpio_request(OVERO_GPIO_PENDOWN, &quot;ADS7846_PENDOWN&quot;) == 0) &amp;&amp;
+            (gpio_direction_input(OVERO_GPIO_PENDOWN) == 0)) {
+                gpio_export(OVERO_GPIO_PENDOWN, 0);
+@@ -103,12 +104,72 @@
+                printk(KERN_ERR &quot;could not obtain gpio for ADS7846_PENDOWN\n&quot;);
+                return;
+        }
+-}
++*/}
+
+ #else
+ static inline void __init overo_ads7846_init(void) { return; }
+ #endif
+
++/* CAN mcp251x SPI driver
++   Added by Erik Calissendorff 2009-09-06 */
++
++#include &lt;linux/spi/mcp251x.h&gt;
++
++static struct omap2_mcspi_device_config mcp251x_mcspi_config = {
++       .turbo_mode     = 0,
++       .single_channel = 1,    /* 0: slave, 1: master */
++};
++
++#define MCP251X_INSTRUCTION_RESET              0xC0
++/* MPC251x registers */
++#define MCP251X_CANSTAT              0x0e
++#define MCP251X_CANCTRL              0x0f
++
++static int mcp251x_setup(struct spi_device *spi)
++{
++       u8 spi_tx = MCP251X_INSTRUCTION_RESET;
++       int ret;
++
++       printk(KERN_INFO &quot;Running: mcp251x_setup&quot;);
++       gpio_set_value(174, 1);
++       msleep(5);
++       gpio_set_value(174, 0);
++       msleep(5);
++
++       ret=spi_write(spi, &amp;spi_tx, 1);
++
++       msleep(5);
++       gpio_set_value(174, 1);
++
++       msleep(5);
++       gpio_set_value(174, 0);
++
++       return 0;
++}
++
++static struct mcp251x_platform_data mcp251x_config = {
++       .oscillator_frequency = 20000000,
++       .board_specific_setup = &amp;mcp251x_setup,
++       .model = CAN_MCP251X_MCP2515,
++       .power_enable = NULL,
++       .transceiver_enable = NULL,
++};
++
++static void __init overo_mcp251x_init(void)
++{
++printk(KERN_INFO &quot;Running: overo_mcp251x_init\n&quot;);
++       if ((gpio_request(OVERO_GPIO_CAN_INT, &quot;MCP251X_INTERRUPT&quot;) == 0) &amp;&amp;
++           (gpio_direction_input(OVERO_GPIO_CAN_INT) == 0)) {
++               gpio_export(OVERO_GPIO_CAN_INT, 0);
++       } else {
++               printk(KERN_ERR &quot;could not obtain gpio for
+MCP251X_INTERRUPT\n&quot;);
++               return;
++       }
++}
++
++/* End of CAN mcp251x SPI driver */
++
++
+ #if defined(CONFIG_SMSC911X) || defined(CONFIG_SMSC911X_MODULE)
+
+ #include &lt;linux/smsc911x.h&gt;
+@@ -510,6 +571,7 @@
+ }
+
+ static struct spi_board_info overo_spi_board_info[] __initdata = {
++/*
+ #if defined(CONFIG_TOUCHSCREEN_ADS7846) || \
+        defined(CONFIG_TOUCHSCREEN_ADS7846_MODULE)
+        {
+@@ -533,11 +595,25 @@
+                .mode                   = SPI_MODE_3,        },
+ #endif
++*/
++       {
++               .modalias               = &quot;mcp251x&quot;,
++               .bus_num                = 1,
++               .chip_select            = 0,
++               // this can be increased to 10MHz with 15 part
++               // SPI clock is divided down 13MHz, so granularity is
+not too goo
+d
++               // 13MHz, 6.5MHz, 4.33MHz, 3.25MHz, 2.6MHz, 2.1666MHz etc.
++               .max_speed_hz = 6500000,
++               .controller_data        = &amp;mcp251x_mcspi_config,
++               .irq                    = OMAP_GPIO_IRQ(OVERO_GPIO_CAN_INT),
++               .platform_data          = &amp;mcp251x_config,
++       },
+ };
+
+ static int __init overo_spi_init(void)
+ {
+-       overo_ads7846_init();
++//     overo_ads7846_init();
++       overo_mcp251x_init();
+        spi_register_board_info(overo_spi_board_info,
+                        ARRAY_SIZE(overo_spi_board_info));
+        return 0;
+diff -Nurd a/include/linux/spi/mcp251x.h b/include/linux/spi/mcp251x.h
+--- a/include/linux/spi/mcp251x.h       1970-01-01 01:00:00.000000000 +0100
++++ b/include/linux/spi/mcp251x.h       2009-09-26 13:41:00.000000000 +0200
+@@ -0,0 +1,34 @@
++#ifndef __CAN_PLATFORM_MCP251X_H__
++#define __CAN_PLATFORM_MCP251X_H__
++
++/*
++ *
++ * CAN bus driver for Microchip 251x CAN Controller with SPI Interface
++ *
++ */
++
++/**
++ * struct mcp251x_platform_data - MCP251X SPI CAN controller platform data
++ * @oscillator_frequency:       - oscillator frequency in Hz
++ * @model:                      - actual type of chip
++ * @board_specific_setup:       - called before probing the chip (power,reset)
++ * @transceiver_enable:         - called to power on/off the transceiver
++ * @power_enable:               - called to power on/off the mcp *and* the
++ *                                transceiver
++ *
++ * Please note that you should define power_enable or transceiver_enable or
++ * none of them. Defining both of them is no use.
++ *
++ */
++
++struct mcp251x_platform_data {
++       unsigned long oscillator_frequency;
++       int model;
++#define CAN_MCP251X_MCP2510 0
++#define CAN_MCP251X_MCP2515 1
++       int (*board_specific_setup)(struct spi_device *spi);
++       int (*transceiver_enable)(int enable);
++       int (*power_enable) (int enable);
++};
++
++#endif /* __CAN_PLATFORM_MCP251X_H__ */
+---
+
+I have also tried to patch the u-boot-omap3 but unsure if the change
+is needed or correct:
+
+---
+diff -Nurd a/board/overo/overo.h b/board/overo/overo.h
+--- a/board/overo/overo.h       2009-09-30 19:08:36.000000000 +0200
++++ b/board/overo/overo.h       2009-09-30 19:17:57.000000000 +0200
+@@ -268,7 +268,7 @@
+        MUX_VAL(CP(MCSPI1_CLK),         (IEN  | PTD | DIS | M0)) /*McSPI1_CLK*/\
+        MUX_VAL(CP(MCSPI1_SIMO),        (IEN  | PTD | DIS | M0))
+/*McSPI1_SIMO */\
+        MUX_VAL(CP(MCSPI1_SOMI),        (IEN  | PTD | DIS | M0))
+/*McSPI1_SOMI */\
+-       MUX_VAL(CP(MCSPI1_CS0),         (IEN  | PTD | EN  | M0)) /*McSPI1_CS0*/\
++       MUX_VAL(CP(MCSPI1_CS0),         (IDIS | PTD | EN  | M0)) /*McSPI1_CS0*/\
+        MUX_VAL(CP(MCSPI1_CS1),         (IDIS | PTD | EN  | M0)) /*McSPI1_CS1*/\
+        MUX_VAL(CP(MCSPI1_CS2),         (IEN  | PTU | DIS | M4)) /*GPIO_176 */\
+                                                                 /* -
+LAN_INTR */\
+---
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001061.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+	<LI>Next message: <A HREF="001064.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1062">[ date ]</a>
+              <a href="thread.html#1062">[ thread ]</a>
+              <a href="subject.html#1062">[ subject ]</a>
+              <a href="author.html#1062">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

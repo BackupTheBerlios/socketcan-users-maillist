@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to receive data from	can	busvia	SJA1000-iomem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20data%20from%0A%09can%09busvia%09SJA1000-iomem&In-Reply-To=%3C46865FFF.5070502%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000137.html">
+   <LINK REL="Next"  HREF="000135.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to receive data from	can	busvia	SJA1000-iomem</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20data%20from%0A%09can%09busvia%09SJA1000-iomem&In-Reply-To=%3C46865FFF.5070502%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Unable to receive data from	can	busvia	SJA1000-iomem">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sat Jun 30 15:51:59 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000137.html">[Socketcan-users] Unable to receive data from can	busvia	SJA1000-iomem
+</A></li>
+        <LI>Next message: <A HREF="000135.html">[Socketcan-users] Unable to receive data from can	bus	via	SJA1000-iomem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#138">[ date ]</a>
+              <a href="thread.html#138">[ thread ]</a>
+              <a href="subject.html#138">[ subject ]</a>
+              <a href="author.html#138">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Riedmann, Kai wrote:
+&gt;&gt;<i> If you think you've found a bug in the trunk, please report it to the
+</I>&gt;&gt;<i> mailing list. As socket-can is currently proposed for linux mainline
+</I>&gt;&gt;<i> inclusion, all bugs which can be fixed before that are good bugs :-)
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I will send a diff to this list with all changes we did but at first we want to get everything to run before telling you there are bugs and these &quot;bugs&quot; are just on our side this won't help you.
+</I>
+Hm - even when we're currently having only some changes inside the CAN
+core that had been caused by detail discussions on the kernel netdev
+mailing list, i do not assume to have any issues inside the stuff placed
+in linux/net/can/*. If you have some suggestions, ideas or fixes for the
+CAN core stuff (af_can.c, raw.c, bcm.c) you should post them NOW.
+Changes in linux/drivers/net/can/* are assumed anyway - but this is
+device driver stuff and does not primary affect the protocol family PF_CAN.
+
+Btw. the current head (== rev399) is the best socketcan we ever had ;-)
+There had been major improvements in kernel lockings and for hot
+unplugging of CAN netdevices (e.g. if you hard unplug your PEAK USB
+adaptors).
+
+Best regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000137.html">[Socketcan-users] Unable to receive data from can	busvia	SJA1000-iomem
+</A></li>
+	<LI>Next message: <A HREF="000135.html">[Socketcan-users] Unable to receive data from can	bus	via	SJA1000-iomem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#138">[ date ]</a>
+              <a href="thread.html#138">[ thread ]</a>
+              <a href="subject.html#138">[ subject ]</a>
+              <a href="author.html#138">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

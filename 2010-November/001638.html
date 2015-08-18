@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE0382C.7030108%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001637.html">
+   <LINK REL="Next"  HREF="001639.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE0382C.7030108%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">wg at grandegger.com
+       </A><BR>
+    <I>Sun Nov 14 20:27:40 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001637.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001639.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1638">[ date ]</a>
+              <a href="thread.html#1638">[ thread ]</a>
+              <a href="subject.html#1638">[ subject ]</a>
+              <a href="author.html#1638">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/14/2010 08:14 PM, Willy Lambert wrote:
+&gt;<i> At the moment I have :
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# ip -d -s link show can0
+</I>&gt;&gt;<i> 17: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;<i> qlen 10
+</I>&gt;&gt;<i>     link/can
+</I>&gt;&gt;<i>     can state ERROR-ACTIVE restart-ms 10000
+</I>&gt;&gt;<i>     bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>     sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>     clock 8000000
+</I>&gt;&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>     0          0          0          0          0          0
+</I>&gt;&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>     0          0        0       0       0       0
+</I>&gt;&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>     0          0        0       0       0       0
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> candump does not show anything !
+</I>
+What does &quot;cat /proc/interrupts&quot; show? Are you sure you are using the
+correct interrupt numbers?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001637.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001639.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1638">[ date ]</a>
+              <a href="thread.html#1638">[ thread ]</a>
+              <a href="subject.html#1638">[ subject ]</a>
+              <a href="author.html#1638">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

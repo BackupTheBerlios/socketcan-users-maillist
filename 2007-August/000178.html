@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kernel integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20integration&In-Reply-To=%3C20070802090218.GK9840%40enneenne.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000177.html">
+   <LINK REL="Next"  HREF="000180.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kernel integration</H1>
+    <B>Rodolfo Giometti</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20integration&In-Reply-To=%3C20070802090218.GK9840%40enneenne.com%3E"
+       TITLE="[Socketcan-users] Kernel integration">giometti at enneenne.com
+       </A><BR>
+    <I>Thu Aug  2 11:02:18 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000177.html">[Socketcan-users] Kernel integration
+</A></li>
+        <LI>Next message: <A HREF="000180.html">[Socketcan-users] Kernel integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#178">[ date ]</a>
+              <a href="thread.html#178">[ thread ]</a>
+              <a href="subject.html#178">[ subject ]</a>
+              <a href="author.html#178">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Aug 01, 2007 at 10:34:46PM +0200, Oliver Hartkopp wrote:
+&gt;<i> 
+</I>&gt;<i> currently it looks like the main problem for the kernel inclusion is the
+</I>&gt;<i> missing review from the netdev guys, because ...
+</I>&gt;<i> 
+</I>&gt;<i> - the CAN protocol family does not look very fancy and interesting
+</I>&gt;<i> - i was stated to be too 'pushy' (as i asked for an answer to my reply
+</I>&gt;<i> after one week)
+</I>&gt;<i> - other things like NAPI have higher priority
+</I>&gt;<i> 
+</I>&gt;<i> So we have to be patient and i personally have to perform the task &quot;It
+</I>&gt;<i> is therefore your responsibility to make the work interesting to the
+</I>&gt;<i> networking developers and fun to review.&quot; given by David Miller ...
+</I>&gt;<i> 
+</I>&gt;<i> But this task is hard to perform, when there's no feedback from the
+</I>&gt;<i> netdev guys and when it's not very interesting by design (of CAN) ;-(
+</I>&gt;<i> I have no idea when PF_CAN becomes that interesting to the major players
+</I>&gt;<i> like Patrik McHardy and David Miller, so that the code gets finally
+</I>&gt;<i> reviewed. I assume that is no sufficient answer for your question. Btw.
+</I>&gt;<i> i backed off for two weeks now and i'm patient.
+</I>
+I see. Did you try in sending your patches to Andrew Morton
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">akpm at linux-foundation.org</A>&gt; explaining the situation?
+
+&gt;<i> ps. The latest posted patches on the netdev ML do not work with the
+</I>&gt;<i> 2.6.23-rc1 as kmem_cache_create() in af_can.c lost it's destructor
+</I>&gt;<i> parameter. This is just updated in the socketcan-SVN but i'm currently
+</I>&gt;<i> waiting for any feedback before posting a new patch series. I don't want
+</I>&gt;<i> to jam the netdev ML ...
+</I>
+Ok. I see... but I'm asking to myself if some GIT repository of the
+&quot;proposed code&quot; exists on some site. It could be very useful for
+people which wish using SocketCAN while you are trying kernel
+inclusion, and for developers which wish sending patches for this
+&quot;latest release&quot;.
+
+Ciao,
+
+Rodolfo
+
+-- 
+
+GNU/Linux Solutions                  e-mail:    <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giometti at enneenne.com</A>
+Linux Device Driver                             <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giometti at gnudd.com</A>
+Embedded Systems                     		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giometti at linux.it</A>
+UNIX programming                     phone:     +39 349 2432127
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20070802/d00a68eb/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20070802/d00a68eb/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000177.html">[Socketcan-users] Kernel integration
+</A></li>
+	<LI>Next message: <A HREF="000180.html">[Socketcan-users] Kernel integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#178">[ date ]</a>
+              <a href="thread.html#178">[ thread ]</a>
+              <a href="subject.html#178">[ subject ]</a>
+              <a href="author.html#178">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

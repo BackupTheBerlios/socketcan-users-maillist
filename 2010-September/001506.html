@@ -1,0 +1,402 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP 2515 RX problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3C4C8E3507.6090305%40serenergy.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001505.html">
+   <LINK REL="Next"  HREF="001507.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP 2515 RX problems</H1>
+    <B>Benny B. Simonsen</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3C4C8E3507.6090305%40serenergy.com%3E"
+       TITLE="[Socketcan-users] MCP 2515 RX problems">bbs at serenergy.com
+       </A><BR>
+    <I>Mon Sep 13 16:28:23 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001505.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+        <LI>Next message: <A HREF="001507.html">[Socketcan-users] Using MCP251x SPI CAN cotroller driver in older	linux kernel distribution
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1506">[ date ]</a>
+              <a href="thread.html#1506">[ thread ]</a>
+              <a href="subject.html#1506">[ subject ]</a>
+              <a href="author.html#1506">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>  Hi Erik,
+
+No as written somewhere in this thread I still loose some packets and I 
+should use my system as a CAN logger (read: can't really accept dropped 
+frames).
+I only applied the patch I send earlier.
+
+
+BR
+Benny
+
+Den 13-09-2010 14:55, Erik Calissendorff skrev:
+&gt;<i> Thanks Benny,
+</I>&gt;<i>
+</I>&gt;<i> Did you manage to remove all the problem in your system? Did you do
+</I>&gt;<i> anything else than applying the patch you attached earlier?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Kindest regards,
+</I>&gt;<i>
+</I>&gt;<i> //Erik
+</I>&gt;<i>
+</I>&gt;<i> On Mon, Sep 13, 2010 at 8:52 AM, Benny B. Simonsen&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bbs at serenergy.com</A>&gt;  wrote:
+</I>&gt;&gt;<i>   Den 12-09-2010 21:24, Erik Calissendorff skrev:
+</I>&gt;&gt;&gt;<i> Hi we are having similar problem with our MCP2515 connected to a Gumstix
+</I>&gt;&gt;&gt;<i> Overo.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Below is a dump from candump of packages when sending a burst of data
+</I>&gt;&gt;&gt;<i> representing
+</I>&gt;&gt;&gt;<i> &quot;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&quot;
+</I>&gt;&gt;&gt;<i> with one character per packet.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   (1279702812.562408)  can0  1A300280  [1] 61
+</I>&gt;&gt;&gt;<i>   (1279702812.568237)  can0    4  [8] 00 01 00 00 00 00 00 00
+</I>&gt;&gt;&gt;<i>   (1279702812.569458)  can0  1A300280  [1] 67
+</I>&gt;&gt;&gt;<i>   (1279702812.571502)  can0  1A300280  [1] 68
+</I>&gt;&gt;&gt;<i>   (1279702812.571594)  can0  1A300280  [1] 69
+</I>&gt;&gt;&gt;<i>   (1279702812.571899)  can0  1A300280  [1] 6A
+</I>&gt;&gt;&gt;<i>   (1279702812.577453)  can0    4  [8] 00 01 00 00 00 00 00 00
+</I>&gt;&gt;&gt;<i>   (1279702812.577575)  can0  1A300280  [1] 6F
+</I>&gt;&gt;&gt;<i>   (1279702812.581634)  can0    4  [8] 00 01 00 00 00 00 00 00
+</I>&gt;&gt;&gt;<i>   (1279702812.581756)  can0  1A300280  [1] 73
+</I>&gt;&gt;&gt;<i>   (1279702812.582397)  can0  1A300280  [1] 74
+</I>&gt;&gt;&gt;<i>   (1279702812.583129)  can0  1A300280  [1] 75
+</I>&gt;&gt;&gt;<i>   (1279702812.584869)  can0  1A300280  [1] 76
+</I>&gt;&gt;&gt;<i>   (1279702812.585449)  can0  1A300280  [1] 77
+</I>&gt;&gt;&gt;<i>   (1279702812.586273)  can0  1A300280  [1] 78
+</I>&gt;&gt;&gt;<i>   (1279702812.587310)  can0  1A300280  [1] 79
+</I>&gt;&gt;&gt;<i>   (1279702812.588348)  can0  1A300280  [1] 7A
+</I>&gt;&gt;&gt;<i>   (1279702812.589599)  can0  1A300280  [1] 41
+</I>&gt;&gt;&gt;<i>   (1279702812.590606)  can0  1A300280  [1] 42
+</I>&gt;&gt;&gt;<i>   (1279702812.591613)  can0  1A300280  [1] 43
+</I>&gt;&gt;&gt;<i>   (1279702812.592864)  can0  1A300280  [1] 44
+</I>&gt;&gt;&gt;<i>   (1279702812.593780)  can0  1A300280  [1] 45
+</I>&gt;&gt;&gt;<i>   (1279702812.594604)  can0  1A300280  [1] 46
+</I>&gt;&gt;&gt;<i>   (1279702812.595825)  can0  1A300280  [1] 47
+</I>&gt;&gt;&gt;<i>   (1279702812.596893)  can0  1A300280  [1] 48
+</I>&gt;&gt;&gt;<i>   (1279702812.597930)  can0  1A300280  [1] 49
+</I>&gt;&gt;&gt;<i>   (1279702812.599426)  can0  1A300280  [1] 4A
+</I>&gt;&gt;&gt;<i>   (1279702812.600646)  can0  1A300280  [1] 4B
+</I>&gt;&gt;&gt;<i>   (1279702812.600952)  can0  1A300280  [1] 4C
+</I>&gt;&gt;&gt;<i>   (1279702812.602111)  can0  1A300280  [1] 4D
+</I>&gt;&gt;&gt;<i>   (1279702812.603118)  can0  1A300280  [1] 4E
+</I>&gt;&gt;&gt;<i>   (1279702812.604156)  can0  1A300280  [1] 4F
+</I>&gt;&gt;&gt;<i>   (1279702812.605224)  can0  1A300280  [1] 50
+</I>&gt;&gt;&gt;<i>   (1279702812.606658)  can0  1A300280  [1] 51
+</I>&gt;&gt;&gt;<i>   (1279702812.607269)  can0  1A300280  [1] 52
+</I>&gt;&gt;&gt;<i>   (1279702812.608459)  can0  1A300280  [1] 53
+</I>&gt;&gt;&gt;<i>   (1279702812.609344)  can0  1A300280  [1] 54
+</I>&gt;&gt;&gt;<i>   (1279702812.610992)  can0  1A300280  [1] 55
+</I>&gt;&gt;&gt;<i>   (1279702812.611389)  can0  1A300280  [1] 56
+</I>&gt;&gt;&gt;<i>   (1279702812.612487)  can0  1A300280  [1] 57
+</I>&gt;&gt;&gt;<i>   (1279702812.613494)  can0  1A300280  [1] 58
+</I>&gt;&gt;&gt;<i>   (1279702812.615020)  can0  1A300280  [1] 59
+</I>&gt;&gt;&gt;<i>   (1279702812.616241)  can0  1A300280  [1] 5A
+</I>&gt;&gt;&gt;<i>   (1279702812.616638)  can0  1A300280  [1] 30
+</I>&gt;&gt;&gt;<i>   (1279702812.624145)  can0    4  [8] 00 01 00 00 00 00 00 00
+</I>&gt;&gt;&gt;<i>   (1279702812.624237)  can0  1A300280  [1] 37
+</I>&gt;&gt;&gt;<i>   (1279702812.625061)  can0  1A300280  [1] 38
+</I>&gt;&gt;&gt;<i>   (1279702812.625823)  can0  1A300280  [1] 39
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> As you can see we are getting a number of dropped frames with id 4,
+</I>&gt;&gt;&gt;<i> unsure where these frames comes from.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have applied the patch from Benny mentioned earlier in this thread
+</I>&gt;&gt;&gt;<i> to the 2.6.35 kernel, and the result is better then before are now
+</I>&gt;&gt;&gt;<i> seeing these id 4 frames.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Is there anything else that I should try?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Kindest regards,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> //Erik
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On Thu, Sep 2, 2010 at 6:48 AM, Michael Stocks
+</I>&gt;&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Michael.Stocks at connexionz.co.nz</A>&gt;    wrote:
+</I>&gt;&gt;&gt;&gt;<i> Dear All,
+</I>&gt;&gt;&gt;&gt;<i> I'm experiencing lost frames and id 0, 8 byte all zero packets now that
+</I>&gt;&gt;&gt;&gt;<i> we have equipment sending back to back packets on a 250Kb network.
+</I>&gt;&gt;&gt;&gt;<i> I have plenty of hardware attached to Gumstix Overos so I'll test your
+</I>&gt;&gt;&gt;&gt;<i> patch once the kernel is rebuilt.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Cheers Mike.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> -----Original Message-----
+</I>&gt;&gt;&gt;&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of christian
+</I>&gt;&gt;&gt;&gt;<i> pellegrin
+</I>&gt;&gt;&gt;&gt;<i> Sent: Thursday, 2 September 2010 02:36
+</I>&gt;&gt;&gt;&gt;<i> To: Benny B. Simonsen
+</I>&gt;&gt;&gt;&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> Subject: Re: [Socketcan-users] MCP 2515 RX problems
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi, first of all sorry for the late response. Just now I managed to put
+</I>&gt;&gt;&gt;&gt;<i> together the needed hardware (you know, in Italy it's near impossible to do
+</I>&gt;&gt;&gt;&gt;<i> anything not related to holidays in august ;-) )
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I had a quick look at your patch and it's similar to the one I prepared
+</I>&gt;&gt;&gt;&gt;<i> and I'm attaching below. I think both of them solve the problem with out of
+</I>&gt;&gt;&gt;&gt;<i> order frame. What is worrying me is that packet with all zeros. I never saw
+</I>&gt;&gt;&gt;&gt;<i> something similar. I'll put my system on test during the next night to see
+</I>&gt;&gt;&gt;&gt;<i> if I can reproduce it. I guess you put the code to reset RX flags in case of
+</I>&gt;&gt;&gt;&gt;<i> error to try to solve this glitch, didn't you?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Anyway I will try your patch tomorrow.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> diff --git a/drivers/net/can/mcp251x.c b/drivers/net/can/mcp251x.c index
+</I>&gt;&gt;&gt;&gt;<i> 177f2e1..e8c5e37 100644
+</I>&gt;&gt;&gt;&gt;<i> --- a/drivers/net/can/mcp251x.c
+</I>&gt;&gt;&gt;&gt;<i> +++ b/drivers/net/can/mcp251x.c
+</I>&gt;&gt;&gt;&gt;<i> @@ -773,8 +773,9 @@ static irqreturn_t mcp251x_can_ist(int irq, void
+</I>&gt;&gt;&gt;&gt;<i> *dev_id)
+</I>&gt;&gt;&gt;&gt;<i>         struct mcp251x_priv *priv = dev_id;
+</I>&gt;&gt;&gt;&gt;<i>         struct spi_device *spi = priv-&gt;spi;
+</I>&gt;&gt;&gt;&gt;<i>         struct net_device *net = priv-&gt;net;
+</I>&gt;&gt;&gt;&gt;<i> +       u8 intf;
+</I>&gt;&gt;&gt;&gt;<i>   #ifdef STATS
+</I>&gt;&gt;&gt;&gt;<i> -       static int irqs, runs, ov0, ov1, rx0, rx1;
+</I>&gt;&gt;&gt;&gt;<i> +       static int irqs, runs;
+</I>&gt;&gt;&gt;&gt;<i>         static int ee[8], ii[8];
+</I>&gt;&gt;&gt;&gt;<i>         static unsigned long last;
+</I>&gt;&gt;&gt;&gt;<i>         unsigned long now;
+</I>&gt;&gt;&gt;&gt;<i> @@ -788,7 +789,7 @@ static irqreturn_t mcp251x_can_ist(int irq, void
+</I>&gt;&gt;&gt;&gt;<i> *dev_id)
+</I>&gt;&gt;&gt;&gt;<i>                 now = jiffies;
+</I>&gt;&gt;&gt;&gt;<i>                 if (now&gt;= last + HZ) {
+</I>&gt;&gt;&gt;&gt;<i>                         last = now;
+</I>&gt;&gt;&gt;&gt;<i> -                       printk(&quot;%lu: i %d r %d r0 %d r1 %d o0 %d o1 %d
+</I>&gt;&gt;&gt;&gt;<i> err&quot;, now, irqs,
+</I>&gt;&gt;&gt;&gt;<i> runs, rx0, rx1, ov0, ov1);
+</I>&gt;&gt;&gt;&gt;<i> +                       printk(&quot;%lu: i %d r %d err&quot;, now, irqs, runs);
+</I>&gt;&gt;&gt;&gt;<i>                         for(i = 0; i&lt;    8; i++) {
+</I>&gt;&gt;&gt;&gt;<i>                                 printk(&quot;,%d&quot;, ee[i]);
+</I>&gt;&gt;&gt;&gt;<i>                                 ee[i] = 0;
+</I>&gt;&gt;&gt;&gt;<i> @@ -799,24 +800,20 @@ static irqreturn_t mcp251x_can_ist(int irq, void
+</I>&gt;&gt;&gt;&gt;<i> *dev_id)
+</I>&gt;&gt;&gt;&gt;<i>                                 ii[i] = 0;
+</I>&gt;&gt;&gt;&gt;<i>                         }
+</I>&gt;&gt;&gt;&gt;<i>                         printk(&quot;\n&quot;);
+</I>&gt;&gt;&gt;&gt;<i> -                       irqs = runs = rx0 = rx1 = ov0 = ov1 = 0;
+</I>&gt;&gt;&gt;&gt;<i> +                       irqs = runs = 0;
+</I>&gt;&gt;&gt;&gt;<i>                 }
+</I>&gt;&gt;&gt;&gt;<i>         }
+</I>&gt;&gt;&gt;&gt;<i>         irqs += 1;
+</I>&gt;&gt;&gt;&gt;<i>   #endif
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>         mutex_lock(&amp;priv-&gt;mcp_lock);
+</I>&gt;&gt;&gt;&gt;<i> -       while (!priv-&gt;force_quit) {
+</I>&gt;&gt;&gt;&gt;<i> +       intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;&gt;&gt;&gt;<i> +       do {
+</I>&gt;&gt;&gt;&gt;<i>                 enum can_state new_state;
+</I>&gt;&gt;&gt;&gt;<i> -               u8 intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;&gt;&gt;&gt;<i> -               u8 eflag;
+</I>&gt;&gt;&gt;&gt;<i> +               u8 eflag = 0;
+</I>&gt;&gt;&gt;&gt;<i>                 int can_id = 0, data1 = 0;
+</I>&gt;&gt;&gt;&gt;<i>   #ifdef STATS
+</I>&gt;&gt;&gt;&gt;<i>                 runs += 1;
+</I>&gt;&gt;&gt;&gt;<i> -               if (intf&amp;    CANINTF_RX0IF)
+</I>&gt;&gt;&gt;&gt;<i> -                       rx0 += 1;
+</I>&gt;&gt;&gt;&gt;<i> -               if (intf&amp;    CANINTF_RX1IF)
+</I>&gt;&gt;&gt;&gt;<i> -                       rx1 += 1;
+</I>&gt;&gt;&gt;&gt;<i>                 {
+</I>&gt;&gt;&gt;&gt;<i>                         int i;
+</I>&gt;&gt;&gt;&gt;<i>                         for(i = 0; i&lt;    8; i++) {
+</I>&gt;&gt;&gt;&gt;<i> @@ -828,25 +825,31 @@ static irqreturn_t mcp251x_can_ist(int irq, void
+</I>&gt;&gt;&gt;&gt;<i> *dev_id)
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>                 if (intf&amp;    CANINTF_RX0IF) {
+</I>&gt;&gt;&gt;&gt;<i>                         mcp251x_hw_rx(spi, 0);
+</I>&gt;&gt;&gt;&gt;<i> -                       /* Free one buffer ASAP */
+</I>&gt;&gt;&gt;&gt;<i> -                       mcp251x_write_bits(spi, CANINTF, intf&amp;
+</I>&gt;&gt;&gt;&gt;<i>   CANINTF_RX0IF,
+</I>&gt;&gt;&gt;&gt;<i> -                                          0x00);
+</I>&gt;&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;&gt;<i> +                       /* check that a packet didn't come while emptying
+</I>&gt;&gt;&gt;&gt;<i> RX0 */
+</I>&gt;&gt;&gt;&gt;<i> +                       if ((intf&amp;    CANINTF_RX1IF) == 0)
+</I>&gt;&gt;&gt;&gt;<i> +                               intf |= mcp251x_read_reg(spi, CANINTF);
+</I>&gt;&gt;&gt;&gt;<i>                 }
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>                 if (intf&amp;    CANINTF_RX1IF)
+</I>&gt;&gt;&gt;&gt;<i>                         mcp251x_hw_rx(spi, 1);
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> +               /* This is needed to close a race condition that causes
+</I>&gt;&gt;&gt;&gt;<i> +                * packet reordening: we must assure that we never empty
+</I>&gt;&gt;&gt;&gt;<i> +                * RX0 but not RX1. If this happens the next packet will
+</I>&gt;&gt;&gt;&gt;<i> +                * land in RX0. As a conseuqence on the next do { } while
+</I>&gt;&gt;&gt;&gt;<i> +                * spin we will have packets out of order.
+</I>&gt;&gt;&gt;&gt;<i> +                */
+</I>&gt;&gt;&gt;&gt;<i> +               intf |= CANINTF_RX1IF;
+</I>&gt;&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;&gt;<i>                 mcp251x_write_bits(spi, CANINTF, intf, 0x00);
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> -               eflag = mcp251x_read_reg(spi, EFLG);
+</I>&gt;&gt;&gt;&gt;<i> -               mcp251x_write_reg(spi, EFLG, 0x00);
+</I>&gt;&gt;&gt;&gt;<i> +               if (intf&amp;&amp;    CANINTF_ERRIF) {
+</I>&gt;&gt;&gt;&gt;<i> +                       eflag = mcp251x_read_reg(spi, EFLG);
+</I>&gt;&gt;&gt;&gt;<i> +                       mcp251x_write_reg(spi, EFLG, 0x00);
+</I>&gt;&gt;&gt;&gt;<i> +               }
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>   #ifdef STATS
+</I>&gt;&gt;&gt;&gt;<i> -               if (eflag&amp;    EFLG_RX0OVR)
+</I>&gt;&gt;&gt;&gt;<i> -                       ov0 += 1;
+</I>&gt;&gt;&gt;&gt;<i> -
+</I>&gt;&gt;&gt;&gt;<i> -               if (eflag&amp;    EFLG_RX1OVR)
+</I>&gt;&gt;&gt;&gt;<i> -                       ov1 += 1;
+</I>&gt;&gt;&gt;&gt;<i>                 {
+</I>&gt;&gt;&gt;&gt;<i>                         int i;
+</I>&gt;&gt;&gt;&gt;<i>                         for(i = 0; i&lt;    8; i++) {
+</I>&gt;&gt;&gt;&gt;<i> @@ -924,9 +927,6 @@ static irqreturn_t mcp251x_can_ist(int irq, void
+</I>&gt;&gt;&gt;&gt;<i> *dev_id)
+</I>&gt;&gt;&gt;&gt;<i>                         }
+</I>&gt;&gt;&gt;&gt;<i>                 }
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> -               if (intf == 0)
+</I>&gt;&gt;&gt;&gt;<i> -                       break;
+</I>&gt;&gt;&gt;&gt;<i> -
+</I>&gt;&gt;&gt;&gt;<i>                 if (intf&amp;    (CANINTF_TX2IF | CANINTF_TX1IF |
+</I>&gt;&gt;&gt;&gt;<i> CANINTF_TX0IF)) {
+</I>&gt;&gt;&gt;&gt;<i>                         net-&gt;stats.tx_packets++;
+</I>&gt;&gt;&gt;&gt;<i>                         net-&gt;stats.tx_bytes += priv-&gt;tx_len - 1; @@ -936,7
+</I>&gt;&gt;&gt;&gt;<i> +936,8 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+</I>&gt;&gt;&gt;&gt;<i>                         }
+</I>&gt;&gt;&gt;&gt;<i>                         netif_wake_queue(net);
+</I>&gt;&gt;&gt;&gt;<i>                 }
+</I>&gt;&gt;&gt;&gt;<i> -       }
+</I>&gt;&gt;&gt;&gt;<i> +               intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;&gt;&gt;&gt;<i> +       } while (!priv-&gt;force_quit&amp;&amp;    intf);
+</I>&gt;&gt;&gt;&gt;<i>         mutex_unlock(&amp;priv-&gt;mcp_lock);
+</I>&gt;&gt;&gt;&gt;<i>         return IRQ_HANDLED;
+</I>&gt;&gt;&gt;&gt;<i>   }
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On Sat, Aug 28, 2010 at 2:20 PM, Benny B. Simonsen&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bbs at serenergy.com</A>&gt;
+</I>&gt;&gt;&gt;&gt;<i>   wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> 2010/8/6 christian pellegrin&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> On Fri, Aug 6, 2010 at 3:56 PM, Wolfgang Grandegger
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> To be clear, out-of-order messages are also not OK.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Yes I was looking at this with some interleave analysis. I think the
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> problem lies in the following race:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> // suppose we come here with RXB0 filled with packet X
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                 u8 intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                 u8 eflag;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                 int can_id = 0, data1 = 0;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> // packet X+1 arrives and lands in RXB1
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                 if (intf&amp;    CANINTF_RX0IF) {
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                         mcp251x_hw_rx(spi, 0);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                         /* Free one buffer ASAP */
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                         mcp251x_write_bits(spi, CANINTF, intf&amp;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> CANINTF_RX0IF,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                                            0x00);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                 }
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> // packet X+2 arrives and lands in RXB0 // unfortunately variable
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> intf is old and doesn't show that we have something in RXB1 // (*1)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                 if (intf&amp;    CANINTF_RX1IF)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                         mcp251x_hw_rx(spi, 1);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> now on the next turn we will have packet X+2 in RXB0 and X+1 in RXB1
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> so we read them out-of-order. The easiest way to solve the problem is
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> to take out the line:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                         /* Free one buffer ASAP */
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                         mcp251x_write_bits(spi, CANINTF, intf&amp;
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> CANINTF_RX0IF,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>                                            0x00);
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> but we risk to lose more packets. Perhaps also rereading intf in (*1)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> could work but we must be careful when we reset CANINTF register to
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> not lose an interrupt for RXB0. I will do some tests but after next
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> week because I don't have the access to the hardware until then.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A> &quot;Real
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Programmers don't play tennis, or any other sport which requires you
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> to change clothes. Mountain climbing is OK, and Real Programmers wear
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> their climbing boots to work in case a mountain should suddenly
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> spring up in the middle of the computer room.&quot;
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Christian,
+</I>&gt;&gt;&gt;&gt;&gt;<i> Did you have a chance to look on the problem and / or the patch I send
+</I>&gt;&gt;&gt;&gt;&gt;<i> to the list?
+</I>&gt;&gt;&gt;&gt;&gt;<i> BR
+</I>&gt;&gt;&gt;&gt;&gt;<i> Benny
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;&gt;<i> Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A> &quot;Real Programmers
+</I>&gt;&gt;&gt;&gt;<i> don't play tennis, or any other sport which requires you to change clothes.
+</I>&gt;&gt;&gt;&gt;<i> Mountain climbing is OK, and Real Programmers wear their climbing boots to
+</I>&gt;&gt;&gt;&gt;<i> work in case a mountain should suddenly spring up in the middle of the
+</I>&gt;&gt;&gt;&gt;<i> computer room.&quot;
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;<i> Hi Erik,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The 0x04 ID message is the way SocketCAN indicates overrun. Don't know where
+</I>&gt;&gt;<i> the different error codes is described (saw it in the driver)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> BR
+</I>&gt;&gt;<i> Benny
+</I>&gt;&gt;<i>
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001505.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+	<LI>Next message: <A HREF="001507.html">[Socketcan-users] Using MCP251x SPI CAN cotroller driver in older	linux kernel distribution
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1506">[ date ]</a>
+              <a href="thread.html#1506">[ thread ]</a>
+              <a href="subject.html#1506">[ subject ]</a>
+              <a href="author.html#1506">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

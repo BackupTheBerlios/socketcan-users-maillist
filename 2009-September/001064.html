@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN communication with MCP2515
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Cc79f5d650909301422i52716f32tb42d635e289881c6%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001062.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN communication with MCP2515</H1>
+    <B>Erik Calissendorff</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Cc79f5d650909301422i52716f32tb42d635e289881c6%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] CAN communication with MCP2515">gumstix at tansaki.com
+       </A><BR>
+    <I>Wed Sep 30 23:22:33 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001062.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1064">[ date ]</a>
+              <a href="thread.html#1064">[ thread ]</a>
+              <a href="subject.html#1064">[ subject ]</a>
+              <a href="author.html#1064">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Michael and thanks for your assistance, don't forget to cc the
+maillist aswell.
+
+I have done step 1 and 3 already, I tried to do step 2 now aswell but
+don't know if it made any real difference. My patch is quite similar
+to yours with the main difference being that I don't have access to
+the physical reset function on the mcp2515 and must use the reset
+instruction instead. I have attached my patches for the
+linux-omap3-2.6.31 kernel and u-boot-omap3.
+
+
+Kindest regards,
+
+//Erik
+
+
+On Sun, Sep 27, 2009 at 11:43 PM, Michael Stocks
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Michael.Stocks at connexionz.co.nz</A>&gt; wrote:
+&gt;<i> Dear Erik,
+</I>&gt;<i> I'm using the MCP2515 on a custom expansion board for the Overo.
+</I>&gt;<i> At the moment I'm suing SVN 935 with Kernel 2.6.31. with no problem.
+</I>&gt;<i> I will try a build of SVN1064 tomorrow to see if we have a similar problem.
+</I>&gt;<i> I notice that you have modprobed your module.
+</I>&gt;<i>
+</I>&gt;<i> This is how I got the CAN bus working. You may want to check that you have performed similar steps as socket-can will not work on the standard Overo builds.
+</I>&gt;<i>
+</I>&gt;<i> 1. &#160; &#160; &#160;Modify defconfig for the kernel by setting all the CONFIG_CAN options to m. I assume you have done this as you cant build the modules without it.
+</I>&gt;<i> 2. &#160; &#160; &#160;Make any changes you need to the pin mux in overo.h in the u-boot recipes. You will only need to do this if you are using different pins for the SPI &amp; IRQ lines.
+</I>&gt;<i> 3. &#160; &#160; &#160;Modify or patch board-overo.c from the linux-omp3_2.6.31.bb recipe. To add details of the MCP2515 interface. The standard overo builds use SPI1 for the optional touch screen interface so if like me you are using SPI1 then these changes need to be made. Attached is the patch I use for the kernel build.
+</I>&gt;<i>
+</I>&gt;<i> At boot up you will see a message about initialising CAN and MCP251x being probed. All you should need to do now is bring up the can0 interface as you are already doing.
+</I>&gt;<i>
+</I>&gt;<i> Cheers Mike.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of Erik Calissendorff
+</I>&gt;<i> Sent: Sunday, 27 September 2009 09:00
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: [Socketcan-users] CAN communication with MCP2515
+</I>&gt;<i>
+</I>&gt;<i> Hi I have tried to get the mcp251x driver to work with the Overo
+</I>&gt;<i> Gumstix for sometime now.
+</I>&gt;<i>
+</I>&gt;<i> I finally got the driver and the SPI communication to work with kernel
+</I>&gt;<i> 2.6.31 and was thereafter able to use iproute to initiate the bitrate,
+</I>&gt;<i> which didn't work with previous kernel versions. But I still can't see
+</I>&gt;<i> any data sent or received on the can0 interface. I have inserted print
+</I>&gt;<i> statements in the module to be able to debug it but I'm still stuck.
+</I>&gt;<i> If someone could point me in the right direction it would be highly
+</I>&gt;<i> appreciated. I'm running the modules from SVN rev 1064.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Below is a capture of the initiation of the module and can0:
+</I>&gt;<i> ---
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# modprobe mcp251x
+</I>&gt;<i> CAN device driver interface
+</I>&gt;<i> Running: mcp251x_can_probe
+</I>&gt;<i> Running: mcp251x_setup
+</I>&gt;<i> &#160;ret 0
+</I>&gt;<i> Running: mcp251x_hw_probe
+</I>&gt;<i> Running: mcp251x_hw_reset
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=14)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 128
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=15)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 135
+</I>&gt;<i> Running: mcp251x_hw_sleep
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=15,val=32)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> mcp251x spi1.0: probed
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~#
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Setting the bitrate, my oscillator frequence is set to 20000000
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ip link set can0 type can bitrate 250000
+</I>&gt;<i> Running: mcp251x_do_set_bittiming
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=15)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 96
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=14)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 32
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=15,mask=224,val=128)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=42,val=1)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=41,val=191)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=40,mask=7,val=2)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=15,mask=224,val=32)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~#
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ifconfig can0 up
+</I>&gt;<i> Running: mcp251x_open
+</I>&gt;<i> enable irq=274
+</I>&gt;<i> Running: mcp251x_wakeup
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=43,mask=64,val=64)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=44,mask=64,val=64)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> Running: mcp251x_can_isr
+</I>&gt;<i> Running: mcp251x_irq_work_handler
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=44)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 64
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=44,mask=64,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=44)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=14)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 96
+</I>&gt;<i> Running: mcp251x_hw_reset
+</I>&gt;<i> Running: mcp251x_setup
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=96,mask=100,val=100)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=112,mask=96,val=96)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_set_normal_mode
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=43,val=63)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=15,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=14)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~#
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# cansend can0 000#
+</I>&gt;<i> can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> NET: Registered protocol family 29
+</I>&gt;<i> can: raw protocol (rev 20090105)
+</I>&gt;<i> Running: mcp251x_hard_start_xmit
+</I>&gt;<i> Running: mcp251x_tx_work_handler
+</I>&gt;<i> Running: mcp251x_hw_tx
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=49,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=50,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~#
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=51,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=52,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=53,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=48,val=8)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ifconfig
+</I>&gt;<i> can0 &#160; &#160; &#160;Link encap:UNSPEC &#160;HWaddr
+</I>&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;UP RUNNING NOARP &#160;MTU:16 &#160;Metric:1
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;collisions:0 txqueuelen:10
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;RX bytes:0 (0.0 B) &#160;TX bytes:0 (0.0 B)
+</I>&gt;<i>
+</I>&gt;<i> lo &#160; &#160; &#160; &#160;Link encap:Local Loopback
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;inet addr:127.0.0.1 &#160;Mask:255.0.0.0
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;inet6 addr: ::1/128 Scope:Host
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;UP LOOPBACK RUNNING &#160;MTU:16436 &#160;Metric:1
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;collisions:0 txqueuelen:0
+</I>&gt;<i> &#160; &#160; &#160; &#160; &#160;RX bytes:0 (0.0 B) &#160;TX bytes:0 (0.0 B)
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~#
+</I>&gt;<i>
+</I>&gt;<i> As soon as I connect the other CAN devices I get this output:
+</I>&gt;<i> [...]
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 31
+</I>&gt;<i> Running: mcp251x_write_reg(*spi,reg=45,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=44)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 128
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=44,mask=128,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=48)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 16
+</I>&gt;<i> ------------[ cut here ]------------
+</I>&gt;<i> WARNING: at /home/plejd/overo-oe/tmp/work/overo-angstrom-linux-gnueabi/socketcan-modules-0.0+svnr1064-r45/trunk/kernel/2.6/drivers/net/can/mcp251x.c:840
+</I>&gt;<i> mcp251x_irq_work_handler+0x24c/0x5d0 [mcp251x]()
+</I>&gt;<i> Modules linked in: can_raw can ipv6 mcp251x can_dev
+</I>&gt;<i> [&lt;c00f45d4&gt;] (unwind_backtrace+0x0/0xdc) from [&lt;c0116288&gt;]
+</I>&gt;<i> (warn_slowpath_common+0x4c/0x80)
+</I>&gt;<i> [&lt;c0116288&gt;] (warn_slowpath_common+0x4c/0x80) from [&lt;bf009040&gt;]
+</I>&gt;<i> (mcp251x_irq_work_handler+0x24c/0x5d0 [mcp251x])
+</I>&gt;<i> [&lt;bf009040&gt;] (mcp251x_irq_work_handler+0x24c/0x5d0 [mcp251x]) from
+</I>&gt;<i> [&lt;c0126d2c&gt;] (worker_thread+0x19c/0x218)
+</I>&gt;<i> [&lt;c0126d2c&gt;] (worker_thread+0x19c/0x218) from [&lt;c012a6c0&gt;] (kthread+0x78/0x80)
+</I>&gt;<i> [&lt;c012a6c0&gt;] (kthread+0x78/0x80) from [&lt;c00f0800&gt;] (kernel_thread_exit+0x0/0x8)
+</I>&gt;<i> ---[ end trace 2c66beb10b4a4a3e ]---
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=44)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=14)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_irq_work_handler
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=44)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=14)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i>
+</I>&gt;<i> If I try to send anything while having other nodes connected the
+</I>&gt;<i> driver doesn't get out from the while loop in the irq_handler:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# cansend can0 000#
+</I>&gt;<i> [...]
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=44)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 128
+</I>&gt;<i> Running: mcp251x_write_bits(*spi,reg=44,mask=128,val=0)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=4)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> Running: mcp251x_read_reg(*spi,reg=48)
+</I>&gt;<i> Running: mcp251x_spi_trans(*spi,len=3)
+</I>&gt;<i> &#160;return: 0
+</I>&gt;<i> &#160;return: 24
+</I>&gt;<i> while(!priv-&gt;force_quit &amp;&amp; !freezing(current))
+</I>&gt;<i> [...]
+</I>&gt;<i>
+</I>&gt;<i> Hope someone can give me some pointers of how to get the communication going.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Kindest regards,
+</I>&gt;<i>
+</I>&gt;<i> //Erik
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i>
+</I>-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mcp251x.patch
+Type: application/octet-stream
+Size: 4640 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090930/500c95af/attachment.obj">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090930/500c95af/attachment.obj</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: spi1.0_pins.patch
+Type: application/octet-stream
+Size: 705 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090930/500c95af/attachment-0001.obj">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090930/500c95af/attachment-0001.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001062.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1064">[ date ]</a>
+              <a href="thread.html#1064">[ thread ]</a>
+              <a href="subject.html#1064">[ subject ]</a>
+              <a href="author.html#1064">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

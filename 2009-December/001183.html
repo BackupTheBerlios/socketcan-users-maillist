@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] FW: CAN Id is trucated
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C4B161A67.8060706%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001186.html">
+   <LINK REL="Next"  HREF="001187.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] FW: CAN Id is trucated</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C4B161A67.8060706%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] FW: CAN Id is trucated">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Dec  2 08:42:31 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001186.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+        <LI>Next message: <A HREF="001187.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1183">[ date ]</a>
+              <a href="thread.html#1183">[ thread ]</a>
+              <a href="subject.html#1183">[ subject ]</a>
+              <a href="author.html#1183">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Moin,
+
+Ravi Kumar Madhuranthakam wrote:
+
+&gt;<i> I am using socket CAN with Atmel 9263 board , And CAN Messages
+</I>&gt;<i> Extended ID is truncated when I send message using PCAN USB- analyzer
+</I>&gt;<i> . I am using read and write calls for message sending and receiving
+</I>&gt;<i> in the board.
+</I>
+So you have a problem in receiving can frames with an extended ID. Which
+kernel are you using? I suggest to use at least the driver that comes
+with the current 2.6.32-rcX.
+
+&gt;<i> I am not using any filters and using CAN_RAW .
+</I>&gt;<i> Anybody has idea on this issue ?
+</I>
+You might want to display the incoming CAN frames with the candumo utility.
+
+&gt;<i> My Code looks like this
+</I>&gt;<i> 
+</I>&gt;<i> #include &lt;sys/types.h&gt;
+</I>&gt;<i> #include &lt;sys/socket.h&gt;
+</I>&gt;<i> #include &lt;sys/ioctl.h&gt;
+</I>&gt;<i> #include &lt;net/if.h&gt;
+</I>&gt;<i> 
+</I>&gt;<i> #include &lt;linux/can.h&gt;
+</I>&gt;<i> #include &lt;linux/can/raw.h&gt;
+</I>&gt;<i> #include &lt;string.h&gt;
+</I>&gt;<i> 
+</I>&gt;<i> /* At time of writing, these constants are not defined in the headers */
+</I>&gt;<i> #ifndef PF_CAN
+</I>&gt;<i> #define PF_CAN 29
+</I>&gt;<i> #endif
+</I>&gt;<i> 
+</I>&gt;<i> #ifndef AF_CAN
+</I>&gt;<i> #define AF_CAN PF_CAN
+</I>&gt;<i> #endif
+</I>&gt;<i> 
+</I>&gt;<i> /* ... */
+</I>&gt;<i> 
+</I>&gt;<i> /* Somewhere in your app */
+</I>&gt;<i> 
+</I>&gt;<i>    /* Create the socket */
+</I>&gt;<i>    int skt = socket( PF_CAN, SOCK_RAW, CAN_RAW );
+</I>&gt;<i> 
+</I>&gt;<i>    /* Locate the interface you wish to use */
+</I>&gt;<i>    struct ifreq ifr;
+</I>&gt;<i>    strcpy(ifr.ifr_name, &quot;can0&quot;);
+</I>&gt;<i>    ioctl(skt, SIOCGIFINDEX, &amp;ifr); /* ifr.ifr_ifindex gets filled
+</I>&gt;<i>                                   * with that device's index */
+</I>&gt;<i> 
+</I>&gt;<i>    /* Select that CAN interface, and bind the socket to it. */
+</I>&gt;<i>    struct sockaddr_can addr;
+</I>&gt;<i>    addr.can_family = AF_CAN;
+</I>&gt;<i>    addr.can_ifindex = ifr.ifr_ifindex;
+</I>&gt;<i>    bind( skt, (struct sockaddr*)&amp;addr, sizeof(addr) );
+</I>&gt;<i> 
+</I>&gt;<i>    /* Send a message to the CAN bus */
+</I>&gt;<i>    struct can_frame frame;
+</I>&gt;<i>    frame.can_id = 0x123;
+</I>&gt;<i>    strcpy( &amp;frame.data, &quot;foo&quot; );
+</I>&gt;<i>    frame.can_dlc = strlen( &amp;frame.data );
+</I>&gt;<i>    int bytes_sent = write( skt, &amp;frame, sizeof(frame) );
+</I>&gt;<i> 
+</I>&gt;<i>    /* Read a message back from the CAN bus */
+</I>&gt;<i>    int bytes_read = read( skt, &amp;frame, sizeof(frame) );
+</I>
+the code looks fine so far.
+
+Cheers, Marc
+
+- --
+Pengutronix e.K.                         | Marc Kleine-Budde           |
+Linux Solutions for Science and Industry | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund                 | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686         | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - <A HREF="http://enigmail.mozdev.org">http://enigmail.mozdev.org</A>
+
+iEYEARECAAYFAksWGmcACgkQjTAFq1RaXHPfUwCeP0TWiwhua4JUvA2ghSrW9YAD
+kFkAnRRb/2oLLtIqU4se9lmcW4jxwwE8
+=QiDC
+-----END PGP SIGNATURE-----
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001186.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+	<LI>Next message: <A HREF="001187.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1183">[ date ]</a>
+              <a href="thread.html#1183">[ thread ]</a>
+              <a href="subject.html#1183">[ subject ]</a>
+              <a href="author.html#1183">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C49063FF7.3050709%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000522.html">
+   <LINK REL="Next"  HREF="000524.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C49063FF7.3050709%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Oct 27 23:25:59 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000522.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000524.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#523">[ date ]</a>
+              <a href="thread.html#523">[ thread ]</a>
+              <a href="subject.html#523">[ subject ]</a>
+              <a href="author.html#523">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Mon, Oct 27, 2008 at 08:09:34PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i>   
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> So the former is essential and I have to change some startup scripts.
+</I>&gt;&gt;&gt;<i> Would have maybe been good to provide a compatible canconfig program for
+</I>&gt;&gt;&gt;<i> backwards compatibility ...
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> canconfig was never part of the Socket-CAN distribution (SVN repository).
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> canconfig supports the new method for kernels that support it. Note that
+</I>&gt;<i> nobody out here has the time to care about *every* old revision one
+</I>&gt;<i> might want to work with - we support the latest and greatest, and even
+</I>&gt;<i> that is a bunch of work to keep up to date. Once SocketCAN went into
+</I>&gt;<i> mainline, there is a well defined set of versions to be compatible with.
+</I>&gt;<i> But until then it is not doable: remember that, at least in theory, you
+</I>&gt;<i> can use *any* svn revision of SocketCAN and backport it to *any* random
+</I>&gt;<i> version of the kernel. A maintenance nightmare.
+</I>&gt;<i>   
+</I>
+At least the network layer stuff in the BerliOS SVN compiles down to 
+Kernel 2.6.16 - without any backporting nightmares. Of course there is a 
+bit more of maintenance to do - but i don't feel, it eats me up as i 
+see, that some people are still requesting SocketCAN in older Kernels ...
+
+Indeed you can have the latest and greatest SocketCAN implementation in 
+a 2.6.22 without any effort.
+
+
+&gt;&gt;&gt;<i> Is setting of the baudrate via user space API still supported ? 
+</I>&gt;&gt;&gt;<i> When upgrading socket-can, do I have to recompile all user space
+</I>&gt;&gt;&gt;<i> programs as well ?
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> The IOCTLs have been removed as there is little chance to get them
+</I>&gt;&gt;<i> included in the mainline kernel. Please use the SYSFS files instead.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> That's what canconfig from canutils-v3 supports:
+</I>&gt;<i> <A HREF="http://www.pengutronix.de/software/socket-can/download/canutils/v3.0/">http://www.pengutronix.de/software/socket-can/download/canutils/v3.0/</A>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Hm - i took a look into these tools and i wonder, if we should move 
+canconfig and cansequence to the SocketCAN SVN to have it in one place 
+and forget the rest ...
+
+candump and cansend (what a bunch of options ... 8-) are just double 
+work and canecho is made obsolete by the (bridge) '-b' option of BerliOS 
+candump. Feel free to use the BerliOS stuff in your OSELAS BSPs also. 
+New ideas and extensions are always welcome.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000522.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000524.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#523">[ date ]</a>
+              <a href="thread.html#523">[ thread ]</a>
+              <a href="subject.html#523">[ subject ]</a>
+              <a href="author.html#523">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

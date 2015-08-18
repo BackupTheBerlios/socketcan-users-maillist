@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Enumerating a list of CAN interfaces
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Enumerating%20a%20list%20of%20CAN%20interfaces&In-Reply-To=%3C4B7A05A0.8020609%40gentoo.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001317.html">
+   <LINK REL="Next"  HREF="001320.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Enumerating a list of CAN interfaces</H1>
+    <B>Stuart Longland</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Enumerating%20a%20list%20of%20CAN%20interfaces&In-Reply-To=%3C4B7A05A0.8020609%40gentoo.org%3E"
+       TITLE="[Socketcan-users] Enumerating a list of CAN interfaces">redhatter at gentoo.org
+       </A><BR>
+    <I>Tue Feb 16 03:40:32 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001317.html">[Socketcan-users] How to build the documentation?
+</A></li>
+        <LI>Next message: <A HREF="001320.html">[Socketcan-users] Enumerating a list of CAN interfaces
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1319">[ date ]</a>
+              <a href="thread.html#1319">[ thread ]</a>
+              <a href="subject.html#1319">[ subject ]</a>
+              <a href="author.html#1319">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+	I was wondering if anyone knew what system calls one used to get a list 
+of CAN devices that are up and running via SocketCAN?
+
+	I have a cross-platform[1] GUI application (Qt-based) that allows 
+configuration of some motor controllers via CANbus.  The CAN interfacing 
+is done at the moment via an in-house developed library (which I call 
+&quot;libcan&quot;) which started its life out as a heavily hacked-up version of a 
+Microchip MCP2515 CAN device driver and API written for MSP430 by 
+Tritium[1].
+
+	Since then, it has been reworked many times, gaining support for the 
+CAN module built into the TI TMS320LF2406A DSP, Lawicel's CANUSB devices 
+on Windows, and the SocketCAN interface... with a planned new driver for 
+Luminary Micro Stellaris controllers coming.  Ultimately I hope to 
+release it as BSD or LGPL someday.  It supports one device at a time... 
+and at the moment, the interface to use is either picked semi-random or 
+hard-coded.
+
+	I'd like to have it provide a list of possible interfaces to the 
+application for display so that the user can choose at runtime where 
+appropriate.  Ideally a meaningful description would be helpful (e.g. 
+&quot;vcan0 - Virtual CAN Device&quot; or &quot;slcan0 - Lawicel CAN232 on 
+/dev/ttyUSB0&quot;) but I'm not sure that information is exposed anywhere, 
+just the device name itself (&quot;vcan0&quot; or &quot;slcan0&quot; in this example) would 
+suffice.
+
+	Is it possible to generate such a list, and how would I go about it?
+Regards,
+-- 
+Stuart Longland (aka Redhatter, VK4MSL)      .'''.
+Gentoo Linux/MIPS Cobalt and Docs Developer  '.'` :
+. . . . . . . . . . . . . . . . . . . . . .   .'.'
+<A HREF="http://dev.gentoo.org/~redhatter">http://dev.gentoo.org/~redhatter</A>             :.'
+
+I haven't lost my mind...
+   ...it's backed up on a tape somewhere.
+
+1. <A HREF="http://www.tritium.com.au">http://www.tritium.com.au</A> -- &quot;libcan&quot;'s grandaddy is the firmware for 
+the TRI63 &quot;Driver Controls&quot; module.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001317.html">[Socketcan-users] How to build the documentation?
+</A></li>
+	<LI>Next message: <A HREF="001320.html">[Socketcan-users] Enumerating a list of CAN interfaces
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1319">[ date ]</a>
+              <a href="thread.html#1319">[ thread ]</a>
+              <a href="subject.html#1319">[ subject ]</a>
+              <a href="author.html#1319">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

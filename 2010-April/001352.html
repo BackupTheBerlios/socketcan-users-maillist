@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem in cross compiling socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3C4BBB5FF9.4000308%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001351.html">
+   <LINK REL="Next"  HREF="001353.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem in cross compiling socketcan</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3C4BBB5FF9.4000308%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] problem in cross compiling socketcan">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Apr  6 18:23:21 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001351.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001353.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1352">[ date ]</a>
+              <a href="thread.html#1352">[ thread ]</a>
+              <a href="subject.html#1352">[ subject ]</a>
+              <a href="author.html#1352">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Lei Luo wrote:
+
+&gt;&gt;&gt;<i> I am a newbie of socketcan, I compiled and installed it in the
+</I>&gt;<i> direction of <A HREF="http://dave.limoilux.org/trac/wiki/UseSocketCAN">http://dave.limoilux.org/trac/wiki/UseSocketCAN</A>   There are
+</I>&gt;<i> two mcp2510 can  controllers in my arm at91rm9200 board.
+</I>&gt;&gt;&gt;<i> It failed when run &quot;can_setup start&quot;, saying that &quot;cannot creat
+</I>&gt;<i> /sys/class/net/can0&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If you look in SocketCAN's makefile, did you uncomment export
+</I>&gt;<i> CONFIG_CAN_MCP251X=m?
+</I>&gt;&gt;<i> You will also need to uncomment export CONFIG_CAN_DEV_SYSFS=y which is
+</I>&gt;<i> legacy. 
+</I>
+Yep!
+
+&gt;<i>  
+</I>&gt;<i> Yes, I have done it. I used the newest source code from the svn server
+</I>&gt;<i> and patched it manually. Configration is as follows:
+</I>&gt;<i> CONFIG_CAN=y;
+</I>&gt;<i> CONFIG_CAN_RAW=y;
+</I>&gt;<i> CONFIG_CAN_BCM=y;
+</I>&gt;<i> CONFIG_CAN_GW=y;
+</I>&gt;<i> CONFIG_CAN_ISOTP=y;
+</I>&gt;<i>  
+</I>&gt;<i> CONFIG_CAN_VCAN=y;
+</I>&gt;<i> CONFIG_CAN_DEV=y;
+</I>&gt;<i> CONFIG_CAN_CALC_BITTIMING=y;
+</I>&gt;<i> CONFIG_CAN_MCP251X=y;
+</I>&gt;<i>  
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Then I use &quot;ip link add type vcan&quot; to create the a vcan interface.
+</I>&gt;<i> But cmd &quot;add&quot; is not recognised, ip tool is the newest one which is
+</I>&gt;<i> compiled with iproute2-2.6.33.tar.bz2. Linux kernel I used is  2.6.28.
+</I>
+Is vcan.ko loaded? Please try
+
+   modprobe vcan
+
+before invoking
+
+   ip link add type vcan
+
+There should be this startup message in the kernel log:
+&quot;vcan: Virtual CAN interface driver&quot;
+
+You can see all network interfaces with
+
+   cat /proc/net/dev
+
+or
+
+   ip link show
+
+
+&gt;<i>  
+</I>&gt;<i> The problem of &quot;ip link add&quot; is OK after recompiling kernel,
+</I>&gt;<i> /sys/class/net/can0 is created if I type in &quot;ip link add dev can0 type
+</I>&gt;<i> vcan&quot;. But it says &quot;cannot create /sys/class/net/can0&quot; whenever I did it
+</I>&gt;<i> or not.
+</I>
+As said above the sysfs configuration interface is depricated.
+
+For that reason the &quot;can_setup&quot; script is also not usable here.
+
+See
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L595">http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L595</A>
+
+for the use of virtual CAN interfaces (that are usually named vcanX).
+
+See
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L623">http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L623</A>
+
+for the use of real CAN interfaces (that are usually named canX).
+
+When a 'real' CAN interface driver initializes (like the mcp251x.c) the CAN
+drivers allocate device names like can0, can1, can2 ... automatically.
+
+Don't mix that with virtual CAN interfaces that are software instances and
+'generated' by &quot;ip link add type vcan&quot;
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001351.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001353.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1352">[ date ]</a>
+              <a href="thread.html#1352">[ thread ]</a>
+              <a href="subject.html#1352">[ subject ]</a>
+              <a href="author.html#1352">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A1D443.8060206%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000229.html">
+   <LINK REL="Next"  HREF="000233.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A1D443.8060206%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jan 31 14:59:31 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000229.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000233.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#230">[ date ]</a>
+              <a href="thread.html#230">[ thread ]</a>
+              <a href="subject.html#230">[ subject ]</a>
+              <a href="author.html#230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> I have this error since quite some time and it still persists in the
+</I>&gt;&gt;&gt;<i> actual socketcan-trunk (r658), which I backported to 2.6.23.1
+</I>&gt;&gt;&gt;<i> (anybody interested in the patch ?)
+</I>&gt;&gt;<i> Do you have already a patch?
+</I>&gt;<i> 
+</I>&gt;<i> Yupp. I had to change quite a few things inside the socket-can project
+</I>&gt;<i> and used mkpatch and afterwards manually removed some incompatibilities
+</I>&gt;<i> inside the patch (remove include of compat.h,  adding struct
+</I>&gt;<i> net_device_stats net_stats to dev.h, removing 1st parameter from
+</I>&gt;<i> get_dev_by_index() ).
+</I>&gt;<i> But this cleanly applies now to 2.6.23.1 and works at least for the test
+</I>&gt;<i> programs I am using. The final patch is over 376kb uncompressed or 84kb
+</I>&gt;<i> compressed. Is this too large as an attachment to the list ?
+</I>
+OK. Do you need it int the kernel? Nevertheless, Socket-CAN is already
+integrated into the DENX linux-2.6-denx tree but it might not work with
+2.6.23, though due to the mentioned modification of the netdev layer. I
+did not check for a while.
+
+&gt;<i> But the cleaner way of course would be to change the socketcan project
+</I>&gt;<i> and provide a diff to that. Is it okay if I change the socketcan-project
+</I>&gt;<i> locally which I got via svn and then provide you with what svn diff
+</I>&gt;<i> spits out ? Or how can I provide a better patch ?
+</I>
+That would be nice, but it would be even better if you could use the
+development branch cannetdriver26 with the new CAN device interface.
+
+  $ svn checkout
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/branches/cannetdriver26">http://svn.berlios.de/svnroot/repos/socketcan/branches/cannetdriver26</A>
+  $ cannetdriver26
+  $ make ARCH=powerpc KERNELDIR=&lt;your-kernel&gt; \
+    CONFIG_CAN_MSCAN=m CONFIG_CAN_MPC52XX=m
+
+&gt;&gt;&gt;<i> There can be quite a long list of tx timeouts afterwards, but it will
+</I>&gt;&gt;&gt;<i> stop after some while.
+</I>&gt;&gt;<i> Hm, do CAN messages get out to the bus?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Generally yes. I have a test program that is communicating to a
+</I>&gt;<i> connected IO-unit and sets there a 6 bit output which itself is
+</I>&gt;<i> connected to the IO-units input and I read back this value, measure the
+</I>&gt;<i> time and compare the IO Input value with the previous set output value.
+</I>&gt;<i> The output is set as a binary counter value, which increases and
+</I>&gt;<i> decreases. This test more or less works fine all the time.
+</I>
+OK.
+
+&gt;<i> In the Error scenario I send 64 SDO messages to different CAN-ID's to
+</I>&gt;<i> see if there are connected devices on the bus. And then this error
+</I>&gt;<i> appears. Because I don't have connected 64 units to the bus I don't know
+</I>&gt;<i> yet if all 64 messages are sent to the bus. Maybe it's time for our CAN
+</I>&gt;<i> sniffer (or could I use candump for that purpose as well ?).
+</I>
+The timeout is set to 0.5 seconds in the MSCAN driver:
+
+  #define MSCAN_WATCHDOG_TIMEOUT  ((500*HZ)/1000)
+
+Do you check the return value of send(to)? Be aware that it can return
+with errno set to EAGAIN when the TX socket buffer is full.
+Nevertheless, the problems seems to show up when you send many messages
+in sequence.
+
+&gt;<i> Is there maybe a correlation of how we setup our realtime tasks
+</I>&gt;<i> priorities under Preempt-RT and the CAN IRQ (which in my understanding
+</I>&gt;<i> will also be scheduled as RT task) ?
+</I>
+Are you using Preempt-RT already? Then the IRQ is handled by a kernel
+thread and priorities do matter. The following ps command should tell
+you more:
+
+ ps -eo pid,tid,class,rtprio,ni,pri,psr,pcpu,stat,wchan:14,comm
+
+But I think there is a bug in the MSCAN driver.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000229.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000233.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#230">[ date ]</a>
+              <a href="thread.html#230">[ thread ]</a>
+              <a href="subject.html#230">[ subject ]</a>
+              <a href="author.html#230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

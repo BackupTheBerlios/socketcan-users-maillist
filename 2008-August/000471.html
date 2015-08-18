@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] unwanted signal comming after enabling can0
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20unwanted%20signal%20comming%20after%20enabling%20can0&In-Reply-To=%3C001c01c8f62a%24b59f8990%24b701010a%40sumeet%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000472.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] unwanted signal comming after enabling can0</H1>
+    <B>Devendra Singh Rawat</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20unwanted%20signal%20comming%20after%20enabling%20can0&In-Reply-To=%3C001c01c8f62a%24b59f8990%24b701010a%40sumeet%3E"
+       TITLE="[Socketcan-users] unwanted signal comming after enabling can0">devendra.rawat at dbups.co.in
+       </A><BR>
+    <I>Mon Aug  4 14:07:47 CEST 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000472.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#471">[ date ]</a>
+              <a href="thread.html#471">[ thread ]</a>
+              <a href="subject.html#471">[ subject ]</a>
+              <a href="author.html#471">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+kernel: linux-2.6.25
+platform:ATMEL (AT91SAM9263)  ARM926 core
+
+After loading the SocketCAN driver module and making the can0 interface up by using the command 
+# ifconfig can0 up
+
+when I check the CANL line on the scope it shows a square wave of frequency of 250KHz (Which is the default can bus baud rate set by the driver)
+CANH also shows some garbage signal.
+
+I disabled the loopback during the can driver load time but again the same signal is appearing.
+
+If I write some CAN frame using raw-can protocol the write call succeeds but my frame gets super-imposed on the previous signal and if I try to read something the program hangs on the read syscall.
+
+Where am I doing something wrong ?
+
+Regards,
+Devendra
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080804/d81646a3/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080804/d81646a3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000472.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#471">[ date ]</a>
+              <a href="thread.html#471">[ thread ]</a>
+              <a href="subject.html#471">[ subject ]</a>
+              <a href="author.html#471">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

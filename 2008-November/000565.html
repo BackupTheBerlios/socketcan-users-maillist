@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Setting CAN parameters
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20CAN%20parameters&In-Reply-To=%3C49194462.2050302%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000563.html">
+   <LINK REL="Next"  HREF="000571.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Setting CAN parameters</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20CAN%20parameters&In-Reply-To=%3C49194462.2050302%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Setting CAN parameters">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Tue Nov 11 09:37:54 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000563.html">[Socketcan-users] Setting CAN parameters
+</A></li>
+        <LI>Next message: <A HREF="000571.html">[Socketcan-users] Can't get SocketCan to work on a MPC5200b board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#565">[ date ]</a>
+              <a href="thread.html#565">[ thread ]</a>
+              <a href="subject.html#565">[ subject ]</a>
+              <a href="author.html#565">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+
+Hi Gary,
+&gt;<i> I seem to be missing documentation on how to setup the various
+</I>&gt;<i> [timing] parameters for my CAN devices.  Once I install my driver,
+</I>&gt;<i> (based on SJA1000) I see these devices:
+</I>&gt;<i>   
+</I>
+Not 'devices' but 'sysfs entries'.
+
+Please check out which entries are writable and then you can see
+
+&gt;<i> ~ ls -l /sys/class/net/can0/can_bittiming
+</I>&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 bitrate
+</I>&gt;<i>   
+</I>
+This is the 'bitrate' for setting standard bitrates ... assumedly the 
+only entry you need for your use-case.
+
+&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_brp_inc
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_brp_max
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_brp_min
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_clock
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_sjw_max
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_tseg1_max
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_tseg1_min
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_tseg2_max
+</I>&gt;<i> -r--r--r--    1 root     root         4096 Nov 11 02:25 hw_tseg2_min
+</I>&gt;<i>   
+</I>
+These hw_ entries export the controllers hardware constants, if you like 
+to have a private or different bittime calculation algorithm in userspace.
+
+&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 phase_seg1
+</I>&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 phase_seg2
+</I>&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 prop_seg
+</I>&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 sample_point
+</I>&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 sjw
+</I>&gt;<i> -rw-r--r--    1 root     root         4096 Nov 11 02:25 tq
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+And these entries are created to set the bittiming in a device 
+independed way (you get these values out of your private or different 
+bittime calculation algorithm in userspace).
+
+&gt;<i> From reading the driver, I need to at least set bitrate and
+</I>&gt;<i> tq.
+</I>&gt;<i>   
+</I>
+As said above 'one' of these settings need to be done before saying 
+'ifconfig can0 up'
+
+&gt;<i> I assume that I set these like this?
+</I>&gt;<i>   # echo 125000 &gt;/sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;<i>   
+</I>
+Yes.
+
+&gt;<i>   # echo 99 &gt;/sys/class/net/can0/can_bittiming/tq
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+No - as you would need the other settings (phase_seg1, ...) also.
+
+
+
+So
+
+# echo 125000 &gt;/sys/class/net/can0/can_bittiming/bitrate
+# ifconfig can0 up
+
+
+should make it for your standard use-case.
+
+&gt;<i> Is this documented somewhere?
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+There had been several discussions om the socketcan-core ML while 
+developing this sysfs interface.
+But besides this text you are currently reading i don't think so - but 
+it's definitely a point for the TODO list ;-)
+
+
+&gt;<i> Thanks
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Have fun,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000563.html">[Socketcan-users] Setting CAN parameters
+</A></li>
+	<LI>Next message: <A HREF="000571.html">[Socketcan-users] Can't get SocketCan to work on a MPC5200b board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#565">[ date ]</a>
+              <a href="thread.html#565">[ thread ]</a>
+              <a href="subject.html#565">[ subject ]</a>
+              <a href="author.html#565">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

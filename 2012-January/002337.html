@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [ANNOUNCEMENT] CAN restbus-simulation the Node-way
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BANNOUNCEMENT%5D%20CAN%20restbus-simulation%20the%20Node-way&In-Reply-To=%3C4F01AA38.7010203%40sebastianhaas.info%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002338.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [ANNOUNCEMENT] CAN restbus-simulation the Node-way</H1>
+    <B>Sebastian Haas</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BANNOUNCEMENT%5D%20CAN%20restbus-simulation%20the%20Node-way&In-Reply-To=%3C4F01AA38.7010203%40sebastianhaas.info%3E"
+       TITLE="[Socketcan-users] [ANNOUNCEMENT] CAN restbus-simulation the Node-way">dev at sebastianhaas.info
+       </A><BR>
+    <I>Mon Jan  2 13:59:36 CET 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002338.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2337">[ date ]</a>
+              <a href="thread.html#2337">[ thread ]</a>
+              <a href="subject.html#2337">[ subject ]</a>
+              <a href="author.html#2337">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello everybody,
+
+I've recently started to work on restbus-simulation based on SocketCAN. 
+Since it is now somewhat useable I decided to announce it here to find 
+some advise and helpers to proceed even faster.
+
+The preliminary name is RestCAN. It basically consists of a set of Node 
+modules (nodejs.org), which enable the user to develop the behaviour of 
+CAN node within a &quot;simple to write&quot; Javascript.
+
+Background
+==========
+The idea was born because of my personal need to test CAN nodes by 
+simulating certain parts of a network. And I also wanted to have a 
+simple to use sandbox to implement and test new protocols or control 
+algorithms.
+
+I decided to use Javascript because this language is subject of current 
+optimization efforts (Webkit, V8, SpiderMonkey). To provide and powerful 
+development environment I switched to use NodeJS instead of using V8 
+from scratch. NodeJS is a asynchronous event oriented Javascript 
+environment with tons of third party modules (NPM) and a good subset of 
+builtin utilities (File I/O, TCP/UDP, HTTP, IPC, ...).
+
+Current status
+==============
+The current status is a Node module to work with raw channels, so a user 
+can write a script to send and receive raw CAN messages.
+
+Example
+=======
+	var can = require('../build/Release/can');
+	var channel = can.createRawChannel(&quot;vcan0&quot;);
+
+	// Start communication
+	channel.start();
+
+	// Send a CAN message in EFF
+	channel.send({ id: 12, ext: true, data: [ 1,2,3,4,5,6,7,8 ] });
+
+	// Register a listener for incoming messages
+	channel.addListener(&quot;onMessage&quot;,
+		function(msg) {
+			console.log(&quot;Message received&quot;);
+			console.log(msg);
+		});
+
+Planned features
+================
+Next step is to support specifing Rx filters and support BCM and ISOTP 
+channels.
+
+To make it a real restbus-simulation I plan to implement a CAN database 
+service to receive and decode signals within CAN messages and also to 
+generate CAN messages out of the CAN database.
+
+Performance
+===========
+A last note about performance, I know some people may have critic 
+thoughts one performance if they hear Javascript. I made some short test 
+here and I was able to receive roughly 9k msgs/s (cangen vcan0 -g 0 -i) 
+within a VirtualBox VM with a Core i5 running at 2.8GHz. Another script 
+was able to generate 7k msgs/s on the same machine. I'm okay with this 
+results so far since nothing is optimized yet. Since Node has already 
+proved its performance in certain setups I'm quite confident we can gain 
+more performance.
+
+Help
+====
+You see it is a lot of stuff to do here, so any help is really 
+appreciated. Due to lack of real CAN hardware here, I also appreciate 
+any help to test restcan with real CAN hardware.
+
+The project is hosted on github: <A HREF="https://github.com/sebi2k1/restcan">https://github.com/sebi2k1/restcan</A>
+
+Cheers,
+  Sebastian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002338.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2337">[ date ]</a>
+              <a href="thread.html#2337">[ thread ]</a>
+              <a href="subject.html#2337">[ subject ]</a>
+              <a href="author.html#2337">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Need help starting socketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C4E5BB005.3060502%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002106.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Need help starting socketCAN</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C4E5BB005.3060502%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Need help starting socketCAN">wg at grandegger.com
+       </A><BR>
+    <I>Mon Aug 29 17:28:05 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002106.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2112">[ date ]</a>
+              <a href="thread.html#2112">[ thread ]</a>
+              <a href="subject.html#2112">[ subject ]</a>
+              <a href="author.html#2112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 08/24/2011 12:56 PM, Ansell, John wrote:
+&gt;<i> Major progress! I can get messages through can0 now, I'll look at can1
+</I>&gt;<i> later. But I'm not sure I understand the fix!
+</I>&gt;<i> 
+</I>&gt;<i> The problem as I see it is that the mcp251x driver requests a falling
+</I>&gt;<i> edge triggered interrupt but function gpio_irq_type() (in gpio.c)
+</I>&gt;<i> doesn't allow that for some reason.
+</I>&gt;<i> 
+</I>&gt;<i> The (temporary?) fix is to make gpio_irq_type() accept
+</I>&gt;<i> IRQ_TYPE_EDGE_FALLING as well, but I suspect that will blow other stuff
+</I>&gt;<i> out of the water.
+</I>
+Puh, heavy hack ;-).
+
+&gt;<i> What would be the best way to fix this properly?
+</I>
+The platform code should provide a proper &quot;pdata-&gt;irq_flags&quot; setting:
+
+  <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/mcp251x.c#L933">http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/mcp251x.c#L933</A>
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002106.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2112">[ date ]</a>
+              <a href="thread.html#2112">[ thread ]</a>
+              <a href="subject.html#2112">[ subject ]</a>
+              <a href="author.html#2112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE00EB6.3070808%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001633.html">
+   <LINK REL="Next"  HREF="001635.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE00EB6.3070808%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Nov 14 17:30:46 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001633.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001635.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1634">[ date ]</a>
+              <a href="thread.html#1634">[ thread ]</a>
+              <a href="subject.html#1634">[ subject ]</a>
+              <a href="author.html#1634">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 14.11.2010 16:26, Willy Lambert wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> *The short story is :*
+</I>&gt;<i> 
+</I>&gt;<i> I manage to use vcan0 but the same tests fails on my real can interface. I
+</I>&gt;<i> am not sure about my HW livelyness but I really don't know where to look at
+</I>&gt;<i> to see if everything is working.
+</I>&gt;<i> 
+</I>
+&gt;<i> 
+</I>&gt;<i> and uses the same commands after having changed &quot;vcan0&quot; into &quot;can0&quot; in my
+</I>&gt;<i> can.log file.
+</I>
+You can assign CAN network devices to replay on different CAN interfaces.
+
+In your case:
+
+   canplayer -l i -I can.log can0=vcan0
+
+... would do it (without changing the original logfile)
+
+So make fist sending tests better try 'cansend' or 'cangen' ...
+
+---
+
+Generally you can't set a bitrate on vcans (as they do not have a CAN
+controller HW ;-)
+
+vcans are only software devices like the loopback device for IP traffic.
+
+&gt;<i> As a result I have a full buffer error message (killing cansend) :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# ../canplayer -l i -I can.log
+</I>&gt;&gt;<i> sendto: No buffer space available
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Here, I am totally lost, I don't know what to look at, I don't event know if
+</I>&gt;<i> my can hw is running. Could someone ligth up my path ?
+</I>&gt;<i> I tried different configuration like :
+</I>&gt;<i> _ no cabling
+</I>&gt;<i> _ cabling can0 into can1
+</I>&gt;<i> _ cabling on open can0
+</I>&gt;<i> I am not sure about my 120 Ohm resistors, I will check this on Monday, but
+</I>&gt;<i> as I am just trying to send is the real bus needed ?
+</I>
+You always need a properly terminated CAN bus AND a second CAN node
+(operationg at the same bitrate!) that acknowledges the CAN frames sent by
+your machine.
+
+
+&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# cat /proc/net/can/stats
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>        11 transmitted frames (TXF)
+</I>
+This is only network layer statistics, that handled the CAN frame on send.
+
+&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# ifconfig
+</I>&gt;&gt;<i> can0      Link encap:UNSPEC  HWaddr
+</I>&gt;&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;&gt;<i>           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>
+Obviously nothing was sent. Check termination/second CAN node.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001633.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001635.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1634">[ date ]</a>
+              <a href="thread.html#1634">[ thread ]</a>
+              <a href="subject.html#1634">[ subject ]</a>
+              <a href="author.html#1634">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

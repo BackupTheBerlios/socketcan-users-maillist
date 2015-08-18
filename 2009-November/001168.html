@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0FA6A1.3060706%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001166.html">
+   <LINK REL="Next"  HREF="001169.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0FA6A1.3060706%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">wg at grandegger.com
+       </A><BR>
+    <I>Fri Nov 27 11:14:57 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001166.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001169.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1168">[ date ]</a>
+              <a href="thread.html#1168">[ thread ]</a>
+              <a href="subject.html#1168">[ subject ]</a>
+              <a href="author.html#1168">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> On Fri, Nov 27, 2009 at 10:24:46AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Fu,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On Thu, Nov 26, 2009 at 01:09:55PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Fu,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;<i> &lt;snip&gt;
+</I>&gt;&gt;&gt;&gt;<i> Just looked to the code. scan_do_restart() just does the bus-off
+</I>&gt;&gt;&gt;&gt;<i> recovery if appropriate. But I realized that the scan_set_* functions do
+</I>&gt;&gt;&gt;&gt;<i>  stop the device before setting the property. That's dangerous and error
+</I>&gt;&gt;&gt;&gt;<i> prune and therefore we did not allow it in the kernel. It's up to the
+</I>&gt;&gt;&gt;&gt;<i> user/application to handle up/down properly. Furthermore, these
+</I>&gt;&gt;&gt;&gt;<i> functions seem to start the device even if it was not up before.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I updated the GIT tree. Now we have
+</I>&gt;&gt;&gt;<i> scan_do_start/stop/restart
+</I>&gt;&gt;&gt;<i> callbacks to start/stop/restart the device. Also elimanated duplicated
+</I>&gt;&gt;&gt;<i> code and remove the internal starting/stoping the device in _set calls.
+</I>&gt;&gt;&gt;<i> canconfig is updated too. I will rename the library to simply
+</I>&gt;&gt;&gt;<i> libsocketcan and the API prefix to can_. All good with these names?
+</I>&gt;&gt;<i> At a first glance, it looks good now. My favorite is libcan. 
+</I>&gt;<i> 
+</I>&gt;<i> let's stick to libsocketcan, libcan sounds somehow like libobama ;-) I'll
+</I>&gt;<i> change the API namespace prefix to can_, so hopefull every one is
+</I>&gt;<i> satisfied.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Just one
+</I>&gt;&gt;<i> final comment about:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   int scan_set_bitrate(const char *name, __u32 bitrate, __u32 sample_point)
+</I>&gt;&gt;<i>   {
+</I>&gt;&gt;<i>         struct can_bittiming bt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         memset(&amp;bt, 0, sizeof(bt));
+</I>&gt;&gt;<i>         bt.bitrate = bitrate;
+</I>&gt;&gt;<i>         bt.sample_point = sample_point;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         return scan_set_bittiming(name, &amp;bt);
+</I>&gt;&gt;<i>   }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I would prefer two functions here:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   int scan_set_bitrate(const char *name, __u32 bitrate)
+</I>&gt;&gt;<i>   int scan_set_bitrate_sample_point(const char *name, __u32 bitrate, __u32 sample_point)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Not sure if we need the latter, though. This would avoid non-expert users
+</I>&gt;&gt;<i> using non-standard sample-points.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I'd prefer not to split it, since they're parameters, which are closelsy
+</I>&gt;<i> related to another. sample_point will anyway be ignored, if it's set to
+</I>&gt;<i> zero. To avoid misuse we can add some extra hint on this to the (still
+</I>&gt;<i> non-existent) documentation.
+</I>
+I don't want to invite people playing with the sample-point. To be
+clear, sample_point==0 will not be ignored. It means using CIA
+recommended sample points for the specified bit-rate.
+
+Wolfgang-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001166.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001169.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1168">[ date ]</a>
+              <a href="thread.html#1168">[ thread ]</a>
+              <a href="subject.html#1168">[ subject ]</a>
+              <a href="author.html#1168">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

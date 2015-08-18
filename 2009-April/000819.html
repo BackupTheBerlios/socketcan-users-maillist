@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] accessing remote CAn interfaces
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20accessing%20remote%20CAn%20interfaces&In-Reply-To=%3C49F57894.6030601%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000818.html">
+   <LINK REL="Next"  HREF="000820.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] accessing remote CAn interfaces</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20accessing%20remote%20CAn%20interfaces&In-Reply-To=%3C49F57894.6030601%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] accessing remote CAn interfaces">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Mon Apr 27 11:19:16 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000818.html">[Socketcan-users] accessing remote CAN interfaces
+</A></li>
+        <LI>Next message: <A HREF="000820.html">[Socketcan-users]  slcan_attach and resetting line disciplines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#819">[ date ]</a>
+              <a href="thread.html#819">[ thread ]</a>
+              <a href="subject.html#819">[ subject ]</a>
+              <a href="author.html#819">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Mon, Apr 27, 2009 at 10:31:53AM +0200, Heinz-J&#252;rgen Oertel wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i>  still new  to socketCAN.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is it possible to access a local CAN interface from a remote computer?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> eg. something like candump but with additionally specifying the IP address of 
+</I>&gt;&gt;<i> the computer where the CAN interface is physically connected
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ candump any,0:0,#FFFFFFFF 192.168.1.100
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I saw in can-utils canlogserver.
+</I>&gt;&gt;<i> I this the only way, starting the  canlogserver on the computer with the 
+</I>&gt;&gt;<i> physical CAN and the remote host has than to connect to the canlogserver ?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> ssh 192.168.1.100 candump any,0:0,#FFFFFFFF
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Oh, snap!
+
+I think the canlogserver just became obsolete :-]
+
+Looks like a good day for new insights.
+
+Thanks Robert!
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000818.html">[Socketcan-users] accessing remote CAN interfaces
+</A></li>
+	<LI>Next message: <A HREF="000820.html">[Socketcan-users]  slcan_attach and resetting line disciplines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#819">[ date ]</a>
+              <a href="thread.html#819">[ thread ]</a>
+              <a href="subject.html#819">[ subject ]</a>
+              <a href="author.html#819">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

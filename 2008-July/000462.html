@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan in kernel space?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20in%20kernel%20space%3F&In-Reply-To=%3C486CBB32.8030809%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000461.html">
+   <LINK REL="Next"  HREF="000463.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan in kernel space?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20in%20kernel%20space%3F&In-Reply-To=%3C486CBB32.8030809%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Socketcan in kernel space?">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Thu Jul  3 13:42:42 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000461.html">[Socketcan-users] Socketcan in kernel space?
+</A></li>
+        <LI>Next message: <A HREF="000463.html">[Socketcan-users] Socketcan in kernel space?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#462">[ date ]</a>
+              <a href="thread.html#462">[ thread ]</a>
+              <a href="subject.html#462">[ subject ]</a>
+              <a href="author.html#462">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Fabrizio Garetto wrote:
+&gt;<i> I'm developing a driver on 2.6.22 kernel (not upgradeable ;), and I
+</I>&gt;<i> need to notify the reception of can frames from there. In practise the
+</I>&gt;<i> same thing that 'cansend.c' does, but in kernel space.
+</I>&gt;<i> Is not possible? I can modify vcan.c and export 'vcan_tx' function,
+</I>&gt;<i> but then how can I identify -for example- vcan0 interface from a
+</I>&gt;<i> driver?
+</I>&gt;<i>   
+</I>
+Hi Fabrizio,
+
+what i've understood:
+
+You have some code inside the Kernel that needs to send CAN frames via a 
+real CAN netdevice interface, right?
+
+If so,  i would suggest to use the well defined interfaces the CAN 
+networklayer provides to all other CAN protocol modules (like the CAN 
+RAW oder CAN BCM socket):
+
+Please take a closer look into include/linux/can/core.h :
+
+  
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/include/linux/can/core.h">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/include/linux/can/core.h</A>
+
+int can_rx_register()
+void can_rx_unregister()
+int can_send();
+
+
+A detailed description of these functions can be found in
+
+  
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/net/can/af_can.c">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/net/can/af_can.c</A>
+
+Example (for your use-case):
+To send a CAN frame from *your* code to can0, you would need to 
+implement similar things as you can find in net/can/raw.c in raw_sendmsg().
+I adapted some things for your needs and for 2.6.22:
+
+	struct sk_buff *skb;
+	struct net_device *dev;
+	struct can_frame *cf;
+	int err;
+
+	dev = dev_get_by_name(&quot;can0&quot;);
+	if (!dev)
+		goto out;
+
+	skb = alloc_skb(sizeof(struct can_frame), gfp_any());
+	if (!skb) {
+		dev_put(dev);
+		goto out;
+	}
+
+	cf = (struct can_frame *)skb-&gt;data;
+
+	cf-&gt;can_id = 0x123
+	cf-&gt;can_dlc = 1;
+	cf-&gt;data[0] = 42; /* what else? */
+
+	/* identify added data length */
+	skb_put(skb, sizeof(struct can_frame));
+
+	skb-&gt;dev = dev;
+	skb-&gt;sk  = 0;
+
+	err = can_send(skb, 1);
+
+	dev_put(dev);
+
+out:
+	/* check the err value */
+
+
+That should work but is untested.
+
+If you would also like to receive CAN frames in your *special* driver 
+you would need to use can_rx_(un)register()  and register your own 
+callback function for the reception of CAN frames. But BEWARE: You need 
+to skb_free() your received socketbuffers (skb) AND you need to register 
+the netdevice notifier call chain to remove your subscription when the 
+interface (here: can0) is removed for any reason!!
+
+So the described approach is still a hack - but it is minimal invasive 
+AND you can run other SocketCAN stuff in parallel :-)
+
+Did this answer fit to your original question?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000461.html">[Socketcan-users] Socketcan in kernel space?
+</A></li>
+	<LI>Next message: <A HREF="000463.html">[Socketcan-users] Socketcan in kernel space?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#462">[ date ]</a>
+              <a href="thread.html#462">[ thread ]</a>
+              <a href="subject.html#462">[ subject ]</a>
+              <a href="author.html#462">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

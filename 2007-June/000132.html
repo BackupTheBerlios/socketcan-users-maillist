@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20data%20from%20can%20bus%0A%09via%09SJA1000-iomem&In-Reply-To=%3C468523B9.5090103%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000131.html">
+   <LINK REL="Next"  HREF="000133.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20data%20from%20can%20bus%0A%09via%09SJA1000-iomem&In-Reply-To=%3C468523B9.5090103%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Jun 29 17:22:33 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000131.html">[Socketcan-users] Unable to receive data from can bus via	SJA1000-iomem
+</A></li>
+        <LI>Next message: <A HREF="000133.html">[Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#132">[ date ]</a>
+              <a href="thread.html#132">[ thread ]</a>
+              <a href="subject.html#132">[ subject ]</a>
+              <a href="author.html#132">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Riedmann, Kai wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> we are introducing the can bus in one of our appliances and so we used
+</I>&gt;<i> an Philips SJA1000 on our BSP. 
+</I>&gt;<i> For some reasons the hardware division had to use the adress lanes from
+</I>&gt;<i> A1 to A8 which connect A0 to A7 on the SJA1000 so I had to change the
+</I>&gt;<i> hw_writereg and hw_readreg and the changes were successful on SVN
+</I>&gt;<i> revision 300. 
+</I>&gt;<i>   
+</I>
+First of all - did you consider to update to the current trunk? There
+had been some changes so far ...
+&gt;<i> There is no problem for me sending data from our appliance over sja1000
+</I>&gt;<i> and can-raw via cansend but when  i try to receive can frames the frames
+</I>&gt;<i> are stored on the chips recevice registers, the SR.0 and the IR.0 are 1
+</I>&gt;<i> but the driver won't read the message. Even a candump from your
+</I>&gt;<i> can-utils-directory isn't able to read some data. Does anyone know a
+</I>&gt;<i> solution for my problem. Were have I got to change the sources for
+</I>&gt;<i> receiving can frames.
+</I>&gt;<i>   
+</I>
+Hm - can you send more than one CAN frame on your SJA1000 (e.g. with
+'cangen')?
+
+Do you have some TX_TIMEOUTs in your Kernel log (or dmesg) ?
+
+I just want to go sure, that the irq-line is attached correctly, before
+considering other checks ...
+
+Regards,
+Oliver
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000131.html">[Socketcan-users] Unable to receive data from can bus via	SJA1000-iomem
+</A></li>
+	<LI>Next message: <A HREF="000133.html">[Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#132">[ date ]</a>
+              <a href="thread.html#132">[ thread ]</a>
+              <a href="subject.html#132">[ subject ]</a>
+              <a href="author.html#132">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN USB
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20USB&In-Reply-To=%3C49386C77.3000305%40mlbassoc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000603.html">
+   <LINK REL="Next"  HREF="000605.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN USB</H1>
+    <B>Gary Thomas</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20USB&In-Reply-To=%3C49386C77.3000305%40mlbassoc.com%3E"
+       TITLE="[Socketcan-users] CAN USB">gary at mlbassoc.com
+       </A><BR>
+    <I>Fri Dec  5 00:49:11 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000603.html">[Socketcan-users] CAN USB
+</A></li>
+        <LI>Next message: <A HREF="000605.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#604">[ date ]</a>
+              <a href="thread.html#604">[ thread ]</a>
+              <a href="subject.html#604">[ subject ]</a>
+              <a href="author.html#604">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Gary Thomas wrote:
+</I>&gt;&gt;<i> For example, I have some of the Lawicel AB devices.  The interface
+</I>&gt;&gt;<i> looks like a [USB] serial port with specialized commands to perform
+</I>&gt;&gt;<i> the actual CAN bus operations.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Has anyone ever thought about supporting these [various] dongles?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> Yes me ;-)
+</I>&gt;<i> 
+</I>&gt;<i> They are already supported by the slcan driver which supports a class of
+</I>&gt;<i> devices that implements the Lawicel protocol aka SLCAN (Serial Line CAN)
+</I>&gt;<i> protocol.
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://download.berlios.de/socketcan/SLCAN-API.pdf">http://download.berlios.de/socketcan/SLCAN-API.pdf</A>
+</I>&gt;<i> 
+</I>&gt;<i> I implemented this driver as a Linux serial line discipline (N_SLCAN
+</I>&gt;<i> since 2.6.25) on the base of slip.c to push the tty ASCII CAN frames
+</I>&gt;<i> into a slc0, slc1, ... CAN netdevices.
+</I>&gt;<i> 
+</I>&gt;<i> The slcan driver is in the SocketCAN SVN (but not default compile target).
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/drivers/net/can/slcan.c">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/drivers/net/can/slcan.c</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> If you go into
+</I>&gt;<i> 
+</I>&gt;<i> socketcan/trunk/kernel/2.6/drivers/net/can
+</I>&gt;<i> 
+</I>&gt;<i> and say
+</I>&gt;<i> 
+</I>&gt;<i> make CONFIG_CAN_SLCAN=m
+</I>&gt;<i> 
+</I>&gt;<i> it is build.
+</I>&gt;<i> 
+</I>&gt;<i> You need the tool 'slcan_attach' from socketcan/trunk/can-utils also.
+</I>&gt;<i> 
+</I>&gt;<i> But for an unknown reason it is not possible to attach, detach and
+</I>&gt;<i> re-attach a (USB/) serial device.
+</I>&gt;<i> 
+</I>&gt;<i> But the fist attach runs excellent for first tests. Maybe you catch the
+</I>&gt;<i> problem ;-)
+</I>&gt;<i> 
+</I>&gt;<i> Give it a try.
+</I>
+Cool, that worked great, thanks :-)
+
+If I have a chance, I'll look into the detach problem, but given that
+the same problem is suffered by other line-discipline drivers, I'm not
+very hopeful (or worried).
+
+
+
+-- 
+------------------------------------------------------------
+Gary Thomas                 |  Consulting for the
+MLB Associates              |    Embedded world
+------------------------------------------------------------
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000603.html">[Socketcan-users] CAN USB
+</A></li>
+	<LI>Next message: <A HREF="000605.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#604">[ date ]</a>
+              <a href="thread.html#604">[ thread ]</a>
+              <a href="subject.html#604">[ subject ]</a>
+              <a href="author.html#604">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

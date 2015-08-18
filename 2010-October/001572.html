@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CB97563.8070401%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001571.html">
+   <LINK REL="Next"  HREF="001573.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CB97563.8070401%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sat Oct 16 11:50:27 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001571.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001573.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1572">[ date ]</a>
+              <a href="thread.html#1572">[ thread ]</a>
+              <a href="subject.html#1572">[ subject ]</a>
+              <a href="author.html#1572">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 15.10.2010 20:35, Wolfgang Grandegger wrote:
+&gt;<i> On 10/14/2010 12:07 PM, Alexander Stein wrote:
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Thursday 14 October 2010, 12:00:06 Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Yes, it's explained in section 3.2, 4.1.3 and 4.1.4 of:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.35.7/Documentation/networking/can.txt">http://lxr.linux.no/#linux+v2.6.35.7/Documentation/networking/can.txt</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I read those sections several times, but I doubt I get it all correctly.
+</I>&gt;&gt;&gt;&gt;<i> To my understanding CAN_RAW_LOOPBACK is the option to enable reception
+</I>&gt;&gt;&gt;&gt;<i> of sent frames on _different_ sockets of the same device. And
+</I>&gt;&gt;&gt;&gt;<i> CAN_RAW_RECV_OWN_MSGS is the option to enable reception of sent frames
+</I>&gt;&gt;&gt;&gt;<i> on the _same_ socket of the same device.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Sounds good.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> If I'm right until here, why do I get my own sent messages on one socket,
+</I>&gt;&gt;&gt;&gt;<i> if CAN_RAW_LOOPBACK = 1 and CAN_RAW_RECV_OWN_MSGS = 0 is set?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> You mean you get the message on the *same* socket you use for sending?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, I write a frame on this socket and after that I read which gets my 
+</I>&gt;&gt;<i> previously sent frame. I do bind this socket to a specific device, but I doubt 
+</I>&gt;&gt;<i> this does matter in this case.
+</I>&gt;<i> 
+</I>
+Looks like a deja-vu :-)
+
+Can you send your exact Kernel version?
+
+The correct behaviour hase been killed here
+
+<A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=fc6055a5ba31e2c14e36e8939f9bf2b6d586a7f5">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=fc6055a5ba31e2c14e36e8939f9bf2b6d586a7f5</A>
+
+and fixed here
+
+<A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=cff0d6e6edac7672b3f915bb4fb59f279243b7f9">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=cff0d6e6edac7672b3f915bb4fb59f279243b7f9</A>
+
+The discussion about this was here:
+
+can: expected receive behavior broken
+
+<A HREF="http://marc.info/?t=128030411900003&amp;r=1&amp;w=2">http://marc.info/?t=128030411900003&amp;r=1&amp;w=2</A>
+
+Probably your kernel version is affected.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001571.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001573.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1572">[ date ]</a>
+              <a href="thread.html#1572">[ thread ]</a>
+              <a href="subject.html#1572">[ subject ]</a>
+              <a href="author.html#1572">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] At91_can transmitting error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3COF8A62CD62.604C607F-ONC125749D.00468726-C125749D.0046D095%40cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000475.html">
+   <LINK REL="Next"  HREF="000477.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] At91_can transmitting error</H1>
+    <B>jorgefm at cirsa.com</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3COF8A62CD62.604C607F-ONC125749D.00468726-C125749D.0046D095%40cirsa.com%3E"
+       TITLE="[Socketcan-users] At91_can transmitting error">jorgefm at cirsa.com
+       </A><BR>
+    <I>Wed Aug  6 14:51:23 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000475.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+        <LI>Next message: <A HREF="000477.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#476">[ date ]</a>
+              <a href="thread.html#476">[ thread ]</a>
+              <a href="subject.html#476">[ subject ]</a>
+              <a href="author.html#476">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote on 06/08/2008 14:04:46:
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">jorgefm at cirsa.com</A> wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote on 06/08/2008 13:46:41:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">jorgefm at cirsa.com</A> wrote:
+</I>&gt;<i> &gt; &gt; &gt; (..)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cat /proc/net/can/stats
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;        34 transmitted frames (TXF)
+</I>&gt;<i> &gt; &gt; &gt;       374 received frames (RXF)
+</I>&gt;<i> &gt; &gt; &gt;         8 matched frames (RXMF)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;         2 % total match ratio (RXMR)
+</I>&gt;<i> &gt; &gt; &gt;         0 frames/s total tx rate (TXR)
+</I>&gt;<i> &gt; &gt; &gt;         2 frames/s total rx rate (RXR)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;         0 % current match ratio (CRXMR)
+</I>&gt;<i> &gt; &gt; &gt;         0 frames/s current tx rate (CTXR)
+</I>&gt;<i> &gt; &gt; &gt;         2 frames/s current rx rate (CRXR)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;       100 % max match ratio (MRXMR)
+</I>&gt;<i> &gt; &gt; &gt;         5 frames/s max tx rate (MTXR)
+</I>&gt;<i> &gt; &gt; &gt;         7 frames/s max rx rate (MRXR)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt; &gt;         0 current receive list entries (CRCV)
+</I>&gt;<i> &gt; &gt; &gt;         1 maximum receive list entries (MRCV)
+</I>&gt;<i> &gt; &gt; &gt;
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Hi Jorge,
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; unfortunately i'm not familiar with the at91_can driver but i can 
+</I>tell
+&gt;<i> &gt; &gt; you that the statistic above only tells you something about how the
+</I>&gt;<i> &gt; &gt; packets flow through the CAN networklayer.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; If you need details (e.g. dropped frames, sent frames) from your
+</I>&gt;<i> &gt; &gt; specific *driver* you should look into
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; cat /proc/net/dev
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; or type
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; /sbin/ifconfig can0
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; to get the latest state/statistic of your network interface.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Regards,
+</I>&gt;<i> &gt; &gt; Oliver
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hi Oliver,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The outcome of these commands are:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cat /proc/net/dev
+</I>&gt;<i> &gt; Inter-|   Receive                                                | 
+</I>&gt;<i> &gt;  Transmit
+</I>&gt;<i> &gt;  face |bytes    packets errs drop fifo frame compressed 
+</I>&gt;<i> &gt; multicast|bytes    packets errs drop fifo colls carrier compressed
+</I>&gt;<i> &gt;     lo:       0       0    0    0    0     0          0         0 
+</I>&gt;<i> &gt;    0       0    0    0    0     0       0          0
+</I>&gt;<i> &gt;   eth0:30024787   34595    1    0    0     0          0         0 
+</I>&gt;<i> &gt;  2355450   15431    3    0    3     0       0          0
+</I>&gt;<i> &gt;   can0:    5592    5592    0    0    0     0          0         0 
+</I>&gt;<i> &gt;  206       1    4    0    0     0       0          0
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ /sbin/ifconfig can0
+</I>&gt;<i> &gt; can0      Link encap:UNSPEC  HWaddr 
+</I>&gt;<i> &gt; 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i> &gt;           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i> &gt;           RX packets:5720 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i> &gt;           TX packets:1 errors:4 dropped:0 overruns:0 carrier:0
+</I>&gt;<i> &gt;           collisions:0 txqueuelen:10
+</I>&gt;<i> &gt;           RX bytes:5720 (5.5 KiB)  TX bytes:206 (206.0 B)
+</I>&gt;<i> &gt;           Interrupt:12
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Basically in the Tx part are more errors than packets sent :)
+</I>&gt;<i> 
+</I>&gt;<i> Hm - really looks like that you have problems to put your frames onto 
+</I>&gt;<i> the wire.
+</I>&gt;<i> 
+</I>&gt;<i> Do you have a correct termination (at least 120 Ohms between CAN_L and 
+</I>&gt;<i> CAN_H?) in your CAN network?
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>
+I've checked the can network and I've change it, because the can node had
+the termination resistor soldered . Now one end is a pc with the 120 ohms
+termination (the can network master), there are two non-terminated can 
+nodes
+and the atmel board in the other end with the 'can bus term' jumper on.
+I think this topology is correct, isn't? two terminations in each end.
+
+Now I've:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ./cangen can0
+net can0: TX start for mb #8
+net can0: BOFF irq
+net can0: can_restart_on (-13450)
+net can0: BOFF irq
+net can0: can_restart_on already active (-13450)
+net can0: can_restart_dev (-13440)
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: TX start for mb #8
+net can0: TX start for mb #8
+net can0: FERR irq
+net can0: BERR irq
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: TX start for mb #12
+net can0: FERR irq
+net can0: BERR irq
+net can0: FERR irq
+net can0: BERR irq
+net can0: FERR irq
+net can0: BOFF irq
+net can0: can_restart_on (-13308)
+net can0: TX start for mb #13
+net can0: can_restart_dev (-13298)
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: TX start for mb #8
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: FERR irq
+net can0: BOFF irq
+net can0: can_restart_on (-13217)
+net can0: can_restart_dev (-13207)
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: TX start for mb #8
+net can0: FERR irq
+net can0: BERR irq
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: FERR irq
+net can0: BERR irq
+net can0: FERR irq
+net can0: BERR irq
+net can0: TX start for mb #12
+net can0: FERR irq
+net can0: BERR irq
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ net can0: FERR irq
+net can0: BOFF irq
+net can0: can_restart_on (-13079)
+net can0: can_restart_dev (-13069)
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: SERR irq
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ifconfig can0
+can0      Link encap:UNSPEC  HWaddr 
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          UP RUNNING NOARP  MTU:16  Metric:1
+          RX packets:867 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:10
+          RX bytes:867 (867.0 B)  TX bytes:106 (106.0 B)
+          Interrupt:12
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cat /proc/net/dev
+Inter-|   Receive                                                | 
+Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes 
+packets errs drop fifo colls carrier compressed
+    lo:       0       0    0    0    0     0          0         0        0 
+      0    0    0    0     0       0          0
+  eth0:29343208   28585    1    0    0     0          0         0  2351497 
+  15268    2    0    2     0       0          0
+  can0:     953     953    0    0    0     0          0         0      106 
+      1    0    0    0     0       0          0
+
+
+Now there are form errors (FERR) and bit errors (BERR), but these errors
+are not reflected in the last two commands.
+
+Best regards,
+Jorge
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080806/a58d0722/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080806/a58d0722/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000475.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+	<LI>Next message: <A HREF="000477.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#476">[ date ]</a>
+              <a href="thread.html#476">[ thread ]</a>
+              <a href="subject.html#476">[ subject ]</a>
+              <a href="author.html#476">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

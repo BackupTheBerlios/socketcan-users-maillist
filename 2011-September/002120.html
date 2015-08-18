@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3CCAKvQZ_2PyM5zo5-4PtrMGjMEML3j02MKCCJU%3DzpnkSK2N_XUjg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002119.html">
+   <LINK REL="Next"  HREF="002121.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3CCAKvQZ_2PyM5zo5-4PtrMGjMEML3j02MKCCJU%3DzpnkSK2N_XUjg%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">lambert.willy at gmail.com
+       </A><BR>
+    <I>Sun Sep  4 21:09:56 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002119.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+        <LI>Next message: <A HREF="002121.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2120">[ date ]</a>
+              <a href="thread.html#2120">[ thread ]</a>
+              <a href="subject.html#2120">[ subject ]</a>
+              <a href="author.html#2120">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/9/3 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> Hi Willy,
+</I>&gt;<i>
+</I>&gt;<i> On 08/30/2011 01:36 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt; 2011/8/30 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; On 08/30/2011 11:18 AM, Willy Lambert wrote:
+</I>&gt;<i> &gt;&gt;&gt; 2011/8/18 Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; On 08/18/2011 07:55 AM, Oliver Hartkopp wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; On 16.08.2011 21:45, Willy Lambert wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Hi all,
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; I used sja1000 on a 32bits system and I am trying to switch to a 64b
+</I>&gt;<i> &gt;&gt;&gt;&gt; system.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; It not possible to select CONFIG_SJA1000_ISA when CONFIG_ISA is not
+</I>&gt;<i> &gt;&gt; set,
+</I>&gt;<i> &gt;&gt;&gt;&gt; which
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; is not available when CONFIG_X86_64 is set.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; As in xenomai &quot;socket&quot; drivers I am able to use my board, I wonder
+</I>&gt;<i> why
+</I>&gt;<i> &gt;&gt;&gt;&gt; this is
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; not possible under a vanilla linux. I access my HW by iomem (the
+</I>&gt;<i> &gt;&gt;&gt;&gt; equivalent
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; xenomai driver is xeno_can_mem), is there an equivalent socket can
+</I>&gt;<i> &gt;&gt;&gt;&gt; driver ?
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Hi Willy,
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; i've looked into
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; which should have a similar problem, as these old-style serial
+</I>&gt;<i> hardware
+</I>&gt;<i> &gt;&gt;&gt;&gt; is
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; also using the ISA bus.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; But the serial drivers are now depending on HAS_IOMEM
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/Kconfig#L4">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/Kconfig#L4</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; and they use platform calls
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3177">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3177</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; like platform_device_alloc(), platform_device_add(),
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; platform_driver_register() and friends ...
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3349">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3349</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; The sja1000_isa.c still uses the ISA pendants
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/sja1000/sja1000_isa.c#L253">http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/sja1000/sja1000_isa.c#L253</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; So IMO the sja1000_isa driver 'just' needs to be converted like they
+</I>&gt;<i> &gt;&gt; did
+</I>&gt;<i> &gt;&gt;&gt;&gt; with
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; the serial drivers.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; @Wolfgang/Marc: Or is it better to create some platform bindings for
+</I>&gt;<i> &gt;&gt; x86
+</I>&gt;<i> &gt;&gt;&gt;&gt; and
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; use the 'sja1000_platform' driver??
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; A platform driver is of course sexier :)
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; Marc
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Does someone know what is to do in order to make this sja1000_platform
+</I>&gt;<i> &gt;&gt;&gt; driver in my case ?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I think we have first to fix the HAS_ISA vs. HAS_IOMEM issue. The
+</I>&gt;<i> &gt;&gt; sja1000 driver supports both, I/O port and memory mapped accesses. For
+</I>&gt;<i> &gt;&gt; the first we need HAS_ISA and for the latter HAS_IOMEM... that's my
+</I>&gt;<i> &gt;&gt; current understanding. I will have a closer look later today or
+</I>&gt;<i> tomorrow.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks in advance, I am using IOMEM, so this fix should be directly
+</I>&gt;<i> usefull
+</I>&gt;<i> &gt; for me.
+</I>&gt;<i>
+</I>&gt;<i> What CAN hardware are you using?
+</I>
+
+Motherboad and CAN stack :
+<A HREF="http://www.advantech.com/products/PCM-3362/mod_2B69DA4C-D506-4AEA-8CC3-F6E58E3CBC87.aspx">http://www.advantech.com/products/PCM-3362/mod_2B69DA4C-D506-4AEA-8CC3-F6E58E3CBC87.aspx</A>
+<A HREF="http://www.ixxat.com/pc_i_04_104_en.html">http://www.ixxat.com/pc_i_04_104_en.html</A>
+
+
+
+&gt;<i> And what bus is it
+</I>&gt;<i> connected to? Why do I ask? In &quot;arch/x86/Kconfig&quot; there is:
+</I>&gt;<i>
+</I>&gt;<i>  # x86_64 have no ISA slots, but can have ISA-style DMA.
+</I>&gt;<i>  config ISA_DMA_API
+</I>&gt;<i>        bool &quot;ISA-style DMA support&quot; if (X86_64 &amp;&amp; EXPERT)
+</I>&gt;<i>        default y
+</I>&gt;<i>        help
+</I>&gt;<i>          Enables ISA-style DMA support for devices requiring such
+</I>&gt;<i> controllers.
+</I>&gt;<i>          If unsure, say Y.
+</I>&gt;<i>
+</I>&gt;<i>  if X86_32
+</I>&gt;<i>
+</I>&gt;<i>  config ISA
+</I>&gt;<i>        bool &quot;ISA support&quot;
+</I>&gt;<i>        ---help---
+</I>&gt;<i>          Find out whether you have ISA slots on your motherboard.  ISA is
+</I>&gt;<i> the
+</I>&gt;<i>          name of a bus system, i.e. the way the CPU talks to the other
+</I>&gt;<i> stuff
+</I>&gt;<i>          inside your box.  Other bus systems are PCI, EISA, MicroChannel
+</I>&gt;<i>          (MCA) or VESA.  ISA is an older system, now being displaced by
+</I>&gt;<i> PCI;
+</I>&gt;<i>          newer boards don't support it.  If you have ISA, say Y, otherwise
+</I>&gt;<i> N.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Maybe the assumption that the x86_64 does not have ISA slots is wrong and
+</I>&gt;<i> we
+</I>&gt;<i> should fix that instead of moving to a platform driver like Oliver
+</I>&gt;<i> suggested.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110904/282d613d/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110904/282d613d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002119.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+	<LI>Next message: <A HREF="002121.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2120">[ date ]</a>
+              <a href="thread.html#2120">[ thread ]</a>
+              <a href="subject.html#2120">[ subject ]</a>
+              <a href="author.html#2120">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

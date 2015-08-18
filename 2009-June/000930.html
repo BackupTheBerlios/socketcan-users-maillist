@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%09Channel%20CAN%20PC104%20Module.&In-Reply-To=%3Cb2da33020906160819jc73613fn68c0389a1abba8dd%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000929.html">
+   <LINK REL="Next"  HREF="000937.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.</H1>
+    <B>khurram gulzar</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%09Channel%20CAN%20PC104%20Module.&In-Reply-To=%3Cb2da33020906160819jc73613fn68c0389a1abba8dd%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.">khurramgulzar at gmail.com
+       </A><BR>
+    <I>Tue Jun 16 17:19:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000929.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+        <LI>Next message: <A HREF="000937.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#930">[ date ]</a>
+              <a href="thread.html#930">[ thread ]</a>
+              <a href="subject.html#930">[ subject ]</a>
+              <a href="author.html#930">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>It probe but only the first can at adress 0x300 but says no module found on
+0x304 i double check the address but it is set to 0x304 and in ioport its
+not accessed via any other hardware.
+
+insmod sja1000-io.ko base=0x300,0x304 irq=10,11
+
+any suggestions
+
+On Tue, Jun 16, 2009 at 4:59 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+
+&gt;<i> khurram gulzar wrote:
+</I>&gt;<i> &gt; well,
+</I>&gt;<i> &gt; it gives me
+</I>&gt;<i> &gt; 01F0-01F7 it821x
+</I>&gt;<i> &gt; 0374-0377 it821x
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So this means the io address space between 0x1F8 - 0x373 is free
+</I>&gt;<i> &gt; the device is mapped at 0x200 0x208 and 0x240
+</I>&gt;<i> &gt; or it i mapped it on 0x300, 0x308 and 0x240
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; what seems to be wrong here ?
+</I>&gt;<i>
+</I>&gt;<i> Ah, of course. That's not a memory mapped address space. You should use
+</I>&gt;<i> the sja1000-io.ko driver instead.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090616/18e5ed8d/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090616/18e5ed8d/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000929.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+	<LI>Next message: <A HREF="000937.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#930">[ date ]</a>
+              <a href="thread.html#930">[ thread ]</a>
+              <a href="subject.html#930">[ subject ]</a>
+              <a href="author.html#930">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

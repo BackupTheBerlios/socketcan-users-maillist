@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kernel Oops and update for MPC5200B CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20Oops%20and%20update%20for%20MPC5200B%20CAN&In-Reply-To=%3C1260457591.12419.41.camel%40slamon-laptop.novariant.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001199.html">
+   <LINK REL="Next"  HREF="001205.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kernel Oops and update for MPC5200B CAN</H1>
+    <B>Sylvain Lamontagne</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20Oops%20and%20update%20for%20MPC5200B%20CAN&In-Reply-To=%3C1260457591.12419.41.camel%40slamon-laptop.novariant.com%3E"
+       TITLE="[Socketcan-users] Kernel Oops and update for MPC5200B CAN">sylvain.lamontagne at novariant.com
+       </A><BR>
+    <I>Thu Dec 10 16:06:31 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001199.html">[Socketcan-users] Capture frames from SocketCAN interface with Libpcap/Tcpdump/Wireshark
+</A></li>
+        <LI>Next message: <A HREF="001205.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1204">[ date ]</a>
+              <a href="thread.html#1204">[ thread ]</a>
+              <a href="subject.html#1204">[ subject ]</a>
+              <a href="author.html#1204">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+I am working with a custom MPC5200B based board and the CAN is mostly
+working on it, using the revision 958 on the berlios svn. I know it's
+quite old, this is why this email have two part. The kernel is version
+2.6.29.2 with some patches for our internal needs.
+
+First: 
+I have been trying to figure out why sometime I'm getting a kernel Oops
+when the command &quot;ifconfig canX down&quot; is used. The Oops is pretty random
+so there is no easy way (that I found) to reproduce it, therefor it is
+hard to debug. I've attached the Oops to this email. (I have plenty of
+similar)
+
+My question regarding this first issue is: Is it known that this version
+(958) of the driver can cause a kernel Oops ?
+Regarding this email it seems that I'm not alone.
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2009-February/000646.html">https://lists.berlios.de/pipermail/socketcan-users/2009-February/000646.html</A>
+
+I though that updating the driver would be a good thing, so I tried and
+this is why I have a second part to this email.
+
+Second:
+By reading the various source of information on the internet I have
+discovered that SocketCAN source code seems now in two different places.
+The berlios SVN and this git
+<A HREF="git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6">git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6</A>
+
+So I'm a bit confused about which I should use, but I tried with the
+berlios svn r1095 but it seems that the way I was compiling before
+doesn't work anymore ... it seems to compile but the mscan driver is not
+compiled. I get some .ko but no mscan-mpc52xx.ko mscan.ko or
+mscan_5xxx.ko anywhere... previously I was getting mscan-mpc52xx.ko
+
+I probably do something wrong, but to verify that I would need the
+procedure to compiled the drivers correctly or even better to include
+them in the kernel as a simple patch.
+
+And also before someone suggest it ... I can't upgrade the kernel to a
+new version on this unit without having really good reason.
+
+So, what is the way to get a newer version of the SocketCAN driver to
+work on a linux kernel 2.6.29.2 ?
+
+
+-- 
+Sylvain Lamontagne &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">sylvain.lamontagne at novariant.com</A>&gt;
+Novariant
+-------------- next part --------------
+syslogd exiting
+Executing /etc/rc.shutdown/shutdown.sh ...
+Executing /etc/rc.shutdown/a01_unload_CAN_device.sh ...
+Bring down can0 interface...[168708.407470] Oops: Kernel access of bad area, sig: 11 [#1]
+[168708.412900] PREEMPT mpc5200-simple-platform
+[168708.417127] Modules linked in: hours_run can_raw can mscan_mpc52xx can_dev novariant_gnss
+[168708.425350] NIP: c001c4ac LR: c001fd14 CTR: c027a490
+[168708.430350] REGS: c537fc10 TRAP: 0300   Not tainted  (2.6.29.2)
+[168708.436283] MSR: 00001032 &lt;ME,IR,DR&gt;  CR: 84000488  XER: 20000000
+[168708.442448] DAR: 90830008, DSISR: 20000000
+[168708.446582] TASK = c266cf40[25469] 'ifconfig' THREAD: c537e000
+[168708.452260] GPR00: c001fd14 c537fcc0 c266cf40 c3d4179c 00000001 00000001 00000001 00000000
+[168708.460669] GPR08: 00000000 90830008 c538ca00 c537e000 47c5c2c7 100c39d8 1009fc6d 1009fc81
+[168708.469078] GPR16: 10094540 100944d8 10094428 00000000 bf9677b8 00000000 00000003 00008914
+[168708.477486] GPR24: 00000000 00000001 00000001 00000000 c3d4179c 9082fffc 00000001 c5d96a00
+[168708.486106] NIP [c001c4ac] __wake_up_common+0x44/0xc8
+[168708.491198] LR [c001fd14] __wake_up_sync+0x44/0x8c
+[168708.496019] Call Trace:
+[168708.498531] [c537fcc0] [c001c4c4] __wake_up_common+0x5c/0xc8 (unreliable)
+[168708.505353] [c537fcf0] [c001fd14] __wake_up_sync+0x44/0x8c
+[168708.510875] [c537fd10] [c027a4f0] sock_def_write_space+0x60/0xd4
+[168708.516914] [c537fd20] [c027b29c] sock_wfree+0x48/0x90
+[168708.522094] [c537fd30] [c027cffc] skb_release_head_state+0x4c/0x60
+[168708.528307] [c537fd40] [c027edf8] __kfree_skb+0x18/0xc4
+[168708.533570] [c537fd50] [c02988b0] pfifo_fast_reset+0x6c/0xa8
+[168708.539260] [c537fd70] [c0298a00] qdisc_reset+0x2c/0x50
+[168708.544521] [c537fd80] [c0298dcc] dev_deactivate_queue+0x70/0xa0
+[168708.550555] [c537fda0] [c0298e44] dev_deactivate+0x48/0x238
+[168708.556162] [c537fdd0] [c028959c] dev_close+0x88/0xe0
+[168708.561269] [c537fde0] [c02890f8] dev_change_flags+0xe0/0x1cc
+[168708.567052] [c537fe00] [c02cf0ac] devinet_ioctl+0x2c0/0x778
+[168708.572663] [c537fe60] [c02d07ec] inet_ioctl+0xd8/0x114
+[168708.577939] [c537fe70] [c0276ca8] sock_ioctl+0x25c/0x2a8
+[168708.583305] [c537fe90] [c0092fb4] vfs_ioctl+0x44/0xbc
+[168708.588401] [c537feb0] [c009367c] do_vfs_ioctl+0x650/0x700
+[168708.593920] [c537ff10] [c009377c] sys_ioctl+0x50/0x90
+[168708.599032] [c537ff40] [c0011c40] ret_from_syscall+0x0/0x38
+[168708.604646] --- Exception: c01 at 0xff5e790
+[168708.604655]     LR = 0xff5e6f0
+[168708.611966] Instruction dump:
+[168708.614991] 7cda3378 9361001c 7cfb3b78 93810020 7c7c1b78 93a10024 93c10028 7cbe2b78
+[168708.622789] 90010034 93e1002c 81230000 3ba9fff4 &lt;813d000c&gt; 48000034 801d0008 83bd0000
+[168708.630769] Kernel panic - not syncing: Fatal exception in interrupt
+[168708.637142] Rebooting in 180 seconds.. 
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001199.html">[Socketcan-users] Capture frames from SocketCAN interface with Libpcap/Tcpdump/Wireshark
+</A></li>
+	<LI>Next message: <A HREF="001205.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1204">[ date ]</a>
+              <a href="thread.html#1204">[ thread ]</a>
+              <a href="subject.html#1204">[ subject ]</a>
+              <a href="author.html#1204">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] 10 CAN interfaces on ECAN-527d
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%2010%20CAN%20interfaces%20on%20ECAN-527d&In-Reply-To=%3C4ECD41C0.6060706%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002242.html">
+   <LINK REL="Next"  HREF="002244.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] 10 CAN interfaces on ECAN-527d</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%2010%20CAN%20interfaces%20on%20ECAN-527d&In-Reply-To=%3C4ECD41C0.6060706%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] 10 CAN interfaces on ECAN-527d">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Nov 23 19:56:00 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002242.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+        <LI>Next message: <A HREF="002244.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2243">[ date ]</a>
+              <a href="thread.html#2243">[ thread ]</a>
+              <a href="subject.html#2243">[ subject ]</a>
+              <a href="author.html#2243">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 23.11.2011 12:33, Marc Kleine-Budde wrote:
+
+&gt;<i> On 11/23/2011 11:01 AM, IreneV wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i> I'm a newbie in CAN-interface and I have to write some programs for MicroPC
+</I>&gt;&gt;<i> with ECAN-527D board under Ubuntu. After installing drivers from disk 10
+</I>&gt;&gt;<i> CAN-interfaces appear in /dev/ and datasheet says that it must be so. Can
+</I>&gt;&gt;<i> anyone tell me why there are 10 interface instead of 2 (the board is
+</I>&gt;&gt;<i> dual-channel)?
+</I>&gt;<i> 
+</I>&gt;<i> I don't know the driver, and it's not using the official linux socketcan
+</I>&gt;<i> interface. The driver you're using is probably not so well written and
+</I>&gt;<i> supports up to 10 CAN interfaces this is why 10 interfaces pop up in /dev.
+</I>&gt;<i> 
+</I>&gt;<i> About three years ago Alexey Serov[1] (Cc'ed) was using the same board,
+</I>&gt;<i> but a socketcan driver. I don't know if the driver is mainline
+</I>&gt;<i> meanwhile. I suggest to use the socketcan driver and not the vendor
+</I>&gt;<i> specific one.
+</I>&gt;<i> 
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i> 
+</I>&gt;<i> [1] <A HREF="http://old.nabble.com/problem-with-82527-PC-104-board-td19020937.html">http://old.nabble.com/problem-with-82527-PC-104-board-td19020937.html</A>
+</I>
+
+I think the referenced i82527-iomem driver
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/drivers/net/can/old/i82527/?#ac21816bb2f78cb7e7b7b1a75f2ecfed0">http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/drivers/net/can/old/i82527/?#ac21816bb2f78cb7e7b7b1a75f2ecfed0</A>
+
+is *really* very old ... don't know, if it still works.
+
+AFAIK Wolfgang created the CC770 driver which is the successor of the i82527:
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/drivers/net/can/cc770/?#a12c70fb51cbd498d785ad6d2ee65ff67">http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/drivers/net/can/cc770/?#a12c70fb51cbd498d785ad6d2ee65ff67</A>
+
+This one is more up to date - but only available in the SVN and not in mainline.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002242.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+	<LI>Next message: <A HREF="002244.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2243">[ date ]</a>
+              <a href="thread.html#2243">[ thread ]</a>
+              <a href="subject.html#2243">[ subject ]</a>
+              <a href="author.html#2243">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

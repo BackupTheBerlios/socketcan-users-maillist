@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Sporadic kernel panic
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Sporadic%20kernel%20panic&In-Reply-To=%3C4A5C3675.5090100%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000986.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Sporadic kernel panic</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Sporadic%20kernel%20panic&In-Reply-To=%3C4A5C3675.5090100%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Sporadic kernel panic">wg at grandegger.com
+       </A><BR>
+    <I>Tue Jul 14 09:40:37 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000986.html">[Socketcan-users] Sporadic kernel panic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#985">[ date ]</a>
+              <a href="thread.html#985">[ thread ]</a>
+              <a href="subject.html#985">[ subject ]</a>
+              <a href="author.html#985">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Martin and Mikael,
+
+Wolfgang Grandegger wrote:
+&gt;<i> Wolf, Mikael wrote:
+</I>&gt;&gt;&gt;<i> -----Original Message-----
+</I>&gt;&gt;&gt;<i> From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;&gt;&gt;<i> Sent: den 28 maj 2009 19:31
+</I>&gt;&gt;&gt;<i> To: Wolf, Mikael
+</I>&gt;&gt;&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> Subject: Re: [Socketcan-users] Sporadic kernel panic
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolf, Mikael wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> -----Original Message-----
+</I>&gt;&gt;&gt;&gt;&gt;<i> From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;&gt;&gt;&gt;&gt;<i> Sent: den 27 maj 2009 19:01
+</I>&gt;&gt;&gt;&gt;&gt;<i> To: Wolf, Mikael
+</I>&gt;&gt;&gt;&gt;&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Subject: Re: [Socketcan-users] Sporadic kernel panic
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> [zap!]
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I have now tried the version from branches/netlink,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> but unfortunately I am still able to provoke kernel
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> panics.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> As I have been trying to provoke the panics, it
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> now seems to me the problem is related to freeing
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> of the skb, as the only situation where I feel
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> the driver is truly stable, is when I have modified
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> the code so that the outgoing packet is neither freed
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> nor fed into netif_rx. Even reducing skb handling to the
+</I>&gt;&gt;&gt;&gt;&gt;<i> This can easily be achieved by writing 0 to can_echo (to disabled the
+</I>&gt;&gt;&gt;&gt;&gt;<i> IFF_ECHO flag).
+</I>&gt;&gt;&gt;&gt;<i> I see. I did remove the setting of the IFF_ECHO flag in one
+</I>&gt;&gt;&gt;&gt;<i> of my attempts to track this down, but that did not help.
+</I>&gt;&gt;&gt;&gt;<i> Maybe because the echo procedure just moved to af_can.c?
+</I>&gt;&gt;&gt;<i> Hm, but then the echo_skb functions do nothing. Maybe it has something
+</I>&gt;&gt;&gt;<i> to do with the skb_orphan call.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> procedure of just saving the skb when sending (in
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> sja1000_start_xmit) and then freeing it at transmission
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> complete interrupt is enough to provoke a panic:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> [zap!]
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I have compiled the CAN-stuff into the kernel. And there
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> is some problem with the presentation of symbols; matching
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hm, why? Do you have CONFIG_KALLSYMS=y in your .config?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Ok, that may be the problem...
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> [zap!]
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Admittedly, it is not easy to provoke the panics, but I
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> often succeed with the following procedure:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 0. Start a script that repeatedly opens a can socket, sends
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> some traffic, and then closes it. Also, start a script that
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> repeatedly tries to reset CAN via sysfs.
+</I>&gt;&gt;&gt;&gt;&gt;<i> By calling &quot;echo 1 &gt; /sys/.../can_restart&quot;?
+</I>&gt;&gt;&gt;&gt;<i> Yes.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 1. Detach and attach the physical CAN socket a few times.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Leave socket detached.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 2. Bring the ethernet link (attached to the same machine)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> down and up a few times (Physically detach/attach cable).
+</I>&gt;&gt;&gt;&gt;&gt;<i> Is this necessary to trigger the Oops? I can't see any obvious relation
+</I>&gt;&gt;&gt;&gt;&gt;<i> with CAN.
+</I>&gt;&gt;&gt;&gt;<i> I am not sure. It helps in provoking them, anyway. When I
+</I>&gt;&gt;&gt;&gt;<i> started to try to track this, I switched from pre-emptive
+</I>&gt;&gt;&gt;&gt;<i> to non pre-emptive kernel (to see if that had anything to
+</I>&gt;&gt;&gt;&gt;<i> do with the problem), and then started the scripts (restarting,
+</I>&gt;&gt;&gt;&gt;<i> open; send-traffic; close) and had them running for 20+ hours
+</I>&gt;&gt;&gt;&gt;<i> without problems. Then I needed to do some unrelated work
+</I>&gt;&gt;&gt;&gt;<i> concerning ifplugd. Kaboom, almost immediately when starting
+</I>&gt;&gt;&gt;&gt;<i> fiddling with the Ethernet cable, I got a panic. Thereafter
+</I>&gt;&gt;&gt;&gt;<i> I include this as a way to provoke the panic within a shorter
+</I>&gt;&gt;&gt;&gt;<i> time.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> So the problem may not be exclusively with the CAN driver,
+</I>&gt;&gt;&gt;&gt;<i> but in some obscure interaction with Ethernet. No problems
+</I>&gt;&gt;&gt;&gt;<i> with Ethernet when CAN is not present though. The other way
+</I>&gt;&gt;&gt;&gt;<i> around (no Ethernet and CAN present) I have not tried (yet)
+</I>&gt;&gt;&gt;&gt;<i> as such a setup carries a set of practical complications.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 3. Attach the physical CAN socket. Now, kernel panic may
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> occur. If not, repeat from 1.
+</I>&gt;&gt;&gt;&gt;&gt;<i> What do you mean with attach and detach.
+</I>&gt;&gt;&gt;&gt;<i> I mean physically connect/disconnect the CAN bus.
+</I>&gt;&gt;&gt;<i> Are you able with the script below and connecting/disconnecting the
+</I>&gt;&gt;&gt;<i> connector to reproduce the problem?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   #!/bin/bash -x
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   while true; do
+</I>&gt;&gt;&gt;<i>     ./cangen -i -g 1 can0 &amp;
+</I>&gt;&gt;&gt;<i>     sleep 1
+</I>&gt;&gt;&gt;<i>     killall cangen
+</I>&gt;&gt;&gt;<i>     sleep 1
+</I>&gt;&gt;&gt;<i>   done
+</I>&gt;&gt;<i> I have tried to reproduce it with your script for a while now,
+</I>&gt;&gt;<i> but I have not been able to provoke a panic. However, at two
+</I>&gt;&gt;<i> occasions, I experienced some sort of &quot;hang&quot;; for some reason
+</I>&gt;&gt;<i> traffic stopped showing up on the bus, but no problem was reported
+</I>&gt;&gt;<i> from cangen. The rest of the OS was responsive and useful but a
+</I>&gt;&gt;<i> boot was needed to bring CAN back into operation again.
+</I>&gt;<i> 
+</I>&gt;<i> Hm, I have not experience any hang on my test system so far. Could you
+</I>&gt;<i> remove the sleep 1 after killall and retry.
+</I>
+Could you please re-test with the following patch with the latest
+revision of the SVN branch &quot;branches/netdev&quot;.
+
+  <A HREF="http://marc.info/?l=linux-netdev&amp;m=124750081706480&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=124750081706480&amp;w=2</A>
+
+When reading the oops output, I had the impression, that there might be
+a problem around sock_orphan():
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000986.html">[Socketcan-users] Sporadic kernel panic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#985">[ date ]</a>
+              <a href="thread.html#985">[ thread ]</a>
+              <a href="subject.html#985">[ subject ]</a>
+              <a href="author.html#985">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

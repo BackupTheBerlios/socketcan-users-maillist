@@ -1,0 +1,543 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] sja1000 BasicCAN mode
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20sja1000%20BasicCAN%20mode&In-Reply-To=%3C4EC157FA.7080701%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002217.html">
+   <LINK REL="Next"  HREF="002215.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] sja1000 BasicCAN mode</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20sja1000%20BasicCAN%20mode&In-Reply-To=%3C4EC157FA.7080701%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] sja1000 BasicCAN mode">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Nov 14 19:03:38 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002217.html">[Socketcan-users] sja1000 BasicCAN mode
+</A></li>
+        <LI>Next message: <A HREF="002215.html">[Socketcan-users]  Info request about sja1000_isa.c
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2212">[ date ]</a>
+              <a href="thread.html#2212">[ thread ]</a>
+              <a href="subject.html#2212">[ subject ]</a>
+              <a href="author.html#2212">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Yuriy,
+
+what's your motivation for the BasicCAN mode support?
+
+My biggest concern is that you leave the driver as a #ifdef hell ...
+The second thing, is that you urge all CAN interfaces in the system to be
+BasicCAN *or* PeliCAN mode. No chance to mix the hardware and to have a
+per-device setting.
+
+If such a functionality is to be implemented (and you have a good reason for
+BasicCAN mode), this could be done by creating a new per-device flag.
+
+E.g. 
+
+#define SJA1000_BASIC_CAN 0x02
+
+for sja1000priv.flags
+
+Regards,
+Oliver
+
+ps. pls send patches always inline for a review
+pps. and no html mails %-)
+
+-------- Original Message --------
+Subject: 	[Socketcan-users] sja1000 BasicCAN mode
+Date: 	Mon, 14 Nov 2011 21:08:29 +0400
+From: 	Yuriy Kiselev &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kiselev.yuriy at gmail.com</A>&gt;
+To: 	<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+CC: 	<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A>
+
+
+
+Hello!
+Implementation of BasicCAN mode for SJA1000 is in attachment.
+Now SJA1000_PELICAN_MODE macros in sja1000.h is used for definition PeliCAN or
+BasicCAN mode. It would be nice to create some menuconfig-wrapper, I think.
+I use this code for a few weeks and it looks stable.
+
+
+diff -ru trunk.orig/kernel/2.6/drivers/net/can/sja1000/sja1000.c trunk/kernel/2.6/drivers/net/can/sja1000/sja1000.c
+--- trunk.orig/kernel/2.6/drivers/net/can/sja1000/sja1000.c	2011-11-14 20:46:35.074737955 +0400
++++ trunk/kernel/2.6/drivers/net/can/sja1000/sja1000.c	2011-11-14 20:56:00.083183431 +0400
+@@ -117,22 +117,43 @@
+ static void set_reset_mode(struct net_device *dev)
+ {
+ 	struct sja1000_priv *priv = netdev_priv(dev);
++#ifdef SJA1000_PELICAN_MODE
+ 	unsigned char status = priv-&gt;read_reg(priv, REG_MOD);
++#else
++	unsigned char status = priv-&gt;read_reg(priv, REG_CR);
++#endif
+ 	int i;
+ 
+ 	/* disable interrupts */
++#ifdef SJA1000_PELICAN_MODE
+ 	priv-&gt;write_reg(priv, REG_IER, IRQ_OFF);
++#else
++	priv-&gt;write_reg(priv, REG_CR, status &amp; IRQ_OFF);
++#endif
+ 
+ 	for (i = 0; i &lt; 100; i++) {
+-		/* check reset bit */
++		// check reset bit
++#ifdef SJA1000_PELICAN_MODE
+ 		if (status &amp; MOD_RM) {
++#else
++		if (status &amp; CR_RRQ) {
++#endif
+ 			priv-&gt;can.state = CAN_STATE_STOPPED;
+ 			return;
+ 		}
+ 
+-		priv-&gt;write_reg(priv, REG_MOD, MOD_RM);	/* reset chip */
++    	/* reset chip */
++#ifdef SJA1000_PELICAN_MODE
++		priv-&gt;write_reg(priv, REG_MOD, MOD_RM);
++#else
++		priv-&gt;write_reg(priv, REG_CR, CR_RRQ);
++#endif
+ 		udelay(10);
++#ifdef SJA1000_PELICAN_MODE
+ 		status = priv-&gt;read_reg(priv, REG_MOD);
++#else
++		status = priv-&gt;read_reg(priv, REG_CR);
++#endif
+ 	}
+ 
+ 	dev_err(ND2D(dev), &quot;setting SJA1000 into reset mode failed!\n&quot;);
+@@ -141,26 +162,50 @@
+ static void set_normal_mode(struct net_device *dev)
+ {
+ 	struct sja1000_priv *priv = netdev_priv(dev);
++#ifdef SJA1000_PELICAN_MODE
+ 	unsigned char status = priv-&gt;read_reg(priv, REG_MOD);
++#else
++	unsigned char status = priv-&gt;read_reg(priv, REG_CR);
++#endif
+ 	int i;
+ 
+ 	for (i = 0; i &lt; 100; i++) {
+ 		/* check reset bit */
++#ifdef SJA1000_PELICAN_MODE
+ 		if ((status &amp; MOD_RM) == 0) {
++#else
++		if ((status &amp; CR_RRQ) == 0) {
++#endif
+ 			priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+ 			/* enable interrupts */
++#ifdef SJA1000_PELICAN_MODE
+ 			if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BERR_REPORTING)
+ 				priv-&gt;write_reg(priv, REG_IER, IRQ_ALL);
++
+ 			else
+ 				priv-&gt;write_reg(priv, REG_IER,
+ 						IRQ_ALL &amp; ~IRQ_BEI);
+ 			return;
++#else
++			priv-&gt;write_reg(priv, REG_CR, status | IRQ_ALL);
++			return;
++#endif
+ 		}
+ 
++
+ 		/* set chip to normal mode */
++#ifdef SJA1000_PELICAN_MODE
+ 		priv-&gt;write_reg(priv, REG_MOD, 0x00);
++#else
++		//status = priv-&gt;read_reg(priv, REG_CR);
++		priv-&gt;write_reg(priv, REG_CR, status &amp; ~CR_RRQ);
++#endif
+ 		udelay(10);
++#ifdef SJA1000_PELICAN_MODE
+ 		status = priv-&gt;read_reg(priv, REG_MOD);
++#else
++		status = priv-&gt;read_reg(priv, REG_CR);
++#endif
+ 	}
+ 
+ 	dev_err(ND2D(dev), &quot;setting SJA1000 into normal mode failed!\n&quot;);
+@@ -175,9 +220,11 @@
+ 		set_reset_mode(dev);
+ 
+ 	/* Clear error counters and error code capture */
++#ifdef SJA1000_PELICAN_MODE
+ 	priv-&gt;write_reg(priv, REG_TXERR, 0x0);
+ 	priv-&gt;write_reg(priv, REG_RXERR, 0x0);
+ 	priv-&gt;read_reg(priv, REG_ECC);
++#endif
+ 
+ 	/* leave reset mode */
+ 	set_normal_mode(dev);
+@@ -230,8 +277,13 @@
+ {
+ 	struct sja1000_priv *priv = netdev_priv(dev);
+ 
++#ifdef SJA1000_PELICAN_MODE
+ 	bec-&gt;txerr = priv-&gt;read_reg(priv, REG_TXERR);
+ 	bec-&gt;rxerr = priv-&gt;read_reg(priv, REG_RXERR);
++#else
++	bec-&gt;txerr = 0;
++	bec-&gt;rxerr = 0;
++#endif
+ 
+ 	return 0;
+ }
+@@ -247,11 +299,17 @@
+ static void chipset_init(struct net_device *dev)
+ {
+ 	struct sja1000_priv *priv = netdev_priv(dev);
++	struct can_bittiming bt;
+ 
+ 	/* set clock divider and output control register */
++#ifdef SJA1000_PELICAN_MODE
+ 	priv-&gt;write_reg(priv, REG_CDR, priv-&gt;cdr | CDR_PELICAN);
++#else
++	priv-&gt;write_reg(priv, REG_CDR, priv-&gt;cdr);
++#endif
+ 
+ 	/* set acceptance filter (accept all) */
++#ifdef SJA1000_PELICAN_MODE
+ 	priv-&gt;write_reg(priv, REG_ACCC0, 0x00);
+ 	priv-&gt;write_reg(priv, REG_ACCC1, 0x00);
+ 	priv-&gt;write_reg(priv, REG_ACCC2, 0x00);
+@@ -261,6 +319,11 @@
+ 	priv-&gt;write_reg(priv, REG_ACCM1, 0xFF);
+ 	priv-&gt;write_reg(priv, REG_ACCM2, 0xFF);
+ 	priv-&gt;write_reg(priv, REG_ACCM3, 0xFF);
++#else
++	priv-&gt;write_reg(priv, REG_AC, 0x00);
++	priv-&gt;write_reg(priv, REG_AM, 0xFF);
++	
++#endif
+ 
+ 	priv-&gt;write_reg(priv, REG_OCR, priv-&gt;ocr | OCR_MODE_NORMAL);
+ }
+@@ -298,6 +361,8 @@
+ 		fi |= FI_RTR;
+ 
+ 	if (id &amp; CAN_EFF_FLAG) {
++	    /* Extended frame. Not available in BasicCAN mode. */
++#ifdef SJA1000_PELICAN_MODE
+ 		fi |= FI_FF;
+ 		dreg = EFF_BUF;
+ 		priv-&gt;write_reg(priv, REG_FI, fi);
+@@ -305,15 +370,26 @@
+ 		priv-&gt;write_reg(priv, REG_ID2, (id &amp; 0x001fe000) &gt;&gt; (5 + 8));
+ 		priv-&gt;write_reg(priv, REG_ID3, (id &amp; 0x00001fe0) &gt;&gt; 5);
+ 		priv-&gt;write_reg(priv, REG_ID4, (id &amp; 0x0000001f) &lt;&lt; 3);
++#endif
+ 	} else {
++	/* Standard frame */
++#ifdef SJA1000_PELICAN_MODE
+ 		dreg = SFF_BUF;
+ 		priv-&gt;write_reg(priv, REG_FI, fi);
+ 		priv-&gt;write_reg(priv, REG_ID1, (id &amp; 0x000007f8) &gt;&gt; 3);
+ 		priv-&gt;write_reg(priv, REG_ID2, (id &amp; 0x00000007) &lt;&lt; 5);
++#else
++		priv-&gt;write_reg(priv, REG_TXB, (id &amp; 0x000007f8) &gt;&gt; 3);
++		priv-&gt;write_reg(priv, REG_TXB + 1, ((id &amp; 0x00000007) &lt;&lt; 5) | fi);
++#endif
+ 	}
+ 
+ 	for (i = 0; i &lt; dlc; i++)
++#ifdef SJA1000_PELICAN_MODE
+ 		priv-&gt;write_reg(priv, dreg++, cf-&gt;data[i]);
++#else
++		priv-&gt;write_reg(priv, REG_TXB + 2 + i, cf-&gt;data[i]);
++#endif
+ 
+ 	dev-&gt;trans_start = jiffies;
+ 
+@@ -344,8 +420,14 @@
+ 	if (skb == NULL)
+ 		return;
+ 
++#ifdef SJA1000_PELICAN_MODE
+ 	fi = priv-&gt;read_reg(priv, REG_FI);
++#else
++    /* Read RTR &amp; DLC */
++	fi = priv-&gt;read_reg(priv, REG_RXB + 1) &amp; 0x1F;
++#endif
+ 
++#ifdef SJA1000_PELICAN_MODE
+ 	if (fi &amp; FI_FF) {
+ 		/* extended frame format (EFF) */
+ 		dreg = EFF_BUF;
+@@ -360,13 +442,22 @@
+ 		id = (priv-&gt;read_reg(priv, REG_ID1) &lt;&lt; 3)
+ 		    | (priv-&gt;read_reg(priv, REG_ID2) &gt;&gt; 5);
+ 	}
++#else
++	id = (priv-&gt;read_reg(priv, REG_RXB) &lt;&lt; 3)
++		| ((priv-&gt;read_reg(priv, REG_RXB + 1) &amp; 0xE0) &gt;&gt; 5);
++#endif
+ 
+ 	if (fi &amp; FI_RTR) {
+ 		id |= CAN_RTR_FLAG;
+ 	} else {
++		/* DLC field is same in TXB/RXB (basiccan) and FI (pelican) registers */
+ 		cf-&gt;can_dlc = get_can_dlc(fi &amp; 0x0F);
+ 		for (i = 0; i &lt; cf-&gt;can_dlc; i++)
++#ifdef SJA1000_PELICAN_MODE
+ 			cf-&gt;data[i] = priv-&gt;read_reg(priv, dreg++);
++#else
++			cf-&gt;data[i] = priv-&gt;read_reg(priv, REG_RXB + 2 + i);
++#endif
+ 	}
+ 
+ 	cf-&gt;can_id = id;
+@@ -423,6 +514,7 @@
+ 		} else
+ 			state = CAN_STATE_ERROR_ACTIVE;
+ 	}
++#ifdef SJA1000_PELICAN_MODE /* BasicCAN mode doesn't support Bus Error Interrupt */
+ 	if (isrc &amp; IRQ_BEI) {
+ 		/* bus error interrupt */
+ 		priv-&gt;can.can_stats.bus_error++;
+@@ -451,6 +543,9 @@
+ 		if ((ecc &amp; ECC_DIR) == 0)
+ 			cf-&gt;data[2] |= CAN_ERR_PROT_TX;
+ 	}
++#endif
++
++#ifdef SJA1000_PELICAN_MODE /* BasicCAN mode doesn't support Error Passive Interrupt */
+ 	if (isrc &amp; IRQ_EPI) {
+ 		/* error passive interrupt */
+ 		dev_dbg(ND2D(dev), &quot;error passive interrupt\n&quot;);
+@@ -459,6 +554,9 @@
+ 		else
+ 			state = CAN_STATE_ERROR_ACTIVE;
+ 	}
++#endif
++
++#ifdef SJA1000_PELICAN_MODE /* BasicCAN mode doesn't support Arbitration Lost Interrupt */
+ 	if (isrc &amp; IRQ_ALI) {
+ 		/* arbitration lost interrupt */
+ 		dev_dbg(ND2D(dev), &quot;arbitration lost interrupt\n&quot;);
+@@ -468,11 +566,18 @@
+ 		cf-&gt;can_id |= CAN_ERR_LOSTARB;
+ 		cf-&gt;data[0] = alc &amp; 0x1f;
+ 	}
++#endif
+ 
+ 	if (state != priv-&gt;can.state &amp;&amp; (state == CAN_STATE_ERROR_WARNING ||
+ 					 state == CAN_STATE_ERROR_PASSIVE)) {
++#ifdef SJA1000_PELICAN_MODE
+ 		uint8_t rxerr = priv-&gt;read_reg(priv, REG_RXERR);
+ 		uint8_t txerr = priv-&gt;read_reg(priv, REG_TXERR);
++#else
++		uint8_t rxerr = 0;
++		uint8_t txerr = 0;
++#endif
++
+ 		cf-&gt;can_id |= CAN_ERR_CRTL;
+ 		if (state == CAN_STATE_ERROR_WARNING) {
+ 			priv-&gt;can.can_stats.error_warning++;
+@@ -519,7 +624,11 @@
+ 	int n = 0;
+ 
+ 	/* Shared interrupts and IRQ off? */
++#ifdef SJA1000_PELICAN_MODE
+ 	if (priv-&gt;read_reg(priv, REG_IER) == IRQ_OFF)
++#else
++	if ((priv-&gt;read_reg(priv, REG_CR) &amp; IRQ_ALL) == 0)
++#endif
+ 		return IRQ_NONE;
+ 
+ 	if (priv-&gt;pre_irq)
+@@ -534,7 +643,11 @@
+ 
+ 		if (isrc &amp; IRQ_TI) {
+ 			/* transmission complete interrupt */
+-			stats-&gt;tx_bytes += priv-&gt;read_reg(priv, REG_FI) &amp; 0xf;
++#ifdef SJA1000_PELICAN_MODE
++			stats-&gt;tx_bytes += priv-&gt;read_reg(priv, REG_FI) &amp; 0xF;
++#else
++			stats-&gt;tx_bytes += priv-&gt;read_reg(priv, REG_TXB + 1) &amp; 0xF;
++#endif
+ 			stats-&gt;tx_packets++;
+ 			can_get_echo_skb(dev, 0);
+ 			netif_wake_queue(dev);
+@@ -546,7 +659,11 @@
+ 				status = priv-&gt;read_reg(priv, REG_SR);
+ 			}
+ 		}
++#ifdef SJA1000_PELICAN_MODE
+ 		if (isrc &amp; (IRQ_DOI | IRQ_EI | IRQ_BEI | IRQ_EPI | IRQ_ALI)) {
++#else
++		if (isrc &amp; (IRQ_DOI | IRQ_EI)) {
++#endif
+ 			/* error interrupt */
+ 			if (sja1000_err(dev, isrc, status))
+ 				break;
+diff -ru trunk.orig/kernel/2.6/drivers/net/can/sja1000/sja1000.h trunk/kernel/2.6/drivers/net/can/sja1000/sja1000.h
+--- trunk.orig/kernel/2.6/drivers/net/can/sja1000/sja1000.h	2011-11-14 20:49:44.526408577 +0400
++++ trunk/kernel/2.6/drivers/net/can/sja1000/sja1000.h	2011-11-14 20:50:20.813395105 +0400
+@@ -50,10 +50,14 @@
+ #include &lt;socketcan/can/dev.h&gt;
+ #include &lt;socketcan/can/platform/sja1000.h&gt;
+ 
++#define SJA1000_PELICAN_MODE /* BasicCAN accepted if not defined */
++
+ #define SJA1000_ECHO_SKB_MAX	1 /* the SJA1000 has one TX buffer object */
+ 
+ #define SJA1000_MAX_IRQ 20	/* max. number of interrupts handled in ISR */
+ 
++#ifdef SJA1000_PELICAN_MODE
++
+ /* SJA1000 registers - manual section 6.4 (Pelican Mode) */
+ #define REG_MOD		0x00
+ #define REG_CMR		0x01
+@@ -76,19 +80,10 @@
+ #define REG_RMC		0x1D
+ #define REG_RBSA	0x1E
+ 
+-/* Common registers - manual section 6.5 */
+-#define REG_BTR0	0x06
+-#define REG_BTR1	0x07
+-#define REG_OCR		0x08
+-#define REG_CDR		0x1F
+-
+ #define REG_FI		0x10
+ #define SFF_BUF		0x13
+ #define EFF_BUF		0x15
+ 
+-#define FI_FF		0x80
+-#define FI_RTR		0x40
+-
+ #define REG_ID1		0x11
+ #define REG_ID2		0x12
+ #define REG_ID3		0x13
+@@ -96,6 +91,27 @@
+ 
+ #define CAN_RAM		0x20
+ 
++#else /* SJA1000_PELICAN_MODE */
++
++/* SJA1000 registers - manual section 6.3 (Basiccan Mode) */
++#define REG_CR		0x00
++#define REG_CMR		0x01
++#define REG_SR		0x02
++#define REG_IR		0x03
++#define REG_AC		0x04
++#define REG_AM		0x05
++#define REG_TXB		0x0A
++#define REG_RXB		0x14
++
++#endif /* SJA1000_PELICAN_MODE */
++
++/* Common registers - manual section 6.5 */
++#define REG_BTR0	0x06
++#define REG_BTR1	0x07
++#define REG_OCR		0x08
++#define REG_CDR		0x1F
++
++#ifdef SJA1000_PELICAN_MODE
+ /* mode register */
+ #define MOD_RM		0x01
+ #define MOD_LOM		0x02
+@@ -137,11 +153,53 @@
+ /* ECC register */
+ #define ECC_SEG		0x1F
+ #define ECC_DIR		0x20
+-#define ECC_ERR		6
++#define ECC_ERR		0x06
+ #define ECC_BIT		0x00
+ #define ECC_FORM	0x40
+ #define ECC_STUFF	0x80
+-#define ECC_MASK	0xc0
++#define ECC_MASK	0xC0
++
++#define FI_FF		0x80
++#define FI_RTR		0x40
++
++#else /* SJA1000_PELICAN_MODE */
++
++/* control register */
++#define CR_RRQ		0x01
++#define CR_RIE		0x02
++#define CR_TIE		0x04
++#define CR_EIE		0x08
++#define CR_OIE		0x10
++#define IRQ_OFF		CR_RRQ
++#define IRQ_ALL		(CR_RIE | CR_TIE | CR_EIE | CR_OIE)
++
++/* command register */
++#define CMD_TR		0x01
++#define CMD_AT		0x02
++#define CMD_RRB		0x04
++#define CMD_CDO		0x08
++#define CMD_GTS		0x10
++
++/* status register */
++#define SR_RBS		0x01
++#define SR_DOS		0x02
++#define SR_TBS		0x04
++#define SR_TCS		0x08
++#define SR_RS		0x10
++#define SR_TS		0x20
++#define SR_ES		0x40
++#define SR_BS		0x80
++
++/* interrupt sources */
++#define IRQ_RI		0x01
++#define IRQ_TI		0x02
++#define IRQ_EI		0x04
++#define IRQ_DOI		0x08
++#define IRQ_WUI		0x10
++
++#define FI_RTR		0x10
++
++#endif /* SJA1000_PELICAN_MODE */
+ 
+ /*
+  * Flags for sja1000priv.flags
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: socketcan_sja1000_basicmod_impl.patch
+Type: application/octet-stream
+Size: 11278 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20111114/f01ee3e8/attachment.obj">https://lists.berlios.de/pipermail/socketcan-users/attachments/20111114/f01ee3e8/attachment.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002217.html">[Socketcan-users] sja1000 BasicCAN mode
+</A></li>
+	<LI>Next message: <A HREF="002215.html">[Socketcan-users]  Info request about sja1000_isa.c
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2212">[ date ]</a>
+              <a href="thread.html#2212">[ thread ]</a>
+              <a href="subject.html#2212">[ subject ]</a>
+              <a href="author.html#2212">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] using socketcan from Python script
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C200906240957.17788.matthias.fuchs%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000966.html">
+   <LINK REL="Next"  HREF="000968.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] using socketcan from Python script</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C200906240957.17788.matthias.fuchs%40esd.eu%3E"
+       TITLE="[Socketcan-users] using socketcan from Python script">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Wed Jun 24 09:57:17 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000966.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+        <LI>Next message: <A HREF="000968.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#967">[ date ]</a>
+              <a href="thread.html#967">[ thread ]</a>
+              <a href="subject.html#967">[ subject ]</a>
+              <a href="author.html#967">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wednesday 24 June 2009 08:44, Oliver Hartkopp wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; Matthias Fuchs wrote:
+</I>&gt;<i> &gt;&gt; On Tuesday 23 June 2009 10:17, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt; Matthias Fuchs wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt; Hi,
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; did anybody try to use socketcan from a Python script?
+</I>&gt;<i> &gt;&gt;&gt;&gt; I gave it a try but with no success:
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; ...
+</I>&gt;<i> &gt;&gt;&gt;&gt; import struct
+</I>&gt;<i> &gt;&gt;&gt;&gt; import socket
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; AF_CAN = 29
+</I>&gt;<i> &gt;&gt;&gt;&gt; PF_CAN = AF_CAN
+</I>&gt;<i> &gt;&gt;&gt;&gt; CAN_RAW = 1
+</I>&gt;<i> &gt;&gt;&gt;&gt; SOL_CAN_BASE = 100
+</I>&gt;<i> &gt;&gt;&gt;&gt; SOL_CAN_RAW = (SOL_CAN_BASE + CAN_RAW)
+</I>&gt;<i> &gt;&gt;&gt;&gt; CAN_RAW_FILTER = 1
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; # create socket
+</I>&gt;<i> &gt;&gt;&gt;&gt; s = socket.socket(PF_CAN, socket.SOCK_RAW, CAN_RAW)
+</I>&gt;<i> &gt;&gt;&gt;&gt; print &quot;socket=&quot;,
+</I>&gt;<i> &gt;&gt;&gt;&gt; print s
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; # setup id filter
+</I>&gt;<i> &gt;&gt;&gt;&gt; id = 0
+</I>&gt;<i> &gt;&gt;&gt;&gt; mask = 0
+</I>&gt;<i> &gt;&gt;&gt;&gt; result = s.setsockopt(SOL_CAN_RAW, CAN_RAW_FILTER, struct.pack(&quot;%i%i&quot; % (id,mask)))
+</I>&gt;<i> &gt;&gt;&gt;&gt; print &quot;setsockopt=&quot;,
+</I>&gt;<i> &gt;&gt;&gt;&gt; print result
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; # bind to any I/F (ifindex=0)
+</I>&gt;<i> &gt;&gt;&gt;&gt; result = s.bind(struct.pack(&quot;%i%i%i&quot; % (AF_CAN, 0, 0)))
+</I>&gt;<i> &gt;&gt;&gt;&gt; print &quot;bind=&quot;,
+</I>&gt;<i> &gt;&gt;&gt;&gt; print result
+</I>&gt;<i> &gt;&gt;&gt;&gt; ...
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; My idea to call socket.bind() seems to be incorrect:
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; socket= &lt;socket._socketobject object at 0xb7d6d4fc&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; setsockopt= None
+</I>&gt;<i> &gt;&gt;&gt;&gt; Traceback (most recent call last):
+</I>&gt;<i> &gt;&gt;&gt;&gt;  File &quot;socketcan.py&quot;, line 26, in &lt;module&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;    result = s.bind(struct.pack(&quot;%i%i%i&quot; % (AF_CAN, 0, 0)))
+</I>&gt;<i> 
+</I>&gt;<i> Hi Matthias,
+</I>&gt;<i> 
+</I>&gt;<i> i'm not familiar with phyton, but probably this struct pack is defined wrong:
+</I>&gt;<i> 
+</I>&gt;<i> struct sockaddr_can {
+</I>&gt;<i>         sa_family_t can_family;
+</I>&gt;<i>         int         can_ifindex;
+</I>&gt;<i>         union {
+</I>&gt;<i>                 /* transport protocol class address information (e.g. ISOTP) */
+</I>&gt;<i>                 struct { canid_t rx_id, tx_id; } tp;
+</I>&gt;<i> 
+</I>&gt;<i>                 /* reserved for future CAN protocols address information */
+</I>&gt;<i>         } can_addr;
+</I>&gt;<i> };
+</I>&gt;<i> 
+</I>&gt;<i> Not only that it has 2 canid_t's in the union, what would lead to
+</I>&gt;<i> 
+</I>&gt;<i> result = s.bind(struct.pack(&quot;%i%i%i%i&quot; % (AF_CAN, 0, 0, 0)))
+</I>&gt;<i> 
+</I>&gt;<i> but the sa_family_t is defined as unsigned short, so it may be
+</I>&gt;<i> 
+</I>&gt;<i> result = s.bind(struct.pack(&quot;%H%i%i%i&quot; % (AF_CAN, 0, 0, 0)))
+</I>&gt;<i> 
+</I>&gt;<i> ???
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>Oops, at least from the Python syntax side the line must be:
+
+	s.bind(struct.pack(&quot;HIII&quot;, AF_CAN, 0, 0, 0))
+
+But the result is the same. I will either dig through the 
+Python socket module's sourcecode or contact some python gurus.
+
+I also expect that the C struct has a hole behind the can_family
+short because the struct is not packed.
+
+Matthias
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000966.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+	<LI>Next message: <A HREF="000968.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#967">[ date ]</a>
+              <a href="thread.html#967">[ thread ]</a>
+              <a href="subject.html#967">[ subject ]</a>
+              <a href="author.html#967">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

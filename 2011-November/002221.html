@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4EC25CE3.4000404%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002220.html">
+   <LINK REL="Next"  HREF="002194.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4EC25CE3.4000404%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">wg at grandegger.com
+       </A><BR>
+    <I>Tue Nov 15 13:36:51 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002220.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+        <LI>Next message: <A HREF="002194.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2221">[ date ]</a>
+              <a href="thread.html#2221">[ thread ]</a>
+              <a href="subject.html#2221">[ subject ]</a>
+              <a href="author.html#2221">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/15/2011 01:28 PM, Willy Lambert wrote:
+&gt;<i> 2011/11/15 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;:
+</I>...
+&gt;&gt;&gt;<i> Do you wish any further tests ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does the following command work as well?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  modprobe sja1000_isa irq=10,10 mem=0xD0000,0xD0200 ocr=0x5e cdr=0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does re-loading of the driver work properly?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  rmmod sja1000_isa; insmod sja1000_isa ...
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> all this is working.
+</I>
+Good.
+
+&gt;&gt;<i> Similar tests on a x86_64 system and with a recent kernel version would
+</I>&gt;&gt;<i> be nice to have.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> This is not possible a present time, I don't have any 64b img to put
+</I>&gt;<i> on my board and I don't have the time to create a new one. Sorry.
+</I>
+OK, no problem. I'm already confident enough to push this patch mainline.
+
+Thanks for your effort.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002220.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+	<LI>Next message: <A HREF="002194.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2221">[ date ]</a>
+              <a href="thread.html#2221">[ thread ]</a>
+              <a href="subject.html#2221">[ subject ]</a>
+              <a href="author.html#2221">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

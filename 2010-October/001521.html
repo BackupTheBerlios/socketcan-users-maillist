@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Driver for the Peak-USB-CAN-Card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Driver%20for%20the%20Peak-USB-CAN-Card&In-Reply-To=%3C20101001091537.23890%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001520.html">
+   <LINK REL="Next"  HREF="001522.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Driver for the Peak-USB-CAN-Card</H1>
+    <B>Ewgenij Sokolovski</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Driver%20for%20the%20Peak-USB-CAN-Card&In-Reply-To=%3C20101001091537.23890%40gmx.net%3E"
+       TITLE="[Socketcan-users] Driver for the Peak-USB-CAN-Card">ewgenijkkg at gmx.de
+       </A><BR>
+    <I>Fri Oct  1 11:15:37 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001520.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+        <LI>Next message: <A HREF="001522.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1521">[ date ]</a>
+              <a href="thread.html#1521">[ thread ]</a>
+              <a href="subject.html#1521">[ subject ]</a>
+              <a href="author.html#1521">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey, thanks, I will try! But, just out of interest, how is that supposed to work? I mean, did the peak guys integrated support for socketcans into their drivers meanwhile?
+
+BR
+Ewgenij
+
+-------- Original-Nachricht --------
+&gt;<i> Datum: Fri, 1 Oct 2010 10:52:43 +0200
+</I>&gt;<i> Von: &quot;Hartkopp, Oliver (K-EFFI/P)&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oliver.hartkopp at volkswagen.de</A>&gt;
+</I>&gt;<i> An: &quot;Ewgenij Sokolovski&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">ewgenijkkg at gmx.de</A>&gt;
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Betreff: AW: [Socketcan-users] Driver for the Peak-USB-CAN-Card
+</I>
+&gt;<i> Hello Ewgenij,
+</I>&gt;<i> 
+</I>&gt;<i> please get the latest PEAK Linux driver (v6.20) from their website.
+</I>&gt;<i> 
+</I>&gt;<i> The driver includes some good documentation (PDF).
+</I>&gt;<i> 
+</I>&gt;<i> After compiling the driver with netdev-support (default on Kernels &gt;=
+</I>&gt;<i> 2.6.25) a can0 device will appear in /proc/pcan after plugging in the adapter.
+</I>&gt;<i> 
+</I>&gt;<i> Only the bitrate setting is a bit different, as you still need the
+</I>&gt;<i> chardev-entry for that:
+</I>&gt;<i> 
+</I>&gt;<i> E.g. 
+</I>&gt;<i> 
+</I>&gt;<i> echo &quot;i 0x4914 e&quot; &gt; /dev/pcanusb0
+</I>&gt;<i> 
+</I>&gt;<i> will set the adapter to 100kBit/s
+</I>&gt;<i> 
+</I>&gt;<i> The default bitrate is 500 kBit/s.
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> -----Urspr&#252;ngliche Nachricht-----
+</I>&gt;<i> Von: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>
+</I>&gt;<i> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] Im Auftrag von Ewgenij Sokolovski
+</I>&gt;<i> Gesendet: Freitag, 1. Oktober 2010 10:24
+</I>&gt;<i> An: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Betreff: [Socketcan-users] Driver for the Peak-USB-CAN-Card
+</I>&gt;<i> 
+</I>&gt;<i> Hello, list. I have a Peak USB CAN adapter here. Is there a socketcan
+</I>&gt;<i> module for this device? Is it possible to use it with socketcans at all? In the
+</I>&gt;<i> German documentation dated 2006 I read that there supposed to be a
+</I>&gt;<i> &quot;Modifizierter Linux-Treiber v2.15 von PEAK-System&quot;, I could use for that purpose.
+</I>&gt;<i> However, we have 2010 now, so what is the current state of affairs?:)
+</I>&gt;<i> 
+</I>&gt;<i> BR
+</I>&gt;<i> Ewgenij
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001520.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+	<LI>Next message: <A HREF="001522.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1521">[ date ]</a>
+              <a href="thread.html#1521">[ thread ]</a>
+              <a href="subject.html#1521">[ subject ]</a>
+              <a href="author.html#1521">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

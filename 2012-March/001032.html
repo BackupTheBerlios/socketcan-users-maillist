@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.10.1331738231.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001030.html">
+   <LINK REL="Next"  HREF="001063.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.10.1331738231.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 16:17:01 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001030.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="001063.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1032">[ date ]</a>
+              <a href="thread.html#1032">[ thread ]</a>
+              <a href="subject.html#1032">[ subject ]</a>
+              <a href="author.html#1032">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>connected to the ISA (or alike) bus.
+
+&gt;<i> lspci doesn't show anything thats looks like a CAN Controller...
+</I>&gt;<i>=20
+</I>&gt;<i> 00:00.0 Host bridge: Intel Corporation Mobile 4 Series Chipset Memory
+</I>&gt;<i> Controller Hub (rev 07)
+</I>&gt;<i> 00:02.0 VGA compatible controller: Intel Corporation Mobile 4 Series
+</I>&gt;<i> Chipset Integrated Graphics Controller (rev 07)
+</I>&gt;<i> 00:02.1 Display controller: Intel Corporation Mobile 4 Series Chipset
+</I>&gt;<i> Integrated Graphics Controller (rev 07)
+</I>&gt;<i> 00:1a.0 USB Controller: Intel Corporation 82801I (ICH9 Family) USB
+</I>UHCI
+&gt;<i> Controller #4 (rev 03)
+</I>&gt;<i> 00:1a.1 USB Controller: Intel Corporation 82801I (ICH9 Family) USB
+</I>UHCI
+&gt;<i> Controller #5 (rev 03)
+</I>&gt;<i> 00:1a.2 USB Controller: Intel Corporation 82801I (ICH9 Family) USB
+</I>UHCI
+&gt;<i> Controller #6 (rev 03)
+</I>&gt;<i> 00:1a.7 USB Controller: Intel Corporation 82801I (ICH9 Family) USB2
+</I>EHCI
+&gt;<i> Controller #2 (rev 03)
+</I>&gt;<i> 00:1c.0 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express
+</I>&gt;<i> Port 1 (rev 03)
+</I>&gt;<i> 00:1c.4 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express
+</I>&gt;<i> Port 5 (rev 03)
+</I>&gt;<i> 00:1c.5 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express
+</I>&gt;<i> Port 6 (rev 03)
+</I>&gt;<i> 00:1d.0 USB Controller: Intel Corporation 82801I (ICH9 Family) USB
+</I>UHCI
+&gt;<i> Controller #1 (rev 03)
+</I>&gt;<i> 00:1d.1 USB Controller: Intel Corporation 82801I (ICH9 Family) USB
+</I>UHCI
+&gt;<i> Controller #2 (rev 03)
+</I>&gt;<i> 00:1d.2 USB Controller: Intel Corporation 82801I (ICH9 Family) USB
+</I>UHCI
+&gt;<i> Controller #3 (rev 03)
+</I>&gt;<i> 00:1d.7 USB Controller: Intel Corporation 82801I (ICH9 Family) USB2
+</I>EHCI
+&gt;<i> Controller #1 (rev 03)
+</I>&gt;<i> 00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev 93)
+</I>&gt;<i> 00:1f.0 ISA bridge: Intel Corporation ICH9M LPC Interface Controller
+</I>&gt;<i> (rev 03)
+</I>&gt;<i> 00:1f.2 IDE interface: Intel Corporation ICH9M/M-E 2 port SATA IDE
+</I>&gt;<i> Controller (rev 03)
+</I>&gt;<i> 00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus Controller
+</I>&gt;<i> (rev 03)
+</I>&gt;<i> 00:1f.5 IDE interface: Intel Corporation ICH9M/M-E 2 port SATA IDE
+</I>&gt;<i> Controller (rev 03)
+</I>&gt;<i> 02:00.0 Ethernet controller: Intel Corporation 82574L Gigabit Network
+</I>&gt;<i> Connection
+</I>&gt;<i> 03:00.0 Ethernet controller: Intel Corporation 82574L Gigabit Network
+</I>&gt;<i> Connection
+</I>&gt;<i> 10:04.0 RAM memory: Siemens Nixdorf AG Device 4040 (rev 14)
+</I>&gt;<i>=20
+</I>&gt;<i>=20
+</I>&gt;<i> Do I have to understand and configure &quot;udev&quot; ??
+</I>
+No. The following line should be sufficient, at least to access the
+device.
+
+  # insmod sja1000_isa port=3D0x4000 irq=3D?
+
+As you like trail and error, try 3..7 for the IRQ number. And check your
+bios settings.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001030.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="001063.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1032">[ date ]</a>
+              <a href="thread.html#1032">[ thread ]</a>
+              <a href="subject.html#1032">[ subject ]</a>
+              <a href="author.html#1032">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CF40EDB.3070602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001659.html">
+   <LINK REL="Next"  HREF="001661.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CF40EDB.3070602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 29 21:36:43 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001659.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001661.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1660">[ date ]</a>
+              <a href="thread.html#1660">[ thread ]</a>
+              <a href="subject.html#1660">[ subject ]</a>
+              <a href="author.html#1660">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/29/2010 08:08 PM, Willy Lambert wrote:
+&gt;<i> I am still trying to setup my can interface. From last time I have wired a
+</I>&gt;<i> resistively correct bus with my motor and manage to find a can analyser. For
+</I>&gt;<i> information, as my motor as a 0xFF nodeID and automatic baudrate detection
+</I>&gt;<i> by default which means that I still need to configure it to a proper nodeID
+</I>&gt;<i> and baudrate before I can put it on the bus.
+</I>&gt;<i> 
+</I>&gt;<i> I would like to try both socketCan and Ixxat drivers with the can analyser
+</I>&gt;<i> so I am preparing this a bit and I remark this : ISA adress range is not the
+</I>&gt;<i> same with ixxat and socket can drivers :
+</I>&gt;<i> --&gt; here is Ixxat adresses which seems correct : d0000 to d0fff
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin# cat /proc/iomem
+</I>&gt;&gt;<i> 00000000-0000ffff : reserved
+</I>&gt;&gt;<i> 00010000-0009fbff : System RAM
+</I>&gt;&gt;<i> 0009fc00-0009ffff : reserved
+</I>&gt;&gt;<i> 000a0000-000bffff : Video RAM area
+</I>&gt;&gt;<i> 000c0000-000c7fff : Video ROM
+</I>&gt;&gt;<i> 000d0000-000d0fff : PCI-I03 ISA [0] DPRAM area
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> --&gt; here is SocketCan which seems incorrect : d0000 to d001f
+</I>&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin# cat /proc/iomem
+</I>&gt;&gt;<i> 00000000-0000ffff : reserved
+</I>&gt;&gt;<i> 00010000-0009fbff : System RAM
+</I>&gt;&gt;<i> 0009fc00-0009ffff : reserved
+</I>&gt;&gt;<i> 000a0000-000bffff : Video RAM area
+</I>&gt;&gt;<i> 000c0000-000c7fff : Video ROM
+</I>&gt;&gt;<i> 000d0000-000d001f : sja1000_isa
+</I>&gt;&gt;<i> 000e0000-000fffff : reserved
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Maybe something stands behind this ?
+</I>
+Obviously, request_mem_region (and also ioremap) are called with a
+different size. The register map of the SJA1000 consists of just 0x20
+byte registers. In the IXXAT driver, how are registers accessed. Maybe
+the registers are aligned on a 4 byte boundary or the SJA1000 registers
+are a a certain offset. And I also think the map is for both CAN ports.
+Can you check the code?
+
+&gt;<i> ---------------------------------------------------------------------------------------------------------------------------
+</I>&gt;<i> complementary informations for the curious
+</I>&gt;<i> 
+</I>&gt;<i> dmesg for Ixxat drivers :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> [ 2252.093040] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;&gt;<i> [ 2252.093112] NET: Registered protocol family 29
+</I>&gt;&gt;<i> [ 2252.100195] can: raw protocol (rev 20090105)
+</I>&gt;&gt;<i> [ 2252.108650] can: broadcast manager protocol (rev 20090105 t)
+</I>&gt;&gt;<i> [ 2252.115236] sja1000 CAN netdevice driver
+</I>&gt;&gt;<i> [ 2252.120307] KINF: CAN PC-I driver v4.1b for BCI v4.5.8 Compiled Nov 22
+</I>&gt;&gt;<i> 2010 at 00:30:34
+</I>&gt;&gt;<i> [ 2252.120529] KINF: Device registered successfully for 2 ports. Major
+</I>
+The register 2 CAN ports.
+
+&gt;&gt;<i> [250]
+</I>&gt;&gt;<i> [ 2252.120700] KINF: IRQ number [5] registered
+</I>&gt;&gt;<i> [ 2252.120846] KINF: IRQ will be not registered for port 1
+</I>&gt;&gt;<i> [ 2811.803121] KINF: IRQ number [5] freed for port 0
+</I>&gt;&gt;<i> [ 2811.803146] KINF: IRQ number [0] for port 1 was not registered! Do
+</I>&gt;&gt;<i> nothing.
+</I>
+Hm, they just use one port for both CAN ports!?
+
+Could you please instrument the IXXAT driver printing the address used
+for ioremap and the base address of the SJA1000 registers.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001659.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001661.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1660">[ date ]</a>
+              <a href="thread.html#1660">[ thread ]</a>
+              <a href="subject.html#1660">[ subject ]</a>
+              <a href="author.html#1660">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem in cross compiling socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cw2k7413205a1004101934iefde2dbdh5ff2b28bcfa8fda8%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001367.html">
+   <LINK REL="Next"  HREF="001370.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem in cross compiling socketcan</H1>
+    <B>Alexandre V&#233;zina</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cw2k7413205a1004101934iefde2dbdh5ff2b28bcfa8fda8%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] problem in cross compiling socketcan">alexandre.vez at gmail.com
+       </A><BR>
+    <I>Sun Apr 11 04:34:03 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001367.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001370.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1369">[ date ]</a>
+              <a href="thread.html#1369">[ thread ]</a>
+              <a href="subject.html#1369">[ subject ]</a>
+              <a href="author.html#1369">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, Apr 10, 2010 at 12:18 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+
+&gt;<i> Hi Alexandre,
+</I>&gt;<i>
+</I>
+Hi Wolfgang
+
+
+&gt;<i>
+</I>&gt;<i> Alexandre V&#233;zina wrote:
+</I>&gt;<i> &gt; On Tue, Apr 6, 2010 at 12:23 PM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>
+</I>&gt;<i> &gt;wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Lei Luo wrote:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; I am a newbie of socketcan, I compiled and installed it in the
+</I>&gt;<i> &gt;&gt;&gt; direction of <A HREF="http://dave.limoilux.org/trac/wiki/UseSocketCAN">http://dave.limoilux.org/trac/wiki/UseSocketCAN</A>   There
+</I>&gt;<i> are
+</I>&gt;<i> &gt;&gt;&gt; two mcp2510 can  controllers in my arm at91rm9200 board.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; It failed when run &quot;can_setup start&quot;, saying that &quot;cannot creat
+</I>&gt;<i> &gt;&gt;&gt; /sys/class/net/can0&quot;.
+</I>&gt;<i> &gt;&gt;&gt;&gt; If you look in SocketCAN's makefile, did you uncomment export
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_MCP251X=m?
+</I>&gt;<i> &gt;&gt;&gt;&gt; You will also need to uncomment export CONFIG_CAN_DEV_SYSFS=y which is
+</I>&gt;<i> &gt;&gt;&gt; legacy.
+</I>&gt;<i> &gt;&gt; Yep!
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Yes, I have done it. I used the newest source code from the svn server
+</I>&gt;<i> &gt;&gt;&gt; and patched it manually. Configration is as follows:
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_RAW=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_BCM=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_GW=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_ISOTP=y;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_VCAN=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_DEV=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_CALC_BITTIMING=y;
+</I>&gt;<i> &gt;&gt;&gt; CONFIG_CAN_MCP251X=y;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Then I use &quot;ip link add type vcan&quot; to create the a vcan interface.
+</I>&gt;<i> &gt;&gt;&gt; But cmd &quot;add&quot; is not recognised, ip tool is the newest one which is
+</I>&gt;<i> &gt;&gt;&gt; compiled with iproute2-2.6.33.tar.bz2. Linux kernel I used is  2.6.28.
+</I>&gt;<i> &gt;&gt; Is vcan.ko loaded? Please try
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;   modprobe vcan
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; before invoking
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;   ip link add type vcan
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; There should be this startup message in the kernel log:
+</I>&gt;<i> &gt;&gt; &quot;vcan: Virtual CAN interface driver&quot;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; You can see all network interfaces with
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;   cat /proc/net/dev
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; or
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;   ip link show
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; The problem of &quot;ip link add&quot; is OK after recompiling kernel,
+</I>&gt;<i> &gt;&gt;&gt; /sys/class/net/can0 is created if I type in &quot;ip link add dev can0 type
+</I>&gt;<i> &gt;&gt;&gt; vcan&quot;. But it says &quot;cannot create /sys/class/net/can0&quot; whenever I did
+</I>&gt;<i> it
+</I>&gt;<i> &gt;&gt;&gt; or not.
+</I>&gt;<i> &gt;&gt; As said above the sysfs configuration interface is depricated.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; For that reason the &quot;can_setup&quot; script is also not usable here.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I juste updated the wiki with can_setup:
+</I>&gt;<i> &gt; <A HREF="http://dave.limoilux.org/trac/wiki/UseSocketCAN#can_setup">http://dave.limoilux.org/trac/wiki/UseSocketCAN#can_setup</A>
+</I>&gt;<i>
+</I>&gt;<i> I don't think your &quot;ip link set&quot; command does work. &quot;type can&quot; is
+</I>&gt;<i> missing and &quot;up&quot; is not recognized at the end of the line (after &quot;type
+</I>&gt;<i> can&quot;).
+</I>&gt;<i>
+</I>
+I add &quot;type can&quot;, but I am not sure to understand the &quot;up&quot; part. Are you
+talking about the line &quot;ifconfig $1 up&quot;?
+
+I will discuss with the team of the possibility to grant wiki edit to
+everyone.
+
+Thanks
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100410/5dc62752/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100410/5dc62752/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001367.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001370.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1369">[ date ]</a>
+              <a href="thread.html#1369">[ thread ]</a>
+              <a href="subject.html#1369">[ subject ]</a>
+              <a href="author.html#1369">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

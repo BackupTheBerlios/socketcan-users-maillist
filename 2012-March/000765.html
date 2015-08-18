@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.4.1331738228.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000691.html">
+   <LINK REL="Next"  HREF="000779.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.4.1331738228.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 16:17:01 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000691.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="000779.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#765">[ date ]</a>
+              <a href="thread.html#765">[ thread ]</a>
+              <a href="subject.html#765">[ subject ]</a>
+              <a href="author.html#765">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>CAN_BCM*=92 undeclared).
+When i run simple user socket application: It showing the error ....
+
+Error: *=91CAN_BCM=92 undeclared (first use in this function)*
+
+My kernel version: 2.6.25.  But, i enabled all the below things in the
+config file :
+
+CONFIG_MKISS=3Dm
+CONFIG_6PACK=3Dm
+CONFIG_BPQETHER=3Dm
+CONFIG_BAYCOM_SER_FDX=3Dm
+CONFIG_BAYCOM_SER_HDX=3Dm
+CONFIG_BAYCOM_PAR=3Dm
+CONFIG_YAM=3Dm
+CONFIG_CAN=3Dm
+CONFIG_CAN_RAW=3Dm
+CONFIG_CAN_BCM=3Dm
+
+I added this 2 lines in linux.h header file :
+
+#define        PF_CAN         29
+#define        AF_CAN         PF_CAN
+
+Post me, whether it is required to install any user-space libraries !!
+
+
+Thanks &amp; Regards,
+  *Aura Networks*
+
+--000e0cd32c480be384046733d5eb
+Content-Type: text/html; charset=windows-1252
+Content-Transfer-Encoding: quoted-printable
+
+Thanks for your replay,&lt;br&gt;&lt;br&gt;From the user application, the macros used i=
+n socket are not resolved (&#39;&lt;b&gt;CAN_BCM&lt;/b&gt;=92 undeclared).&lt;br&gt;When i ru=
+n simple user socket application: It showing the error ....&lt;br&gt;&lt;br&gt;Error: &lt;=
+i&gt;=91CAN_BCM=92 undeclared (first use in this function)&lt;/i&gt;&lt;br&gt;
+
+&lt;br&gt;My kernel version: 2.6.25.=A0 But, i enabled all the below things in th=
+e config file :&lt;br&gt;&lt;br&gt;CONFIG_MKISS=3Dm&lt;br&gt;CONFIG_6PACK=3Dm&lt;br&gt;CONFIG_BPQET=
+HER=3Dm&lt;br&gt;CONFIG_BAYCOM_SER_FDX=3Dm&lt;br&gt;CONFIG_BAYCOM_SER_HDX=3Dm&lt;br&gt;CONFIG=
+_BAYCOM_PAR=3Dm&lt;br&gt;
+
+CONFIG_YAM=3Dm&lt;br&gt;CONFIG_CAN=3Dm&lt;br&gt;CONFIG_CAN_RAW=3Dm&lt;br&gt;CONFIG_CAN_BCM=3D=
+m&lt;br&gt;
+&lt;br&gt;I added this 2 lines in linux.h header file :&lt;br&gt;&lt;br&gt;#define =A0 =A0 =
+=A0 =A0PF_CAN =A0 =A0 =A0 =A0 29&lt;br&gt;#define=A0=A0=A0=A0=A0=A0=A0 AF_CAN=A0=
+=A0=A0=A0=A0=A0=A0=A0 PF_CAN&lt;br&gt;&lt;br&gt;Post me, whether it is required to inst=
+all any user-space libraries !!&lt;br&gt;&lt;br&gt;&lt;br&gt;Thanks &amp; Regards,&lt;br&gt;
+
+=A0 &lt;i&gt;Aura Networks&lt;/i&gt;&lt;br&gt;
+
+--000e0cd32c480be384046733d5eb--
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000691.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="000779.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#765">[ date ]</a>
+              <a href="thread.html#765">[ thread ]</a>
+              <a href="subject.html#765">[ subject ]</a>
+              <a href="author.html#765">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

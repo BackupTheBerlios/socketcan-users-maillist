@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E383751.1080901%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002010.html">
+   <LINK REL="Next"  HREF="002011.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E383751.1080901%40grandegger.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">wg at grandegger.com
+       </A><BR>
+    <I>Tue Aug  2 19:43:45 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002010.html">[Socketcan-users] Hot plug support
+</A></li>
+        <LI>Next message: <A HREF="002011.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2009">[ date ]</a>
+              <a href="thread.html#2009">[ thread ]</a>
+              <a href="subject.html#2009">[ subject ]</a>
+              <a href="author.html#2009">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ulrich,
+
+On 08/02/2011 05:50 PM, uprinz wrote:
+&gt;<i> 
+</I>&gt;<i> Hi all, back again :)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi Ulirich
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 01/26/2011 05:02 PM, uprinz wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> CAN_FLEXCAN=y
+</I>&gt;&gt;&gt;&gt;&gt;<i> FLEXCAN_MXC_SELECT1=y
+</I>&gt;&gt;&gt;&gt;&gt;<i> are set.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Kernel is 2.6.34.7
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Well, I doubt the i.MX will ever be fully supported by the kernel but I
+</I>&gt;&gt;<i> think that the recent kernel version (2.6.37+) does have reasonable
+</I>&gt;&gt;<i> support for the i.MX25. That's what I would start with. Anyway, you may
+</I>&gt;&gt;<i> need to port the BSP for your board if it's not already supported in the
+</I>&gt;&gt;<i> mainline kernel. It seems that you are using a LTIB-kernel provided by
+</I>&gt;&gt;<i> Freescale.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Well, Wolfgang, finally we got a pretty fine working kernel 2.6.39 including
+</I>&gt;<i> full flexcan support.
+</I>&gt;<i> Both channels work smoothly. All Ip commands are supported and I think I
+</I>&gt;<i> have to thank not only our supplier but some folks in this forum too.
+</I>&gt;<i> 
+</I>&gt;<i> But there is one question left that was mentioned in this thread a while
+</I>&gt;<i> back.
+</I>&gt;<i> 
+</I>&gt;<i> Scenario is that I have two physical CAN channels. To both of them might be
+</I>&gt;<i> some devices connected or, what is important, may be not connected.
+</I>&gt;<i> The i.MX25 features two separate masters, each one responsible for only one
+</I>&gt;<i> bus.
+</I>&gt;<i> Additional it features one slave that hooks on one of the channels. But this
+</I>&gt;<i> slave is just a piece of software, not a physical device.
+</I>&gt;<i> 
+</I>&gt;<i> Now what happens is, that the physical channels might be unconnected. On one
+</I>&gt;<i> of the channels there is the slave hooked. But the interface of both
+</I>&gt;<i> channels is flooding my syslog with 
+</I>&gt;<i> &quot;SC2:write error; : No buffer space available&quot;
+</I>&gt;<i> 
+</I>&gt;<i> Is there a chance to get rid of this message?
+</I>
+You could handle the errno ENOBUFS and simply retry after some short
+delay without printing a message.
+
+&gt;<i> (Besides the one from throwing this error out of the source code)
+</I>
+&gt;<i> Just toi make clear the differences to the scenario we had with the older
+</I>&gt;<i> kernels:
+</I>&gt;<i> We do not have any problem with the bus! As soon as I connect any kind of
+</I>&gt;<i> device to the physical bus, the error message disappears and the bus is up
+</I>&gt;<i> and running. 
+</I>&gt;<i> 
+</I>&gt;<i> I configured the bus with 
+</I>&gt;<i> 
+</I>&gt;<i>         ifconfig $1 down
+</I>&gt;<i>         echo &quot;$1: Setting bitrate $BITRATE, restart $RESTART&quot;
+</I>&gt;<i>         ip link set $1 type can bitrate $BITRATE triple-sampling on
+</I>
+BTW, triple-sampling with 125 kb/s is pretty unusual.
+
+&gt;<i>         ip link set $1 type can restart-ms $RESTART
+</I>&gt;<i>         ifconfig $1 up
+</I>&gt;<i> 
+</I>&gt;<i> where $RESTART is a value of 100 and $1 ist can0 or can1, $BITRATE is 125000
+</I>
+What does &quot;ip -d -s link&quot; display? What type of errors and state changes
+do you see?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002010.html">[Socketcan-users] Hot plug support
+</A></li>
+	<LI>Next message: <A HREF="002011.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2009">[ date ]</a>
+              <a href="thread.html#2009">[ thread ]</a>
+              <a href="subject.html#2009">[ subject ]</a>
+              <a href="author.html#2009">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

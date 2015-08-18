@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC 0/4] [flexcan] Add support for powerpc	(freescale p1010) -V3
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%200/4%5D%20%5Bflexcan%5D%20Add%20support%20for%20powerpc%0A%09%28freescale%20p1010%29%20-V3&In-Reply-To=%3C1312485303-6175-1-git-send-email-holt%40sgi.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002051.html">
+   <LINK REL="Next"  HREF="002055.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC 0/4] [flexcan] Add support for powerpc	(freescale p1010) -V3</H1>
+    <B>Robin Holt</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%200/4%5D%20%5Bflexcan%5D%20Add%20support%20for%20powerpc%0A%09%28freescale%20p1010%29%20-V3&In-Reply-To=%3C1312485303-6175-1-git-send-email-holt%40sgi.com%3E"
+       TITLE="[Socketcan-users] [RFC 0/4] [flexcan] Add support for powerpc	(freescale p1010) -V3">holt at sgi.com
+       </A><BR>
+    <I>Thu Aug  4 21:14:59 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002051.html">[Socketcan-users] FW: [RFC 3/3] [flexcan] Add of_match to	platform_device definition.
+</A></li>
+        <LI>Next message: <A HREF="002055.html">[Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2054">[ date ]</a>
+              <a href="thread.html#2054">[ thread ]</a>
+              <a href="subject.html#2054">[ subject ]</a>
+              <a href="author.html#2054">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marc or Wolfgang,
+
+I have success.  These four patches together get things working for my
+freescale P1010RDB board.  I have not done a lot of testing yet, but I
+am able to at least configure the devices.  I will begin testing now.
+
+Could you please apply these four patches to a test branch, compile
+and test them on an arm based system?  I would like to at least feel
+comfortable that I have not broken anything there so far.
+
+I found that by defining an of_match attribute of the driver, I now get
+a callout at the flexcan_probe function.  This _MAY_ break the compile
+for machines that do not have CONFIG_OF, but I am not sure.
+
+I have also added some flexcan_clk_* functions for __powerpc__ compiles.
+I hope I left arm unchanged.
+
+Thanks,
+Robin Holt
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002051.html">[Socketcan-users] FW: [RFC 3/3] [flexcan] Add of_match to	platform_device definition.
+</A></li>
+	<LI>Next message: <A HREF="002055.html">[Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2054">[ date ]</a>
+              <a href="thread.html#2054">[ thread ]</a>
+              <a href="subject.html#2054">[ subject ]</a>
+              <a href="author.html#2054">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

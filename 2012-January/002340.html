@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4F058ED5.2000407%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002339.html">
+   <LINK REL="Next"  HREF="002341.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4F058ED5.2000407%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jan  5 12:51:49 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002339.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002341.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2340">[ date ]</a>
+              <a href="thread.html#2340">[ thread ]</a>
+              <a href="subject.html#2340">[ subject ]</a>
+              <a href="author.html#2340">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+On 01/05/2012 04:29 AM, Wolfgang Zarre wrote:
+&gt;<i> Hello Wolfgang,
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>...
+&gt;&gt;&gt;<i> diff --git a/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;&gt;<i> b/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;&gt;<i> index 4be5fe2..48fc128 100644
+</I>&gt;&gt;&gt;<i> --- a/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;&gt;<i> +++ b/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;&gt;<i> @@ -148,8 +148,7 @@ static void cc770_isa_port_write_reg_indirect(const
+</I>&gt;&gt;&gt;<i> struct cc770_priv *priv,
+</I>&gt;&gt;&gt;<i>   {
+</I>&gt;&gt;&gt;<i>       unsigned long base = (unsigned long)priv-&gt;reg_base;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -    outb(reg, base);
+</I>&gt;&gt;&gt;<i> -    outb(val, base + 1);
+</I>&gt;&gt;&gt;<i> +    outw( reg + ( val&lt;&lt;  8), base);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> That modification does fix your problem, right? The others above don't
+</I>&gt;&gt;<i> help nor harm but we don't know if it's really realted to the same
+</I>&gt;&gt;<i> problem. I wll dig a bit deeper.
+</I>&gt;<i> 
+</I>&gt;<i> Exactly. The others above I removed because facing the opposite, even
+</I>&gt;<i> missing interrupts but then just to avoid other possible side effects
+</I>&gt;<i> and then assuming that they might be related.
+</I>
+OK. My concern: Can we be sure that 16bit accesses are always supported
+by the hardware? Does a spinlock_irqsave/spinlock_irqrestore around the
+8bit accesses already help?
+
+About the &quot;HM:&quot; fixes, I did not find any info in the svn log. Maybe
+Oliver knows why they have been added.
+
+&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   static int __devinit cc770_isa_probe(struct platform_device *pdev)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ---------------------------------------------------------------------------------------------
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Please let me know if this is OK for You, maybe You can do some tests as
+</I>&gt;&gt;&gt;<i> well.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My board does not use indirect accesses.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Ah Ok, I see, but let me know if I may help with additional tests You would
+</I>&gt;<i> like to have beside the other mentioned tests as long as I have the
+</I>&gt;<i> hardware.
+</I>
+I will do some test anyway.
+
+&gt;&gt;&gt;<i> Would continue then with further tests regarding error conditions,
+</I>&gt;&gt;&gt;<i> however
+</I>&gt;&gt;&gt;<i> I realised another small issue with dropped packages at reception.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> As soon as You read the first time from the socket and then You stop
+</I>&gt;&gt;&gt;<i> reading
+</I>&gt;&gt;&gt;<i> the packages are not counted as 'dropped' any more which is IMHO not
+</I>&gt;&gt;&gt;<i> correct
+</I>&gt;&gt;&gt;<i> because as soon as You stop reading they should be counted as dropped
+</I>&gt;&gt;&gt;<i> again.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Will have a closer look now...
+</I>&gt;<i> 
+</I>&gt;<i> Thanks a lot.
+</I>&gt;<i> Also I'll inform You as soon as I can continue with some further tests
+</I>&gt;<i> regarding bus states and error counters and maybe also with patches in
+</I>&gt;<i> case I have.
+</I>
+No hurry... I'm first awaiting some patches to go mainline.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002339.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002341.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2340">[ date ]</a>
+              <a href="thread.html#2340">[ thread ]</a>
+              <a href="subject.html#2340">[ subject ]</a>
+              <a href="author.html#2340">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

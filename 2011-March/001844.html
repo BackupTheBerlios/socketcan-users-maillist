@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Multiple programs trying to access the socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Multiple%20programs%20trying%20to%20access%20the%20socket&In-Reply-To=%3C4D90AA2B.2010401%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001852.html">
+   <LINK REL="Next"  HREF="001853.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Multiple programs trying to access the socket</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Multiple%20programs%20trying%20to%20access%20the%20socket&In-Reply-To=%3C4D90AA2B.2010401%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Multiple programs trying to access the socket">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Mar 28 17:32:59 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001852.html">[Socketcan-users] poll broken (for can)
+</A></li>
+        <LI>Next message: <A HREF="001853.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1844">[ date ]</a>
+              <a href="thread.html#1844">[ thread ]</a>
+              <a href="subject.html#1844">[ subject ]</a>
+              <a href="author.html#1844">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 03/28/2011 04:05 PM, Georgy Lukonin wrote:
+&gt;<i> Currently there is a problem if two programs trying to access the socket.
+</I>&gt;<i> In my case the one program sends only few packets over the CAN. The
+</I>&gt;<i> another one sends a huge amount of packets. This causes a frequently
+</I>&gt;<i> reset of the device and the lost of messages in the buffer. 
+</I>
+Which Linux Version are you using? Which hardware do you have? What's
+the bitrate of the CAN bus?
+
+Who resets the device? How do you know that the device has been reset?
+Which messages are lost? The packages the at91 should rx or tx?
+
+&gt;<i> I get this messages:
+</I>&gt;<i> 
+</I>&gt;<i> can: chip_stopped
+</I>&gt;<i> can: at91_close
+</I>&gt;<i> at91_can at91_can: bitrate error 0.3%
+</I>&gt;<i> at91_can at91_can: writing AT91_BR: 0x000a0122
+</I>&gt;<i> can: chip_started!
+</I>&gt;<i> can: at91_open
+</I>
+Have you made any modifications to the kernel? I cannot find any code in
+v2.6.38 that prints &quot;chip_stopped&quot; or &quot;chip_started!&quot;.
+
+&gt;<i> What is the best way to avoid this behaviour? How can I check if there
+</I>&gt;<i> are any free buffers available?
+</I>
+Which buffers do you mean? RX or TX. The mainline driver has no
+interface to get this information. However you can add a debugfs
+interface for this.
+
+regards, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110328/31fceacd/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110328/31fceacd/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001852.html">[Socketcan-users] poll broken (for can)
+</A></li>
+	<LI>Next message: <A HREF="001853.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1844">[ date ]</a>
+              <a href="thread.html#1844">[ thread ]</a>
+              <a href="subject.html#1844">[ subject ]</a>
+              <a href="author.html#1844">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

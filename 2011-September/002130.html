@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3CCAAZiaZcvb5ms4DVsDWhkczLenqQu9xXCT7T0ygSgnoFSYSdp3g%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002127.html">
+   <LINK REL="Next"  HREF="002132.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR</H1>
+    <B>Francois Bouchard</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3CCAAZiaZcvb5ms4DVsDWhkczLenqQu9xXCT7T0ygSgnoFSYSdp3g%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR">francois.bouchard at mpbc.ca
+       </A><BR>
+    <I>Thu Sep  8 15:30:00 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002127.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+        <LI>Next message: <A HREF="002132.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2130">[ date ]</a>
+              <a href="thread.html#2130">[ thread ]</a>
+              <a href="subject.html#2130">[ subject ]</a>
+              <a href="author.html#2130">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marc,
+
+
+
+Francois
+
+&gt;<i>It's a coldfire processor isn't it?
+</I>yes it is a v4 core.
+
+&gt;<i>IIRC it has the old flexcan core.
+</I>ok how do you do this?
+
+&gt;&gt;<i> used to write and read consecutively in a while loop.  Therefor I have no
+</I>&gt;&gt;<i> problem creating the socket and communicating between the can1 I/F and a
+</I>&gt;&gt;<i> second device, but the program reset by itself after a while.
+</I>&gt;<i> Like Oliver asked, what does that mean exactly?
+</I>The Whole system seems to reboot when running my CAN loop program.
+
+
+&gt;<i> Can you send me where you downloaded the BSP/kernel?
+</I>Yes it was taken from the M54418TWR tower CD, or here
+M54418Tower_Linux_BSP_20110422_ltib.iso :
+<A HREF="http://cache.freescale.com/lgfiles/bsps/M54418Tower_Linux_BSP_20110422_ltib.iso?WT_TYPE=Board%20Support%20Packages&amp;WT_VENDOR=FREESCALE&amp;WT_FILE_FORMAT=iso&amp;WT_ASSET=Downloads*">http://cache.freescale.com/lgfiles/bsps/M54418Tower_Linux_BSP_20110422_ltib.iso?WT_TYPE=Board%20Support%20Packages&amp;WT_VENDOR=FREESCALE&amp;WT_FILE_FORMAT=iso&amp;WT_ASSET=Downloads*</A>
+* you may have to register before download.
+
+&gt;<i> What does &quot;hardware dependent&quot; mean?
+</I>BSP driver issue.
+
+thanks
+
+Francois
+
+2011/9/7 Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+
+&gt;<i> Hallo,
+</I>&gt;<i>
+</I>&gt;<i> On 09/07/2011 06:28 PM, Francois Bouchard wrote:
+</I>&gt;<i> &gt; Attempting to create heavy traffic with M54418TWR CAN interface, S socket
+</I>&gt;<i> is
+</I>&gt;<i>
+</I>&gt;<i> It's a coldfire processor isn't it? IIRC it has the old flexcan core.
+</I>&gt;<i> The mainline driver doesn't support that core, so I think it's provided
+</I>&gt;<i> by flexcan.
+</I>&gt;<i>
+</I>&gt;<i> &gt; used to write and read consecutively in a while loop.  Therefor I have no
+</I>&gt;<i> &gt; problem creating the socket and communicating between the can1 I/F and a
+</I>&gt;<i> &gt; second device, but the program reset by itself after a while.
+</I>&gt;<i>
+</I>&gt;<i> Like Oliver asked, what does that mean exactly?
+</I>&gt;<i>
+</I>&gt;<i> &gt; CODE:
+</I>&gt;<i> &gt; *while(numofmsg)
+</I>&gt;<i> &gt; {
+</I>&gt;<i> &gt;         nbytes = write(can_socket, &amp;tx_frame, sizeof(struct can_frame));
+</I>&gt;<i> &gt;         numofmsg--;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         // recv()
+</I>&gt;<i> &gt;         nbytes = recv(can_socket, &amp;rx_frame, sizeof(struct can_frame),
+</I>&gt;<i> &gt; MSG_DONTWAIT );
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         // ...
+</I>&gt;<i> &gt; }
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt; Is there some coding rules or prevention when doing something like that?
+</I>&gt;<i> &gt; It is also hardware dependent, so I should check that also.
+</I>&gt;<i>
+</I>&gt;<i> What does &quot;hardware dependent&quot; mean?
+</I>&gt;<i>
+</I>&gt;<i> &gt; target: ( Freescale 54418TWR );
+</I>&gt;<i> &gt; Linux version 2.6.29 (gcc version 4.4.1 (Sourcery G++ Lite 4.4-54) ) #49
+</I>&gt;<i> Wed
+</I>&gt;<i> &gt; Aug 10 15:50:50 EDT 2011
+</I>&gt;<i>
+</I>&gt;<i> Can you send me where you downloaded the BSP/kernel?
+</I>&gt;<i>
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Pengutronix e.K.                  | Marc Kleine-Budde           |
+</I>&gt;<i> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+</I>&gt;<i> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+</I>&gt;<i> Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110908/11e245b2/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110908/11e245b2/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002127.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+	<LI>Next message: <A HREF="002132.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2130">[ date ]</a>
+              <a href="thread.html#2130">[ thread ]</a>
+              <a href="subject.html#2130">[ subject ]</a>
+              <a href="author.html#2130">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Bus-simulation with SocketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bus-simulation%20with%20SocketCAN&In-Reply-To=%3C4F0CA98E.2050400%40sebastianhaas.info%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002342.html">
+   <LINK REL="Next"  HREF="002344.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Bus-simulation with SocketCAN</H1>
+    <B>Sebastian Haas</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bus-simulation%20with%20SocketCAN&In-Reply-To=%3C4F0CA98E.2050400%40sebastianhaas.info%3E"
+       TITLE="[Socketcan-users] Bus-simulation with SocketCAN">dev at sebastianhaas.info
+       </A><BR>
+    <I>Tue Jan 10 22:11:42 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002342.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+        <LI>Next message: <A HREF="002344.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2343">[ date ]</a>
+              <a href="thread.html#2343">[ thread ]</a>
+              <a href="subject.html#2343">[ subject ]</a>
+              <a href="author.html#2343">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+Am 10.01.2012 11:29, schrieb Oliver Hartkopp:
+&gt;<i> Hello Sebastian,
+</I>&gt;<i>
+</I>&gt;<i> On 09.01.2012 23:33, Sebastian Haas wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> just in case someone is interested in an easy to way to simulate CAN nodes or
+</I>&gt;&gt;<i> to test ECUs via CAN. I want to inform you that my recently started project
+</I>&gt;&gt;<i> restcan [3] reached a first milestone. Look at [1] to know what restcan is.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The milestone includes the following features:
+</I>&gt;&gt;<i> - support of SocketCANs' RAW channels incl. Rx filters
+</I>&gt;&gt;<i> - support of a rudimentary JSON-based message database format
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Do you know the Kayak project from Jan-Niklas Meier?
+</I>&gt;<i>
+</I>&gt;<i> Kajak is a JAVA based frontend and library, see:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://kayak.2codeornot2code.org/">http://kayak.2codeornot2code.org/</A>
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://kayak.2codeornot2code.org/tutorial.html">http://kayak.2codeornot2code.org/tutorial.html</A>
+</I>&gt;<i>
+</I>&gt;<i> And on github: <A HREF="https://github.com/dschanoeh/Kayak">https://github.com/dschanoeh/Kayak</A>
+</I>That looks quite interesting. The approach is different than mine, as 
+the logic in restcan is at the server side and the client (not yet 
+available) is an optional visualization/control component.
+
+It is quite difficult to find active open source projects which are CAN 
+related. I hope to find some help to implement the visualization for 
+restcan. Too bad Kayak does the signal processing on its own.
+
+&gt;<i> Implementing a restbus functionality in JAVA based on the Kajak library is
+</I>&gt;<i> very easy - when  you are a JAVA developer ;-)
+</I>&gt;<i>
+</I>&gt;<i> I like your approach to get a restbus simulation in C.
+</I>Well the simulation is written in Javascript, which is even easier than 
+C or Java. I want it to be easy to use. The only dependency is NodeJS 
+and you can write and run simulation and test cases from commandline 
+within few minutes.
+
+&gt;<i> But checking your JSON description for CAN signals i stumbled about the
+</I>&gt;<i> 'intel' and 'motorola' tags which stand for 'little' and 'big' endian.
+</I>Yeah, you are right. I will improve it.
+
+&gt;<i> I wonder, if it makes sense for your project to adopt the XML-based KCD
+</I>&gt;<i> format for CAN signal descriptions:
+</I>I had a look at the spec, KCD looks pretty good, I think I will use it 
+to replace the JSON description.
+
+&gt;<i> <A HREF="https://github.com/dschanoeh/Kayak/blob/ee6b459bddd1831ae99c1afcde01f315e4b454b4/Kayak-kcd/src/test/resources/can_definition_sample.kcd">https://github.com/dschanoeh/Kayak/blob/ee6b459bddd1831ae99c1afcde01f315e4b454b4/Kayak-kcd/src/test/resources/can_definition_sample.kcd</A>
+</I>&gt;<i>
+</I>&gt;<i> Here is the XML schema definition:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://github.com/dschanoeh/Kayak/blob/master/Kayak-kcd/src/main/resources/com/github/kayak/canio/kcd/schema/Definition.xsd">https://github.com/dschanoeh/Kayak/blob/master/Kayak-kcd/src/main/resources/com/github/kayak/canio/kcd/schema/Definition.xsd</A>
+</I>&gt;<i>
+</I>&gt;<i> Maybe you can build your JSON description with an XSLT process from the well
+</I>&gt;<i> defined KCD description.
+</I>&gt;<i>
+</I>&gt;<i> There's also a dbc input converter on the run to create KCDs:
+</I>&gt;<i> <A HREF="https://github.com/dschanoeh/CANBabel">https://github.com/dschanoeh/CANBabel</A>
+</I>Thats create, I was afraid I need to implement the converter myself. ;-) 
+I hope they will extend to parse .sym files from Peak as well.
+
+Do you know about BUSMASTER (<A HREF="https://github.com/rbei-etas/busmaster">https://github.com/rbei-etas/busmaster</A>). If 
+it weren't Windows (R) only it would be an interesting solution.
+
+Oliver, what must restcan provide to be useable for you in your daily 
+work? Or what do you expect from such a tool?
+
+Cheers,
+  Sebastian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002342.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+	<LI>Next message: <A HREF="002344.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2343">[ date ]</a>
+              <a href="thread.html#2343">[ thread ]</a>
+              <a href="subject.html#2343">[ subject ]</a>
+              <a href="author.html#2343">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

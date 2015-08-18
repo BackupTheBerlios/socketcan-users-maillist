@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] 10 CAN interfaces on ECAN-527d
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%2010%20CAN%20interfaces%20on%20ECAN-527d&In-Reply-To=%3C32881524.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002245.html">
+   <LINK REL="Next"  HREF="002283.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] 10 CAN interfaces on ECAN-527d</H1>
+    <B>IreneV</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%2010%20CAN%20interfaces%20on%20ECAN-527d&In-Reply-To=%3C32881524.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users] 10 CAN interfaces on ECAN-527d">boir1 at yandex.ru
+       </A><BR>
+    <I>Tue Nov 29 19:02:09 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002245.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+        <LI>Next message: <A HREF="002283.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2282">[ date ]</a>
+              <a href="thread.html#2282">[ thread ]</a>
+              <a href="subject.html#2282">[ subject ]</a>
+              <a href="author.html#2282">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+
+Wolfgang Grandegger wrote:
+&gt;<i> 
+</I>&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> On 11/23/2011 08:20 PM, IreneV wrote:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> Marc &amp; Oliver, 
+</I>&gt;&gt;<i> thanks a lot for your quick answers!
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> RTD ECAN-527 board's chip is really i82527. This board is supplied with
+</I>&gt;&gt;<i> CD
+</I>&gt;&gt;<i> containing Linux drivers and some example programs. Today I compiled one
+</I>&gt;&gt;<i> of
+</I>&gt;&gt;<i> that programs - it was an easy hardware test. This program displayed
+</I>&gt;&gt;<i> information about 2 interfaces of that 10 (rtd-ecan527-0 and
+</I>&gt;&gt;<i> rtd-ecan527-1). 
+</I>&gt;&gt;<i> When I tried to get info about other interfaces (2-9) an error occured
+</I>&gt;&gt;<i> (program said that there is no that interface). So I can draw a
+</I>&gt;&gt;<i> conclusion
+</I>&gt;&gt;<i> that drivers are OK and my MicroPC understands that ECAN board is really
+</I>&gt;&gt;<i> dual-channel :jumping:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> About drivers and SocketCAN. I've read some information about SocketCAN
+</I>&gt;&gt;<i> and
+</I>&gt;&gt;<i> it seemed very attractive to me. 
+</I>&gt;&gt;<i> Do you think can I try to use SocketCAN in my work or it would not run on
+</I>&gt;&gt;<i> this board?
+</I>&gt;&gt;<i> Or maybe it would be better to use official drivers and libraries from
+</I>&gt;&gt;<i> the
+</I>&gt;&gt;<i> producer?
+</I>&gt;<i> 
+</I>&gt;<i> I have the CC770 Socket-CAN driver almost ready for mainline inclusion,
+</I>&gt;<i> which also supports the i82527. Would you like to test it? What kernel
+</I>&gt;<i> version are you using?
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+Hello, Wolfgang.
+I use kernel v. 2.6.35-30. 
+I downloaded the trunk of SocketCAN project from SVN and found there
+directory /old/i82527. Can I use it in my project or not? And what's the
+difference between this driver and the driver that you offer me? There is
+also a driver for cc770 in the trunk - it supports my board too?
+
+Please correct me if I'm wrong. As I understood from &quot;README&quot; file from the
+trunk directory I have to run &quot;make&quot; for SocketCAN drivers for my kernel and
+I must have linux sources on my target PC. Now I don't have sourcesin my
+filesystem but I'll download them and try again. What must I see in my
+filesystem after that? Where CAN drivers will appear?
+
+Sorry for stupid questions - I'm not close with SVN and Linux drivers:-( but
+I'll try to improve it :working:
+-- 
+View this message in context: <A HREF="http://old.nabble.com/10-CAN-interfaces-on-ECAN-527d-tp32872261p32881524.html">http://old.nabble.com/10-CAN-interfaces-on-ECAN-527d-tp32872261p32881524.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002245.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+	<LI>Next message: <A HREF="002283.html">[Socketcan-users] 10 CAN interfaces on ECAN-527d
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2282">[ date ]</a>
+              <a href="thread.html#2282">[ thread ]</a>
+              <a href="subject.html#2282">[ subject ]</a>
+              <a href="author.html#2282">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

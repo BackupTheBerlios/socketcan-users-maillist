@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x driver for linux-2.6.22
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20driver%20for%20linux-2.6.22&In-Reply-To=%3Ccabda6420903252354s2a7923b1ta41990b28cc87a6d%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000722.html">
+   <LINK REL="Next"  HREF="000725.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x driver for linux-2.6.22</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20driver%20for%20linux-2.6.22&In-Reply-To=%3Ccabda6420903252354s2a7923b1ta41990b28cc87a6d%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp251x driver for linux-2.6.22">chripell at gmail.com
+       </A><BR>
+    <I>Thu Mar 26 07:54:41 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000722.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+        <LI>Next message: <A HREF="000725.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#723">[ date ]</a>
+              <a href="thread.html#723">[ thread ]</a>
+              <a href="subject.html#723">[ subject ]</a>
+              <a href="author.html#723">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Mar 26, 2009 at 3:36 AM, Yonghui Shen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">shenyonghui at gmail.com</A>&gt; wrote:
+&gt;<i> Hello, Wolfang and Chris,
+</I>&gt;<i>
+</I>&gt;<i> thank you very much for your replies.
+</I>&gt;<i>
+</I>&gt;<i> I&#160;did choose the CONFIG_CAN_DEBUG_DEVICE=y&#160; at the beginning&#160;and build it
+</I>&gt;<i> into the kernel. I think dmesg shows already all&#160;the debug messages, does
+</I>&gt;<i> it? Do you have more precise advises how I should do to locate the wrong
+</I>&gt;<i> &quot;SPI interface configuration&quot;? 'Cause I have tried a lot of different
+</I>&gt;<i> settings but it still does not work. : - (
+</I>&gt;<i>
+</I>
+The SPI mode is set in the in the driver itself:
+
+        /* Configure the SPI bus */
+        spi-&gt;mode = SPI_MODE_0;
+        spi-&gt;bits_per_word = 8;
+        spi_setup(spi);
+
+so what is left to you is check that platform data i right. I use
+something like:
+
+static struct mcp251x_platform_data mcp251x_info = {
+        .oscillator_frequency = 8000000,
+        .board_specific_setup = &amp;mcp251x_setup,
+        .model = CAN_MCP251X_MCP2510,
+        .power_enable = mcp251x_power_enable,
+        .transceiver_enable = NULL,
+};
+
+static struct spi_board_info spi_board_info[] = {
+        {
+                .modalias       = &quot;mcp251x&quot;,
+                .platform_data  = &amp;mcp251x_info,
+                .irq            = IRQ_EINT13,
+                .max_speed_hz   = 2*1000*1000,
+                .chip_select    = 0, /* GPJ2 */
+        },
+}
+
+of course you have to write functions to handle the chip select:
+
+static void abt40_set_cs(struct s3c2410_spi_info *spi, int cs, int pol) {
+        int pin;
+
+        switch(cs) {
+        case 0:
+                pin = S3C2440_GPJ2;
+                break;
+        s3c2410_gpio_setpin(pin, pol);
+        s3c2410_gpio_cfgpin(pin, S3C2410_GPIO_OUTPUT);
+        udelay(1);
+}
+
+and, if you defined mcp251x_setup and mcp251x_power_enable, these to
+setup the gpio lines and power on the chip.
+
+If you correctly enabled debug you should at least see something like:
+
+[spi device] mcp251x_hw_probe: [first id byte] [second id byte]
+
+if these bytes are all zeros or all 0xff chances are that the wiring
+is wrong: review the connections perhaps with the help of an
+oscilloscope. If the number are different please post them.
+
+HTH
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000722.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+	<LI>Next message: <A HREF="000725.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#723">[ date ]</a>
+              <a href="thread.html#723">[ thread ]</a>
+              <a href="subject.html#723">[ subject ]</a>
+              <a href="author.html#723">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

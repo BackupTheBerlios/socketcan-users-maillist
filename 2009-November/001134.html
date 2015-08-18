@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%0A%20slprq%09timeout&In-Reply-To=%3C4AF2FE47.8080007%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001133.html">
+   <LINK REL="Next"  HREF="001135.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%0A%20slprq%09timeout&In-Reply-To=%3C4AF2FE47.8080007%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov  5 17:33:11 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001133.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+        <LI>Next message: <A HREF="001135.html">[Socketcan-users]  socketcan w/ MCP2515 and dropped rx frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1134">[ date ]</a>
+              <a href="thread.html#1134">[ thread ]</a>
+              <a href="subject.html#1134">[ subject ]</a>
+              <a href="author.html#1134">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Fu,
+
+Luotao Fu wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> On Thu, Nov 05, 2009 at 03:55:15PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;<i> On Thu, Nov 05, 2009 at 08:55:20AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> ....
+</I>&gt;<i> ...
+</I>&gt;&gt;&gt;<i> hmm, this means that normal_mode get through somehow. This is not the
+</I>&gt;&gt;&gt;<i> case on the mpc5200b here.
+</I>&gt;&gt;<i> Yes.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> /me scratch my head.... just a wild guess: the slprq disappears on a
+</I>&gt;<i> mpc5200a somehow later by itself?
+</I>
+It does not disappear as long as MSCAN_INITRQ is not set. I tried with
+big mdelays in the wait loop. If MSCAN_INITRQ is set, it disappears
+immediately.
+
+&gt;<i> ....
+</I>&gt;<i> 
+</I>&gt;&gt;<i> If you agree, I will apply it with some minor nitpicking:
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I'm certainly fine with this.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> - Remove &quot;XXX:&quot; and spelling:
+</I>&gt;&gt;<i> 			/*
+</I>&gt;&gt;<i> 			 * The mscan controller will fail to enter sleep
+</I>&gt;&gt;<i> 			 * mode, while there are irregular activities on bus,
+</I>&gt;&gt;<i> 			 * like somebody keeps retransmitting. This behavior
+</I>&gt;&gt;<i> 			 ...
+</I>&gt;<i> 
+</I>&gt;<i> Doh! thx. ..ooOO(Next time I'd write comment in chinese pinyin, no chance for
+</I>&gt;<i> misspelling then. Yeah!)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> - Improve printout:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   dev_dbg(dev-&gt;dev.parent,
+</I>&gt;&gt;<i>           &quot;device failed to enter sleep mode. 
+</I>&gt;&gt;<i> 	  &quot;We proceed to enter init mode anyhow.\n&quot;);
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> /me nitpicks back: theoretically we could also proceed to cswai or
+</I>&gt;<i> simply sleep. These modes are actually not used, however &quot;proceed to
+</I>&gt;<i> init mode&quot; is still not accurate. Let's stay at &quot;we will proceed anyhow.&quot;
+</I>
+OK. Applied to SVN trunk. Please check.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001133.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+	<LI>Next message: <A HREF="001135.html">[Socketcan-users]  socketcan w/ MCP2515 and dropped rx frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1134">[ date ]</a>
+              <a href="thread.html#1134">[ thread ]</a>
+              <a href="subject.html#1134">[ subject ]</a>
+              <a href="author.html#1134">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

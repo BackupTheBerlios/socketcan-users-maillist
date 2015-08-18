@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp2515 on ARM9 s3c2440
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20on%20ARM9%20s3c2440&In-Reply-To=%3C4B07A98B.6060606%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001142.html">
+   <LINK REL="Next"  HREF="001144.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp2515 on ARM9 s3c2440</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20on%20ARM9%20s3c2440&In-Reply-To=%3C4B07A98B.6060606%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] mcp2515 on ARM9 s3c2440">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sat Nov 21 09:49:15 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001142.html">[Socketcan-users]  mcp2515 on ARM9 s3c2440
+</A></li>
+        <LI>Next message: <A HREF="001144.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1143">[ date ]</a>
+              <a href="thread.html#1143">[ thread ]</a>
+              <a href="subject.html#1143">[ subject ]</a>
+              <a href="author.html#1143">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>jwb361 wrote:
+&gt;<i> hi,
+</I>&gt;<i>     I have some problem with mcp251x module driver. I'm using kernel 2.6.29
+</I>&gt;<i> on s3c2440, and my CAN controller is mcp2515. I have successfully add the
+</I>&gt;<i> mcp251x module into the linux kernel(build-in), and on the start up I can
+</I>&gt;<i> see someting like this:
+</I>&gt;<i> ...
+</I>&gt;<i> can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> NET: Registered protocol family 29
+</I>&gt;<i> can: raw protocol (rev 20090105)
+</I>&gt;<i> can: broadcast manager protocol (rev 20090105 t)
+</I>&gt;<i> ...
+</I>&gt;<i> I type command cat /proc/net/can/stats it return:
+</I>&gt;<i> 
+</I>
+(..)
+
+&gt;<i> and cat /proc/net/can/version :
+</I>&gt;<i> rev 20090105 abi 8
+</I>
+All this is the CAN networklayer stuff that has nothing to do with the CAN
+netdevice.
+
+That's fine - but it's like checking if TCP/IP is available ;-)
+And your problem is the &quot;ethernet driver&quot; ...
+
+&gt;<i> 
+</I>&gt;<i> ip link set can0 up type can bitrate 125000:
+</I>&gt;<i> ip: either &quot;dev&quot; is duplicate, or &quot;type&quot; is garbage
+</I>
+This is because of your &quot;ip&quot; is too old and does not support CAN devices setup.
+
+<A HREF="http://git.kernel.org/?p=network/iproute2/iproute2.git;a=summary">http://git.kernel.org/?p=network/iproute2/iproute2.git;a=summary</A>
+
+Get &amp; build the latest &quot;ip&quot; from
+
+<A HREF="git://git.kernel.org/pub/scm/network/iproute2/iproute2.git">git://git.kernel.org/pub/scm/network/iproute2/iproute2.git</A>
+
+
+&gt;<i> ifconfig can0 up:
+</I>&gt;<i> ifconfig: SIOCGIFFLAGS: No such device
+</I>
+Please check for CAN driver stuff in the kernel log (e.g. with dmesg)
+search for &quot;CAN device driver interface&quot;
+
+Or check
+
+cat /proc/net/dev | grep can
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001142.html">[Socketcan-users]  mcp2515 on ARM9 s3c2440
+</A></li>
+	<LI>Next message: <A HREF="001144.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1143">[ date ]</a>
+              <a href="thread.html#1143">[ thread ]</a>
+              <a href="subject.html#1143">[ subject ]</a>
+              <a href="author.html#1143">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

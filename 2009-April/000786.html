@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Losing CAN messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Losing%20CAN%20messages&In-Reply-To=%3C49E6D7CF.1010106%40ibb.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000785.html">
+   <LINK REL="Next"  HREF="000787.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Losing CAN messages</H1>
+    <B>Richard Knoop</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Losing%20CAN%20messages&In-Reply-To=%3C49E6D7CF.1010106%40ibb.nl%3E"
+       TITLE="[Socketcan-users] Losing CAN messages">richard.knoop at ibb.nl
+       </A><BR>
+    <I>Thu Apr 16 09:01:35 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000785.html">[Socketcan-users] Losing CAN messages
+</A></li>
+        <LI>Next message: <A HREF="000787.html">[Socketcan-users] CAN frame reordering.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#786">[ date ]</a>
+              <a href="thread.html#786">[ thread ]</a>
+              <a href="subject.html#786">[ subject ]</a>
+              <a href="author.html#786">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Hi Richard,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> i hacked test/tst-raw.c like this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~/socketcan/trunk/test$ svn diff
+</I>&gt;&gt;<i> Index: tst-raw.c
+</I>&gt;&gt;<i> ===================================================================
+</I>&gt;&gt;<i> --- tst-raw.c	(Revision 967)
+</I>&gt;&gt;<i> +++ tst-raw.c	(Arbeitskopie)
+</I>&gt;&gt;<i> @@ -69,6 +69,7 @@
+</I>&gt;&gt;<i>  	char *ifname = &quot;vcan2&quot;;
+</I>&gt;&gt;<i>  	int ifindex;
+</I>&gt;&gt;<i>  	int opt;
+</I>&gt;&gt;<i> +	int sock_buf_size;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  	/* sockopt test */
+</I>&gt;&gt;<i>  	int loopback = 0;
+</I>&gt;&gt;<i> @@ -154,6 +155,23 @@
+</I>&gt;&gt;<i>  		nbytes = write(s, &amp;frame, sizeof(struct can_frame));
+</I>&gt;&gt;<i>  	}
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> +	i = sizeof(sock_buf_size);
+</I>&gt;&gt;<i> +	nbytes = getsockopt(s, SOL_SOCKET, SO_RCVBUF,
+</I>&gt;&gt;<i> +			    &amp;sock_buf_size, (socklen_t *)&amp;i);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	printf(&quot;current sock_buf_size %X\n&quot;, sock_buf_size);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	sock_buf_size = 0x80000;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	nbytes = setsockopt(s, SOL_SOCKET, SO_RCVBUF,
+</I>&gt;&gt;<i> +			    &amp;sock_buf_size, sizeof(sock_buf_size));
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	i = sizeof(sock_buf_size);
+</I>&gt;&gt;<i> +	nbytes = getsockopt(s, SOL_SOCKET, SO_RCVBUF,
+</I>&gt;&gt;<i> +			    &amp;sock_buf_size, (socklen_t *)&amp;i);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	printf(&quot;new sock_buf_size %X\n&quot;, sock_buf_size);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i>  	while (1) {
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  		if ((nbytes = read(s, &amp;frame, sizeof(struct can_frame))) &lt; 0) {
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And i got this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~/socketcan/trunk/test$ ./tst-raw
+</I>&gt;&gt;<i> current sock_buf_size 1A000
+</I>&gt;&gt;<i> new sock_buf_size 3FFFE
+</I>&gt;&gt;<i> ^C
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So there was a change (somehow ...)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Indeed this new sock_buf_size is capped value of the double from
+</I>&gt;<i> /proc/net/sys/core/rmem_max
+</I>&gt;<i> 
+</I>&gt;<i> With
+</I>&gt;<i> 
+</I>&gt;<i> vwagwolkf320:/proc/sys/net/core# echo 400000 &gt; rmem_max
+</I>&gt;<i> 
+</I>&gt;<i> i get this:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~/socketcan/trunk/test$ ./tst-raw
+</I>&gt;<i> current sock_buf_size 1A000
+</I>&gt;<i> new sock_buf_size C3500
+</I>&gt;<i> 
+</I>&gt;<i> $C3500 = 800000
+</I>&gt;<i> 
+</I>&gt;<i> So this is definitely the way you can extend the socket receive buffer
+</I>&gt;<i> according to your needs.
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>
+Hi Oliver,
+
+I tested the setoptsock, it helped receiving more CAN messages.
+
+Then I changed the rmem_max and all messages are received, excellent.
+
+I am just wondering, with a new sock_buf_size of $34000 I still mis messages, while my messages itself are just 17 KByte 
+of data and the buffer is 34000H = 212992 bytes.
+
+There seems to be a lot of overhead.
+
+I now have a sock_buf_size of $C35000 and it works like a charm.
+
+Thanks for your quick response.
+
+Richard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000785.html">[Socketcan-users] Losing CAN messages
+</A></li>
+	<LI>Next message: <A HREF="000787.html">[Socketcan-users] CAN frame reordering.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#786">[ date ]</a>
+              <a href="thread.html#786">[ thread ]</a>
+              <a href="subject.html#786">[ subject ]</a>
+              <a href="author.html#786">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

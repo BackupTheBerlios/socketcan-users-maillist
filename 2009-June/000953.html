@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] atomic operations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3C20090617152735.GB6653%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000932.html">
+   <LINK REL="Next"  HREF="000954.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] atomic operations</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3C20090617152735.GB6653%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] atomic operations">l.fu at pengutronix.de
+       </A><BR>
+    <I>Wed Jun 17 17:27:35 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000932.html">[Socketcan-users] [PATCH 3/5]: softing CAN card
+</A></li>
+        <LI>Next message: <A HREF="000954.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#953">[ date ]</a>
+              <a href="thread.html#953">[ thread ]</a>
+              <a href="subject.html#953">[ subject ]</a>
+              <a href="author.html#953">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi folks,
+I was playing around with a mcp2510 card on a i.MX27 platform with 2.6.30
+lately. I turned on preempt support in kernel and ran quite quickly into the
+issue of scheduling in atomic operations while trying to get the if state by
+doing a cat on can_state. The issue has been apparently already describe on this
+list. The thread can be found here:
+ <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2009-April/002427.html.">https://lists.berlios.de/pipermail/socketcan-core/2009-April/002427.html.</A>
+Christians workaround works fine. But as he's already written in the thread,
+this is no solution. Taking a look a can_dev_show: The read_lock forces an
+atomic path on systems with preemption. Hence there's always a chance to
+run into similar situations for cards connecting to slower busses with its own
+transfer waiting queue like mcp251x. The situation is quite similar to the one
+once gpiolib faced to. The access clearly has to be locked to avoid racing. But
+the rwlock is probably wrong here. I have no ide what else will have to be
+changed to fix this behaviour or whether this issue has already been discussed
+before. If the issue is already known, sorry for double posting than.
+
+cheers
+Luotao Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090617/82e6ef5f/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090617/82e6ef5f/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000932.html">[Socketcan-users] [PATCH 3/5]: softing CAN card
+</A></li>
+	<LI>Next message: <A HREF="000954.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#953">[ date ]</a>
+              <a href="thread.html#953">[ thread ]</a>
+              <a href="subject.html#953">[ subject ]</a>
+              <a href="author.html#953">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

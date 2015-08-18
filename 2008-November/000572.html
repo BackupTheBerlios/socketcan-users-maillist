@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Can't get SocketCan to work on a MPC5200b	board
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Can%27t%20get%20SocketCan%20to%20work%20on%20a%20MPC5200b%0A%09board&In-Reply-To=%3C491B2FCE.4040909%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000571.html">
+   <LINK REL="Next"  HREF="000573.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Can't get SocketCan to work on a MPC5200b	board</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Can%27t%20get%20SocketCan%20to%20work%20on%20a%20MPC5200b%0A%09board&In-Reply-To=%3C491B2FCE.4040909%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Can't get SocketCan to work on a MPC5200b	board">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Nov 12 20:34:38 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000571.html">[Socketcan-users] Can't get SocketCan to work on a MPC5200b board
+</A></li>
+        <LI>Next message: <A HREF="000573.html">[Socketcan-users] Can't get SocketCan to work on a MPC5200b	board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#572">[ date ]</a>
+              <a href="thread.html#572">[ thread ]</a>
+              <a href="subject.html#572">[ subject ]</a>
+              <a href="author.html#572">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nick wrote:
+&gt;<i> Hi Everyone,
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Hi Nick,
+
+&gt;<i> I have been trying to get the SocketCan to work on my board, very 
+</I>&gt;<i> similar to the Freescale IceCube board.  Using a USB to CAN 
+</I>&gt;<i> transmitter,  I can see the CAN receive signal right to my processor, so 
+</I>&gt;<i> I know the hardware is working.  My kernel version is Linux-2.6.27-rc6.
+</I>&gt;<i>
+</I>&gt;<i> This is what I get on kernel startup:
+</I>&gt;<i>
+</I>&gt;<i> [  131.120240] TCP cubic registered
+</I>&gt;<i> [  131.123646] NET: Registered protocol family 17
+</I>&gt;<i> [  131.128278] can: controller area network core (rev 20071116 abi 8)
+</I>&gt;<i> [  131.134733] NET: Registered protocol family 29
+</I>&gt;<i> [  131.139442] can: raw protocol (rev 20071116)
+</I>&gt;<i> [  131.143874] can: broadcast manager protocol (rev 20080415)
+</I>&gt;<i>   
+</I>
+This looks good :-)
+
+&gt;<i> [  131.150572] RPC: Registered udp transport module.
+</I>&gt;<i> [  131.155469] RPC: Registered tcp transport module.
+</I>&gt;<i> [  131.155469] RPC: Registered tcp transport module.
+</I>&gt;<i>
+</I>&gt;<i> After I log in,  I type &quot;ifconfig can0 up&quot; and then an &quot;ifconfig&quot;  and 
+</I>&gt;<i> this is what I get:
+</I>&gt;<i>
+</I>&gt;<i> can0      Link encap:UNSPEC  HWaddr 
+</I>&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i>           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:10
+</I>&gt;<i>           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+</I>&gt;<i>           Interrupt:151 Base address:0xc900
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So to me,  everything looks good. 
+</I>
+Yep.
+
+&gt;<i>  When I run cansniffer,  I don't see 
+</I>&gt;<i> any packets being received so I suspect that I have not completed all 
+</I>&gt;<i> the steps necessary to get the CAN interface to work.
+</I>&gt;<i>   
+</I>
+If there is any CAN traffic you would see an increasing RX packet 
+counter when invoking ifconfig. When the interface doesn't get any CAN 
+frames you won't be able to see any frames with candump/cansniffer also 
+... so maybe your current bitrate setting is wrong.
+
+&gt;<i> Could someone point me in the right direction on how to get the 
+</I>&gt;<i> interface to work? 
+</I>&gt;<i>   
+</I>
+I'm a bit confused on your CAN hardware. Are you using the mscan driver 
+or an USB driver (which USB driver?) ???
+
+Can you post the part of the 'dmesg' output where the CAN driver 
+initializes?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000571.html">[Socketcan-users] Can't get SocketCan to work on a MPC5200b board
+</A></li>
+	<LI>Next message: <A HREF="000573.html">[Socketcan-users] Can't get SocketCan to work on a MPC5200b	board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#572">[ date ]</a>
+              <a href="thread.html#572">[ thread ]</a>
+              <a href="subject.html#572">[ subject ]</a>
+              <a href="author.html#572">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

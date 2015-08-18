@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] using socketcan from Python script
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C26b052040910061418i7fe79584hd6aa19b9b1080fc1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001073.html">
+   <LINK REL="Next"  HREF="001074.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] using socketcan from Python script</H1>
+    <B>Paul Gibson</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C26b052040910061418i7fe79584hd6aa19b9b1080fc1%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] using socketcan from Python script">paul.gibson2074 at gmail.com
+       </A><BR>
+    <I>Tue Oct  6 23:18:47 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001073.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+        <LI>Next message: <A HREF="001074.html">[Socketcan-users] socket: Address family not supported by protocol
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1072">[ date ]</a>
+              <a href="thread.html#1072">[ thread ]</a>
+              <a href="subject.html#1072">[ subject ]</a>
+              <a href="author.html#1072">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Matthias,
+
+Thank you for the info.
+
+I was wondering if you could post the patch you did to the Python
+Modules/socketmodule.c/h files?
+
+I'm interested in getting this going as well.
+
+Paul
+
+&gt;&gt;<i> Matthias Fuchs-3 wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> it works. After some hacking on the python socket module
+</I>&gt;&gt;&gt;<i> (Modules/socketmodule.c, Modules/socketmodule.h) to make it know about
+</I>&gt;&gt;&gt;<i> the AF_CAN stuff, I can receive CAN data with the little script below:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (29, '\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; ^ ifindex
+</I>&gt;&gt;&gt;<i> 0000 &#160; 00 00 00 00 08 00 00 00 &#160; &#160;........
+</I>&gt;&gt;&gt;<i> 0008 &#160; 00 00 00 00 00 00 00 01 &#160; &#160;........
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> (29, '\x00\x00\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+</I>&gt;&gt;&gt;<i> 0000 &#160; 00 00 00 00 08 00 00 00 &#160; &#160;........
+</I>&gt;&gt;&gt;<i> 0008 &#160; 00 00 00 01 00 00 00 01 &#160; &#160;........
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> There are a couple of open issue to make this clean (e.g. passing
+</I>&gt;&gt;&gt;<i> interface name instead of index to bind()). But it's cool stuff
+</I>&gt;&gt;&gt;<i> an extremely usefull when you need to script some test equipment
+</I>&gt;&gt;&gt;<i> over CAN.
+</I>&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> import struct
+</I>&gt;&gt;&gt;<i> import socket
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> AF_CAN = 29
+</I>&gt;&gt;&gt;<i> PF_CAN = AF_CAN
+</I>&gt;&gt;&gt;<i> CAN_RAW = 1
+</I>&gt;&gt;&gt;<i> SOL_CAN_BASE = 100
+</I>&gt;&gt;&gt;<i> SOL_CAN_RAW = (SOL_CAN_BASE + CAN_RAW)
+</I>&gt;&gt;&gt;<i> CAN_RAW_FILTER = 1
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> FILTER=''.join([(len(repr(chr(x)))==3) and chr(x) or '.' for x in
+</I>&gt;&gt;&gt;<i> range(256)])
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> def dump(src, length=8):
+</I>&gt;&gt;&gt;<i> &#160; &#160;result=[]
+</I>&gt;&gt;&gt;<i> &#160; &#160;for i in xrange(0, len(src), length):
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; s = src[i:i+length]
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; hexa = ' '.join([&quot;%02X&quot;%ord(x) for x in s])
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; printable = s.translate(FILTER)
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; result.append(&quot;%04X &#160; %-*s &#160; %s\n&quot; % (i, length*3, hexa,
+</I>&gt;&gt;&gt;<i> printable))
+</I>&gt;&gt;&gt;<i> &#160; &#160;return ''.join(result)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # create socket
+</I>&gt;&gt;&gt;<i> s = socket.socket(PF_CAN, socket.SOCK_RAW, CAN_RAW)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # setup id filter
+</I>&gt;&gt;&gt;<i> id = 0
+</I>&gt;&gt;&gt;<i> mask = 0
+</I>&gt;&gt;&gt;<i> s.setsockopt(SOL_CAN_RAW, CAN_RAW_FILTER, struct.pack(&quot;II&quot;, id, mask))
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # bind to any I/F (ifindex, reserved/whatever)
+</I>&gt;&gt;&gt;<i> s.bind((0,))
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> while 1:
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; &#160;data, addr = s.recvfrom(16)
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; &#160;print addr
+</I>&gt;&gt;&gt;<i> &#160; &#160; &#160; &#160;print dump(data)
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001073.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+	<LI>Next message: <A HREF="001074.html">[Socketcan-users] socket: Address family not supported by protocol
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1072">[ date ]</a>
+              <a href="thread.html#1072">[ thread ]</a>
+              <a href="subject.html#1072">[ subject ]</a>
+              <a href="author.html#1072">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

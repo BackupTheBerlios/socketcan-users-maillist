@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN device selection
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20device%20selection&In-Reply-To=%3C4C76C32B.3080307%40lakedaemon.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001493.html">
+   <LINK REL="Next"  HREF="001495.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN device selection</H1>
+    <B>Jason</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20device%20selection&In-Reply-To=%3C4C76C32B.3080307%40lakedaemon.net%3E"
+       TITLE="[Socketcan-users] CAN device selection">socketcan at lakedaemon.net
+       </A><BR>
+    <I>Thu Aug 26 21:40:27 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001493.html">[Socketcan-users] CAN device selection
+</A></li>
+        <LI>Next message: <A HREF="001495.html">[Socketcan-users] CAN in embedded system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1494">[ date ]</a>
+              <a href="thread.html#1494">[ thread ]</a>
+              <a href="subject.html#1494">[ subject ]</a>
+              <a href="author.html#1494">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> On 26.08.2010 20:00, Jason wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Can anyone here recommend and good starting out device?  I'd prefer
+</I>&gt;&gt;<i> something I can plug into my laptop, but a development board running
+</I>&gt;&gt;<i> embedded linux is fine also.  I'd like to stay under $100US if possible
+</I>&gt;&gt;<i> but I can exceed that if necessary.
+</I>&gt;<i> 
+</I>&gt;<i> 100$ is an ambitious price target ...
+</I>&gt;<i> 
+</I>
+I know.  I was hoping my poking around the net had missed something obvious, like an OBD-II dongle that happened to access the CANbus...
+
+&gt;&gt;<i> What do you folks use?
+</I>&gt;<i> 
+</I>&gt;<i> We also use PCAN USB adapters, which require the PEAK driver that's not in
+</I>&gt;<i> Linux Mainline. If you'd like to use mainline drivers there are two USB CAN
+</I>&gt;<i> interfaces from EMS Wuensche and ESD that support the latest netlink CAN
+</I>&gt;<i> configuration interface and should work excellent out of the box.
+</I>&gt;<i> 
+</I>
+Ok, that confirms my research.  Those were the only two vendors I had found as well.  They are a bit out of my target price range, but if it's the right tool...
+
+I just sent a few questions to Angelina at EMS, we'll see how that goes.  I'm looking at the CPC-USB/ARM7 and trying to determine if I need the low speed version or not.
+
+&gt;<i> There's also a low-cost USB CAN adapter (<A HREF="http://www.canusb.com">http://www.canusb.com</A>) that is priced
+</I>&gt;<i> at $99 on it's website. This adapter uses an ASCII protocol via an USB-RS232
+</I>&gt;<i> adapter integrated inside the hardware. This adapter requires the slcan driver
+</I>&gt;<i> from the SocketCAN SVN and some handling to switch the serial line discipline.
+</I>&gt;<i> There's no real handshake nor flow control on the serial line ... but i know
+</I>&gt;<i> people using it :-)
+</I>&gt;<i> 
+</I>
+I've spent days poking serial ports trying to come up with the magical combination of parameters to make them work.  I'm man enough to admit it's not my strong suit and I'll avoid it if at all possible.  ;-)
+
+&gt;<i> 
+</I>&gt;&gt;<i> Thanks for any pointers,
+</I>&gt;<i> 
+</I>&gt;<i> With hope that gave you some of them ...
+</I>&gt;<i> 
+</I>
+Yes, definitely.  Thanks again.
+
+Jason.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001493.html">[Socketcan-users] CAN device selection
+</A></li>
+	<LI>Next message: <A HREF="001495.html">[Socketcan-users] CAN in embedded system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1494">[ date ]</a>
+              <a href="thread.html#1494">[ thread ]</a>
+              <a href="subject.html#1494">[ subject ]</a>
+              <a href="author.html#1494">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

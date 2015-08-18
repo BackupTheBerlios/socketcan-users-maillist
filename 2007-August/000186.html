@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Some explainations about the file vcan.c
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20explainations%20about%20the%20file%20vcan.c&In-Reply-To=%3C538ef530708210755r207beaa3y9907343061eddbe3%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000195.html">
+   <LINK REL="Next"  HREF="000188.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Some explainations about the file vcan.c</H1>
+    <B>Lorenzo Montrucchio</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20explainations%20about%20the%20file%20vcan.c&In-Reply-To=%3C538ef530708210755r207beaa3y9907343061eddbe3%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Some explainations about the file vcan.c">l.montrucchio at libero.it
+       </A><BR>
+    <I>Tue Aug 21 16:55:54 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000195.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+        <LI>Next message: <A HREF="000188.html">[Socketcan-users] Some explainations about the file vcan.c
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#186">[ date ]</a>
+              <a href="thread.html#186">[ thread ]</a>
+              <a href="subject.html#186">[ subject ]</a>
+              <a href="author.html#186">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi everyone,
+I'm new in embedded systems (so please be kind with me even if my question
+will surely be a very silly one!) and I'm very interested in the Socket CAN
+project. I downloaded the file vcan.c and I tried to analyze it line by
+line.
+
+I was surpised by  the function vcan_tx.
+
+My questions are:
+_ why isn't there any function like netif_tx for the effective socket buffer
+transmission? I noticed that there is the function netif_rx for reception.
+_ how is the packet, let's say physically, sent?
+_ does the CAN core manage transmission elsewhere? And in this case where
+and how?
+_ is all this bargain made by the linux networking stack?
+
+I know that I bothered you with a lot of questions nad I'm sorry for that.
+I also know that the answere will probably be very straightforward and I ask
+you to be patient with me!
+Thanks a lot in advance.
+LORENZO
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20070821/22468cb9/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20070821/22468cb9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000195.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+	<LI>Next message: <A HREF="000188.html">[Socketcan-users] Some explainations about the file vcan.c
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#186">[ date ]</a>
+              <a href="thread.html#186">[ thread ]</a>
+              <a href="subject.html#186">[ subject ]</a>
+              <a href="author.html#186">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 09/14] can: sja1000: consolidate error	state handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2009/14%5D%20can%3A%20sja1000%3A%20consolidate%20error%0A%09state%20handling&In-Reply-To=%3C1323269728-17491-10-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002320.html">
+   <LINK REL="Next"  HREF="002314.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 09/14] can: sja1000: consolidate error	state handling</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2009/14%5D%20can%3A%20sja1000%3A%20consolidate%20error%0A%09state%20handling&In-Reply-To=%3C1323269728-17491-10-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 09/14] can: sja1000: consolidate error	state handling">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:23 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002320.html">[Socketcan-users] [RFC PATCH 08/14] can: flexcan: consolidate	bus-off handling
+</A></li>
+        <LI>Next message: <A HREF="002314.html">[Socketcan-users] [RFC PATCH 10/14] can: sja1000: consolidate	bus-off handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2313">[ date ]</a>
+              <a href="thread.html#2313">[ thread ]</a>
+              <a href="subject.html#2313">[ subject ]</a>
+              <a href="author.html#2313">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Allow state to decrease bus-off-&gt;passive-&gt;warning-&gt;active.
+Use the common function can_chage_state().
+
+Here is an example output of &quot;candump -candump -td -e any,0:0,#FFFFFFFF&quot;
+for a recovery from error passive state due to no ack/cable (reconnect
+after 5s) for a SJA1000 on an on EMS PCI card:
+
+ (000.201913)  can0   1C  [0]
+ (000.212241)  can0  20000204  [8] 00 08 00 00 00 00 60 00   ERRORFRAME
+        controller-problem{tx-error-warning}
+        state-change{tx-error-warning}
+        error-counter-tx-rx{{96}{0}}
+ (000.003544)  can0  20000204  [8] 00 20 00 00 00 00 80 00   ERRORFRAME
+        controller-problem{tx-error-passive}
+        state-change{tx-error-passive}
+        error-counter-tx-rx{{128}{0}}
+ (004.901842)  can0   1D  [7] 1D F6 33 52 31 4B DE
+ (000.000116)  can0  20000200  [8] 00 08 00 00 00 00 7F 00   ERRORFRAME
+        state-change{tx-error-warning}
+        error-counter-tx-rx{{127}{0}}
+ (000.000678)  can0   1E  [6] 42 05 14 82 23 B6
+ ...
+ (000.201927)  can0   49  [4] 2F 1A 97 25
+ (000.000096)  can0  20000200  [8] 00 40 00 00 00 00 5F 00   ERRORFRAME
+        state-change{back-to-error-active}
+        error-counter-tx-rx{{95}{0}}
+ (000.202184)  can0   4A  [8] 7F 87 0E FE 03 BA 78 91
+
+This is how it should be on other CAN controllers as well.
+
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/sja1000/sja1000.c |   39 ++++++++++++------------------------
+ 1 files changed, 13 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
+index ebbcfca..f6a1c74 100644
+--- a/drivers/net/can/sja1000/sja1000.c
++++ b/drivers/net/can/sja1000/sja1000.c
+@@ -371,6 +371,8 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 	enum can_state state = priv-&gt;can.state;
+ 	uint8_t ecc, alc;
+ 
++	netdev_dbg(dev, &quot;%s: ir=0x%02x sr=0x%02x&quot;, __func__, isrc, status);
++
+ 	skb = alloc_can_err_skb(dev, &amp;cf);
+ 	if (skb == NULL)
+ 		return -ENOMEM;
+@@ -391,12 +393,12 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 
+ 		if (status &amp; SR_BS) {
+ 			state = CAN_STATE_BUS_OFF;
+-			cf-&gt;can_id |= CAN_ERR_BUSOFF;
+ 			can_bus_off(dev);
+ 		} else if (status &amp; SR_ES) {
+ 			state = CAN_STATE_ERROR_WARNING;
+-		} else
++		} else {
+ 			state = CAN_STATE_ERROR_ACTIVE;
++		}
+ 	}
+ 	if (isrc &amp; IRQ_BEI) {
+ 		/* bus error interrupt */
+@@ -429,10 +431,14 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 	if (isrc &amp; IRQ_EPI) {
+ 		/* error passive interrupt */
+ 		netdev_dbg(dev, &quot;error passive interrupt\n&quot;);
+-		if (status &amp; SR_ES)
+-			state = CAN_STATE_ERROR_PASSIVE;
+-		else
++		if (status &amp; SR_ES) {
++			if (state == CAN_STATE_ERROR_WARNING)
++				state = CAN_STATE_ERROR_PASSIVE;
++			else
++				state = CAN_STATE_ERROR_WARNING;
++		} else {
+ 			state = CAN_STATE_ERROR_ACTIVE;
++		}
+ 	}
+ 	if (isrc &amp; IRQ_ALI) {
+ 		/* arbitration lost interrupt */
+@@ -444,27 +450,8 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 		cf-&gt;data[0] = alc &amp; 0x1f;
+ 	}
+ 
+-	if (state != priv-&gt;can.state &amp;&amp; (state == CAN_STATE_ERROR_WARNING ||
+-					 state == CAN_STATE_ERROR_PASSIVE)) {
+-		uint8_t rxerr = priv-&gt;read_reg(priv, REG_RXERR);
+-		uint8_t txerr = priv-&gt;read_reg(priv, REG_TXERR);
+-		cf-&gt;can_id |= CAN_ERR_CRTL;
+-		if (state == CAN_STATE_ERROR_WARNING) {
+-			priv-&gt;can.can_stats.error_warning++;
+-			cf-&gt;data[1] = (txerr &gt; rxerr) ?
+-				CAN_ERR_CRTL_TX_WARNING :
+-				CAN_ERR_CRTL_RX_WARNING;
+-		} else {
+-			priv-&gt;can.can_stats.error_passive++;
+-			cf-&gt;data[1] = (txerr &gt; rxerr) ?
+-				CAN_ERR_CRTL_TX_PASSIVE :
+-				CAN_ERR_CRTL_RX_PASSIVE;
+-		}
+-		cf-&gt;data[6] = txerr;
+-		cf-&gt;data[7] = rxerr;
+-	}
+-
+-	priv-&gt;can.state = state;
++	if (state != priv-&gt;can.state)
++		can_change_state(dev, cf, state, CAN_ERR_DIR_UNKNOWN);
+ 
+ 	netif_rx(skb);
+ 
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002320.html">[Socketcan-users] [RFC PATCH 08/14] can: flexcan: consolidate	bus-off handling
+</A></li>
+	<LI>Next message: <A HREF="002314.html">[Socketcan-users] [RFC PATCH 10/14] can: sja1000: consolidate	bus-off handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2313">[ date ]</a>
+              <a href="thread.html#2313">[ thread ]</a>
+              <a href="subject.html#2313">[ subject ]</a>
+              <a href="author.html#2313">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

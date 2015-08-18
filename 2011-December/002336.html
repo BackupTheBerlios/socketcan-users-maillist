@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EFED857.3000701%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002335.html">
+   <LINK REL="Next"  HREF="002308.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EFED857.3000701%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Sat Dec 31 10:39:35 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002335.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002308.html">[Socketcan-users] [PATCH net-next v6 4/4] powerpc: tqm8548/tqm8xx: add and update CAN device nodes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2336">[ date ]</a>
+              <a href="thread.html#2336">[ thread ]</a>
+              <a href="subject.html#2336">[ subject ]</a>
+              <a href="author.html#2336">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 12/21/2011 07:32 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;<i> ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Again, please check if you have netif_start_queue() at the end of the
+</I>&gt;&gt;<i> open function.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> As said I'm using eec921ac28fde243456078a557768808d93d94a3
+</I>&gt;<i>
+</I>&gt;<i> However, I'll try further to investigate that issue due the fact having it
+</I>&gt;<i> running with my lincan without problems and therefore it should be possible
+</I>&gt;<i> to find the problem.
+</I>&gt;<i>
+</I>
+I found the problem which was then at the end quite simple to understand why it
+get stuck due the fact not receiving an interrupt for TX and due that no
+reactivation of the queue.
+
+I think that maybe also the hacks in the TX functions are obsolete with the
+fix assuming that the repeated interrupts just happen by indirect access.
+
+Here my fix which worked for me:
+--------------------------------------------------------------------------------------------------------
+diff --git a/drivers/net/can/cc770/cc770.c b/drivers/net/can/cc770/cc770.c
+index 2d12f89..dad6707 100644
+--- a/drivers/net/can/cc770/cc770.c
++++ b/drivers/net/can/cc770/cc770.c
+@@ -460,15 +460,6 @@ static netdev_tx_t cc770_start_xmit(struct sk_buff *skb, struct net_device *dev)
+
+  	stats-&gt;tx_bytes += dlc;
+
+-
+-	/*
+-	 * HM: We had some cases of repeated IRQs so make sure the
+-	 * INT is acknowledged I know it's already further up, but
+-	 * doing again fixed the issue
+-	 */
+-	cc770_write_reg(priv, msgobj[mo].ctrl0,
+-			MSGVAL_UNC | TXIE_UNC | RXIE_UNC | INTPND_RES);
+-
+  	return NETDEV_TX_OK;
+  }
+
+@@ -689,12 +680,6 @@ static void cc770_tx_interrupt(struct net_device *dev, unsigned int o)
+  	/* Nothing more to send, switch off interrupts */
+  	cc770_write_reg(priv, msgobj[mo].ctrl0,
+  			MSGVAL_RES | TXIE_RES | RXIE_RES | INTPND_RES);
+-	/*
+-	 * We had some cases of repeated IRQ so make sure the
+-	 * INT is acknowledged
+-	 */
+-	cc770_write_reg(priv, msgobj[mo].ctrl0,
+-			MSGVAL_UNC | TXIE_UNC | RXIE_UNC | INTPND_RES);
+
+  	stats-&gt;tx_packets++;
+  	can_get_echo_skb(dev, 0);
+diff --git a/drivers/net/can/cc770/cc770_isa.c b/drivers/net/can/cc770/cc770_isa.c
+index 4be5fe2..48fc128 100644
+--- a/drivers/net/can/cc770/cc770_isa.c
++++ b/drivers/net/can/cc770/cc770_isa.c
+@@ -148,8 +148,7 @@ static void cc770_isa_port_write_reg_indirect(const struct cc770_priv *priv,
+  {
+  	unsigned long base = (unsigned long)priv-&gt;reg_base;
+
+-	outb(reg, base);
+-	outb(val, base + 1);
++	outw( reg + ( val &lt;&lt; 8), base);
+  }
+
+  static int __devinit cc770_isa_probe(struct platform_device *pdev)
+
+---------------------------------------------------------------------------------------------
+
+
+Please let me know if this is OK for You, maybe You can do some tests as well.
+
+Would continue then with further tests regarding error conditions, however
+I realised another small issue with dropped packages at reception.
+
+As soon as You read the first time from the socket and then You stop reading
+the packages are not counted as 'dropped' any more which is IMHO not correct
+because as soon as You stop reading they should be counted as dropped again.
+
+
+&gt;&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang
+</I>
+Wolfgang
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002335.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002308.html">[Socketcan-users] [PATCH net-next v6 4/4] powerpc: tqm8548/tqm8xx: add and update CAN device nodes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2336">[ date ]</a>
+              <a href="thread.html#2336">[ thread ]</a>
+              <a href="subject.html#2336">[ subject ]</a>
+              <a href="author.html#2336">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

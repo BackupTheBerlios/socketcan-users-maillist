@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C209DF69354E1D4469C564CF6FFF4E809A6977C%40MCHP7I5A.ww902.siemens.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001022.html">
+   <LINK REL="Next"  HREF="001025.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B</H1>
+    <B>Lipkowski, Merten</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C209DF69354E1D4469C564CF6FFF4E809A6977C%40MCHP7I5A.ww902.siemens.net%3E"
+       TITLE="[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B">merten.lipkowski at siemens.com
+       </A><BR>
+    <I>Sun Aug 23 13:00:59 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001022.html">[Socketcan-users] SVN state: branches/netlink merged back to trunk
+</A></li>
+        <LI>Next message: <A HREF="001025.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1024">[ date ]</a>
+              <a href="thread.html#1024">[ thread ]</a>
+              <a href="subject.html#1024">[ subject ]</a>
+              <a href="author.html#1024">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+ 
+
+I've trouble with a Phillips SJA1000 onboard CAN Controller, on a
+Siemens Microbox PC427B.
+
+I'm using a Debian System with a 2.6.29.6-rt23 Kernel. The rt-23 means
+that I've applied the Realtime Patch by Ingo Molnar.
+
+ 
+
+If some experience with a peak CAN-USB converter and Socketcan, it was
+easy to install and it works fine.
+
+ 
+
+I thought it would be also easy with a SJA1000 onboard Controller but it
+doesn't seem so....
+
+ 
+
+I've checked out this:
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan">http://svn.berlios.de/svnroot/repos/socketcan</A>
+&lt;<A HREF="http://svn.berlios.de/svnroot/repos/socketcan">http://svn.berlios.de/svnroot/repos/socketcan</A>&gt; 
+
+and I've successfully compiled the drivers in
+kernel/2.6/drivers/net/can
+
+I installed the modules as described in the README.
+
+I could load the modules with modprobe, but there is no &quot;can0&quot; device
+anywhere?
+
+Where is my mistake?  
+
+ 
+
+ 
+
+That's what I found within the official manual, from the Siemens
+MicroboxPC.
+
+ 
+
+CAN base address register (write only, address 066h) 
+ 
+A 512 byte window is created in the I/O area for the CAN controller
+(Philips SJA1000). The 
+block itself only needs 32 or 128 bytes of this depending on the
+operating mode. The 
+address window can be selected in 1024 byte steps between 4000h and
+7C00h through the 
+CAN base address register (write only, address 066h).  
+A limited selection can be preset in the BIOS Setup. 
+ 
+ 
+Note 
+The CAN base address register shares its I/O address with other
+registers. The watchdog 
+enable register / 066h select register therefore must be selected before
+access. 
+ 
+Meaning of the bits 
+ 
+CAN base address register (write only, address 066h, Address register
+selection 1) 
+Bit 
+Description 
+7     6     5     4     3     2     1     0      
+                                          0     0     Reserved (Write:
+00) 
+0     1                                               Reserved
+(Write:01) 
+              0     0     0     0                   40h 
+              .      .      .      .                    . 
+              .      .      .      .                    . 
+              1     1     1     1                   7Ch 
+Sets the high byte of the CAN base address 
+01nnnn00 
+
+ 
+
+ 
+
+With best regards,
+ML1982
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090823/1df84907/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090823/1df84907/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001022.html">[Socketcan-users] SVN state: branches/netlink merged back to trunk
+</A></li>
+	<LI>Next message: <A HREF="001025.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1024">[ date ]</a>
+              <a href="thread.html#1024">[ thread ]</a>
+              <a href="subject.html#1024">[ subject ]</a>
+              <a href="author.html#1024">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

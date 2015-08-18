@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44ED7212.2050307%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000026.html">
+   <LINK REL="Next"  HREF="000032.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Hartkopp, Oliver (K-GEFE/E)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44ED7212.2050307%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Thu Aug 24 11:32:02 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000026.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+        <LI>Next message: <A HREF="000032.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Jan Kiszka wrote in
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2006-August/000029.html">https://lists.berlios.de/pipermail/socketcan-users/2006-August/000029.html</A> :
+
+&gt;<i> I thought you are using standard network devices. Isn't libpcap working
+</I>&gt;<i> for CAN yet? *That's* the way for sniffing frames. I think Pengutronix
+</I>&gt;<i> had once something running.
+</I>
+Hey Jan,
+
+want kind of discussion would you like to start here? Maybe you should look
+on what has been done in the source, before shooting around.
+Yes, we're using standard network devices and this works fine with libpcap.
+
+But you're always mixing addressing concepts &amp; tools you know from TCP/IP
+networking with the completely different addressing concept used by CAN.
+
+E.g. there would never been something like a Ethernet promiscuous mode on
+CAN-network interfaces, as there are no ethernet-addresses. And there will
+never be something that compares to the routing of IP-packets, as there are
+no ARP, Ethernet, IP nor TCP-headers in CAN.
+
+So what has to be accomplished here is to *transfer* the broken (from normal
+IT view) addressing concept of the CAN-bus *into* what the normal IT
+expects, when they want to use the CAN with established and well know
+interfaces like the BSD-socket interface.
+
+If you face the network-layer (that makes the routing and the protocols) the
+current implementation does exactly this routing and the protocols.
+
+You may rename the 'loopback' functionality and the receive-lists as the
+analogy of what you know from routing of other networking implementations.
+And it IS standard that several applications can communicate on the same
+machine via TCP/IP - so it has nothing to do with 'inventing some kind of
+new IPC'. And even if the *majority* of IP-applications are mostly
+communicating with other computers, the PF_INET networkstack is implemented
+to support this local communication also.
+
+Sorry, but you are wrong here. Your suggestions do not lead to a 'standard
+behaviour'.
+
+If you do not need 'local CAN-routing' - fine. But this depends on YOUR
+application and YOUR testbed.
+
+As long as even experienced peoples like Wolfgang do not use the fancy
+filter possibilities in kernel space, that really reduces system load, a
+discussion about the overhead created by skb_clone() and netif_rx() becomes
+absurd. And these two functions are Linux core business and therefore highly
+efficient.
+
+In my opinion disabling the 'local CAN-routing' that cares for the common
+known network behaviour is depending on applications &amp; testbeds. So if you
+do not need 'local CAN-routing' in your environment and this really boosts
+your performance(?), this is an option for experts to disable the 'local
+CAN-routing' - nothing more. And if you disable the 'local CAN routing' you
+have to know what you're doing even when you leave the path of common
+expectations of other users.
+
+Thinking about disabling this feature i would suggest a commandline
+parameter for can.ko (e.g. disable_loopback = 1) and we can add it to
+/proc/net/can/disable_loopback ...
+
+Oliver
+
+p.s. Sorry my broken Mailer crashed the threading on the mailing list, but i
+wanted to react before 19:00 :-/
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000026.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+	<LI>Next message: <A HREF="000032.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#30">[ date ]</a>
+              <a href="thread.html#30">[ thread ]</a>
+              <a href="subject.html#30">[ subject ]</a>
+              <a href="author.html#30">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

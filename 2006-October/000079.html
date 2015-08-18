@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan sources?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20sources%3F&In-Reply-To=%3C4542609F.1010103%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000078.html">
+   <LINK REL="Next"  HREF="000080.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan sources?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20sources%3F&In-Reply-To=%3C4542609F.1010103%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socketcan sources?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Oct 27 21:40:27 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000078.html">[Socketcan-users] Socketcan sources?
+</A></li>
+        <LI>Next message: <A HREF="000080.html">[Socketcan-users] Socketcan sources?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#79">[ date ]</a>
+              <a href="thread.html#79">[ thread ]</a>
+              <a href="subject.html#79">[ subject ]</a>
+              <a href="author.html#79">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Scott,
+
+the Pengutronix branch is derived from a mid 2004 branch of a Kernel 2.4 
+socketcan. The socketcan core has been improved in many cases since 
+then. Especially due to many discussions on several mailing lists.
+
+Currently we're working to bring the Pengutronix-branch up-to-date to 
+the current berlios development.
+
+BUT the CAN-netdevice-drivers do not distinguish that much. We changed 
+the structure for the can_frame - this should be the only real 
+difference for the CAN-netdevice-driver. So you can it use together with 
+the berlios socketcan with minimum effort.
+
+Btw. feel free to ask Robert on this topic ...
+
+Best regards,
+Oliver
+
+Marco Cavallini [KOAN] schrieb:
+&gt;<i> Wagner Scott (ST-IN/ENG1) ha scritto:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hi again Marco,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have looked at the original and fork versions of the socketcan driver
+</I>&gt;&gt;<i> on your site - and I also have the trunk and branch versions from the
+</I>&gt;&gt;<i> svn server at berlois.de.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I see that your &quot;original&quot; code - linux-2.6.18-socketcan1.diff - is
+</I>&gt;&gt;<i> close to the BerliOS svn branch version.  However, I have not found the
+</I>&gt;&gt;<i> source for the &quot;fork&quot; code - linux-2.6.18-can1.diff.  I'm interested in
+</I>&gt;&gt;<i> particular because my planned target is an ARM9 board with an IFI CAN
+</I>&gt;&gt;<i> core implemented in an Altera FPGA - the nioscan.c interface in the
+</I>&gt;&gt;<i> fork.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It seems that the all of te fork code is significantly different from
+</I>&gt;&gt;<i> either BerliOS driver or your &quot;original&quot; patch - what do you know about
+</I>&gt;&gt;<i> the &quot;fork&quot; code and what Pengutronics is doing here?  Why did they
+</I>&gt;&gt;<i> deviate so much from the mainline SocketCAN?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Hi Scott,
+</I>&gt;<i> try asking to ML, Robert Schwebel of Pengutronix will be pleased to give 
+</I>&gt;<i> you more details.
+</I>&gt;<i> If you need custom driver development or support feel free to ask me ;-)
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i>   
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000078.html">[Socketcan-users] Socketcan sources?
+</A></li>
+	<LI>Next message: <A HREF="000080.html">[Socketcan-users] Socketcan sources?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#79">[ date ]</a>
+              <a href="thread.html#79">[ thread ]</a>
+              <a href="subject.html#79">[ subject ]</a>
+              <a href="author.html#79">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

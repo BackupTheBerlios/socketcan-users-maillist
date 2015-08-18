@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000&In-Reply-To=%3C7413205a0904150518j32edcc04ge771012084df7116%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000795.html">
+   <LINK REL="Next"  HREF="000773.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000</H1>
+    <B>Alexandre V&#233;zina</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000&In-Reply-To=%3C7413205a0904150518j32edcc04ge771012084df7116%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Using sja1000">alexandre.vez at gmail.com
+       </A><BR>
+    <I>Wed Apr 15 14:18:45 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000795.html">[Socketcan-users] CAN with switchable power
+</A></li>
+        <LI>Next message: <A HREF="000773.html">[Socketcan-users] Using sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#772">[ date ]</a>
+              <a href="thread.html#772">[ thread ]</a>
+              <a href="subject.html#772">[ subject ]</a>
+              <a href="author.html#772">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi guys,
+
+I have some problem using SocketCAN with sja1000.
+
+ - I am using linux 2.6.24.4 on Debian.
+ - I compiled SocketCAN modules as you provide them (default).
+ - I use this board:
+<A HREF="http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1(pc/104">http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1(pc/104</A>)
+ - The CAN board is plugged on this board:
+<A HREF="http://www.embeddedarm.com/products/board-detail.php?product=TS-7200">http://www.embeddedarm.com/products/board-detail.php?product=TS-7200</A>
+
+I am able to link a vcan interface by running:
+
+# modprobe vcan
+# ip link add type vcan
+# ip link dev vcan0 add type vcan
+
+I don't understand how to do the same with sja1000. (ip link add type
+sja1000 doesn't work :D). In fact, as a final result, I would like to have a
+&quot;/dev/can0&quot; linked with my sja1000.
+
+
+Thank You
+
+-- 
+Alexandre V&#233;zina
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">alexandre.vez at gmail.com</A>
+Pensez &#224; l'environnement, avez-vous vraiment besoin d'imprimer ce courriel?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090415/18f94073/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090415/18f94073/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000795.html">[Socketcan-users] CAN with switchable power
+</A></li>
+	<LI>Next message: <A HREF="000773.html">[Socketcan-users] Using sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#772">[ date ]</a>
+              <a href="thread.html#772">[ thread ]</a>
+              <a href="subject.html#772">[ subject ]</a>
+              <a href="author.html#772">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

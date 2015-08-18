@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EF2FA3F.3010308%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002333.html">
+   <LINK REL="Next"  HREF="002335.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EF2FA3F.3010308%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Thu Dec 22 10:37:03 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002333.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002335.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2334">[ date ]</a>
+              <a href="thread.html#2334">[ thread ]</a>
+              <a href="subject.html#2334">[ subject ]</a>
+              <a href="author.html#2334">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+On 12/21/2011 07:32 PM, Wolfgang Zarre wrote:
+&gt;<i> Hello Wolfgang,
+</I>...
+
+&gt;&gt;<i> It's a bug! netif_start_queue is missing at the end of the open
+</I>&gt;&gt;<i> function. Got lost some how. I have just updated (rebased!) my
+</I>&gt;&gt;<i> wg-linux-can-next repository.
+</I>&gt;<i> 
+</I>&gt;<i> Ok, I was checking out last week and since I'm running one test series
+</I>&gt;<i> after the other.
+</I>&gt;<i> 
+</I>&gt;<i> There are several odd issues I could found and I'm trying to trace them
+</I>&gt;<i> down beside some other work.
+</I>&gt;<i> 
+</I>&gt;<i> Even with an assumed correct configuration like I was using with the lincan
+</I>&gt;<i> driver I'm loosing telegrams so around 1 till 2 in 500000 but might be a
+</I>&gt;<i> different sample-point at the PLC which is opaque due the predefined
+</I>&gt;<i> setting.
+</I>
+In principle, messages can be lost because the cc770 does buffer only up
+to two messages in hardware. If they are not read out quickly enough,
+message loss will happen. The CAN statistics should list such overruns,
+though.
+
+&gt;<i> For the next test I'll set the BTR's directly.
+</I>
+OK, if you do not see bus errors, everything should be fine.
+
+&gt;<i> Further sometimes I can find one in dropped but mostly not.
+</I>&gt;<i> 
+</I>&gt;<i> But more odd is that after an undefined time the transmission gets
+</I>&gt;<i> stuck followed by a buffer overrun but can receive.
+</I>
+I recently found a bug. Please try this fix:
+
+<A HREF="http://marc.info/?l=linux-can&amp;m=132370253713701&amp;w=4">http://marc.info/?l=linux-can&amp;m=132370253713701&amp;w=4</A>
+
+Did you realize related error messages in the dmesg output?
+
+&gt;<i> No error messages nor changes in ip -d -s link show can0.
+</I>&gt;<i> 
+</I>&gt;<i> Additional it seems that neither the automatic restart nor
+</I>&gt;<i> the manual one works.
+</I>
+What version are you using. I think this problem has been fixed by
+adding the missing netif_start_queue() at the end of the open
+function, as mentioned above. Do you have that in your driver?
+
+&gt;<i> ip link set can0 up type can restart gives me 'RTNETLINK answers: Invalid
+</I>&gt;<i> argument' and ip link set can0 up type can bitrate 500000 restart a
+</I>&gt;<i> RTNETLINK answers: Device or resource busy but nothing connected to can0.
+</I>
+The error message is shown because you try to set bitrate when the
+device is up. For the restart after bus-off just type:
+
+  # ip link set can0 type can restart
+
+Anyway, if you run into a bus-off, then it's likely that you have
+electrical problems on the CAN bus, e.g. termination, mismatching
+bit-timing parameters.
+
+&gt;<i> So I have to perform per example  ip link set can0 down;ip link set can0 up
+</I>&gt;<i> type can bitrate 500000 restart-ms 2000 sample-point 0.75
+</I>&gt;<i> but this is emptying the buffer and these telegrams are lost then as well.
+</I>&gt;<i> 
+</I>&gt;<i> I was comparing with my lincan driver which was running so far ok also
+</I>&gt;<i> to confirm a proper working PLC.
+</I>&gt;<i> 
+</I>&gt;<i> First I assumed that maybe the set_reset_mode procedure is responsible for
+</I>&gt;<i> that misbehaviour because according to the cc770 manual we should wait for
+</I>&gt;<i> a zero of bit 7 RstST of the CPU interface register but when the
+</I>&gt;<i> transmission
+</I>&gt;<i> gets stuck there was no call for set_reset_mode.
+</I>&gt;<i> 
+</I>&gt;<i> Maybe it's ending up somehow recessive.
+</I>&gt;<i> 
+</I>&gt;<i> Anyway, I might compare the registers of both drivers just to figure out
+</I>&gt;<i> what's going on but maybe You have an idea as well.
+</I>&gt;<i> 
+</I>&gt;<i> Problem is just it runs always quite some time until the issues happen
+</I>&gt;<i> otherwise it would be more easy.
+</I>
+Again, please check if you have netif_start_queue() at the end of the
+open function.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002333.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002335.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2334">[ date ]</a>
+              <a href="thread.html#2334">[ thread ]</a>
+              <a href="subject.html#2334">[ subject ]</a>
+              <a href="author.html#2334">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

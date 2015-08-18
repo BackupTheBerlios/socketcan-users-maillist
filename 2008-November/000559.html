@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MSCAN clock source
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MSCAN%20clock%20source&In-Reply-To=%3C4911963E.1060701%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000557.html">
+   <LINK REL="Next"  HREF="000560.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MSCAN clock source</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MSCAN%20clock%20source&In-Reply-To=%3C4911963E.1060701%40grandegger.com%3E"
+       TITLE="[Socketcan-users] MSCAN clock source">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov  5 13:49:02 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000557.html">[Socketcan-users] MSCAN clock source
+</A></li>
+        <LI>Next message: <A HREF="000560.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#559">[ date ]</a>
+              <a href="thread.html#559">[ thread ]</a>
+              <a href="subject.html#559">[ subject ]</a>
+              <a href="author.html#559">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Daniel Schnell wrote:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> According to the MPC5200B users manual section 19.7.5 (Clock System),
+</I>&gt;&gt;&gt;<i> if higher frequencies are set, the internal clock source should be
+</I>&gt;&gt;&gt;<i> set to SYS_XTAL_IN, which is the internal clock source of 33MHz,
+</I>&gt;&gt;&gt;<i> because of higher accuracy than the PLL driven IPB bus clock.
+</I>&gt;&gt;&gt;<i> On the other hand in MSCAN it is always set to the IPB clock. Is
+</I>&gt;&gt;&gt;<i> there some objection against using the system clock ?
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It will break compatibility with MPC5200 Rev. A chips. But you are
+</I>&gt;&gt;<i> right, for Rev. B CPUS, the internal clock source should be used. I'm
+</I>&gt;&gt;<i> going to provide a fix a.s.a.p. checking the CPU rev. id. For more
+</I>&gt;&gt;<i> informantion see also:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://www.rts.uni-hannover.de/xenomai/lxr/source/ksrc/drivers/can/mscan/Kconfig#016">http://www.rts.uni-hannover.de/xenomai/lxr/source/ksrc/drivers/can/mscan/Kconfig#016</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> It should be possible to derive the system clock frequency from the IPB
+</I>&gt;<i> clock frequency as IPB is either 2 or 4 times the system clock (if this
+</I>&gt;<i> information is not available somewhere else). For the IPB clock there's
+</I>&gt;<i> the function mpc52xx_find_ipb_freq(). Because the system clock can
+</I>&gt;<i> either be 33 MHz or 27 MHz a test of the modulo of 33MHz should tell it.
+</I>&gt;<i> I just say, because in the link you gave, the frequency is a user
+</I>&gt;<i> provided Kernel configuration option, which I find a bit inflexible. We
+</I>&gt;<i> have e.g. different board revisions running on different IPB
+</I>&gt;<i> frequencies, so when we used Xenomai at that time, we had to use two
+</I>&gt;<i> different kernels.
+</I>
+For RT-Socket-CAN it's defined via kernel configuration option but it's
+not my intention to do it that way for Socket-CAN as well.  The clock
+frequencies can be read from somewhere, that's not the problem. I need
+to check the CPU revision register to distinguish between Rev. A and
+Rev. B CPUs.
+
+&gt;&gt;<i> BTW: I will take care of your other problem later today.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Really looking forward to it.
+</I>
+Hold on...
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000557.html">[Socketcan-users] MSCAN clock source
+</A></li>
+	<LI>Next message: <A HREF="000560.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#559">[ date ]</a>
+              <a href="thread.html#559">[ thread ]</a>
+              <a href="subject.html#559">[ subject ]</a>
+              <a href="author.html#559">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

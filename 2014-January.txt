@@ -1,0 +1,254 @@
+From pgarnero at visteon.com  Tue Jan  7 15:17:40 2014
+From: pgarnero at visteon.com (GARNERO, PIERRE (P.))
+Date: Tue, 7 Jan 2014 14:17:40 +0000
+Subject: [Socketcan-users] Beginner question - Kvazer USB CAN driver
+Message-ID: <a8d74bed340445f081325afedf044bb5@AMSPR06MB053.eurprd06.prod.outlook.com>
+
+Hello.
+
+I would like to use a KVAZER USBcan Rugged device with the socketcan library.
+I use Raspbian OS and I have built a kernel with anything enabled regarding CAN.
+
+I have loaded the following modules:
+# modprobe can
+# modprobe vcan
+# modprobe can-raw
+# modprobe can-dev
+# modprobe kvazer-usb
+
+But any ip link command (ex: ip link add dev can0 type can) failed with "RTNETLINK answer : operation not permitted" (excepted for vcan which works well).
+
+Could someone provide me some hints regarding the steps to have a Kvaser USBcan device up and running using the net driver ?
+
+Many thanks in advance,
+
+Pierre
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/socketcan-users/attachments/20140107/76264226/attachment.html>
+
+From king at greatfreeworld.org  Tue Jan  7 16:16:32 2014
+From: king at greatfreeworld.org (Max S.)
+Date: Tue, 07 Jan 2014 15:16:32 +0000
+Subject: [Socketcan-users] Beginner question - Kvazer USB CAN driver
+In-Reply-To: <a8d74bed340445f081325afedf044bb5@AMSPR06MB053.eurprd06.prod.outlook.com>
+References: <a8d74bed340445f081325afedf044bb5@AMSPR06MB053.eurprd06.prod.outlook.com>
+Message-ID: <1389107792.5708.9.camel@blackbox>
+
+Hello,
+
+I'm not sure about the kvaser in particular, but the driver should
+create the network interfaces when the USB device is attached.
+
+so no need to add a new socketcan device.
+
+Check to make sure you have kvaser connected:
+	lsusb
+
+Check to make sure kvaser driver has made network interfaces:
+	sudo ip link list
+
+Then bring the interface up:
+	sudo ip link set can0 up type can bitrate 250000
+
+Listen to some frames:
+	candump can0
+
+Depending on how you have permissions set up you will require sudo to
+use most of the ip commands.
+
+Regards,
+Max Schneider
+
+On Tue, 2014-01-07 at 14:17 +0000, GARNERO, PIERRE (P.) wrote:
+> Hello.
+> 
+>  
+> 
+> I would like to use a KVAZER USBcan Rugged device with the socketcan
+> library.
+> 
+> I use Raspbian OS and I have built a kernel with anything enabled
+> regarding CAN.
+> 
+>  
+> 
+> I have loaded the following modules:
+> 
+> # modprobe can
+> 
+> # modprobe vcan
+> 
+> # modprobe can-raw
+> 
+> # modprobe can-dev
+> 
+> # modprobe kvazer-usb
+> 
+>  
+> 
+> But any ip link command (ex: ip link add dev can0 type can) failed
+> with ?RTNETLINK answer : operation not permitted? (excepted for vcan
+> which works well).
+> 
+>  
+> 
+> Could someone provide me some hints regarding the steps to have a
+> Kvaser USBcan device up and running using the net driver ?
+> 
+>  
+> 
+> Many thanks in advance,
+> 
+>  
+> 
+> Pierre
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+> 
+> _______________________________________________
+> Socketcan-users mailing list
+> Socketcan-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/socketcan-users
+
+
+
+From pgarnero at visteon.com  Tue Jan  7 17:46:48 2014
+From: pgarnero at visteon.com (GARNERO, PIERRE (P.))
+Date: Tue, 7 Jan 2014 16:46:48 +0000
+Subject: [Socketcan-users] Beginner question - Kvazer USB CAN driver
+In-Reply-To: <1389107792.5708.9.camel@blackbox>
+References: <a8d74bed340445f081325afedf044bb5@AMSPR06MB053.eurprd06.prod.outlook.com>
+	<1389107792.5708.9.camel@blackbox>
+Message-ID: <85d7d20e09a64996a182e491c6d250e0@AMSPR06MB053.eurprd06.prod.outlook.com>
+
+Hello,
+
+Thanks for all this information. And, basically the issue is the fact that no can network interface shows up.
+
+If I boot with the Kvaser device plugged, I could well see it using:
+ Lsusb
+
+...but 
+ sudo ip link list
+...does not reveal any can interface while I have loaded these modules: can, can-raw, can-dev, kvaser-usb.
+...while dmesg displays "usbcore: registered new interface driver kvaser_usb"...
+
+In addition, if I hotplug Kvaser device, I get a kernel panic.
+
+So, I have probably made a mistake when I have built the kernel.
+
+Cheers,
+
+Pierre 
+
+ 
+-----Message d'origine-----
+De?: socketcan-users-bounces at lists.berlios.de [mailto:socketcan-users-bounces at lists.berlios.de] De la part de Max S.
+Envoy??: mardi 7 janvier 2014 16:17
+??: socketcan-users at lists.berlios.de
+Objet?: Re: [Socketcan-users] Beginner question - Kvazer USB CAN driver
+
+Hello,
+
+I'm not sure about the kvaser in particular, but the driver should create the network interfaces when the USB device is attached.
+
+so no need to add a new socketcan device.
+
+Check to make sure you have kvaser connected:
+	lsusb
+
+Check to make sure kvaser driver has made network interfaces:
+	sudo ip link list
+
+Then bring the interface up:
+	sudo ip link set can0 up type can bitrate 250000
+
+Listen to some frames:
+	candump can0
+
+Depending on how you have permissions set up you will require sudo to use most of the ip commands.
+
+Regards,
+Max Schneider
+
+On Tue, 2014-01-07 at 14:17 +0000, GARNERO, PIERRE (P.) wrote:
+> Hello.
+> 
+>  
+> 
+> I would like to use a KVAZER USBcan Rugged device with the socketcan 
+> library.
+> 
+> I use Raspbian OS and I have built a kernel with anything enabled 
+> regarding CAN.
+> 
+>  
+> 
+> I have loaded the following modules:
+> 
+> # modprobe can
+> 
+> # modprobe vcan
+> 
+> # modprobe can-raw
+> 
+> # modprobe can-dev
+> 
+> # modprobe kvazer-usb
+> 
+>  
+> 
+> But any ip link command (ex: ip link add dev can0 type can) failed 
+> with ?RTNETLINK answer : operation not permitted? (excepted for vcan 
+> which works well).
+> 
+>  
+> 
+> Could someone provide me some hints regarding the steps to have a 
+> Kvaser USBcan device up and running using the net driver ?
+> 
+>  
+> 
+> Many thanks in advance,
+> 
+>  
+> 
+> Pierre
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+>  
+> 
+> 
+> _______________________________________________
+> Socketcan-users mailing list
+> Socketcan-users at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/socketcan-users
+
+
+_______________________________________________
+Socketcan-users mailing list
+Socketcan-users at lists.berlios.de
+https://lists.berlios.de/mailman/listinfo/socketcan-users
+

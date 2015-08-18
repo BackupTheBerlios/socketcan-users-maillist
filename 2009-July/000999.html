@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Some%20problems%20with%20CANUSB%20and%20Ubuntu%0A%208.04/9.04&In-Reply-To=%3C4A69CF2A.1050708%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000998.html">
+   <LINK REL="Next"  HREF="001000.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Some%20problems%20with%20CANUSB%20and%20Ubuntu%0A%208.04/9.04&In-Reply-To=%3C4A69CF2A.1050708%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Jul 24 17:11:38 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000998.html">[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu	8.04/9.04
+</A></li>
+        <LI>Next message: <A HREF="001000.html">[Socketcan-users] NOHZ: local_softirq_pending 08
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#999">[ date ]</a>
+              <a href="thread.html#999">[ thread ]</a>
+              <a href="subject.html#999">[ subject ]</a>
+              <a href="author.html#999">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Berhard,
+
+Bernhard Perun wrote:
+
+&gt;<i> Hi Oliver,
+</I>&gt;<i> thanks a lot. With Ubuntu 9.04 - and a newer kernel - it works very well.
+</I>
+Fine!
+
+&gt;<i> I wrote a little HowTo &quot;HowTo - socketcan with LAWICEL CANUSB and Ubuntu
+</I>&gt;<i> 9.04&quot;.
+</I>&gt;<i> Mabye other people have the same problem...
+</I>
+Thanks! I added some remarks that may make it 'even easier' :-)
+
+&gt;<i> This works for me:
+</I>&gt;<i> 
+</I>&gt;<i> HowTo - socketcan with LAWICEL CANUSB and Ubuntu 9.04
+</I>&gt;<i> -----------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> 1. Preface
+</I>&gt;<i> ----------
+</I>&gt;<i>     - Use a current kernel (&gt;= 2.6.28) for example with Ubuntu 9.04
+</I>
+&gt;<i>= 2.6.25 should be ok also
+</I>
+&gt;<i> 
+</I>&gt;<i> 2. Checkout socketcan - sources (zB mit RapidSVN)
+</I>&gt;<i> -------------------------------------------------------
+</I>&gt;<i>     - svn checkout <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk">http://svn.berlios.de/svnroot/repos/socketcan/trunk</A>
+</I>&gt;<i> 
+</I>&gt;<i> 3. Edit the Makefile at [socketcan-verzeichnis]/kernel/2.6/
+</I>&gt;<i> -----------------------------------------------------------
+</I>&gt;<i>     - Attach following line after &quot;export CONFIG_CAN_MCP251X=m&quot; (without
+</I>&gt;<i> quotes): &quot;export CONFIG_CAN_SLCAN=m&quot;
+</I>&gt;<i> 
+</I>&gt;<i> 4. Edit the Makefiles at [socketcan-verzeichnis]/kernel/2.6/drivers/net/can/
+</I>&gt;<i> ----------------------------------------------------------------------------
+</I>&gt;<i>     - Also attach following line after &quot;export CONFIG_CAN_MCP251X=m&quot;
+</I>&gt;<i> (without quotes): &quot;export CONFIG_CAN_SLCAN=m&quot;
+</I>&gt;<i> 
+</I>
+You can omit to edit the Makefiles, when you give the config definition on the
+commandline for 'make', e.g.
+
+$&gt; make CONFIG_CAN_SLCAN=m
+
+does the same job.
+
+&gt;<i> 5. Build and install kernelmodules for socketcan
+</I>&gt;<i> ------------------------------------------------
+</I>&gt;<i>     - change back to [socketcan-verzeichnis]/kernel/2.6/   
+</I>&gt;<i>     - make
+</I>&gt;<i>     - mkdir /lib/modules/$(uname -r)/socketcan
+</I>&gt;<i>         - find -name \*.ko | xargs install -t /lib/modules/$(uname
+</I>&gt;<i> -r)/socketcan
+</I>&gt;<i>         - depmod $(uname -r)
+</I>&gt;<i> 
+</I>
+$&gt; make CONFIG_CAN_SLCAN=m modules_install
+
+creates automatically the new stuff in
+
+/lib/modules/$(uname -r)/extra
+
+
+&gt;<i> 6. Build can-utils and install it
+</I>&gt;<i> ---------------------------------
+</I>&gt;<i>     - cd can-utils
+</I>&gt;<i>     - make
+</I>&gt;<i>     - make install
+</I>&gt;<i> 
+</I>&gt;<i> 7. Build test - applications for socketcan and install it
+</I>&gt;<i> ---------------------------------------------------------
+</I>&gt;<i>     - cd ../test
+</I>&gt;<i>     - make
+</I>&gt;<i>     - make install
+</I>&gt;<i> 
+</I>
+The test applications are usually not needed to be installed for the public use.
+
+&gt;<i> 8. Get serial interface &quot;ttyUSB0&quot; to networksocket &quot;slc0&quot;
+</I>&gt;<i> ---------------------------------------------------------
+</I>&gt;<i>     - slcan_attach -o -s6 /dev/ttyUSB0
+</I>&gt;<i>     - slcand ttyUSB0
+</I>&gt;<i>     - ifconfig slc0 up
+</I>&gt;<i> 
+</I>&gt;<i> 9. Running candump (testapplication)
+</I>&gt;<i> ------------------------------------
+</I>&gt;<i>     - candump slc0,0:0,#FFFFFFFF
+</I>
+AFAIK the SLCAN devices do not support Error messages, so
+
+candump slc0
+
+would be enough here.
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000998.html">[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu	8.04/9.04
+</A></li>
+	<LI>Next message: <A HREF="001000.html">[Socketcan-users] NOHZ: local_softirq_pending 08
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#999">[ date ]</a>
+              <a href="thread.html#999">[ thread ]</a>
+              <a href="subject.html#999">[ subject ]</a>
+              <a href="author.html#999">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

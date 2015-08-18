@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C20091028092017.GB4531%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001095.html">
+   <LINK REL="Next"  HREF="001098.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C20091028092017.GB4531%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">l.fu at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 28 10:20:22 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001095.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001098.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1097">[ date ]</a>
+              <a href="thread.html#1097">[ thread ]</a>
+              <a href="subject.html#1097">[ subject ]</a>
+              <a href="author.html#1097">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+On Tue, Oct 27, 2009 at 06:29:57PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Luotao Fu wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I'm playing with 2.6.31 + mscan driver on a mpc5200B board the last
+</I>&gt;<i> &gt; days, have slightly backported the mscan driver to meet the can frame
+</I>&gt;<i> &gt; work in 2.6.31. Now I ran into a quite funny situation:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The board is connected to a host, which has an IXXAT PCI can card
+</I>&gt;<i> &gt; (2.6.26 and an unknown SocketCAN version, which is more or less recent,
+</I>&gt;<i> &gt; since it provides sysfs entries). The host is set to a baudrate of
+</I>&gt;<i> &gt; 250kbit, while the target comes up with 125kbit. As soon as the host and
+</I>&gt;<i> &gt; target are up and running, I send a frame with cansend from the host.
+</I>&gt;<i> &gt; After that both sides go into bus passive, which is the expected
+</I>&gt;<i> &gt; behaviour. However the board seems not to be able to get out there any
+</I>&gt;<i> &gt; more. Turning off the interface -&gt; change the baudrate to 250K -&gt;
+</I>&gt;<i> &gt; turning on the interface went through without errors. However the board
+</I>&gt;<i> &gt; seems to stuck and neither sending nor receiving will work any more. I
+</I>&gt;<i> &gt; instrumented the mscan_set_mode() call with the attached patch and
+</I>&gt;<i> &gt; noticed that the RXACT is never cleared in this case any more and the
+</I>&gt;<i> &gt; initrq will eventually never reach. a small screenshot to make it a
+</I>&gt;<i> &gt; little more clear:
+</I>&gt;<i> &gt; ## Usually changing bitrate should read like this
+</I>&gt;<i> &gt; @target: /sbin/ip link set can1 type can bitrate 250000
+</I>&gt;<i> &gt; changing bit rate to can1
+</I>&gt;<i> &gt; [  105.854706] ctl0: 0x10
+</I>&gt;<i> &gt; [  105.857231] ctl0: 0x2
+</I>&gt;<i> &gt; ## sleep mode request is set
+</I>&gt;<i> &gt; [  105.863075] ctl0: 0x3
+</I>&gt;<i> &gt; ## init mode request is set
+</I>&gt;<i> 
+</I>&gt;<i> Hm, the lines above are from a ifconfig down, right?
+</I>&gt;<i> 
+</I>
+Ah, je, the kernel prints are from ifconfig down. I lied a little since
+in the screenshot since I wrote the commands into a script. Actually I
+thought myself the whole time that the printks come from bitrate stuff,
+just like in the prehistorical old version. This was however the only
+untruth here. I promise. ;-)
+
+&gt;<i> &gt; [  105.888505] mpc52xx_can f0000980.can: setting BTR0=0x0a BTR1=0x18
+</I>&gt;<i> &gt; ## after the mscan got stuck resetting bitrate reads like this:
+</I>&gt;<i> &gt; @target: /sbin/ip link set can1 type can bitrate 250000
+</I>&gt;<i> &gt; changing bit rate to can1
+</I>&gt;<i> &gt; [  303.130686] ctl0: 0x50
+</I>&gt;<i> &gt; [  303.160088] ctl0: 0x52
+</I>&gt;<i> &gt; [  303.162512] ctl0: 0x52
+</I>&gt;<i> &gt; [  303.206860] mpc52xx_can f0000980.can: setting BTR0=0x0a BTR1=0x18
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Seems RXACT is never cleared on the mscan side. Setting to init_mode
+</I>&gt;<i> &gt; will then eventually fail and the controller stucks in sleep mode. I
+</I>&gt;<i> &gt; can solve the problem by pulling the target from can bus and so
+</I>&gt;<i> &gt; cause an bus-off to restart the stuff or I restart the can controller
+</I>&gt;<i> &gt; on the host side. However it still feels like a bug. Two questions:
+</I>&gt;<i> 
+</I>&gt;<i> Either a hardware or a software bug. RXACT can not be cleared by software.
+</I>&gt;<i> 
+</I>
+Noticed that. I do think that the RXACT is triggered by the host
+retrying sending the message. Could this be the reason why the mscan
+controller got stuck?
+
+&gt;<i> &gt; 1. why is the failed initrq uncatched? I doubled checked with an mscan
+</I>&gt;<i> &gt; driver from an reeeeal old socketcan patch(-r466) + 2.6.23, it will fail
+</I>&gt;<i> &gt; on spinning wait for slpak and quit there with an -ENODEV. Why is it not
+</I>&gt;<i> &gt; happening any more?
+</I>&gt;<i> 
+</I>&gt;<i> Could you highlight the differences between to new and the old version?
+</I>&gt;<i> And does the old approach fix the problem?
+</I>&gt;<i> 
+</I>
+I mistook on this one. In the old version the do_set_mode was called
+while changing baudrate with INIT_MODE set. In the new version the
+do_set_mode is called during ifconfig down with SLEEP_MODE. Where
+there's no init request, there's also no error to catch.
+
+&gt;<i> &gt; 2. Any hint for a possible fix the problem described above or is it more
+</I>&gt;<i> &gt; a conceptional question / hardware problem with mscan?
+</I>&gt;<i> 
+</I>&gt;<i> &gt;From time to time I have observed myself wired problems with the MSCAN
+</I>&gt;<i> CAN state management, which I was unable to explain. I will try to
+</I>&gt;<i> reproduce your symptoms on my setup.
+</I>
+thx
+
+cheers
+Luotao Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091028/78a0ef2e/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091028/78a0ef2e/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001095.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001098.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1097">[ date ]</a>
+              <a href="thread.html#1097">[ thread ]</a>
+              <a href="subject.html#1097">[ subject ]</a>
+              <a href="author.html#1097">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%09Channel%20CAN%20PC104%20Module.&In-Reply-To=%3Cb2da33020906161022t7b98dc15pd9f275a2cd6f296c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000942.html">
+   <LINK REL="Next"  HREF="000944.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.</H1>
+    <B>khurram gulzar</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%09Channel%20CAN%20PC104%20Module.&In-Reply-To=%3Cb2da33020906161022t7b98dc15pd9f275a2cd6f296c%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.">khurramgulzar at gmail.com
+       </A><BR>
+    <I>Tue Jun 16 19:22:43 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000942.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+</A></li>
+        <LI>Next message: <A HREF="000944.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#943">[ date ]</a>
+              <a href="thread.html#943">[ thread ]</a>
+              <a href="subject.html#943">[ subject ]</a>
+              <a href="author.html#943">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanx Oliver and Wolfgang,
+
+It works even with the highest baud i.e. 1M by using the
+
+insmod sja1000-iomux.ko base=0x200,0x204 irq=10,11 speed=1000,1000
+
+Can you tell me a little bit, how iomux sends data to COM1273?
+
+BR
+
+On Tue, Jun 16, 2009 at 7:08 PM, khurram gulzar &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">khurramgulzar at gmail.com</A>&gt;wrote:
+
+&gt;<i> it probes successfully and also get both the modules up
+</I>&gt;<i> now i am making connectors to check its transmission
+</I>&gt;<i> will post the result soon
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On Tue, Jun 16, 2009 at 6:45 PM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> OT: Sorry for double posting. My UMTS mobile ran out of energy ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Please try sja1000-iomux with the given parameters.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The 3rd register looks like a reset-register that is probably not needed
+</I>&gt;&gt;<i> for a
+</I>&gt;&gt;<i> first test.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Oliver
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> &gt; khurram gulzar wrote:
+</I>&gt;&gt;<i> &gt;&gt; It probe but only the first can at adress 0x300 but says no module
+</I>&gt;&gt;<i> found
+</I>&gt;&gt;<i> &gt;&gt; on 0x304 i double check the address but it is set to 0x304 and in
+</I>&gt;&gt;<i> ioport
+</I>&gt;&gt;<i> &gt;&gt; its not accessed via any other hardware.
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt; insmod sja1000-io.ko base=0x300,0x304 irq=10,11
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; The SJA1000 needs a memory register space of 0x20 or 0x100 bytes.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; So 0x04 or 0x08 bytes are definitely too small for that.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; There are hardware designs that use multiplexed register access to
+</I>&gt;&gt;<i> reduce the
+</I>&gt;&gt;<i> &gt; needed address space to 2 or 4 bytes per chip.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; As you can see on page 19 of the given documentation in
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;&gt; <A HREF="http://www.eurotech.fi/products/manuals/COM-1273_manual_10.pdf">http://www.eurotech.fi/products/manuals/COM-1273_manual_10.pdf</A>
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; the register access to the controllers are handled via 3 registers!
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; You would need a modified version of sja1000-iomux.ko then that can cope
+</I>&gt;&gt;<i> with
+</I>&gt;&gt;<i> &gt; the multiplexed register access given in the Eurotech spec.
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Regards,
+</I>&gt;&gt;<i> &gt; Oliver
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; _______________________________________________
+</I>&gt;&gt;<i> &gt; Socketcan-users mailing list
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090616/ac3867fa/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090616/ac3867fa/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000942.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+</A></li>
+	<LI>Next message: <A HREF="000944.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#943">[ date ]</a>
+              <a href="thread.html#943">[ thread ]</a>
+              <a href="subject.html#943">[ subject ]</a>
+              <a href="author.html#943">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

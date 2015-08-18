@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] import svn to git
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20import%20svn%20to%20git&In-Reply-To=%3C4E96AD7A.8080601%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002183.html">
+   <LINK REL="Next"  HREF="002187.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] import svn to git</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20import%20svn%20to%20git&In-Reply-To=%3C4E96AD7A.8080601%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] import svn to git">mkl at pengutronix.de
+       </A><BR>
+    <I>Thu Oct 13 11:20:58 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002183.html">[Socketcan-users] import svn to git
+</A></li>
+        <LI>Next message: <A HREF="002187.html">[Socketcan-users] import svn to git
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2184">[ date ]</a>
+              <a href="thread.html#2184">[ thread ]</a>
+              <a href="subject.html#2184">[ subject ]</a>
+              <a href="author.html#2184">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/13/2011 11:10 AM, Wolfgang Grandegger wrote:
+&gt;&gt;<i> I think it's a good idea to import the berlios svn subtree containing
+</I>&gt;&gt;<i> the can-utils into the git repo on the new server. The git history looks
+</I>&gt;&gt;<i> better if we convert the svn usernames to a proper author field, e.g.:
+</I>&gt;&gt;<i> &quot;John Developer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">john.developer at example.com</A>&gt;&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> Yep, as described also in &quot;Importing from SVN&quot; at
+</I>&gt;<i> 
+</I>&gt;<i>   <A HREF="http://savannah.gnu.org/maintenance/UsingGit">http://savannah.gnu.org/maintenance/UsingGit</A>
+</I>
+Yes, looks good. A very nice thing about git-svn is, that you can inport
+a sub-tree from svn to git.
+
+&gt;&gt;<i> Urs, Oliver, Wolfgang and all other contributors, what's your preferred
+</I>&gt;&gt;<i> email?
+</I>&gt;<i> 
+</I>&gt;<i>   Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>
+:<i>) That's the address I've already in my list.
+</I>
+&gt;<i> From that description it also seems that we can push only to one git
+</I>&gt;<i> repository per project. This again rises the question how to handle and
+</I>&gt;<i> name the can-utils and can-kmods. I see the following possibilities:
+</I>&gt;<i> 
+</I>&gt;<i> 1. *One* project named &quot;socketcan&quot; or &quot;linux-can&quot; for both. In the git
+</I>&gt;<i>    repo we could then store all socketcan related code in:
+</I>&gt;<i> 
+</I>&gt;<i>    can-utils/...      The CAN Utils
+</I>&gt;<i>    can-lib/...        Eventually A Socketcan library, might be
+</I>&gt;<i>                       integrated into can-utils
+</I>&gt;<i>    kernel/...         Out-of-tree kernel modules for 2.6 and 3.x
+</I>&gt;<i>    kernel-2.4/...     Old kernel modules for 2.4
+</I>&gt;<i> 
+</I>&gt;<i> 2. *Two* different projects named &quot;can-utils&quot; and &quot;can-kmod&quot;.
+</I>
+At least two repos, one for the userspace one for the kernel. Maybe even
+more then one userspace repo.
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20111013/b4d53d10/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20111013/b4d53d10/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002183.html">[Socketcan-users] import svn to git
+</A></li>
+	<LI>Next message: <A HREF="002187.html">[Socketcan-users] import svn to git
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2184">[ date ]</a>
+              <a href="thread.html#2184">[ thread ]</a>
+              <a href="subject.html#2184">[ subject ]</a>
+              <a href="author.html#2184">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

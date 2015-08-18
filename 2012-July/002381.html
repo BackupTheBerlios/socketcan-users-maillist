@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] back to back can frames.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20back%20to%20back%20can%20frames.&In-Reply-To=%3C1341488146.2416.9.camel%40slaptop%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002380.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] back to back can frames.</H1>
+    <B>Max S.</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20back%20to%20back%20can%20frames.&In-Reply-To=%3C1341488146.2416.9.camel%40slaptop%3E"
+       TITLE="[Socketcan-users] back to back can frames.">king at greatfreeworld.org
+       </A><BR>
+    <I>Thu Jul  5 13:35:46 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002380.html">[Socketcan-users] [SocketCan] Problem of accuracy
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2381">[ date ]</a>
+              <a href="thread.html#2381">[ thread ]</a>
+              <a href="subject.html#2381">[ subject ]</a>
+              <a href="author.html#2381">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+While trying to test a can device I wrote a short program to
+continuously send can frames... However after a short while I get a
+buffer overflow error. Seems the internal queue is filled and overrun...
+
+How can I send can frames at maximum throughput? simply one after the
+other, back to back.
+
+what i have now is something like this:
+
+
+do{
+	//prepare next frame...
+}while(write( sfd, frame, sizeof(*arguments.frame) ) == sizeof(*frame));
+//print error message...
+
+since the write simply pushes the frame into the queue, it is logical
+that the queue would fill up quickly and get overflown?overrun?full.
+
+Thanks,
+Max S.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002380.html">[Socketcan-users] [SocketCan] Problem of accuracy
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2381">[ date ]</a>
+              <a href="thread.html#2381">[ thread ]</a>
+              <a href="subject.html#2381">[ subject ]</a>
+              <a href="author.html#2381">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

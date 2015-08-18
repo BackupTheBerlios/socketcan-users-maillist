@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x remove module when there is CAN	activity
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20remove%20module%20when%20there%20is%20CAN%0A%09activity&In-Reply-To=%3Ccabda6420902112316l679d6925we8551852dacba251%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000666.html">
+   <LINK REL="Next"  HREF="000673.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x remove module when there is CAN	activity</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20remove%20module%20when%20there%20is%20CAN%0A%09activity&In-Reply-To=%3Ccabda6420902112316l679d6925we8551852dacba251%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp251x remove module when there is CAN	activity">chripell at gmail.com
+       </A><BR>
+    <I>Thu Feb 12 08:16:22 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000666.html">[Socketcan-users] mcp251x remove module when there is CAN activity
+</A></li>
+        <LI>Next message: <A HREF="000673.html">[Socketcan-users] mcp251x remove module when there is CAN	activity
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#670">[ date ]</a>
+              <a href="thread.html#670">[ thread ]</a>
+              <a href="subject.html#670">[ subject ]</a>
+              <a href="author.html#670">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Feb 11, 2009 at 8:27 PM, Cliff Brake &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">cliff.brake at gmail.com</A>&gt; wrote:
+&gt;<i> If I try to rmmod the mcp251x module while there is CAN activity,
+</I>&gt;<i> rmmod either freezes, or segfaults. &#160;Try again, I get ERROR: Removing
+</I>&gt;<i> 'mcp251x': Device or resource busy. &#160;The kernel fault below is likely
+</I>&gt;<i> related. I'll debug as I have time, but thought I would post here for
+</I>&gt;<i> now.
+</I>&gt;<i>
+</I>
+I never saw this problem. Have you done an &quot;ifconfig can0 down&quot; before
+the rmmod? If you don't do this perhaps there is a race condition in
+rmmod. Can you try to put:
+
+unregister_netdev(net);
+free_candev(net);
+
+at the beginning of the mcp251x_can_remove function? Another way of
+avoiding this problem could be adding a flag to mcp251x_priv to track
+when the device is up and returning -EBUSY on mcp251x_can_remove if it
+is so, but looking at the other drivers I guess this is not needed.
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000666.html">[Socketcan-users] mcp251x remove module when there is CAN activity
+</A></li>
+	<LI>Next message: <A HREF="000673.html">[Socketcan-users] mcp251x remove module when there is CAN	activity
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#670">[ date ]</a>
+              <a href="thread.html#670">[ thread ]</a>
+              <a href="subject.html#670">[ subject ]</a>
+              <a href="author.html#670">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

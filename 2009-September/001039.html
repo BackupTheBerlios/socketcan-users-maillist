@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan and LinCAN benchmarks
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20and%20LinCAN%20benchmarks&In-Reply-To=%3C4A9EA5E8.9070003%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001038.html">
+   <LINK REL="Next"  HREF="001042.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan and LinCAN benchmarks</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20and%20LinCAN%20benchmarks&In-Reply-To=%3C4A9EA5E8.9070003%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socketcan and LinCAN benchmarks">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Sep  2 19:05:44 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001038.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+        <LI>Next message: <A HREF="001042.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1039">[ date ]</a>
+              <a href="thread.html#1039">[ thread ]</a>
+              <a href="subject.html#1039">[ subject ]</a>
+              <a href="author.html#1039">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Michal Sojka wrote:
+&gt;<i> On Wednesday 02 of September 2009 18:37:26 Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Michal Sojka wrote:
+</I>&gt;&gt;&gt;<i> The testbed was a Pentium 4 box with a Kvaser quad-head PCI card
+</I>&gt;&gt;&gt;<i> (SJA1000 based). We have simply connected output 1 to output 2 and
+</I>&gt;&gt;&gt;<i> measured the time how long it takes for the message to go forth and
+</I>&gt;&gt;&gt;<i> back.
+</I>&gt;&gt;<i> The idea behind my setup was to benchmark the chardev vs netdev in general.
+</I>&gt;&gt;<i> For that reason, i used a PEAK PCMCIA card (which had an exclusive IRQ
+</I>&gt;&gt;<i> line) and compiled the same driver with and without netdev support:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [...]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Finally the RX path was faster with netdev and the impact of different
+</I>&gt;&gt;<i> driver implementations or the performance of the drivers TX-handling on the
+</I>&gt;&gt;<i> SJA1000 was excluded in this benchmark.
+</I>&gt;<i> 
+</I>&gt;<i> Interesting. We may try to do similar test to check whether the problem is in 
+</I>&gt;<i> PEAK's FIFOs or it is a general property (Lincan is also based on FIFOs filled 
+</I>&gt;<i> from IRQ).
+</I>
+
+If you're planning some more tests, i would be interested what happens if you
+make the rtt-virtual tests with waits of 0/1/2 ms.
+
+When there is a delay between the sent frames, we probably see a completely
+different behaviour on the virtual CANs.
+
+
+&gt;&gt;&gt;<i> We have used canping [1] tool to generate CAN traffic.
+</I>&gt;&gt;<i> I tried to figure out how canping was used with SocketCAN in your testbed.
+</I>&gt;&gt;<i> But i didn't find any socket() call :-)
+</I>&gt;<i> 
+</I>&gt;<i> In <A HREF="http://rtime.felk.cvut.cz/gitweb/canping.git/blob/HEAD:/src/vca_canping.c,">http://rtime.felk.cvut.cz/gitweb/canping.git/blob/HEAD:/src/vca_canping.c,</A> 
+</I>&gt;<i> you can see vca_open_handle() and other vca_*() functions, which are 
+</I>&gt;<i> implemented in libVCA. For socketcan it is in 
+</I>&gt;<i> <A HREF="http://ocera.cvs.sourceforge.net/viewvc/ocera/ocera/components/comm/can/canvca/libvca/vca_isocketcan.c?revision=1.4&amp;view=markup">http://ocera.cvs.sourceforge.net/viewvc/ocera/ocera/components/comm/can/canvca/libvca/vca_isocketcan.c?revision=1.4&amp;view=markup</A>
+</I>
+Ah, ok.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001038.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+	<LI>Next message: <A HREF="001042.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1039">[ date ]</a>
+              <a href="thread.html#1039">[ thread ]</a>
+              <a href="subject.html#1039">[ subject ]</a>
+              <a href="author.html#1039">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

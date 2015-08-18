@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mainline inclusion?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mainline%20inclusion%3F&In-Reply-To=%3C45D8944C.8010501%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000082.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mainline inclusion?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mainline%20inclusion%3F&In-Reply-To=%3C45D8944C.8010501%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] mainline inclusion?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Feb 18 19:00:44 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000082.html">[Socketcan-users] mainline inclusion?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#81">[ date ]</a>
+              <a href="thread.html#81">[ thread ]</a>
+              <a href="subject.html#81">[ subject ]</a>
+              <a href="author.html#81">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Teemu Ikonen wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I'm writing a CAN application (at the moment actually a CANopen
+</I>&gt;<i> library) on top of a traditional character device driver. As all the
+</I>&gt;<i> interface manufacturers seem to have a slightly different api for
+</I>&gt;<i> their driver (the hardware we use is from Peak-system), it would
+</I>&gt;<i> indeed be nice to have a standard CAN api in Linux. Has there been any
+</I>&gt;<i> contact with the kernel maintainers in order to get the socket api
+</I>&gt;<i> included in the kernel.org Linux?
+</I>&gt;<i>
+</I>&gt;<i> Best,
+</I>&gt;<i>
+</I>&gt;<i> Teemu
+</I>
+Hi Teemu,
+
+indeed Urs and me are currently working on additional documentation and 
+man-pages to answer most of the questions that may occur, when the 
+concepts of the integration of a Protocol Family CAN (PF_CAN) into the 
+kernel are posted on the LKML. The plan is to announce the socketcan 
+project on the LKML somewhere in March. I don't know if it's good to 
+contact the Maintainers right now, but i am not that experienced in 
+these things nowadays. I had my last mail contact to Linus in 1992 due 
+to a problem in the serial driver IRQs ;-)
+
+The creation of a common API for CAN in Linux (especially to be used via 
+the BSD-Socket API) is the mayor goal of this project. To get an 
+overview you may read
+
+<A HREF="http://openfacts.berlios.de/index-en.phtml?title=Socket-CAN">http://openfacts.berlios.de/index-en.phtml?title=Socket-CAN</A>
+
+or this README from Urs
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/README">http://svn.berlios.de/svnroot/repos/socketcan/trunk/README</A>
+
+-----------
+
+Regarding your question on the PEAK hardware, i can tell you that the 
+next mainline PEAK-driver (<A HREF="http://www.peak-system.com/linux/index.htm">http://www.peak-system.com/linux/index.htm</A>) 
+in Version 6.0 will have socketcan netdevice support(!!). I maintained a 
+netdevice-patch to the vanilla PEAK-driver for a long time for our 
+projects at Volkswagen Group Research. This patch is now integrated into 
+the mainline PEAK-driver (on the PEAK-SVN). Currently the Maintainer of 
+the PEAK-linux-driver (Klaus Hitschler) is working on the release 
+documentation. I assume the Version 6.0 to be released within the next 
+2-3 weeks.
+The socketcan support is working for *all* available PEAK-hardware (ISA 
+/ PC104, PCI, Parport-Dongle, USB, PCCard).
+
+I hope, this information has helped you so far. If it's very urgent for 
+your project, i can sent you the my last netdevice patch for the vanilla 
+PEAK-driver v5.5. Have you already looked at the CANOpen Implementation 
+from Edouard Tisserant at <A HREF="http://canfestival.sf.net">http://canfestival.sf.net</A> ? Edouard knows the 
+socketcan project from our meeting at PEAK-systems. Maybe you can 
+contact him to share/synchronize the work that needs to be done to make 
+CANOpen work with socketcan.
+
+Best regards,
+Oliver
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000082.html">[Socketcan-users] mainline inclusion?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#81">[ date ]</a>
+              <a href="thread.html#81">[ thread ]</a>
+              <a href="subject.html#81">[ subject ]</a>
+              <a href="author.html#81">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] How to test flexcan driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20How%20to%20test%20flexcan%20driver&In-Reply-To=%3C4DCCCEF6.4070400%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001874.html">
+   <LINK REL="Next"  HREF="001883.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] How to test flexcan driver</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20How%20to%20test%20flexcan%20driver&In-Reply-To=%3C4DCCCEF6.4070400%40grandegger.com%3E"
+       TITLE="[Socketcan-users] How to test flexcan driver">wg at grandegger.com
+       </A><BR>
+    <I>Fri May 13 08:25:58 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001874.html">[Socketcan-users] How to test flexcan driver
+</A></li>
+        <LI>Next message: <A HREF="001883.html">[Socketcan-users] How to test flexcan driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1876">[ date ]</a>
+              <a href="thread.html#1876">[ thread ]</a>
+              <a href="subject.html#1876">[ subject ]</a>
+              <a href="author.html#1876">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05/13/2011 04:22 AM, seedshope wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> Add socketcan-users and avolkov in the loop.
+</I>&gt;<i> 
+</I>&gt;<i> 1. Kernel version 2.6.39-rc7
+</I>&gt;<i> 
+</I>&gt;<i> 2.CAN utils:
+</I>&gt;<i> libsocketcan-0.0.8.tar.gz
+</I>&gt;<i> canutils-4.0.6.tar.bz2
+</I>
+The first choice are the ip tools from iproute2 and the can-utils from
+the BerliOS Socketcan-Respository:
+
+  <A HREF="http://svn.berlios.de/viewvc/socketcan/trunk/can-utils/">http://svn.berlios.de/viewvc/socketcan/trunk/can-utils/</A>
+
+&gt;<i> 3. Test step:
+</I>&gt;<i> (1) Do a cable to connect two fsl_imx25pdk board through CAN BUS interface,
+</I>&gt;<i> The RX pin for The CAN BUS of baord1 connect to The TX pin
+</I>&gt;<i> for the board2. The TX pin for The CAN BUS of baord1 connect to The RX pin
+</I>&gt;<i> for the board2. as following:
+</I>
+CAN does not have RX and TX pins but CAN high and CAN low and you should
+connect high&lt;-&gt;high (Pin 2&lt;-&gt;2) and low&lt;-&gt;low (Pin 7&lt;-&gt;7) and maybe also
+ground (Pinn 3&lt;-&gt;3). See also:
+
+<A HREF="http://www.interfacebus.com/Can_Bus_Connector_Pinout.html">http://www.interfacebus.com/Can_Bus_Connector_Pinout.html</A>
+
+You *also* need proper 120 Ohm termination on *both* sides of the CAN
+bus cable.
+
+&gt;<i> (2) start can0 device
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/root&gt; ip link set can0 type can bitrate 500000
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/root&gt; ifconfig can0 up
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/root&gt; ifconfig
+</I>&gt;<i> can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-
+</I>&gt;<i> 00-00-00-00-00-00
+</I>&gt;<i>           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:64
+</I>&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;<i> 
+</I>&gt;<i> eth1      Link encap:Ethernet  HWaddr 00:04:9F:00:F6:85
+</I>&gt;<i>           inet addr:128.224.163.143  Bcast:128.224.163.255
+</I>&gt;<i> Mask:255.255.254.0
+</I>&gt;<i>           inet6 addr: fe80::204:9fff:fe00:f685/64 Scope:Link
+</I>&gt;<i>           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+</I>&gt;<i>           RX packets:32699 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:13310 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:1000
+</I>&gt;<i>           RX bytes:32742183 (31.2 MiB)  TX bytes:2294256 (2.1 MiB)
+</I>&gt;<i>           Interrupt:192
+</I>&gt;<i> 
+</I>&gt;<i> lo        Link encap:Local Loopback
+</I>&gt;<i>           inet addr:127.0.0.1  Mask:255.0.0.0
+</I>&gt;<i>           inet6 addr: ::1/128 Scope:Host
+</I>&gt;<i>           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+</I>&gt;<i>           RX packets:8 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:0
+</I>&gt;<i>           RX bytes:560 (560.0 b)  TX bytes:560 (560.0 b)
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/root&gt;
+</I>&gt;<i> 
+</I>&gt;<i> (3) The first board run candump to receive data.
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/usr/canutils/bin&gt; ./candump can0
+</I>&gt;<i> interface = can0, family = 29, type = 3, proto = 1
+</I>
+Please use &quot;candump -e any,0:0,#FFFFFFFF&quot; to realize bus errors and
+state changes as well.
+
+&gt;<i> (4) The other board run cansend to send can data
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/usr/canutils/bin&gt; cat /proc/net/dev
+</I>&gt;<i> Inter-|   Receive                                                |  Transmit
+</I>&gt;<i>  face |bytes    packets errs drop fifo frame compressed multicast|bytes
+</I>&gt;<i> packets errs drop fifo colls carrier compressed
+</I>&gt;<i>     lo:     560       8    0    0    0     0          0         0
+</I>&gt;<i> 560       8    0    0    0     0       0          0
+</I>&gt;<i>   can0:       0       0    0    0    0     0          0         0
+</I>&gt;<i> 90      14    0    0    0     0       0          0
+</I>&gt;<i>   eth0:       0       0    0    0    0     0          0         0
+</I>&gt;<i> 1180       2    0    0    0     0       0          0
+</I>&gt;<i>   eth1: 34574162   42679    0    0    0     0          0     10215
+</I>&gt;<i> 3002895   17229    0    0    0     0       0          0
+</I>
+The command &quot;ip -d -s link show can0&quot; provides more information.
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/usr/canutils/bin&gt; ./cansend can0 123#1122334455667788
+</I>&gt;<i> interface = can0, family = 29, type = 3, proto = 1
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/usr/canutils/bin&gt; cat /proc/net/dev
+</I>&gt;<i> Inter-|   Receive                                                |  Transmit
+</I>&gt;<i>  face |bytes    packets errs drop fifo frame compressed multicast|bytes
+</I>&gt;<i> packets errs drop fifo colls carrier compressed
+</I>&gt;<i>     lo:     560       8    0    0    0     0          0         0
+</I>&gt;<i> 560       8    0    0    0     0       0          0
+</I>&gt;<i>   can0:       0       0    0    0    0     0          0         0
+</I>&gt;<i> 91      15    0    0    0     0       0          0
+</I>&gt;<i>   eth0:       0       0    0    0    0     0          0         0
+</I>&gt;<i> 1180       2    0    0    0     0       0          0
+</I>&gt;<i>   eth1: 34581833   42758    0    0    0     0          0     10250
+</I>&gt;<i> 3009673   17266    0    0    0     0       0          0
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A>:/usr/canutils/bin&gt;
+</I>&gt;<i> 
+</I>&gt;&gt;<i>From above information, The CAN data have already sent successful, But the
+</I>&gt;<i> receive CAN data board have not any response.
+</I>&gt;<i> Thanks to everyone who answered my question.
+</I>
+Please check your cabling, first.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001874.html">[Socketcan-users] How to test flexcan driver
+</A></li>
+	<LI>Next message: <A HREF="001883.html">[Socketcan-users] How to test flexcan driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1876">[ date ]</a>
+              <a href="thread.html#1876">[ thread ]</a>
+              <a href="subject.html#1876">[ subject ]</a>
+              <a href="author.html#1876">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

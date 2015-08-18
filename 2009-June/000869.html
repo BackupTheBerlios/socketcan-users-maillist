@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CANUSB and Ubuntu
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CANUSB%20and%20Ubuntu&In-Reply-To=%3C4A243DE1.30604%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000868.html">
+   <LINK REL="Next"  HREF="000870.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CANUSB and Ubuntu</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CANUSB%20and%20Ubuntu&In-Reply-To=%3C4A243DE1.30604%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] CANUSB and Ubuntu">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Jun  1 22:45:21 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000868.html">[Socketcan-users] CANUSB and Ubuntu
+</A></li>
+        <LI>Next message: <A HREF="000870.html">[Socketcan-users] CANUSB and Ubuntu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#869">[ date ]</a>
+              <a href="thread.html#869">[ thread ]</a>
+              <a href="subject.html#869">[ subject ]</a>
+              <a href="author.html#869">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Morgan T&#248;rvolt wrote:
+&gt;<i> 2009/6/1 Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;:
+</I>&gt;&gt;<i> Morgan T&#248;rvolt wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I am running Ubuntu 9.04 Jaunty. The kernel is 2.6.28, which should
+</I>&gt;&gt;&gt;<i> have the socketcan interface included. I find some header files in the
+</I>&gt;&gt;&gt;<i> kernel headers package that are related to socketcan, but it seems
+</I>&gt;&gt;&gt;<i> that there are no modules that I can load in order to support my
+</I>&gt;&gt;&gt;<i> CANUSB device. This is a usb serial line device as you might know.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> My two questions are:
+</I>&gt;&gt;&gt;<i> Is socketcan available for usage in Ubuntu Jaunty?
+</I>&gt;&gt;&gt;<i> Will socketcan work with CANUSB?
+</I>&gt;&gt;<i> Hi Morgan,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> you would need the 'slcan' driver from the SocketCAN SVN to run you CANUSB
+</I>&gt;&gt;<i> adaptor. The slcan driver implements a serial line discipline for the SLCAN
+</I>&gt;&gt;<i> protocol that's used e.g. by CANUSB.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> There are many threads in both SocketCAN mailing list archives (user/core)
+</I>&gt;&gt;<i> regarding the slcan driver.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Please check out the SVN any try to build the slcan driver for your Ubuntu
+</I>&gt;&gt;<i> kernel. And then you need the slcan_attach tool from trunk/canutils or the
+</I>&gt;&gt;<i> slcand daemon that can also be found there.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> Hi Oliver
+</I>&gt;<i> 
+</I>&gt;<i> Thank you for the quick reply!
+</I>&gt;<i> 
+</I>&gt;<i> I have read about the slcan module, but I cannot find it in the Ubuntu
+</I>&gt;<i> kernel. Is it not built by default?
+</I>
+It's currently not part of the mainline Kernel. You need to build the slcan
+driver 'out of tree'. But you always need to have a proper kernel build
+environment with the correct kernel sources/includes for your Ubuntu kernel
+for that.
+
+&gt;<i> I also tried the virtual
+</I>&gt;<i> interface, but that seems to be unavailable also.
+</I>
+Try
+
+modprobe vcan
+
+and
+
+ip link add type vcan
+
+and
+
+ifconfig vcan0 up
+
+:<i>-)
+</I>
+The vcan driver is in the mainline kernel since 2.6.25.
+
+&gt;<i> I was expecting both
+</I>&gt;<i> of these to be available without having to resolve to SVN.
+</I>
+Hm. Not yet.
+
+&gt;<i> 
+</I>&gt;<i> I have already tested the SVN version by the way, but that was some
+</I>&gt;<i> time ago. I would like to be able to upgrade my Ubuntu installation to
+</I>&gt;<i> the next version (9.10 in october I guess), without having to jump
+</I>&gt;<i> trough a lot of hoops to get everything back up and running.
+</I>
+You would only need to compile the slcan driver according to your running
+kernel again. The can-utils (userspace tools) are quite stable.
+
+&gt;<i> I was
+</I>&gt;<i> hoping that I could avoid any SVN stuff on my Car PC, and instead just
+</I>&gt;<i> use an Ubuntu package repository. A unofficial repository would also
+</I>&gt;<i> work fine, but I have not found any of those eighter.
+</I>
+There had been an attempt to have the canutils available in a debian package -
+but i don't know it's current state.
+
+But saying 'make' and 'make install' in socketcan/trunk/can-utils is not that
+tricky ;-)
+
+&gt;<i> 
+</I>&gt;<i> If SVN is the only solution for now, I guess I will drop it and just
+</I>&gt;<i> make a small python script that does what I want.
+</I>&gt;<i> 
+</I>&gt;<i> BTW, is socketcan compatible with the Python socket bindings?
+</I>
+The question is:
+
+Does Python support other than PF_INET sockets?
+
+If so, they might probably also support PF_CAN sockets.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000868.html">[Socketcan-users] CANUSB and Ubuntu
+</A></li>
+	<LI>Next message: <A HREF="000870.html">[Socketcan-users] CANUSB and Ubuntu
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#869">[ date ]</a>
+              <a href="thread.html#869">[ thread ]</a>
+              <a href="subject.html#869">[ subject ]</a>
+              <a href="author.html#869">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ask : CAN Frames Interpertation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C49D1C65D.2060707%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000737.html">
+   <LINK REL="Next"  HREF="000740.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ask : CAN Frames Interpertation</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C49D1C65D.2060707%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] ask : CAN Frames Interpertation">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Tue Mar 31 09:29:33 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000737.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+        <LI>Next message: <A HREF="000740.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#738">[ date ]</a>
+              <a href="thread.html#738">[ thread ]</a>
+              <a href="subject.html#738">[ subject ]</a>
+              <a href="author.html#738">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Bino Oetomo wrote:
+&gt;<i> Dear All ...
+</I>&gt;<i>
+</I>&gt;<i> With the help of CANOe (Demo) from &quot;Vector Informatik GmbH 
+</I>&gt;<i> &lt;<A HREF="http://www.vector-informatik.com/english/index.html?../products?download.php">http://www.vector-informatik.com/english/index.html?../products?download.php</A>&gt;&quot; 
+</I>&gt;<i> ,
+</I>&gt;<i> I made a note for some structure of PGN 65132 (TCO 1).
+</I>&gt;<i>
+</I>&gt;<i>  From what I read, the &quot;content&quot; of PGN 65132 (Please give me correction) :
+</I>&gt;<i>
+</I>&gt;<i> Byte/Bit/Len : 1/1/3
+</I>&gt;<i> Name : Driver 1 Working State
+</I>&gt;<i> Example : 001
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+(..)
+
+&gt;<i> Byte/Bit/Len : 7/1/16
+</I>&gt;<i> Name : TCO Vehicle Speed
+</I>&gt;<i> Scaling unit : 0.00390625 kph
+</I>&gt;<i> Example : 101000000000000 (80 kph)
+</I>&gt;<i> Byte 7 Hex : 50
+</I>&gt;<i> Byte 8 Hex : 00
+</I>&gt;<i> ------------------------------------------------
+</I>&gt;<i>
+</I>&gt;<i> My Interpertation is ==
+</I>&gt;<i> Final Data Hex : 21.04.00.00.3E.80.50.00 , and
+</I>&gt;<i> Since the PGN is 61532,
+</I>&gt;<i> If I want SocketCan to emulate using cansend, the CAN Frame will be :  
+</I>&gt;<i> 00065132#21.04.00.00.3E.80.50.00
+</I>&gt;<i> ----&gt; cansend vcan0 00065132#21.04.00.00.3E.80.50.00
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Hi Bino,
+
+i just tried
+
+<A HREF="http://www.google.de/search?hl=de&amp;q=PGN+65132&amp;btnG=Suche&amp;meta=">http://www.google.de/search?hl=de&amp;q=PGN+65132&amp;btnG=Suche&amp;meta=</A>
+
+to figure out that PGN is related to the FMS Standard - sorry.
+
+Yesterday i thought, yu were writing about a different Logfile format 
+using the &quot;Portable Game Notation&quot;
+<A HREF="http://en.wikipedia.org/wiki/Pgn">http://en.wikipedia.org/wiki/Pgn</A>
+
+:<i>-))
+</I>
+The first four hits of the above google search made some things clearer 
+to me. The second hit *is* a PDF file of the FMS Standard v1.00, when 
+downloaded and renamed to fms.pdf ... which was very informative to me.
+
+But regarding the Excel sheet (4th hit) it looks like the PGN identifier 
+is encoded into the CAN identifier but you can not take the PGN number 
+as a CAN Identifier directly. I assume this CAN Id building pattern to 
+be specified somewhere in SAE J1939. But i'm unfortunately not a FMS nor 
+J1939 specialist. Anyone else out there?
+
+I think, you'll need some more investigation here.
+
+Regards,
+Oliver
+
+ps. Just one hint, if you try to build your own C-application for 
+extended CAN frames: 'cansend' detects the extended frame format 
+identifier due to the 8 digit length if the Id. When you set a EFF Id 
+value in your frame.can_id you need to set the CAN_EFF_FLAG in 
+frame.can_id, so that it is handled as a EFF CAN Id.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000737.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+	<LI>Next message: <A HREF="000740.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#738">[ date ]</a>
+              <a href="thread.html#738">[ thread ]</a>
+              <a href="subject.html#738">[ subject ]</a>
+              <a href="author.html#738">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

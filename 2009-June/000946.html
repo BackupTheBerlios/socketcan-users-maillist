@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%20Channel%20CAN%20PC104%20Module.&In-Reply-To=%3C4A38A0C0.4010507%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000949.html">
+   <LINK REL="Next"  HREF="000933.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%20Channel%20CAN%20PC104%20Module.&In-Reply-To=%3C4A38A0C0.4010507%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.">wg at grandegger.com
+       </A><BR>
+    <I>Wed Jun 17 09:52:32 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000949.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+        <LI>Next message: <A HREF="000933.html">[Socketcan-users] [PATCH 1/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#946">[ date ]</a>
+              <a href="thread.html#946">[ thread ]</a>
+              <a href="subject.html#946">[ subject ]</a>
+              <a href="author.html#946">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>khurram gulzar wrote:
+&gt;<i> Thanx Oliver and Wolfgang,
+</I>&gt;<i>  
+</I>&gt;<i> It works even with the highest baud i.e. 1M by using the
+</I>&gt;<i> 
+</I>&gt;<i> insmod sja1000-iomux.ko base=0x200,0x204 irq=10,11 speed=1000,1000
+</I>&gt;<i> 
+</I>&gt;<i> Can you tell me a little bit, how iomux sends data to COM1273?
+</I>
+Nice to hear that you got it working. Unfortunately, you are using very
+old code. As you might have realized, we are currently working on
+ISA-bus drivers for the most recent version of Socket-CAN and we could
+provide up-to-date drivers for the cards you are using, in case you are
+willing to switch. The new version is currently developed under the SVN
+branch &quot;branches/netlink&quot; and is in sync with the SJA1000 drivers
+showing up with 2.6.31 in the mainline kernel. To get an impression
+about the improvements of the new version please read chapter 6.5 of:
+
+<A HREF="http://git.kernel.org/?p=linux/kernel/git/davem/net-next-2.6.git;a=blob_plain;f=Documentation/networking/can.txt;hb=HEAD">http://git.kernel.org/?p=linux/kernel/git/davem/net-next-2.6.git;a=blob_plain;f=Documentation/networking/can.txt;hb=HEAD</A>
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000949.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+	<LI>Next message: <A HREF="000933.html">[Socketcan-users] [PATCH 1/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#946">[ date ]</a>
+              <a href="thread.html#946">[ thread ]</a>
+              <a href="subject.html#946">[ subject ]</a>
+              <a href="author.html#946">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

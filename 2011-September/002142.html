@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Find identifier in the can_id
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3Cj5i1ib%24i2u%241%40dough.gmane.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002141.html">
+   <LINK REL="Next"  HREF="002143.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Find identifier in the can_id</H1>
+    <B>Damien R.</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3Cj5i1ib%24i2u%241%40dough.gmane.org%3E"
+       TITLE="[Socketcan-users] Find identifier in the can_id">damienrg+list at gmail.com
+       </A><BR>
+    <I>Fri Sep 23 15:27:50 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002141.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+        <LI>Next message: <A HREF="002143.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2142">[ date ]</a>
+              <a href="thread.html#2142">[ thread ]</a>
+              <a href="subject.html#2142">[ subject ]</a>
+              <a href="author.html#2142">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 23/09/11 11:11, Damien R. wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> I'm using socket can with the raw socket protocol and I receive messages
+</I>&gt;<i> with a 11bits identifier (eg: 0x1C) but the can_id in the raw frame has
+</I>&gt;<i> a size of 32bits. So, I have the following questions:
+</I>&gt;<i> - How can I retrieve the 11bits identifier in the can_id ?
+</I>&gt;<i> - Can you explain the meaning of each bit in the cand_id ?
+</I>&gt;<i> - j1939 use a 29bits identifier, how can I retrieve the 29bits
+</I>&gt;<i> identifier in the can_id ?
+</I>
+Sorry, I did not see the following part of the linux/can.h
+
+/*
+  * Controller Area Network Identifier structure
+  *
+  * bit 0-28	: CAN identifier (11/29 bit)
+  * bit 29	: error frame flag (0 = data frame, 1 = error frame)
+  * bit 30	: remote transmission request flag (1 = rtr frame)
+  * bit 31	: frame format flag (0 = standard 11 bit, 1 = extended 29 bit)
+  */
+typedef __u32 canid_t;
+
+So can someone explain how bits are arranged with a 11 bits identifier? 
+Is it this 0...0 identifier or identifier 0...0 or something else?
+
+Regards,
+Damien R.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002141.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+	<LI>Next message: <A HREF="002143.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2142">[ date ]</a>
+              <a href="thread.html#2142">[ thread ]</a>
+              <a href="subject.html#2142">[ subject ]</a>
+              <a href="author.html#2142">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

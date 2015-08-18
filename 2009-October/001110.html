@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] TSCAN1 driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TSCAN1%20driver&In-Reply-To=%3C7413205a0910292236t7a7c2230h69d198683e766427%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001109.html">
+   <LINK REL="Next"  HREF="001111.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] TSCAN1 driver</H1>
+    <B>Alexandre V&#233;zina</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TSCAN1%20driver&In-Reply-To=%3C7413205a0910292236t7a7c2230h69d198683e766427%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] TSCAN1 driver">alexandre.vez at gmail.com
+       </A><BR>
+    <I>Fri Oct 30 06:36:08 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001109.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001111.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1110">[ date ]</a>
+              <a href="thread.html#1110">[ thread ]</a>
+              <a href="subject.html#1110">[ subject ]</a>
+              <a href="author.html#1110">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Sorry for the &quot;reply to all&quot; problem..
+
+On Tue, Oct 27, 2009 at 2:20 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+
+&gt;<i> &gt;&gt; Does this problem show up with CONFIG_CAN_DEV_SYSFS=y?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt; No actually it doesn't thanks.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; But I have another problem. Again I get a segfault while calling *rmmod*.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I looked at the resource flags at different point in the code and I found
+</I>&gt;<i> &gt; out that they were still ok at the end of the *init *function (but not in
+</I>&gt;<i> &gt; exit or remove).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So I did:
+</I>&gt;<i> &gt; *modprobe tscan1
+</I>&gt;<i> &gt; echo 1000 &gt; /sys/class/net/can0/tx_queue_len
+</I>&gt;<i> &gt; echo 12500 &gt; /sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;<i> &gt; ip link set can0 up type can*
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I then saw that the resource flags were set to a wrong value (like
+</I>&gt;<i> &gt; 102840504) in the *write_reg *function (after setting the can0
+</I>&gt;<i> interface).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Do you know what is happening between the end of *init* and the moment
+</I>&gt;<i> that
+</I>&gt;<i> &gt; *write_reg *is called?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   static int __init tscan1_init(void)
+</I>&gt;<i>  {
+</I>&gt;<i>    int irq;
+</I>&gt;<i>    void *reg_end;
+</I>&gt;<i>    struct resource tscan1_res[2];
+</I>&gt;<i>
+</I>&gt;<i> Shouldn't there be a  &quot;static&quot; in front of &quot;struct resource
+</I>&gt;<i> tscan1_res[2];&quot;. Does it fix your problem?
+</I>&gt;<i>
+</I>
+ Thanks a lot it worked, but can you explain (or point me what to look for
+:<i>P) why this struct needs to be declared static. I do not understand what is
+</I>wrong there so I don't know where to search...
+
+I tried can{ gen | dump }ing and it seems that write_reg is never called.
+
+Calling *ip link set can0 type can bitrate 125000* gives the output:
+*RTNETLINK answers: Operation not supported*
+
+I am really confused about the role of RTNELINK vs iproute2 (compiled from
+git if it can help).
+
+Here are the details and stats of the interface:
+ip -details -statistics link show can0
+7: can0: &lt;LOOPBACK,NOARP,UP,LOWER_UP&gt; mtu 16 qdisc pfifo_fast state UNKNOWN
+qlen 1000
+    link/can
+    RX: bytes  packets  errors  dropped overrun mcast
+    574016     71752    71752   0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    0          0        0       0       0       0
+
+Thank you very much
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091030/cf45e45b/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091030/cf45e45b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001109.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001111.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1110">[ date ]</a>
+              <a href="thread.html#1110">[ thread ]</a>
+              <a href="subject.html#1110">[ subject ]</a>
+              <a href="author.html#1110">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

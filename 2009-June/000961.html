@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] atomic operations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3C4A3F9C8A.3020300%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000959.html">
+   <LINK REL="Next"  HREF="000970.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] atomic operations</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3C4A3F9C8A.3020300%40grandegger.com%3E"
+       TITLE="[Socketcan-users] atomic operations">wg at grandegger.com
+       </A><BR>
+    <I>Mon Jun 22 17:00:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000959.html">[Socketcan-users] atomic operations
+</A></li>
+        <LI>Next message: <A HREF="000970.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#961">[ date ]</a>
+              <a href="thread.html#961">[ thread ]</a>
+              <a href="subject.html#961">[ subject ]</a>
+              <a href="author.html#961">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian,
+
+christian pellegrin wrote:
+&gt;<i> On Sat, Jun 20, 2009 at 9:57 AM, christian pellegrin&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt; wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> I had a look into the new code. Acquiring state is now called by netlink. The
+</I>&gt;&gt;&gt;<i> locking path problem could indeed be solved by this. I'll test it as soon as I
+</I>&gt;&gt;&gt;<i> get some time.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> Should be fixed in netlink. I'm cleaning up the &quot;final&quot; patch from the
+</I>&gt;&gt;<i> suggestions I got in the ml and I hope to resend soon after testing.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Just my 2 eurocents on this point from a more general view. This
+</I>&gt;<i> problem is quite common in Linux driver programming, since there are
+</I>&gt;<i> some context when you just cannot sleep. And there are many subtle
+</I>&gt;<i> ways how you can find yourself calling some code that does without
+</I>&gt;<i> knowing it. Unfortunately I had to do some work on other OSes like
+</I>&gt;<i> windoze ce for a living: there quite everything (only a tiny bit of
+</I>&gt;<i> code called HAL is different)  is a thread with the same API like
+</I>&gt;<i> userspace that can block: it's easier to write code but all the
+</I>&gt;<i> locking issues are on your shoulders. The result is that code quality
+</I>&gt;<i> (even that released by big companies, I can prove it!) is awful
+</I>&gt;<i> compared to that of Linux with tons of problems facing now and then
+</I>&gt;<i> and very difficult to debug. So I think this is good for cell phones
+</I>&gt;<i> or mp3 players ... who cares if you have to reset them sometimes. But
+</I>&gt;<i> it's crap for serious use (even if I saw crazy people using windows ce
+</I>&gt;<i> in military applications, God help final users!).
+</I>&gt;<i> 
+</I>&gt;<i> I would like to see mcp251x driver in mainstream because it can
+</I>&gt;<i> trigger many interesting situations that perhaps should be discussed
+</I>&gt;<i> by people that knows much more than me about Linux. For example the PM
+</I>&gt;<i> code is inelegant (the work queue must look after freezing condition
+</I>&gt;<i> itself) but I really don't know how to improve it. With threaded
+</I>&gt;<i> interrupts coming and tasklets being phased out for worqueues and
+</I>&gt;<i> kernel threads kernel programming could be easier but we risk to get
+</I>&gt;<i> all the locking burden on the driver writer. So having code reviewed
+</I>&gt;<i> by good kernel hackers will be even more important!
+</I>
+After fixing the remaining issues, please feel free to prepare a kernel
+patch against Dave Miller's &quot;net-net-2.6&quot; tree and post it to the netdev
+mailing list with CC to this and the Linux SPI mailing list. If you are
+lucky (or unlucky depending on your free time and mood to deal with
+bigger changes ;-) you will get constructive feedback. I'm wondering if
+the NAPI interface could be used for deferred interrupt handling instead
+of the work-queues.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000959.html">[Socketcan-users] atomic operations
+</A></li>
+	<LI>Next message: <A HREF="000970.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#961">[ date ]</a>
+              <a href="thread.html#961">[ thread ]</a>
+              <a href="subject.html#961">[ subject ]</a>
+              <a href="author.html#961">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

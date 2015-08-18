@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44ECB93E.803%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000022.html">
+   <LINK REL="Next"  HREF="000029.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44ECB93E.803%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Aug 23 22:23:26 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000022.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000029.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jan Kiszka wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Jan Kiszka wrote:
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> Hartkopp, Oliver (K-GEFE/E) wrote:
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at denx.de</A> wrote:
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> while playing with RAW CAN sockets of LLCF (socketcan for Linux 2.4) I
+</I>&gt;&gt;&gt;&gt;&gt;<i> realized, that TX messages are automatically looped back to the local
+</I>&gt;&gt;&gt;&gt;&gt;<i> interface. What is the intention of this feature? Can this feature be
+</I>&gt;&gt;&gt;&gt;&gt;<i> switched off?
+</I>&gt;&gt;&gt;&gt;&gt;<i>           
+</I>&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> this is indeed a wanted feature, as you may have more than one
+</I>&gt;&gt;&gt;&gt;<i> application
+</I>&gt;&gt;&gt;&gt;<i> working on the same CAN-netdevice. Netdevices only send or receive
+</I>&gt;&gt;&gt;&gt;<i> frames -
+</I>&gt;&gt;&gt;&gt;<i> they do not implement any loopback funktionality.
+</I>&gt;&gt;&gt;&gt;<i> But this functionality is important implementing a broadcast bus like
+</I>&gt;&gt;&gt;&gt;<i> the
+</I>&gt;&gt;&gt;&gt;<i> CAN-bus.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;<i> Mmh, that's not that obvious to me (did I miss the related discussion on
+</I>&gt;&gt;&gt;<i> this?). 
+</I>Hm - there was never a discussion on this, as we did not discuss these 
+things in this details since end of last year ...
+&gt;&gt;&gt;<i> We are not designing a new IPC mechanism here, but a networking
+</I>&gt;&gt;&gt;<i> API.
+</I>&gt;&gt;&gt;<i>       
+</I>Yep. But the question is, how users that are coming from the 
+standard-IT-business (or fresh from university making a diploma in 
+computer science) would expect the system to work, when they are running 
+several processes accessing one CAN-bus via RAW-Sockets. We had exactly 
+that problem, that e.g. the debugging of CAN-applications (using the 
+on-board RAW-socket reader tools like 'candump') was impossible as you 
+were not able to see the frames that the other application / 
+protocol-instance was sending on the bus. This was unusable. And 
+therefore we checked the solutions
+
+- implement it into the netdevice driver (very complex)
+- implement it into af_can.c (very easy)
+
+The implementation into af_can.c caused the vcan-driver to become 
+something like a nul device.
+
+&gt;&gt;&gt;<i> I'm not disputing that this can be a useful feature for certain
+</I>&gt;&gt;&gt;<i> applications, but I'm convinced it should be only optional and off by
+</I>&gt;&gt;&gt;<i> default. 
+</I>I have many other use-cases (where debugging and logging are the most 
+important ones) that require the loopback functionality. It's the only 
+way to make an application movable so that it is regardless on which 
+linux-box it is running. If you have three applications runnig 
+independently on three linux-boxes and talking to each other (and to 
+other CAN-ECUs), i would expect, that i can also put these three 
+applications onto one linux box talking to each other and to other ECUs. 
+And all this without recompiling - that's standard behaviour in other 
+network protocols! And that is implemented! If there is a really need to 
+disable the loopback, i am not against some CONFIG-switch. But it has to 
+be ON by default, as this is the behaviour most IT application 
+programmers would expect. Not seeing completely whats going on on the 
+bus is dissatisfying. If you make an TCP-dump you also get incoming and 
+outgoing traffic.
+&gt;&gt;&gt;<i> That would follow the rule of least surprise when comparing CAN
+</I>&gt;&gt;&gt;<i> with other networking devices.
+</I>The CAN has multiple differences to what we know from other networking 
+stuff (e.g. due to it's different addressing concept). This makes it 
+that complicated to create a socket interface with a IT flavour, that's 
+derived from TCP/IP. The IP has ethernet-addresses, IP -address, ports 
+and routing. The CAN-sockets have the RX-dispatcher to distribute 
+registered CAN-Frames - a comletely different approach to the Internet 
+Protocol but necessary to handle CAN-addressing needs.
+&gt;&gt;&gt;<i>  The overhead when it's unused is another
+</I>&gt;&gt;&gt;<i> counterargument.
+</I>&gt;&gt;&gt;<i>       
+</I>Doing it like it's implemented guarantees the minimum overhead 
+(presuming that loopback is needed).
+And loopback IS needed (see above).
+&gt;&gt;&gt;<i> This feature is not included in the RT-variant so far, and I can only
+</I>&gt;&gt;&gt;<i> imagine that it would make sense to add it if
+</I>&gt;&gt;&gt;<i>  A) people ask for it and
+</I>&gt;&gt;&gt;<i>  B) it's user-controllable.
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> Yes, I already put it on my TODO list. I would made it an option
+</I>&gt;&gt;<i> configurable via kernel configuration parameter. I also don't like to
+</I>&gt;&gt;<i> have it build in by default.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     
+</I>I ask for it :-)
+
+I don't know, how you have been working so far. Did you never use some 
+tracing tools on your local machine?
+If not - why not? I think any other developer uses tcpdump and etherreal 
+on his local machine, when he programms / debugs his modified 
+application or networking code!?!!
+
+So it should be really ON by default.
+&gt;<i> My feeling is that the involved code size increment can be fairly small,
+</I>&gt;<i> rather the lengthened code path on transmission (+it's locking
+</I>&gt;<i> dependencies) worries me when it's not at least runtime-configurable.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>Yes - it is indeed small and has zero copying ... see af_can.c:
+
+/**************************************************/
+/* af_can tx path                                 */
+/**************************************************/
+
+int can_send(struct sk_buff *skb)
+{
+	struct sk_buff *newskb = skb_clone(skb, GFP_ATOMIC);
+	int err;
+
+	if (!(skb-&gt;dev-&gt;flags &amp; IFF_UP))
+		err = -ENETDOWN;
+	else if ((err = dev_queue_xmit(skb)) &gt; 0)  /* send to netdevice */
+		err = net_xmit_errno(err);
+
+	/* update statistics */
+	stats.tx_frames++;
+	stats.tx_frames_delta++;
+
+	newskb-&gt;protocol  = htons(ETH_P_CAN);
+	newskb-&gt;ip_summed = CHECKSUM_UNNECESSARY;
+	netif_rx(newskb);                          /* local loopback */
+
+	return err;
+}
+
+&gt;<i> However, point A) still stands. Or could someone explain the broad
+</I>&gt;<i> usefulness to me? 
+</I>Done! Can you follow my arguments knowing these requirements now?
+
+Regards,
+
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000022.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000029.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

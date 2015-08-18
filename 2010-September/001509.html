@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Translated API documentation available
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Translated%20API%20documentation%20available&In-Reply-To=%3C4C9F5869.8050904%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001508.html">
+   <LINK REL="Next"  HREF="001510.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Translated API documentation available</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Translated%20API%20documentation%20available&In-Reply-To=%3C4C9F5869.8050904%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Translated API documentation available">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Sep 26 16:27:53 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001508.html">[Socketcan-users] Translated API documentation available
+</A></li>
+        <LI>Next message: <A HREF="001510.html">[Socketcan-users] Translated API documentation available
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1509">[ date ]</a>
+              <a href="thread.html#1509">[ thread ]</a>
+              <a href="subject.html#1509">[ subject ]</a>
+              <a href="author.html#1509">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 25.09.2010 23:20, Daniele Venzano wrote:
+
+Hello Daniele,
+
+&gt;<i> since I wanted to use BCM sockets for a couple of application we are
+</I>&gt;<i> developing at my company, I had to find out how they actually work.
+</I>
+Thanks for picking this up - indeed i had that on my todo list much too long.
+
+&gt;<i> I found the German LaTeX documents inside the SVN repository and I
+</I>&gt;<i> translated them in English. I put the files on a website and I can keep
+</I>&gt;<i> them there forever, but I think they could also be put with their older
+</I>&gt;<i> german brothers in the source repository.
+</I>
+Unforunately *many* things (like struct sockaddr_can) was outdated in the TeX
+documentation. Also the introduction and the legal stuff and the
+procfs-entries (like /proc/net/can/version or the sja1000 driver stuff) has
+been changed or removed entirely. LLCF could be renamed to SocketCAN, etc.
+
+In general i would suggest to add the API documentation to
+
+    linux/Documentation/networking/can.txt
+
+but i was unsure if the BCM stuff better would go into
+
+    linux/Documentation/networking/can-bcm.txt
+
+to prevent can.txt being growing too much.
+
+Finally i would tend to add the translated BCM documentation, the timestamp
+stuff and probably some more procfs details in
+Documentation/networking/can.txt which is the up-to-date documentation. E.g.
+chapter 4.2
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.35.5/Documentation/networking/can.txt#L474">http://lxr.linux.no/#linux+v2.6.35.5/Documentation/networking/can.txt#L474</A>
+
+has been already reserved for the BCM.
+
+I would suggest to work on the SVN
+
+   socketcan/trunk/kernel/2.6/Documentation/networking/can.txt
+
+until the documentation is fine to be added to mainline Linux.
+
+Currently there's only a tiny difference, someone fixed in Mainline :-))
+
+--- socketcan/trunk/kernel/2.6/Documentation/networking/can.txt
++++ net-next-2.6/Documentation/networking/can.txt
+@@ -334,7 +334,7 @@
+             return 1;
+     }
+
+-    /* paraniod check ... */
++    /* paranoid check ... */
+     if (nbytes &lt; sizeof(struct can_frame)) {
+             fprintf(stderr, &quot;read: incomplete CAN frame\n&quot;);
+             return 1;
+
+
+Would this approach be ok for you?
+
+Tnx &amp; best regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001508.html">[Socketcan-users] Translated API documentation available
+</A></li>
+	<LI>Next message: <A HREF="001510.html">[Socketcan-users] Translated API documentation available
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1509">[ date ]</a>
+              <a href="thread.html#1509">[ thread ]</a>
+              <a href="subject.html#1509">[ subject ]</a>
+              <a href="author.html#1509">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

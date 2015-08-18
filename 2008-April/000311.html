@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Usage of Kvaser Leaf Light HS USB
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Usage%20of%20Kvaser%20Leaf%20Light%20HS%20USB&In-Reply-To=%3C47F3A960.1050804%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000310.html">
+   <LINK REL="Next"  HREF="000312.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Usage of Kvaser Leaf Light HS USB</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Usage%20of%20Kvaser%20Leaf%20Light%20HS%20USB&In-Reply-To=%3C47F3A960.1050804%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Usage of Kvaser Leaf Light HS USB">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed Apr  2 17:42:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000310.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+        <LI>Next message: <A HREF="000312.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#311">[ date ]</a>
+              <a href="thread.html#311">[ thread ]</a>
+              <a href="subject.html#311">[ subject ]</a>
+              <a href="author.html#311">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Paolo Doz wrote:
+&gt;<i> I'm trying to use the Kvaser Leaf Light HS USB with socketcan.
+</I>&gt;<i> I've downloaded the linux driver 4.72Beta from Kvaser website, and
+</I>&gt;<i> installed it. Pluging the device and typing the following command ls
+</I>&gt;<i> -l /dev/leaf* I see that there is the corresponding node in the /dev
+</I>&gt;<i> directory (leaf0).
+</I>&gt;<i> Also in /proc dir there is the leaf file with this content :
+</I>&gt;<i>        total channels 1
+</I>&gt;<i>        minor numbers 0
+</I>&gt;<i>
+</I>&gt;<i> So I guess that the device has been correctly recognized.
+</I>&gt;<i>   
+</I>
+Yes, that's right.
+
+&gt;<i> Now my question: is the previous driver compatible with socketcan, or
+</I>&gt;<i> are some modifications needed?
+</I>&gt;<i>   
+</I>
+The SocketCAN approach uses the Linux networking subsystem to work with 
+CAN as any other networking does. Therefore the device driver model is a 
+network device driver (like your ethernet card) and NOT a character 
+device (like e.g a serial adaptor or unfortunately the current Kvaser 
+driver).
+
+Due to the netdevice driver model the CAN interface is always similar to 
+the application, which allows to run the same application on different 
+CAN hardware. Of course you also won't be happy to reprogramm your 
+web-browser when you change your Ethernet card in your system ;-)
+
+Programming a netdevice driver is in most cases easier than handling all 
+the FIFO stuff and different APIs yourself when programming a character 
+device. Although we need to wait for the Kvaser driver supporting the 
+netdevice driver modell ... as it is open source you are heavily invited 
+to modify it :-)
+Or just give the developers a hint about the coming CAN subsystem in the 
+Linux 2.6.25 kernel.
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000310.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+	<LI>Next message: <A HREF="000312.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#311">[ date ]</a>
+              <a href="thread.html#311">[ thread ]</a>
+              <a href="subject.html#311">[ subject ]</a>
+              <a href="author.html#311">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

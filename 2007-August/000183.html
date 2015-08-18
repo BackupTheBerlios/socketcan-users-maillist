@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Very NEWBIE needs help
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3Ced84ed090708140540s771db63ald9d3e2423919e53c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000182.html">
+   <LINK REL="Next"  HREF="000184.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Very NEWBIE needs help</H1>
+    <B>Fabri</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3Ced84ed090708140540s771db63ald9d3e2423919e53c%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Very NEWBIE needs help">rider4ever at gmail.com
+       </A><BR>
+    <I>Tue Aug 14 14:40:52 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000182.html">[Socketcan-users] Kernel integration
+</A></li>
+        <LI>Next message: <A HREF="000184.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#183">[ date ]</a>
+              <a href="thread.html#183">[ thread ]</a>
+              <a href="subject.html#183">[ subject ]</a>
+              <a href="author.html#183">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi to everybody.
+This morning I was trying to add the last release of Socket-CAN to Ubuntu
+Feisty 7.04, following the istructions contained in the README that can be
+found in the trunk dir. All was fine and I was able to install the kernel
+modules (at least I hope so, since depmod didn't output any errors) but then
+I got in trouble when I tried to launch some tests.
+
+In order to verify that everything is ok I only need to execute the programs
+contained in the &quot;test&quot; dir, right?
+Doing so, every time the socket function is called in the code it claims
+that the protocol is unsupported and it stops. I have the kernel 2.6.20.16,
+what should I do?
+
+A last question: I wasn't able to create a new device driver, for example by
+duplicating the existing vcan.c file. I named it vmcan.c and I modified the
+following files
+
+/trunk/kernel/2.6/Makefile :: added -&gt;
+export CONFIG_CAN_VMCAN=m
+
+/trunk/kernel/2.6/drivers/net/can/Makefile :: added -&gt;
+export CONFIG_CAN_VMCAN=m
+obj-$(CONFIG_CAN_VMCAN) += vmcan.o
+
+/trunk/kernel/2.6/drivers/net/can/Makefile.kernel :: added -&gt;
+obj-$(CONFIG_CAN_VMCAN) += vmcan.o
+
+Kconfig and Kconfig.kernel were updated as well, but  when I launch &quot;make&quot;
+in the parent directory no vmcan.c is compiled.
+What am I missing?
+
+Thank you in advance for you patience and sorry for my silly questions :)
+
+Fabrizio Garetto
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20070814/4e7446c7/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20070814/4e7446c7/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000182.html">[Socketcan-users] Kernel integration
+</A></li>
+	<LI>Next message: <A HREF="000184.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#183">[ date ]</a>
+              <a href="thread.html#183">[ thread ]</a>
+              <a href="subject.html#183">[ subject ]</a>
+              <a href="author.html#183">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

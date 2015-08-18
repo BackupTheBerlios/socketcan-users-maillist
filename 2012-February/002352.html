@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Message stalls in SocketCan Layer?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Message%20stalls%20in%20SocketCan%20Layer%3F&In-Reply-To=%3C4F29091F.4010908%40in.tum.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002355.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Message stalls in SocketCan Layer?</H1>
+    <B>Michael J&#228;ntsch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Message%20stalls%20in%20SocketCan%20Layer%3F&In-Reply-To=%3C4F29091F.4010908%40in.tum.de%3E"
+       TITLE="[Socketcan-users] Message stalls in SocketCan Layer?">michael.jaentsch at in.tum.de
+       </A><BR>
+    <I>Wed Feb  1 10:42:55 CET 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002355.html">[Socketcan-users] Message stalls in SocketCan Layer?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2352">[ date ]</a>
+              <a href="thread.html#2352">[ thread ]</a>
+              <a href="subject.html#2352">[ subject ]</a>
+              <a href="author.html#2352">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi everyone,
+
+for about a month now, I have a problem with messages that get stalled,
+causing the select system call on several CAN sockets to time out. We're
+using the PEAK PCAN-USB interface on a Ubuntu 11.10 (kernel:
+3.0.0-15-generic). I've been using the system for about 2 years now and
+there were no revelant changes to the protocol or software lately. This
+problem occurs quite frequently now.
+
+What happens is, that our master sends out a message and receives 13
+reply messages from 13 different nodes on the bus, at a frequency of
+50Hz. This works for some time (minutes) and then a timeout on the
+select system call occurs that reads from the 13 sockets. Wireshark
+shows that there is an unusual time delay between the messages. They get
+sent at the same time and are normally received within the time of
+2-4ms. When the timeout occurs, this time is 30ms. When I turn on the
+debug information in the peak driver I see debug output with time
+stamps. On this layer the times are still ok when the timeout occurs.
+Talking to the peak support, I got pointed at the socket can layer which
+in this case might be causing the problem. However, I have no idea how
+to debug this and find out more about the problem.
+
+This part of the system is quite crucial, causing our robot controller
+to fail. Time delays in the area of 30ms are extremely long. I don't see
+why this would be happening and especially why it starts happening now.
+Were there any changes to the socketcan layer and/or the kernel lately
+that might be causing this?
+
+thanks a lot
+Cheers
+Michael
+
+-- 
+Technische Universit&#228;t M&#252;nchen
+Michael J&#228;ntsch
+Fakult&#228;t f&#252;r Informatik
+Robotics and Embedded Systems
+Parkring 13
+85748 Garching bei M&#252;nchen
+Tel: + 49.89.289.17626
+Fax: + 49.89.289.17637
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">michael.jaentsch at in.tum.de</A>
+www6.in.tum.de
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002355.html">[Socketcan-users] Message stalls in SocketCan Layer?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2352">[ date ]</a>
+              <a href="thread.html#2352">[ thread ]</a>
+              <a href="subject.html#2352">[ subject ]</a>
+              <a href="author.html#2352">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

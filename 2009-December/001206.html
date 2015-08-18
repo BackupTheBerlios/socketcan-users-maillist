@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kernel Oops and update for MPC5200B CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20Oops%20and%20update%20for%20MPC5200B%20CAN&In-Reply-To=%3C1260476812.12419.60.camel%40slamon-laptop.novariant.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001205.html">
+   <LINK REL="Next"  HREF="001207.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kernel Oops and update for MPC5200B CAN</H1>
+    <B>Sylvain Lamontagne</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20Oops%20and%20update%20for%20MPC5200B%20CAN&In-Reply-To=%3C1260476812.12419.60.camel%40slamon-laptop.novariant.com%3E"
+       TITLE="[Socketcan-users] Kernel Oops and update for MPC5200B CAN">sylvain.lamontagne at novariant.com
+       </A><BR>
+    <I>Thu Dec 10 21:26:52 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001205.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+        <LI>Next message: <A HREF="001207.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1206">[ date ]</a>
+              <a href="thread.html#1206">[ thread ]</a>
+              <a href="subject.html#1206">[ subject ]</a>
+              <a href="author.html#1206">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Le jeudi 10 d&#233;cembre 2009 &#224; 16:42 +0100, Wolfgang Grandegger a &#233;crit :
+&gt;<i> Sylvain Lamontagne wrote:
+</I>&gt;<i> &gt; Hi
+</I>&gt;<i> &gt; I am working with a custom MPC5200B based board and the CAN is mostly
+</I>&gt;<i> &gt; working on it, using the revision 958 on the berlios svn. I know it's
+</I>&gt;<i> &gt; quite old, this is why this email have two part. The kernel is version
+</I>&gt;<i> &gt; 2.6.29.2 with some patches for our internal needs.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; First: 
+</I>&gt;<i> &gt; I have been trying to figure out why sometime I'm getting a kernel Oops
+</I>&gt;<i> &gt; when the command &quot;ifconfig canX down&quot; is used. The Oops is pretty random
+</I>&gt;<i> &gt; so there is no easy way (that I found) to reproduce it, therefor it is
+</I>&gt;<i> &gt; hard to debug. I've attached the Oops to this email. (I have plenty of
+</I>&gt;<i> &gt; similar)
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; My question regarding this first issue is: Is it known that this version
+</I>&gt;<i> &gt; (958) of the driver can cause a kernel Oops ?
+</I>&gt;<i> &gt; Regarding this email it seems that I'm not alone.
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/pipermail/socketcan-users/2009-February/000646.html">https://lists.berlios.de/pipermail/socketcan-users/2009-February/000646.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> OK, I have no quick solution for that problem and as the version is
+</I>&gt;<i> already quite old... let's try with up-to-date software.
+</I>&gt;<i> 
+</I>Yeah no problem, I'll test with the new driver for a while and if I see
+this kernel oops again I'll repost here.
+
+&gt;<i> &gt; I though that updating the driver would be a good thing, so I tried and
+</I>&gt;<i> &gt; this is why I have a second part to this email.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Second:
+</I>&gt;<i> &gt; By reading the various source of information on the internet I have
+</I>&gt;<i> &gt; discovered that SocketCAN source code seems now in two different places.
+</I>&gt;<i> &gt; The berlios SVN and this git
+</I>&gt;<i> &gt; <A HREF="git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6">git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6</A>
+</I>&gt;<i> 
+</I>&gt;<i> There is MSCAN-Support in the mainline kernel since 2.6.32. The code at
+</I>&gt;<i> BerliOS is (usually) in sync with the official version and it still
+</I>&gt;<i> supports older versions of the kernel.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; So I'm a bit confused about which I should use, but I tried with the
+</I>&gt;<i> &gt; berlios svn r1095 but it seems that the way I was compiling before
+</I>&gt;<i> &gt; doesn't work anymore ... it seems to compile but the mscan driver is not
+</I>&gt;<i> &gt; compiled. I get some .ko but no mscan-mpc52xx.ko mscan.ko or
+</I>&gt;<i> &gt; mscan_5xxx.ko anywhere... previously I was getting mscan-mpc52xx.ko
+</I>&gt;<i> 
+</I>&gt;<i> $ cd trunk/kernel/2.6
+</I>&gt;<i> $ make ARCH=powerpc \
+</I>&gt;<i>     KERNELDIR=$KSRC CONFIG_CAN_DEBUG_DEVICES=y \
+</I>&gt;<i>     CONFIG_CAN_DEV=m \
+</I>&gt;<i>     CONFIG_CAN_MSCAN=m CONFIG_CAN_MPC52XX=m CONFIG_CAN_MPC5XXX=m \
+</I>&gt;<i> 
+</I>&gt;<i> should do the job. For 2.6.29 CONFIG_CAN_MPC5XXX=m should just be fine.
+</I>
+Yep it worked fine, though I think maybe there is something odd in the
+different Makefile. If I don't specify the CONFIG_CAN_* options above
+I'll not get the driver. Specifying only CONFIG_CAN_MPC5XXX=m instead of
+both worked fine for my kernel.
+  
+&gt;<i> 
+</I>&gt;<i> &gt; I probably do something wrong, but to verify that I would need the
+</I>&gt;<i> &gt; procedure to compiled the drivers correctly or even better to include
+</I>&gt;<i> &gt; them in the kernel as a simple patch.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; And also before someone suggest it ... I can't upgrade the kernel to a
+</I>&gt;<i> &gt; new version on this unit without having really good reason.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; So, what is the way to get a newer version of the SocketCAN driver to
+</I>&gt;<i> &gt; work on a linux kernel 2.6.29.2 ?
+</I>&gt;<i> 
+</I>&gt;<i> See above. Note that the official kernel version now uses the netlink
+</I>&gt;<i> interface to configure the device, instead of the deprecated sysfs.
+</I>Yep, I used git version of iproute2 to configure it and everything is
+working fine. I'll do more testing in the following days, but it seems
+pretty well so far.
+
+Thanks a lot!
+
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; ------------------------------------------------------------------------
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; _______________________________________________
+</I>&gt;<i> &gt; Socketcan-users mailing list
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+-- 
+Sylvain Lamontagne &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">sylvain.lamontagne at novariant.com</A>&gt;
+Novariant
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001205.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+	<LI>Next message: <A HREF="001207.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1206">[ date ]</a>
+              <a href="thread.html#1206">[ thread ]</a>
+              <a href="subject.html#1206">[ subject ]</a>
+              <a href="author.html#1206">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

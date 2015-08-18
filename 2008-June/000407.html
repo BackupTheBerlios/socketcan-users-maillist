@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] sysfs interface
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20sysfs%20interface&In-Reply-To=%3C485639DA.7060103%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000406.html">
+   <LINK REL="Next"  HREF="000408.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] sysfs interface</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20sysfs%20interface&In-Reply-To=%3C485639DA.7060103%40grandegger.com%3E"
+       TITLE="[Socketcan-users] sysfs interface">wg at grandegger.com
+       </A><BR>
+    <I>Mon Jun 16 12:00:58 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000406.html">[Socketcan-users] sysfs interface
+</A></li>
+        <LI>Next message: <A HREF="000408.html">[Socketcan-users] sequin inartificial
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#407">[ date ]</a>
+              <a href="thread.html#407">[ thread ]</a>
+              <a href="subject.html#407">[ subject ]</a>
+              <a href="author.html#407">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Vladislav,
+
+Vladislav Gribov wrote:
+&gt;<i> Hi,
+</I>&gt;<i> are there already any docs about new sysfs interface?
+</I>&gt;<i> 
+</I>&gt;<i> Need it for porting old ioctl interface to sysfs (CAN controller is
+</I>&gt;<i> SJA1000).Folowing features are required:
+</I>&gt;<i> 
+</I>&gt;<i> 1) get CAN state 
+</I>&gt;<i> ioctl : SIOCGCANSTATE (returned CAN_STATE_BUS_OFF,
+</I>&gt;<i> CAN_STATE_BUS_WARNING, CAN_STATE_ACTIVE)
+</I>&gt;<i> sysfs : guess /sys/class/net/can0/can_state (&quot;bus-off&quot;, &quot;bus-warn&quot;,
+</I>&gt;<i> &quot;active&quot;)
+</I>
+Yep, it can be  &quot;active&quot;, &quot;bus-warn&quot;, &quot;bus-pass&quot; , &quot;bus-off&quot; and
+&quot;stopped&quot;. Note that the application should receive and inspect error 
+frames reporting state changes as well. Reading the SYSFS file directly 
+is discouraged.
+
+&gt;<i> 
+</I>&gt;<i> 2) start CAN
+</I>&gt;<i> ioctl : SIOCSCANMODE (set to CAN_MODE_START)
+</I>&gt;<i> sysfs : ?
+</I>
+ifconfig can0 up
+
+&gt;<i> 3) stop CAN
+</I>&gt;<i> ioctl : SIOCSCANMODE (set to CAN_MODE_STOP)
+</I>&gt;<i> sysfs : ?
+</I>
+ifconfig can0 down
+
+The CAN device can be restarted for bus-off recovery writing to 
+sys/class/net/can0/can_restart.
+
+&gt;<i> 4) set CAN bitrate
+</I>&gt;<i> ioctl : SIOCSCANBAUDRATE
+</I>&gt;<i> this issue is not yet clear defined, i know
+</I>
+sys/class/net/can0/can_bitrate. But the interface for bit-rate and bit 
+timing parameter setting is currently discussed. Note also, that the 
+bit-rate can only be modified when the device is down.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000406.html">[Socketcan-users] sysfs interface
+</A></li>
+	<LI>Next message: <A HREF="000408.html">[Socketcan-users] sequin inartificial
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#407">[ date ]</a>
+              <a href="thread.html#407">[ thread ]</a>
+              <a href="subject.html#407">[ subject ]</a>
+              <a href="author.html#407">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

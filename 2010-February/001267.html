@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [PATCH] bus-error tec rec
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BPATCH%5D%20bus-error%20tec%20rec&In-Reply-To=%3Cmailman.16.1331738233.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001265.html">
+   <LINK REL="Next"  HREF="001301.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[PATCH] bus-error tec rec</H1>
+    <B>Christian Pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BPATCH%5D%20bus-error%20tec%20rec&In-Reply-To=%3Cmailman.16.1331738233.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="[PATCH] bus-error tec rec">chripell at fsfe.org
+       </A><BR>
+    <I>Sun Feb  7 09:58:42 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001265.html">[PATCH] rec tec
+</A></li>
+        <LI>Next message: <A HREF="001301.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1267">[ date ]</a>
+              <a href="thread.html#1267">[ thread ]</a>
+              <a href="subject.html#1267">[ subject ]</a>
+              <a href="author.html#1267">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>---
+ include/linux/can/netlink.h |    3 +++
+ ip/iplink_can.c             |   14 +++++++++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/can/netlink.h b/include/linux/can/netlink.h
+index bd969a6..364ae21 100644
+--- a/include/linux/can/netlink.h
++++ b/include/linux/can/netlink.h
+@@ -81,6 +81,7 @@ struct can_ctrlmode {
+ #define CAN_CTRLMODE_LISTENONLY	0x2 	/* Listen-only mode */
+ #define CAN_CTRLMODE_3_SAMPLES	0x4	/* Triple sampling mode */
+ #define CAN_CTRLMODE_ONE_SHOT   0x8     /* One-Shot mode */
++#define CAN_CTRLMODE_BUS_ERROR	0x10	/* Bus-error support mode */
+
+
+ /*
+@@ -93,6 +94,8 @@ struct can_device_stats {
+ 	__u32 bus_off;		/* Changes to bus off state */
+ 	__u32 arbitration_lost; /* Arbitration lost errors */
+ 	__u32 restarts;		/* CAN controller re-starts */
++	__u8 tec;
++	__u8 rec;
+ };
+
+ /*
+diff --git a/ip/iplink_can.c b/ip/iplink_can.c
+index 5d0d82c..5bd1953 100644
+--- a/ip/iplink_can.c
++++ b/ip/iplink_can.c
+@@ -31,6 +31,7 @@ static void usage(void)
+ 	        &quot;\t[ listen-only { on | off } ]\n&quot;
+ 	        &quot;\t[ triple-sampling { on | off } ]\n&quot;
+ 	        &quot;\t[ one-shot { on | off } ]\n&quot;
++	        &quot;\t[ bus-error { on | off } ]\n&quot;
+ 		&quot;\n&quot;
+ 	        &quot;\t[ restart-ms TIME-MS ]\n&quot;
+ 	        &quot;\t[ restart ]\n&quot;
+@@ -86,6 +87,7 @@ static void print_ctrlmode(FILE *f, __u32 cm)
+ 	_PF(CAN_CTRLMODE_LISTENONLY, &quot;LISTEN-ONLY&quot;);
+ 	_PF(CAN_CTRLMODE_3_SAMPLES, &quot;TRIPLE-SAMPLING&quot;);
+ 	_PF(CAN_CTRLMODE_ONE_SHOT, &quot;ONE-SHOT&quot;);
++	_PF(CAN_CTRLMODE_ONE_SHOT, &quot;BUS-ERROR&quot;);
+ #undef _PF
+ 	if (cm)
+ 		fprintf(f, &quot;%x&quot;, cm);
+@@ -148,6 +150,10 @@ static int can_parse_opt(struct link_util *lu,
+int argc, char **argv,
+ 			NEXT_ARG();
+ 			set_ctrlmode(&quot;one-shot&quot;, *argv, &amp;cm,
+ 				     CAN_CTRLMODE_ONE_SHOT);
++		} else if (matches(*argv, &quot;bus-error&quot;) == 0) {
++			NEXT_ARG();
++			set_ctrlmode(&quot;bus-error&quot;, *argv, &amp;cm,
++				     CAN_CTRLMODE_BUS_ERROR);
+ 		} else if (matches(*argv, &quot;restart&quot;) == 0) {
+ 			__u32 val = 1;
+
+@@ -253,11 +259,13 @@ static void can_print_xstats(struct link_util *lu,
+ 		stats = RTA_DATA(xstats);
+ 		fprintf(f, &quot;\n    &quot;
+ 			&quot;re-started bus-errors arbit-lost &quot;
+-			&quot;error-warn error-pass bus-off&quot;);
+-		fprintf(f, &quot;\n    %-10d %-10d %-10d %-10d %-10d %-10d&quot;,
++			&quot;error-warn error-pass bus-off    &quot;
++			&quot;tec        rec&quot;);
++		fprintf(f, &quot;\n    %-10d %-10d %-10d %-10d %-10d %-10d %-10d %-10d&quot;,
+ 			stats-&gt;restarts, stats-&gt;bus_error,
+ 			stats-&gt;arbitration_lost, stats-&gt;error_warning,
+-			stats-&gt;error_passive, stats-&gt;bus_off);
++			stats-&gt;error_passive, stats-&gt;bus_off,
++			stats-&gt;tec, stats-&gt;rec);
+ 	}
+ }
+
+-- 
+1.5.6.5
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001265.html">[PATCH] rec tec
+</A></li>
+	<LI>Next message: <A HREF="001301.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1267">[ date ]</a>
+              <a href="thread.html#1267">[ thread ]</a>
+              <a href="subject.html#1267">[ subject ]</a>
+              <a href="author.html#1267">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

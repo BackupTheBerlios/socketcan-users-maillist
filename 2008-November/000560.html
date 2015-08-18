@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan problems for settings &gt; 125kbit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C4912A0BE.20602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000559.html">
+   <LINK REL="Next"  HREF="000566.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan problems for settings &gt; 125kbit</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C4912A0BE.20602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan problems for settings &gt; 125kbit">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov  6 08:46:06 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000559.html">[Socketcan-users] MSCAN clock source
+</A></li>
+        <LI>Next message: <A HREF="000566.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#560">[ date ]</a>
+              <a href="thread.html#560">[ thread ]</a>
+              <a href="subject.html#560">[ subject ]</a>
+              <a href="author.html#560">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> we are using a relatively actual Socketcan stack (-r858) / Linux
+</I>&gt;<i> 2.6.24.7-rt21 with MSCAN on a MPC5200b. Usually our software runs on
+</I>&gt;<i> 125kbit. This works quite nicely. So we didn't notice this problem
+</I>&gt;<i> before.
+</I>&gt;<i> 
+</I>&gt;<i> But as soon as we switch to higher frequencies (250kbit/500kbit), the
+</I>&gt;<i> driver doesn't generate anything valid on the bus (this has been
+</I>&gt;<i> examined with a scope) nor does it receive. 
+</I>&gt;<i> 
+</I>&gt;<i> What I did:
+</I>&gt;<i> (sidenote: termination was done correctly)
+</I>&gt;<i> ifconfig can0 down
+</I>&gt;<i> echo &quot;500000&quot;&gt;/sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;<i> ifconfig can0 up
+</I>&gt;<i> cat /sys/class/net/can0/can_state
+</I>&gt;<i> bus-pass
+</I>&gt;<i> 
+</I>&gt;<i> What causes the bus-pass state ?
+</I>
+Bit-timing trouble when sending messaged, typically when the cable is
+not connected. In your case it's likely due to bad bit-timing parameters.
+
+&gt;<i> it is set immediately even after a restart of the mscan (echo
+</I>&gt;<i> &quot;1&quot;&gt;/sys/class/net/can0/can_restart).
+</I>
+OK, I have to check this behavior. Nevertheless, the bus-passive state
+still allows to send and receive messages, unlike bus-off requiring a
+restart to recover.
+
+&gt;<i> 
+</I>&gt;<i> I've put debugging output for control registers in
+</I>&gt;<i> mscan_do_set_bittiming and looked at the differences between 125kbit and
+</I>&gt;<i> 500kbit:
+</I>&gt;<i> 
+</I>&gt;<i> 500 kbit:
+</I>&gt;<i> [   47.179126] mpc52xx-mscan mpc52xx-mscan.0: BTR0=0x15 BTR1=0x03
+</I>&gt;<i> [   47.186143] mpc52xx-mscan mpc52xx-mscan.0: canctl0=0x03 canctl1=0x93
+</I>&gt;<i> 
+</I>&gt;<i> 125 kbit:
+</I>&gt;<i> [  160.429960] mpc52xx-mscan mpc52xx-mscan.0: BTR0=0x20 BTR1=0x1c
+</I>&gt;<i> [  160.437026] mpc52xx-mscan mpc52xx-mscan.0: canctl0=0x03 canctl1=0x83
+</I>
+For what CAN clock frequency are these values?
+
+&gt;<i> What we see here, is that canctl1 on 500kbit has the LISTEN ONLY bit
+</I>&gt;<i> enabled, which is strange, but I don't know what else happens after the
+</I>&gt;<i> call to mscan_set_bittiming(), if I clear it directly at that point, it
+</I>&gt;<i> doesn't change anything.
+</I>
+That's wired. Anyhow, these values show that the CAN controller is in
+the initialization mode (not connected to the bus). Is the  network  up?
+
+&gt;<i> By the way: with subversion -r679 we didn't have this problem, so it's
+</I>&gt;<i> probably not hardware.
+</I>
+That revision uses an old algorithm to calculate the bit-timing parameters.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000559.html">[Socketcan-users] MSCAN clock source
+</A></li>
+	<LI>Next message: <A HREF="000566.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#560">[ date ]</a>
+              <a href="thread.html#560">[ thread ]</a>
+              <a href="subject.html#560">[ subject ]</a>
+              <a href="author.html#560">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

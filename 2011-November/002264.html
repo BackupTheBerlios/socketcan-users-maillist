@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4ED393B0.2030004%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002262.html">
+   <LINK REL="Next"  HREF="002252.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4ED393B0.2030004%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 28 14:59:12 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002262.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002252.html">[Socketcan-users] [PATCH net-next v2 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2264">[ date ]</a>
+              <a href="thread.html#2264">[ thread ]</a>
+              <a href="subject.html#2264">[ subject ]</a>
+              <a href="author.html#2264">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/28/2011 01:09 PM, Marc Kleine-Budde wrote:
+&gt;<i> On 11/25/2011 10:43 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> This patch adds support for legacy Bosch CC770 and Intel AN82527 CAN
+</I>&gt;&gt;<i> controllers on the ISA or PC-104 bus. The I/O port or memory address
+</I>&gt;&gt;<i> and the IRQ number must be specified via module parameters:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   insmod cc770_isa.ko port=0x310,0x380 irq=7,11
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> for ISA devices using I/O ports or:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> for memory mapped ISA devices.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Indirect access via address and data port is supported as well:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   insmod cc770_isa.ko port=0x310,0x380 indirect=1 irq=7,11
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Furthermore, the following mode parameter can be defined:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   clk: External oscillator clock frequency (default=16000000 [16 MHz])
+</I>&gt;&gt;<i>   cir: CPU interface register (default=0x40 [DSC])
+</I>&gt;&gt;<i>   ocr, Bus configuration register (default=0x40 [CBY])
+</I>&gt;&gt;<i>   cor, Clockout register (default=0x00)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Note: for clk, cir, bcr and cor, the first argument re-defines the
+</I>&gt;&gt;<i> default for all other devices, e.g.:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11 clk=24000000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> is equivalent to
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11 clk=24000000,24000000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> Some nitpicking inside.
+</I>&gt;<i> 
+</I>&gt;<i> Marc
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>  drivers/net/can/cc770/Kconfig     |   11 ++
+</I>&gt;&gt;<i>  drivers/net/can/cc770/Makefile    |    1 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/cc770_isa.c |  336 +++++++++++++++++++++++++++++++++++++
+</I>&gt;&gt;<i>  3 files changed, 348 insertions(+), 0 deletions(-)
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> diff --git a/drivers/net/can/cc770/Kconfig b/drivers/net/can/cc770/Kconfig
+</I>&gt;&gt;<i> index 225131b..28e4d48 100644
+</I>&gt;&gt;<i> --- a/drivers/net/can/cc770/Kconfig
+</I>&gt;&gt;<i> +++ b/drivers/net/can/cc770/Kconfig
+</I>&gt;&gt;<i> @@ -1,3 +1,14 @@
+</I>&gt;&gt;<i>  menuconfig CAN_CC770
+</I>&gt;&gt;<i>  	tristate &quot;Bosch CC770 and Intel AN82527 devices&quot;
+</I>&gt;&gt;<i>  	depends on CAN_DEV &amp;&amp; HAS_IOMEM
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +if CAN_CC770
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +config CAN_CC770_ISA
+</I>&gt;&gt;<i> +	tristate &quot;ISA Bus based legacy CC770 driver&quot;
+</I>&gt;&gt;<i> +	---help---
+</I>&gt;&gt;<i> +	  This driver adds legacy support for CC770 and AN82527 chips
+</I>&gt;&gt;<i> +	  connected to the ISA bus using I/O port, memory mapped or
+</I>&gt;&gt;<i> +	  indirect access.
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +endif
+</I>&gt;&gt;<i> diff --git a/drivers/net/can/cc770/Makefile b/drivers/net/can/cc770/Makefile
+</I>&gt;&gt;<i> index 34e8180..872ecff 100644
+</I>&gt;&gt;<i> --- a/drivers/net/can/cc770/Makefile
+</I>&gt;&gt;<i> +++ b/drivers/net/can/cc770/Makefile
+</I>&gt;&gt;<i> @@ -3,5 +3,6 @@
+</I>&gt;&gt;<i>  #
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  obj-$(CONFIG_CAN_CC770) += cc770.o
+</I>&gt;&gt;<i> +obj-$(CONFIG_CAN_CC770_ISA) += cc770_isa.o
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  ccflags-$(CONFIG_CAN_DEBUG_DEVICES) := -DDEBUG
+</I>&gt;&gt;<i> diff --git a/drivers/net/can/cc770/cc770_isa.c b/drivers/net/can/cc770/cc770_isa.c
+</I>...
+&gt;&gt;<i> +	for (idx = 0; idx &lt; MAXDEV; idx++) {
+</I>&gt;<i> ARRAY_SIZE?
+</I>
+Well, I think ARRAY_SIZE is useful to derive the number of elements from
+a static array of the type:
+
+  static const int array[] = { 1, 2, 3, 4, }
+
+but not if its declared as:
+
+  static array[MAXDEV]:
+
+... or have I missed something?
+
+I'm fine with all other comments.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002262.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002252.html">[Socketcan-users] [PATCH net-next v2 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2264">[ date ]</a>
+              <a href="thread.html#2264">[ thread ]</a>
+              <a href="subject.html#2264">[ subject ]</a>
+              <a href="author.html#2264">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

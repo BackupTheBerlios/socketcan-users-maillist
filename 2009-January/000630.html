@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fixed crash on re-attaching slcan netdevices ...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fixed%20crash%20on%20re-attaching%20slcan%20netdevices%20...&In-Reply-To=%3C4970778B.6060807%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000633.html">
+   <LINK REL="Next"  HREF="000634.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fixed crash on re-attaching slcan netdevices ...</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fixed%20crash%20on%20re-attaching%20slcan%20netdevices%20...&In-Reply-To=%3C4970778B.6060807%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Fixed crash on re-attaching slcan netdevices ...">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Jan 16 13:03:23 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000633.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+        <LI>Next message: <A HREF="000634.html">[Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#630">[ date ]</a>
+              <a href="thread.html#630">[ thread ]</a>
+              <a href="subject.html#630">[ subject ]</a>
+              <a href="author.html#630">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+... by removing the extra code added to slcan.c that was not in slip.c .
+
+Indeed the slip driver (and so the slcan driver) holds the several
+created slcan netdevices in a structure and only registeres the allocated
+netdevices - but doesn't unregister them immediately at detach time.
+Even when detached the devices still appear in /proc/net/dev (!)
+Finally the destructor is well defined to execute free_netdev() at
+unregister_netdev() which is handled properly.
+The added free_netdev() produced a double free and therefore crashed.
+
+When the slcan module is removed all the slcan devices are also removed 
+properly.
+
+So it was just a inappropriate paranoia from my side which introduced 
+this problem from the first version. SVN Rev. 904 contains the fix.
+
+Sorry for the crashing boxes all over the world :-(
+
+Best regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000633.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+	<LI>Next message: <A HREF="000634.html">[Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#630">[ date ]</a>
+              <a href="thread.html#630">[ thread ]</a>
+              <a href="subject.html#630">[ subject ]</a>
+              <a href="author.html#630">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

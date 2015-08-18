@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTinChhZbk_ui3aj4UaP6c0sCkn8B-UkkSd%3DxD2FK%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001669.html">
+   <LINK REL="Next"  HREF="001655.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTinChhZbk_ui3aj4UaP6c0sCkn8B-UkkSd%3DxD2FK%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Nov 15 20:39:09 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001669.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001655.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1648">[ date ]</a>
+              <a href="thread.html#1648">[ thread ]</a>
+              <a href="subject.html#1648">[ subject ]</a>
+              <a href="author.html#1648">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>So I change my script,the sja1000_isa line  is now :
+
+try 1 :                 insmod
+/lib/modules/2.6.32.11-target-alpha-v2/kernel/drivers/net/can/sja1000/sja1000_isa.ko
+irq=5,7 mem=0xD0000,0xD0200  ocr=0x5e,0x5e
+try 2 :                 insmod
+/lib/modules/2.6.32.11-target-alpha-v2/kernel/drivers/net/can/sja1000/sja1000_isa.ko
+irq=5,7 mem=0xD0000,0xD0200  ocr=0x5e,0x5e cdr=0,0
+
+Nothing is plugged into my card (no wire and no resistors). I did :
+candump any,0:0,#FFFFFFFF (in a first terminal)
+cansend can0 5A1#11.22 (in a second one)
+cat /proc/interrupts
+
+
+And nothing seems to have changed
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# cat /proc/interrupts
+            CPU0       CPU1
+   0:       6321       5859   IO-APIC-edge      timer
+   1:          0          2   IO-APIC-edge      i8042
+   5:          0          0   IO-APIC-edge      can0
+   7:          0          0   IO-APIC-edge      can1
+   8:          1          0   IO-APIC-edge      rtc0
+   9:          0          0   IO-APIC-fasteoi   acpi
+  12:          2          2   IO-APIC-edge      i8042
+  14:          0          0   IO-APIC-edge      ata_piix
+  15:       1304       1307   IO-APIC-edge      ata_piix
+  19:          0          0   IO-APIC-fasteoi   uhci_hcd:usb3
+  23:          0          0   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+  24:      19309      19719   PCI-MSI-edge      eth0
+ NMI:          0          0   Non-maskable interrupts
+ LOC:       3731       4536   Local timer interrupts
+ SPU:          0          0   Spurious interrupts
+ PMI:          0          0   Performance monitoring interrupts
+ PND:          0          0   Performance pending work
+ RES:        194        164   Rescheduling interrupts
+ CAL:          5         27   Function call interrupts
+ TLB:        135        108   TLB shootdowns
+ TRM:          0          0   Thermal event interrupts
+ THR:          0          0   Threshold APIC interrupts
+ MCE:          0          0   Machine check exceptions
+ MCP:          5          5   Machine check polls
+ ERR:          1
+ MIS:          0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard#
+
+
+
+I don't know what kind of report you'll need (dmesg ? interrupts ? iomem ?
+stats ? ifconfig ? ...)
+
+
+
+2010/11/15 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 11/15/2010 08:10 PM, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; Hello,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On 11/15/2010 06:59 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt;&gt; Here is my dmesg :
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt# dmesg
+</I>&gt;<i> &gt;&gt; [    0.000000] Initializing cgroup subsys cpuset
+</I>&gt;<i> &gt;&gt; [    0.000000] Initializing cgroup subsys cpu
+</I>&gt;<i> &gt;&gt; [    0.000000] Linux version 2.6.32.11-target-alpha-v2 (<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at ard-host-4</A>
+</I>&gt;<i> )
+</I>&gt;<i> &gt;&gt; (gcc version 4.4.5 20100728 (prerelease) (Debian 4.4.4-8) ) #3 SMP Tue
+</I>&gt;<i> Nov 9
+</I>&gt;<i> &gt;&gt; 19:07:02 CET 2010
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I do not see anything obvious. But maybe the default &quot;cdr&quot; and &quot;ocr&quot;
+</I>&gt;<i> &gt; values are not OK for that card. Could you please add the module
+</I>&gt;<i> parameters:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;   ocr=0xdc cdr=0
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; when loading the SJA1000 ISA driver.
+</I>&gt;<i>
+</I>&gt;<i> Do you have a manual or data sheet for that card? I just read somewhere
+</I>&gt;<i> that it tells to use 0x5e as ocr value. Therefore, please try first:
+</I>&gt;<i>
+</I>&gt;<i>    ocr=0x5e,0x5e
+</I>&gt;<i>
+</I>&gt;<i> and then
+</I>&gt;<i>
+</I>&gt;<i>    ocr=0x5e,0x5e cdr=0,0
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101115/cf8aa911/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101115/cf8aa911/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001669.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001655.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1648">[ date ]</a>
+              <a href="thread.html#1648">[ thread ]</a>
+              <a href="subject.html#1648">[ subject ]</a>
+              <a href="author.html#1648">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

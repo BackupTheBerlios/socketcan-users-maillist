@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C46555D23.8020907%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000125.html">
+   <LINK REL="Next"  HREF="000126.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can driver</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C46555D23.8020907%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan c_can driver">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Thu May 24 11:38:43 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000125.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+        <LI>Next message: <A HREF="000126.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#128">[ date ]</a>
+              <a href="thread.html#128">[ thread ]</a>
+              <a href="subject.html#128">[ subject ]</a>
+              <a href="author.html#128">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert,
+
+&gt;&gt;<i> * The hynix h7202 hardware design really is braindamaged. Robert, did
+</I>&gt;&gt;<i> the driver really work back when it was written?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Yea, although I think it was back in the 2.6.11 era and without
+</I>&gt;<i> preemption, so that would explain the effects you are seeing.
+</I>&gt;<i>   
+</I>
+Yap that makes sense.
+
+&gt;<i>   
+</I>&gt;&gt;<i> So what I did as a temporary hack is putting the CAN register
+</I>&gt;&gt;<i> read/write methods into the big kernel lock so no other peripheral can
+</I>&gt;&gt;<i> read/write to the AMBA bus. This seems to work, but of course is a
+</I>&gt;&gt;<i> very very poor solution. Btw. is it allowed to take the kernel lock
+</I>&gt;&gt;<i> inside an ISR? Any ideas how to implement a finer grained locking
+</I>&gt;&gt;<i> mechanisms for all AMBA peripherals without completely hacking up the
+</I>&gt;&gt;<i> kernel?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Well, I'm not sure if it is worth the efford to hack up the whole
+</I>&gt;<i> kernel, just to make such a braindamaged piece of hardware work. If
+</I>&gt;<i> socketcan was maintained as a patch stack, I'd vote for marking the
+</I>&gt;<i> h720x driver patch as &quot;not for upstream&quot; and just let the people who
+</I>&gt;<i> really need it patch it into their BSPs.
+</I>&gt;<i>   
+</I>
+Yes, i'm also looking for the simplest solution. Actually i would like 
+to get rid of the h7202 controller, but we need it for yet another 
+project and we need can, so i'm stuck with it. I think we should commit 
+the c_can module to the socketcan repo, also i don't see no reason for 
+not adding the h7202can module, as it won't bother anyone, right? But 
+i'm fine with patching too.
+
+&gt;&gt;<i> * There is a candev module in the socketcan trunk. I adapted the driver 
+</I>&gt;&gt;<i> to use the candev module. Is this the right thing to do? Also I've seen 
+</I>&gt;&gt;<i> that the candev driver is not tagged with a mod license, so it 'taints' 
+</I>&gt;&gt;<i> the kernel when loading.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I suppose from our side GPL is ok - Sascha, could you add your
+</I>&gt;<i> Signed-off?
+</I>&gt;<i>   
+</I>
+The driver is actually already signed as GPLv2.
+
+&gt;&gt;<i> * Currently to load the h7202can driver as a module I have to load
+</I>&gt;&gt;<i> candev, c_can and h7202can modules. I just wondered if this isn't a
+</I>&gt;&gt;<i> bit too modular. What you think?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> No, looks good. The ccan core is also on other chips, so we want to have
+</I>&gt;<i> only one generic driver which is independend of the underlying SoC.
+</I>&gt;<i>   
+</I>
+Yes, i guess it really makes sense.
+
+
+Best regards,
+Simon
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000125.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+	<LI>Next message: <A HREF="000126.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#128">[ date ]</a>
+              <a href="thread.html#128">[ thread ]</a>
+              <a href="subject.html#128">[ subject ]</a>
+              <a href="author.html#128">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

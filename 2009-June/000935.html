@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 4/5]: softing CAN card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%204/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090616152423.GJ2830%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000934.html">
+   <LINK REL="Next"  HREF="000936.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 4/5]: softing CAN card</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%204/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090616152423.GJ2830%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] [PATCH 4/5]: softing CAN card">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Tue Jun 16 17:24:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000934.html">[Socketcan-users] [PATCH 0/5]: softing CAN card
+</A></li>
+        <LI>Next message: <A HREF="000936.html">[Socketcan-users] [PATCH 5/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#935">[ date ]</a>
+              <a href="thread.html#935">[ thread ]</a>
+              <a href="subject.html#935">[ subject ]</a>
+              <a href="author.html#935">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Some functions make 1 call, and seem to could be inlined for better
+readability
+
+
+Signed-off-by: Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt;
+---
+ kernel/2.6/drivers/net/can/softing/softing_main.c |   48 +++-------------------
+ 1 file changed, 8 insertions(+), 40 deletions(-)
+
+Index: netlink-up/kernel/2.6/drivers/net/can/softing/softing_main.c
+===================================================================
+--- netlink-up.orig/kernel/2.6/drivers/net/can/softing/softing_main.c	2009-06-16 16:29:28.000000000 +0200
++++ netlink-up/kernel/2.6/drivers/net/can/softing/softing_main.c	2009-06-16 16:31:03.000000000 +0200
+@@ -130,16 +130,6 @@
+ 		spin_unlock_bh(&amp;card-&gt;spin);
+ 	else
+ 		spin_unlock(&amp;card-&gt;spin);
+-	if (card-&gt;tx.pending &gt;= TXMAX) {
+-		struct softing_priv *bus;
+-		int j;
+-		for (j = 0; j &lt; card-&gt;nbus; ++j) {
+-			bus = card-&gt;bus[j];
+-			if (!bus)
+-				continue;
+-			netif_stop_queue(bus-&gt;netdev);
+-		}
+-	}
+ 	if (ret &lt; 0)
+ 		netif_stop_queue(dev);
+ 
+@@ -374,19 +364,6 @@
+ 	spin_unlock(&amp;card-&gt;spin);
+ }
+ 
+-static void card_seems_down(struct softing *card)
+-{
+-	/* free interrupt, but probably
+-	 * in wrong (interrupt) context
+-	if (card-&gt;irq.requested) {
+-		free_irq(card-&gt;irq.nr, card);
+-		card-&gt;irq.requested = 0;
+-		card-&gt;fw.up = 0;
+-	}
+-	*/
+-	dev_alert(card-&gt;dev, &quot;I think the card is vanished\n&quot;);
+-}
+-
+ static
+ irqreturn_t dev_interrupt_shared(int irq, void *dev_id)
+ {
+@@ -395,7 +372,7 @@
+ 	ir = card-&gt;dpram.virt[0xe02];
+ 	card-&gt;dpram.virt[0xe02] = 0;
+ 	if (card-&gt;dpram.rx-&gt;rd == 0xffff) {
+-		card_seems_down(card);
++		dev_alert(card-&gt;dev, &quot;I think the card is gone\n&quot;);
+ 		return IRQ_NONE;
+ 	}
+ 	if (ir == 1) {
+@@ -420,7 +397,7 @@
+ 	/* make sure we cleared it */
+ 	wmb();
+ 	if (card-&gt;dpram.rx-&gt;rd == 0xffff) {
+-		card_seems_down(card);
++		dev_alert(card-&gt;dev, &quot;I think the card is gone\n&quot;);
+ 		return IRQ_NONE;
+ 	}
+ 	tasklet_schedule(&amp;card-&gt;irq.bh);
+@@ -890,11 +867,6 @@
+ 	return priv;
+ }
+ 
+-static void rm_netdev(struct softing_priv *priv)
+-{
+-	free_candev(priv-&gt;netdev);
+-}
+-
+ static int reg_netdev(struct softing_priv *priv)
+ {
+ 	int ret;
+@@ -918,12 +890,6 @@
+ 	return EINVAL;
+ }
+ 
+-static void unreg_netdev(struct softing_priv *priv)
+-{
+-	rm_netdev_sysfs(priv);
+-	unregister_candev(priv-&gt;netdev);
+-}
+-
+ void rm_softing(struct softing *card)
+ {
+ 	int j;
+@@ -932,8 +898,9 @@
+ 	shutdown_card(card);
+ 
+ 	for (j = 0; j &lt; card-&gt;nbus; ++j) {
+-		unreg_netdev(card-&gt;bus[j]);
+-		rm_netdev(card-&gt;bus[j]);
++		rm_netdev_sysfs(card-&gt;bus[j]);
++		unregister_candev(card-&gt;bus[j]-&gt;netdev);
++		free_candev(card-&gt;bus[j]-&gt;netdev);
+ 	}
+ 
+ 	rm_card_sysfs(card);
+@@ -1019,13 +986,14 @@
+ 	for (j = 0; j &lt; card-&gt;nbus; ++j) {
+ 		if (!card-&gt;bus[j])
+ 			continue;
+-		unreg_netdev(card-&gt;bus[j]);
++		rm_netdev_sysfs(card-&gt;bus[j]);
++		unregister_candev(card-&gt;bus[j]-&gt;netdev);
+ 	}
+ netdev_failed:
+ 	for (j = 0; j &lt; card-&gt;nbus; ++j) {
+ 		if (!card-&gt;bus[j])
+ 			continue;
+-		rm_netdev(card-&gt;bus[j]);
++		free_candev(card-&gt;bus[j]-&gt;netdev);
+ 	}
+ 	rm_card_sysfs(card);
+ sysfs_failed:
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000934.html">[Socketcan-users] [PATCH 0/5]: softing CAN card
+</A></li>
+	<LI>Next message: <A HREF="000936.html">[Socketcan-users] [PATCH 5/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#935">[ date ]</a>
+              <a href="thread.html#935">[ thread ]</a>
+              <a href="subject.html#935">[ subject ]</a>
+              <a href="author.html#935">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

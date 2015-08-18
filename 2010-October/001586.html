@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp2515 frames with ID 004 and 000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3CAANLkTi%3DYU0XnV9KXzG52Luzm3nUCeWxvFpXneOM8cxzC%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001585.html">
+   <LINK REL="Next"  HREF="001587.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp2515 frames with ID 004 and 000</H1>
+    <B>Jargalan Nermunkh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3CAANLkTi%3DYU0XnV9KXzG52Luzm3nUCeWxvFpXneOM8cxzC%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp2515 frames with ID 004 and 000">jargalan.nermunkh at criticallink.com
+       </A><BR>
+    <I>Mon Oct 18 23:42:45 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001585.html">[Socketcan-users] Controlling can socket from user space
+</A></li>
+        <LI>Next message: <A HREF="001587.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1586">[ date ]</a>
+              <a href="thread.html#1586">[ thread ]</a>
+              <a href="subject.html#1586">[ subject ]</a>
+              <a href="author.html#1586">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I am pretty new to CAN / linux kernel and I have been working with a custom
+board with the mcp2515. I managed to get it up and running with the help of
+this and the socket-core mailing list. The boards use the TI OMAP-L138 and
+using the davinci spi driver found here:
+<A HREF="http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite">http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite</A>
+
+The patch seems to fix another issue I was having with missing frames
+(mcp2515 auto clears rx0, rx1 flags after its read):
+<A HREF="http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.html">http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.html</A>
+
+The CAN interface is brought up by &quot;ip link set can0 up txqueuelen 1000 type
+can bitrate 1000000&quot;
+
+One board collects incoming can frames with &quot;candump -l can0&quot; and another
+board sends data using &quot;cangen -vv -g 0 -I 255 -L 8 -D i can0&quot;.
+Snippet from candump:
+(1273660526.261745) can0 255#6B00000000000000
+(1273660526.262940) can0 255#6C00000000000000
+(1273660526.264550) can0 255#6D00000000000000
+(1273660526.266156) can0 255#6E00000000000000
+(1273660526.267738) can0 255#6F00000000000000
+(1273660526.268450) can0 255#6F00000000000000
+(1273660526.269255) can0 004#0001000000000000 &lt;--
+(1273660526.270810) can0 255#7100000000000000
+(1273660526.272564) can0 255#7200000000000000
+(1273660526.274213) can0 255#7300000000000000
+(1273660526.275806) can0 255#7400000000000000
+(1273660526.277356) can0 255#7500000000000000
+(1273660526.278987) can0 255#7600000000000000
+(1273660526.280579) can0 255#7700000000000000
+...
+(1273660526.679990) can0 255#D600000000000000
+(1273660526.681331) can0 255#D700000000000000
+(1273660526.682890) can0 255#D800000000000000
+(1273660526.684471) can0 255#D900000000000000
+(1273660526.686086) can0 255#DA00000000000000
+(1273660526.687702) can0 255#DB00000000000000
+(1273660526.688442) can0 255#DB00000000000000
+(1273660526.689668) can0 000#0000000000000000 &lt;--
+(1273660526.690836) can0 255#DD00000000000000
+(1273660526.692557) can0 255#DE00000000000000
+(1273660526.694161) can0 255#DF00000000000000
+(1273660526.695781) can0 255#E000000000000000
+(1273660526.697432) can0 255#E100000000000000
+(1273660526.699022) can0 255#E200000000000000
+(1273660526.700622) can0 255#E300000000000000
+(1273660526.702224) can0 255#E400000000000000
+
+Not sure where this could be coming from any guidance on how to debug this
+would be grateful.
+
+Thank You
+
+Jargalan Nermunkh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101018/6e0440da/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101018/6e0440da/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001585.html">[Socketcan-users] Controlling can socket from user space
+</A></li>
+	<LI>Next message: <A HREF="001587.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1586">[ date ]</a>
+              <a href="thread.html#1586">[ thread ]</a>
+              <a href="subject.html#1586">[ subject ]</a>
+              <a href="author.html#1586">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

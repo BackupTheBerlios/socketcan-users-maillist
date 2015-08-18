@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A311637.1020806%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000878.html">
+   <LINK REL="Next"  HREF="000880.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A311637.1020806%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jun 11 16:35:35 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000878.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+        <LI>Next message: <A HREF="000880.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#879">[ date ]</a>
+              <a href="thread.html#879">[ thread ]</a>
+              <a href="subject.html#879">[ subject ]</a>
+              <a href="author.html#879">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>khurram gulzar wrote:
+
+&gt;<i> it doesnt work still
+</I>&gt;<i> here is the debug msgs from the kernel.
+</I>
+
+&gt;<i> [  383.989052] NETDEV WATCHDOG: can0 (): transmit timed out
+</I>
+This looks like you don't have a CAN node the controller can talk to.
+
+Possible problems:
+
+- wrong bitrate
+- missing CAN bus termination
+- missing second CAN node with correct bitrate ;-)
+
+When the CAN frame is not acknowledged the NETDEV WATCHDOG occurs - and this
+make this ugly call trace in 2.6.29+ Kernels. The netdev watchdog is removed
+in newer drivers.
+
+Please check the three points above. The best test is to receive CAN data from
+a well working CAN source first.
+
+Regards,
+Oliver
+
+ps. The rest of the Kernel log looks good.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000878.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+	<LI>Next message: <A HREF="000880.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#879">[ date ]</a>
+              <a href="thread.html#879">[ thread ]</a>
+              <a href="subject.html#879">[ subject ]</a>
+              <a href="author.html#879">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

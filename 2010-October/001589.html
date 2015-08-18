@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp2515 frames with ID 004 and 000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3CAANLkTi%3DtgV%3DDGzN%3DyL7X0Mb1hYPQ1DQxH9T3S2iRbVav%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001597.html">
+   <LINK REL="Next"  HREF="001592.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp2515 frames with ID 004 and 000</H1>
+    <B>Jargalan Nermunkh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3CAANLkTi%3DtgV%3DDGzN%3DyL7X0Mb1hYPQ1DQxH9T3S2iRbVav%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp2515 frames with ID 004 and 000">jargalan.nermunkh at criticallink.com
+       </A><BR>
+    <I>Tue Oct 19 18:12:57 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001597.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+        <LI>Next message: <A HREF="001592.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1589">[ date ]</a>
+              <a href="thread.html#1589">[ thread ]</a>
+              <a href="subject.html#1589">[ subject ]</a>
+              <a href="author.html#1589">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> We have a omap (i.e. beagle board) somewhere in our lab, I'll ask the
+</I>&gt;<i> hardware guy to if he can attach the mcp2515 to it.
+</I>&gt;<i>
+</I>
+
+&gt;<i> You mean without the patches mentioned above, I mean the unpachted
+</I>&gt;<i> 2.6.35.x, your can controller was missing frames? After applying these
+</I>&gt;<i> patches that problem was fixed?
+</I>&gt;<i>
+</I>
+That is correct. The patch added proper handling of RX1 when there is a
+rollover from RX0 to RX1.
+
+
+&gt;<i> Can you ensure with a 3rd system, preferred with a different CAN core,
+</I>&gt;<i> that the frames send to the bus are correct?
+</I>&gt;<i>
+</I>
+I connected a board to a lawicel CAN dongle and receiving on the board
+(sending from dongle) is fine but sending (with cangen) from the board to
+the dongle produces repeated frames.
+
+
+&gt;<i> Which driver is active in your setup? Does this happen with both
+</I>&gt;<i> versions of the driver?
+</I>&gt;<i>
+</I>
+I am currently using the inline driver.
+
+I'm going now to bed, but tomorrow I'm going to do some stress tests
+&gt;<i> with 1 Mbit.
+</I>&gt;<i>
+</I>&gt;<i> g'night,
+</I>&gt;<i> Marc
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Pengutronix e.K.                  | Marc Kleine-Budde           |
+</I>&gt;<i> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+</I>&gt;<i> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+</I>&gt;<i> Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>Jargalan Nermunkh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/c5201210/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/c5201210/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001597.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+	<LI>Next message: <A HREF="001592.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1589">[ date ]</a>
+              <a href="thread.html#1589">[ thread ]</a>
+              <a href="subject.html#1589">[ subject ]</a>
+              <a href="author.html#1589">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP2515 design opinion
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP2515%20design%20opinion&In-Reply-To=%3CAANLkTi%3D%2B5xTR1jyjECVNOo9Fmz2ms4CY-YD_gQfJ0EmE%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001854.html">
+   <LINK REL="Next"  HREF="001856.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP2515 design opinion</H1>
+    <B>bruce bushby</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP2515%20design%20opinion&In-Reply-To=%3CAANLkTi%3D%2B5xTR1jyjECVNOo9Fmz2ms4CY-YD_gQfJ0EmE%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] MCP2515 design opinion">bruce.bushby at gmail.com
+       </A><BR>
+    <I>Sat Apr  2 09:44:45 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001854.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+        <LI>Next message: <A HREF="001856.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1855">[ date ]</a>
+              <a href="thread.html#1855">[ thread ]</a>
+              <a href="subject.html#1855">[ subject ]</a>
+              <a href="author.html#1855">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marc
+
+Thanks for the advice, much appreciated!!!
+
+Since I'm having a prototype made, I'll pass on the recommendation and see
+if I can switch one of the MCP 2515's for SJA1000 and test both solutions.
+
+I'm using Telit's GE863-PRO which only has a 200Mhz cpu so ideally I need to
+conserve as many cpu cycles as possible.
+
+Cheers
+Bruce
+
+
+
+On Fri, Apr 1, 2011 at 12:31 PM, Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;wrote:
+
+&gt;<i> On 03/30/2011 08:05 PM, bruce bushby wrote:
+</I>&gt;<i> &gt; I'm hoping the list could offer some quick advice. I'm having a board
+</I>&gt;<i> &gt; designed and have decided to use 2x MCP2515 but first wanted to hear how
+</I>&gt;<i> the
+</I>&gt;<i> &gt; list felt about:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 1. Support for the device in the 2.6.38 Linux kernel
+</I>&gt;<i> &gt; 2. Opinions regarding having both devices on the same SPI interface?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Any comments good or bad would be appreciated!!
+</I>&gt;<i>
+</I>&gt;<i> My advice:
+</I>&gt;<i> Avoid using a SPI can controller if you can. I've seen ~30% system load
+</I>&gt;<i> on a mx35 (~500 MHz ARM11, which has probably not the best
+</I>&gt;<i> SPI-controller), while the internal CAN controller of the mx35 produces
+</I>&gt;<i> just a load of 1-3%.
+</I>&gt;<i>
+</I>&gt;<i> There are a couple of arm controllers with two CAN cores on chip, e.g.
+</I>&gt;<i> MX25, MX35, MX28, which are already supported by the mainline kernel.
+</I>&gt;<i> There are probably other vendors that have such controllers.
+</I>&gt;<i>
+</I>&gt;<i> The other alternative would be to attach two SJA1000 to one or two chip
+</I>&gt;<i> selects of your CPU. If you have a PCI bus you can attach them via a PLX
+</I>&gt;<i> bridge.
+</I>&gt;<i>
+</I>&gt;<i> Last but not least Andre coded and I improved an optimized driver for
+</I>&gt;<i> the mcp2515. But I have had no time to mainline the driver, yet.
+</I>&gt;<i>
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Pengutronix e.K.                  | Marc Kleine-Budde           |
+</I>&gt;<i> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+</I>&gt;<i> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+</I>&gt;<i> Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110402/2724d157/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110402/2724d157/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001854.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+	<LI>Next message: <A HREF="001856.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1855">[ date ]</a>
+              <a href="thread.html#1855">[ thread ]</a>
+              <a href="subject.html#1855">[ subject ]</a>
+              <a href="author.html#1855">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

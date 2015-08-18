@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100209195711.GA284%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001298.html">
+   <LINK REL="Next"  HREF="001300.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100209195711.GA284%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Tue Feb  9 20:57:11 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001298.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001300.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1299">[ date ]</a>
+              <a href="thread.html#1299">[ thread ]</a>
+              <a href="subject.html#1299">[ subject ]</a>
+              <a href="author.html#1299">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Feb 09, 2010 at 06:26:02PM +0100, Oliver Hartkopp wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>[...]
+&gt;<i> &gt; Index: 2.6/drivers/net/can/sja1000/sja1000.c
+</I>&gt;<i> &gt; ===================================================================
+</I>&gt;<i> &gt; --- 2.6.orig/drivers/net/can/sja1000/sja1000.c
+</I>&gt;<i> &gt; +++ 2.6/drivers/net/can/sja1000/sja1000.c
+</I>&gt;<i> &gt; @@ -133,9 +133,13 @@ static void set_normal_mode(struct net_d
+</I>&gt;<i> &gt;  	for (i = 0; i &lt; 100; i++) {
+</I>&gt;<i> &gt;  		/* check reset bit */
+</I>&gt;<i> &gt;  		if ((status &amp; MOD_RM) == 0) {
+</I>&gt;<i> &gt; +			u8 reg_ier = IRQ_ALL;
+</I>&gt;<i> &gt; +
+</I>&gt;<i> &gt; +			if (!(priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BUS_ERROR))
+</I>&gt;<i> &gt; +				reg_ier &amp;= ~IRQ_BEI;
+</I>&gt;<i> &gt;  			priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+</I>&gt;<i> &gt; -			/* enable all interrupts */
+</I>&gt;<i> &gt; -			priv-&gt;write_reg(priv, REG_IER, IRQ_ALL);
+</I>&gt;<i> &gt; +			/* enable interrupts */
+</I>&gt;<i> &gt; +			priv-&gt;write_reg(priv, REG_IER, reg_ier);
+</I>&gt;<i> &gt;  			return;
+</I>&gt;<i> &gt;  		}
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Why did you introduce the extra variable here?
+</I>&gt;<i> 
+</I>&gt;<i> 		priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+</I>&gt;<i> 		/* enable interrupts */
+</I>&gt;<i> 		if (!(priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BUS_ERROR))
+</I>&gt;<i> 			priv-&gt;write_reg(priv, REG_IER, (IRQ_ALL &amp; ~IRQ_BEI));
+</I>&gt;<i> 		else
+</I>&gt;<i> 			priv-&gt;write_reg(priv, REG_IER, IRQ_ALL);
+</I>&gt;<i> 
+</I>&gt;<i> Won't this work also?
+</I>Just a question: is stack space an issue over code space?
+&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>
+Kurt
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001298.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001300.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1299">[ date ]</a>
+              <a href="thread.html#1299">[ thread ]</a>
+              <a href="subject.html#1299">[ subject ]</a>
+              <a href="author.html#1299">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

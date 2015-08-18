@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%09receive%20own%20messages%20problem&In-Reply-To=%3C4BFD64E4.2050609%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001409.html">
+   <LINK REL="Next"  HREF="001411.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%09receive%20own%20messages%20problem&In-Reply-To=%3C4BFD64E4.2050609%40grandegger.com%3E"
+       TITLE="[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem">wg at grandegger.com
+       </A><BR>
+    <I>Wed May 26 20:13:56 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001409.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+</A></li>
+        <LI>Next message: <A HREF="001411.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1410">[ date ]</a>
+              <a href="thread.html#1410">[ thread ]</a>
+              <a href="subject.html#1410">[ subject ]</a>
+              <a href="author.html#1410">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05/26/2010 07:29 PM, navanee than wrote:
+&gt;<i> Hi All, 
+</I>&gt;<i> 
+</I>&gt;<i> I am using linux-2.6.31 kernel and a slightly modified version of mcp251x driver. 
+</I>&gt;<i> If I set the socket options using CAN_RAW_RECV_OWN_MSGS, to receive the sent frames, it is not receiving back. 
+</I>
+This means that you want to receive the message sent on the *same*
+socket as well? For clarification, please read section 4.1.3 and 4.1.3:
+
+<A HREF="http://lxr.linux.no/linux+*/Documentation/networking/can.txt#L448">http://lxr.linux.no/linux+*/Documentation/networking/can.txt#L448</A>
+
+&gt;<i> I enabled local echo (IFF_ECHO), in my code. 
+</I>&gt;<i> 
+</I>&gt;<i> I don't know why it is not working. 
+</I>&gt;<i> I believe that it is being taken care by the low level CAN subsystem. 
+</I>&gt;<i> 
+</I>&gt;<i> I saw that when setsockopt(CAN_RAW_RECV_OWN_MSGS) is called, recv_own_msgs member of raw_sock is updated. 
+</I>&gt;<i> But, is there any way to get this information in my driver. So, that I can support the local loopback. 
+</I>
+Local loopback is supported by default. You can verify that by running
+&quot;candump any,0:0,#FFFFFFFF&quot;.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001409.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+</A></li>
+	<LI>Next message: <A HREF="001411.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1410">[ date ]</a>
+              <a href="thread.html#1410">[ thread ]</a>
+              <a href="subject.html#1410">[ subject ]</a>
+              <a href="author.html#1410">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

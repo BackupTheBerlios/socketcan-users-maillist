@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan problems for settings &gt; 125kbit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C491A963F.4020507%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000566.html">
+   <LINK REL="Next"  HREF="000568.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan problems for settings &gt; 125kbit</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C491A963F.4020507%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan problems for settings &gt; 125kbit">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov 12 09:39:27 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000566.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+        <LI>Next message: <A HREF="000568.html">[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#567">[ date ]</a>
+              <a href="thread.html#567">[ thread ]</a>
+              <a href="subject.html#567">[ subject ]</a>
+              <a href="author.html#567">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Daniel,
+
+Daniel Schnell wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> I found out that the successful communication with MSCAN is depending on
+</I>&gt;<i> the IPB clock frequency.
+</I>&gt;<i> 
+</I>&gt;<i> The following bit rates are working for an IPB Frequency of _132_ MHz:
+</I>
+OK.
+
+&gt;<i> 
+</I>&gt;<i> 125Kbit (BTR0=0x2f BTR1=0x4f), 250 Kbit (BTR0=0x20 BTR1=0x1c),
+</I>&gt;<i> 1Mbit(BTR0=0x0a BTR1=0x27)
+</I>&gt;<i> 500 Kbit(BTR0=0x20 BTR1=0x05) is not working and an attached scope shows
+</I>&gt;<i> that the bittime of the sent packets is more like 71 Kbit.
+</I>
+These are the calculated values for the MSCAN at 132MHz:
+
+$ ./can-calc-bit-timing -c 132000000 mscan
+Bit timing parameters for mscan using 132000000Hz
+Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+1000000     83   5    3    3   1  11 75.0%  0.0% 0x0a 0x27
+ 800000     83   8    3    3   1  11 80.0%  0.0% 0x0a 0x2a
+ 500000    250   5    1    1   1  33 87.5%  0.0% 0x20 0x05
+ 250000    250  11    2    2   1  33 87.5%  0.0% 0x20 0x1c
+ 125000    363  11    5    5   1  48 77.2%  0.0% 0x2f 0x4f
+ 100000    454  11    5    5   1  60 77.2%  0.0% 0x3b 0x4f
+  50000 ***bitrate not possible***
+  20000 ***bitrate not possible***
+  10000 ***bitrate not possible***
+
+
+Well, it looks like some recent changes has broken the calculation for
+MSCAN :-(.
+
+&gt;<i> I have not tested other bit rate settings (20Kbit, 100Kbit, etc.).
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> For an IPB frequency of _66_ MHz I could not get 500Kbit (BTR0=0x15
+</I>&gt;<i> BTR1=0x03), 250 Kbit (BTR0=0x20 BTR1=0x05) and above to work. Whereas
+</I>&gt;<i> 125 Kbit (BTR0=0x20 BTR1=0x1c) works fine.
+</I>&gt;<i> 
+</I>&gt;<i> This was tested with the original MSCAN driver and Linux 2.6.24.7 + RT
+</I>&gt;<i> patches 21.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> How are you testing the functionality of the MSCAN driver for different
+</I>&gt;<i> bit rates and which IPB clock settings do you have on your board ? I
+</I>&gt;<i> have a Lite5200B here, so I could also use this board for further tests.
+</I>
+I have a TQM5200 with a CAN-EMS-PCI-Card and I'm going to verify the
+MSCAN driver today or tomorrow. I already realized that it requires some
+work because CONFIG_PPC_MERGE is no longer supported with 2.6.28 because
+arch/ppc has been removed.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000566.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+	<LI>Next message: <A HREF="000568.html">[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#567">[ date ]</a>
+              <a href="thread.html#567">[ thread ]</a>
+              <a href="subject.html#567">[ subject ]</a>
+              <a href="author.html#567">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

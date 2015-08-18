@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%20cross-compilation%0A%09using%09%22powerpc-linux-gnu-gcc%22&In-Reply-To=%3C200803161516.m2GFGLN04953%40ngcobalt02.manitu.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000300.html">
+   <LINK REL="Next"  HREF="000302.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%20cross-compilation%0A%09using%09%22powerpc-linux-gnu-gcc%22&In-Reply-To=%3C200803161516.m2GFGLN04953%40ngcobalt02.manitu.net%3E"
+       TITLE="[Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;">wg at grandegger.com
+       </A><BR>
+    <I>Sun Mar 16 16:16:21 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000300.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+        <LI>Next message: <A HREF="000302.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#301">[ date ]</a>
+              <a href="thread.html#301">[ thread ]</a>
+              <a href="subject.html#301">[ subject ]</a>
+              <a href="author.html#301">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+&gt;<i> I've tried with your command and the result now is a little bit different:
+</I>&gt;<i> 
+</I>&gt;<i>  WARNING: Symbol version dump
+</I>&gt;<i> /home/user/trunk/kernel/linux-2.6.22.1-lite5200B/Module.symvers
+</I>&gt;<i>            is missing; modules will have no dependencies and modversions.
+</I>&gt;<i> 
+</I>&gt;<i>   CC [M]  /home/user/socketcan_last/kernel/2.6/drivers/net/can/vcan.o
+</I>&gt;<i>   cc1: error: unrecognized command line option &quot;-mmultiple&quot;
+</I>&gt;<i>   cc1: error: unrecognized command line option &quot;-mstring&quot;
+</I>&gt;<i>   cc1: warning: unknown register name: r2
+</I>&gt;<i>   make[3]: ***
+</I>[/home/user/socketcan/kernel/2.6/drivers/net/can/vcan.o] Error 1
+&gt;<i>   make[2]: *** [/home/user/socketcan/kernel/2.6/drivers/net/can] Error 2
+</I>&gt;<i>   make[1]: *** [_module_/home/user/socketcan/kernel/2.6] Error 2
+</I>&gt;<i>   make[1]: Leaving directory
+</I>`/home/user/trunk/kernel/linux-2.6.22.1-lite5200B'
+&gt;<i>   make: *** [modules] Error 2
+</I>
+Could you add &quot;V=1&quot; to the make command and send the output, please.
+Be aware that the kernel in KERNELDIR must be configuired and made.
+
+Wolfgang.
+
+
+
+ On Fri, Mar 14, 2008 at 6:40 PM, Wolfgang Grandegger
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+&gt;<i> &gt;
+</I>&gt;<i> &gt; Fabrizio Garetto wrote:
+</I>&gt;<i> &gt;  &gt; Hello,
+</I>&gt;<i> &gt;  &gt;    I'm trying to compile socketcan trunk with powerpc-linux-gnu-gcc
+</I>&gt;<i> &gt;  &gt; using the command
+</I>&gt;<i> &gt;  &gt;
+</I>&gt;<i> &gt;  &gt;   make CC=powerpc-linux-gnu-gcc
+</I>&gt;<i> &gt;  &gt; KERNELDIR=/home/user/trunk/kernel/linux-2.6.22.1-lite5200B
+</I>&gt;<i> &gt;  &gt;
+</I>&gt;<i> &gt;  &gt; and this is the result:
+</I>&gt;<i> &gt;  &gt;
+</I>&gt;<i> &gt;  &gt;    CC [M]  /home/user/socketcan/kernel/2.6/drivers/net/can/vcan.o
+</I>&gt;<i> &gt;  &gt;    cc1: error: unrecognized command line option &quot;-mregparm=3&quot;
+</I>&gt;<i> &gt;  &gt;    cc1: error: unrecognized command line option &quot;-march=i586&quot;
+</I>&gt;<i> &gt;  &gt;    cc1: error: unrecognized command line option
+</I>&quot;-maccumulate-outgoing-args&quot;
+&gt;<i> &gt;  &gt;    make[3]: ***
+</I>[/home/user/socketcan/kernel/2.6/drivers/net/can/vcan.o] Error 1
+&gt;<i> &gt;  &gt;    make[2]: *** [/home/user/socketcan/kernel/2.6/drivers/net/can]
+</I>Error 2
+&gt;<i> &gt;  &gt;    make[1]: *** [_module_/home/user/socketcan/kernel/2.6] Error 2
+</I>&gt;<i> &gt;  &gt;    make[1]: Leaving directory
+</I>`/home/user/trunk/kernel/linux-2.6.22.1-lite5200B'
+&gt;<i> &gt;  &gt;    make: *** [modules] Error 2
+</I>&gt;<i> &gt;  &gt;
+</I>&gt;<i> &gt;  &gt; I looked for those options inside the various Makefiles but I
+</I>couldn't
+&gt;<i> &gt;  &gt; find any of them.
+</I>&gt;<i> &gt;  &gt; Do you know where is the problem and how to fix it?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  Try
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;   $ make ARCH=ppc KERNELDIR=&lt;your-kernel&gt; \
+</I>&gt;<i> &gt;          CROSS_COMPILE=powerpc-linux-gnu- \
+</I>&gt;<i> &gt;          CONFIG_CAN_MSCAN=m CONFIG_CAN_MPC52XX=m
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  Wolfgang.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000300.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+	<LI>Next message: <A HREF="000302.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#301">[ date ]</a>
+              <a href="thread.html#301">[ thread ]</a>
+              <a href="subject.html#301">[ subject ]</a>
+              <a href="author.html#301">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

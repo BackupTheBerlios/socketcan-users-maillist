@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6EB5D0.5000208%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001268.html">
+   <LINK REL="Next"  HREF="001281.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6EB5D0.5000208%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Sun Feb  7 13:45:04 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001268.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001281.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1273">[ date ]</a>
+              <a href="thread.html#1273">[ thread ]</a>
+              <a href="subject.html#1273">[ subject ]</a>
+              <a href="author.html#1273">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>christian pellegrin wrote:
+&gt;<i> Ditto for mcp251x but against mainline. Just a question I noted
+</I>&gt;<i> studying the error frames: it looks to me that there isn't an error
+</I>&gt;<i> frame saying &quot;the situation is come back to normality&quot; (I mean
+</I>&gt;<i> error-active). Is this normal or I'm just missing something?
+</I>
+I found this useful information in the AT91 CAN manual:
+
+&lt;begin quote&gt;
+
+&#8226; REC: Receive Error Counter
+When a receiver detects an error, REC will be increased by one, except when the detected error is a BIT ERROR while
+sending an ACTIVE ERROR FLAG or an OVERLOAD FLAG.
+When a receiver detects a dominant bit as the first bit after sending an ERROR FLAG, REC is increased by 8.
+When a receiver detects a BIT ERROR while sending an ACTIVE ERROR FLAG, REC is increased by 8.
+Any node tolerates up to 7 consecutive dominant bits after sending an ACTIVE ERROR FLAG, PASSIVE ERROR FLAG or
+OVERLOAD FLAG. After detecting the 14th consecutive dominant bit (in case of an ACTIVE ERROR FLAG or an OVER-
+LOAD FLAG) or after detecting the 8th consecutive dominant bit following a PASSIVE ERROR FLAG, and after each
+sequence of additional eight consecutive dominant bits, each receiver increases its REC by 8.
+After successful reception of a message, REC is decreased by 1 if it was between 1 and 127. If REC was 0, it stays 0, and
+if it was greater than 127, then it is set to a value between 119 and 127.
+
+&#8226; TEC: Transmit Error Counter
+When a transmitter sends an ERROR FLAG, TEC is increased by 8 except when
+       &#8211; the transmitter is error passive and detects an ACKNOWLEDGMENT ERROR because of not detecting a
+         dominant ACK and does not detect a dominant bit while sending its PASSIVE ERROR FLAG.
+       &#8211; the transmitter sends an ERROR FLAG because a STUFF ERROR occurred during arbitration and should
+         have been recessive and has been sent as recessive but monitored as dominant.
+When a transmitter detects a BIT ERROR while sending an ACTIVE ERROR FLAG or an OVERLOAD FLAG, the TEC will
+be increased by 8.
+Any node tolerates up to 7 consecutive dominant bits after sending an ACTIVE ERROR FLAG, PASSIVE ERROR FLAG or
+OVERLOAD FLAG. After detecting the 14th consecutive dominant bit (in case of an ACTIVE ERROR FLAG or an OVER-
+LOAD FLAG) or after detecting the 8th consecutive dominant bit following a PASSIVE ERROR FLAG, and after each
+sequence of additional eight consecutive dominant bits every transmitter increases its TEC by 8.
+After a successful transmission the TEC is decreased by 1 unless it was already 0.
+
+&lt;end qoute&gt;
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001268.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001281.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1273">[ date ]</a>
+              <a href="thread.html#1273">[ thread ]</a>
+              <a href="subject.html#1273">[ subject ]</a>
+              <a href="author.html#1273">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

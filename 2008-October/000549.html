@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C490A25CE.1020602%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000544.html">
+   <LINK REL="Next"  HREF="000516.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ixxat-pci (with sja1000) doesn't receive</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C490A25CE.1020602%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] ixxat-pci (with sja1000) doesn't receive">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Oct 30 22:23:26 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000544.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+        <LI>Next message: <A HREF="000516.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#549">[ date ]</a>
+              <a href="thread.html#549">[ thread ]</a>
+              <a href="subject.html#549">[ subject ]</a>
+              <a href="author.html#549">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> g a wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> On Tue, Oct 28, 2008 at 2:02 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> g a wrote:
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;&gt;&gt;<i> perfect!, it works! my next step is to see why can1 doesn't appear at /sys
+</I>&gt;&gt;&gt;&gt;<i> thank you so much!!
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;<i> Please check the code in ixxat_pci_init_one(). To detect the second
+</I>&gt;&gt;&gt;<i> device, the card gets reseted first and then the reset values of the
+</I>&gt;&gt;&gt;<i> registers of the second chip are inspected:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        /* Check if second channel is available */
+</I>&gt;&gt;&gt;<i>        if (readb(base_addr + CHANNEL_OFFSET + REG_MOD) == 0x21 &amp;&amp;
+</I>&gt;&gt;&gt;<i>            readb(base_addr + CHANNEL_OFFSET + REG_SR) == 0x0c &amp;&amp;
+</I>&gt;&gt;&gt;<i>            readb(base_addr + CHANNEL_OFFSET + REG_IR) == 0xe0) {
+</I>&gt;&gt;&gt;<i>                board-&gt;dev[1] = ixxat_pci_add_chan(pdev,
+</I>&gt;&gt;&gt;<i>                                base_addr + CHANNEL_OFFSET);
+</I>&gt;&gt;&gt;<i>                if (IS_ERR(board-&gt;dev[1]))
+</I>&gt;&gt;&gt;<i>                        goto failure_unreg_dev0;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>                intcsr |= INTCSR_LINTI2;
+</I>&gt;&gt;&gt;<i>        }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> What are the values of these MOD, SR and IR registeres?
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> REG_SR and REG_IR have the correct values (0x0c and 0xe0) but REG_MOD
+</I>&gt;&gt;<i> has 0x2b instead of 0x21. Should i set to 0x21?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> No, please try the patch below and let me know if it works.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i> [PATCH] SJA1000: ixxat_pci: fix the detection of the second SJA1000 chip
+</I>&gt;<i>
+</I>&gt;<i> According to the SJA1000 data sheet, section 6.3.2, only the bits 0,5
+</I>&gt;<i> and 7 of the control/mode register are defined after a reset. This
+</I>&gt;<i> patch uses a proper mask before checking the value.
+</I>&gt;<i>
+</I>&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> ---
+</I>&gt;<i>  drivers/net/can/sja1000/ixxat_pci.c |    2 +-
+</I>&gt;<i>  1 file changed, 1 insertion(+), 1 deletion(-)
+</I>&gt;<i>
+</I>&gt;<i> Index: 2.6/drivers/net/can/sja1000/ixxat_pci.c
+</I>&gt;<i> ===================================================================
+</I>&gt;<i> --- 2.6.orig/drivers/net/can/sja1000/ixxat_pci.c
+</I>&gt;<i> +++ 2.6/drivers/net/can/sja1000/ixxat_pci.c
+</I>&gt;<i> @@ -199,7 +199,7 @@ static int __devinit ixxat_pci_init_one(
+</I>&gt;<i>  		goto failure_iounmap;
+</I>&gt;<i>  
+</I>&gt;<i>  	/* Check if second channel is available */
+</I>&gt;<i> -	if (readb(base_addr + CHANNEL_OFFSET + REG_MOD) == 0x21 &amp;&amp;
+</I>&gt;<i> +	if ((readb(base_addr + CHANNEL_OFFSET + REG_MOD) &amp; 0xa1) == 0x21  &amp;&amp;
+</I>&gt;<i>  	    readb(base_addr + CHANNEL_OFFSET + REG_SR) == 0x0c &amp;&amp;
+</I>&gt;<i>  	    readb(base_addr + CHANNEL_OFFSET + REG_IR) == 0xe0) {
+</I>&gt;<i>  		board-&gt;dev[1] = ixxat_pci_add_chan(pdev,
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Hi Wolfgang,
+
+i applied your patch on the SVN after double checking the Spec.
+Thanks for catching this.
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000544.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+	<LI>Next message: <A HREF="000516.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#549">[ date ]</a>
+              <a href="thread.html#549">[ thread ]</a>
+              <a href="subject.html#549">[ subject ]</a>
+              <a href="author.html#549">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

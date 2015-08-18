@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTi%3Dj8GpEjpTJOXhCAa1rokSLyOfzi5u9sfH2drDA%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001641.html">
+   <LINK REL="Next"  HREF="001643.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTi%3Dj8GpEjpTJOXhCAa1rokSLyOfzi5u9sfH2drDA%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Sun Nov 14 23:54:01 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001641.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001643.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1642">[ date ]</a>
+              <a href="thread.html#1642">[ thread ]</a>
+              <a href="subject.html#1642">[ subject ]</a>
+              <a href="author.html#1642">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Lasts magics were in the PCI/Pnp section. My bios shows this options:
+
+(Name = current Value : description)
+( ** ** : option I think important for my problem)
+
+
+__Clear NVRAM__ = No: Set this value to force the BIOS to clear the
+Non-Volatile Random Access Memory (NVRAM).The Optimal and Fail-Safe default
+setting is No.
+**__Plug &amp; Play O/S__** = No : When set to No, BIOS configures all the
+device in the system. When set to Yes and if you install a Plug and Play
+operating system, the operating system configures the Plug and Play device
+not required for boot.
+__PCI Latency Timer__ = 64 : Value in units of PCI clocks for PCI device
+latency timer register.
+__Allocate IRQ to PCI VGA__ = Yes: When set to Yes will assigns IRQ to PCI
+VGA card if card requests IRQ. When set to No will not assign IRQ to PCI VGA
+card even if card requests an IRQ.
+__Palette Snooping__ = Disabled : This item is designed to solve problems
+caused by some non-standard VGA card.
+__PCI IDE BusMaster__  = Enabled: When set to enabled BIOS uses PCI
+busmastering for reading/writing to IDE drives.
+__OffBoard PCI/ISA IDE Card__ = Auto : Some PCI IDE cards may require this
+to be set to the PCI slot number that is holding the card. When set to Auto
+will works for most PCI IDE cards.
+**__IRQ3 / 4 / 5 / 7 / 9 / 10 /11__** = Available (for each of them, second
+option is : Reserved) : This item allows you respectively assign an
+interruptive type for IRQ-3, 4, 5, 7, 9, 10,11.
+**__DMA Channel0 / 1 / 3 / 5 / 6 / 7__** Available (for each of then, second
+option is : Reserved): When set to Available will specified DMA is available
+to be used by PCI/PnP devices. When set to Reserved will specified DMA will
+Reserved for use by legacy ISA devices.
+**__Reserved Memory Size__** : This item allows you to reserved size of
+memory block for legacy ISA device.
+
+
+I tried to reserve IRQ5 and 7 and/or DMA channel (5 and 7 or all). It
+doesn't seem to change anything. I don't know what to tune. Is it possible
+that my HW is not powered ? Or would this has prevent &quot;normal&quot; interface
+configuration
+
+
+2010/11/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 11/14/2010 08:36 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# cat /proc/interrupts
+</I>&gt;<i> &gt;&gt;             CPU0       CPU1
+</I>&gt;<i> &gt;&gt;    0:     153590     153124   IO-APIC-edge      timer
+</I>&gt;<i> &gt;&gt;    1:          0          2   IO-APIC-edge      i8042
+</I>&gt;<i> &gt;&gt;    5:          0          0   IO-APIC-edge      can0
+</I>&gt;<i> &gt;&gt;    7:          0          0   IO-APIC-edge      can1
+</I>&gt;<i>
+</I>&gt;<i> I assume that you already send some messages. Then you should see some
+</I>&gt;<i> interrupts, even if no cable is connected. I think there is a problem
+</I>&gt;<i> with these interrupts. Maybe again some bios magics.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101114/8b7a7e01/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101114/8b7a7e01/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001641.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001643.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1642">[ date ]</a>
+              <a href="thread.html#1642">[ thread ]</a>
+              <a href="subject.html#1642">[ subject ]</a>
+              <a href="author.html#1642">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

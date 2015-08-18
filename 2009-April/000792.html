@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN frame reordering.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20frame%20reordering.&In-Reply-To=%3C49E73FDF.2060408%40hipro.co.in%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000791.html">
+   <LINK REL="Next"  HREF="000794.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN frame reordering.</H1>
+    <B>vivek</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20frame%20reordering.&In-Reply-To=%3C49E73FDF.2060408%40hipro.co.in%3E"
+       TITLE="[Socketcan-users] CAN frame reordering.">vivek at hipro.co.in
+       </A><BR>
+    <I>Thu Apr 16 16:25:35 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000791.html">[Socketcan-users] CAN frame reordering.
+</A></li>
+        <LI>Next message: <A HREF="000794.html">[Socketcan-users] CAN frame reordering.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#792">[ date ]</a>
+              <a href="thread.html#792">[ thread ]</a>
+              <a href="subject.html#792">[ subject ]</a>
+              <a href="author.html#792">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> vivek wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I tried reducing the number of threads to two and sending data at full 
+</I>&gt;&gt;<i> rate without sleep. I frames are getting reordered. The missed ones 
+</I>&gt;&gt;<i> comes later. For eg. message sequence 1116 arrives when 1479 is 
+</I>&gt;&gt;<i> expected. Like wise sequence number 1532 arrives before 1531  and the 
+</I>&gt;&gt;<i> expected comes later.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [SpindleMsgHandler.cxx:0080] Got Message from 1, message sequence 
+</I>&gt;&gt;<i> 1116, expected = 1479
+</I>&gt;&gt;<i> [SpindleMsgHandler.cxx:0080] Got Message from 1, message sequence 
+</I>&gt;&gt;<i> 1479, expected = 1117
+</I>&gt;&gt;<i> [SpindleMsgHandler.cxx:0080] Got Message from 1, message sequence 
+</I>&gt;&gt;<i> 1532, expected = 1531
+</I>&gt;&gt;<i> [SpindleMsgHandler.cxx:0080] Got Message from 1, message sequence 
+</I>&gt;&gt;<i> 1531, expected = 2207
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> Hm - this could be an issue with the threads and probably with C++
+</I>&gt;<i> 
+</I>&gt;<i> We tried to reproduce a sequence swap with the CAN utils:
+</I>&gt;<i> 
+</I>&gt;<i> cangen vcan0 -g0 -I 1 -L 1 -D i
+</I>&gt;<i> cangen vcan0 -g0 -I 2 -L 1 -D i
+</I>&gt;<i> 
+</I>&gt;<i> We only recognized (expected) frame drops with candump but never any 
+</I>&gt;<i> swapping frames in the sequence number  ...
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>
+
+I have written a CAN client and server programs to push and read CAN 
+frames, in a continuous while loop, without threads. I still get the 
+same result.
+
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 31401, 
+expected = 31400
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 31400, 
+expected = 32597
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 32597, 
+expected = 31401
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 135604, 
+expected = 135603
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 135603, 
+expected = 135833
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 135833, 
+expected = 135604
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 160695, 
+expected = 160694
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 160694, 
+expected = 160878
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 160878, 
+expected = 160695
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 165503, 
+expected = 165502
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 165502, 
+expected = 166083
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 166083, 
+expected = 165503
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 185001, 
+expected = 185000
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 185000, 
+expected = 185153
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 185153, 
+expected = 185001
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 193213, 
+expected = 193212
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 193212, 
+expected = 194024
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 194024, 
+expected = 193213
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 219445, 
+expected = 219444
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 219444, 
+expected = 219541
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 219541, 
+expected = 219445
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 227763, 
+expected = 227762
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 227762, 
+expected = 228586
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 228586, 
+expected = 227763
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 296265, 
+expected = 296264
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 296264, 
+expected = 296366
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 296366, 
+expected = 296265
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 315652, 
+expected = 315651
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 315651, 
+expected = 317017
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 317017, 
+expected = 315652
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 324291, 
+expected = 324290
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 324290, 
+expected = 324381
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 324381, 
+expected = 324291
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 327726, 
+expected = 327725
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 327725, 
+expected = 327833
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 327833, 
+expected = 327726
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 357567, 
+expected = 357566
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 357566, 
+expected = 357764
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 357764, 
+expected = 357567
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 363154, 
+expected = 363153
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 363153, 
+expected = 363452
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 363452, 
+expected = 363154
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 410381, 
+expected = 410380
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 410380, 
+expected = 411572
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 411572, 
+expected = 410381
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 476470, 
+expected = 476469
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 476469, 
+expected = 476862
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 476862, 
+expected = 476470
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 509069, 
+expected = 509068
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 509068, 
+expected = 509078
+[I:      Can-Server.c:0098] Got Message from 1, message sequence 509078, 
+expected = 509069
+
+I am sending the client and server codes for your reference.
+
+-- 
+Vivek Anand
+HiPro IT Solutions
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Can-Client.c
+Type: text/x-csrc
+Size: 2494 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090416/89229f6d/attachment.c">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090416/89229f6d/attachment.c</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Can-Server.c
+Type: text/x-csrc
+Size: 2511 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090416/89229f6d/attachment-0001.c">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090416/89229f6d/attachment-0001.c</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000791.html">[Socketcan-users] CAN frame reordering.
+</A></li>
+	<LI>Next message: <A HREF="000794.html">[Socketcan-users] CAN frame reordering.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#792">[ date ]</a>
+              <a href="thread.html#792">[ thread ]</a>
+              <a href="subject.html#792">[ subject ]</a>
+              <a href="author.html#792">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

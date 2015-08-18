@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can&In-Reply-To=%3C4694E10C.5060605%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000149.html">
+   <LINK REL="Next"  HREF="000151.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can&In-Reply-To=%3C4694E10C.5060605%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] socketcan c_can">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Jul 11 15:54:20 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000149.html">[Socketcan-users] socketcan c_can
+</A></li>
+        <LI>Next message: <A HREF="000151.html">[Socketcan-users] socketcan c_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#150">[ date ]</a>
+              <a href="thread.html#150">[ thread ]</a>
+              <a href="subject.html#150">[ subject ]</a>
+              <a href="author.html#150">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">simon.kallweit at intefo.ch</A> wrote:
+
+&gt;<i> I have finished the adaption of the old c_can driver to the current 
+</I>&gt;<i> socketcan trunk. So far a driver for the hynix H7202 has been written 
+</I>&gt;<i> and successfully tested. I'd like to commit my changes to the current 
+</I>&gt;<i> development tree if possible. For that matter, i send you a patch as an 
+</I>&gt;<i> attachment. I just created a developer account on BerliOS (Username: 
+</I>&gt;<i> skallweit) so i could commit my changes myself if you add me as a 
+</I>&gt;<i> developer. But please, review my code before doing so :)
+</I>
+
+&gt;<i> diff -Naur socketcan.orig/kernel/2.6/drivers/net/can/c_can/h7202_can.c socketcan/kernel/2.6/drivers/net/can/c_can/h7202_can.c
+</I>&gt;<i> --- socketcan.orig/kernel/2.6/drivers/net/can/c_can/h7202_can.c	1970-01-01 01:00:00.000000000 +0100
+</I>&gt;<i> +++ socketcan/kernel/2.6/drivers/net/can/c_can/h7202_can.c	2007-07-11 14:50:45.000000000 +0200
+</I>&gt;<i> @@ -0,0 +1,218 @@
+</I>&gt;<i> +/*
+</I>&gt;<i> + * drivers/can/h7202_can.c
+</I>&gt;<i> + *
+</I>&gt;<i> + * Copyright (C) 2007
+</I>&gt;<i> + *
+</I>&gt;<i> + * - Sascha Hauer, Marc Kleine-Budde, Pengutronix
+</I>&gt;<i> + * - Simon Kallweit, intefo AG
+</I>&gt;<i> + *
+</I>&gt;<i> + * This program is free software; you can redistribute it and/or modify
+</I>&gt;<i> + * it under the terms of the version 2 of the GNU General Public License
+</I>&gt;<i> + * as published by the Free Software Foundation
+</I>&gt;<i> + *
+</I>&gt;<i> + * This program is distributed in the hope that it will be useful,
+</I>&gt;<i> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+</I>&gt;<i> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+</I>&gt;<i> + * GNU General Public License for more details.
+</I>&gt;<i> + *
+</I>&gt;<i> + * You should have received a copy of the GNU General Public License
+</I>&gt;<i> + * along with this program; if not, write to the Free Software
+</I>&gt;<i> + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+</I>&gt;<i> + */
+</I>&gt;<i> +
+</I>&gt;<i> +#include &lt;linux/module.h&gt;
+</I>&gt;<i> +#include &lt;linux/kernel.h&gt;
+</I>&gt;<i> +#include &lt;linux/pci.h&gt;
+</I>&gt;<i> +#include &lt;linux/init.h&gt;
+</I>&gt;<i> +#include &lt;linux/ioport.h&gt;
+</I>&gt;<i> +#include &lt;linux/delay.h&gt;
+</I>&gt;<i> +#include &lt;linux/crc32.h&gt;
+</I>&gt;<i> +#include &lt;linux/netdevice.h&gt;
+</I>&gt;<i> +#include &lt;linux/platform_device.h&gt;
+</I>&gt;<i> +
+</I>&gt;<i> +#include &lt;asm/io.h&gt;
+</I>&gt;<i> +#include &lt;asm/hardware.h&gt;
+</I>&gt;<i> +
+</I>&gt;<i> +#include &quot;c_can.h&quot;
+</I>&gt;<i> +
+</I>&gt;<i> +#define DRV_NAME      &quot;h7202can&quot;
+</I>&gt;<i> +#define DELAY         5
+</I>&gt;<i> +#define CAN_ENABLE    0x0e
+</I>&gt;<i> +#define NUM_CDEVS     2
+</I>&gt;<i> +
+</I>&gt;<i> +static struct ccan_dev *cdevs[NUM_CDEVS];
+</I>
+why do you need a global var here?
+
+Marc
+-- 
+  Dipl.-Ing. Marc Kleine-Budde | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+   Pengutronix - Linux Solutions for Science and Industry
+     Handelsregister: Amtsgericht Hildesheim, HRA 2686
+       Hannoversche Str. 2, 31134 Hildesheim, Germany
+     Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000149.html">[Socketcan-users] socketcan c_can
+</A></li>
+	<LI>Next message: <A HREF="000151.html">[Socketcan-users] socketcan c_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#150">[ date ]</a>
+              <a href="thread.html#150">[ thread ]</a>
+              <a href="subject.html#150">[ subject ]</a>
+              <a href="author.html#150">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

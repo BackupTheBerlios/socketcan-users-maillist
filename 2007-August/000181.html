@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kernel integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20integration&In-Reply-To=%3C46B22B28.6050305%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000179.html">
+   <LINK REL="Next"  HREF="000182.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kernel integration</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20integration&In-Reply-To=%3C46B22B28.6050305%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Kernel integration">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Aug  2 21:06:16 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000179.html">[Socketcan-users] Kernel integration
+</A></li>
+        <LI>Next message: <A HREF="000182.html">[Socketcan-users] Kernel integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#181">[ date ]</a>
+              <a href="thread.html#181">[ thread ]</a>
+              <a href="subject.html#181">[ subject ]</a>
+              <a href="author.html#181">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Rodolfo Giometti wrote:
+&gt;<i> On Thu, Aug 02, 2007 at 02:20:56AM -0700, David Miller wrote:
+</I>&gt;<i>   
+</I>&gt;<i>
+</I>&gt;&gt;<i> Why don't you guys just post your patches to netdev and make the
+</I>&gt;&gt;<i> changes to the code and design being asked from you instead of
+</I>&gt;&gt;<i> spending so much effort trying to argue against the things Patrick is
+</I>&gt;&gt;<i> trying to tell you about your code and how the infrastructure is
+</I>&gt;&gt;<i> designed?  All of which are totally reasonable and I absolutely agree
+</I>&gt;&gt;<i> with, your device model is horrible and needs to be fixed up.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Ok, I see. I'm just new to this project... maybe you can give me some
+</I>&gt;<i> links to past letters so I can start in understanding what should be
+</I>&gt;<i> done to fix up the code.
+</I>&gt;<i>   
+</I>
+Hi Rodolfo,
+
+if you could look at the SVN log you will see all our changes based on
+hints and advises from the netdev list and from every change the inside
+kernel since our first posting
+(<A HREF="http://marc.info/?l=linux-netdev&amp;m=117932884006029&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=117932884006029&amp;w=2</A>) that was
+already quickly reviewed by Thomas Gleixner. Indeed we've done all the
+things that have been requested.
+
+The problem is, that there are many misunderstandings as CAN is very
+different to the other networking stuff and you have to go a bit deeper
+to understand the broken CAN design in opposite to Ethernet and IP. And
+there was also a misunderstanding with my wish to include the  PF_CAN
+core first and not to wait for the suggested changes in the VCAN driver
+(as the protocol family and the netdriver are really _different_
+things!). Finally this RFC to Partick (
+<A HREF="http://marc.info/?l=linux-netdev&amp;m=118460167525654&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118460167525654&amp;w=2</A> ) waits to be
+answered since 17 days ... i made some changes in the comments today to
+point out the intention more precisely, which might (hopefully) make
+this RFC to Patrick obsolete ...
+
+Btw. everything that has to be fixed and beautified is done now, as we
+*really* adopted the hints. But David is (due to all these
+misunderstandings) on edge - which i can understand in parts.
+
+AFAIK Urs want's to post the patch series try#4 this evening which is
+try#3 (<A HREF="http://marc.info/?l=linux-netdev&amp;m=118248490902398&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118248490902398&amp;w=2</A>) with some
+changes described in
+(<A HREF="http://marc.info/?l=linux-netdev&amp;m=118398142013357&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118398142013357&amp;w=2</A>) and some
+changes caused by the ongoing kernel development.
+
+If you have still any questions on PF_CAN or it's concepts please try to
+discuss them here first (as i don't want to make the netdev ML
+discussions even more curious in these critical times ;-) You can find a
+full qualified documentation under
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+
+Thanks for your interest &amp; activity!
+
+Best Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000179.html">[Socketcan-users] Kernel integration
+</A></li>
+	<LI>Next message: <A HREF="000182.html">[Socketcan-users] Kernel integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#181">[ date ]</a>
+              <a href="thread.html#181">[ thread ]</a>
+              <a href="subject.html#181">[ subject ]</a>
+              <a href="author.html#181">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

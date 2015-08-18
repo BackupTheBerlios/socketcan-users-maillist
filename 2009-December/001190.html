@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can0 doesn't show after modprobe at91_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C68FBE0F3CE97264395875AC1C468F22C1F398F%40mail03.cyberswitching.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001200.html">
+   <LINK REL="Next"  HREF="001191.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can0 doesn't show after modprobe at91_can</H1>
+    <B>Chris Verges</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C68FBE0F3CE97264395875AC1C468F22C1F398F%40mail03.cyberswitching.local%3E"
+       TITLE="[Socketcan-users] can0 doesn't show after modprobe at91_can">chrisv at cyberswitching.com
+       </A><BR>
+    <I>Mon Dec  7 18:27:28 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001200.html">[Socketcan-users] Local loopback broken?
+</A></li>
+        <LI>Next message: <A HREF="001191.html">[Socketcan-users] can0 doesn't show after modprobe at91_can	[SOLVED]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1190">[ date ]</a>
+              <a href="thread.html#1190">[ thread ]</a>
+              <a href="subject.html#1190">[ subject ]</a>
+              <a href="author.html#1190">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi list,
+
+I'm attempting to build the SocketCAN kernel modules external to the
+kernel and load them in.  When I do, I see the following:
+
+   # modprobe can-raw
+   can: controller area network core (rev 20090105 abi 8)
+   NET: Registered protocol family 29
+   can: raw protocol (rev 20090105)
+
+   # modprobe at91_can
+   CAN device driver interface using the deprecated SYSFS interface
+   at91_can netdevice driver
+
+   # ip link show
+   1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 16436 qdisc noqueue state UNKNOWN
+       link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+   2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast
+state UNKN0
+       link/ether 00:09:e6:ff:ff:fe brd ff:ff:ff:ff:ff:ff
+
+How do I get the can0 interface to show up after modprobing the at91_can
+driver?  I assumed it would automagically happen.
+
+(Prior to this, I've been porting the SocketCAN code directly into the
+kernel and building monolithic.  However, this is cumbersome so I'd like
+to just use the external modules rather than maintain my own kernel
+line.  When building into the kernel directly, can0 does show up.)
+
+Thanks,
+Chris
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001200.html">[Socketcan-users] Local loopback broken?
+</A></li>
+	<LI>Next message: <A HREF="001191.html">[Socketcan-users] can0 doesn't show after modprobe at91_can	[SOLVED]
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1190">[ date ]</a>
+              <a href="thread.html#1190">[ thread ]</a>
+              <a href="subject.html#1190">[ subject ]</a>
+              <a href="author.html#1190">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

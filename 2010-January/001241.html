@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN Protocol - Generating bus off
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20Protocol%20-%20Generating%20bus%20off&In-Reply-To=%3C4B628F6C.10402%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001237.html">
+   <LINK REL="Next"  HREF="001238.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN Protocol - Generating bus off</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20Protocol%20-%20Generating%20bus%20off&In-Reply-To=%3C4B628F6C.10402%40grandegger.com%3E"
+       TITLE="[Socketcan-users] CAN Protocol - Generating bus off">wg at grandegger.com
+       </A><BR>
+    <I>Fri Jan 29 08:34:04 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001237.html">[Socketcan-users] CAN Protocol - Generating bus off
+</A></li>
+        <LI>Next message: <A HREF="001238.html">[Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1241">[ date ]</a>
+              <a href="thread.html#1241">[ thread ]</a>
+              <a href="subject.html#1241">[ subject ]</a>
+              <a href="author.html#1241">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Baluta wrote:
+&gt;<i> On Thu, Jan 28, 2010 at 4:16 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;<i> Daniel Baluta wrote:
+</I>&gt;&gt;&gt;<i> On Thu, Jan 28, 2010 at 3:17 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;<i> Daniel Baluta wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I'm writing tests for an Intel based CAN controller and I've now
+</I>&gt;&gt;&gt;&gt;&gt;<i> reached the part with bus off.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Can you give me some hints about how to generate a deterministic test
+</I>&gt;&gt;&gt;&gt;&gt;<i> for bus off.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I have a testcase where two nodes are communicating correctly using a
+</I>&gt;&gt;&gt;&gt;&gt;<i> given baud rate,
+</I>&gt;&gt;&gt;&gt;&gt;<i> and a third one tries to transmit using a different baud rate. Using
+</I>&gt;&gt;&gt;&gt;&gt;<i> this test I can generate
+</I>&gt;&gt;&gt;&gt;&gt;<i> bus off, but its not deterministic.
+</I>&gt;&gt;&gt;&gt;<i> What do you mean with &quot;it's not deterministic&quot;?
+</I>&gt;&gt;&gt;<i> Not deterministic means that when I run the test multiple times I get
+</I>&gt;&gt;&gt;<i> different results. (e.g I don't get
+</I>&gt;&gt;&gt;<i> bus off each time ).
+</I>&gt;&gt;<i> I normally short-circuit CAN low and high to trigger bus-off.
+</I>&gt;<i> 
+</I>&gt;<i> thanks, this works just fine.
+</I>&gt;<i> anyhow, this implies either a manual configuration either a power switch.
+</I>&gt;<i> it must be another way of generating this bus off condition.
+</I>
+Yes, I known. Maybe the device trying to provoke the bus-off goes
+bus-off itself. I you find aother way, please let me know.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001237.html">[Socketcan-users] CAN Protocol - Generating bus off
+</A></li>
+	<LI>Next message: <A HREF="001238.html">[Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1241">[ date ]</a>
+              <a href="thread.html#1241">[ thread ]</a>
+              <a href="subject.html#1241">[ subject ]</a>
+              <a href="author.html#1241">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

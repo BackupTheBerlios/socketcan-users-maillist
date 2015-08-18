@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EE5E321.8050104%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002330.html">
+   <LINK REL="Next"  HREF="002332.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EE5E321.8050104%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Mon Dec 12 12:18:57 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002330.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002332.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2331">[ date ]</a>
+              <a href="thread.html#2331">[ thread ]</a>
+              <a href="subject.html#2331">[ subject ]</a>
+              <a href="author.html#2331">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i>
+</I>&gt;<i> On 12/11/2011 07:33 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;<i> On 12/07/2011 02:42 PM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 12/06/2011 10:08 PM, Wolfgang Zarre wrote:
+</I>&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;<i> Let me know if You need more or some other tests.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> You could provoke some state changes or bus-off conditions to see if the
+</I>&gt;&gt;&gt;&gt;<i> berr-counter shows reasonable results. I'm currently consolidating and
+</I>&gt;&gt;&gt;&gt;<i> unifying error state and bus-off handling. Would be nice if you could do
+</I>&gt;&gt;&gt;&gt;<i> some further tests when I have the patches ready...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I just pushed the mentioned modifications to the &quot;devel&quot; branch of my
+</I>&gt;&gt;&gt;<i> &quot;wg-linux-can-next&quot; [1] repository. You can get it as shown below:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>     $ git clone --reference=&lt;some-recent-net-next-tree&gt;   \
+</I>&gt;&gt;&gt;<i>         <A HREF="git://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next.git">git://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next.git</A>
+</I>&gt;&gt;&gt;<i>     $ git checkout -b devel devel
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> [1] <A HREF="https://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next">https://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> OK, I was trying so far and You will find below the results.
+</I>&gt;&gt;<i> Just FYI the states on the PLC side couldn't be verified because the
+</I>&gt;&gt;<i> function
+</I>&gt;&gt;<i> provided by the manufacturer is not working at all and CAN analyser was not
+</I>&gt;&gt;<i> available.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We are running CANopen and therefore the PLC will send automatically a
+</I>&gt;&gt;<i> heartbeat.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I produced the bus-off state through a short circuit between L/H which was
+</I>&gt;&gt;<i> working as expected.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> A bit odd was that on the second try I had to reload the module
+</I>&gt;&gt;<i> because a ip down/up was not enough.
+</I>&gt;<i>
+</I>&gt;<i> Oops, not good.
+</I>&gt;<i>
+</I>
+But might be in connection with the strange behaviour of the PLC.
+
+&gt;&gt;<i> Let me know if You would need further tests or different procedure.
+</I>&gt;<i>
+</I>&gt;<i> The state changes are reported via error messages, which you can list
+</I>&gt;<i> with &quot;candump -td -e any,0:0,#FFFFFFFF&quot; with the attached patch.
+</I>&gt;<i>
+</I>
+Thanks, I'll try this with the next series of tests.
+
+&gt;&gt;<i> Producing L/H short circuit for 2 seconds
+</I>&gt;&gt;<i> dmesg:
+</I>&gt;&gt;<i> [  885.409058] cc770_isa cc770_isa.0: can0: status interrupt (0x5b)
+</I>&gt;&gt;<i> [  885.420475] cc770_isa cc770_isa.0: can0: status interrupt (0xc5)
+</I>&gt;&gt;<i> [  885.420496] cc770_isa cc770_isa.0: can0: bus-off
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ip -d -s link show can0
+</I>&gt;&gt;<i> 4: can0:&lt;NO-CARRIER,NOARP,UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state DOWN
+</I>&gt;&gt;<i> qlen 10
+</I>&gt;&gt;<i>      link/can
+</I>&gt;&gt;<i>      can state BUS-OFF (berr-counter tx 92 rx 103) restart-ms 0
+</I>&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>      0          0          0          1          0          1
+</I>&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>      544        382      0       0       0       0
+</I>&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>      30         29       0       0       0       0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sending and receiving stops.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Trying to recover on PC:
+</I>&gt;&gt;<i> ip link set can0 down;
+</I>&gt;&gt;<i> ip -d -s link show can0
+</I>&gt;&gt;<i> 4: can0:&lt;NOARP,ECHO&gt;  mtu 16 qdisc pfifo_fast state DOWN qlen 10
+</I>&gt;&gt;<i>      link/can
+</I>&gt;&gt;<i>      can state STOPPED (berr-counter tx 92 rx 103) restart-ms 0
+</I>&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>      0          0          0          1          0          1
+</I>&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>      544        382      0       0       0       0
+</I>&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>      30         29       0       1       0       0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ip link set can0 up type can bitrate 500000;
+</I>&gt;&gt;<i> dmesg:
+</I>&gt;&gt;<i> [ 1090.937778] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+</I>&gt;&gt;<i> [ 1090.937869] cc770_isa cc770_isa.0: can0: Message object 15 for RX
+</I>&gt;&gt;<i> data, RTR, SFF and EFF
+</I>&gt;&gt;<i> [ 1090.937885] cc770_isa cc770_isa.0: can0: Message object 11 for TX
+</I>&gt;&gt;<i> data, RTR, SFF and EFF
+</I>&gt;&gt;<i> [ 1090.938050] ADDRCONF(NETDEV_CHANGE): can0: link becomes ready
+</I>&gt;&gt;<i> [ 1090.940769] cc770_isa cc770_isa.0: can0: status interrupt (0x5)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ip -d -s link show can0
+</I>&gt;&gt;<i> 4: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UP qlen 10
+</I>&gt;&gt;<i>      link/can
+</I>&gt;&gt;<i>      can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+</I>&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>      0          0          0          1          0          1
+</I>&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>      552        383      0       0       0       0
+</I>&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>      30         29       0       1       0       0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> PLC in unknown state but not sending heartbeat,
+</I>&gt;&gt;<i> Rebooting PLC
+</I>&gt;<i>
+</I>&gt;<i> Hm, does it work if you do the bus-off recovery manually with?
+</I>&gt;<i>
+</I>&gt;<i>    # ip link set can0 up type can restart
+</I>&gt;<i>
+</I>&gt;<i> ... or automatically with?
+</I>&gt;<i>
+</I>&gt;<i>    # ip link set can0 up type can restart-ms 5000
+</I>
+Ah, ok, good point, will try out as well with the next series of tests
+
+&gt;<i>
+</I>&gt;<i> Anyway, rebooting/reloading should never be necessary. I will check on
+</I>&gt;<i> my i82572.
+</I>&gt;<i>
+</I>&gt;&gt;<i> -----------------------------------------
+</I>&gt;&gt;<i> Disconnecting cable for around 4 seconds:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> dmesg:
+</I>&gt;&gt;<i> [ 2339.660283] cc770_isa cc770_isa.0: can0: status interrupt (0x5b)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ip -d -s link show can0
+</I>&gt;&gt;<i> 6: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;<i> qlen 10
+</I>&gt;&gt;<i>      link/can
+</I>&gt;&gt;<i>      can state ERROR-WARNING (berr-counter tx 128 rx 128) restart-ms 0
+</I>&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>      0          0          0          1          0          0
+</I>&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>      459        298      0       0       0       0
+</I>&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>      193        192      0       0       0       0
+</I>&gt;<i>
+</I>&gt;<i> TX and RX berr-counter are&gt;= 128. I wonder why error passive was not
+</I>&gt;<i> reached.
+</I>
+Hmmm, that is a good question and You are right &gt; 127 should be error-passive,
+anyway, just realised now, what means then 'error-warning' because I just
+know error-active, error-passive and bus-off.
+
+&gt;<i>
+</I>&gt;&gt;<i> Connecting again:
+</I>&gt;&gt;<i> ip -d -s link show can0
+</I>&gt;&gt;<i> 6: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;<i> qlen 10
+</I>&gt;&gt;<i>      link/can
+</I>&gt;&gt;<i>      can state ERROR-WARNING (berr-counter tx 120 rx 0) restart-ms 0
+</I>&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>      0          0          0          1          0          0
+</I>&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>      473        311      0       0       0       0
+</I>&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>      200        200      0       0       0       0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After some time (around 125 seconds):
+</I>&gt;&gt;<i> dmesg:
+</I>&gt;&gt;<i> [ 2387.172008] cc770_isa cc770_isa.0: can0: status interrupt (0x18)
+</I>&gt;&gt;<i> ip -d -s link show can0
+</I>&gt;&gt;<i> 6: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;<i> qlen 10
+</I>&gt;&gt;<i>      link/can
+</I>&gt;&gt;<i>      can state ERROR-ACTIVE (berr-counter tx 29 rx 0) restart-ms 0
+</I>&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>      0          0          0          1          0          0
+</I>&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;<i>      616        447      0       0       0       0
+</I>&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;<i>      291        291      0       0       0       0
+</I>&gt;<i>
+</I>&gt;<i> OK, the state is back to error active (counter&lt;  96).
+</I>&gt;<i>
+</I>&gt;<i> Thanks for testing...
+</I>
+You are welcome, however, I have to thank You for Your work done.
+
+So, I'll try as soon as I can another series of tests and may be
+You let me know if You have patches I should include as well.
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Thanks
+
+Wolfgang
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002330.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002332.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2331">[ date ]</a>
+              <a href="thread.html#2331">[ thread ]</a>
+              <a href="subject.html#2331">[ subject ]</a>
+              <a href="author.html#2331">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

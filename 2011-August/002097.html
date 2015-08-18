@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Performance issues with MPC5200B and socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB5381F2%40Zuse1.tracetronic.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002094.html">
+   <LINK REL="Next"  HREF="002098.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Performance issues with MPC5200B and socketcan</H1>
+    <B>&quot;M&#252;ller, Ren&#233;&quot;</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB5381F2%40Zuse1.tracetronic.local%3E"
+       TITLE="[Socketcan-users] Performance issues with MPC5200B and socketcan">Rene.Mueller at tracetronic.de
+       </A><BR>
+    <I>Mon Aug 22 17:04:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002094.html">[Socketcan-users] Advice needed starting SocketCAN
+</A></li>
+        <LI>Next message: <A HREF="002098.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2097">[ date ]</a>
+              <a href="thread.html#2097">[ thread ]</a>
+              <a href="subject.html#2097">[ subject ]</a>
+              <a href="author.html#2097">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am 19.08.2011 17:27, schrieb &quot;M&#252;ller, Ren&#233;&quot;:
+&gt;<i> Am 17.08.2011 11:43, schrieb Oliver Hartkopp:
+</I>&gt;&gt;<i> Am 17.08.2011 10:38, schrieb &quot;M&#252;ller, Ren&#233;&quot;:
+</I>&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have an performance issue with socketcan and an MPC5200B. My setup looks like this:
+</I>&gt;&gt;&gt;<i>   - MPC5200B board (TQM5200)
+</I>&gt;&gt;&gt;<i>   - custom base board with two PCA82C251, one for each can controller
+</I>&gt;&gt;&gt;<i>   - linux-2.6.27.18-denx, I use the mpc52xx driver
+</I>&gt;&gt;&gt;<i>   - booted with uboot and kernel from flash
+</I>&gt;&gt;&gt;<i>   - mount root filesystem via NFS
+</I>&gt;&gt;&gt;<i>   - can0 with 1Mbit/s
+</I>&gt;&gt;&gt;<i>   - candump -l can0 to tmpfs 
+</I>&gt;&gt;<i> Hi Ren&#233;,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> can you check if the frames are dropped on socket-level? I assume, that the candump is not able to dump the stuff into tmpfs at full speed.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> See details at:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00170.html">http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00170.html</A>
+</I>&gt;<i> Hi Oliver,
+</I>&gt;<i>
+</I>&gt;<i> thanks for the hint. I tried it, and indeed I lose my frames because I'm to slow with fetching them. I will take a look, if I find a better mechanism to dump the frames.
+</I>Hi Oliver,
+
+I made some tests with increased rx buffer size and a hacked candump. I want to dump every frame in an 30 second time span, so I increased the rx buffer with candump -r to 20000000. In candump I disabled the live-dump to the log file. When I press a key, I set a &quot;nothing passes&quot; filter, so that the socket rx buffer contains the last ~25s (1Mbit/s with &gt;90% busload). Then I start writing the frames to my candump log file until the buffer is empty. So far this solution is fine (no data is lost), but it eats my memory. For this ~25s I need ~100MB ram. My board has only 128MB, so this is way too much and I cannot increase the buffer further (I'm still missing ~5s).
+
+I took a look at the kernel code and I think the socket buffer has some &quot;slight&quot; overhead in case of can. There is an huge structure used to store the 8 bytes of one can frame. I'm afraid that this structure is needed.
+
+I think my main problem is the system call overhead of recv/recvmsg, because I tried to store the data in an circular buffer (from boost libraries) entirely in ram and I'm still losing data. The only way I get the frames without data loss seems to increase the socket buffer.
+
+At the moment I see 3 options:
+1. Decrease memory demand of the socket buffer (to fit my 30s into &lt;30MB)
+2. Put more than one can frame into one socket buffer structure to minimize the overhead
+3. Try lincan with hopefully less system call overhead
+
+What do you think I should try? Do you see another option to get the frames at such high busload without data loss?
+
+
+Thanks,
+Ren&#233;
+
+
+&gt;&gt;<i> As this functionality is only working on a 2.6.33+, i created a patch for our MPC5200 based system (which has a 2.6.28.10), that upgrades the CAN network and drivers to a recent functionality (including dropcount, isotp, cangw and a recent mpc52xx driver).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I can send the (huge) patches to you, if you're interested.
+</I>&gt;<i> Thanks for the offer. For the moment I got a 2.6.35.7 working for testing purposes. If I need a back port later, I will come back to you.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Ren&#233;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Oliver
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Now I play with the busload on can0 (generated by CANalyzer and three CANcaseXL). This leads to the following results:
+</I>&gt;&gt;&gt;<i>   - 0% to 71% busload -&gt;  no missing frames
+</I>&gt;&gt;&gt;<i>   - 74% busload -&gt;  5% missing frames
+</I>&gt;&gt;&gt;<i>   - 77% busload -&gt;  10% missing frames
+</I>&gt;&gt;&gt;<i>   - 90% busload -&gt;  45% missing frames
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The missing frames are measured by comparison of the candump log file against the CANalyzer log file. The indicated busload is measured by CANalyzer. The cause seems to be very simple: the cpu load is too high (or the cpu is too slow). When the busload is under 71%, the cpu load is under 100%. When the busload goes higher than 71%, the cpu load is 100%. This seems to be the cause for the missing frames.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Has anyone else ever seen such an performance issue? Does someone use the MPC5200B in high busload environments? Maybe I configured something wrong in my linux.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> What about lincan? It has an character device approach with very little overhead. Is there an chance, that this will solve my problem?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Best regards,
+</I>&gt;&gt;&gt;<i> Ren&#233;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A> 
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002094.html">[Socketcan-users] Advice needed starting SocketCAN
+</A></li>
+	<LI>Next message: <A HREF="002098.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2097">[ date ]</a>
+              <a href="thread.html#2097">[ thread ]</a>
+              <a href="subject.html#2097">[ subject ]</a>
+              <a href="author.html#2097">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

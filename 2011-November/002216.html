@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Info request about sja1000_isa.c
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Info%20request%20about%20sja1000_isa.c&In-Reply-To=%3C4EC225A6.9080001%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002215.html">
+   <LINK REL="Next"  HREF="002218.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Info request about sja1000_isa.c</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Info%20request%20about%20sja1000_isa.c&In-Reply-To=%3C4EC225A6.9080001%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Info request about sja1000_isa.c">wg at grandegger.com
+       </A><BR>
+    <I>Tue Nov 15 09:41:10 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002215.html">[Socketcan-users]  Info request about sja1000_isa.c
+</A></li>
+        <LI>Next message: <A HREF="002218.html">[Socketcan-users] Info request about sja1000_isa.c
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2216">[ date ]</a>
+              <a href="thread.html#2216">[ thread ]</a>
+              <a href="subject.html#2216">[ subject ]</a>
+              <a href="author.html#2216">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Michael,
+
+On 11/15/2011 09:31 AM, Michael A. Purwoadi wrote:
+&gt;<i> 
+</I>&gt;<i> Hi guys,
+</I>&gt;<i> 
+</I>&gt;<i> I would like to use the kernel module sja1000_isa for my PC/104 board 
+</I>&gt;<i> Canpro/104 from ConnectTech. I use linux-2.6.20.18-rt8 on PXA 270. 
+</I>&gt;<i> when insmod the module, there was an error below :
+</I>&gt;<i> sja1000_isa: Unknown symbol alloc_sja1000dev
+</I>&gt;<i> sja1000_isa: Unknown symbol register_sja1000dev                                                                     
+</I>&gt;<i> sja1000_isa: Unknown symbol free_sja1000dev                                                                         
+</I>&gt;<i> sja1000_isa: Unknown symbol unregister_sja1000dev          
+</I>&gt;<i> 
+</I>&gt;<i> What file contains those routines ? I'd just made 
+</I>&gt;<i> the module from sja1000_isa.c file. 
+</I>
+Hm, you are using a very old version of Linux and most likely it does
+not have CAN support, at least the mainline kernel doesn't. Then you
+need to build and load other kernel modules from our out-of-tree
+Socket-CAN repo, apart from sja1000.ko.
+
+Anyway, I'm puzzled how you build *just* the sja1000_isa.ko module
+without all the others.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002215.html">[Socketcan-users]  Info request about sja1000_isa.c
+</A></li>
+	<LI>Next message: <A HREF="002218.html">[Socketcan-users] Info request about sja1000_isa.c
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2216">[ date ]</a>
+              <a href="thread.html#2216">[ thread ]</a>
+              <a href="subject.html#2216">[ subject ]</a>
+              <a href="author.html#2216">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

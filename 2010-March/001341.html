@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] queuesize manipulation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20queuesize%20manipulation&In-Reply-To=%3C201003151128.17150.matthias.fuchs%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001340.html">
+   <LINK REL="Next"  HREF="001339.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] queuesize manipulation</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20queuesize%20manipulation&In-Reply-To=%3C201003151128.17150.matthias.fuchs%40esd.eu%3E"
+       TITLE="[Socketcan-users] queuesize manipulation">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Mon Mar 15 11:28:16 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001340.html">[Socketcan-users] queuesize manipulation
+</A></li>
+        <LI>Next message: <A HREF="001339.html">[Socketcan-users] queuesize manipulation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1341">[ date ]</a>
+              <a href="thread.html#1341">[ thread ]</a>
+              <a href="subject.html#1341">[ subject ]</a>
+              <a href="author.html#1341">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thursday 11 March 2010 17:40, Oliver Hartkopp wrote:
+&gt;<i> Hi Matthias,
+</I>&gt;<i> 
+</I>&gt;<i> Matthias Fuchs wrote:
+</I>&gt;<i> &gt; I played a little with various ways to manipulate tx/rxqueuesizes with SocketCAN.
+</I>&gt;<i> &gt; I ended up with some questions:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 1) Does setsockopt(... ,SOL_SOCKET, SO_SNDBUF, ....) have any impact on CAN_RAW sockets?
+</I>&gt;<i> &gt; My result: no!
+</I>&gt;<i> 
+</I>&gt;<i> Ack.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 2) Does setsockopt(... ,SOL_SOCKET, SO_RCVBUF, ....) have any impact on CAN_RAW sockets?
+</I>&gt;<i> &gt; Yes, that's also used by candump to prevent losing rx frames.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 1+2 brings me to the conclusion that setsockopt(..., SO_RCVBUF, ...) configures receive
+</I>&gt;<i> &gt; behavior and &quot;ip link set can0 txqueuelen &lt;whatever&gt;&quot; configures tx behavior. Did I miss 
+</I>&gt;<i> &gt; anything?
+</I>&gt;<i> 
+</I>&gt;<i> No. That's the current behaviour.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 3) Do we have a way to make write() on CAN_RAW sockets block when there is
+</I>&gt;<i> &gt; no more buffer space? Typical behavior is returning ENOBUFS. I haven't tried to
+</I>&gt;<i> &gt; use select() for sending. Does this work?
+</I>&gt;<i> 
+</I>&gt;<i> Yes. That should work.
+</I>&gt;<i> 
+</I>&gt;<i> We had a discussion on this recently.
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://old.nabble.com/-PATCH-0-2--add-support-for-Janz-MODULbus-devices-tp27662172p27715072.html">http://old.nabble.com/-PATCH-0-2--add-support-for-Janz-MODULbus-devices-tp27662172p27715072.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> Due to that discussion, i added the poll support to the 'cangen' tool:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://svn.berlios.de/wsvn/socketcan/?op=comp&amp;compare[">http://svn.berlios.de/wsvn/socketcan/?op=comp&amp;compare[</A>]=%2Ftrunk%<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">2Fcan-utils at 1149</A>&amp;compare[]=%2Ftrunk%<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">2Fcan-utils at 1146</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 4) Do we have a way to flush the txqueue and block until all messages are on the bus?
+</I>&gt;<i> &gt; fsync() does not seem to be the right choice.
+</I>&gt;<i> 
+</I>&gt;<i> AFAIK there's no way from the userspace to flush the txqueue - only set the
+</I>&gt;<i> interface state to &quot;down&quot; ...
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 5) Is there any special reason why read/write can only handle single messages?
+</I>&gt;<i> &gt; Is it just because nobody asked? It should be possible with our
+</I>&gt;<i> &gt; fixed size stuct can_frame. It could even speed thing up.
+</I>&gt;<i> 
+</I>&gt;<i> This is an interesting idea. BUT the problem is that all the drivers and
+</I>&gt;<i> especially the echo_skb handling deals with single skb's. For a good reason.
+</I>&gt;<i> 
+</I>&gt;<i> But i could imagine to implement a multi-frame handling inside the CAN_RAW
+</I>&gt;<i> socket. This could be done with a loop that splits it into single skb's in
+</I>&gt;<i> raw_sendmsg() quite easily.
+</I>&gt;<i> 
+</I>&gt;<i> At least this would reduce the number of userspace-&gt;kernelspace copies.
+</I>Yes.
+&gt;<i> 
+</I>&gt;<i> But you would need to check the return code to check how many frames have been
+</I>&gt;<i> written (when the txqueue is getting full).
+</I>Don't you check the return code of every systemcall :-)
+&gt;<i> 
+</I>&gt;<i> Interested?
+</I>Yes. But of course we could live with the current implementation.
+So it's a nice to have feature.
+
+Matthias
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001340.html">[Socketcan-users] queuesize manipulation
+</A></li>
+	<LI>Next message: <A HREF="001339.html">[Socketcan-users] queuesize manipulation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1341">[ date ]</a>
+              <a href="thread.html#1341">[ thread ]</a>
+              <a href="subject.html#1341">[ subject ]</a>
+              <a href="author.html#1341">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

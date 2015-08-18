@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%0A%20Protocol%09functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%202.6.18-6-amd64%0A%20%29&In-Reply-To=%3C49D8B9A0.3040106%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000748.html">
+   <LINK REL="Next"  HREF="000751.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%0A%20Protocol%09functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%202.6.18-6-amd64%0A%20%29&In-Reply-To=%3C49D8B9A0.3040106%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Apr  5 16:01:04 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000748.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+        <LI>Next message: <A HREF="000751.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#750">[ date ]</a>
+              <a href="thread.html#750">[ thread ]</a>
+              <a href="subject.html#750">[ subject ]</a>
+              <a href="author.html#750">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>lakshmi sreekanth wrote:
+&gt;<i> 
+</I>&gt;<i> Now i upgraded my kernel version.
+</I>&gt;<i> 
+</I>&gt;<i> My updated kernel version : /Linux / /*2.6.29-1*-amd64/
+</I>&gt;<i> Now what i have to install to run the CAN related programs in
+</I>&gt;<i> Linux 2.6.29-1-amd64.
+</I>
+2.6.25 would also be enough :-)
+
+CONFIG_CAN=m
+CONFIG_CAN_RAW=m
+CONFIG_CAN_BCM=m
+
+#
+# CAN Device Drivers
+#
+CONFIG_CAN_VCAN=m
+
+Must be enabled.
+
+After 'modprobe vcan' you can create virtual CAN interfaces for first tests
+(see
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+section 6.4)
+
+Then try the stuff from the SVN
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/</A>
+
+(best: check out the SVN and work in your private tree)
+
+You can send and receive CAN Messages with the provided tools on the vcan
+interfaces then to get a first impression.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000748.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+	<LI>Next message: <A HREF="000751.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#750">[ date ]</a>
+              <a href="thread.html#750">[ thread ]</a>
+              <a href="subject.html#750">[ subject ]</a>
+              <a href="author.html#750">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

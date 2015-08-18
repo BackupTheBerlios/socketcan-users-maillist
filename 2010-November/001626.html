@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104	proc+can stack
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Failed%20to%20load%20sja1000_isa.ko%20on%20a%20PC104%0A%09proc%2Bcan%20stack&In-Reply-To=%3CAANLkTikQ7FtfEB%3DrKZuzXsU2tOaoZcEPvbxUccuv8txt%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001625.html">
+   <LINK REL="Next"  HREF="001627.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104	proc+can stack</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Failed%20to%20load%20sja1000_isa.ko%20on%20a%20PC104%0A%09proc%2Bcan%20stack&In-Reply-To=%3CAANLkTikQ7FtfEB%3DrKZuzXsU2tOaoZcEPvbxUccuv8txt%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104	proc+can stack">lambert.willy at gmail.com
+       </A><BR>
+    <I>Wed Nov 10 14:44:19 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001625.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+        <LI>Next message: <A HREF="001627.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1626">[ date ]</a>
+              <a href="thread.html#1626">[ thread ]</a>
+              <a href="subject.html#1626">[ subject ]</a>
+              <a href="author.html#1626">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+the short story is that &quot;insmod sja1000_isa.ko irq=5,7 mem=0xd000,0xd200&quot;
+failed in dmesg with :
+[ 3260.818929] sja1000_isa: probe of sja1000_isa.0 failed with error -16
+[ 3260.819455] sja1000_isa: probe of sja1000_isa.1 failed with error -16
+[ 3260.820225] Legacy sja1000_isa driver for max. 8 devices registered
+
+The long one is :
+
+I just receive my brand new Ixxat Can PC104 Interface, I tried to put
+everything in order tonigth on my Linux 2.6.32.11 Debian system. but I'm
+stuck with kernel modules loading. Be sure that I rake the web in order to
+find any piece of information, but I did not find anything like
+&quot;installation instructions&quot;. I tried to compile the latex documentation
+(even in my Windows) but it's quite in German :) Please redirect me to any
+existing documentation if it exists. (this didn't helped :
+<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#635">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#635</A>)
+
+Then here is my config :
+_ <A HREF="http://www.ableway.com.cn/wp-content/uploads/2009/12/pcm-3362.pdf">http://www.ableway.com.cn/wp-content/uploads/2009/12/pcm-3362.pdf</A> (there
+is a bus cartography)
+_ <A HREF="http://www.ixxat.com/pc_i_04_104_en.html">http://www.ixxat.com/pc_i_04_104_en.html</A>
+
+
+What I did :
+_ As I am on a PC104 module,my can interface is on a ISA bus and It is
+connected to the chipset via a pci-isa bridge. I  activated ISA bus
+management in .config file. (I don't know if I have something to do for
+making the bus working).
+_ I add socket can options in .config and sja1000 drivers (on isa bus).
+_ I compiled my kernel on my host PC and copied it to my target. I now have
+sja1000.ko sja1000_isa.ko in lib/.../driver/net/can/sja1000
+
+I tried to load theses modules :
+_ insmod can.ko
+_ insmod candev.ko
+_ insmod sja1000.ko
+_ insmod sja1000_isa.ko irq=5,7 mem=0xd000,0xd200
+
+And then I have the error :
+[ 3260.818929] sja1000_isa: probe of sja1000_isa.0 failed with error -16
+[ 3260.819455] sja1000_isa: probe of sja1000_isa.1 failed with error -16
+[ 3260.820225] Legacy sja1000_isa driver for max. 8 devices registered
+
+Can someone help me finding what's wrong with it ?
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Following some details about my configuration that I find relevant +
+enclosed file. Please be kind if I forgot something, I am not used to work
+with so low level interfaces
+
+** lspci (ISA bridge) **
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/lib/modules/2.6.32.11-target-alpha-v2/kernel/drivers/net/can/sja1000#
+lspci
+00:00.0 Host bridge: Intel Corporation N10 Family DMI Bridge
+00:02.0 VGA compatible controller: Intel Corporation N10 Family Integrated
+Graphics Controller
+00:02.1 Display controller: Intel Corporation N10 Family Integrated Graphics
+Controller
+00:19.0 Ethernet controller: Intel Corporation 82567V-3 Gigabit Network
+Connection (rev 04)
+00:1d.0 USB Controller: Intel Corporation 82801H (ICH8 Family) USB UHCI
+Controller #1 (rev 04)
+00:1d.1 USB Controller: Intel Corporation 82801H (ICH8 Family) USB UHCI
+Controller #2 (rev 04)
+00:1d.7 USB Controller: Intel Corporation 82801H (ICH8 Family) USB2 EHCI
+Controller #1 (rev 04)
+00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev f4)
+00:1f.0 ISA bridge: Intel Corporation 82801HEM (ICH8M) LPC Interface
+Controller (rev 04)
+00:1f.2 IDE interface: Intel Corporation 82801HBM/HEM (ICH8M/ICH8M-E) SATA
+IDE Controller (rev 04)
+00:1f.3 SMBus: Intel Corporation 82801H (ICH8 Family) SMBus Controller (rev
+04)
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/lib/modules/2.6.32.11-target-alpha-v2/kernel/drivers/net/can/sja1000#
+
+
+
+** lsmod **
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/lib/modules/2.6.32.11-target-alpha-v2/kernel# lsmod
+Module                  Size  Used by
+sja1000_isa             2567  0
+sja1000                 4040  1 sja1000_isa
+can_dev                 4522  1 sja1000
+can                    17657  0
+coretemp                3279  0
+loop                    9893  0
+snd_pcm                45978  0
+snd_timer              12426  1 snd_pcm
+evdev                   5587  2
+snd                    33532  2 snd_pcm,snd_timer
+i2c_i801                6398  0
+soundcore               3454  1 snd
+snd_page_alloc          4829  1 snd_pcm
+i2c_core               12522  1 i2c_i801
+button                  3578  0
+processor              26157  2
+psmouse                43565  0
+pcspkr                  1207  0
+serio_raw               2902  0
+ext3                   92143  1
+jbd                    30655  1 ext3
+mbcache                 3836  1 ext3
+sd_mod                 25170  2
+crc_t10dif              1008  1 sd_mod
+ata_generic             2015  0
+uhci_hcd               15686  0
+ata_piix               17013  1
+thermal                 9183  0
+libata                112604  2 ata_generic,ata_piix
+ehci_hcd               26288  0
+thermal_sys             9396  2 processor,thermal
+scsi_mod              100573  2 sd_mod,libata
+e1000e                 95143  0
+usbcore                95699  3 uhci_hcd,ehci_hcd
+nls_base                4537  1 usbcore
+
+
+** .config **
+It's too big to be sent on this mailing list (100k instead of 40 max) so I
+will send it personnaly on demand if needed
+
+**  demsg **
+It's too big to be sent on this mailing list (100k instead of 40 max) so I
+will send it personnaly on demand if needed
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101110/235a6d50/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101110/235a6d50/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001625.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+	<LI>Next message: <A HREF="001627.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1626">[ date ]</a>
+              <a href="thread.html#1626">[ thread ]</a>
+              <a href="subject.html#1626">[ subject ]</a>
+              <a href="author.html#1626">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

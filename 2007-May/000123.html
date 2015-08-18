@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C4654075C.7070000%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000122.html">
+   <LINK REL="Next"  HREF="000124.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can driver</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C4654075C.7070000%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan c_can driver">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Wed May 23 11:20:28 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000122.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+        <LI>Next message: <A HREF="000124.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#123">[ date ]</a>
+              <a href="thread.html#123">[ thread ]</a>
+              <a href="subject.html#123">[ subject ]</a>
+              <a href="author.html#123">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I have now ported the c_can driver to the socketcan trunk. So far it 
+compiles and sort of works. I got a few questions though:
+
+* The hynix h7202 hardware design really is braindamaged. Robert, did 
+the driver really work back when it was written? I have observed that 
+doing the double reads and the waits when writing certainly is 
+necessary, but as there are some other peripherals on the AMBA bus it's 
+also necessary to lock against these accesses. I currently use 2 UARTS 
+for development (1 for logging console, the other with SLIP). At least 
+one of ten reads (or writes for that matter) failed because I think 
+kernel preemption kicked in and let the UART driver do some work. So 
+what I did as a temporary hack is putting the CAN register read/write 
+methods into the big kernel lock so no other peripheral can read/write 
+to the AMBA bus. This seems to work, but of course is a very very poor 
+solution. Btw. is it allowed to take the kernel lock inside an ISR? Any 
+ideas how to implement a finer grained locking mechanisms for all AMBA 
+peripherals without completely hacking up the kernel?
+
+* It still seems that some strange things are happening on the CAN IP. 
+For example, when I read the interrupt register during the ISR I 
+sometimes get an invalid value (0x0063). Valid values may be 0x8000 
+(status) or 0x0001-0x0020 for a pending message object. I wonder if 
+there still is some misbehaviour in when reading/writing registers or 
+the interrupt handling breaks something. Any ideas on that?
+
+* There is a candev module in the socketcan trunk. I adapted the driver 
+to use the candev module. Is this the right thing to do? Also I've seen 
+that the candev driver is not tagged with a mod license, so it 'taints' 
+the kernel when loading.
+
+* I have changed the driver (h7202 part) to be a platform_driver as the 
+CAN is directly on the hynix chip. I hope this is the correct way to do it?
+
+* Currently to load the h7202can driver as a module I have to load 
+candev, c_can and h7202can modules. I just wondered if this isn't a bit 
+too modular. What you think?
+
+Best regards,
+Simon
+
+
+
+Oliver Hartkopp wrote:
+&gt;<i> Robert Schwebel wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> He asked about the ccan core in the h720x, so I assume the hint to the
+</I>&gt;&gt;<i> driver in the phyCORE-MPC5200B-tiny BSP is a good one.
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> My impression was, Simon asked about how to run the &quot;c_can&quot; driver which 
+</I>&gt;<i> is part of the phyCORE-MPC5200B-tiny BSP with the current head of the 
+</I>&gt;<i> SocketCAN trunk. Therfore i just provided my patched MPC52xx MSCAN 
+</I>&gt;<i> driver to look at the modifications to help him to port the BSPs &quot;c_can&quot; 
+</I>&gt;<i> driver to SocketCAN. That's all. Only my experiences from my personal 
+</I>&gt;<i> finger exercise.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> (..) Integrating that into the berlios tree is left as a finger exercise to
+</I>&gt;&gt;<i> the casual observer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Robert
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Feel free to do so :-)
+</I>&gt;<i>
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000122.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+	<LI>Next message: <A HREF="000124.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#123">[ date ]</a>
+              <a href="thread.html#123">[ thread ]</a>
+              <a href="subject.html#123">[ subject ]</a>
+              <a href="author.html#123">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

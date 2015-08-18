@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTik0-PwubcfUbwt-wCbgE1vUiYkdSK-GkpRom_Gx%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001643.html">
+   <LINK REL="Next"  HREF="001645.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTik0-PwubcfUbwt-wCbgE1vUiYkdSK-GkpRom_Gx%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Nov 15 09:29:44 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001643.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001645.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1644">[ date ]</a>
+              <a href="thread.html#1644">[ thread ]</a>
+              <a href="subject.html#1644">[ subject ]</a>
+              <a href="author.html#1644">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Good news, what makes you saying that I access the CAN controller ?
+
+It is going to be complicate for the CAN analyzer, but for the boot log it's
+OK (you want the &quot;dmesg&quot; of my PC board, am I rigth?)
+
+2010/11/15 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 11/14/2010 11:54 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt; Lasts magics were in the PCI/Pnp section. My bios shows this options:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; (Name = current Value : description)
+</I>&gt;<i> &gt; ( ** ** : option I think important for my problem)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; __Clear NVRAM__ = No: Set this value to force the BIOS to clear the
+</I>&gt;<i> &gt; Non-Volatile Random Access Memory (NVRAM).The Optimal and Fail-Safe
+</I>&gt;<i> default
+</I>&gt;<i> &gt; setting is No.
+</I>&gt;<i> &gt; **__Plug &amp; Play O/S__** = No : When set to No, BIOS configures all the
+</I>&gt;<i> &gt; device in the system. When set to Yes and if you install a Plug and Play
+</I>&gt;<i> &gt; operating system, the operating system configures the Plug and Play
+</I>&gt;<i> device
+</I>&gt;<i> &gt; not required for boot.
+</I>&gt;<i> &gt; __PCI Latency Timer__ = 64 : Value in units of PCI clocks for PCI device
+</I>&gt;<i> &gt; latency timer register.
+</I>&gt;<i> &gt; __Allocate IRQ to PCI VGA__ = Yes: When set to Yes will assigns IRQ to
+</I>&gt;<i> PCI
+</I>&gt;<i> &gt; VGA card if card requests IRQ. When set to No will not assign IRQ to PCI
+</I>&gt;<i> VGA
+</I>&gt;<i> &gt; card even if card requests an IRQ.
+</I>&gt;<i> &gt; __Palette Snooping__ = Disabled : This item is designed to solve problems
+</I>&gt;<i> &gt; caused by some non-standard VGA card.
+</I>&gt;<i> &gt; __PCI IDE BusMaster__  = Enabled: When set to enabled BIOS uses PCI
+</I>&gt;<i> &gt; busmastering for reading/writing to IDE drives.
+</I>&gt;<i> &gt; __OffBoard PCI/ISA IDE Card__ = Auto : Some PCI IDE cards may require
+</I>&gt;<i> this
+</I>&gt;<i> &gt; to be set to the PCI slot number that is holding the card. When set to
+</I>&gt;<i> Auto
+</I>&gt;<i> &gt; will works for most PCI IDE cards.
+</I>&gt;<i> &gt; **__IRQ3 / 4 / 5 / 7 / 9 / 10 /11__** = Available (for each of them,
+</I>&gt;<i> second
+</I>&gt;<i> &gt; option is : Reserved) : This item allows you respectively assign an
+</I>&gt;<i> &gt; interruptive type for IRQ-3, 4, 5, 7, 9, 10,11.
+</I>&gt;<i> &gt; **__DMA Channel0 / 1 / 3 / 5 / 6 / 7__** Available (for each of then,
+</I>&gt;<i> second
+</I>&gt;<i> &gt; option is : Reserved): When set to Available will specified DMA is
+</I>&gt;<i> available
+</I>&gt;<i> &gt; to be used by PCI/PnP devices. When set to Reserved will specified DMA
+</I>&gt;<i> will
+</I>&gt;<i> &gt; Reserved for use by legacy ISA devices.
+</I>&gt;<i> &gt; **__Reserved Memory Size__** : This item allows you to reserved size of
+</I>&gt;<i> &gt; memory block for legacy ISA device.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I tried to reserve IRQ5 and 7 and/or DMA channel (5 and 7 or all). It
+</I>&gt;<i> &gt; doesn't seem to change anything. I don't know what to tune. Is it
+</I>&gt;<i> possible
+</I>&gt;<i> &gt; that my HW is not powered ? Or would this has prevent &quot;normal&quot; interface
+</I>&gt;<i> &gt; configuration
+</I>&gt;<i>
+</I>&gt;<i> You can access the CAN controller and therefore it must be powered. Do
+</I>&gt;<i> you have an external CAN controller if bus analyzer to check if
+</I>&gt;<i> something goes out to the wire? And can you show your complete boot log?
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101115/b7547e62/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101115/b7547e62/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001643.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001645.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1644">[ date ]</a>
+              <a href="thread.html#1644">[ thread ]</a>
+              <a href="subject.html#1644">[ subject ]</a>
+              <a href="author.html#1644">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

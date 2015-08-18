@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%09PC104&In-Reply-To=%3Cb2da33020906120720o43bd3a33j234882d57f6c8bae%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000899.html">
+   <LINK REL="Next"  HREF="000900.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104</H1>
+    <B>khurram gulzar</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%09PC104&In-Reply-To=%3Cb2da33020906120720o43bd3a33j234882d57f6c8bae%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104">khurramgulzar at gmail.com
+       </A><BR>
+    <I>Fri Jun 12 16:20:09 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000899.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+        <LI>Next message: <A HREF="000900.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#901">[ date ]</a>
+              <a href="thread.html#901">[ thread ]</a>
+              <a href="subject.html#901">[ subject ]</a>
+              <a href="author.html#901">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>well the irq 15 is used by ohci_hcd:usb4
+so i cant use it
+0 is timer
+1 is i8042
+2 cascade
+5 is ehci_hcd:usb2
+6 is usb1
+8 rtc
+9 usb 3 eth0
+10 can0
+11 can1
+12 i8042
+14 ide0
+15 usb4
+
+
+On Fri, Jun 12, 2009 at 5:06 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+
+&gt;<i> khurram gulzar wrote:
+</I>&gt;<i> &gt; Well it sets the baudrate to 1M that good
+</I>&gt;<i> &gt;  but i am not able to recieve any thing
+</I>&gt;<i>
+</I>&gt;<i> OK, just for the records, do you need force_dmc?
+</I>&gt;<i>
+</I>&gt;<i> &gt; although the packets recieve acknowlegement and no error on the sender
+</I>&gt;<i> &gt; side Kavaser USBcan device
+</I>&gt;<i> &gt; but the is no interrupt recieved in
+</I>&gt;<i> &gt; /proc/interrupts on PC104 it always give 0 even after sending packets
+</I>&gt;<i> &gt; Any suggestions?
+</I>&gt;<i>
+</I>&gt;<i> Are the irq nummbers you use correct and usable? That's most likely the
+</I>&gt;<i> problem. Check your bios settings. Oliver used irq=4,15 on his hardware.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090612/fbcc9de0/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090612/fbcc9de0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000899.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+	<LI>Next message: <A HREF="000900.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#901">[ date ]</a>
+              <a href="thread.html#901">[ thread ]</a>
+              <a href="subject.html#901">[ subject ]</a>
+              <a href="author.html#901">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

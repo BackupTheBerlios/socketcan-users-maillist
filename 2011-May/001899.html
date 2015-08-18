@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Block or non-block behavior?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Block%20or%20non-block%20behavior%3F&In-Reply-To=%3C4DDD3F27.5000201%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001895.html">
+   <LINK REL="Next"  HREF="001896.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Block or non-block behavior?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Block%20or%20non-block%20behavior%3F&In-Reply-To=%3C4DDD3F27.5000201%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Block or non-block behavior?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed May 25 19:40:55 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001895.html">[Socketcan-users] Block or non-block behavior?
+</A></li>
+        <LI>Next message: <A HREF="001896.html">[Socketcan-users] FlexCAN driver -RTNETLINK operation not permitter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1899">[ date ]</a>
+              <a href="thread.html#1899">[ thread ]</a>
+              <a href="subject.html#1899">[ subject ]</a>
+              <a href="author.html#1899">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 25.05.2011 10:36, Piotr Domagalski wrote:
+
+&gt;<i> I have a simple question and didn't manage to find the answer anywhere in the
+</I>&gt;<i> docs: are SocketCAN sockets blocking or non-blocking by default?
+</I>&gt;<i> 
+</I>&gt;<i> TCP sockets are blocking by default and this is what I'm used to. Looking at
+</I>&gt;<i> SocketCAN utils, cangen for example, indicates that as far as write() goes, by
+</I>&gt;<i> default it doesn't block but it just returns ENOBUFS. On the other hand,
+</I>&gt;<i> read() blocks (at least on my vcan interface) when there is nothing to read.
+</I>
+Hi Piotr,
+
+indeed the write-side of the can-raw socket tries to en-queue the CAN frame
+directly into the netdevices tx queue.
+
+There's still some discussion how to go on with blocking write of several CAN
+applications and how long the tx queue should be to have a prompt and
+contemporary transmission on CAN (as the user would expect). These are the new
+challenges when having a multi-user system ;-)
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001895.html">[Socketcan-users] Block or non-block behavior?
+</A></li>
+	<LI>Next message: <A HREF="001896.html">[Socketcan-users] FlexCAN driver -RTNETLINK operation not permitter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1899">[ date ]</a>
+              <a href="thread.html#1899">[ thread ]</a>
+              <a href="subject.html#1899">[ subject ]</a>
+              <a href="author.html#1899">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

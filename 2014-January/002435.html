@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Beginner question - Kvazer USB CAN driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2014-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Beginner%20question%20-%20Kvazer%20USB%20CAN%20driver&In-Reply-To=%3C85d7d20e09a64996a182e491c6d250e0%40AMSPR06MB053.eurprd06.prod.outlook.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002434.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Beginner question - Kvazer USB CAN driver</H1>
+    <B>GARNERO, PIERRE (P.)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Beginner%20question%20-%20Kvazer%20USB%20CAN%20driver&In-Reply-To=%3C85d7d20e09a64996a182e491c6d250e0%40AMSPR06MB053.eurprd06.prod.outlook.com%3E"
+       TITLE="[Socketcan-users] Beginner question - Kvazer USB CAN driver">pgarnero at visteon.com
+       </A><BR>
+    <I>Tue Jan  7 17:46:48 CET 2014</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002434.html">[Socketcan-users] Beginner question - Kvazer USB CAN driver
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2435">[ date ]</a>
+              <a href="thread.html#2435">[ thread ]</a>
+              <a href="subject.html#2435">[ subject ]</a>
+              <a href="author.html#2435">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+Thanks for all this information. And, basically the issue is the fact that no can network interface shows up.
+
+If I boot with the Kvaser device plugged, I could well see it using:
+ Lsusb
+
+...but 
+ sudo ip link list
+...does not reveal any can interface while I have loaded these modules: can, can-raw, can-dev, kvaser-usb.
+...while dmesg displays &quot;usbcore: registered new interface driver kvaser_usb&quot;...
+
+In addition, if I hotplug Kvaser device, I get a kernel panic.
+
+So, I have probably made a mistake when I have built the kernel.
+
+Cheers,
+
+Pierre 
+
+ 
+-----Message d'origine-----
+De&#160;: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] De la part de Max S.
+Envoy&#233;&#160;: mardi 7 janvier 2014 16:17
+&#192;&#160;: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Objet&#160;: Re: [Socketcan-users] Beginner question - Kvazer USB CAN driver
+
+Hello,
+
+I'm not sure about the kvaser in particular, but the driver should create the network interfaces when the USB device is attached.
+
+so no need to add a new socketcan device.
+
+Check to make sure you have kvaser connected:
+	lsusb
+
+Check to make sure kvaser driver has made network interfaces:
+	sudo ip link list
+
+Then bring the interface up:
+	sudo ip link set can0 up type can bitrate 250000
+
+Listen to some frames:
+	candump can0
+
+Depending on how you have permissions set up you will require sudo to use most of the ip commands.
+
+Regards,
+Max Schneider
+
+On Tue, 2014-01-07 at 14:17 +0000, GARNERO, PIERRE (P.) wrote:
+&gt;<i> Hello.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> I would like to use a KVAZER USBcan Rugged device with the socketcan 
+</I>&gt;<i> library.
+</I>&gt;<i> 
+</I>&gt;<i> I use Raspbian OS and I have built a kernel with anything enabled 
+</I>&gt;<i> regarding CAN.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> I have loaded the following modules:
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe can
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe vcan
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe can-raw
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe can-dev
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe kvazer-usb
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> But any ip link command (ex: ip link add dev can0 type can) failed 
+</I>&gt;<i> with &#8220;RTNETLINK answer : operation not permitted&#8221; (excepted for vcan 
+</I>&gt;<i> which works well).
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Could someone provide me some hints regarding the steps to have a 
+</I>&gt;<i> Kvaser USBcan device up and running using the net driver ?
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Many thanks in advance,
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Pierre
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002434.html">[Socketcan-users] Beginner question - Kvazer USB CAN driver
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2435">[ date ]</a>
+              <a href="thread.html#2435">[ thread ]</a>
+              <a href="subject.html#2435">[ subject ]</a>
+              <a href="author.html#2435">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

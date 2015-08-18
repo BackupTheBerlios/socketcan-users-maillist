@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] FW: CAN Id is trucated
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C68FBE0F3CE97264395875AC1C468F22C1F374D%40mail03.cyberswitching.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001181.html">
+   <LINK REL="Next"  HREF="001186.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] FW: CAN Id is trucated</H1>
+    <B>Chris Verges</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C68FBE0F3CE97264395875AC1C468F22C1F374D%40mail03.cyberswitching.local%3E"
+       TITLE="[Socketcan-users] FW: CAN Id is trucated">chrisv at cyberswitching.com
+       </A><BR>
+    <I>Wed Dec  2 05:18:43 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001181.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+        <LI>Next message: <A HREF="001186.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1182">[ date ]</a>
+              <a href="thread.html#1182">[ thread ]</a>
+              <a href="subject.html#1182">[ subject ]</a>
+              <a href="author.html#1182">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ravi,
+
+Also, have you tried adding CAN_EFF_FLAG to the can_id in a logical OR?
+
+Chris
+
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of Chris Verges
+Sent: Tuesday, December 01, 2009 8:16 PM
+To: Ravi Kumar Madhuranthakam; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] FW: CAN Id is trucated
+
+Hi Ravi,
+
+First, apologies for the top-posting.  Tis the mail reader that I'm forced to use at the moment.
+
+I too am using the AT91 SocketCAN driver with extended IDs.  Everything seems to work fine in our application.  What version of the kernel and/or SocketCAN drivers are you using?  Also, how are the extended IDs being truncated?
+
+Chris
+
+
+
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of Ravi Kumar Madhuranthakam
+Sent: Tuesday, December 01, 2009 8:08 PM
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Cc: Ravi Kumar Madhuranthakam
+Subject: [Socketcan-users] FW: CAN Id is trucated
+
+
+
+HI ,
+
+I am using socket CAN with Atmel 9263 board , And CAN Messages Extended ID is truncated when I send message using PCAN USB- analyzer .
+I am using read and write calls for message sending and receiving in the board.
+
+I am not using any filters and using CAN_RAW .
+Anybody has idea on this issue ?
+
+
+My Code looks like this
+
+#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;sys/ioctl.h&gt;
+#include &lt;net/if.h&gt;
+&#160;
+#include &lt;linux/can.h&gt;
+#include &lt;linux/can/raw.h&gt;
+#include &lt;string.h&gt;
+&#160;
+/* At time of writing, these constants are not defined in the headers */
+#ifndef PF_CAN
+#define PF_CAN 29
+#endif
+&#160;
+#ifndef AF_CAN
+#define AF_CAN PF_CAN
+#endif
+&#160;
+/* ... */
+&#160;
+/* Somewhere in your app */
+&#160;
+&#160;&#160; /* Create the socket */
+&#160;&#160; int skt = socket( PF_CAN, SOCK_RAW, CAN_RAW );
+&#160;
+&#160;&#160; /* Locate the interface you wish to use */
+&#160;&#160; struct ifreq ifr;
+&#160;&#160; strcpy(ifr.ifr_name, &quot;can0&quot;);
+&#160;&#160; ioctl(skt, SIOCGIFINDEX, &amp;ifr); /* ifr.ifr_ifindex gets filled 
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; * with that device's index */
+&#160;
+&#160;&#160; /* Select that CAN interface, and bind the socket to it. */
+&#160;&#160; struct sockaddr_can addr;
+&#160;&#160; addr.can_family = AF_CAN;
+&#160;&#160; addr.can_ifindex = ifr.ifr_ifindex;
+&#160;&#160; bind( skt, (struct sockaddr*)&amp;addr, sizeof(addr) );
+&#160;
+&#160;&#160; /* Send a message to the CAN bus */
+&#160;&#160; struct can_frame frame;
+&#160;&#160; frame.can_id = 0x123;
+&#160;&#160; strcpy( &amp;frame.data, &quot;foo&quot; );
+&#160;&#160; frame.can_dlc = strlen( &amp;frame.data );
+&#160;&#160; int bytes_sent = write( skt, &amp;frame, sizeof(frame) );
+&#160;
+&#160;&#160; /* Read a message back from the CAN bus */
+&#160;&#160; int bytes_read = read( skt, &amp;frame, sizeof(frame) );
+
+
+
+
+
+________________________________________
+<A HREF="http://www.mindtree.com/email/disclaimer.html">http://www.mindtree.com/email/disclaimer.html</A>
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001181.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+	<LI>Next message: <A HREF="001186.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1182">[ date ]</a>
+              <a href="thread.html#1182">[ thread ]</a>
+              <a href="subject.html#1182">[ subject ]</a>
+              <a href="author.html#1182">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

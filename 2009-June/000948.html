@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 2/5]: softing CAN card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090617081545.GA2799%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000940.html">
+   <LINK REL="Next"  HREF="000932.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 2/5]: softing CAN card</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090617081545.GA2799%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] [PATCH 2/5]: softing CAN card">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Wed Jun 17 10:15:45 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000940.html">[Socketcan-users] [PATCH 2/5]: softing CAN card
+</A></li>
+        <LI>Next message: <A HREF="000932.html">[Socketcan-users] [PATCH 3/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#948">[ date ]</a>
+              <a href="thread.html#948">[ thread ]</a>
+              <a href="subject.html#948">[ subject ]</a>
+              <a href="author.html#948">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Jun 16, 2009 at 05:41:13PM +0200, Wolfgang Grandegger wrote:
+&gt;<i> &gt;  void softing_flush_echo_skb(struct softing_priv *priv)
+</I>&gt;<i> &gt;  {
+</I>&gt;<i> &gt; -	close_candev(priv-&gt;netdev);
+</I>&gt;<i> &gt; +	can_flush_echo_skb(priv-&gt;netdev);
+</I>&gt;<i> &gt;  	priv-&gt;tx.pending = 0;
+</I>&gt;<i> &gt;  	priv-&gt;tx.echo_put = 0;
+</I>&gt;<i> &gt;  	priv-&gt;tx.echo_get = 0;
+</I>&gt;<i> 
+</I>&gt;<i> Do your really need this function. More below...
+</I>&gt;<i> 
+</I>&gt;<i> &gt; ....
+</I>&gt;<i> &gt;  			/*update internal status */
+</I>&gt;<i> &gt;  			if (can_state != bus-&gt;can.state) {
+</I>&gt;<i> &gt;  				bus-&gt;can.state = can_state;
+</I>&gt;<i> &gt; -				if (can_state == 1)
+</I>&gt;<i> &gt; +				if (can_state == CAN_STATE_ERROR_PASSIVE)
+</I>&gt;<i> &gt;  					bus-&gt;can.can_stats.error_passive += 1;
+</I>&gt;<i> &gt; +				if (can_state == CAN_STATE_BUS_OFF) {
+</I>&gt;<i> &gt; +					/* this calls can_close_cleanup() */
+</I>&gt;<i> &gt; +					softing_flush_echo_skb(bus);
+</I>&gt;<i> &gt; +					can_bus_off(bus-&gt;netdev);
+</I>&gt;<i> &gt; +					netif_stop_queue(bus-&gt;netdev);
+</I>&gt;<i> 
+</I>&gt;<i> Just call can_bus_off(). You need a restart here anyhow, which is in
+</I>&gt;<i> your case a down/up cycle.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; +				}
+</I>&gt;<i> &gt;  			}
+</I>&gt;<i> &gt;  			bus-&gt;can.can_stats.bus_error += 1;
+</I>&gt;<i> &gt;  
+</I>&gt;<i> &gt;  			/*trigger socketcan */
+</I>&gt;<i> &gt; -			if (state == 2) {
+</I>&gt;<i> &gt; -				/* this calls can_close_cleanup() */
+</I>&gt;<i> &gt; -				softing_flush_echo_skb(bus);
+</I>&gt;<i> &gt; -				can_bus_off(bus-&gt;netdev);
+</I>&gt;<i> &gt; -				netif_stop_queue(bus-&gt;netdev);
+</I>&gt;<i> &gt; -			}
+</I>&gt;<i> 
+</I>&gt;<i> Ditto.
+</I>&gt;<i> 
+</I>&gt;<i> In your driver your netdev_stop you also call
+</I>&gt;<i> softing_flush_echo_skb(priv), which close_candev(ndev) already does.
+</I>Ack.
+It seemed like a bad idea to me to take that kind of shortcuts. It would
+need a very lot of documentation.
+Anyway, your argument is true, and this code does not justify the
+presence of softing_flush_echo_skb(). but ...
+&gt;<i> 
+</I>&gt;<i> Have I missed something?
+</I>In softing_main.c, the 2 busses on a card do not yet come together.
+This happens in softing_fw.c, in softing_reinit().
+If an up or down is done, the other bus is restarted too.
+In that case, the bus is not going up or down, but the queue on the
+DPRAM on the card is flushed, so should the echo_skb on the netdev.
+I'll emphasise that softing_flush_echo_skb() is not _needed_ for the
+netdev you're controlling, but I think it's needed for the netdev
+that is attached on the card.
+Small example: 1 card, 2 busses: can0 &amp; can1
+
+$ ifup can0
+   no problem
+$ ifup can1
+   in softing_reinit(), can0 is brought down &amp; up, as is its queue.
+   softing_flush_echo_skb for can0 must be called.
+[...] can0 goes busoff.
+$ ifdown can1
+   this implies again that can0 is brought down &amp; up again. I cannot
+   prevent busoff recovery, unless I leave can0 down.
+
+When an 'attached CAN bus' is cycled (down/up), I just flush those CAN
+frames that were queue'd, as they are not getting transmitted anymore.
+If the bus was up, I see no reason to tell the kernel that the bus has
+gone down &amp; up again.
+
+I think this kind of interference is not optimal. But I'd stick as close
+as possible to normal CAN chip behaviour. This allows for development on
+laptop, and port code to embedded platform.
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>Kurt
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000940.html">[Socketcan-users] [PATCH 2/5]: softing CAN card
+</A></li>
+	<LI>Next message: <A HREF="000932.html">[Socketcan-users] [PATCH 3/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#948">[ date ]</a>
+              <a href="thread.html#948">[ thread ]</a>
+              <a href="subject.html#948">[ subject ]</a>
+              <a href="author.html#948">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

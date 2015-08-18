@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem with 82527 PC/104 board
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%2082527%20PC/104%20board&In-Reply-To=%3C48AFFA34.8040407%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000483.html">
+   <LINK REL="Next"  HREF="000485.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem with 82527 PC/104 board</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%2082527%20PC/104%20board&In-Reply-To=%3C48AFFA34.8040407%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] problem with 82527 PC/104 board">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sat Aug 23 13:53:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000483.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+        <LI>Next message: <A HREF="000485.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#484">[ date ]</a>
+              <a href="thread.html#484">[ thread ]</a>
+              <a href="subject.html#484">[ subject ]</a>
+              <a href="author.html#484">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alexey Serov wrote:
+&gt;<i> Maybe I should calculate and set BTR0 and BTR1 parameters manually? I
+</I>&gt;<i> didn't try this, but ECAN527 driver I tried before didn't require such
+</I>&gt;<i> parameters anywhere. Can I find somewhere a working example of
+</I>&gt;<i> i82527-iomem module parameters?
+</I>&gt;<i>   
+</I>
+I personally had some problems with the DMC bit, that usually is derived 
+from the clock. For that reason, i added 'force_dmc=1' as module 
+parameter. You should probably try it.
+
+Also the bus configuration register may be set different in your setup - 
+there is a module parameter for that.
+
+Additionally calculating BTR0 and BTR1 manually may be also a good choice.
+
+With the 'old' i82527 driver you can look in the procfs
+
+/proc/driver/i82527_regs to look how the registers are set (and compare 
+it to your working setup).
+
+Regards,
+Oliver
+
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000483.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+	<LI>Next message: <A HREF="000485.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#484">[ date ]</a>
+              <a href="thread.html#484">[ thread ]</a>
+              <a href="subject.html#484">[ subject ]</a>
+              <a href="author.html#484">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

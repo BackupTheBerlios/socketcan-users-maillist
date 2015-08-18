@@ -1,0 +1,473 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] &quot;Corrupted MAC on input&quot; error at high bus load	(PCAN-USB)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%22Corrupted%20MAC%20on%20input%22%20error%20at%20high%20bus%20load%0A%09%28PCAN-USB%29&In-Reply-To=%3C853484.59609.qm%40web28311.mail.ukl.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000220.html">
+   <LINK REL="Next"  HREF="000222.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] &quot;Corrupted MAC on input&quot; error at high bus load	(PCAN-USB)</H1>
+    <B>Stefan Kneisler</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%22Corrupted%20MAC%20on%20input%22%20error%20at%20high%20bus%20load%0A%09%28PCAN-USB%29&In-Reply-To=%3C853484.59609.qm%40web28311.mail.ukl.yahoo.com%3E"
+       TITLE="[Socketcan-users] &quot;Corrupted MAC on input&quot; error at high bus load	(PCAN-USB)">stefan.kneisler at yahoo.de
+       </A><BR>
+    <I>Mon Jan 28 15:54:21 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000220.html">[Socketcan-users] Preise ohne Konkurrenz Viiaaaagra... - 1.79$
+</A></li>
+        <LI>Next message: <A HREF="000222.html">[Socketcan-users] &quot;Corrupted MAC on input&quot; error at high bus load	(PCAN-USB)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#221">[ date ]</a>
+              <a href="thread.html#221">[ thread ]</a>
+              <a href="subject.html#221">[ subject ]</a>
+              <a href="author.html#221">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+
+
+I try to use socketcan (trunk checked out on Jan 23) with peak-linux-driver-6.5.
+
+I use up to 4 PCAN-USB Adapter with an ARM-11 based phyCORE-i.mx31 Module which Robert should know.
+
+Drivers, Root-FS and Kernel were built with OSELAS.Toolchain-1.1.1 (arm-1136jfs-linux-gnueabi)
+
+The rootfs was built with the BSP (ptxdist-0.10.6).
+
+The Kernel is also from the BSP but I removed the following (older socketcan-) patches:
+
+
+
+linux-2.6.19.2-can_base.diff
+
+linux-2.6.19.2-drivers_can_ccan.diff
+
+linux-2.6.19.2-drivers_can_loopback.diff
+
+linux-2.6.19.2-drivers_can_nios.diff
+
+linux-2.6.19.2-drivers_can_sja.diff
+
+linux-2.6.19.2-pcm037can.patch
+
+
+
+Instead I use the latest socketcan form SVN trunk.
+
+
+
+It works so far but on extreme situations some problems occur.
+
+On heavy bus load I get the following error from ssh: &quot;Disconnecting: Corrupted MAC on input.&quot;
+
+
+
+It would be nice to have some advise where to start debugging.
+
+
+
+Below you can find some console output referring to the mentioned problems.
+
+
+
+Thanks in advance
+
+
+
+Stefan
+
+
+
+
+
+
+
+
+
+==============================================================================================================
+
+removing canbus cable from can0 (while 'cangen -g 1 can0' is running):
+
+
+
+
+
+
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+NETDEV WATCHDOG: can0: transmit timed out
+
+Unable to handle kernel paging request at virtual address 8070588e
+
+pgd = c5e4c000
+
+[8070588e] *pgd=00000000
+
+Internal error: Oops: 1 [#1]
+
+Modules linked in: pcan can_bcm can_raw can mx31ads_pcmcia ide_cs pcmcia firmware_class pcmcia_core ide_disk ide_core mxc_v4l2_capture ipu_prp_enc ipu_prp_vf_sdc videodev v4l1_compat v4l2_common ipu_still ipu_prp_vf_sdc_bg mt9v111_camera usb_storage ehci_hcd isp1504_arc
+
+CPU: 0
+
+PC is at kref_get+0x10/0x5c
+
+LR is at ehci_work+0x270/0x674 [ehci_hcd]
+
+pc : [&lt;c01487b0&gt;]    lr : [&lt;bf006a18&gt;]    Not tainted
+
+sp : c02e1e48  ip : c02e1e60  fp : c02e1e5c
+
+r10: 00002047  r9 : c65df600  r8 : 00000000
+
+r7 : 00000001  r6 : c65df6c0  r5 : 00000002  r4 : 8070582e
+
+r3 : 00000001  r2 : 00000001  r1 : 00001020  r0 : 8070588e
+
+Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  Segment kernel
+
+Control: C5387F
+
+Table: 85E4C000  DAC: 00000017
+
+Process swapper (pid: 0, stack limit = 0xc02e0250)
+
+Stack: (0xc02e1e48 to 0xc02e2000)
+
+1e40:                   00000000 8070582e c02e1eac c02e1e60 bf006a18 c01487ac 
+
+1e60: ff651020 c003b020 13a01008 00001020 13a01008 00000008 13a01008 00003690 
+
+1e80: c05bd400 c65df6c0 00000001 00000000 00000001 c65df600 c02e0000 800203c4 
+
+1ea0: c02e1ed4 c02e1eb0 bf009e38 bf0067b4 c0371548 c65df600 00000000 00000000 
+
+1ec0: 00000024 00000001 c02e1eec c02e1ed8 c01b3b9c bf009cb0 c02e1f04 c6507b20 
+
+1ee0: c02e1f0c c02e1ef0 c008b880 c01b3b6c c02e0000 c02e2900 00000024 c6507b20 
+
+1f00: c02e1f2c c02e1f10 c008d4e4 c008b850 00000000 0000ffff 00000001 00000002 
+
+1f20: c02e1f44 c02e1f30 c004b7c8 c008d408 c02e5fd8 ffffffff c02e1f9c c02e1f48 
+
+1f40: c004a9e4 c004b788 00000000 c02e0000 00000018 f8871d5b c02e0000 c004c09c 
+
+1f60: c02e6c84 c0377320 800203f8 4107b364 800203c4 c02e1f9c c02e1f90 c02e1f90 
+
+1f80: c0053ba8 c004c0dc 20000013 ffffffff c02e1fb4 c02e1fa0 c004bdb8 c004c0a8 
+
+1fa0: c02e0000 c0351c2c c02e1fcc c02e1fb8 c004a2f0 c004bd94 c0351c2c c035b914 
+
+1fc0: c02e1ff4 c02e1fd0 c0008888 c004a2b0 c00083c4 00000000 00000000 c0351ca8 
+
+1fe0: 00000000 00c5387d 00000000 c02e1ff8 80008030 c00086e0 00000000 00000000 
+
+Backtrace: 
+
+[&lt;c01487a0&gt;] (kref_get+0x0/0x5c) from [&lt;bf006a18&gt;] (ehci_work+0x270/0x674 [ehci_hcd])
+
+ r4 = 8070582E 
+
+[&lt;bf0067a8&gt;] (ehci_work+0x0/0x674 [ehci_hcd]) from [&lt;bf009e38&gt;] (ehci_irq+0x194/0x1cc [ehci_hcd])
+
+[&lt;bf009ca4&gt;] (ehci_irq+0x0/0x1cc [ehci_hcd]) from [&lt;c01b3b9c&gt;] (usb_hcd_irq+0x3c/0x88)
+
+ r8 = 00000001  r7 = 00000024  r6 = 00000000  r5 = 00000000
+
+ r4 = C65DF600 
+
+[&lt;c01b3b60&gt;] (usb_hcd_irq+0x0/0x88) from [&lt;c008b880&gt;] (handle_IRQ_event+0x3c/0x74)
+
+ r4 = C6507B20 
+
+[&lt;c008b844&gt;] (handle_IRQ_event+0x0/0x74) from [&lt;c008d4e4&gt;] (handle_level_irq+0xe8/0x170)
+
+ r7 = C6507B20  r6 = 00000024  r5 = C02E2900  r4 = C02E0000
+
+[&lt;c008d3fc&gt;] (handle_level_irq+0x0/0x170) from [&lt;c004b7c8&gt;] (asm_do_IRQ+0x4c/0x68)
+
+ r7 = 00000002  r6 = 00000001  r5 = 0000FFFF  r4 = 00000000
+
+[&lt;c004b77c&gt;] (asm_do_IRQ+0x0/0x68) from [&lt;c004a9e4&gt;] (__irq_svc+0x44/0x80)
+
+ r4 = FFFFFFFF 
+
+[&lt;c004c09c&gt;] (default_idle+0x0/0x48) from [&lt;c004bdb8&gt;] (cpu_idle+0x30/0x64)
+
+[&lt;c004bd88&gt;] (cpu_idle+0x0/0x64) from [&lt;c004a2f0&gt;] (rest_init+0x4c/0x54)
+
+ r5 = C0351C2C  r4 = C02E0000 
+
+[&lt;c004a2a4&gt;] (rest_init+0x0/0x54) from [&lt;c0008888&gt;] (start_kernel+0x1b4/0x204)
+
+ r4 = C035B914 
+
+[&lt;c00086d4&gt;] (start_kernel+0x0/0x204) from [&lt;80008030&gt;] (0x80008030)
+
+Code: e1a0c00d e92dd810 e24cb004 e24dd004 (e5903000) 
+
+ &lt;0&gt;Kernel panic - not syncing: Aiee, killing interrupt handler!
+
+  
+
+
+
+==============================================================================================
+
+
+
+it seems to take a while until the buffer is empty or packet lifetime ends.
+
+
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at phyCORE-iMX31</A>:~&gt; cangen -g 1 can3
+
+write: No buffer space available
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at phyCORE-iMX31</A>:~&gt; cangen -g 1 can3
+
+write: No buffer space available
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at phyCORE-iMX31</A>:~&gt; cangen -g 1 can3
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at phyCORE-iMX31</A>:~&gt;
+
+
+
+===============================================================================================
+
+
+
+another problem receiving can msgs (candump via ssh) on can0 (100kbit) (only 1 Adapter attached)
+
+after being disconnected no new ssh connection an be established
+
+(restarting ssh via serial console has no effect).
+
+
+
+ (1970-01-01 01:23:31.579567)  can0  500  [8] AA BB CC DD EE FF 11 22
+
+ (1970-01-01 01:23:31.581566)  can0  500  [8] AA BB CC DD EE FF 11 22
+
+ (1970-01-01 01:23:31.583567)  can0  500  [8] AA BB CC DD EE FF 11 22
+
+ (1970-01-01 01:23:31.584572)  can0  500  [8] AA BB CC DD EE FF 11 22
+
+ (1970-01-01 01:23:31.586565)  can0  500  [8] AA BB CC DD EE FF 11 22
+
+ (1970-01-01 01:23:31.588570)  can0  500  [8] AA BB CC DD EE FF 11 22
+
+Disconnecting: Corrupted MAC on input.
+
+debug3: channel 0: close_fds r 4 w 5 e 6 c -1
+
+
+
+
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">user at notebook</A>:~$ ssh -vvv <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at 192.168.3.11</A>
+
+OpenSSH_4.6p1 Debian-5ubuntu0.1, OpenSSL 0.9.8e 23 Feb 2007
+
+debug1: Reading configuration data /home/user/.ssh/config
+
+debug1: Reading configuration data /etc/ssh/ssh_config
+
+debug1: Applying options for *
+
+debug2: ssh_connect: needpriv 0
+
+debug1: Connecting to 192.168.3.11 [192.168.3.11] port 22.
+
+debug1: Connection established.
+
+debug1: identity file /home/user/.ssh/identity type -1
+
+debug1: identity file /home/user/.ssh/id_rsa type -1
+
+debug1: identity file /home/user/.ssh/id_dsa type -1
+
+debug1: Remote protocol version 1.99, remote software version OpenSSH_4.3
+
+debug1: match: OpenSSH_4.3 pat OpenSSH*
+
+debug1: Enabling compatibility mode for protocol 2.0
+
+debug1: Local version string SSH-2.0-OpenSSH_4.6p1 Debian-5ubuntu0.1
+
+debug2: fd 3 setting O_NONBLOCK
+
+debug1: SSH2_MSG_KEXINIT sent
+
+debug1: SSH2_MSG_KEXINIT received
+
+debug2: kex_parse_kexinit: diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
+
+debug2: kex_parse_kexinit: ssh-rsa,ssh-dss
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">aes128-cbc,3des-cbc,blowfish-cbc,cast128-cbc,arcfour128,arcfour256,arcfour,aes192-cbc,aes256-cbc,rijndael-cbc at lysator.liu.se</A>,aes128-ctr,aes192-ctr,aes256-ctr
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">aes128-cbc,3des-cbc,blowfish-cbc,cast128-cbc,arcfour128,arcfour256,arcfour,aes192-cbc,aes256-cbc,rijndael-cbc at lysator.liu.se</A>,aes128-ctr,aes192-ctr,aes256-ctr
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hmac-md5,hmac-sha1,hmac-ripemd160,hmac-ripemd160 at openssh.com</A>,hmac-sha1-96,hmac-md5-96
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hmac-md5,hmac-sha1,hmac-ripemd160,hmac-ripemd160 at openssh.com</A>,hmac-sha1-96,hmac-md5-96
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">none,zlib at openssh.com</A>,zlib
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">none,zlib at openssh.com</A>,zlib
+
+debug2: kex_parse_kexinit:
+
+debug2: kex_parse_kexinit:
+
+debug2: kex_parse_kexinit: first_kex_follows 0
+
+debug2: kex_parse_kexinit: reserved 0
+
+debug2: kex_parse_kexinit: diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1
+
+debug2: kex_parse_kexinit: ssh-rsa,ssh-dss
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">aes128-cbc,3des-cbc,blowfish-cbc,cast128-cbc,arcfour128,arcfour256,arcfour,aes192-cbc,aes256-cbc,rijndael-cbc at lysator.liu.se</A>,aes128-ctr,aes192-ctr,aes256-ctr
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">aes128-cbc,3des-cbc,blowfish-cbc,cast128-cbc,arcfour128,arcfour256,arcfour,aes192-cbc,aes256-cbc,rijndael-cbc at lysator.liu.se</A>,aes128-ctr,aes192-ctr,aes256-ctr
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hmac-md5,hmac-sha1,hmac-ripemd160,hmac-ripemd160 at openssh.com</A>,hmac-sha1-96,hmac-md5-96
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hmac-md5,hmac-sha1,hmac-ripemd160,hmac-ripemd160 at openssh.com</A>,hmac-sha1-96,hmac-md5-96
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">none,zlib at openssh.com</A>
+
+debug2: kex_parse_kexinit: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">none,zlib at openssh.com</A>
+
+debug2: kex_parse_kexinit:
+
+debug2: kex_parse_kexinit:
+
+debug2: kex_parse_kexinit: first_kex_follows 0
+
+debug2: kex_parse_kexinit: reserved 0
+
+debug2: mac_init: found hmac-md5
+
+debug1: kex: server-&gt;client aes128-cbc hmac-md5 none
+
+debug2: mac_init: found hmac-md5
+
+debug1: kex: client-&gt;server aes128-cbc hmac-md5 none
+
+debug1: SSH2_MSG_KEX_DH_GEX_REQUEST(1024&lt;1024&lt;8192) sent
+
+debug1: expecting SSH2_MSG_KEX_DH_GEX_GROUP
+
+debug2: dh_gen_key: priv key bits set: 136/256
+
+debug2: bits set: 480/1024
+
+debug1: SSH2_MSG_KEX_DH_GEX_INIT sent
+
+debug1: expecting SSH2_MSG_KEX_DH_GEX_REPLY
+
+debug3: check_host_in_hostfile: filename /home/user/.ssh/known_hosts
+
+debug3: check_host_in_hostfile: match line 26
+
+debug1: Host '192.168.3.11' is known and matches the RSA host key.
+
+debug1: Found key in /home/user/.ssh/known_hosts:26
+
+debug2: bits set: 503/1024
+
+debug1: ssh_rsa_verify: signature correct
+
+debug2: kex_derive_keys
+
+debug2: set_newkeys: mode 1
+
+debug1: SSH2_MSG_NEWKEYS sent
+
+debug1: expecting SSH2_MSG_NEWKEYS
+
+debug2: set_newkeys: mode 0
+
+debug1: SSH2_MSG_NEWKEYS received
+
+debug1: SSH2_MSG_SERVICE_REQUEST sent
+
+Disconnecting: Bad packet length 605372564.
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">user at notebook</A>:~$ ssh <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at 192.168.3.11</A>
+
+Disconnecting: Corrupted MAC on input.
+
+
+
+==============================================================================================================
+
+
+
+
+
+
+
+       __________________________________ Ihr erstes Fernweh? Wo gibt es den sch&#246;nsten Strand? www.yahoo.de/clever
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000220.html">[Socketcan-users] Preise ohne Konkurrenz Viiaaaagra... - 1.79$
+</A></li>
+	<LI>Next message: <A HREF="000222.html">[Socketcan-users] &quot;Corrupted MAC on input&quot; error at high bus load	(PCAN-USB)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#221">[ date ]</a>
+              <a href="thread.html#221">[ thread ]</a>
+              <a href="subject.html#221">[ subject ]</a>
+              <a href="author.html#221">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding	by clearing all interrupt sources
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2001/14%5D%20can%3A%20flexcan%3A%20fix%20irq%20flooding%0A%09by%20clearing%20all%20interrupt%20sources&In-Reply-To=%3C1323269728-17491-2-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002310.html">
+   <LINK REL="Next"  HREF="002323.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding	by clearing all interrupt sources</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2001/14%5D%20can%3A%20flexcan%3A%20fix%20irq%20flooding%0A%09by%20clearing%20all%20interrupt%20sources&In-Reply-To=%3C1323269728-17491-2-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding	by clearing all interrupt sources">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:15 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002310.html">[Socketcan-users] [RFC PATCH 00/14] consolidate and unify state	change and bus-off handling
+</A></li>
+        <LI>Next message: <A HREF="002323.html">[Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding by clearing all interrupt sources
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2311">[ date ]</a>
+              <a href="thread.html#2311">[ thread ]</a>
+              <a href="subject.html#2311">[ subject ]</a>
+              <a href="author.html#2311">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>As pointed out by Reuben Dowle, the TWRN_INT, RWRN_INT, BOFF_INT
+interrupt sources need to be cleared as well to avoid interrupt
+flooding, at least for the Flexcan on i.MX28 SOCs.
+
+CC: Reuben Dowle &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Reuben.Dowle at navico.com</A>&gt;
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/flexcan.c |   67 ++++++++++++++++-----------------------------
+ 1 files changed, 24 insertions(+), 43 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 165a4c7..feb8e64 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -118,6 +118,9 @@
+ 	(FLEXCAN_ESR_TWRN_INT | FLEXCAN_ESR_RWRN_INT | FLEXCAN_ESR_BOFF_INT)
+ #define FLEXCAN_ESR_ERR_ALL \
+ 	(FLEXCAN_ESR_ERR_BUS | FLEXCAN_ESR_ERR_STATE)
++#define FLEXCAN_ESR_ALL_INT \
++	(FLEXCAN_ESR_TWRN_INT | FLEXCAN_ESR_RWRN_INT | \
++	 FLEXCAN_ESR_BOFF_INT | FLEXCAN_ESR_ERR_INT)
+ 
+ /* FLEXCAN interrupt flag register (IFLAG) bits */
+ #define FLEXCAN_TX_BUF_ID		8
+@@ -224,13 +227,6 @@ static void flexcan_transceiver_switch(const struct flexcan_priv *priv, int on)
+ 		priv-&gt;pdata-&gt;transceiver_switch(on);
+ }
+ 
+-static inline int flexcan_has_and_handle_berr(const struct flexcan_priv *priv,
+-					      u32 reg_esr)
+-{
+-	return (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BERR_REPORTING) &amp;&amp;
+-		(reg_esr &amp; FLEXCAN_ESR_ERR_BUS);
+-}
+-
+ static inline void flexcan_chip_enable(struct flexcan_priv *priv)
+ {
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+@@ -358,24 +354,6 @@ static void do_bus_err(struct net_device *dev,
+ 		dev-&gt;stats.tx_errors++;
+ }
+ 
+-static int flexcan_poll_bus_err(struct net_device *dev, u32 reg_esr)
+-{
+-	struct sk_buff *skb;
+-	struct can_frame *cf;
+-
+-	skb = alloc_can_err_skb(dev, &amp;cf);
+-	if (unlikely(!skb))
+-		return 0;
+-
+-	do_bus_err(dev, cf, reg_esr);
+-	netif_receive_skb(skb);
+-
+-	dev-&gt;stats.rx_packets++;
+-	dev-&gt;stats.rx_bytes += cf-&gt;can_dlc;
+-
+-	return 1;
+-}
+-
+ static void do_state(struct net_device *dev,
+ 		     struct can_frame *cf, enum can_state new_state)
+ {
+@@ -442,7 +420,7 @@ static void do_state(struct net_device *dev,
+ 	}
+ }
+ 
+-static int flexcan_poll_state(struct net_device *dev, u32 reg_esr)
++static int flexcan_poll_error_state(struct net_device *dev, u32 reg_esr)
+ {
+ 	struct flexcan_priv *priv = netdev_priv(dev);
+ 	struct sk_buff *skb;
+@@ -462,16 +440,23 @@ static int flexcan_poll_state(struct net_device *dev, u32 reg_esr)
+ 	else
+ 		new_state = CAN_STATE_BUS_OFF;
+ 
+-	/* state hasn't changed */
+-	if (likely(new_state == priv-&gt;can.state))
++	/* has state changed or are there bus errros? */
++	if (likely(new_state == priv-&gt;can.state &amp;&amp;
++		  !(reg_esr &amp; FLEXCAN_ESR_ERR_BUS)))
+ 		return 0;
+ 
+ 	skb = alloc_can_err_skb(dev, &amp;cf);
+ 	if (unlikely(!skb))
+ 		return 0;
+ 
+-	do_state(dev, cf, new_state);
+-	priv-&gt;can.state = new_state;
++	if (new_state != priv-&gt;can.state) {
++		do_state(dev, cf, new_state);
++		priv-&gt;can.state = new_state;
++	}
++
++	if (reg_esr &amp; FLEXCAN_ESR_ERR_BUS)
++		do_bus_err(dev, cf, reg_esr);
++
+ 	netif_receive_skb(skb);
+ 
+ 	dev-&gt;stats.rx_packets++;
+@@ -540,10 +525,10 @@ static int flexcan_poll(struct napi_struct *napi, int quota)
+ 	 * The error bits are cleared on read,
+ 	 * use saved value from irq handler.
+ 	 */
+-	reg_esr = flexcan_read(&amp;regs-&gt;esr) | priv-&gt;reg_esr;
++	reg_esr = priv-&gt;reg_esr;
+ 
+-	/* handle state changes */
+-	work_done += flexcan_poll_state(dev, reg_esr);
++	/* handle bus error amd state changes */
++	work_done += flexcan_poll_error_state(dev, reg_esr);
+ 
+ 	/* handle RX-FIFO */
+ 	reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
+@@ -553,10 +538,6 @@ static int flexcan_poll(struct napi_struct *napi, int quota)
+ 		reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
+ 	}
+ 
+-	/* report bus errors */
+-	if (flexcan_has_and_handle_berr(priv, reg_esr) &amp;&amp; work_done &lt; quota)
+-		work_done += flexcan_poll_bus_err(dev, reg_esr);
+-
+ 	if (work_done &lt; quota) {
+ 		napi_complete(napi);
+ 		/* enable IRQs */
+@@ -577,7 +558,9 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 
+ 	reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
+ 	reg_esr = flexcan_read(&amp;regs-&gt;esr);
+-	flexcan_write(FLEXCAN_ESR_ERR_INT, &amp;regs-&gt;esr);	/* ACK err IRQ */
++	/* ACK all bus error and state change IRQ sources */
++	if (reg_esr &amp; FLEXCAN_ESR_ALL_INT)
++		flexcan_write(reg_esr &amp; FLEXCAN_ESR_ALL_INT, &amp;regs-&gt;esr);
+ 
+ 	/*
+ 	 * schedule NAPI in case of:
+@@ -586,13 +569,11 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 	 * - bus error IRQ and bus error reporting is activated
+ 	 */
+ 	if ((reg_iflag1 &amp; FLEXCAN_IFLAG_RX_FIFO_AVAILABLE) ||
+-	    (reg_esr &amp; FLEXCAN_ESR_ERR_STATE) ||
+-	    flexcan_has_and_handle_berr(priv, reg_esr)) {
++	    (reg_esr &amp; FLEXCAN_ESR_ALL_INT)) {
+ 		/*
+-		 * The error bits are cleared on read,
+-		 * save them for later use.
++		 * save esr at interrupt time for later use in poll function
+ 		 */
+-		priv-&gt;reg_esr = reg_esr &amp; FLEXCAN_ESR_ERR_BUS;
++		priv-&gt;reg_esr = reg_esr;
+ 		flexcan_write(FLEXCAN_IFLAG_DEFAULT &amp;
+ 			~FLEXCAN_IFLAG_RX_FIFO_AVAILABLE, &amp;regs-&gt;imask1);
+ 		flexcan_write(priv-&gt;reg_ctrl_default &amp; ~FLEXCAN_CTRL_ERR_ALL,
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002310.html">[Socketcan-users] [RFC PATCH 00/14] consolidate and unify state	change and bus-off handling
+</A></li>
+	<LI>Next message: <A HREF="002323.html">[Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding by clearing all interrupt sources
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2311">[ date ]</a>
+              <a href="thread.html#2311">[ thread ]</a>
+              <a href="subject.html#2311">[ subject ]</a>
+              <a href="author.html#2311">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

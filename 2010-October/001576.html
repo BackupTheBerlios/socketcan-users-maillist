@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] Add BCM intro, opcodes and TX_DELETE to can.txt
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Add%20BCM%20intro%2C%0A%20opcodes%20and%20TX_DELETE%20to%20can.txt&In-Reply-To=%3C4CBB48D6.8000209%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001574.html">
+   <LINK REL="Next"  HREF="001609.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] Add BCM intro, opcodes and TX_DELETE to can.txt</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Add%20BCM%20intro%2C%0A%20opcodes%20and%20TX_DELETE%20to%20can.txt&In-Reply-To=%3C4CBB48D6.8000209%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [PATCH] Add BCM intro, opcodes and TX_DELETE to can.txt">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Oct 17 21:04:54 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001574.html">[Socketcan-users] [PATCH] Add BCM intro,	opcodes and TX_DELETE to can.txt
+</A></li>
+        <LI>Next message: <A HREF="001609.html">[Socketcan-users] RFC: CAN documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1576">[ date ]</a>
+              <a href="thread.html#1576">[ thread ]</a>
+              <a href="subject.html#1576">[ subject ]</a>
+              <a href="author.html#1576">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 17.10.2010 19:39, Daniele Venzano wrote:
+&gt;<i> The following patch fills the BCM chapter of can.txt with some
+</I>&gt;<i> intro text, a description of the opcodes and flags and the TX_DELETE
+</I>&gt;<i> command (because it was easy).
+</I>&gt;<i> The patch is against latest SVN.
+</I>&gt;<i> 
+</I>&gt;<i> Are all opcodes and flags are still there with the documented behaviour ?
+</I>
+Yes. Mostly. E.g. the operation on several CAN busses has been made possible
+in SVN Revision 138:
+
+------------------------------------------------------------------------
+r138 | hartkopp | 2007-02-01 10:15:00 +0100 (Do, 01. Feb 2007) | 11 Zeilen
+
+Complete reworked and beautified the Broadcast Manager (bcm)
+The BCM now supports the binding to ifindex 0 like the raw socket does.
+The first implementation of the BCM was from September 2003 and therefore
+many historic stuff (e.g. unusual error reporting) was removed.
+The support of ifindex 0 leads to the possibility to read from several
+interfaces via one BCM-socket using sendto() / recvfrom().
+See new test-apps tst-bcm-?x-sendto.c
+The update of RX/TX_SETUPs 'on the run' are only possible with a smaller or
+eval size of parameters now, as it is very complex in locking to provide the
+other case and there was really now use-case for it ...
+------------------------------------------------------------------------
+
+The max. number of nframes has been limited to 256 and some structures exposed
+to the userpace (struct bcm_msg_head) has been sanitized.
+
+I will fix all this based on your initial patch the next days.
+
+Many thanks!
+
+Oliver
+
+&gt;<i> 
+</I>&gt;<i> Thanks.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Index: kernel/2.6/Documentation/networking/can.txt
+</I>&gt;<i> ===================================================================
+</I>&gt;<i> --- kernel/2.6/Documentation/networking/can.txt	(revision 1198)
+</I>&gt;<i> +++ kernel/2.6/Documentation/networking/can.txt	(working copy)
+</I>&gt;<i> @@ -23,6 +23,15 @@
+</I>&gt;<i>        4.1.3 RAW socket option CAN_RAW_LOOPBACK
+</I>&gt;<i>        4.1.4 RAW socket option CAN_RAW_RECV_OWN_MSGS
+</I>&gt;<i>      4.2 Broadcast Manager protocol sockets (SOCK_DGRAM)
+</I>&gt;<i> +      4.2.1 Opening BCM sockets
+</I>&gt;<i> +      4.2.2 BCM messages (struct bcm_msg_head)
+</I>&gt;<i> +      4.2.3 TX_SETUP opcode
+</I>&gt;<i> +      4.2.4 TX_DELETE opcode
+</I>&gt;<i> +      4.2.5 TX_READ opcode
+</I>&gt;<i> +      4.2.6 TX_SEND opcode
+</I>&gt;<i> +      4.2.7 RX_SETUP opcode
+</I>&gt;<i> +      4.2.8 RX_DELETE opcode
+</I>&gt;<i> +      4.2.9 RX_READ opcode      
+</I>&gt;<i>      4.3 connected transport protocols (SOCK_SEQPACKET)
+</I>&gt;<i>      4.4 unconnected transport protocols (SOCK_DGRAM)
+</I>&gt;<i>      4.5 Timestamps
+</I>&gt;<i> @@ -473,6 +482,159 @@
+</I>&gt;<i>                 &amp;recv_own_msgs, sizeof(recv_own_msgs));
+</I>&gt;<i>  
+</I>&gt;<i>    4.2 Broadcast Manager protocol sockets (SOCK_DGRAM)
+</I>&gt;<i> +  
+</I>&gt;<i> +  The Broadcast Manager (BCM) provides functions to send CAN frames
+</I>&gt;<i> +  once or periodically, as well as notify applications of changes in
+</I>&gt;<i> +  received CAN frames, recognizing specific CAN IDs.
+</I>&gt;<i> +
+</I>&gt;<i> +  Capabilities on the trasmission side:
+</I>&gt;<i> +  - Cyclic transmission of a CAN frame with a given interval
+</I>&gt;<i> +  - Modification of message content and intervals at runtime (e.g.
+</I>&gt;<i> +    switching to a new interval with or without immediate restart of
+</I>&gt;<i> +    the timer)
+</I>&gt;<i> +  - Automatically switching to a second interval after a certain number
+</I>&gt;<i> +    of frames has been sent
+</I>&gt;<i> +  - Instant transmission of changed frames, without influencing the
+</I>&gt;<i> +    interval cycle
+</I>&gt;<i> +  - One-time transmission of CAN messages
+</I>&gt;<i> +
+</I>&gt;<i> +  Capabilities on the receiving side:
+</I>&gt;<i> +  - Receive filter to detect changes in frame ID, data or length (DLC)
+</I>&gt;<i> +  - Receive filter for multiplex frames (e.g. with packet counters in
+</I>&gt;<i> +    the data field)
+</I>&gt;<i> +  - RTR replies to messages
+</I>&gt;<i> +  - Time-out monitoring of frames
+</I>&gt;<i> +  - Frequency reduction of messages (throttle function) to the user
+</I>&gt;<i> +    application
+</I>&gt;<i> +
+</I>&gt;<i> +  4.2.1 Opening BCM sockets
+</I>&gt;<i> +  
+</I>&gt;<i> +  To use Broadcast-Manager include the file &quot;bcm.h&quot;.
+</I>&gt;<i> +  A socket for Broadcast-Manager is created with:
+</I>&gt;<i> +
+</I>&gt;<i> +    s = socket(PF_CAN, SOCK_DGRAM, CAN_BCM);
+</I>&gt;<i> +
+</I>&gt;<i> +  The CAN interface is assigned with a call to connect() on the socket.
+</I>&gt;<i> +  
+</I>&gt;<i> +    addr.can_family = AF_CAN;
+</I>&gt;<i> +    strcpy(ifr.ifr_name, &quot;can0&quot;);
+</I>&gt;<i> +    ioctl(s, SIOCGIFINDEX, &amp;ifr);
+</I>&gt;<i> +    addr.can_ifindex = ifr.ifr_ifindex;
+</I>&gt;<i> +
+</I>&gt;<i> +    connect(s, (struct sockaddr *)&amp;addr, sizeof(addr));
+</I>&gt;<i> +  
+</I>&gt;<i> +  If a process must operate on multiple CAN buses, it must open several
+</I>&gt;<i> +  sockets. It is also possible for a process to open multiple sockets
+</I>&gt;<i> +  on a single CAN-bus, if it makes sense for the application programmer
+</I>&gt;<i> +  to structure different data flows.
+</I>&gt;<i> +  Every single instance of Broadcast-Manager is able to manage any number of
+</I>&gt;<i> +  filter and/or send requests.
+</I>&gt;<i> +
+</I>&gt;<i> +  4.2.2 BCM messages (struct bcm_msg_head)
+</I>&gt;<i> +  
+</I>&gt;<i> +  All messages from the (user) process to Broadcast-Manager have the same
+</I>&gt;<i> +  structure. It consists of a message header with the command (opcode),
+</I>&gt;<i> +  several options and zero or more CAN frames, depending on the command
+</I>&gt;<i> +  used and the action requested:
+</I>&gt;<i> +
+</I>&gt;<i> +    struct bcm_msg_head {
+</I>&gt;<i> +        int opcode;                   /* command */
+</I>&gt;<i> +        int flags;                    /* special flags */
+</I>&gt;<i> +        int count;                    /* run 'count' times ival1 then ival2 */
+</I>&gt;<i> +        struct timeval ival1, ival2;  /* intervals */
+</I>&gt;<i> +        canid_t can_id;               /* 32 Bit SFF/EFF. MSB set at EFF */
+</I>&gt;<i> +        int nframes;                  /* number of can_frame's in the next field */
+</I>&gt;<i> +        struct can_frame frames[0];
+</I>&gt;<i> +    };
+</I>&gt;<i> +
+</I>&gt;<i> +  The value of nframes indicates how many user data frames follow the
+</I>&gt;<i> +  message header. The user data frames are used to describe the actual
+</I>&gt;<i> +  content of a CAN message:
+</I>&gt;<i> +
+</I>&gt;<i> +    struct can_frame {
+</I>&gt;<i> +        canid_t can_id;      /* 32 bit CAN_ID + EFF/RTR flags */
+</I>&gt;<i> +        __u8    can_dlc;     /* data length code: 0 .. 8 */
+</I>&gt;<i> +        __u8    data[8] __attribute__ ((aligned(8)));
+</I>&gt;<i> +    };
+</I>&gt;<i> +
+</I>&gt;<i> +  The opcode defines the type of message. Messages from the user to
+</I>&gt;<i> +  BCM control the operations of the BCM, replies from the BCM indicate
+</I>&gt;<i> +  certain changes to the user, such as timeouts, etc.
+</I>&gt;<i> +
+</I>&gt;<i> +  The transmit and receive path of the BCM are two independent functional
+</I>&gt;<i> +  blocks.
+</I>&gt;<i> +
+</I>&gt;<i> +  For the transmit path the following opcodes exist:
+</I>&gt;<i> +
+</I>&gt;<i> +   TX_SETUP: for setting up and modifying transmission requests
+</I>&gt;<i> +   TX_DELETE: to remove send requests
+</I>&gt;<i> +   TX_READ: to read out the current broadcasting commands
+</I>&gt;<i> +            (for debugging purposes)
+</I>&gt;<i> +   TX_SEND: for sending a single CAN message
+</I>&gt;<i> +
+</I>&gt;<i> +  For the receive path the following opcodes exist:
+</I>&gt;<i> +
+</I>&gt;<i> +   RX_SETUP: for setting and modifying receive filters
+</I>&gt;<i> +   RX_DELETE: for deleting receive filters
+</I>&gt;<i> +   RX_READ: to read out the current receive filter (for debugging purposes)
+</I>&gt;<i> +
+</I>&gt;<i> +  The Broadcast-Manager sends response messages in the same form. The
+</I>&gt;<i> +  BCM sends these opcodes:
+</I>&gt;<i> +
+</I>&gt;<i> +   TX_STATUS: in response to TX_READ
+</I>&gt;<i> +   TX_EXPIRED: is sent when the counter count reaches ival1 (only if
+</I>&gt;<i> +               flag TX_COUNTEVT is set, see below)
+</I>&gt;<i> +
+</I>&gt;<i> +   RX_STATUS: in response to RX_READ
+</I>&gt;<i> +   RX_TIMEOUT: sent if the time-controlled reception of a message failed
+</I>&gt;<i> +   RX_CHANGED: sent if the first or a revised CAN message was received
+</I>&gt;<i> +
+</I>&gt;<i> +  Each of these opcode needs CAN ID specified either in the &quot;can_id&quot; field or
+</I>&gt;<i> +  in the first can_frame structure attached to the command.
+</I>&gt;<i> +
+</I>&gt;<i> +  In addition, there are optional flags which can influence the BCM behavior:
+</I>&gt;<i> +
+</I>&gt;<i> +   SETTIMER: set the value of ival1, ival2 and count
+</I>&gt;<i> +   STARTTIMER: start the timer with the actual value of ival1, ival2 and count.
+</I>&gt;<i> +        Starting the timer leads simultaneously to the transmission of a can_frame
+</I>&gt;<i> +   TX_COUNTEVT: create the message TX_EXPIRED when count is reached
+</I>&gt;<i> +   TX_ANNOUNCE: a change of data by the process is emitted with a new frame,
+</I>&gt;<i> +        regardless of the timer status
+</I>&gt;<i> +   TX_CP_CAN_ID: copies the can_id from the message header attached to each
+</I>&gt;<i> +        of can_frame. This is intended only as usage simplification
+</I>&gt;<i> +   TX_RESET_MULTI_IDX: forces a reset of the index counter from the update
+</I>&gt;<i> +        to be sent by multiplex message even if it would not be necessary
+</I>&gt;<i> +        because of the length
+</I>&gt;<i> +   RX_FILTER_ID: there is no filtering of the user data. A match with the
+</I>&gt;<i> +        received message can_id automatically leads to a RX_CHANGED. Use
+</I>&gt;<i> +        caution in cyclic messages. If RX_FILTER_ID flag is set, the CAN frame
+</I>&gt;<i> +        in RX_SETUP can be ignored (i.e., nframes = 0)
+</I>&gt;<i> +   RX_RTR_FRAME: the filter passed is used as CAN message to be sent when
+</I>&gt;<i> +        receiving an RTR frame
+</I>&gt;<i> +   RX_CHECK_DLC: a change of the DLC leads to an RX_CHANGED message to the user
+</I>&gt;<i> +        application
+</I>&gt;<i> +   RX_NO_AUTOTIMER: if the timer ival1 in the RX_SETUP has been set equal to
+</I>&gt;<i> +        zero, on receipt of the CAN message the timer for the timeout
+</I>&gt;<i> +        monitoring is automatically started. Setting this flag prevents the
+</I>&gt;<i> +        automatic reset of the start timer
+</I>&gt;<i> +   RX_ANNOUNCE_RESUME: refers also to the time-out supervision of RX_SETUP. By
+</I>&gt;<i> +        setting this flag, when an RX-outs occours, a RX_CHANGED will be
+</I>&gt;<i> +        generated when the (cyclic) receive restarts. This will happen even
+</I>&gt;<i> +        if the user data have not changed
+</I>&gt;<i> +
+</I>&gt;<i> +  4.2.3 TX_SETUP opcode
+</I>&gt;<i> +  4.2.4 TX_DELETE opcode
+</I>&gt;<i> +
+</I>&gt;<i> +  This opcode will delete the entry for transmission of the CAN frame with
+</I>&gt;<i> +  the specified can_id CAN identifier. The message length for the command
+</I>&gt;<i> +  TX_DELETE is sizeof(bcm_msg_head) (only the header).
+</I>&gt;<i> +
+</I>&gt;<i> +  4.2.5 TX_READ opcode
+</I>&gt;<i> +  4.2.6 TX_SEND opcode
+</I>&gt;<i> +  4.2.7 RX_SETUP opcode
+</I>&gt;<i> +  4.2.8 RX_DELETE opcode
+</I>&gt;<i> +  4.2.9 RX_READ opcode      
+</I>&gt;<i> +
+</I>&gt;<i>    4.3 connected transport protocols (SOCK_SEQPACKET)
+</I>&gt;<i>    4.4 unconnected transport protocols (SOCK_DGRAM)
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001574.html">[Socketcan-users] [PATCH] Add BCM intro,	opcodes and TX_DELETE to can.txt
+</A></li>
+	<LI>Next message: <A HREF="001609.html">[Socketcan-users] RFC: CAN documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1576">[ date ]</a>
+              <a href="thread.html#1576">[ thread ]</a>
+              <a href="subject.html#1576">[ subject ]</a>
+              <a href="author.html#1576">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

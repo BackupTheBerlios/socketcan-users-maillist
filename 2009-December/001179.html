@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ECAN527 stopped working
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ECAN527%20stopped%20working&In-Reply-To=%3C4B153044.9050604%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001178.html">
+   <LINK REL="Next"  HREF="001184.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ECAN527 stopped working</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ECAN527%20stopped%20working&In-Reply-To=%3C4B153044.9050604%40grandegger.com%3E"
+       TITLE="[Socketcan-users] ECAN527 stopped working">wg at grandegger.com
+       </A><BR>
+    <I>Tue Dec  1 16:03:32 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001178.html">[Socketcan-users] ECAN527 stopped working
+</A></li>
+        <LI>Next message: <A HREF="001184.html">[Socketcan-users] ECAN527 stopped working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1179">[ date ]</a>
+              <a href="thread.html#1179">[ thread ]</a>
+              <a href="subject.html#1179">[ subject ]</a>
+              <a href="author.html#1179">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alexey Serov wrote:
+&gt;<i> Hi All,
+</I>&gt;<i> 
+</I>&gt;<i> I had a working CAN setup with ECAN527 PC/104 Card, but recently this
+</I>&gt;<i> configuration stopped working.
+</I>&gt;<i> 
+</I>&gt;<i> It was running on Ubuntu 9.04 with kernel 2.6.28. I've just upgraded it to
+</I>&gt;<i> Ubuntu 9.10 with 2.6.31 kernel (and most recent socket-can snapshot from
+</I>&gt;<i> SVN), but with no results.
+</I>&gt;<i> 
+</I>&gt;<i> I'm getting some strange traceback in /var/log/messages when trying to send
+</I>&gt;<i> something to CAN network (e.g., &quot;cansend can0 080#&quot;).
+</I>&gt;<i> 
+</I>&gt;<i> Here is a cut from dmesg:
+</I>&gt;<i> 
+</I>&gt;<i> [  690.702419] can: raw protocol (rev 20090105)
+</I>&gt;<i> [  934.096116] ------------[ cut here ]------------
+</I>&gt;<i> [  934.096177] WARNING: at
+</I>&gt;<i> /build/buildd/linux-2.6.31/net/sched/sch_generic.c:246
+</I>&gt;<i> dev_watchdog+0x1f6/0x210()
+</I>&gt;<i> [  934.096207] NETDEV WATCHDOG: can0 (): transmit queue 0 timed out
+</I>&gt;<i> [  934.096225] Modules linked in: can_raw can i82527_iomem vcan snd_via82xx
+</I>&gt;<i> gameport snd_ac97_codec ac97_bus snd_pcm snd_timer iptable_filter ip_tables
+</I>&gt;<i> snd_page_alloc snd_mpu401_uart snd_rawmidi x_tables snd_seq_device ppdev
+</I>&gt;<i> shpchp snd lp via686a soundcore parport_pc via_agp agpgart i2c_viapro
+</I>&gt;<i> parport 8139too 8139cp mii
+</I>&gt;<i> [  934.096434] Pid: 0, comm: swapper Not tainted 2.6.31-15-generic
+</I>&gt;<i> #50-Ubuntu
+</I>&gt;<i> [  934.096457] Call Trace:
+</I>&gt;<i> [  934.096515]  [&lt;c014518d&gt;] warn_slowpath_common+0x6d/0xa0
+</I>&gt;<i> [  934.096546]  [&lt;c04b0dd6&gt;] ? dev_watchdog+0x1f6/0x210
+</I>&gt;<i> [  934.096574]  [&lt;c04b0dd6&gt;] ? dev_watchdog+0x1f6/0x210
+</I>&gt;<i> [  934.096608]  [&lt;c0145206&gt;] warn_slowpath_fmt+0x26/0x30
+</I>&gt;<i> [  934.096637]  [&lt;c04b0dd6&gt;] dev_watchdog+0x1f6/0x210
+</I>&gt;<i> [  934.096676]  [&lt;c0161dab&gt;] ? sched_clock_cpu+0xeb/0x1a0
+</I>&gt;<i> [  934.096709]  [&lt;c013bcf1&gt;] ? scheduler_tick+0x101/0x240
+</I>&gt;<i> [  934.096743]  [&lt;c01501b7&gt;] run_timer_softirq+0x117/0x200
+</I>&gt;<i> [  934.096772]  [&lt;c04b0be0&gt;] ? dev_watchdog+0x0/0x210
+</I>&gt;<i> [  934.096818]  [&lt;c014b3b0&gt;] __do_softirq+0x90/0x1a0
+</I>&gt;<i> [  934.096860]  [&lt;c0127c38&gt;] ? default_spin_lock_flags+0x8/0x10
+</I>&gt;<i> [  934.096898]  [&lt;c0570dca&gt;] ? _spin_lock_irqsave+0x2a/0x40
+</I>&gt;<i> [  934.096946]  [&lt;c0106b92&gt;] ? enable_8259A_irq+0x42/0x60
+</I>&gt;<i> [  934.096978]  [&lt;c014b4fd&gt;] do_softirq+0x3d/0x40
+</I>&gt;<i> [  934.097007]  [&lt;c014b63d&gt;] irq_exit+0x5d/0x70
+</I>&gt;<i> [  934.097036]  [&lt;c0104f10&gt;] do_IRQ+0x50/0xc0
+</I>&gt;<i> [  934.097069]  [&lt;c01039b0&gt;] common_interrupt+0x30/0x40
+</I>&gt;<i> [  934.097100]  [&lt;c0126fc5&gt;] ? native_safe_halt+0x5/0x10
+</I>&gt;<i> [  934.097132]  [&lt;c010a486&gt;] default_idle+0x46/0xd0
+</I>&gt;<i> [  934.097162]  [&lt;c010202c&gt;] cpu_idle+0x8c/0xd0
+</I>&gt;<i> [  934.097211]  [&lt;c055ee85&gt;] rest_init+0x55/0x60
+</I>&gt;<i> [  934.097263]  [&lt;c078e8cd&gt;] start_kernel+0x2e6/0x2ec
+</I>&gt;<i> [  934.097295]  [&lt;c078e406&gt;] ? unknown_bootoption+0x0/0x1ab
+</I>&gt;<i> [  934.097331]  [&lt;c078e07c&gt;] i386_start_kernel+0x7c/0x83
+</I>&gt;<i> [  934.097354] ---[ end trace ffe46399f3049559 ]---
+</I>&gt;<i> [  934.097709] can0: i82527: using msg object 15 for SFF receiption.
+</I>
+This message shows up once when the TX timeout triggers, which happens
+if the message does not go out.
+
+&gt;<i> Here is my config in /etc/modprobe.d/llcf file:
+</I>&gt;<i> 
+</I>&gt;<i> alias net-pf-29 can
+</I>&gt;<i> alias can-proto-1 can-raw
+</I>&gt;<i> alias can-proto-2 can-bcm
+</I>&gt;<i> alias can-proto-3 can-tp16
+</I>&gt;<i> alias can-proto-4 can-tp20
+</I>&gt;<i> alias can-proto-5 can-mcnet
+</I>&gt;<i> alias can-proto-6 can-isotp
+</I>&gt;<i> alias can-proto-7 can-bap
+</I>&gt;<i> 
+</I>&gt;<i> alias can0 i82527-iomem
+</I>&gt;<i> alias can1 i82527-iomem
+</I>&gt;<i> options i82527-iomem irq=4,6 base=0xD0000,0xD0100 speed=125,125 clk=8000000
+</I>&gt;<i> irq_mode=2 force_dmc=1 debug=1
+</I>&gt;<i> 
+</I>&gt;<i> Can this be software problem or there is really something bad with my CAN
+</I>&gt;<i> hardware?
+</I>
+I suspect electrical problems with your bus e.g. not connected, bus
+termination or improper bit-timing.
+
+Anyway, if you have a chance, please switch tot the new cc770/i82527
+driver, which is fully compatible with the Socket-CAN interface
+available in mainline.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001178.html">[Socketcan-users] ECAN527 stopped working
+</A></li>
+	<LI>Next message: <A HREF="001184.html">[Socketcan-users] ECAN527 stopped working
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1179">[ date ]</a>
+              <a href="thread.html#1179">[ thread ]</a>
+              <a href="subject.html#1179">[ subject ]</a>
+              <a href="author.html#1179">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

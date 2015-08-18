@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] FW: CAN Id is trucated
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C1B3CA99331DE5E47BB89385002F8D1EF10E3689156%40MTW02MSG02.mindtree.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001185.html">
+   <LINK REL="Next"  HREF="001181.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] FW: CAN Id is trucated</H1>
+    <B>Ravi Kumar Madhuranthakam</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C1B3CA99331DE5E47BB89385002F8D1EF10E3689156%40MTW02MSG02.mindtree.com%3E"
+       TITLE="[Socketcan-users] FW: CAN Id is trucated">RaviKumar_Madhuranthakam at mindtree.com
+       </A><BR>
+    <I>Wed Dec  2 05:07:41 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001185.html">[Socketcan-users] ECAN527 stopped working
+</A></li>
+        <LI>Next message: <A HREF="001181.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1180">[ date ]</a>
+              <a href="thread.html#1180">[ thread ]</a>
+              <a href="subject.html#1180">[ subject ]</a>
+              <a href="author.html#1180">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+HI ,
+
+I am using socket CAN with Atmel 9263 board , And CAN Messages Extended ID is truncated when I send message using PCAN USB- analyzer .
+I am using read and write calls for message sending and receiving in the board.
+
+I am not using any filters and using CAN_RAW .
+Anybody has idea on this issue ?
+
+
+My Code looks like this
+
+#include &lt;sys/types.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;sys/ioctl.h&gt;
+#include &lt;net/if.h&gt;
+
+#include &lt;linux/can.h&gt;
+#include &lt;linux/can/raw.h&gt;
+#include &lt;string.h&gt;
+
+/* At time of writing, these constants are not defined in the headers */
+#ifndef PF_CAN
+#define PF_CAN 29
+#endif
+
+#ifndef AF_CAN
+#define AF_CAN PF_CAN
+#endif
+
+/* ... */
+
+/* Somewhere in your app */
+
+   /* Create the socket */
+   int skt = socket( PF_CAN, SOCK_RAW, CAN_RAW );
+
+   /* Locate the interface you wish to use */
+   struct ifreq ifr;
+   strcpy(ifr.ifr_name, &quot;can0&quot;);
+   ioctl(skt, SIOCGIFINDEX, &amp;ifr); /* ifr.ifr_ifindex gets filled
+                                  * with that device's index */
+
+   /* Select that CAN interface, and bind the socket to it. */
+   struct sockaddr_can addr;
+   addr.can_family = AF_CAN;
+   addr.can_ifindex = ifr.ifr_ifindex;
+   bind( skt, (struct sockaddr*)&amp;addr, sizeof(addr) );
+
+   /* Send a message to the CAN bus */
+   struct can_frame frame;
+   frame.can_id = 0x123;
+   strcpy( &amp;frame.data, &quot;foo&quot; );
+   frame.can_dlc = strlen( &amp;frame.data );
+   int bytes_sent = write( skt, &amp;frame, sizeof(frame) );
+
+   /* Read a message back from the CAN bus */
+   int bytes_read = read( skt, &amp;frame, sizeof(frame) );
+
+
+
+
+
+________________________________
+<A HREF="http://www.mindtree.com/email/disclaimer.html">http://www.mindtree.com/email/disclaimer.html</A>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091202/9edf2c4e/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091202/9edf2c4e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001185.html">[Socketcan-users] ECAN527 stopped working
+</A></li>
+	<LI>Next message: <A HREF="001181.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1180">[ date ]</a>
+              <a href="thread.html#1180">[ thread ]</a>
+              <a href="subject.html#1180">[ subject ]</a>
+              <a href="author.html#1180">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

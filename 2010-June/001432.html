@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ems-usb%2C%202.6.31%2C%20unknown%20symbols%2C%0A%20refused%20to%20load&In-Reply-To=%3C4C17EB8C.200%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001431.html">
+   <LINK REL="Next"  HREF="001447.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ems-usb%2C%202.6.31%2C%20unknown%20symbols%2C%0A%20refused%20to%20load&In-Reply-To=%3C4C17EB8C.200%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load">mkl at pengutronix.de
+       </A><BR>
+    <I>Tue Jun 15 23:07:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001431.html">[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load
+</A></li>
+        <LI>Next message: <A HREF="001447.html">[Socketcan-users]  SJA 1000 bit timing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1432">[ date ]</a>
+              <a href="thread.html#1432">[ thread ]</a>
+              <a href="subject.html#1432">[ subject ]</a>
+              <a href="author.html#1432">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Markus Plessing wrote:
+&gt;<i> Hi there,
+</I>&gt;<i> 
+</I>&gt;<i> I'm trying to get the SocketCAN driver ems-usb running with
+</I>&gt;<i> a kernel 2.6.31-19, but fail.
+</I>&gt;<i> 
+</I>&gt;<i> I've updated my local version with the svn repository files
+</I>&gt;<i> and compiled the socket can drivers against the running kernel
+</I>&gt;<i> 2.6.31-19-generic on a ubuntu box.
+</I>&gt;<i> 
+</I>&gt;<i> Running &quot;make modules&quot; and &quot;make modules install&quot; compiles all
+</I>&gt;<i> the modules fine, modpostes 24 modules and installs them. Afterwards the
+</I>&gt;<i> driver is found under
+</I>&gt;<i> /lib/modules/2.6.31-19-generic/extra/drivers/net/can/usb/ems_usb.ko
+</I>&gt;<i> 
+</I>&gt;<i> All fine, but if I try to load the driver, it is refused.
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe ems_usb
+</I>&gt;<i> FATAL: Error inserting ems_usb
+</I>&gt;<i> (/lib/modules/2.6.31-19-generic/extra/drivers/net/can/usb/ems_usb.ko):
+</I>&gt;<i> Unknown symbol in module, or unknown parameter (see dmesg)
+</I>&gt;<i> 
+</I>&gt;<i> # lsmod | grep can
+</I>&gt;<i> can_dev                 7004  0
+</I>&gt;<i> can_raw                 7164  0
+</I>&gt;<i> can                    23068  1 can_raw
+</I>&gt;<i> 
+</I>&gt;<i> #tail -n 13 /var/log/messages
+</I>&gt;<i> Jun 15 11:48:31 freya kernel: [ 1699.264333] can: controller area
+</I>&gt;<i> network core (rev 20090105 abi 8)
+</I>&gt;<i> Jun 15 11:48:31 freya kernel: [ 1699.264453] NET: Registered protocol
+</I>&gt;<i> family 29
+</I>&gt;<i> Jun 15 11:48:47 freya kernel: [ 1714.986724] can: raw protocol (rev
+</I>&gt;<i> 20090105)
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.878233] CAN device driver interface
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.879362] ems_usb: Unknown symbol
+</I>&gt;<i> can_free_echo_skb
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.879574] ems_usb: disagrees about
+</I>&gt;<i> version of symbol can_put_echo_skb
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.879581] ems_usb: Unknown symbol
+</I>&gt;<i> can_put_echo_skb
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.880040] ems_usb: disagrees about
+</I>&gt;<i> version of symbol can_get_echo_skb
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.880046] ems_usb: Unknown symbol
+</I>&gt;<i> can_get_echo_skb
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.881232] ems_usb: Unknown symbol
+</I>&gt;<i> alloc_can_skb
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.883261] ems_usb: disagrees about
+</I>&gt;<i> version of symbol alloc_candev
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.883268] ems_usb: Unknown symbol
+</I>&gt;<i> alloc_candev
+</I>&gt;<i> Jun 15 11:49:03 freya kernel: [ 1730.883751] ems_usb: Unknown symbol
+</I>&gt;<i> alloc_can_err_skb
+</I>&gt;<i> 
+</I>&gt;<i> What I'm doing wrong?
+</I>
+I think you're using the ems driver from the svn repo, but the helper
+libraries from the kernel.
+
+Try to unload all socketcan related drivers and insmod can_dev and
+can_raw from /lib/modules/2.6.31-19-generic/extra, then try to load the
+ems driver.
+
+If this works, you may want to delete the can_dev and can_raw that come
+with the ubuntu kernel.
+
+&gt;<i> The ems_usb driver is in the mainline kernel for 2.6.32, also the
+</I>&gt;<i> mentioned functioned are added for this kernel in drivers/net/can/dev.c
+</I>&gt;<i> but they are there also within the socketcan repository. Aren't they
+</I>&gt;<i> available afterwards?
+</I>
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100615/d4a7d5cd/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100615/d4a7d5cd/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001431.html">[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load
+</A></li>
+	<LI>Next message: <A HREF="001447.html">[Socketcan-users]  SJA 1000 bit timing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1432">[ date ]</a>
+              <a href="thread.html#1432">[ thread ]</a>
+              <a href="subject.html#1432">[ subject ]</a>
+              <a href="author.html#1432">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

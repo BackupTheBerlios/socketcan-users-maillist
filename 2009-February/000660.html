@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SPI problem with mcp251x driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SPI%20problem%20with%20mcp251x%20driver&In-Reply-To=%3Cf96d234e0902091510v47035428xc549307f9af7dc17%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000659.html">
+   <LINK REL="Next"  HREF="000661.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SPI problem with mcp251x driver</H1>
+    <B>Cliff Brake</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SPI%20problem%20with%20mcp251x%20driver&In-Reply-To=%3Cf96d234e0902091510v47035428xc549307f9af7dc17%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] SPI problem with mcp251x driver">cliff.brake at gmail.com
+       </A><BR>
+    <I>Tue Feb 10 00:10:04 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000659.html">[Socketcan-users] ifconfig can0 up fails using ems_pci
+</A></li>
+        <LI>Next message: <A HREF="000661.html">[Socketcan-users] SPI problem with mcp251x driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#660">[ date ]</a>
+              <a href="thread.html#660">[ thread ]</a>
+              <a href="subject.html#660">[ subject ]</a>
+              <a href="author.html#660">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I'm using the mcp251x driver with a PXA270.  It mostly works with the
+SPI clock set to 2.166Mhz, but fails with the SPI clock set to 6.5MHz.
+ After looking at the signals with a scope, I see that at low clock
+rates it is not de-asserting the SPI frame for multi-byte transactions
+like read.  But as the clock rate goes up, it appears that the frame
+is de-asserted every byte.
+
+Any thoughts on the best way to fix this?  One way would be to
+configure 24 bit transactions for read/write instructions, etc, but I
+want to make sure I'm not missing anything.
+
+Looking at the PXA270 SPI controller, it can leave the frame active
+for back-to-back transactions, but you probably need to keep the SPI
+data fed.  At low data rates, this mostly happens, but not at higher
+data rates.
+
+Cliff
+
+-- 
+=======================
+Cliff Brake
+<A HREF="http://bec-systems.com">http://bec-systems.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000659.html">[Socketcan-users] ifconfig can0 up fails using ems_pci
+</A></li>
+	<LI>Next message: <A HREF="000661.html">[Socketcan-users] SPI problem with mcp251x driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#660">[ date ]</a>
+              <a href="thread.html#660">[ thread ]</a>
+              <a href="subject.html#660">[ subject ]</a>
+              <a href="author.html#660">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

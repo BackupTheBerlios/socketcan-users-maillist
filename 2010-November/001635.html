@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE01FB2.3020602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001634.html">
+   <LINK REL="Next"  HREF="001636.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE01FB2.3020602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">wg at grandegger.com
+       </A><BR>
+    <I>Sun Nov 14 18:43:14 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001634.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001636.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1635">[ date ]</a>
+              <a href="thread.html#1635">[ thread ]</a>
+              <a href="subject.html#1635">[ subject ]</a>
+              <a href="author.html#1635">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/14/2010 04:26 PM, Willy Lambert wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> *The short story is :*
+</I>&gt;<i> 
+</I>&gt;<i> I manage to use vcan0 but the same tests fails on my real can interface. I
+</I>&gt;<i> am not sure about my HW livelyness but I really don't know where to look at
+</I>&gt;<i> to see if everything is working.
+</I>&gt;<i> 
+</I>&gt;<i> *The long one :*
+</I>&gt;<i> 
+</I>&gt;<i> As I just found my way in the kernel modules, I'm am trying to send a
+</I>&gt;<i> message on my can bus. to begin smoothly, I loaded a vcan modules and tried
+</I>&gt;<i> cansend et candump with this script :
+</I>&gt;<i> 
+</I>&gt;&gt;<i>         echo &quot;Inserting can drivers...&quot;
+</I>&gt;&gt;<i>         echo &quot;insert can&quot;
+</I>&gt;&gt;<i>         modprobe can
+</I>&gt;&gt;<i>         echo &quot;insert can_raw&quot;
+</I>&gt;&gt;<i>         modprobe can_raw
+</I>&gt;&gt;<i>         echo &quot;insert can_bcm&quot;
+</I>&gt;&gt;<i>         modprobe can_bcm
+</I>&gt;&gt;<i>         echo &quot;insert vcan&quot;
+</I>&gt;&gt;<i>         modprobe vcan
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         echo &quot;Configuring can ...&quot;
+</I>&gt;&gt;<i>         ip link add dev vcan0 type vcan
+</I>&gt;&gt;<i>         ip link add dev vcan1 type vcan
+</I>&gt;&gt;<i>         ip link set up vcan0
+</I>&gt;&gt;<i>         ip link set up vcan1
+</I>&gt;&gt;<i>
+</I>&gt;<i> And creates this can.log file :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> (0.1) vcan0 5D1#0000
+</I>&gt;&gt;<i> (0.2) vcan0 271#0100
+</I>&gt;&gt;<i> (0.3) vcan0 289#72027000
+</I>&gt;&gt;<i> (0.4) vcan0 401#081100000000
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> in one term I send :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> ?&gt;canplayer -l i -L can.log
+</I>&gt;&gt;<i> in an other one I receive :
+</I>&gt;&gt;<i> ?&gt;candump vcan0
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> (by the way if someone could tell me how to configure vcan speed, if it is
+</I>&gt;<i> meaningfull)
+</I>
+It's *not* meaningfull. It's a *virtual* device.
+
+&gt;<i> Then I tried the same thing with my real hardware using this script :
+</I>&gt;<i> 
+</I>&gt;&gt;<i>         echo &quot;Inserting can drivers ...&quot;
+</I>&gt;&gt;<i>         modprobe can
+</I>&gt;&gt;<i>         echo &quot;insert can_raw&quot;
+</I>&gt;&gt;<i>         modprobe can_raw
+</I>&gt;&gt;<i>         echo &quot;insert can_bcm&quot;
+</I>&gt;&gt;<i>         modprobe can_bcm
+</I>&gt;&gt;<i>         echo &quot;insert sja1000&quot;
+</I>&gt;&gt;<i>         modprobe sja1000
+</I>&gt;&gt;<i>         echo &quot;insert sja1000_isa&quot;
+</I>&gt;&gt;<i>         insmod $MODPATH/drivers/net/can/sja1000/sja1000_isa.ko irq=5,7
+</I>&gt;&gt;<i> mem=0xD0000,0xD0200
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         echo &quot;Configuring can drivers ...&quot;
+</I>&gt;&gt;<i>         ip link set can0 type can bitrate 500000
+</I>&gt;&gt;<i>         ip link set can1 type can bitrate 500000
+</I>&gt;&gt;<i>         ip link set can0 type can restart-ms 10000
+</I>&gt;&gt;<i>         ip link set can1 type can restart-ms 10000
+</I>&gt;&gt;<i>         ifconfig can0 up
+</I>&gt;&gt;<i>         ifconfig can1 up
+</I>
+BTW: you could set everything with one command:
+
+	ip link set can0 up type can bitrate 500000 restart-ms 10000
+
+&gt;<i> and uses the same commands after having changed &quot;vcan0&quot; into &quot;can0&quot; in my
+</I>&gt;<i> can.log file.
+</I>&gt;<i> As a result I have a full buffer error message (killing cansend) :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard# ../canplayer -l i -I can.log
+</I>&gt;&gt;<i> sendto: No buffer space available
+</I>
+It seems that no can messages are going out to the bus, likely due to
+electrical problems.
+
+&gt;<i> Here, I am totally lost, I don't know what to look at, I don't event know if
+</I>&gt;<i> my can hw is running. Could someone ligth up my path ?
+</I>&gt;<i> I tried different configuration like :
+</I>&gt;<i> _ no cabling
+</I>
+Well, no comment.
+
+&gt;<i> _ cabling can0 into can1
+</I>
+You mean connecting can0 and can1 to the same CAN bus/cable!?
+
+&gt;<i> _ cabling on open can0
+</I>
+I don't understand!?
+
+&gt;<i> I am not sure about my 120 Ohm resistors, I will check this on Monday, but
+</I>&gt;<i> as I am just trying to send is the real bus needed ?
+</I>
+Yes, you need a bus with a least one node responding to CAN messages.
+Otherwise the bus error count of the device will increase and even reach
+the bus-off state. The cable *must* be terminated with 120 Ohm at *each*
+end of CAN bus cable.
+
+&gt;<i> Here is some information I find relevant for analysis, I don't know what you
+</I>&gt;<i> need to look into my problem.
+</I>
+There a few tools and commands useful for debugging:
+
+- List the CAN setting and statistics after sending a message:
+
+  # ip -d -s link show can0
+  # ip -d -s link show can1
+
+- Dump real and error CAN messages while you send a message:
+
+  # candump any,0:0,#FFFFFFFF
+
+Could you please show us the output of the above two commands.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001634.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001636.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1635">[ date ]</a>
+              <a href="thread.html#1635">[ thread ]</a>
+              <a href="subject.html#1635">[ subject ]</a>
+              <a href="author.html#1635">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

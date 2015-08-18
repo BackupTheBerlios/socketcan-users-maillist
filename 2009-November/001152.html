@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091125161048.GD4696%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001150.html">
+   <LINK REL="Next"  HREF="001153.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091125161048.GD4696%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">l.fu at pengutronix.de
+       </A><BR>
+    <I>Wed Nov 25 17:10:48 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001150.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001153.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1152">[ date ]</a>
+              <a href="thread.html#1152">[ thread ]</a>
+              <a href="subject.html#1152">[ subject ]</a>
+              <a href="author.html#1152">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+Sorry I rolled out new version just two seconds beyond I saw your mail.
+Will consider the changes for further incarnations.
+
+On Wed, Nov 25, 2009 at 04:49:11PM +0100, Oliver Hartkopp wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; Luotao Fu wrote:
+</I>&gt;<i> &gt;&gt; Hi Wolfgang,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; On Tue, Nov 24, 2009 at 03:46:22PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt; Hi Fu,
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Luotao Fu wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt; Hi folks,
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; I was trying to integrate socketcan control in an application the last days and
+</I>&gt;<i> &gt;&gt;&gt;&gt; spent quite a lot of time getting clear how to deal with the netlink interface.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Nice idea! Especially for some kind of *integrated* (GUI-based) applications.
+</I>&gt;<i> 
+</I>
+That's what I had in mind as I started this.
+
+&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_set_bitrate(const char *name, __u32 bitrate);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_set_restart_ms(const char *name, __u32 restart_ms);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_set_ctrlmode(const char *name, __u32 mode, __u32 flags);
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_get_state(const char *name, int *state);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_get_restart_ms(const char *name, __u32 *restart_ms);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_get_bittiming(const char *name, struct can_bittiming *bt);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int scan_get_ctrlmode(const char *name, struct can_ctrlmode *cm);
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I'm not really happy with the 'scan_' prefix ...
+</I>&gt;<i> 
+</I>&gt;<i> I assume it's derived from s(ocket)can, and not from scan(ner) right? ;-)
+</I>&gt;<i> 
+</I>&gt;<i> What about 'canhw_' ??
+</I>&gt;<i> 
+</I>&gt;<i> Like this:
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_set_bitrate(const char *name, __u32 bitrate);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_set_restart_ms(const char *name, __u32 restart_ms);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_set_ctrlmode(const char *name, __u32 mode, __u32 flags);
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_get_state(const char *name, int *state);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_get_restart_ms(const char *name, __u32 *restart_ms);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_get_bittiming(const char *name, struct can_bittiming *bt);
+</I>&gt;<i> &gt;&gt;&gt;&gt; int canhw_get_ctrlmode(const char *name, struct can_ctrlmode *cm);
+</I>&gt;<i> 
+</I>&gt;<i> This leads also to 'libcanhw' as library name.
+</I>&gt;<i> 
+</I>&gt;<i> &quot;SocketCAN&quot; and &quot;Netlink&quot; is just state-of-the-art for CAN hardware in Linux.
+</I>&gt;<i> No need to put it into the library name ...
+</I>&gt;<i> 
+</I>
+interesting idea. I'll think about this.
+
+&gt;<i> IMHO there's also no real benefit to put this lib together with the helpers in
+</I>&gt;<i> 
+</I>&gt;<i>    trunk/can-utils/lib.[ch]
+</I>&gt;<i> 
+</I>&gt;<i> These are addressing different topics.
+</I>&gt;<i> 
+</I>
+I personally don't have opinions on this. The canconfig tool is partly
+supposed to demonstrate the usage of the library too. Intergrate the lib
+into the canutils package would work the same, as long as the library is
+build as dyn. so and can be loaded separatedly.
+
+&gt;<i> 
+</I>&gt;<i> &gt; Well, yes, I should add some more lines to Documentation/can.txt.
+</I>&gt;<i> &gt; Also, keep it simple having in mind that it's especially useful on
+</I>&gt;<i> &gt; embedded system (the busybox's &quot;ip&quot; utility does not yet support CAN).
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Which should be fixed inside busybox :-)
+</I>&gt;<i> Fortunately ptxdist allows the iproute2 package to be build instead of using
+</I>&gt;<i> the built-in 'ip' from busybox.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> ps. Did you recognize the updated can_if script in
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/etc/can_if">http://svn.berlios.de/svnroot/repos/socketcan/trunk/etc/can_if</A>
+</I>&gt;<i> 
+</I>&gt;<i> that can deal with the new 'ip' tool also?
+</I>&gt;<i> 
+</I>&gt;<i> # The syntax for the CAN devices is: devname[@bitrate][,restart-ms]
+</I>&gt;<i> # example CAN_IF=&quot;can0 <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can1 at 500000</A> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can2 at 500000</A>,200 can3,500&quot;
+</I>&gt;<i> 
+</I>&gt;<i> Just another idea.
+</I>&gt;<i> 
+</I>
+Yeah I know the script. Indeed I looked into it every time I was
+wondering for how the ip parameter should look like. ;-) The script is
+nice to bring up/turn down or reload the interfaces, but the
+possibilities are limited,Besides there're some natural limitations in
+the iproute tool, as I mentioned in the last mail, and not at least the
+big footprint and complex infrastructure. So I think canconfig comes in
+quite some occassions more handy than iproute + script.
+
+cheers
+Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091125/8bfae96f/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091125/8bfae96f/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001150.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001153.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1152">[ date ]</a>
+              <a href="thread.html#1152">[ thread ]</a>
+              <a href="subject.html#1152">[ subject ]</a>
+              <a href="author.html#1152">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

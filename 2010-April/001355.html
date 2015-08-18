@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem in cross compiling socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cn2i7401a78a1004062226x27cc9ddfib7f9341732cc4a93%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001372.html">
+   <LINK REL="Next"  HREF="001356.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem in cross compiling socketcan</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cn2i7401a78a1004062226x27cc9ddfib7f9341732cc4a93%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] problem in cross compiling socketcan">nudtrobert at gmail.com
+       </A><BR>
+    <I>Wed Apr  7 07:26:58 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001372.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001356.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1355">[ date ]</a>
+              <a href="thread.html#1355">[ thread ]</a>
+              <a href="subject.html#1355">[ subject ]</a>
+              <a href="author.html#1355">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2010/4/7 Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+
+&gt;<i> Lei Luo wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt;&gt; I am a newbie of socketcan, I compiled and installed it in the
+</I>&gt;<i> &gt; direction of <A HREF="http://dave.limoilux.org/trac/wiki/UseSocketCAN">http://dave.limoilux.org/trac/wiki/UseSocketCAN</A>   There are
+</I>&gt;<i> &gt; two mcp2510 can  controllers in my arm at91rm9200 board.
+</I>&gt;<i> &gt;&gt;&gt; It failed when run &quot;can_setup start&quot;, saying that &quot;cannot creat
+</I>&gt;<i> &gt; /sys/class/net/can0&quot;.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; If you look in SocketCAN's makefile, did you uncomment export
+</I>&gt;<i> &gt; CONFIG_CAN_MCP251X=m?
+</I>&gt;<i> &gt;&gt; You will also need to uncomment export CONFIG_CAN_DEV_SYSFS=y which is
+</I>&gt;<i> &gt; legacy.
+</I>&gt;<i>
+</I>&gt;<i> Yep!
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Yes, I have done it. I used the newest source code from the svn server
+</I>&gt;<i> &gt; and patched it manually. Configration is as follows:
+</I>&gt;<i> &gt; CONFIG_CAN=y;
+</I>&gt;<i> &gt; CONFIG_CAN_RAW=y;
+</I>&gt;<i> &gt; CONFIG_CAN_BCM=y;
+</I>&gt;<i> &gt; CONFIG_CAN_GW=y;
+</I>&gt;<i> &gt; CONFIG_CAN_ISOTP=y;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; CONFIG_CAN_VCAN=y;
+</I>&gt;<i> &gt; CONFIG_CAN_DEV=y;
+</I>&gt;<i> &gt; CONFIG_CAN_CALC_BITTIMING=y;
+</I>&gt;<i> &gt; CONFIG_CAN_MCP251X=y;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Then I use &quot;ip link add type vcan&quot; to create the a vcan interface.
+</I>&gt;<i> &gt; But cmd &quot;add&quot; is not recognised, ip tool is the newest one which is
+</I>&gt;<i> &gt; compiled with iproute2-2.6.33.tar.bz2. Linux kernel I used is  2.6.28.
+</I>&gt;<i>
+</I>&gt;<i> Is vcan.ko loaded? Please try
+</I>&gt;<i>
+</I>&gt;<i>   modprobe vcan
+</I>&gt;<i>
+</I>&gt;<i> before invoking
+</I>&gt;<i>
+</I>&gt;<i>   ip link add type vcan
+</I>&gt;<i>
+</I>&gt;<i> There should be this startup message in the kernel log:
+</I>&gt;<i> &quot;vcan: Virtual CAN interface driver&quot;
+</I>&gt;<i>
+</I>&gt;<i> You can see all network interfaces with
+</I>&gt;<i>
+</I>&gt;<i>   cat /proc/net/dev
+</I>&gt;<i>
+</I>&gt;<i> or
+</I>&gt;<i>
+</I>&gt;<i>   ip link show
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The problem of &quot;ip link add&quot; is OK after recompiling kernel,
+</I>&gt;<i> &gt; /sys/class/net/can0 is created if I type in &quot;ip link add dev can0 type
+</I>&gt;<i> &gt; vcan&quot;. But it says &quot;cannot create /sys/class/net/can0&quot; whenever I did it
+</I>&gt;<i> &gt; or not.
+</I>&gt;<i>
+</I>&gt;<i> As said above the sysfs configuration interface is depricated.
+</I>&gt;<i>
+</I>&gt;<i> For that reason the &quot;can_setup&quot; script is also not usable here.
+</I>&gt;<i>
+</I>&gt;<i> See
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L595">http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L595</A>
+</I>&gt;<i>
+</I>&gt;<i> for the use of virtual CAN interfaces (that are usually named vcanX).
+</I>&gt;<i>
+</I>&gt;<i> See
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L623">http://lxr.linux.no/#linux+v2.6.33/Documentation/networking/can.txt#L623</A>
+</I>&gt;<i>
+</I>&gt;<i> for the use of real CAN interfaces (that are usually named canX).
+</I>&gt;<i>
+</I>&gt;<i> When a 'real' CAN interface driver initializes (like the mcp251x.c) the CAN
+</I>&gt;<i> drivers allocate device names like can0, can1, can2 ... automatically.
+</I>&gt;<i>
+</I>&gt;<i> Don't mix that with virtual CAN interfaces that are software instances and
+</I>&gt;<i> 'generated' by &quot;ip link add type vcan&quot;
+</I>&gt;<i>
+</I>The real device file as can0, can1 havenot created after OS been loaded. So
+I am trying to add mpc2510 info into the platform definition file.
+
+Another problem is: if I build socketcan as modules and loaded them
+manually, an err will happen in sometime; if build it direct into kernel,
+then load application modules such as vcan, things will be OK.  An err info
+is as follows(not every time the same):
+
+kernel BUG at mm/slab.c:602!
+Unable to handle kernel NULL pointer dereference at virtual address 00000000
+fcse pid: 0, 0x00000000
+pgd = c0004000
+[00000000] *pgd=00000000
+Internal error: Oops: 817 [#1]
+Modules linked in: [last unloaded: can_dev]
+CPU: 0    Not tainted  (2.6.28 #11)
+PC is at __bug+0x20/0x2c
+LR is at vprintk+0x288/0x2cc
+pc : [&lt;c002b7b4&gt;]    lr : [&lt;c0041080&gt;]    psr: 20000013
+sp : c1c21ee4  ip : c1c21e2c  fp : c1c21ef0
+r10: 00000018  r9 : 00000000  r8 : 0000000f
+r7 : c1c000c0  r6 : 00000000  r5 : 0000003e  r4 : 0000003e
+r3 : 00000000  r2 : c02b2e5c  r1 : 20000013  r0 : 00000020
+Flags: nzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment kernel
+Control: c000317f  Table: 21e20000  DAC: 00000017
+Process events/0 (pid: 5, stack limit = 0xc1c20260)
+Stack: (0xc1c21ee4 to 0xc1c22000)
+1ee0:          c1c21f24 c1c21ef4 c00bae88 c002b7a4 c1d7d01c c1c05410
+c1c05410
+1f00: 00000018 c1c05400 c1c000c0 c02e6758 00000000 00000000 c1c21f44
+c1c21f28
+1f20: c00bb04c c00bae24 c1c025e0 c1c000c0 00000000 c02e674c c1c21f74
+c1c21f48
+1f40: c00bc58c c00baf9c 00000000 c1c21f58 c02e675c c1c01940 c02e6758
+c00bc530
+1f60: c0222824 00000000 c1c21f98 c1c21f78 c0050abc c00bc540 c1c01948
+c1c21fb0
+1f80: c1c01940 00000000 00000000 c1c21fdc c1c21f9c c0050c18 c0050a00
+00000000
+1fa0: c1c12040 c0054a58 c1c21fbc c1c21fbc 00000000 c1c12040 c0054a58
+c1c21fbc
+1fc0: c1c21fbc fffffffc c0050b60 00000000 c1c21ff4 c1c21fe0 c0054428
+c0050b70
+1fe0: 00000000 00000000 00000000 c1c21ff8 c0042490 c00543e4 00000000
+10002040
+Backtrace:
+[&lt;c002b794&gt;] (__bug+0x0/0x2c) from [&lt;c00bae88&gt;] (free_block+0x74/0x178)
+[&lt;c00bae14&gt;] (free_block+0x0/0x178) from [&lt;c00bb04c&gt;]
+(drain_array+0xc0/0xec)
+[&lt;c00baf8c&gt;] (drain_array+0x0/0xec) from [&lt;c00bc58c&gt;]
+(cache_reap+0x5c/0x10c)
+ r7:c02e674c r6:00000000 r5:c1c000c0 r4:c1c025e0
+[&lt;c00bc530&gt;] (cache_reap+0x0/0x10c) from [&lt;c0050abc&gt;]
+(run_workqueue+0xcc/0x170)
+[&lt;c00509f0&gt;] (run_workqueue+0x0/0x170) from [&lt;c0050c18&gt;]
+(worker_thread+0xb8/0xc
+c)
+ r8:00000000 r7:00000000 r6:c1c01940 r5:c1c21fb0 r4:c1c01948
+[&lt;c0050b60&gt;] (worker_thread+0x0/0xcc) from [&lt;c0054428&gt;] (kthread+0x54/0x7c)
+ r6:00000000 r5:c0050b60 r4:fffffffc
+[&lt;c00543d4&gt;] (kthread+0x0/0x7c) from [&lt;c0042490&gt;] (do_exit+0x0/0x758)
+ r5:00000000 r4:00000000
+Code: e1a01000 e59f000c eb005644 e3a03000 (e5833000)
+---[ end trace 12468964a579a4db ]---
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100407/31c35e27/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100407/31c35e27/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001372.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001356.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1355">[ date ]</a>
+              <a href="thread.html#1355">[ thread ]</a>
+              <a href="subject.html#1355">[ subject ]</a>
+              <a href="author.html#1355">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

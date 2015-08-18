@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SocketCan on s3c64xx Board
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCan%20on%20s3c64xx%20Board&In-Reply-To=%3C13db27a.51c2.1312d5275c6.Coremail.hongjiujing%40126.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001947.html">
+   <LINK REL="Next"  HREF="001949.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SocketCan on s3c64xx Board</H1>
+    <B>tommy.hong</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCan%20on%20s3c64xx%20Board&In-Reply-To=%3C13db27a.51c2.1312d5275c6.Coremail.hongjiujing%40126.com%3E"
+       TITLE="[Socketcan-users] SocketCan on s3c64xx Board">hongjiujing at 126.com
+       </A><BR>
+    <I>Fri Jul 15 12:23:24 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001947.html">[Socketcan-users] SocketCan on s3c64xx Board
+</A></li>
+        <LI>Next message: <A HREF="001949.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1948">[ date ]</a>
+              <a href="thread.html#1948">[ thread ]</a>
+              <a href="subject.html#1948">[ subject ]</a>
+              <a href="author.html#1948">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,My s3c64xx (ARM11),use following design,
+
+GPN1---&gt;ALE (Data address ALE signal)
+GPN2---&gt;Can interrupt
+GPN3---&gt;Data Direction,LOW (SJA1000--&gt;s3c6410),High (S3C6410-&gt;sja1000)
+GPK11:RESET
+
+I use following code to drivers/net/can/sja1000/sja1000_platform.c,want to replace default read/write with my s3c64xx_sja1000_read_reg8/s3c64xx_sja1000_write_reg8;
+
+
+#ifdef CONFIG_ARCH_S3C64XX
+/*S3C64XX CAN SJA1000,ALE Pin ---&gt;S3C64XX GPN1*/
+/*-----SJA1000 ALE Pin-----*/
+#define  BSJA1000_ALE_PIN  { gpio_set_value(S3C64XX_GPN(1),0x1);}  /*Set Bit,Open ALE Lock*/
+#define  CSJA1000_ALE_PIN  { gpio_set_value(S3C64XX_GPN(1),0x0);}   /*Clear Bit,Close ALE Lock*/
+
+/*-----SJA1000 RESET Pin-----*/
+#define  BSJA1000_RST_PIN  { gpio_set_value(S3C64XX_GPK(11),0x1);} /*RESET PIN,High*/
+#define  CSJA1000_RST_PIN  { gpio_set_value(S3C64XX_GPK(11),0x0);} /*RESET PIN Low,Available*/
+
+/*-----SJA1000 Interrupt Pin-----*/
+#define  BSJA1000_INT_PIN  { s3c_gpio_cfgpin(S3C64XX_GPN(0), S3C64XX_GPN0_EINT0);s3c_gpio_setpull(S3C64XX_GPN(0), S3C_GPIO_PULL_UP);}
+
+/*-----SJA1000 CS Pin-----*/
+#define  BSJA1000_CS_PIN   { __raw_writel( readl(S3C_MEM_SYS_CFG)|1&lt;&lt;4,S3C_MEM_SYS_CFG);}/*Use S3C64XX CS4*/
+
+#define  CSJA1000_CS_PIN   { __raw_writel( readl(S3C_MEM_SYS_CFG)&amp; ~(1&lt;&lt;4),S3C_MEM_SYS_CFG);}/*Use S3C64XX CS4*/
+
+#define SJA1000_DATA_DIR_H  { gpio_set_value(S3C64XX_GPN(3),0x1);}
+
+#define SJA1000_DATA_DIR_L  { gpio_set_value(S3C64XX_GPN(3),0x0);}     
+
+#endif
+
+static u8 s3c64xx_sja1000_read_reg8(const struct sja1000_priv *priv, int reg)
+{
+#if 1  
+         volatile unsigned int data;
+         BSJA1000_CS_PIN    //CS High
+         SJA1000_DATA_DIR_H //
+         BSJA1000_ALE_PIN //ALE high
+         iowrite8(reg, priv-&gt;reg_base);
+         CSJA1000_ALE_PIN //ALE low
+         CSJA1000_CS_PIN  //CS low
+         //?RD Signal Low?
+         SJA1000_DATA_DIR_L
+         data=ioread8(priv-&gt;reg_base + reg);
+         return data;
+#endif
+}
+static void s3c64xx_sja1000_write_reg8(const struct sja1000_priv *priv, int reg, u8 val)
+{
+#if 1  
+        BSJA1000_CS_PIN  //CS High
+        SJA1000_DATA_DIR_H
+        BSJA1000_ALE_PIN //ALE high
+        iowrite8(reg, priv-&gt;reg_base);
+        CSJA1000_ALE_PIN //ALE low
+        CSJA1000_CS_PIN  //CS low
+        iowrite8(val, priv-&gt;reg_base + reg);
+#endif
+}
+
+
+when kernel booting:
+bd: registered device at major 43
+CAN device driver interface
+sja1000 CAN netdevice driver
+Unhandled fault: external abort on linefetch (0x1806) at 0x00000000
+Internal error: : 1806 [#1]
+Modules linked in:
+CPU: 0    Not tainted  (2.6.29 #495)
+PC is at s3c_gpiolib_set+0x28/0x4c
+LR is at __gpio_set_value+0x30/0x38
+pc : [&lt;c0039974&gt;]    lr : [&lt;c015005c&gt;]    psr: 60000093
+sp : cf821dbc  ip : 60000013  fp : cf821dcc
+r10: c04247f8  r9 : c04244b0  r8 : c04247dc
+r7 : c04245c0  r6 : 00000000  r5 : cfdb3b60  r4 : f4500830
+r3 : 00000002  r2 : 00000000  r1 : 00000001  r0 : 0000f1f6
+Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment kernel
+Control: 00c5387d  Table: 50004008  DAC: 00000017
+
+
+that means my sja1000 read timing has some issue need to fix ? can some one give some tips?
+
+B.R
+Tommy
+
+
+At 2011-07-15 14:52:48&#65292;&quot;Oliver Hartkopp&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+
+&gt;<i>On 14.07.2011 10:32, tommy.hong wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at s3c6410</A> /]# ifconfig can0 up
+</I>&gt;&gt;<i> sja1000_platform sja1000_platform.0: bit-timing not yet defined
+</I>&gt;&gt;<i> ifconfig: SIOCSIFFLAGS: Invalid argument
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at s3c64xx</A> /]# cat /proc/interrupts
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> there are no my CAN interrupt
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> according to above error,i need to use iproute to &quot;ip link set can0 up type
+</I>&gt;&gt;<i> can bitrate 1000000&quot;?
+</I>&gt;<i>
+</I>&gt;<i>We formerly had a misconfiguration problem for the bitrate on ubuntu systems.
+</I>&gt;<i>
+</I>&gt;<i>Please check whether CONFIG_CAN_CALC_BITTIMING=y in your kernel konfig
+</I>&gt;<i>
+</I>&gt;<i>and - yes, you need to use iproute to set the bitrate.
+</I>&gt;<i>
+</I>&gt;<i>Setting the bitrate is *mandatory* to set the interface to 'up'.
+</I>&gt;<i>
+</I>&gt;<i>Regards,
+</I>&gt;<i>Oliver
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110715/173708cc/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110715/173708cc/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001947.html">[Socketcan-users] SocketCan on s3c64xx Board
+</A></li>
+	<LI>Next message: <A HREF="001949.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1948">[ date ]</a>
+              <a href="thread.html#1948">[ thread ]</a>
+              <a href="subject.html#1948">[ subject ]</a>
+              <a href="author.html#1948">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

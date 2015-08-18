@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SLCAN serial baudrate...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C20110109105734.173070%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001708.html">
+   <LINK REL="Next"  HREF="001710.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SLCAN serial baudrate...</H1>
+    <B>Thorsten Godau</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C20110109105734.173070%40gmx.net%3E"
+       TITLE="[Socketcan-users] SLCAN serial baudrate...">dl9sec at gmx.net
+       </A><BR>
+    <I>Sun Jan  9 11:57:34 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001708.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+        <LI>Next message: <A HREF="001710.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1709">[ date ]</a>
+              <a href="thread.html#1709">[ thread ]</a>
+              <a href="subject.html#1709">[ subject ]</a>
+              <a href="author.html#1709">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+thanks for the quick response an patch.
+
+&gt;<i> So the _order_ of the commandline has no effect on the behaviour as you
+</I>&gt;<i> tried in the two examples in the beginning of this mail.
+</I>
+Ah ok. In this case the commandline help is correct ;-)
+I didn't look deep into the sources what happens exactly...
+
+&gt;<i> To fix this behaviour, i would suggest to force a close of the slcan
+</I>&gt;<i> adapter before setting the bitrate (which is also common for other CAN
+</I>&gt;<i> adapters/controllers). E.g. by sending
+</I>&gt;<i> 
+</I>&gt;<i>     &quot;C\rS?\r&quot; instead of only &quot;S?\r&quot;
+</I>&gt;<i> 
+</I>&gt;<i> Then we would have this possible init sequence of slcan_attach:
+</I>&gt;<i> 
+</I>&gt;<i>     CS? -&gt; Cs???? -&gt; O -&gt; (attach tty) -&gt; (wait) -&gt; (detach tty) -&gt; C
+</I>&gt;<i> 
+</I>&gt;<i> Can you try this (also attached) patch to check whether a 'close' before
+</I>&gt;<i> setting the bitrate brings back the wanted functionality?
+</I>
+Done. Works perfect now! Thanks a lot for the fix.
+
+&gt;<i> Btw. when slcan_attach provides some functionality on the commandline, &gt; it should JUST WORK like expected ;-)
+</I>
+Sure! WORKS like expected by the coder ;-)))
+
+In the meantime in managed to start/stop this SocketCAN/SLCAN stuff on
+startup/shutdown by use of an initscript.
+Therefore i used the skeleton script in /etc/init.d/ and modified it
+to get all the things i described in my last mail to be executed 
+with that initscript. I am not a real linux or scripting geek, so i am
+sure that the script has a lot of room for improvement. For those who are
+interested: <A HREF="http://www.dl9sec.de/dld/SLCANd">http://www.dl9sec.de/dld/SLCANd</A>
+I put the initscript in /etc/init.d/ and added the entry &quot;61 61 SLCANd&quot;
+at /var/lib/rcconf/services. Then i executed rcconf and activated &quot;SLCANd&quot;
+to be started at system startup. Then all the symbolic links are generated
+for all runlevels. Now it seems to run perfect. When the system is up,
+slcan0 is present and works fine :-))
+
+By the way: i added a &quot;F\r&quot; to my initstring for the SLCAN to clear 
+the error-LED in case of a pending bus error. So the command looks 
+like this now: echo -e -n &quot;C\rF\rS6\rO\r&quot; &gt; /dev/ttyUSB0
+
+Cheers, Thorsten  
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001708.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+	<LI>Next message: <A HREF="001710.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1709">[ date ]</a>
+              <a href="thread.html#1709">[ thread ]</a>
+              <a href="subject.html#1709">[ subject ]</a>
+              <a href="author.html#1709">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

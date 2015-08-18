@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Very NEWBIE needs help
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3C24323.87.234.249.112.1187104926.squirrel%40mue.homeip.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000183.html">
+   <LINK REL="Next"  HREF="000185.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Very NEWBIE needs help</H1>
+    <B>frost at mue.homeip.net</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3C24323.87.234.249.112.1187104926.squirrel%40mue.homeip.net%3E"
+       TITLE="[Socketcan-users] Very NEWBIE needs help">frost at mue.homeip.net
+       </A><BR>
+    <I>Tue Aug 14 17:22:06 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000183.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+        <LI>Next message: <A HREF="000185.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Hi to everybody.
+</I>
+Hi Fabrizio,
+
+&gt;<i> This morning I was trying to add the last release of Socket-CAN to Ubuntu
+</I>&gt;<i> Feisty 7.04, following the istructions contained in the README that can be
+</I>&gt;<i> found in the trunk dir. All was fine and I was able to install the kernel
+</I>&gt;<i> modules (at least I hope so, since depmod didn't output any errors) but
+</I>&gt;<i> then
+</I>&gt;<i> I got in trouble when I tried to launch some tests.
+</I>&gt;<i>
+</I>&gt;<i> In order to verify that everything is ok I only need to execute the
+</I>&gt;<i> programs
+</I>&gt;<i> contained in the &quot;test&quot; dir, right?
+</I>&gt;<i> Doing so, every time the socket function is called in the code it claims
+</I>&gt;<i> that the protocol is unsupported and it stops. I have the kernel
+</I>&gt;<i> 2.6.20.16,
+</I>&gt;<i> what should I do?
+</I>&gt;<i>
+</I>I had the same problem and my solution was to add some aliases to
+/etc/modules.d. I have Gentoo Linux and don't know, how it works in your
+distribution, but I created a file called /etc/modules.d/llcf with the
+following content:
+
+-----
+alias net-pf-29 can
+alias can-proto-1 can-raw
+alias can-proto-2 can-bcm
+alias vcan0 vcan
+alias vcan1 vcan
+alias vcan2 vcan
+alias vcan3 vcan
+-----
+
+Then I needed to run &quot;update-modules&quot; and it rebuild my /etc/modprobe.conf
+with the aliases. After this I had no problems with the tools in
+trunk/can-utils and trunk/test.
+
+I hope I could help you with this.
+
+Ren&#233; M&#252;ller
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000183.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+	<LI>Next message: <A HREF="000185.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

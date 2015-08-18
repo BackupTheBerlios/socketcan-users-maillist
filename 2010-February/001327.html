@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan for 2.6.18
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20for%202.6.18&In-Reply-To=%3C3AACE18DA92B48139022061B9662346C%40pcduronb%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001328.html">
+   <LINK REL="Next"  HREF="001329.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan for 2.6.18</H1>
+    <B>Juraj</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20for%202.6.18&In-Reply-To=%3C3AACE18DA92B48139022061B9662346C%40pcduronb%3E"
+       TITLE="[Socketcan-users] socketcan for 2.6.18">juraj at amit.sk
+       </A><BR>
+    <I>Fri Feb 26 13:49:30 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001328.html">[Socketcan-users] can0 doesn't show after Linux boots up (at91_can driver built into kernel)
+</A></li>
+        <LI>Next message: <A HREF="001329.html">[Socketcan-users] socketcan for 2.6.18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1327">[ date ]</a>
+              <a href="thread.html#1327">[ thread ]</a>
+              <a href="subject.html#1327">[ subject ]</a>
+              <a href="author.html#1327">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I try to compile the socketcan for the version 2.6.18 (cross compiling for
+ARCH=arm, kernel 2.6.18 changed by montavista for TI devices).
+
+I have checked out files from the /socketcan/trunk tried to compile
+according what I have read in README file and I get lot of errors like:
+
+error: #error This driver does not support Kernel versions &lt; 2.6.27
+
+ 
+
+Then I have seen also errors like
+
+socketcan/kernel/2.6/include/socketcan/can/dev.h:92: error: 'struct
+net_device' has no member named 'stats'
+
+ 
+
+I am a newie in such things so I have understood that the backporting will
+not be so straightforward for me.
+
+ 
+
+So this is what is my goal:
+
+= to have some CAN interface (as a first step - as simple as possible) in
+the user space. We use CAN chip MCP2515.
+
+ 
+
+What are my main questions now:
+
+1. Isn't the kernel 2.6.18 too old for the socketcan? (I have seen in
+mailing list
+<A HREF="https://lists.berlios.de/pipermail/socketcan-core/2009-December/thread.html">https://lists.berlios.de/pipermail/socketcan-core/2009-December/thread.html</A>
+that Matthias made it working on his system, so I hope it would be possible
+also for my one)
+
+ 
+
+2. What is a minimum set of files/ objects which I need to compile to have
+some API? (I think it would be better to start with a minimum of the files
+.)
+
+ 
+
+3. I have found patch
+<A HREF="https://lists.berlios.de/pipermail/socketcan-core/2009-December/003638.html">https://lists.berlios.de/pipermail/socketcan-core/2009-December/003638.html</A>
+posted by Wolfgang, but by my opinion it does not solve problem in dev.h
+file. Or am I wrong?
+
+ 
+
+So please give me a hint how to start . 
+
+Thanks
+
+Juraj
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100226/b440f756/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100226/b440f756/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001328.html">[Socketcan-users] can0 doesn't show after Linux boots up (at91_can driver built into kernel)
+</A></li>
+	<LI>Next message: <A HREF="001329.html">[Socketcan-users] socketcan for 2.6.18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1327">[ date ]</a>
+              <a href="thread.html#1327">[ thread ]</a>
+              <a href="subject.html#1327">[ subject ]</a>
+              <a href="author.html#1327">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

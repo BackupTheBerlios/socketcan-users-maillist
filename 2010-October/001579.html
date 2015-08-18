@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Loosing frames on MPC5200B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB336534%40Zuse1.tracetronic.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001549.html">
+   <LINK REL="Next"  HREF="001543.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Loosing frames on MPC5200B</H1>
+    <B>&quot;M&#252;ller, Ren&#233;&quot;</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB336534%40Zuse1.tracetronic.local%3E"
+       TITLE="[Socketcan-users] Loosing frames on MPC5200B">Rene.Mueller at tracetronic.de
+       </A><BR>
+    <I>Mon Oct 18 10:11:48 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001549.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+        <LI>Next message: <A HREF="001543.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1579">[ date ]</a>
+              <a href="thread.html#1579">[ thread ]</a>
+              <a href="subject.html#1579">[ subject ]</a>
+              <a href="author.html#1579">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am 13.10.2010 10:50, schrieb Wolfgang Grandegger:
+&gt;<i> On 10/13/2010 10:20 AM, Michal Sojka wrote:
+</I>&gt;&gt;<i> On Tue, 12 Oct 2010, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Yes, packet losses can also happen, when the message buffers are not
+</I>&gt;&gt;&gt;<i> read out fast enough. But then you should see overrun errors, which you
+</I>&gt;&gt;&gt;<i> should see with &quot;candump any,0:0,#FFFFFFFF&quot;. See also:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.35.7/drivers/net/can/mscan/mscan.c#L353">http://lxr.linux.no/#linux+v2.6.35.7/drivers/net/can/mscan/mscan.c#L353</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Right.
+</I>&gt;<i>
+</I>&gt;<i> It's still unclear to me what errors you get? RX overrun errors in
+</I>&gt;<i> hardware or software? candump is able to detect and report both.
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> Also &quot;# ip -d -s link show can0&quot; should list them.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> We were able to avoid losing messages by reading them in hard-irq
+</I>&gt;&gt;&gt;&gt;<i> context (with lincan driver), but I'm not sure whether this will help if
+</I>&gt;&gt;&gt;&gt;<i> you use CF (we do not use it).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Well, if the CF card driver is causing huge latencies, it should be
+</I>&gt;&gt;&gt;<i> fixed. It should not be too difficult to spot the latency evil with ftrace.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I've heard that one company that experienced these problems tried to
+</I>&gt;&gt;<i> solve it with Thomas Gleixner and he said that it is impossible to fix.
+</I>&gt;&gt;<i> But that's only what I've heard, I do not know any details.
+</I>&gt;<i>
+</I>&gt;<i> Hey, it's software! Everything is possible ;-). Feel free to add Thomas
+</I>&gt;<i> to CC to get more information.
+</I>
+Well, that's the point. According to the errata and some information we found deep in the internet, there is a hardware bug in the FIFO of the ATA-controller. The ATA-FIFO has to be polled to avoid data loss and this is the reason for the high latencies. (source: Freescale MPC5200B Errata)
+
+Greetings,
+Ren&#233;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001549.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+	<LI>Next message: <A HREF="001543.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1579">[ date ]</a>
+              <a href="thread.html#1579">[ thread ]</a>
+              <a href="subject.html#1579">[ subject ]</a>
+              <a href="author.html#1579">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

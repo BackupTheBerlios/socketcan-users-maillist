@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ELM327 interface
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ELM327%20interface&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB0BE2CF%40mail.tracetronic.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001020.html">
+   <LINK REL="Next"  HREF="001022.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ELM327 interface</H1>
+    <B>M&#252;ller, Ren&#233;</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ELM327%20interface&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB0BE2CF%40mail.tracetronic.de%3E"
+       TITLE="[Socketcan-users] ELM327 interface">Rene.Mueller at tracetronic.de
+       </A><BR>
+    <I>Tue Aug 18 15:54:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001020.html">[Socketcan-users] ELM327 interface
+</A></li>
+        <LI>Next message: <A HREF="001022.html">[Socketcan-users] SVN state: branches/netlink merged back to trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1021">[ date ]</a>
+              <a href="thread.html#1021">[ thread ]</a>
+              <a href="subject.html#1021">[ subject ]</a>
+              <a href="author.html#1021">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This time for the whole mailing-list, sorry Tom for double mailing.
+
+
+Hi Tom,
+
+I worked with the ELM327 some times ago. First, it is not an CAN
+interface, but an OBD to RS232 Interpreter. So you can do some basic
+diagnostic with your car, but as far as I can remember no pure CAN
+communication. The ELM327 just takes your diagnostic request, sends it
+to the car (over CAN, J1850 or K-Line) and presents you the diagnostic
+response over RS232.
+
+I can remember an listen only mode, in which you can put the ELM327.
+Then it will send all received CAN frames to RS232. I'm not sure if you
+can send any frames not related to diagnostics with the ELM327.
+
+Hope this helps,
+Ren&#233;
+
+
+-----Urspr&#252;ngliche Nachricht-----
+Von: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] Im Auftrag von Tom Parker
+Gesendet: Dienstag, 18. August 2009 13:05
+An: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Betreff: [Socketcan-users] ELM327 interface
+
+Hi,
+
+I'm wondering if Socket CAN supports the ELM327 interface? It's a
+combined OBDII and CAN interface available for US$30 at Deal Extreme
+<A HREF="http://www.dealextreme.com/details.dx/sku.28528">http://www.dealextreme.com/details.dx/sku.28528</A>
+
+The full hardware and host PC protocol are available at
+<A HREF="http://www.elmelectronics.com/DSheets/ELM327DS.pdf">http://www.elmelectronics.com/DSheets/ELM327DS.pdf</A> The protocol is AT
+command based. From what little I understand about Socket CAN, it might
+work with the slcan driver after you send the appropriate AT commands to
+configure a compatible mode?
+
+Has anyone tried this interface?
+
+Thanks.
+
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001020.html">[Socketcan-users] ELM327 interface
+</A></li>
+	<LI>Next message: <A HREF="001022.html">[Socketcan-users] SVN state: branches/netlink merged back to trunk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1021">[ date ]</a>
+              <a href="thread.html#1021">[ thread ]</a>
+              <a href="subject.html#1021">[ subject ]</a>
+              <a href="author.html#1021">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP251x driver: Probe failed.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP251x%20driver%3A%20Probe%20failed.&In-Reply-To=%3Ccabda6420904080229x36547372re78f98c61203dd9e%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000754.html">
+   <LINK REL="Next"  HREF="000756.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP251x driver: Probe failed.</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP251x%20driver%3A%20Probe%20failed.&In-Reply-To=%3Ccabda6420904080229x36547372re78f98c61203dd9e%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] MCP251x driver: Probe failed.">chripell at gmail.com
+       </A><BR>
+    <I>Wed Apr  8 11:29:03 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000754.html">[Socketcan-users] MCP251x driver: Probe failed.
+</A></li>
+        <LI>Next message: <A HREF="000756.html">[Socketcan-users] Limiting the send rate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#755">[ date ]</a>
+              <a href="thread.html#755">[ thread ]</a>
+              <a href="subject.html#755">[ subject ]</a>
+              <a href="author.html#755">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Apr 8, 2009 at 10:56 AM, Yonghui Shen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">shenyonghui at gmail.com</A>&gt; wrote:
+&gt;<i> Hello Guys,
+</I>&gt;<i>
+</I>
+Hi,
+
+&gt;<i>
+</I>&gt;<i> mcp251x spi1.1: 8 bits/word, 6500000 Hz, mode 0
+</I>
+8 bit and mode 0 is OK. 6.5 Mhz is OK for MCP2515 but not for MCP2510
+
+&gt;<i>
+</I>&gt;<i> are OK. Also, when mcp251x_can_probe runs, why the frequency is always
+</I>&gt;<i> 6500000 Hz as showed above, no matter what value I set in the platform
+</I>&gt;<i> definition file?
+</I>&gt;<i>
+</I>
+Good question. Some grepping can reveal you that clock parameters is
+set in int setup(struct spi_device *spi) in pxa2xx_spi.c using a field
+max_speed_hz in the spi_device struct. This is initialized from the
+platform data in spi.c in function spi_new_device called from
+scan_boardinfo on new SPI master registration. I don't see any obvious
+error. Can you try to see with some printks in pxa2xx_spi.c's setup
+function what clock speed is selected? Do you measure 6.5 Mhz at the
+SPI clock actually? The only idea that comes me to the mind right now
+is that some of the timings requirements of the SPI are not met. Here
+is a cut &amp; paste from the data sheet, you should be able to easly
+check these with the logic analyzer. The next step is understand why
+the wrong parameters are set in the PXA2xx SPI driver.
+
+TABLE 13-6:         SPITM INTERFACE AC CHARACTERISTICS
+                                                    Industrial (I):
+TAMB = -40&#176;C to +85&#176;C   VDD = 2.7V to 5.5V
+ SPITM Interface AC Characteristics
+                                                    Extended (E):
+TAMB = -40&#176;C to +125&#176;C  VDD = 4.5V to 5.5V
+  Param.
+               Sym               Characteristic        Min
+Max       Units            Conditions
+   No.
+               FCLK     Clock Frequency                 --
+10        MHz
+     1         TCSS     CS Setup Time                   50
+--         ns
+     2         TCSH     CS Hold Time                    50
+--         ns
+     3         TCSD     CS Disable Time                 50
+--         ns
+     4          TSU     Data Setup Time                 10
+--         ns
+     5         THD      Data Hold Time                  10
+--         ns
+     6          TR      CLK Rise Time                   --
+2         &#181;s    Note 1
+     7           TF     CLK Fall Time                   --
+2         &#181;s    Note 1
+     8          THI     Clock High Time                 45
+--         ns
+     9          TLO     Clock Low Time                  45
+--         ns
+
+         ns
+    10         TCLD     Clock Delay Time                50
+--         ns
+    11         TCLE     Clock Enable Time               50
+--         ns
+    12          TV      Output Valid from Clock Low     --
+45         ns
+    13         THO      Output Hold Time                 0
+--         ns
+    14         TDIS     Output Disable Time             --
+100         ns
+   Note 1:    This parameter is not 100% tested.
+
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000754.html">[Socketcan-users] MCP251x driver: Probe failed.
+</A></li>
+	<LI>Next message: <A HREF="000756.html">[Socketcan-users] Limiting the send rate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#755">[ date ]</a>
+              <a href="thread.html#755">[ thread ]</a>
+              <a href="subject.html#755">[ subject ]</a>
+              <a href="author.html#755">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

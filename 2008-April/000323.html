@@ -1,0 +1,241 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C4815C3A5.1020606%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000322.html">
+   <LINK REL="Next"  HREF="000324.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN problems</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C4815C3A5.1020606%40grandegger.com%3E"
+       TITLE="[Socketcan-users] CAN problems">wg at grandegger.com
+       </A><BR>
+    <I>Mon Apr 28 14:31:33 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000322.html">[Socketcan-users] CAN problems
+</A></li>
+        <LI>Next message: <A HREF="000324.html">[Socketcan-users] CAN problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#323">[ date ]</a>
+              <a href="thread.html#323">[ thread ]</a>
+              <a href="subject.html#323">[ subject ]</a>
+              <a href="author.html#323">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Breno,
+
+first, please do not drop the CC to the mailing list.
+
+Breno wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">breno at das.ufsc.br</A> wrote:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> Hi all, I'm embedding a Linux kernel from DENX ELDK-2.6.24 on
+</I>&gt;&gt;&gt;<i> lite5200 v2
+</I>&gt;&gt;&gt;<i> board with a PowerPC core MPC5200 processor.
+</I>&gt;&gt;&gt;<i> On kernel configuration I enabled the CAN support and the Freescale
+</I>&gt;&gt;&gt;<i> MSCAN
+</I>&gt;&gt;&gt;<i> based chips support but when I got the kernel loaded on my system I
+</I>&gt;&gt;&gt;<i> couldn't find at /dev dir the device can0 or can1. Not even at
+</I>&gt;&gt;&gt;<i> /proc/devices regardless of all positive messages along kernel loading
+</I>&gt;&gt;&gt;<i> process.I mean, no errors reported!!!
+</I>&gt;&gt;&gt;<i>  Then I made a simple application in order to use the socket can but the
+</I>&gt;&gt;&gt;<i> call to sendto() or write() return something like &quot;no such device or
+</I>&gt;&gt;&gt;<i> address&quot;. Well, I wonder know what else is necessary on configuration
+</I>&gt;&gt;&gt;<i> steps to get my can interface working out. The step enabled option on
+</I>&gt;&gt;&gt;<i> kernel menuconfig is enough or there is another step to be accomplished.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> At my /proc/net/dev files I have lo,eth0,can0 and can1 lines with
+</I>&gt;&gt;&gt;<i> informations about transmitted and received packages.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Can anyone help me?
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> There should be the network devices can0 and can1, which you can list
+</I>&gt;&gt;<i> with &quot;ifconfig&quot;. To use the device, you need &quot;ifconfig can0 up&quot;. Does
+</I>&gt;&gt;<i> that work? And please check your boot log for (MS)CAN related messages,
+</I>&gt;&gt;<i> e.g. with &quot;dmesg&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Hi Wolfgang, the loading process return the messages below about can in
+</I>&gt;<i> sequence :
+</I>&gt;<i> 
+</I>&gt;<i> mpc-52xx-mscan initializing;
+</I>&gt;<i> mpc-52xx-mscan mpc-52xx-mscan.0:probe for port 0xC500A900 done;
+</I>&gt;<i> mpc-52xx-mscan mpc-52xx-mscan.1: probe for port 0xC500A980 done;
+</I>&gt;<i> can: raw protocol ( rev 2007116)
+</I>&gt;<i> can:broadcast manager protocol ( rev20071116)
+</I>&gt;<i> can: controller area network core (rev 20071116 abi 8)
+</I>
+OK, looks good.
+
+&gt;<i> Doing a cat command in /proc/devices I get:
+</I>&gt;<i> Character device:
+</I>&gt;<i> 1 mem
+</I>&gt;<i> 2 pty
+</I>&gt;<i> 3 ttyp
+</I>&gt;<i> 5 /dev/tty
+</I>&gt;<i> 5 /dev/console
+</I>&gt;<i> 5 /dev/ptmx
+</I>&gt;<i> 10 misc
+</I>&gt;<i> 128 ptm
+</I>&gt;<i> 136 pts
+</I>&gt;<i> 150 rtpipe
+</I>&gt;<i> 204 ttyPSC
+</I>&gt;<i> Block Devices:
+</I>&gt;<i> 1 ramdisk
+</I>&gt;<i> 7 loop
+</I>
+We are dealing with network devices, you will not find them in
+/proc/devices.
+
+&gt;<i> Inside  /device-tree I have:
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mscan at 900</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mscan at 980</A>
+</I>
+Yes, of course, otherwise probing for MSCAN devices would not have happend.
+
+&gt;<i> If I do ifconfig just after booting the system  I don 't  have can0
+</I>&gt;<i> listed.  When I execute ifconfig can0 up then I get it listed but the
+</I>&gt;<i> field HWaddr is 00-00-00-00...
+</I>
+Pretty normal, &quot;ifconfig&quot; will only list active/running network devices.
+But &quot;ifconfig can0&quot; should work.
+
+&gt;<i> I'm attaching the application I'm trying to test. Could you take a look?
+</I>&gt;<i> As I said, after sendto command I got  a  &quot;no such device&quot; message!!!
+</I>
+Are you aware of the CAN-Utilities of the Socket-CAN project at
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/.">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/.</A> They are
+useful for testing and debugging and serve as examples as well.
+
+You are using the old Socket-CAN driver for MSCAN (from the SVN trunk).
+There is a problem with that driver setting up the bit-rate. Any chance
+to switch to a more recent version of the linux-2.6-denx GIT tree? It
+uses the new MSCAN driver based on the new CAN device interface (from
+the SVN branch &quot;cannetdriver26&quot;).
+
+&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> #include &lt;stdio.h&gt;
+</I>&gt;<i> #include &lt;stdlib.h&gt;
+</I>&gt;<i> #include &lt;unistd.h&gt;
+</I>&gt;<i> #include &lt;string.h&gt;
+</I>&gt;<i> 
+</I>&gt;<i> #include &lt;linux/types.h&gt;
+</I>&gt;<i> #include &lt;linux/socket.h&gt;
+</I>&gt;<i> #include &lt;linux/net.h&gt;
+</I>&gt;<i> #include &lt;sys/ioctl.h&gt;
+</I>&gt;<i> #include &lt;net/if.h&gt;
+</I>&gt;<i> 
+</I>&gt;<i> #include &lt;linux/can.h&gt;
+</I>&gt;<i> #include &lt;linux/can/raw.h&gt;
+</I>&gt;<i> #include &lt;linux/can/error.h&gt;
+</I>&gt;<i> 
+</I>&gt;<i> #define AF_CAN 29
+</I>&gt;<i> #define PF_CAN AF_CAN
+</I>&gt;<i> 
+</I>&gt;<i> int main(int argc, char **argv)
+</I>&gt;<i> {
+</I>&gt;<i> 	int s;
+</I>&gt;<i> 	int ifindex;
+</I>&gt;<i> 	int nbytes;
+</I>&gt;<i> 	//char* a;
+</I>&gt;<i> 	struct can_frame frame;
+</I>&gt;<i> 	struct sockaddr_can addr;
+</I>&gt;<i> 	struct ifreq ifr;
+</I>&gt;<i> 	
+</I>&gt;<i> 	if ((s = socket(AF_CAN,SOCK_RAW,CAN_RAW)) &lt; 0)
+</I>&gt;<i>  	{
+</I>&gt;<i>       		perror(&quot;socket&quot;);
+</I>&gt;<i>       		
+</I>&gt;<i>       		exit(1);
+</I>&gt;<i>     	}
+</I>&gt;<i>     	    	
+</I>&gt;<i>     	strcpy(ifr.ifr_name,&quot;mpc52xx-mscan0&quot;);
+</I>
+The name of the network device is &quot;can0&quot; (or &quot;can1&quot;).
+
+&gt;<i>     	perror(&quot;strcpy&quot;);
+</I>&gt;<i>     	
+</I>&gt;<i>     	if (ioctl(s,SIOCGIFINDEX,&amp;ifr) &lt; 0) 
+</I>&gt;<i>     	{
+</I>&gt;<i>     		perror(&quot;ioctl&quot;);
+</I>&gt;<i>     		exit(1);
+</I>
+YOur program should exit here, right!
+
+&gt;<i> 		    	
+</I>&gt;<i>     	}
+</I>&gt;<i>     	//perror(&quot;ioctl&quot;);
+</I>&gt;<i>     	ifindex = ifr.ifr_ifindex;
+</I>&gt;<i>     	
+</I>&gt;<i>     	addr.can_family=AF_CAN;
+</I>&gt;<i>     	addr.can_ifindex=0; /* bind() a Todas as interfaces */
+</I>&gt;<i>     	bind(s, (struct sockaddr *)&amp;addr, sizeof(addr));
+</I>&gt;<i>     	if (bind(s, (struct sockaddr *)&amp;addr, sizeof(addr)) &lt; 0)
+</I>&gt;<i>     	 {
+</I>&gt;<i>     	 	
+</I>&gt;<i>       		perror(&quot;bind&quot;);
+</I>&gt;<i>       		exit(1);
+</I>&gt;<i>     	 }
+</I>&gt;<i>     	 
+</I>&gt;<i>     	     /*Frame CAN*/
+</I>&gt;<i>     	frame.can_id  = 0x123;
+</I>&gt;<i>     	frame.can_dlc = 3;
+</I>&gt;<i>     	frame.data[0] = 'a';
+</I>&gt;<i>     	frame.data[1] = 'b';
+</I>&gt;<i>     	frame.data[2] = 'c';
+</I>&gt;<i> 
+</I>&gt;<i>     	
+</I>&gt;<i>     	
+</I>&gt;<i>       	nbytes = sendto(s, &amp;frame, sizeof(struct can_frame), 0, (struct sockaddr*)&amp;addr, sizeof(addr));
+</I>&gt;<i>       	perror(&quot;sendto&quot;);
+</I>&gt;<i>       	nbytes = write(s, &amp;frame, sizeof(struct can_frame));
+</I>&gt;<i>       	perror(&quot;write&quot;);
+</I>&gt;<i>       	printf(&quot;%d\n&quot;,nbytes);
+</I>&gt;<i>     	close(s);
+</I>&gt;<i> 
+</I>&gt;<i> 	return 0;
+</I>&gt;<i> }
+</I>
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000322.html">[Socketcan-users] CAN problems
+</A></li>
+	<LI>Next message: <A HREF="000324.html">[Socketcan-users] CAN problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#323">[ date ]</a>
+              <a href="thread.html#323">[ thread ]</a>
+              <a href="subject.html#323">[ subject ]</a>
+              <a href="author.html#323">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Loosing frames on MPC5200B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3C4CB32C34.6000903%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001535.html">
+   <LINK REL="Next"  HREF="001537.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Loosing frames on MPC5200B</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3C4CB32C34.6000903%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Loosing frames on MPC5200B">wg at grandegger.com
+       </A><BR>
+    <I>Mon Oct 11 17:24:36 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001535.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+        <LI>Next message: <A HREF="001537.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1536">[ date ]</a>
+              <a href="thread.html#1536">[ thread ]</a>
+              <a href="subject.html#1536">[ subject ]</a>
+              <a href="author.html#1536">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/11/2010 05:01 PM, &quot;M&#252;ller, Ren&#233;&quot; wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> we are loosing frames on our embedded target and currently we are searching for the cause.
+</I>&gt;<i> 
+</I>&gt;<i> Our current setup is:
+</I>&gt;<i> - TQM5200 (a board made by TQ with an MPC5200B) on our own carrier-board
+</I>&gt;<i> - Kernel 2.6.35.7 from kernel.org (we initial used 2.6.27.18 from denx and had the same problems)
+</I>&gt;<i> - activated mscan in kernel-config
+</I>&gt;<i> 
+</I>&gt;<i> - 2x CAN-sources connected to the 2 can interfaces of the board:
+</I>&gt;<i>   - first source (connected to can0):
+</I>&gt;<i>     - creates an message containing a counter every 5ms
+</I>&gt;<i>     - creates another message containing another counter every 2ms
+</I>&gt;<i>   - second source (connected to can1):
+</I>&gt;<i>     - creates 3 messages every 20ms containing some payload
+</I>&gt;<i> 
+</I>&gt;<i> - both can interfaces are configured with 1Mbit/s
+</I>&gt;<i> 
+</I>&gt;<i> Now we have two cases, one with missing frames and one without:
+</I>&gt;<i> Case 1:
+</I>&gt;<i>  - candump -l -s2 can0 -&gt; logging in an file which is stored in RAM
+</I>&gt;<i>  - we get all messages in the logfile
+</I>&gt;<i> 
+</I>&gt;<i> Case 2:
+</I>&gt;<i>  - candump -l -s2 can0 -&gt; logging in an file which is stored on an CompactFlash-card
+</I>&gt;<i>  - the CF-card is connected via the IDE-interface without DMA (we don't get DMA working with the CF-card, unfortunately it only works with harddrives)
+</I>&gt;<i>  - we are loosing messages:
+</I>&gt;<i>    - every 35s we are missing messages in blocks, never we are missing 1 message, always 5-6 at once
+</I>&gt;<i> 
+</I>&gt;<i> Anyone had similar problems? Any hints?
+</I>
+Sounds like a receive buffer overrun when the application is not able to
+read messages fast enough. You could use setsockopt(... ,SOL_SOCKET,
+SO_RCVBUF, ....) to increase the buffer size. It's also possible to
+detect dropped CAN frames as described here:
+
+<A HREF="http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg00861.html">http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg00861.html</A>
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001535.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+	<LI>Next message: <A HREF="001537.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1536">[ date ]</a>
+              <a href="thread.html#1536">[ thread ]</a>
+              <a href="subject.html#1536">[ subject ]</a>
+              <a href="author.html#1536">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

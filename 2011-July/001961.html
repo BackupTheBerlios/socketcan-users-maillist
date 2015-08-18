@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20flexcan%3A%20Re%3A%20%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E25D515.2060504%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001959.html">
+   <LINK REL="Next"  HREF="001963.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20flexcan%3A%20Re%3A%20%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E25D515.2060504%40grandegger.com%3E"
+       TITLE="[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK">wg at grandegger.com
+       </A><BR>
+    <I>Tue Jul 19 21:03:49 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001959.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+        <LI>Next message: <A HREF="001963.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1961">[ date ]</a>
+              <a href="thread.html#1961">[ thread ]</a>
+              <a href="subject.html#1961">[ subject ]</a>
+              <a href="author.html#1961">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mike,
+
+On 07/19/2011 07:58 PM, Mike Brown wrote:
+&gt;<i> On 07/19/2011 11:39 AM, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> On 19.07.2011 18:18, Mike Brown wrote:
+</I>&gt;&gt;&gt;<i> On 07/19/2011 10:40 AM, Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;&gt;<i> On 19.07.2011 17:35, Mike Brown wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 07/19/2011 09:51 AM, Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> When the sent CAN frames are not pushed into the rx queue on
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> successful
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> transmit IFF_ECHO must not be set in the device flags.
+</I>&gt;&gt;&gt;&gt;&gt;<i> I didn't dig this deep into the flexcan driver but did got deep
+</I>&gt;&gt;&gt;&gt;&gt;<i> enough to see
+</I>&gt;&gt;&gt;&gt;&gt;<i> this flag being set as well.  If read the SocketCAN documentation
+</I>&gt;&gt;&gt;&gt;&gt;<i> correctly,
+</I>&gt;&gt;&gt;&gt;&gt;<i> then if the driver doesn't set this flag then the PF_CAN layer
+</I>&gt;&gt;&gt;&gt;&gt;<i> should handle
+</I>&gt;&gt;&gt;&gt;&gt;<i> the loopback???   I'm trying to get a build with the flag cleared
+</I>&gt;&gt;&gt;&gt;&gt;<i> in flexcan.c
+</I>&gt;&gt;&gt;&gt;<i> Yes - that's a good test!
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Feedback is appreciated :-)
+</I>&gt;&gt;&gt;<i> Clearing the IFF_ECHO flag in flexcan.c fixes the problem.  I can now
+</I>&gt;&gt;&gt;<i> run
+</I>&gt;&gt;&gt;<i> cansend and candump on the same CAN interface.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # candump -a can0,0:0
+</I>&gt;&gt;&gt;<i>    can0    1  [1] 48                        'H'
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> # cansend can0 001#48
+</I>&gt;&gt;&gt;<i> #
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Safe to assume that the flexcan driver doesn't support loopback as
+</I>&gt;&gt;&gt;<i> described
+</I>&gt;&gt;&gt;<i> then?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L580">http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L580</A>
+</I>&gt;&gt;<i> Yes. Sigh.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So this can be temporarily fixed by removing the line which sets
+</I>&gt;&gt;<i> IFF_ECHO ...
+</I>&gt;&gt;<i> but of course should be fixed by implementing the can_echo_skb stuff.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thanks for testing!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I enhanced the mail subject to wake up the maintainers ;-)
+</I>
+Mike, could you please post your version of flexcan.c. It's not the one
+from mainline I suspect.
+
+Thanks,
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001959.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+	<LI>Next message: <A HREF="001963.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1961">[ date ]</a>
+              <a href="thread.html#1961">[ thread ]</a>
+              <a href="subject.html#1961">[ subject ]</a>
+              <a href="author.html#1961">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%0A%20tell%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C4CDAFB62.7020502%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001632.html">
+   <LINK REL="Next"  HREF="001654.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%0A%20tell%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C4CDAFB62.7020502%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Nov 10 21:06:58 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001632.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+        <LI>Next message: <A HREF="001654.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1630">[ date ]</a>
+              <a href="thread.html#1630">[ thread ]</a>
+              <a href="subject.html#1630">[ subject ]</a>
+              <a href="author.html#1630">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10.11.2010 20:20, Stephen Hellriegel wrote:
+
+&gt;<i> Our hardware uses  the &quot;serial&quot; number field of the USB stack to map to a device position on the board.
+</I>
+(..)
+
+&gt;<i> we have the TTYUSB# and the &quot;Serial&quot; number which allows us to map the serial number to the can# we want the device to show up on.
+</I>
+Ok - got that.
+
+&gt;<i> We run a script that in essence does the following:
+</I>&gt;<i> NUM = can number we want (ie can0...can7)
+</I>&gt;<i> stty swtch $NUM -F /dev/$TTY
+</I>&gt;<i> slcand $TTY
+</I>&gt;<i> sleep 0.5
+</I>&gt;<i> ifconfig can${NUM} up
+</I>&gt;<i> 
+</I>&gt;<i> and then our requests can interface is up, and bound to the $TTY port.
+</I>
+As i assumed you have the $TTY and the $NUM mapped at some point.
+
+But the stty hack is bad.
+
+As the created netdevice name is already available from the /dev/$TTY via
+ioctl(), i would suggest to move the initialization process to the following:
+
+NUM = can number we want (ie can0...can7)
+slcand $TTY can{$NUM}
+sleep 0.5
+ifconfig can${NUM} up
+
+
+For that reason the slcan.c (and slip.c) already supports the SIOCGIFNAME ioctl():
+
+        case SIOCGIFNAME:
+                tmp = strlen(sl-&gt;dev-&gt;name) + 1;
+                if (copy_to_user((void __user *)arg, sl-&gt;dev-&gt;name, tmp))
+                        return -EFAULT;
+                return 0;
+
+So the better approach would be to come up e.g. with a different naming scheme
+slcan0, slcan1, ... and then rename the netdevice to the wanted can0.
+
+The slcand would do the following:
+
+1. open /dev/$TTY
+2. perform the ioctl (fd, TIOCSETD, &amp;ldisc) and create the netdevice
+3. get the created netdevice name with SIOCGIFNAME from /dev/$TTY
+4. rename the netdevice to can{$NUM} (with netlink?)
+
+IMO the stty swtch stuff is not only a misuse of the swtch char - it is also
+avoidable by using existing ioctls known from slip.c . And finally the swtch
+char does not allow to map the tty to e.g. can345
+
+Can you give my suggestion a try with your hardware?
+
+Regards,
+Oliver
+
+&gt;&gt;<i> AFAICS this approach does not solve the problem at it's root.
+</I>&gt;&gt;<i> And i doubt this to become a functionality for mainline Linux as it 'reuses'
+</I>&gt;&gt;<i> potentially 'dead' options in a different manner ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I would propose to have a table of assignments, e.g. in 
+</I>&gt;&gt;<i> /etc/slcan-devs
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> /dev/ttyS0 can0
+</I>&gt;&gt;<i> /dev/ttyUSB0 can3
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1. The slcand may create a file in /var/whatever containing the serial 
+</I>&gt;&gt;<i> device name &quot;/dev/ttyUSB0&quot; at netdev creation time.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2. Let's say the slcand still creates a 'slc0' netdevice with the 
+</I>&gt;&gt;<i> ioctl()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 3. Write a udev-rule that's invoked when the 'slc*' is created and 
+</I>&gt;&gt;<i> announced to the system. This udev-rule can look through 
+</I>&gt;&gt;<i> /etc/slcan-devs and then renames slc0 -&gt; can3 with the ip-tool:
+</I>
+Ah - my original idea :-)
+
+And with the SIOCGIFNAME you always get the created netdev name from the tty
+that was missing in this description.
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i>     ip link set slc0 name can3
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 4. Remove /var/whatever to be ready for the next slcan device creation
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> That's IMHO the way this slcan 'naming problem' should be handled in 
+</I>&gt;&gt;<i> the user-space. Setting &quot;stty swtch 4 -F /dev/TTYUSB9&quot; makes the 
+</I>&gt;&gt;<i> problem a kernel problem but it does not solved the original issue.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Oliver
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001632.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+	<LI>Next message: <A HREF="001654.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1630">[ date ]</a>
+              <a href="thread.html#1630">[ thread ]</a>
+              <a href="subject.html#1630">[ subject ]</a>
+              <a href="author.html#1630">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

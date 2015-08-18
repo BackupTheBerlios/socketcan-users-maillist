@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EDD220.6090302%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000030.html">
+   <LINK REL="Next"  HREF="000033.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EDD220.6090302%40web.de%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">jan.kiszka at web.de
+       </A><BR>
+    <I>Thu Aug 24 18:21:52 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000030.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000033.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#32">[ date ]</a>
+              <a href="thread.html#32">[ thread ]</a>
+              <a href="subject.html#32">[ subject ]</a>
+              <a href="author.html#32">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+thinking about the whole issue also from your POV again, I realised that
+my position was too strict. When considering CAN frames as multicast,
+what certainly matches best, local delivery is reasonable. But, as this
+thread may have indicated, it's at the same time also a surprising
+feature for (I'm still convinced) a huge group of users.
+
+I think that all these misconceptions melt down to the question if you
+consider our CAN interface to be at data link or at network layer:
+
+CAN can be put quite well to the network layer. Then local loopback
+makes sense and provides a nice additional feature compared to existing
+CAN APIs. E.g., you could then run several CANopen nodes on the same
+host and they could communicate with each other - likely more of a test
+scenario than a reasonable production design, but still useful.
+
+If you consider the CAN API more as an interface to the data link layer
+(and this is what I did yesterday implicitly), local loopback is no
+longer correct. You may argue this is not how users should see CAN, but
+that doesn't solve the problem.
+
+So, what to do? Having a global switch like a module parameter is not an
+elegant solution in my eyes. The day will come when you have
+applications of both types on a complex host, requiring loopback on and
+off at the same time - boom. Actually, this property is more something
+the user should decide about in the transmitting application. How?
+Either via the socket type or the protocol. I would say the best way is
+now the latter, e.g. something like this:
+
+	socket(PF_CAN, SOCK_RAW, CAN_PROTO_NET); /* local loopback */
+	socket(PF_CAN, SOCK_RAW, CAN_PROTO_DEVICE); /* no loopback */
+
+This hands back the control to the individual user, the one who
+(typically) knows best what should happen to a frame in the core. :)
+
+And what should become protocol 0, i.e. the default one? Well, that's
+tricky, maybe we should do a poll on this. My believe is
+CAN_PROTO_DEVICE. But given good documentation of the differences (and
+the recommendation to RT users to always provide the protocol
+explicitly), I could personally also live with the other way around.
+
+What do you all think?
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20060824/3a894fa0/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20060824/3a894fa0/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000030.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000033.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#32">[ date ]</a>
+              <a href="thread.html#32">[ thread ]</a>
+              <a href="subject.html#32">[ subject ]</a>
+              <a href="author.html#32">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

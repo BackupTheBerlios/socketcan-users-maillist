@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users]  Using multiple CAN-channels
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%20Using%20multiple%20CAN-channels&In-Reply-To=%3C26743673.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001214.html">
+   <LINK REL="Next"  HREF="001216.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users]  Using multiple CAN-channels</H1>
+    <B>ferrymax</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%20Using%20multiple%20CAN-channels&In-Reply-To=%3C26743673.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users]  Using multiple CAN-channels">ferrymax at yahoo.com
+       </A><BR>
+    <I>Fri Dec 11 13:42:52 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001214.html">[Socketcan-users]  Use multiple CAN-Channels
+</A></li>
+        <LI>Next message: <A HREF="001216.html">[Socketcan-users] Using multiple CAN-channels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1215">[ date ]</a>
+              <a href="thread.html#1215">[ thread ]</a>
+              <a href="subject.html#1215">[ subject ]</a>
+              <a href="author.html#1215">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi! 
+
+I am trying to write a network device driver for using multiple
+CAN-channels. 
+I have a network-device-driver-module &quot;can&quot;. I use the command &quot;ip link add
+dev canX type can&quot; to create can0 to can3. 
+
+In an example application, I can connect to each of these devices with a
+socket by setting &quot;ifr_name&quot; for ioctrl accordingly. So far so good. 
+
+What I just don't get is how I can distinguish the four devices in the &quot;can&quot;
+module. E.g., the &quot;can_transmit()&quot; [=net_device_ops.ndo_start_xmit()]
+function is called with the respective net_device parameter for the calling
+socket. However, I need to know which CHANNEL is calling (i.e., can0, can1,
+...) to forward the message to the correct mailbox. 
+
+Also, if I call &quot;ip link add can0 type can&quot;, the init function
+[=rtnl_link_ops.setup()] is called. The name-field of the net_device
+parameter, however, is NOT can0, as I would have expected. So I am missing
+the link between the &quot;ip link add&quot; command and the device-module. 
+
+I guess I'm missing something really important and fundamental here... 
+
+Regards, and thanks for your answer in advance, 
+Markus
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Using-multiple-CAN-channels-tp26743673p26743673.html">http://old.nabble.com/Using-multiple-CAN-channels-tp26743673p26743673.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001214.html">[Socketcan-users]  Use multiple CAN-Channels
+</A></li>
+	<LI>Next message: <A HREF="001216.html">[Socketcan-users] Using multiple CAN-channels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1215">[ date ]</a>
+              <a href="thread.html#1215">[ thread ]</a>
+              <a href="subject.html#1215">[ subject ]</a>
+              <a href="author.html#1215">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

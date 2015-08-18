@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] Split documentation files
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Split%20documentation%20files&In-Reply-To=%3C4CEAC918.7080109%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001655.html">
+   <LINK REL="Next"  HREF="001657.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] Split documentation files</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Split%20documentation%20files&In-Reply-To=%3C4CEAC918.7080109%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [PATCH] Split documentation files">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Nov 22 20:48:40 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001655.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+        <LI>Next message: <A HREF="001657.html">[Socketcan-users] [cangen] Patch to send count frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1656">[ date ]</a>
+              <a href="thread.html#1656">[ thread ]</a>
+              <a href="subject.html#1656">[ subject ]</a>
+              <a href="author.html#1656">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 22.11.2010 16:43, Daniele Venzano wrote:
+&gt;<i> Below you can find a patch that splits can.txt in several files inside a
+</I>&gt;<i> new &quot;can&quot; subdirectory, according what was decided a couple of weeks ago.
+</I>&gt;<i> 
+</I>&gt;<i> I made no additions, but have modified all internal references that I
+</I>&gt;<i> could find to point to the file and the new chapter number.
+</I>&gt;<i> 
+</I>&gt;<i> I still have to add some more to the bcm stuff that I had translated.
+</I>&gt;<i> 
+</I>&gt;<i> Let me know, bye.
+</I>
+Hi Daniele,
+
+thanks for the contribution. I applied it to the SVN as-is.
+
+To patch the SVN i had to do this first:
+
+mkdir kernel/2.6/Documentation/networking/can
+cp kernel/2.6/Documentation/networking/can.txt
+kernel/2.6/Documentation/networking/can/can-raw.txt
+
+As the can-raw.txt patch based on an existing file ;-)
+
+When the layout is finished, you/we should also add a
+
+    00-INDEX
+
+file which describes the files inside the directory.
+
+Many thanks,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001655.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+	<LI>Next message: <A HREF="001657.html">[Socketcan-users] [cangen] Patch to send count frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1656">[ date ]</a>
+              <a href="thread.html#1656">[ thread ]</a>
+              <a href="subject.html#1656">[ subject ]</a>
+              <a href="author.html#1656">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

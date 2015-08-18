@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Where%20can%20I%20find%20a%20linux%203.0%20%28or%20later%29%0A%20flexcan%20driver%20for%20a%20Freescale%20P1010RDB%20board%3F&In-Reply-To=%3C4E3AA2D1.1060105%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002036.html">
+   <LINK REL="Next"  HREF="002025.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Where%20can%20I%20find%20a%20linux%203.0%20%28or%20later%29%0A%20flexcan%20driver%20for%20a%20Freescale%20P1010RDB%20board%3F&In-Reply-To=%3C4E3AA2D1.1060105%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?">wg at grandegger.com
+       </A><BR>
+    <I>Thu Aug  4 15:46:57 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002036.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+        <LI>Next message: <A HREF="002025.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2031">[ date ]</a>
+              <a href="thread.html#2031">[ thread ]</a>
+              <a href="subject.html#2031">[ subject ]</a>
+              <a href="author.html#2031">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marc,
+
+On 08/04/2011 11:47 AM, Marc Kleine-Budde wrote:
+&gt;<i> On 08/04/2011 10:25 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> On 08/04/2011 10:09 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Hi Robin,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 08/04/2011 05:23 AM, Robin Holt wrote:
+</I>&gt;&gt;&gt;&gt;<i> I have spent some more time working on this.  I took their code from the
+</I>&gt;&gt;&gt;&gt;<i> April BSP and am reworking it to be a much cleaner (IMHO) implementation.
+</I>&gt;&gt;&gt;&gt;<i> Hopefully I will have a set of patches for you tomorrow.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Right now, I am down to the point of getting the _probe function
+</I>&gt;&gt;&gt;&gt;<i> abstracted off.  I think I will get it fairly clean when I am completed.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Not sure what are you trying to do? What is missing in the mainline
+</I>&gt;&gt;&gt;<i> Flexcan driver are the device tree bindings. Unfortunately, Freescale's
+</I>&gt;&gt;&gt;<i> driver is not a good approach. I think it can be done much simpler,
+</I>&gt;&gt;&gt;<i> especially with the new device-tree integration available in v3.0.
+</I>&gt;&gt;&gt;<i> Robin, you have the mainline kernel running for a P1010 board, right?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You patches are a good starting point for discussion...
+</I>&gt;<i> 
+</I>&gt;<i> Have you already posted them?
+</I>&gt;<i> 
+</I>&gt;<i> From my point of view there are two problems:
+</I>&gt;<i> - OF tree integration (iomem, irq, clock)
+</I>&gt;<i> - endianess
+</I>&gt;<i> 
+</I>&gt;<i> The fsl driver assumes that OF tree means a big endian hardware, this is
+</I>&gt;<i> not true for arm, where we have OF tree now.
+</I>
+Yes. But I was also thinking about a smart integration of platform and
+of platform bindings as we need this sooner than later for other drivers
+as well. As you have already realized, already since 2.6.35 there is a
+common platform_driver_register() and &quot;of_node&quot; is now part of &quot;struct
+device&quot; allowing a much nice implementation. I will look for a good
+example in the kernel...
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002036.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+	<LI>Next message: <A HREF="002025.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2031">[ date ]</a>
+              <a href="thread.html#2031">[ thread ]</a>
+              <a href="subject.html#2031">[ subject ]</a>
+              <a href="author.html#2031">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

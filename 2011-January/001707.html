@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SLCAN serial baudrate...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C20110108163220.255600%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001706.html">
+   <LINK REL="Next"  HREF="001708.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SLCAN serial baudrate...</H1>
+    <B>Thorsten Godau</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C20110108163220.255600%40gmx.net%3E"
+       TITLE="[Socketcan-users] SLCAN serial baudrate...">dl9sec at gmx.net
+       </A><BR>
+    <I>Sat Jan  8 17:32:20 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001706.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+        <LI>Next message: <A HREF="001708.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1707">[ date ]</a>
+              <a href="thread.html#1707">[ thread ]</a>
+              <a href="subject.html#1707">[ subject ]</a>
+              <a href="author.html#1707">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+spent the whole last evening and todays morning trying to
+get this SocketCAN stuff running with my SLCAN adapter.
+Here are my experiences and a little description which
+may help other SLCAN users.
+
+I use an Advantech 686 Embedded PC with a homemade Mictronics-
+style SLCAN interface connected to the USB. It appears as
+&quot;ttyUSB0&quot; device. The OS is a Debian 5 &quot;stable&quot; running a
+&quot;squeeze&quot; kernel 2.6.32.5. The sources of SocketCAN are 
+compiled against this kernel without problems.
+
+First of all i searched a way to set the serial baudrate as
+high as possible (460800Bd or 921600Bd) to get a stable
+communication on higher CAN bitrates with heavy CAN busload
+(the SLCAN protocol has a lot of overhead). So until now 
+i did this by hardcoding the serial baudrate into slcand.c.
+But with my last sync to the svn the code structure changed
+and i had to find another way.
+
+What it did was stty:
+
+stty -F /dev/ttyUSB0 921600 line 0 cs8 -onlcr -echo raw min 100 time 2
+
+(these parameters worked for me, on other systems the parameters
+may vary. I determined working parameters with a screen terminal and
+then with some console test, e.g.: echo -e -n &quot;v\r&quot; &gt; /dev/ttyUSB0 and
+cat &lt; /dev/ttyUSB0 in another terminal/screen. So there was no need
+for a special terminal to install)
+
+The next step was to set a dedicated CAN bitrate (S0..8). Until now
+this was also done with some parameters of slcand ( S6 O -- C ), but
+this is also omitted with the latest sources.
+So i tried to use &quot;slcan_attach -o -s6 -c /dev/ttyUSB0&quot; similar to the
+descrition in the command line help of slcan_attach. IMHO there is an
+error: the SLCAN interface must be closed to accept a new bitrate code,
+so the correct command should be &quot;slcan_attach -c -s6 -o /dev/ttyUSB0&quot;.
+Nevertheless i can't get the bitrate changed properly with slcan_attach.
+The solution was the echo command (to be honest i tried to change the
+CAN bitrate before determining the working serial parameters):
+
+echo -e -n &quot;C\rS6\rO\r&quot; &gt; /dev/ttyUSB0
+
+With this simple command i always got the correct bitrate when changing.
+
+To get the SLCAN damon running i used:
+
+slcand ttyUSB0 slcan0
+
+To bring the interface up i used:
+
+ifconfig slcan0 up
+
+So a little script &quot;startslcan&quot; to do all the stuff in sequence could
+look like this:
+
+#! /bin/bash
+
+stty -F /dev/ttyUSB0 921600 line 0 cs8 -onlcr -echo raw min 100 time 2
+sleep 1
+echo -e -n &quot;C\rS6\rO\r&quot; &gt; /dev/ttyUSB0
+sleep 1
+slcand ttyUSB0 slcan0
+sleep 1
+ifconfig slcan0 up
+
+That worked perfect for me so far.
+
+Next i wanted to have this SocketCAN stuff to be setup on system start.
+Therefore i copied the initscript of my LCD daemon (/etc/init.d/LCDd) to
+/etc/init.d/SLCANd and modified it to do the described sequence on
+startup and doing a &quot;ifconfig slcan0 down&quot; and SLCAN daemon killing on
+shutdown. With the &quot;rcconf&quot; i generated all the runlevel stuff.
+On the whole this works, but it seems that on startup the 
+initscript is called more than one time and this isn't really considered
+when calling &quot;stty...&quot; and &quot;echo... &gt; /dev/ttyUSB0&quot; in the initscript.
+Have to dig deep in that initscripting. But that's another story... :-)
+
+Finally i will try to get the interface run with CAN-Festival...
+
+Regards, Thorsten
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001706.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+	<LI>Next message: <A HREF="001708.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1707">[ date ]</a>
+              <a href="thread.html#1707">[ thread ]</a>
+              <a href="subject.html#1707">[ subject ]</a>
+              <a href="author.html#1707">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

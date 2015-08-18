@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Performance issues with MPC5200B and socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3C4E5398CF.7090905%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002101.html">
+   <LINK REL="Next"  HREF="002103.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Performance issues with MPC5200B and socketcan</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3C4E5398CF.7090905%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Performance issues with MPC5200B and socketcan">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Tue Aug 23 14:10:55 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002101.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+        <LI>Next message: <A HREF="002103.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2102">[ date ]</a>
+              <a href="thread.html#2102">[ thread ]</a>
+              <a href="subject.html#2102">[ subject ]</a>
+              <a href="author.html#2102">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am 23.08.2011 12:04, schrieb &quot;M&#252;ller, Ren&#233;&quot;:
+&gt;<i> Am 22.08.2011 18:55, schrieb Oliver Hartkopp:
+</I>
+
+&gt;&gt;<i> i would try move the problem into userspace.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The skbuff struct contains indeed much more than just the 16 bytes used by the
+</I>&gt;&gt;<i> can_frame. If you can make an estimation about how many frames you receive in
+</I>&gt;&gt;<i> this 30 seconds, you could create a big array of struct can_frames in
+</I>&gt;&gt;<i> userspace that holds the (binary) CAN frames in userspace.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After the 30 seconds, you can dump the binary frames into a file. IMO not
+</I>&gt;&gt;<i> getting the frames from the socket is the problem, but writing to a file.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> An increased socket buffer size still gives you some additional safety, that
+</I>&gt;&gt;<i> you don't lose frames, when writing the file.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Do you also need the timestamps?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If so, i would add them to an other new big array containing the the (64 bit)
+</I>&gt;&gt;<i> timestamps. I don't know if it's better to save timestamp offsets, as this
+</I>&gt;&gt;<i> would probably cost more CPU time than just copying the timestamps.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do you think about this idea?
+</I>&gt;<i> Hi Oliver,
+</I>&gt;<i>
+</I>&gt;<i> I like this idea. I liked it so much, that I just tried it :)
+</I>&gt;<i>
+</I>&gt;<i> But the results are not exactly what I want. I used candump as base and created a simple array, as you suggested (only for the frames, none for the timestamps. I need them, but for testing purposes I can life without them). Now the problem is the cpu load, again. I have ~18-20% idle time and ~60% for candump. Basically I can dump the frames this way, but in my application dumping the frames is not the only task. I need a bit more cpu time than the remaining 20%.
+</I>&gt;<i>
+</I>&gt;<i> When I used the increased socket buffer size I had plenty cpu time available (&gt;70%), but no memory for my application left. With an simple buffer I have plenty of memory available (&gt;90MB), but not enough cpu time left. :(
+</I>
+Ok, i must admit this is a bit like fishing in murky waters but i do not 
+know which impact the recvmsg() syscall hass in this game.
+
+When integrating the support for dropcounts i moved the receiption of 
+CAN frames from recvfrom() to recvmsg() to get all the information 
+including timestamps and dropcounts with one syscall:
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan?op=comp&amp;compare[">http://svn.berlios.de/wsvn/socketcan?op=comp&amp;compare[</A>]=/trunk/can-utils/<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">candump.c at 1110</A>&amp;compare[]=/trunk/can-utils/<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">candump.c at 1111</A>
+
+This has an increased effort in setting and parsing cmsg structures.
+
+Maybe you can try to modify the rev1110 to your needs (with the CAN 
+frame array) or use the very simple socketcan/test/tst-raw.c source as a 
+basis that only uses read() without any multi-socket- nor select()-support.
+
+This would be interesting to see if we really can save remarkable 
+amounts of CPU time without having the full-featured candump mechanisms.
+
+Best regards &amp; thanks for the interesting CPU/MEM tradeoff problem ;-)
+
+Oliver
+
+&gt;<i>
+</I>&gt;<i> It seems, that I have to optimize either the memory consumption of the socket buffer or the cpu load of the frame fetching. Maybe the right tradeoff between user space and socket is the clue.
+</I>&gt;<i>
+</I>&gt;<i> I'm familiar with linux, but I'm no kernel hacker. I think, you have way more experience in this area (at least you implemented many stuff in kernel space for socketcan ;) ), so do you think I can get my application running with one of the three options from above? Or I'm missing some &quot;simple&quot; other option? (beside from switching the cpu, of course)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Ren&#233;
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002101.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+	<LI>Next message: <A HREF="002103.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2102">[ date ]</a>
+              <a href="thread.html#2102">[ thread ]</a>
+              <a href="subject.html#2102">[ subject ]</a>
+              <a href="author.html#2102">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

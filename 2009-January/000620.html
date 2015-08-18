@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BXenomai-help%5D%20rtcanconfig%20rtcansend%20rtcanrecv&In-Reply-To=%3C496B7B34.9030405%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000625.html">
+   <LINK REL="Next"  HREF="000626.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BXenomai-help%5D%20rtcanconfig%20rtcansend%20rtcanrecv&In-Reply-To=%3C496B7B34.9030405%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv">wg at grandegger.com
+       </A><BR>
+    <I>Mon Jan 12 18:17:40 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000625.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+        <LI>Next message: <A HREF="000626.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#620">[ date ]</a>
+              <a href="thread.html#620">[ thread ]</a>
+              <a href="subject.html#620">[ subject ]</a>
+              <a href="author.html#620">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Charlton, John wrote:
+&gt;<i> Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> Thank you for the help.  I do have XENO_DRIVERS_CAN_DEBUG enabled and the registers are:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at oelinux-nano</A>:~$ cat /proc/rtcan/rtcan1/registers
+</I>&gt;<i> SJA1000 registers
+</I>&gt;<i> 00: 00 00 0c 02 ff 00 03 1c 1a 00 00 00 00 60 00 00
+</I>&gt;<i> 10: 08 00 20 01 02 03 04 05 06 07 08 ff 20 00 00 c8
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at oelinux-nano</A>:~$ cat /proc/rtcan/rtcan0/registers
+</I>&gt;<i> SJA1000 registers
+</I>&gt;<i> 00: 00 00 0d 01 ff 00 03 1c 1a 00 00 00 00 60 00 00
+</I>&gt;<i> 10: 08 00 20 01 02 03 04 05 06 07 08 bf 00 01 00 c8
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at oelinux-nano</A>:~$
+</I>
+Looks like the data have been received by the rtcan0 chip. Then most
+likely there are problems with the interrupts.
+
+&gt;<i> I will focus on the transmitter and try another CAN device or CAN analyzer as you suggest.
+</I>
+I see that the TSCAN1 Lincan driver also writes 0 to offset 4:
+
+  outb(0x0, TSCAN1_BASE_ADDR + idx * 8 + 4);
+  outb(0x60 + idx, TSCAN1_BASE_ADDR + idx * 8 + 5); // set base I/O address in
+                                                    // control reg
+
+Maybe it already makes a difference?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000625.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+	<LI>Next message: <A HREF="000626.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#620">[ date ]</a>
+              <a href="thread.html#620">[ thread ]</a>
+              <a href="subject.html#620">[ subject ]</a>
+              <a href="author.html#620">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

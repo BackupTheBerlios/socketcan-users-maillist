@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A314674.9040909%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000892.html">
+   <LINK REL="Next"  HREF="000896.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A314674.9040909%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jun 11 20:01:24 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000892.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+        <LI>Next message: <A HREF="000896.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#893">[ date ]</a>
+              <a href="thread.html#893">[ thread ]</a>
+              <a href="subject.html#893">[ subject ]</a>
+              <a href="author.html#893">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+
+&gt;<i>  DMC Divide Memory Clock The memory clock may
+</I>&gt;<i>     not exceed 8 MHz See section 4 5
+</I>&gt;<i> 
+</I>&gt;<i>  one    The memory clock MCLK is equal to
+</I>&gt;<i>         SCLK/2
+</I>&gt;<i> 
+</I>&gt;<i>  zero   The memory clock MCLK is equal to SCLK
+</I>&gt;<i>         This bit is written by the CPU
+</I>&gt;<i> 
+</I>&gt;<i> For 16MHz, with is the usual XTAL, the bits should be DSC=1 and DMC=0.
+</I>
+Indeed. I had the problem to access the I/O registers of the i82527 on the
+Eurotech com1274 board i was programming this driver for.
+
+Usually the DMC is derived from the clock. But i needed to overwrite the DMC
+with '1' as the 'specified behaviour' obviously had a critical timing on my
+PC104 System. I worked on a Eurotech rugged PC for automotive applications for
+US DOT VII (Celeron 700 or something like this)
+
+&gt;<i> Try playing with clk and force_dmc. Do you known the real XTAL of the
+</I>&gt;<i> card? Do you have the Linux driver for the card from Eurotech?
+</I>
+There also existed a driver from Eurotech with chardev interface.
+
+&gt;<i> I also believe, that the bit-time calculation of the driver should work,
+</I>
+I used to work with btr= ...
+
+&gt;<i> but it uses some strange defaults. Oliver?
+</I>
+I know where i had my setup now: It was a request from the VII project. I'll
+boot my VW-Laptop and search for the details.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000892.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+	<LI>Next message: <A HREF="000896.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#893">[ date ]</a>
+              <a href="thread.html#893">[ thread ]</a>
+              <a href="subject.html#893">[ subject ]</a>
+              <a href="author.html#893">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

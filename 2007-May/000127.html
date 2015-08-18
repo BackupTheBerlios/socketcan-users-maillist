@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C465549F3.3040604%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000124.html">
+   <LINK REL="Next"  HREF="000125.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can driver</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C465549F3.3040604%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan c_can driver">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Thu May 24 10:16:51 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000124.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+        <LI>Next message: <A HREF="000125.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#127">[ date ]</a>
+              <a href="thread.html#127">[ thread ]</a>
+              <a href="subject.html#127">[ subject ]</a>
+              <a href="author.html#127">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Indeed the candev library module's intention is to provide a general
+</I>&gt;<i> functionality that's needed by CAN network devices. But it's worth
+</I>&gt;<i> discussing if we would need an extra abstracted 'struct can_device' like
+</I>&gt;<i> ethernet_device with a bunch of ND2CAN and CAN2ND macros and typedefs
+</I>&gt;<i> like can_mode_t, etc.
+</I>&gt;<i>
+</I>&gt;<i> Additionally the current ioctl() interface needs to be checked. I'm not
+</I>&gt;<i> that sure, but i heard something about the removal of ioctls for
+</I>&gt;<i> netdevices ...
+</I>&gt;<i>
+</I>&gt;<i> These details would lead to unwanted feedback when mainlining the driver
+</I>&gt;<i> code. So the candev.ko is a very good idea but under construction and
+</I>&gt;<i> discussion in my opinion.
+</I>&gt;<i>
+</I>&gt;<i> Maybe your request restarts the discussion about this open topic.
+</I>&gt;<i>   
+</I>It sure makes sense to have some general functionality which can be 
+reused. But i don't have enough insight into the subject yet to discuss 
+implementation details.
+&gt;<i> Btw. i'll add the MODULE_LICENSE() macro to remove the kernel tainting
+</I>&gt;<i> messages as the code is already under GPL.
+</I>&gt;<i>   
+</I>Great.
+
+Best regards,
+Simon
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000124.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+	<LI>Next message: <A HREF="000125.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#127">[ date ]</a>
+              <a href="thread.html#127">[ thread ]</a>
+              <a href="subject.html#127">[ subject ]</a>
+              <a href="author.html#127">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

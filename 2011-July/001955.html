@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Help with CAN_RAW_LOOPBACK
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E25A426.1000000%40sgi.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001954.html">
+   <LINK REL="Next"  HREF="001956.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Help with CAN_RAW_LOOPBACK</H1>
+    <B>Mike Brown</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E25A426.1000000%40sgi.com%3E"
+       TITLE="[Socketcan-users] Help with CAN_RAW_LOOPBACK">mtb at sgi.com
+       </A><BR>
+    <I>Tue Jul 19 17:35:02 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001954.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+        <LI>Next message: <A HREF="001956.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1955">[ date ]</a>
+              <a href="thread.html#1955">[ thread ]</a>
+              <a href="subject.html#1955">[ subject ]</a>
+              <a href="author.html#1955">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 07/19/2011 09:51 AM, Oliver Hartkopp wrote:
+&gt;<i> On 18.07.2011 20:03, Mike Brown wrote:
+</I>&gt;&gt;<i> All appears fine with the vcan interface - tst_rcv_own_msgs runs with both
+</I>&gt;&gt;<i> echo=1 or echo=0.   I suspected this would be case, since the CAN utilities
+</I>&gt;&gt;<i> candump and cansend work as expected when run on the vcan interface as well.
+</I>&gt;<i> tst_rcv_own_msgs with echo=0 is trivial and does not check the complete loop
+</I>&gt;<i> down to the CAN netdevice and up again.
+</I>&gt;<i>
+</I>&gt;<i> Btw. does your 'real' flexcan work now as expected?
+</I>No... but I'm suspecting something fundamental with the flexcan driver...
+
+This pair of commands works (can2 is a vcan interface)
+
+candump -a can2,0:0
+cansend can2 001#48
+
+These two don't (can0 is the flexcan device):
+
+candump -a can0,0:0
+cansend can0 001#48
+&gt;<i> @Marc/Sascha: I just realized the line
+</I>&gt;<i>
+</I>&gt;<i>      dev-&gt;flags |= IFF_ECHO; /* we support local echo in hardware */
+</I>&gt;<i>
+</I>&gt;<i> in the flexcan source at
+</I>&gt;<i>
+</I>&gt;<i>      <A HREF="http://lxr.linux.no/#linux+v2.6.39/drivers/net/can/flexcan.c#L943">http://lxr.linux.no/#linux+v2.6.39/drivers/net/can/flexcan.c#L943</A>
+</I>&gt;<i>
+</I>&gt;<i> But do you really mean, that the sent frames are pushed into the rx queue when
+</I>&gt;<i> the TX is complete according
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L580">http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L580</A>
+</I>&gt;<i>
+</I>&gt;<i> ???
+</I>&gt;<i>
+</I>&gt;<i> The tx complete interrupt in flexcan.c
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.39/drivers/net/can/flexcan.c#L585">http://lxr.linux.no/#linux+v2.6.39/drivers/net/can/flexcan.c#L585</A>
+</I>&gt;<i>
+</I>&gt;<i> does not do anything with can_[put|get|free]_echo_skb() ?!?
+</I>&gt;<i>
+</I>&gt;<i> When the sent CAN frames are not pushed into the rx queue on successful
+</I>&gt;<i> transmit IFF_ECHO must not be set in the device flags.
+</I>I didn't dig this deep into the flexcan driver but did got deep enough 
+to see this flag being set as well.  If read the SocketCAN documentation 
+correctly, then if the driver doesn't set this flag then the PF_CAN 
+layer should handle the loopback???   I'm trying to get a build with the 
+flag cleared in flexcan.c
+&gt;<i> This mechanic does not really stick together with CAN_CTRLMODE_LOOPBACK
+</I>&gt;<i>
+</I>&gt;<i>      <A HREF="http://lxr.linux.no/#linux+v2.6.39/drivers/net/can/flexcan.c#L619">http://lxr.linux.no/#linux+v2.6.39/drivers/net/can/flexcan.c#L619</A>
+</I>&gt;<i>
+</I>&gt;<i> as nothing is sent onto the bus, when CAN_CTRLMODE_LOOPBACK is enabled.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001954.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+	<LI>Next message: <A HREF="001956.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1955">[ date ]</a>
+              <a href="thread.html#1955">[ thread ]</a>
+              <a href="subject.html#1955">[ subject ]</a>
+              <a href="author.html#1955">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

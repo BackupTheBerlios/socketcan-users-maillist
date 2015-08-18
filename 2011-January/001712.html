@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3C4D2D6A28.7060602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001711.html">
+   <LINK REL="Next"  HREF="001713.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3C4D2D6A28.7060602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104">wg at grandegger.com
+       </A><BR>
+    <I>Wed Jan 12 09:45:28 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001711.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I 04/104
+</A></li>
+        <LI>Next message: <A HREF="001713.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1712">[ date ]</a>
+              <a href="thread.html#1712">[ thread ]</a>
+              <a href="subject.html#1712">[ subject ]</a>
+              <a href="author.html#1712">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Willy,
+
+On 01/12/2011 01:55 AM, Willy Lambert wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> for memory I have been trying to makes socketCan working on my Ixxat board
+</I>&gt;<i> for some time. It is stacked on a PC104 cpu module with a linux debian
+</I>&gt;<i> squeeze. After having a fully hardware configuration (a proper node + can
+</I>&gt;<i> analyser) I tried Ixxat drivers and succeed after soldering a jumper on the
+</I>&gt;<i> board and setting some BIOS values. After this I quickly tested a socketCan
+</I>&gt;<i> version from svn and it seems to works (at least interrupts were triggered).
+</I>&gt;<i> 
+</I>&gt;<i> Cleaning time arrived and I complety reinstall the linux with only the
+</I>&gt;<i> required kernel configuration. The choosed kernel is a 2.6.35.7.
+</I>&gt;<i> My first question is : may I use kernel official sources of socketCan ? or
+</I>&gt;<i> do I need to checkout something ?
+</I>&gt;<i> 
+</I>&gt;<i> I activated theses options :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> [*] Networking Support --&gt;
+</I>&gt;&gt;<i> --- [*] CAN bus subsystem support --&gt;
+</I>&gt;&gt;<i> ----------[*] Raw Can Protocol (raw access with CAN-ID filtering)
+</I>&gt;&gt;<i> ----------[*] Broadcast Manager CAN Protocol (with content filtering)
+</I>&gt;&gt;<i> ----------     CAN Device Drivers ---&gt;
+</I>&gt;&gt;<i> ----------------- [*] Virtual Local CAN Interface (vcan)
+</I>&gt;&gt;<i> ----------------- [*] Platform CAN drivers with Netlonk support
+</I>&gt;&gt;<i> ----------------- [*] CAN bit-timing calculation
+</I>&gt;&gt;<i> ----------------- [*] Philips/NXP SJA1000 devices --&gt;
+</I>&gt;&gt;<i> -------------------------[M] ISA Bus based legacy SJA1000 driver
+</I>&gt;&gt;<i>
+</I>&gt;<i> All remark is welcome (espacially if I need to choose &quot;M&quot; instead of &quot;*&quot;)
+</I>&gt;<i> 
+</I>&gt;<i> I setup my can0 interface in the rc.local script :
+</I>&gt;<i> 
+</I>&gt;&gt;<i> modprobe sja1000_isa irq=3 mem=0XD0000
+</I>
+Why do you use irq=3 now. IIRC, it's used for the serial port. Why not
+irq=5?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001711.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I 04/104
+</A></li>
+	<LI>Next message: <A HREF="001713.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1712">[ date ]</a>
+              <a href="thread.html#1712">[ thread ]</a>
+              <a href="subject.html#1712">[ subject ]</a>
+              <a href="author.html#1712">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

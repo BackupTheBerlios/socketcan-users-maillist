@@ -1,0 +1,192 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6C7AFF.4050602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001260.html">
+   <LINK REL="Next"  HREF="001262.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6C7AFF.4050602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Fri Feb  5 21:09:35 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001260.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001262.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1261">[ date ]</a>
+              <a href="thread.html#1261">[ thread ]</a>
+              <a href="subject.html#1261">[ subject ]</a>
+              <a href="author.html#1261">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Kurt Van Dijck wrote:
+&gt;<i> On Fri, Feb 05, 2010 at 11:44:42AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;<i> christian pellegrin wrote:
+</I>&gt;&gt;&gt;&gt;<i> On Fri, Feb 5, 2010 at 10:05 AM, Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I never enabled the bus-error interrupts anywhere embedded.
+</I>&gt;&gt;&gt;&gt;&gt;<i> To research odd behaviour, the error counters were helpfull,
+</I>&gt;&gt;&gt;&gt;<i> I like this idea much. I speak from a point of view of meanness ;-) :
+</I>&gt;&gt;&gt;&gt;<i> we have paid the chip manufacturer for the REC and TEC counters that
+</I>&gt;&gt;&gt;&gt;<i> are cleverly incremented and decremented (AFAIK it's more likely they
+</I>&gt;&gt;&gt;&gt;<i> are incremented that decremented, so there is always a window in which
+</I>&gt;&gt;&gt;&gt;<i> the user space application can catch an increase in them even if not
+</I>&gt;&gt;&gt;&gt;<i> polling at an excessive rate) by the controller itself so they could
+</I>&gt;&gt;&gt;&gt;<i> be easily exported to user space. Perhaps all we need is a function
+</I>&gt;&gt;&gt;&gt;<i> for this in can_priv such do_get_err_counters. Even better if these
+</I>&gt;&gt;&gt;&gt;<i> counters are exported via sysfs so the function above is guaranteed to
+</I>&gt;&gt;&gt;&gt;<i> be called in  non-atomic context.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Trying to summarize these points, what about this:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 1. We disable bus-error interrupts by default
+</I>&gt;&gt;<i> Fine for me, even if that changes the current behavior.
+</I>&gt;<i> Ack
+</I>&gt;&gt;&gt;<i> 2. They can be enabled via netlink
+</I>&gt;&gt;<i> Yep.
+</I>&gt;<i> Ack
+</I>&gt;&gt;&gt;<i> 3. Once they are enabled we send the (unified) rx/tx error counters inside the
+</I>&gt;&gt;&gt;<i> currently reserved bytes of the CAN error frame to the userspace.
+</I>&gt;&gt;<i> The problem is that some CAN controllers do not allow to read these
+</I>&gt;&gt;<i> counters while it's active. But in general we could add the rx/txerr to
+</I>&gt;&gt;<i> any error message, if possible. The information in the error message is
+</I>&gt;&gt;<i> hardware dependent anyway.
+</I>&gt;<i> Ack
+</I>&gt;&gt;&gt;<i> Would this meet the requirements in production-use and development-use ??
+</I>&gt;<i> Yes, for me, this would meet the requirements.
+</I>
+OK, the preliminary patch for SVN below implements this solution and shows
+what we are speaking about. As a nice side effect, it also allows to check
+if the device supports bus-error reporting. Marc, could you please check
+the at91_can modifications?
+
+Wolfgang.
+
+
+[PATCH/RFC] make bus-error generation configurable via netlink interface
+
+By default, bus-error generation is *disabled* and it can be enabled
+with: &quot;ip link set can0 up type can bitrate 500000 bus-error 1&quot;.
+
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/at91_can.c        |    5 ++++-
+ drivers/net/can/sja1000/sja1000.c |   11 ++++++++---
+ include/socketcan/can/netlink.h   |    9 +++++----
+ 3 files changed, 17 insertions(+), 8 deletions(-)
+
+Index: 2.6/include/socketcan/can/netlink.h
+===================================================================
+--- 2.6.orig/include/socketcan/can/netlink.h
++++ 2.6/include/socketcan/can/netlink.h
+@@ -79,10 +79,11 @@ struct can_ctrlmode {
+ 	__u32 flags;
+ };
+ 
+-#define CAN_CTRLMODE_LOOPBACK	0x1	/* Loopback mode */
+-#define CAN_CTRLMODE_LISTENONLY	0x2 	/* Listen-only mode */
+-#define CAN_CTRLMODE_3_SAMPLES	0x4	/* Triple sampling mode */
+-#define CAN_CTRLMODE_ONE_SHOT	0x8	/* One-Shot mode */
++#define CAN_CTRLMODE_LOOPBACK	0x01	/* Loopback mode */
++#define CAN_CTRLMODE_LISTENONLY	0x02 	/* Listen-only mode */
++#define CAN_CTRLMODE_3_SAMPLES	0x04	/* Triple sampling mode */
++#define CAN_CTRLMODE_ONE_SHOT	0x08	/* One-Shot mode */
++#define CAN_CTRLMODE_BUS_ERROR	0x10	/* Bus-error support mode */
+ 
+ /*
+  * CAN device statistics
+Index: 2.6/drivers/net/can/at91_can.c
+===================================================================
+--- 2.6.orig/drivers/net/can/at91_can.c
++++ 2.6/drivers/net/can/at91_can.c
+@@ -292,6 +292,8 @@ static void at91_chip_start(struct net_d
+ 
+ 	/* Enable interrupts */
+ 	reg_ier = AT91_IRQ_MB_RX | AT91_IRQ_ERRP | AT91_IRQ_ERR_FRAME;
++	if (!(priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BUS_ERROR))
++		reg_ier &amp;= ~AT91_IRQ_BERR;
+ 	at91_write(priv, AT91_IDR, AT91_IRQ_ALL);
+ 	at91_write(priv, AT91_IER, reg_ier);
+ }
+@@ -1094,7 +1096,8 @@ static int __init at91_can_probe(struct 
+ 	priv-&gt;can.bittiming_const = &amp;at91_bittiming_const;
+ 	priv-&gt;can.do_set_bittiming = at91_set_bittiming;
+ 	priv-&gt;can.do_set_mode = at91_set_mode;
+-	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES;
++	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
++		CAN_CTRLMODE_BUS_ERROR;
+ 	priv-&gt;reg_base = addr;
+ 	priv-&gt;dev = dev;
+ 	priv-&gt;clk = clk;
+Index: 2.6/drivers/net/can/sja1000/sja1000.c
+===================================================================
+--- 2.6.orig/drivers/net/can/sja1000/sja1000.c
++++ 2.6/drivers/net/can/sja1000/sja1000.c
+@@ -133,9 +133,13 @@ static void set_normal_mode(struct net_d
+ 	for (i = 0; i &lt; 100; i++) {
+ 		/* check reset bit */
+ 		if ((status &amp; MOD_RM) == 0) {
++			u8 reg_ier = IRQ_ALL;
++
++			if (!(priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BUS_ERROR))
++				reg_ier &amp;= ~IRQ_BEI;
+ 			priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+-			/* enable all interrupts */
+-			priv-&gt;write_reg(priv, REG_IER, IRQ_ALL);
++			/* enable interrupts */
++			priv-&gt;write_reg(priv, REG_IER, reg_ier);
+ 			return;
+ 		}
+ 
+@@ -602,7 +606,8 @@ struct net_device *alloc_sja1000dev(int 
+ 	priv-&gt;can.bittiming_const = &amp;sja1000_bittiming_const;
+ 	priv-&gt;can.do_set_bittiming = sja1000_set_bittiming;
+ 	priv-&gt;can.do_set_mode = sja1000_set_mode;
+-	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES;
++	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
++		CAN_CTRLMODE_BUS_ERROR;
+ 
+ 	if (sizeof_priv)
+ 		priv-&gt;priv = (void *)priv + sizeof(struct sja1000_priv);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001260.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001262.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1261">[ date ]</a>
+              <a href="thread.html#1261">[ thread ]</a>
+              <a href="subject.html#1261">[ subject ]</a>
+              <a href="author.html#1261">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] TSCAN1 driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TSCAN1%20driver&In-Reply-To=%3C4AEA85BB.60104%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001110.html">
+   <LINK REL="Next"  HREF="001112.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] TSCAN1 driver</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TSCAN1%20driver&In-Reply-To=%3C4AEA85BB.60104%40grandegger.com%3E"
+       TITLE="[Socketcan-users] TSCAN1 driver">wg at grandegger.com
+       </A><BR>
+    <I>Fri Oct 30 07:20:43 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001110.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+        <LI>Next message: <A HREF="001112.html">[Socketcan-users] [PATCH] mscan: add non-polling rx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1111">[ date ]</a>
+              <a href="thread.html#1111">[ thread ]</a>
+              <a href="subject.html#1111">[ subject ]</a>
+              <a href="author.html#1111">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alexandre V&#233;zina wrote:
+&gt;<i> Sorry for the &quot;reply to all&quot; problem..
+</I>&gt;<i> 
+</I>&gt;<i> On Tue, Oct 27, 2009 at 2:20 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Does this problem show up with CONFIG_CAN_DEV_SYSFS=y?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> No actually it doesn't thanks.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> But I have another problem. Again I get a segfault while calling *rmmod*.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I looked at the resource flags at different point in the code and I found
+</I>&gt;&gt;&gt;<i> out that they were still ok at the end of the *init *function (but not in
+</I>&gt;&gt;&gt;<i> exit or remove).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So I did:
+</I>&gt;&gt;&gt;<i> *modprobe tscan1
+</I>&gt;&gt;&gt;<i> echo 1000 &gt; /sys/class/net/can0/tx_queue_len
+</I>&gt;&gt;&gt;<i> echo 12500 &gt; /sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;&gt;&gt;<i> ip link set can0 up type can*
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I then saw that the resource flags were set to a wrong value (like
+</I>&gt;&gt;&gt;<i> 102840504) in the *write_reg *function (after setting the can0
+</I>&gt;&gt;<i> interface).
+</I>&gt;&gt;&gt;<i> Do you know what is happening between the end of *init* and the moment
+</I>&gt;&gt;<i> that
+</I>&gt;&gt;&gt;<i> *write_reg *is called?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   static int __init tscan1_init(void)
+</I>&gt;&gt;<i>  {
+</I>&gt;&gt;<i>    int irq;
+</I>&gt;&gt;<i>    void *reg_end;
+</I>&gt;&gt;<i>    struct resource tscan1_res[2];
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Shouldn't there be a  &quot;static&quot; in front of &quot;struct resource
+</I>&gt;&gt;<i> tscan1_res[2];&quot;. Does it fix your problem?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i>  Thanks a lot it worked, but can you explain (or point me what to look for
+</I>&gt;<i> :P) why this struct needs to be declared static. I do not understand what is
+</I>&gt;<i> wrong there so I don't know where to search...
+</I>
+If you don't declare the variable static, the address is only valid
+within the function. But you reference it later-on in other function(s)
+as well.
+
+&gt;<i> I tried can{ gen | dump }ing and it seems that write_reg is never called.
+</I>&gt;<i> 
+</I>&gt;<i> Calling *ip link set can0 type can bitrate 125000* gives the output:
+</I>&gt;<i> *RTNETLINK answers: Operation not supported*
+</I>&gt;<i> 
+</I>&gt;<i> I am really confused about the role of RTNELINK vs iproute2 (compiled from
+</I>&gt;<i> git if it can help).
+</I>
+Either you use the SysFS *or* the netlink interface. These are two
+different interfaces to configure the CAN devices. If you are using the
+SysFS interface, you should write to the relevant SysFS files as you do
+above and use ifconfig to start/stop the device:
+
+  # echo 12500 &gt; /sys/class/net/can0/can_bittiming/bitrate
+  # ifconfig can0 up
+
+The problems you see with the netlink interface have been reported with
+2.6.27 as well. I will debug them when time permits.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001110.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+	<LI>Next message: <A HREF="001112.html">[Socketcan-users] [PATCH] mscan: add non-polling rx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1111">[ date ]</a>
+              <a href="thread.html#1111">[ thread ]</a>
+              <a href="subject.html#1111">[ subject ]</a>
+              <a href="author.html#1111">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

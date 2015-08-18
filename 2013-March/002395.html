@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Help: Transmitted Data is not to be received by other Application
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2013-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%3A%20Transmitted%20Data%20is%20not%20to%20be%20received%0A%20by%20other%20Application&In-Reply-To=%3C5154404D.3070400%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002393.html">
+   <LINK REL="Next"  HREF="002394.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Help: Transmitted Data is not to be received by other Application</H1>
+    <B>Olli</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%3A%20Transmitted%20Data%20is%20not%20to%20be%20received%0A%20by%20other%20Application&In-Reply-To=%3C5154404D.3070400%40gmx.de%3E"
+       TITLE="[Socketcan-users] Help: Transmitted Data is not to be received by other Application">os252 at gmx.de
+       </A><BR>
+    <I>Thu Mar 28 14:06:53 CET 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002393.html">[Socketcan-users] Help: Transmitted Data is not to be received by other Application
+</A></li>
+        <LI>Next message: <A HREF="002394.html">[Socketcan-users] Help: Transmitted Data is not to be received by other Application
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2395">[ date ]</a>
+              <a href="thread.html#2395">[ thread ]</a>
+              <a href="subject.html#2395">[ subject ]</a>
+              <a href="author.html#2395">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>You are right, the Identifier of the message specifies the target of the 
+information.
+It is probably not necessary to disable this &quot;local loopback&quot; function.
+
+I have already tried to disable the loopback function.
+I used this code:
+int loopback = 0;
+setsockopt(s, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &amp;loopback, sizeof(loopback));
+
+I had an error in my code, so that the loopback function was turned on 
+again.
+
+Now it's working perfectly!
+
+Many thanks to all!
+
+
+Am 28.03.2013 13:40, schrieb Gary Thomas [via Socket-CAN]:
+&gt;<i> On 2013-03-28 06:08, Olli wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; I'm developing Software for the Raspberry Pi with MCP2515 extension.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have two applications running the same time.
+</I>&gt;<i> &gt; One is in the receiving mode, and the other can transmit and receive.
+</I>&gt;<i> &gt; Unfortunately the application that is permanently receiving, 
+</I>&gt;<i> receives the
+</I>&gt;<i> &gt; data of the second application too.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; How can I turn off this function?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I read the helpfile
+</I>&gt;<i> &gt; 
+</I>&gt;<i> <A HREF="http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+</I>&gt;<i> &gt; but I don't see there any possibility to eleminate this function.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thank you very much!
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> How do you distinguish the data?  Surely the &quot;permanently receiving&quot;
+</I>&gt;<i> application wants to see some part of the data and the other application
+</I>&gt;<i> needs to see other parts?  How do you know which is which?  Are you
+</I>&gt;<i> running some sort of higher-level protocol, e.g. CanFestival, on the
+</I>&gt;<i> CAN bus?
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> ------------------------------------------------------------
+</I>&gt;<i> Gary Thomas                 |  Consulting for the
+</I>&gt;<i> MLB Associates              |    Embedded world
+</I>&gt;<i> ------------------------------------------------------------
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> [hidden email] &lt;/user/SendEmail.jtp?type=node&amp;node=7636&amp;i=0&gt;
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> If you reply to this email, your message will be added to the 
+</I>&gt;<i> discussion below:
+</I>&gt;<i> <A HREF="http://socket-can.996257.n3.nabble.com/Help-Transmitted-Data-is-not-to-be-received-by-other-Application-tp7635p7636.html">http://socket-can.996257.n3.nabble.com/Help-Transmitted-Data-is-not-to-be-received-by-other-Application-tp7635p7636.html</A> 
+</I>&gt;<i>
+</I>&gt;<i> To unsubscribe from Help: Transmitted Data is not to be received by 
+</I>&gt;<i> other Application, click here 
+</I>&gt;<i> &lt;<A HREF="http://socket-can.996257.n3.nabble.com/template/NamlServlet.jtp?macro=unsubscribe_by_code&amp;node=7635&amp;code=b3MyNTJAZ214LmRlfDc2MzV8LTE4MzAzMjQ3NTg=">http://socket-can.996257.n3.nabble.com/template/NamlServlet.jtp?macro=unsubscribe_by_code&amp;node=7635&amp;code=b3MyNTJAZ214LmRlfDc2MzV8LTE4MzAzMjQ3NTg=</A>&gt;.
+</I>&gt;<i> NAML 
+</I>&gt;<i> &lt;<A HREF="http://socket-can.996257.n3.nabble.com/template/NamlServlet.jtp?macro=macro_viewer&amp;id=instant_html%21nabble%3Aemail.naml&amp;base=nabble.naml.namespaces.BasicNamespace-nabble.view.web.template.NabbleNamespace-nabble.view.web.template.NodeNamespace&amp;breadcrumbs=notify_subscribers%21nabble%3Aemail.naml-instant_emails%21nabble%3Aemail.naml-send_instant_email%21nabble%3Aemail.naml">http://socket-can.996257.n3.nabble.com/template/NamlServlet.jtp?macro=macro_viewer&amp;id=instant_html%21nabble%3Aemail.naml&amp;base=nabble.naml.namespaces.BasicNamespace-nabble.view.web.template.NabbleNamespace-nabble.view.web.template.NodeNamespace&amp;breadcrumbs=notify_subscribers%21nabble%3Aemail.naml-instant_emails%21nabble%3Aemail.naml-send_instant_email%21nabble%3Aemail.naml</A>&gt; 
+</I>&gt;<i>
+</I>
+
+
+
+
+--
+View this message in context: <A HREF="http://socket-can.996257.n3.nabble.com/Help-Transmitted-Data-is-not-to-be-received-by-other-Application-tp7635p7638.html">http://socket-can.996257.n3.nabble.com/Help-Transmitted-Data-is-not-to-be-received-by-other-Application-tp7635p7638.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002393.html">[Socketcan-users] Help: Transmitted Data is not to be received by other Application
+</A></li>
+	<LI>Next message: <A HREF="002394.html">[Socketcan-users] Help: Transmitted Data is not to be received by other Application
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2395">[ date ]</a>
+              <a href="thread.html#2395">[ thread ]</a>
+              <a href="subject.html#2395">[ subject ]</a>
+              <a href="author.html#2395">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

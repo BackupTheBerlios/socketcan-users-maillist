@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Compiling on 64 bit machine
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Compiling%20on%2064%20bit%20machine&In-Reply-To=%3C468F8F5C.5020406%40probestar.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000143.html">
+   <LINK REL="Next"  HREF="000145.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Compiling on 64 bit machine</H1>
+    <B>Neal Probert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Compiling%20on%2064%20bit%20machine&In-Reply-To=%3C468F8F5C.5020406%40probestar.com%3E"
+       TITLE="[Socketcan-users] Compiling on 64 bit machine">nprobert at probestar.com
+       </A><BR>
+    <I>Sat Jul  7 15:04:28 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000143.html">[Socketcan-users] RFC: default NET capabilites for external	compilation
+</A></li>
+        <LI>Next message: <A HREF="000145.html">[Socketcan-users] Compiling on 64 bit machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Tried compiling on my new 64 bit machine running Ubuntu. Code needs to 
+be made clean for both 32 and 64 bits.
+
+I would suggest using int16_t, int32_t, int64_t, uint16_t, uint32_t, 
+uint64_t to erase all doubt of how big your ints are.
+
+
+CC [M] /home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/net/can/proc.o
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/net/can/proc.c: In 
+function &#8216;can_print_rcvlist&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/net/can/proc.c:215: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/net/can/proc.c:215: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/net/can/proc.c: In 
+function &#8216;can_proc_read_rcvlist&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/net
+
+
+CC [M] 
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.o
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;enable_rx_obj&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:296: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:298: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:300: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:303: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:304: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:306: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;disable_rx_obj&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:315: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:317: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;i82527_clear_msg_objects&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:420: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:422: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:424: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:427: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:429: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:430: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;can_start_xmit&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:612: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;can_rx&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:738: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:739: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:742: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:743: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:744: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:745: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:749: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:750: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:767: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;can_interrupt&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:917: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:921: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:924: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:942: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:945: 
+warning: cast from pointer to integer of different size
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c: 
+In function &#8216;i82527_init_module&#8217;:
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:1175: 
+warning: format &#8216;%d&#8217; expects type &#8216;int&#8217;, but argument 3 has type &#8216;long 
+unsigned int&#8217;
+/home/neal/Interfaces/CAN/Socket-CAN/trunk/kernel/2.6/drivers/net/can/i82527/i82527.c:1175: 
+warning: format &#8216;%d&#8217; expects type &#8216;int&#8217;, but argument 4 has type &#8216;long 
+unsigned int&#8217;
+
+
+cansniffer.c:511: warning: field width should have type &#8216;int&#8217;, but 
+argument 3 has type &#8216;long unsigned int&#8217;
+
+
+-- 
+
+             *** ProbeStar Telematics, LLC.  ***
+  Automotive, Mobile and Embedded Communications Consulting
+
+==// Neal W. Probert (President)       / Email: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nprobert at probestar.com</A> //
+=// Web: www.probestar.com            / Phone: 248-522-6836           //=
+// Fax:                              / Cell:                         //==
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000143.html">[Socketcan-users] RFC: default NET capabilites for external	compilation
+</A></li>
+	<LI>Next message: <A HREF="000145.html">[Socketcan-users] Compiling on 64 bit machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] CAN: make checking in can_rcv less	restrictive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20CAN%3A%20make%20checking%20in%20can_rcv%20less%0A%09restrictive&In-Reply-To=%3C1249572295-7801-1-git-send-email-l.fu%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001011.html">
+   <LINK REL="Next"  HREF="001013.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] CAN: make checking in can_rcv less	restrictive</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20CAN%3A%20make%20checking%20in%20can_rcv%20less%0A%09restrictive&In-Reply-To=%3C1249572295-7801-1-git-send-email-l.fu%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] CAN: make checking in can_rcv less	restrictive">l.fu at pengutronix.de
+       </A><BR>
+    <I>Thu Aug  6 17:24:55 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001011.html">[Socketcan-users] Using Socketcan from Ruby-script ?
+</A></li>
+        <LI>Next message: <A HREF="001013.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1012">[ date ]</a>
+              <a href="thread.html#1012">[ thread ]</a>
+              <a href="subject.html#1012">[ subject ]</a>
+              <a href="author.html#1012">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>From: Michael Olbrich &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">m.olbrich at pengutronix.de</A>&gt;
+
+Checking for can frame format in can_rcv() is too restrictive. BUG_ON is way too
+heavy for the case that the can interface probably received a can frame with
+malicious format. Further it can be used for DDOS attack since BUG_ON can lead
+to kernel panic. Hence we turn this to WARN_ON instead.
+
+Signed-off-by: Michael Olbrich &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">m.olbrich at pengutronix.de</A>&gt;
+Signed-off-by: Luotao Fu &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">l.fu at pengutronix.de</A>&gt;
+---
+ net/can/af_can.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index e733725..e6dcf4b 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -656,7 +656,7 @@ static int can_rcv(struct sk_buff *skb, struct net_device *dev,
+ 		return 0;
+ 	}
+ 
+-	BUG_ON(skb-&gt;len != sizeof(struct can_frame) || cf-&gt;can_dlc &gt; 8);
++	WARN_ON(skb-&gt;len != sizeof(struct can_frame) || cf-&gt;can_dlc &gt; 8);
+ 
+ 	/* update statistics */
+ 	can_stats.rx_frames++;
+-- 
+1.6.3.3
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001011.html">[Socketcan-users] Using Socketcan from Ruby-script ?
+</A></li>
+	<LI>Next message: <A HREF="001013.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1012">[ date ]</a>
+              <a href="thread.html#1012">[ thread ]</a>
+              <a href="subject.html#1012">[ subject ]</a>
+              <a href="author.html#1012">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

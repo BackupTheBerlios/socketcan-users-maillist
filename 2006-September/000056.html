@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using socketcan the first time
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20socketcan%20the%20first%20time&In-Reply-To=%3C451D48FF.8060401%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000049.html">
+   <LINK REL="Next"  HREF="000050.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using socketcan the first time</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20socketcan%20the%20first%20time&In-Reply-To=%3C451D48FF.8060401%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Using socketcan the first time">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Sep 29 18:25:35 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000049.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+        <LI>Next message: <A HREF="000050.html">[Socketcan-users] Testing socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marco Cavallini [KOAN] schrieb:
+
+&gt;<i> BTW, I'm still unable to see the real benefit of this design vs. a 
+</I>&gt;<i> standard file or misc linux driver, could anybody please explain it ?
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Yep!
+
+The socket-can idea brings to you:
+
+- Multiuser capabilities (try this with a character device)
+- A socket-api that smells similar to PF_INET sockets (known usage for 
+standard-IT programmers)
+- A standardized network-device interface for CAN-Devices (not the 
+ioctl(), ASCII, binary, whatever mix you mostly get when you buy a new 
+CAN-Hardware and get a 'special driver' for it)
+- It makes the CAN-Bus a real 'network' under Linux
+- Transparent CAN transport protocol support (e.g. in vehicle diagnosis 
+you have a point-to-point communication via CAN. The socket-can makes 
+connections to an engine-ECU as easy as a connection via TCP/IP-sockets)
+- you can have multiple applications (e.g. multiple candump's with 
+different filter settings) on the same CAN-Bus
+- you can have applications on real or virtual CAN-busses talking to 
+each other on the same machine
+
+Is this enough so far?
+
+:<i>-)
+</I>
+Oliver.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000049.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+	<LI>Next message: <A HREF="000050.html">[Socketcan-users] Testing socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#56">[ date ]</a>
+              <a href="thread.html#56">[ thread ]</a>
+              <a href="subject.html#56">[ subject ]</a>
+              <a href="author.html#56">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

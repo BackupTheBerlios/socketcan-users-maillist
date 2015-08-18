@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBB063.2020701%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001674.html">
+   <LINK REL="Next"  HREF="001675.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kenrel panic with CAN gateway on MPC5200</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBB063.2020701%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Kenrel panic with CAN gateway on MPC5200">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Dec  5 16:31:47 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001674.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+        <LI>Next message: <A HREF="001675.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1676">[ date ]</a>
+              <a href="thread.html#1676">[ thread ]</a>
+              <a href="subject.html#1676">[ subject ]</a>
+              <a href="author.html#1676">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05.12.2010 16:02, Michal Sojka wrote:
+&gt;<i> On Sun, 05 Dec 2010, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> can you give some more details about you setup, that leads to the crash?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1. Are you running the setup using this patch:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    <A HREF="http://rtime.felk.cvut.cz/gitweb/shark/linux.git/commitdiff/92487e4f349cd7518cc3202662f42fea7d42ba73">http://rtime.felk.cvut.cz/gitweb/shark/linux.git/commitdiff/92487e4f349cd7518cc3202662f42fea7d42ba73</A>
+</I>&gt;<i> 
+</I>&gt;<i> Yes, but I've just tested that the panic appears even without this patch
+</I>&gt;<i> applied.
+</I>&gt;<i> 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2. Are you using the '-e' option that creates the local echo of sent
+</I>&gt;&gt;<i>    CAN frames?
+</I>&gt;<i> 
+</I>&gt;<i> No. I use a simple cangw -A -s can0 -d can1. It crashes immediately with
+</I>&gt;<i> the first routed message. I tried different messages ids and lengths but
+</I>&gt;<i> the result is still the same.
+</I>
+Yes - i don't expect this to be CAN message specific.
+
+As i don't have all my CAN hardware here, i checked it with vcan0 &amp; vcan1 :
+
+At the time when i invoked
+
+    cangw -A -s vcan0 -d vcan1 -e
+
+i get this in dmesg:
+
+[10716.319344] BUG: sleeping function called from invalid context at mm/slub.c:793
+[10716.319357] in_atomic(): 1, irqs_disabled(): 0, pid: 7963, name: cangw
+[10716.319365] 2 locks held by cangw/7963:
+[10716.319371]  #0:  (rtnl_mutex){+.+.+.}, at: [&lt;c13863af&gt;] rtnl_lock+0xf/0x20
+[10716.319396]  #1:  (cgw_list_lock){+.+.+.}, at: [&lt;f9afbd9c&gt;] cgw_create_job+0x15c/0x1d0 [can_gw]
+[10716.319422] Pid: 7963, comm: cangw Not tainted 2.6.37-rc4-00012-g22a5b56 #115
+[10716.319429] Call Trace:
+[10716.319443]  [&lt;c102c159&gt;] __might_sleep+0x109/0x140
+[10716.319456]  [&lt;c10b73de&gt;] kmem_cache_alloc+0x3e/0xc0
+[10716.319471]  [&lt;f9a4c41f&gt;] ? can_rx_register+0x4f/0x190 [can]
+[10716.319484]  [&lt;f9a4c41f&gt;] can_rx_register+0x4f/0x190 [can]
+[10716.319496]  [&lt;f9afbdc9&gt;] cgw_create_job+0x189/0x1d0 [can_gw]
+[10716.319507]  [&lt;f9afb530&gt;] ? can_can_gw_rcv+0x0/0x140 [can_gw]
+[10716.319518]  [&lt;c1386515&gt;] rtnetlink_rcv_msg+0x135/0x220
+[10716.319529]  [&lt;f9afbc40&gt;] ? cgw_create_job+0x0/0x1d0 [can_gw]
+[10716.319539]  [&lt;c13863e0&gt;] ? rtnetlink_rcv_msg+0x0/0x220
+[10716.319550]  [&lt;c138fb16&gt;] netlink_rcv_skb+0x86/0xb0
+[10716.319560]  [&lt;c13863d7&gt;] rtnetlink_rcv+0x17/0x20
+[10716.319569]  [&lt;c138f7e3&gt;] netlink_unicast+0x243/0x290
+[10716.319579]  [&lt;c13903c2&gt;] netlink_sendmsg+0x1d2/0x2e0
+[10716.319591]  [&lt;c13686b7&gt;] sock_sendmsg+0xa7/0xd0
+[10716.319603]  [&lt;c109fe2a&gt;] ? might_fault+0x5a/0xb0
+[10716.319614]  [&lt;c109fe2a&gt;] ? might_fault+0x5a/0xb0
+[10716.319624]  [&lt;c109fe70&gt;] ? might_fault+0xa0/0xb0
+[10716.319637]  [&lt;c1196478&gt;] ? _copy_from_user+0x38/0x130
+[10716.319646]  [&lt;c1367fe8&gt;] ? copy_from_user+0x8/0x10
+[10716.319656]  [&lt;c1369452&gt;] sys_sendto+0xb2/0xe0
+[10716.319668]  [&lt;c1064e49&gt;] ? lock_release_non_nested+0x59/0x2e0
+[10716.319678]  [&lt;c10a2b58&gt;] ? handle_mm_fault+0xd8/0x650
+[10716.319689]  [&lt;c109fe2a&gt;] ? might_fault+0x5a/0xb0
+[10716.319699]  [&lt;c109fe2a&gt;] ? might_fault+0x5a/0xb0
+[10716.319710]  [&lt;c136a651&gt;] sys_socketcall+0x171/0x270
+[10716.319721]  [&lt;c1002e90&gt;] sysenter_do_call+0x12/0x36
+
+I think, i need to check, if there was any change in netlink / rtnl_mutex in
+the kernel recently. I get this message independently from CAN traffic, when
+creating the routing entry.
+
+My setup here is a recent 2.6.37-rc4 and i compiled the SocketCAN SVN source
+any only insmod'ded the can{|-raw|-gw}.ko files created in the SVN.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001674.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+	<LI>Next message: <A HREF="001675.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1676">[ date ]</a>
+              <a href="thread.html#1676">[ thread ]</a>
+              <a href="subject.html#1676">[ subject ]</a>
+              <a href="author.html#1676">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

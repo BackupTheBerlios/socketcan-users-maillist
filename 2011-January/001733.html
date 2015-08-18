@@ -1,0 +1,427 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTi%3DsAJuAyFr%3DAR-8Ng_bokJKfmXtR7qedgXt8W46%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001732.html">
+   <LINK REL="Next"  HREF="001734.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTi%3DsAJuAyFr%3DAR-8Ng_bokJKfmXtR7qedgXt8W46%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104">lambert.willy at gmail.com
+       </A><BR>
+    <I>Fri Jan 14 17:56:00 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001732.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+        <LI>Next message: <A HREF="001734.html">[Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1733">[ date ]</a>
+              <a href="thread.html#1733">[ thread ]</a>
+              <a href="subject.html#1733">[ subject ]</a>
+              <a href="author.html#1733">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/1/14 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2011/1/14 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;<i>
+</I>&gt;<i> 2011/1/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 01/14/2011 10:37 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;<i> &gt; 2011/1/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; On 01/14/2011 12:57 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; 2011/1/13 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; ...
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; I am stuck with the test case setup, candump shows error messages
+</I>&gt;&gt;&gt;<i> when I
+</I>&gt;&gt;&gt;<i> &gt;&gt; try
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; a cansend. I already have tricks with extended or standard data frame
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; formats with Ixxat drivers. My motors seems to only accept standard
+</I>&gt;&gt;&gt;<i> &gt;&gt; frames.
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Is there a way to configure this ?
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; I booted my target with Ixxat driver and run my test cases to
+</I>&gt;&gt;&gt;<i> validate
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; everything is in order. (BIOS options, jumpers, IRQ, wiring). I only
+</I>&gt;&gt;&gt;<i> use
+</I>&gt;&gt;&gt;<i> &gt;&gt; one
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; controller on IRQ11 (as it is said as &quot;reserved&quot; in my CPU board IRQ
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; mapping)
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; I may run my motor and receive SDO from him, everything seems to be
+</I>&gt;&gt;&gt;<i> OK.
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; The hardware seem to work. That's a good starting point.
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Without changing anything except my init script which load can
+</I>&gt;&gt;&gt;<i> drivers
+</I>&gt;&gt;&gt;<i> &gt;&gt; (in
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; order to load socket can drivers instead of Ixxat ones), I rebooted
+</I>&gt;&gt;&gt;<i> my
+</I>&gt;&gt;&gt;<i> &gt;&gt; CPU.
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Here is the load script :
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; modprobe sja1000_isa irq=11 mem=0xD0000
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; ip link set can0 type can bitrate 250000 restart-ms 1000
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; ifconfig can0 up
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Here is dmesg answer (which seems correc) :
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; [    3.928467] sja1000_isa sja1000_isa.0: sja1000_isa device
+</I>&gt;&gt;&gt;<i> registered
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; (reg_base=0xc00d0000, irq=11)
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; [    3.928646] Legacy sja1000_isa driver for max. 8 devices
+</I>&gt;&gt;&gt;<i> registered
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; [    3.938877] sja1000_isa sja1000_isa.0: setting BTR0=0x01
+</I>&gt;&gt;&gt;<i> BTR1=0x1c
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Here is ifconfig result :
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; can0      Link encap:UNSPEC  HWaddr
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;           RX packets:2 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;           collisions:0 lg file transmission:10
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;           RX bytes:16 (16.0 B)  TX bytes:0 (0.0 B)
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;           Interruption:11
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Here is /proc/iomem
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 00000000-00000fff : reserved
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 00001000-0009fbff : System RAM
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 0009fc00-0009ffff : reserved
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 000a0000-000bffff : Video RAM area
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 000c0000-000c7fff : Video ROM
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; 000d0000-000d001f : sja1000_isa
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; ...
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; Here is /proc/interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;            CPU0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   0:        215   IO-APIC-edge      timer
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   1:          8   IO-APIC-edge      i8042
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   2:          0    XT-PIC-XT        cascade
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   8:         97   IO-APIC-edge      rtc0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  11:          1   IO-APIC-edge      can0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  12:          7   IO-APIC-edge      i8042
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  14:          0   IO-APIC-edge      ata_piix
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  15:       1017   IO-APIC-edge      ata_piix
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  19:          0   IO-APIC-fasteoi   uhci_hcd:usb3
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  23:         14   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  40:        411   PCI-MSI-edge      eth0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; NMI:          0   Non-maskable interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; LOC:     293000   Local timer interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; SPU:          0   Spurious interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; PMI:          0   Performance monitoring interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; PND:          0   Performance pending work
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; TRM:          0   Thermal event interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; THR:          0   Threshold APIC interrupts
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; MCE:          0   Machine check exceptions
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; MCP:          1   Machine check polls
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; ERR:          0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; MIS:          0
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; I write this command to wake up everybody :
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt; ./cansend can0 000#0100
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; And at the same time, in another terminal, I run candump with theses
+</I>&gt;&gt;&gt;<i> &gt;&gt; results
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt; :
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;  ./candump any,0:0,#FFFFFFFF
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   can0  20000100  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   can0  20000004  [8] 00 04 00 00 00 00 00 71   ERRORFRAME
+</I>&gt;&gt;&gt;<i> &gt;&gt;&gt;&gt;   can0  20000004  [8] 00 10 00 00 00 00 00 81   ERRORFRAME
+</I>&gt;&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;&gt;<i> &gt;&gt; The controller goes bus-off.
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt;
+</I>&gt;&gt;&gt;<i> &gt; May I ask you how you decode the candump ERRORFRAME ? does the
+</I>&gt;&gt;&gt;<i> &gt; 20000040/20000100/20000004 makes sens ? What the date behind ?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> See <A HREF="http://lxr.linux.no/#linux/include/linux/can/error.h">http://lxr.linux.no/#linux/include/linux/can/error.h</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Also &quot;ip -d -s link show can0&quot; should provide some useful statistics.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here is the result of the command, just after booting (no ocr, cdr
+</I>&gt;&gt;<i> tuning), with my 2nd can node poweredOff. So Nothing is received, nothing is
+</I>&gt;&gt;<i> sent.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:~# ip -d -s link show can0
+</I>&gt;&gt;&gt;<i> 3: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;&gt;<i> qlen 10
+</I>&gt;&gt;&gt;<i>     link/can
+</I>&gt;&gt;&gt;<i>     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 1000
+</I>&gt;&gt;&gt;<i>     bitrate 250000 sample-point 0.875
+</I>&gt;&gt;&gt;<i>     tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;&gt;<i>     sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;&gt;<i>     clock 8000000
+</I>&gt;&gt;&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;&gt;<i>     0          0          0          0          0          0
+</I>&gt;&gt;&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;&gt;<i>     0          0        0       0       0       0
+</I>&gt;&gt;&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;&gt;<i>     0          0        0       0       0       0
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:~#
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is it normal that it's already in an error state ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> After have add ocr + cdr tuning as suggested I have this (my motor has a
+</I>&gt;<i> node ID of 0x21) :
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 721#R
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 000#0121
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 721#R
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 000#0221
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 721#R
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 000#0121
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 721#R
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 000#8121
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./cansend can0 000#8221
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can# ./candump any,0:0,#FFFFFFFF
+</I>&gt;&gt;<i>   can0  721  [1] 00
+</I>&gt;&gt;<i>   can0  721  [0] remote request
+</I>&gt;&gt;<i>   can0  721  [1] 7F
+</I>&gt;&gt;<i>   can0    0  [2] 01 21
+</I>&gt;&gt;<i>   can0  1A1  [2] 60 00
+</I>&gt;&gt;<i>   can0  721  [0] remote request
+</I>&gt;&gt;<i>   can0  721  [1] 85
+</I>&gt;&gt;<i>   can0    0  [2] 02 21
+</I>&gt;&gt;<i>   can0  721  [0] remote request
+</I>&gt;&gt;<i>   can0  721  [1] 04
+</I>&gt;&gt;<i>   can0    0  [2] 01 21
+</I>&gt;&gt;<i>   can0  1A1  [2] 60 00
+</I>&gt;&gt;<i>   can0  721  [0] remote request
+</I>&gt;&gt;<i>   can0  721  [1] 85
+</I>&gt;&gt;<i>   can0    0  [2] 81 21
+</I>&gt;&gt;<i>   can0  721  [1] 00
+</I>&gt;&gt;<i>   can0    0  [2] 82 21
+</I>&gt;&gt;<i>   can0  721  [1] 00
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> So it seems to communicating :)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>During a &quot;stress test&quot; I have 2 controller error messages :
+
+ 39 &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L39">http://lxr.linux.no/linux+*/include/linux/can/error.h#L39</A>&gt;#define
+CAN_ERR_CRTL_TX_WARNING
+&lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_WARNING">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_WARNING</A>&gt;  0x08 /*
+reached warning level for TX errors */
+&lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L40">http://lxr.linux.no/linux+*/include/linux/can/error.h#L40</A>&gt;
+&lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_RX_PASSIVE">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_RX_PASSIVE</A>&gt;
+ 41 &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L41">http://lxr.linux.no/linux+*/include/linux/can/error.h#L41</A>&gt;#define
+CAN_ERR_CRTL_TX_PASSIVE
+&lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_PASSIVE">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_PASSIVE</A>&gt;  0x20 /*
+reached error passive status TX */
+
+
+
+canplayer file :
+
+&gt;<i> #start nodes
+</I>&gt;<i> (0.000) can1 000#8100
+</I>&gt;<i> (1.000)    can1 000#01.00
+</I>&gt;<i> (1.200) can1 721#R
+</I>&gt;<i>
+</I>&gt;<i> #Faulhaber command mode
+</I>&gt;<i> (1.500)    can1 321#FD.FF.FF.FF.FF
+</I>&gt;<i> #motion enable
+</I>&gt;<i> (1.700)    can1 321#0F.00.00.00.00
+</I>&gt;<i> (1.900) can1 721#R
+</I>&gt;<i>
+</I>&gt;<i> #envoi d'une vitesse
+</I>&gt;<i> (2.000)    can1 321#93.FF.04.00.00
+</I>&gt;<i> #envoi d'une vitesse nulle
+</I>&gt;<i> (5.000)    can1 321#93.00.00.00.00
+</I>&gt;<i>
+</I>&gt;<i> (6.000) can1 321#93.00.01.00.00
+</I>&gt;<i> (6.500) can1 321#93.00.02.00.00
+</I>&gt;<i> (7.000) can1 321#93.00.03.00.00
+</I>&gt;<i> (7.500) can1 321#93.00.04.00.00
+</I>&gt;<i> (8.000) can1 321#93.00.05.00.00
+</I>&gt;<i> (8.500) can1 321#93.00.06.00.00
+</I>&gt;<i> (9.000) can1 321#93.00.07.00.00
+</I>&gt;<i> (9.500) can1 321#93.00.08.00.00
+</I>&gt;<i> (10.000) can1 321#93.00.09.00.00
+</I>&gt;<i> (10.500) can1 321#93.00.10.00.00
+</I>&gt;<i> (11.000) can1 321#93.00.11.00.00
+</I>&gt;<i> (11.500) can1 321#93.00.12.00.00
+</I>&gt;<i> (12.000) can1 321#93.00.13.00.00
+</I>&gt;<i> (12.500) can1 321#93.00.14.00.00
+</I>&gt;<i> (13.000) can1 321#93.00.15.00.00
+</I>&gt;<i> (13.500) can1 321#93.00.16.00.00
+</I>&gt;<i> (14.000) can1 321#93.00.17.00.00
+</I>&gt;<i> (14.500) can1 321#93.00.18.00.00
+</I>&gt;<i> (15.000) can1 321#93.00.19.00.00
+</I>&gt;<i> (15.500) can1 321#93.00.20.00.00
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> (18.000) can1 321#93.00.19.00.00
+</I>&gt;<i> (18.500) can1 321#93.00.18.00.00
+</I>&gt;<i> (19.000) can1 321#93.00.17.00.00
+</I>&gt;<i> (19.500) can1 321#93.00.16.00.00
+</I>&gt;<i> (20.000) can1 321#93.00.15.00.00
+</I>&gt;<i> (20.500) can1 321#93.00.14.00.00
+</I>&gt;<i> (21.000) can1 321#93.00.13.00.00
+</I>&gt;<i> (21.500) can1 321#93.00.12.00.00
+</I>&gt;<i> (22.000) can1 321#93.00.11.00.00
+</I>&gt;<i> (22.500) can1 321#93.00.10.00.00
+</I>&gt;<i> (23.000) can1 321#93.00.09.00.00
+</I>&gt;<i> (23.500) can1 321#93.00.08.00.00
+</I>&gt;<i> (24.000) can1 321#93.00.07.00.00
+</I>&gt;<i> (24.500) can1 321#93.00.06.00.00
+</I>&gt;<i> (25.000) can1 321#93.00.05.00.00
+</I>&gt;<i> (25.500) can1 321#93.00.04.00.00
+</I>&gt;<i> (26.000) can1 321#93.00.03.00.00
+</I>&gt;<i> (26.500) can1 321#93.00.02.00.00
+</I>&gt;<i> (27.000) can1 321#93.00.01.00.00
+</I>&gt;<i> (27.500) can1 321#93.00.00.00.00
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/can#
+</I>&gt;<i>
+</I>
+
+candump view :
+
+  can0    0  [2] 81 00
+&gt;<i>   can0  721  [1] 00
+</I>&gt;<i>   can0    0  [2] 01 00
+</I>&gt;<i>   can0  1A1  [2] 60 00
+</I>&gt;<i>   can0  721  [0] remote request
+</I>&gt;<i>   can0  321  [5] FD FF FF FF FF
+</I>&gt;<i>   can0  721  [1] 05
+</I>&gt;<i>   can0  321  [5] 0F 00 00 00 00
+</I>&gt;<i>   can0  721  [0] remote request
+</I>&gt;<i>   can0  1A1  [2] 27 00
+</I>&gt;<i>   can0  721  [1] 85
+</I>&gt;<i>   can0  321  [5] 93 FF 04 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 00 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 01 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 02 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 03 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 04 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 05 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 06 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 07 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 08 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 09 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 10 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 11 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 12 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 13 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 14 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 15 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 16 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 17 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 18 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 19 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 20 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 19 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 18 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 17 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 16 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 15 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 14 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 13 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 12 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 11 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 10 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 09 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 08 00 00
+</I>&gt;<i>   can0  20000004  [8] 00 08 00 00 00 00 67 0C   ERRORFRAME
+</I>&gt;<i>   can0  20000004  [8] 00 20 00 00 00 00 87 0C   ERRORFRAME
+</I>&gt;<i>   can0  721  [1] 00
+</I>&gt;<i>   can0  321  [5] 93 00 07 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 06 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 05 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 04 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 03 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 02 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 01 00 00
+</I>&gt;<i>   can0  321  [5] 93 00 00 00 00
+</I>&gt;<i>
+</I>
+
+
+May this be due to wiring quality ?
+
+
+
+
+
+
+
+
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110114/d5d307b7/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110114/d5d307b7/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001732.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+	<LI>Next message: <A HREF="001734.html">[Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1733">[ date ]</a>
+              <a href="thread.html#1733">[ thread ]</a>
+              <a href="subject.html#1733">[ subject ]</a>
+              <a href="author.html#1733">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Testing socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Testing%20socketcan&In-Reply-To=%3C4523CEC8.9060802%40koansoftware.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000060.html">
+   <LINK REL="Next"  HREF="000062.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Testing socketcan</H1>
+    <B>Marco Cavallini [KOAN]</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Testing%20socketcan&In-Reply-To=%3C4523CEC8.9060802%40koansoftware.com%3E"
+       TITLE="[Socketcan-users] Testing socketcan">m.cavallini at koansoftware.com
+       </A><BR>
+    <I>Wed Oct  4 17:10:00 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000060.html">[Socketcan-users] Testing socketcan
+</A></li>
+        <LI>Next message: <A HREF="000062.html">[Socketcan-users] Testing socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#61">[ date ]</a>
+              <a href="thread.html#61">[ thread ]</a>
+              <a href="subject.html#61">[ subject ]</a>
+              <a href="author.html#61">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>After further tests I am still facing to the socketcan usage problems,
+I am sending CAN messages from a PC
+
+
+# insmod /boot/boot/socketcan/sja1000-isa.ko base_addr=0xe000,0xe200 
+irq=5 debug=1
+# ifconfig can0 up
+
+
+# ifconfig -a
+can0      Link encap:UNSPEC  HWaddr 
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+           UP RUNNING NOARP  MTU:16  Metric:1
+           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+           collisions:0 txqueuelen:10
+           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+           Interrupt:5 Base address:0xe000
+
+can1      Link encap:UNSPEC  HWaddr 
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+           NOARP  MTU:16  Metric:1
+           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+           collisions:0 txqueuelen:10
+           RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+           Interrupt:5 Base address:0xe200
+
+
+# cat /proc/net/sja1000-isa
+CAN bus device statistics:
+        errwarn  overrun   wakeup   buserr   errpass  arbitr   restarts 
+clock        baud
+can0:        0        0        0     2530        0        0     2529 
+16000000      100
+can0: bus status: ERROR PASSIVE, RXERR: 130, TXERR: 0
+can1:        0        0        0        0        0        0        0 
+16000000      100
+can1: bus status: OK, RXERR: 0, TXERR: 0
+
+
+# cat /proc/net/sja1000-isa_regs
+SJA1000 registers:
+can0 SJA1000 registers:
+00: 01 00 7c 00 00 00 43 cd 1a 10 00 00 a2 60 82 00
+10: 00 00 00 00 ff ff ff ff 00 00 00 00 00 00 00 cf
+can1 SJA1000 registers:
+00: 01 00 3c 00 00 00 00 00 1a 01 00 00 00 60 00 00
+10: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 cf
+
+
+If I launch
+#candump can0
+the system freezes
+
+What could I do to test the tx/rx channel ?
+TIA
+
+-- 
+/marco
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000060.html">[Socketcan-users] Testing socketcan
+</A></li>
+	<LI>Next message: <A HREF="000062.html">[Socketcan-users] Testing socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#61">[ date ]</a>
+              <a href="thread.html#61">[ thread ]</a>
+              <a href="subject.html#61">[ subject ]</a>
+              <a href="author.html#61">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

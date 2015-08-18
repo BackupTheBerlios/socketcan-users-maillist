@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%20slprq%0A%09timeout&In-Reply-To=%3C20091105090651.GA4612%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001130.html">
+   <LINK REL="Next"  HREF="001132.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%20slprq%0A%09timeout&In-Reply-To=%3C20091105090651.GA4612%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout">l.fu at pengutronix.de
+       </A><BR>
+    <I>Thu Nov  5 10:06:51 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001130.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001132.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1131">[ date ]</a>
+              <a href="thread.html#1131">[ thread ]</a>
+              <a href="subject.html#1131">[ subject ]</a>
+              <a href="author.html#1131">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Nov 05, 2009 at 08:55:20AM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>....
+&gt;<i> &gt;&gt;&gt; Here are the values of the canctrl0/1 registers after the sleep and init loop:
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;  mpc52xx_can f0000980.can: setting BTR0=0x2f BTR1=0x4f
+</I>&gt;<i> &gt;&gt;&gt;  Sleep: ctrl0=0x12 ctrl1=0xc0
+</I>&gt;<i> &gt;&gt;&gt;  mpc52xx_can f0000900.can: SLPRQ timeout reached, failed to enter 
+</I>&gt;<i> &gt;&gt;&gt;  Init: ctrl0=0x03 ctrl1=0xc3
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt; So the slprq is kept set, interesting, Could you please try instrument
+</I>&gt;<i> &gt;&gt; the canctl0 and canctl1 value withouth my pathc? The code would not set
+</I>&gt;<i> &gt;&gt; initrq because the ret value will be set to error after failing waiting
+</I>&gt;<i> &gt;&gt; for slpack and the slprq will be kept set. According to the datasheet:
+</I>&gt;<i> &gt;&gt; SLPRQ:
+</I>&gt;<i> &gt;&gt; 0 Running MSCAN functions normally
+</I>&gt;<i> &gt;&gt; 1 Sleep Mode Request???MSCAN locks in idle state
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Yes, I realized as well that the MSCAN did not enter init mode properly.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; I'm wondering heavily how this could work at all, if the datasheet is
+</I>&gt;<i> &gt;&gt; right.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; ... and after a &quot;ifconfig up&quot; it continues working as usual. But I
+</I>&gt;<i> &gt; remember wired problems with the error state not being reset to &quot;error
+</I>&gt;<i> &gt; active&quot; after the restart.
+</I>&gt;<i> &gt; 
+</I>
+hmm, this means that normal_mode get through somehow. This is not the
+case on the mpc5200b here.
+
+&gt;<i> &gt;&gt; Hmm, something like this?
+</I>&gt;<i> &gt;&gt; &quot;Sleep request failed, device could not enter sleep mode. We force to
+</I>&gt;<i> &gt;&gt; proceed any how to avoid freeze. All active transmit actions, if still
+</I>&gt;<i> &gt;&gt; any, will be aborted.&quot;
+</I>&gt;<i> 
+</I>&gt;<i> I'm thinking about some words avoiding the user to panic (taking the
+</I>&gt;<i> message too serious).
+</I>&gt;<i> 
+</I>
+I now reduced the message and put some of the text into the comment.
+Since it's now dev_dbg, the message won't appear in normal case. This
+way I think it's now &quot;mild&quot; enough.
+
+&gt;<i> &gt;&gt; Since we are experiencing funny behaviours on mpc5200a too. I agree you
+</I>&gt;<i> &gt;&gt; with the point on dev_err vs. dev_debug. I'll change it in dev_dbg then.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, that would be nice.
+</I>&gt;<i> 
+</I>
+V2 Patch is attached.
+
+&gt;<i> &gt;&gt;&gt; Just for curiosity. Could you try the patch below waiting to
+</I>&gt;<i> &gt;&gt;&gt; the TX messages to get aborted. Does that help? 
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt; In my testscenarios the tx_active is mostly not set. So I don't
+</I>&gt;<i> &gt;&gt; think this will change the behaviour. Nevertheless I'll try this out
+</I>&gt;<i> &gt;&gt; tommorow.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Right, the problem shows up when the controller receives messages. Just
+</I>&gt;<i> forget it.
+</I>
+All right.
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>
+cheers
+Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-V2-mscan-do-not-set-err-value-on-slprq-timeout.patch
+Type: text/x-diff
+Size: 2723 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091105/e8f71958/attachment.patch">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091105/e8f71958/attachment.patch</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091105/e8f71958/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091105/e8f71958/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001130.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001132.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1131">[ date ]</a>
+              <a href="thread.html#1131">[ thread ]</a>
+              <a href="subject.html#1131">[ subject ]</a>
+              <a href="author.html#1131">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

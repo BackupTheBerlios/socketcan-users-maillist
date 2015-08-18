@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0BFEEB.2050604%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001147.html">
+   <LINK REL="Next"  HREF="001150.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0BFEEB.2050604%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">wg at grandegger.com
+       </A><BR>
+    <I>Tue Nov 24 16:42:35 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001147.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001150.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1149">[ date ]</a>
+              <a href="thread.html#1149">[ thread ]</a>
+              <a href="subject.html#1149">[ subject ]</a>
+              <a href="author.html#1149">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> On Tue, Nov 24, 2009 at 03:46:22PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Fu,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;<i> Hi folks,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I was trying to integrate socketcan control in an application the last days and
+</I>&gt;&gt;&gt;<i> spent quite a lot of time getting clear how to deal with the netlink interface.
+</I>&gt;&gt;<i> I can image. Such a library is on my to-do list since a long time, but
+</I>&gt;&gt;<i> so far I didn't find enough time to implement it. Thanks for the effort.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Ah, luckily we didn't do doubled work. ;-)
+</I>
+Puh, not yet, fortunately.
+
+&gt;&gt;&gt;<i> Besides I just couldn't remember the correct order of parameter when using the
+</I>&gt;&gt;&gt;<i> iproute tool for can ;-). So I stripped some code from the iproute package and
+</I>&gt;&gt;&gt;<i> put them with some own stuffs together in a library to access can configuration
+</I>&gt;&gt;&gt;<i> functions with netlink, which I call libsocketcan-nl. (nl stand for netlink, not
+</I>&gt;&gt;&gt;<i> netherland ;-)). The library provides some simple APIs to do common CAN stuffs,
+</I>&gt;&gt;&gt;<i> lacking of a proper documentation I'll start here with the content of the header
+</I>&gt;&gt;&gt;<i> file:
+</I>&gt;&gt;&gt;<i> int scan_set_restart(const char *name);
+</I>&gt;&gt;<i> scan_do_restart() would be more appropriate.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Hm, I actually want to keep the name scheme with _set_ and _get_. I'll
+</I>&gt;<i> consider a better name for this.
+</I>
+It's definitely not a set/get property.
+
+&gt;&gt;&gt;<i> int scan_set_bitrate(const char *name, __u32 bitrate);
+</I>&gt;&gt;&gt;<i> int scan_set_restart_ms(const char *name, __u32 restart_ms);
+</I>&gt;&gt;&gt;<i> int scan_set_ctrlmode(const char *name, __u32 mode, __u32 flags);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> int scan_get_state(const char *name, int *state);
+</I>&gt;&gt;&gt;<i> int scan_get_restart_ms(const char *name, __u32 *restart_ms);
+</I>&gt;&gt;&gt;<i> int scan_get_bittiming(const char *name, struct can_bittiming *bt);
+</I>&gt;&gt;&gt;<i> int scan_get_ctrlmode(const char *name, struct can_ctrlmode *cm);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Usage is quite straight forward. The functions await simply the name of the can
+</I>&gt;&gt;&gt;<i> interface and, if any, configuration values and return 0 for success and -1 if
+</I>&gt;&gt;&gt;<i> something went wrong.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This library provides some benefits, which the hookup code in iproute doesn't do:
+</I>&gt;&gt;&gt;<i> * more clear error messages and takes care of special cases, e.g. restarting a
+</I>&gt;&gt;&gt;<i> device can only be done while the interface is in BUS_OFF. Neither kernel nor
+</I>&gt;&gt;<i> Hm, you cannot restart the device when it's not bus-off. The driver does
+</I>&gt;&gt;<i> not allow that. See:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.31/drivers/net/can/dev.c#L376">http://lxr.linux.no/#linux+v2.6.31/drivers/net/can/dev.c#L376</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Yeah I know. What I mean was that if one calls &quot;ip link can0 type can
+</I>&gt;<i> set restart&quot; (no guarantee for correctness of the parameters, I'm still
+</I>&gt;<i> struggling with this ;-)) while the device is not in BUS_OFF, he will
+</I>&gt;<i> eventually end up with an EINVAL or EBUSY without knowing why. The
+</I>&gt;<i> iproute tool cannot do any pre-detection while calling can_parse_opt
+</I>&gt;<i> function since it's hooked deeply in the iproute given infrastructure
+</I>&gt;<i> and the kernel simply returns a EBUSY or EINVAL without any error
+</I>&gt;<i> message in such cases. I myself had to look up in the kernelcode to find
+</I>&gt;<i> what was really going wrong since I didn't know about the BUS_OFF
+</I>&gt;<i> limitation. So I add some detection in the library to make clear why
+</I>&gt;<i> restart is not supposed to work. Addtionally I also added if_up if_down
+</I>&gt;<i> callbacks into several _set_ callbacks, to make the usage as easy as
+</I>&gt;<i> possible.
+</I>
+Well, yes, I should add some more lines to Documentation/can.txt.
+Also, keep it simple having in mind that it's especially useful on
+embedded system (the busybox's &quot;ip&quot; utility does not yet support CAN).
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001147.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001150.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1149">[ date ]</a>
+              <a href="thread.html#1149">[ thread ]</a>
+              <a href="subject.html#1149">[ subject ]</a>
+              <a href="author.html#1149">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

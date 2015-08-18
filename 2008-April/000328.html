@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C4816BF96.6010400%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000327.html">
+   <LINK REL="Next"  HREF="000329.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN problems</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C4816BF96.6010400%40grandegger.com%3E"
+       TITLE="[Socketcan-users] CAN problems">wg at grandegger.com
+       </A><BR>
+    <I>Tue Apr 29 08:26:30 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000327.html">[Socketcan-users] CAN problems
+</A></li>
+        <LI>Next message: <A HREF="000329.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#328">[ date ]</a>
+              <a href="thread.html#328">[ thread ]</a>
+              <a href="subject.html#328">[ subject ]</a>
+              <a href="author.html#328">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Breno wrote:
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;&gt;&gt;<i> Hi Breno,
+</I>&gt;&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> [... deletions ...]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> Hi Wolfgang, I have the Denx-2.6.24-stable tree with the last commit on
+</I>&gt;&gt;&gt;<i> Mar/08. Did you mentioned the 2.6.25.5?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Well, I made a mistake when a I send you my code with a line :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> strcpy(ifr.ifr_name,&quot;mpc52xx-mscan0&quot;);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I really did it because the can0 name wasn't working. Anyway I tried to
+</I>&gt;&gt;&gt;<i> run it again and I got success on socket,ioctl, strcpy and bind
+</I>&gt;&gt;&gt;<i> commands. But unfortunately my write command still return  &quot;write :  No
+</I>&gt;&gt;&gt;<i> such device or address&quot;
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does the cansend from the CAN utils work for you:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/cansend.c">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/cansend.c</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> Coul you please send me you checkout and commit commands on Denx-tree?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> A git log on my tree returned:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> commit 76e8fbcc9e3e928a6898a93e6077264f5cb8f432
+</I>&gt;&gt;&gt;<i> Author: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wolf at pollux.denx.de</A>&gt;
+</I>&gt;&gt;&gt;<i> Date:   Thu Mar 27 17:41:09 2008 +0100
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Is taht yours too?
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Your DENX tree seems OK. To make clear what has been merged into the
+</I>&gt;&gt;<i> DENX GIT tree &quot;linux-2.6-denx&quot; (see <A HREF="http://www.denx.de/en/Software/GIT">http://www.denx.de/en/Software/GIT</A>):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Into kernel version &gt;= 2.6.24:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  This is what you are using.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Into kernel version &gt; 2.6.24:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/branches/cannetdriver26/">http://svn.berlios.de/svnroot/repos/socketcan/branches/cannetdriver26/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  The CAN core is already part of the mainstream kernel and the new CAN
+</I>&gt;&gt;<i>  device interface is used. This allows to manage CAN controller
+</I>&gt;&gt;<i>  settings like bitrate via sysfs file-system. It might be worth to
+</I>&gt;&gt;<i>  switch to that version.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Hi Wolfgang, thanks for your support I got it working. The files you
+</I>&gt;<i> mentioned in last e-mail available on
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/</A>
+</I>&gt;<i> I just copied the ones driver/, include/ and net folders. The Makefiles
+</I>&gt;<i> available are for module compiler, aren't they?
+</I>&gt;<i> My can interface looks working now!!!
+</I>
+Well, I doubt that copying the files did fix anything. You already have
+them in your tree, as you told me:
+
+  commit 76e8fbcc9e3e928a6898a93e6077264f5cb8f432
+  Author: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wolf at pollux.denx.de</A>&gt;
+  Date:   Thu Mar 27 17:41:09 2008 +0100
+
+  Socket-CAN: merge with SVN trunk revision 690
+
+  This commit fixes various problems with kernel version 2.6.24,mainly
+  due to modification in the netdev layer. The SVN repository is
+  available at <A HREF="http://developer.berlios.de/projects/socketcan/.">http://developer.berlios.de/projects/socketcan/.</A>
+
+  Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> By the way, do you have experience on RT_Socket can? In order to use it
+</I>&gt;<i> I have to disable the CAN driver options on kernel and enble the options
+</I>&gt;<i> on Xenomai folder, right? I ptched the Xenomai 2.4.3 on my denx-2.6.24.
+</I>
+Right.
+
+&gt;<i> Does it work fine or you know about anyone having bad experiences???
+</I>
+I should work fine. Instead of ifconfig you have to use rtcanconfig to
+start the device.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000327.html">[Socketcan-users] CAN problems
+</A></li>
+	<LI>Next message: <A HREF="000329.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#328">[ date ]</a>
+              <a href="thread.html#328">[ thread ]</a>
+              <a href="subject.html#328">[ subject ]</a>
+              <a href="author.html#328">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN bus receovery
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bus%20receovery&In-Reply-To=%3C200907311006.46136.oe%40port.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001006.html">
+   <LINK REL="Next"  HREF="001007.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN bus receovery</H1>
+    <B>Heinz-J&#252;rgen Oertel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bus%20receovery&In-Reply-To=%3C200907311006.46136.oe%40port.de%3E"
+       TITLE="[Socketcan-users] CAN bus receovery">oe at port.de
+       </A><BR>
+    <I>Fri Jul 31 10:06:38 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001006.html">[Socketcan-users] CAN bus receovery
+</A></li>
+        <LI>Next message: <A HREF="001007.html">[Socketcan-users] CAN bus receovery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1008">[ date ]</a>
+              <a href="thread.html#1008">[ thread ]</a>
+              <a href="subject.html#1008">[ subject ]</a>
+              <a href="author.html#1008">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Freitag, 31. Juli 2009 09:06:10 schrieb Wolfgang Grandegger:
+&gt;<i> &gt; By the way, its not a good idea
+</I>&gt;<i> &gt; to let others than the application
+</I>&gt;<i> &gt; decide how to handle a bus-off condition.
+</I>&gt;<i>
+</I>&gt;<i> What do you mean with others? The bus-off can be handled by &quot;another&quot;
+</I>&gt;<i> application or server. Or what exactly do you mean.
+</I>
+Sorry, I meant the auto-bus-on, automatic recovery of the bus-off state.
+At least the application should get an error indication and should be able to 
+stop the automatic recovery from bus-off after a certain number of retries.
+Bus-off can be caused by wrong bit time settings or  defective CAN 
+controller/transceiver. In this case auto recovery always will disturb the 
+running network if it tries to go bus-on again and again. 
+-- 
+
+with best regards / mit freundlichen Gr&#252;&#223;en
+
+   Heinz-J&#252;rgen Oertel
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part.
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090731/a1799269/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090731/a1799269/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001006.html">[Socketcan-users] CAN bus receovery
+</A></li>
+	<LI>Next message: <A HREF="001007.html">[Socketcan-users] CAN bus receovery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1008">[ date ]</a>
+              <a href="thread.html#1008">[ thread ]</a>
+              <a href="subject.html#1008">[ subject ]</a>
+              <a href="author.html#1008">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

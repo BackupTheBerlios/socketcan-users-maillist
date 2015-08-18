@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Sporadic kernel panic
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Sporadic%20kernel%20panic&In-Reply-To=%3C4A1D71D6.7080206%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000859.html">
+   <LINK REL="Next"  HREF="000862.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Sporadic kernel panic</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Sporadic%20kernel%20panic&In-Reply-To=%3C4A1D71D6.7080206%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Sporadic kernel panic">wg at grandegger.com
+       </A><BR>
+    <I>Wed May 27 19:01:10 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000859.html">[Socketcan-users] Sporadic kernel panic
+</A></li>
+        <LI>Next message: <A HREF="000862.html">[Socketcan-users] Sporadic kernel panic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#858">[ date ]</a>
+              <a href="thread.html#858">[ thread ]</a>
+              <a href="subject.html#858">[ subject ]</a>
+              <a href="author.html#858">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolf, Mikael wrote:
+&gt;&gt;<i> -----Original Message-----
+</I>&gt;&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:socketcan-users-
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bounces at lists.berlios.de</A>] On Behalf Of Wolfgang Grandegger
+</I>&gt;&gt;<i> Sent: den 26 maj 2009 16:30
+</I>&gt;&gt;<i> To: Wolf, Mikael
+</I>&gt;&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;<i> Subject: Re: [Socketcan-users] Sporadic kernel panic
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolf, Mikael wrote:
+</I>&gt;&gt;&gt;<i> Hi!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I have been using SocketCAN together with a sja1000
+</I>&gt;&gt;&gt;<i> controller on a PC/104 board for some time now. Most
+</I>&gt;&gt;&gt;<i> things seems to work as expected, and I have no problems
+</I>&gt;&gt;&gt;<i> with sending/receiving traffic.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> However, in a situation where socket open/close operations
+</I>&gt;&gt;&gt;<i> occur frequently, together with repeated resets via sysfs
+</I>&gt;&gt;&gt;<i> (even more frequently), I experience sporadic kernel panics
+</I>&gt;&gt;&gt;<i> (sometimes with a null pointer reference, but not always).
+</I>&gt;&gt;&gt;<i> I can usually see can_put_echo_skb() in the call trace, and
+</I>&gt;&gt;&gt;<i> if I modify the code a bit, so that can_put_echo_skb() is
+</I>&gt;&gt;&gt;<i> not called, the kernel panics seems to go away.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Looking at the code (dev.c, sja1000.c) it looks like the
+</I>&gt;&gt;&gt;<i> can_priv.echo_skb it being updated for several different
+</I>&gt;&gt;&gt;<i> reasons:
+</I>&gt;&gt;&gt;<i> - can_flush_echo_skb() via can_restart_now()
+</I>&gt;&gt;&gt;<i> - can_flush_echo_skb() via can_close_cleanup()
+</I>&gt;&gt;&gt;<i> - can_put_echo_skb() via sja1000_start_xmit()
+</I>&gt;&gt;&gt;<i> - can_get_echo_skb() via sja1000_interrupt()
+</I>&gt;&gt;&gt;<i> but is not protected by means of a critical region?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> In the situation described above, can_restart_now()
+</I>&gt;&gt;&gt;<i> and can_close_cleanup() are called quite often, and
+</I>&gt;&gt;&gt;<i> the fact that the panics seems to go away when there is
+</I>&gt;&gt;&gt;<i> nothing stored in can_priv.echo_skb makes me suspect
+</I>&gt;&gt;&gt;<i> some sort of race condition.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Opinions, hints, comments?
+</I>&gt;&gt;<i> I'm aware of this issue and it should be fixed with the version included
+</I>&gt;&gt;<i>  into the kernel recently. That version, with SYSFS support is available
+</I>&gt;&gt;<i> in the SVN branch &quot;branches/netlink&quot;. Do you have a  chance to give  it
+</I>&gt;&gt;<i> a try?  That would be nice.
+</I>&gt;<i> 
+</I>&gt;<i> I have now tried the version from branches/netlink,
+</I>&gt;<i> but unfortunately I am still able to provoke kernel
+</I>&gt;<i> panics.
+</I>&gt;<i> 
+</I>&gt;<i> As I have been trying to provoke the panics, it
+</I>&gt;<i> now seems to me the problem is related to freeing
+</I>&gt;<i> of the skb, as the only situation where I feel
+</I>&gt;<i> the driver is truly stable, is when I have modified
+</I>&gt;<i> the code so that the outgoing packet is neither freed
+</I>&gt;<i> nor fed into netif_rx. Even reducing skb handling to the
+</I>
+This can easily be achieved by writing 0 to can_echo (to disabled the
+IFF_ECHO flag).
+
+&gt;<i> procedure of just saving the skb when sending (in
+</I>&gt;<i> sja1000_start_xmit) and then freeing it at transmission
+</I>&gt;<i> complete interrupt is enough to provoke a panic:
+</I>&gt;<i> 
+</I>&gt;<i> BUG: unable to handle kernel NULL pointer dereference at 00000000
+</I>&gt;<i> IP: [&lt;00000000&gt;] 0x000000
+</I>&gt;<i> *pde = 00000000
+</I>&gt;<i> Oops: 0000 [#1]
+</I>&gt;<i> last sysfs file: /sys/class/net/can0/can_restart
+</I>&gt;<i> Modules linked in:
+</I>&gt;<i> 
+</I>&gt;<i> Pid: 0, comm: swapper Not tainted (2.6.28.7 #7)
+</I>&gt;<i> EIP: 0060:[&lt;00000000&gt;] EFLAGS: 00010097 CPU: 0
+</I>&gt;<i> EAX: c6c399ac EBX: c6c399ac ECX: 00000001 EDX: 00000001
+</I>&gt;<i> ESI: c6c399ac EDI: c6c399ac EBP: c6c399bc ESP: c02c5f1c
+</I>&gt;<i>  DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068
+</I>&gt;<i> Process swapper (pid: 0, ti=c02c4000 task=c02a4300 task.ti=c02c4000)
+</I>&gt;<i> Stack:
+</I>&gt;<i>  c010f3db 00000000 00000001 00000001 00000282 c6c399bc 00000100 0000000a
+</I>&gt;<i>  c0110e7f 00000001 00000000 c70a3600 00000000 c0207c53 c70a3600 c0207de8
+</I>&gt;<i>  c7053460 c0209757 c7053460 c0209fc8 c7053460 c0209778 c7053460 c0211418
+</I>&gt;<i> Call Trace:
+</I>&gt;<i>  [&lt;c010f3db&gt;] 0xc010f3db
+</I>&gt;<i>  [&lt;c0110e7f&gt;] 0xc0110e7f
+</I>&gt;<i>  [&lt;c0207c53&gt;] 0xc0207c53
+</I>&gt;<i>  [&lt;c0207de8&gt;] 0xc0207de8
+</I>&gt;<i>  [&lt;c0209757&gt;] 0xc0209757
+</I>&gt;<i>  [&lt;c0209fc8&gt;] 0xc0209fc8
+</I>&gt;<i>  [&lt;c0209778&gt;] 0xc0209778
+</I>&gt;<i>  [&lt;c0211418&gt;] 0xc0211418
+</I>&gt;<i>  [&lt;c0117565&gt;] 0xc0117565
+</I>&gt;<i>  [&lt;c0117617&gt;] 0xc0117617
+</I>&gt;<i>  [&lt;c0105196&gt;] 0xc0105196
+</I>&gt;<i>  [&lt;c0103f93&gt;] 0xc0103f93
+</I>&gt;<i>  [&lt;c010869e&gt;] 0xc010869e
+</I>&gt;<i>  [&lt;c0101a13&gt;] 0xc0101a13
+</I>&gt;<i> Code:  Bad EIP value.
+</I>&gt;<i> EIP: [&lt;00000000&gt;]  SS:ESP 0068:c02c5f1c
+</I>&gt;<i> Kernel panic - not syncing: Fatal exception in interrupt
+</I>&gt;<i> 
+</I>&gt;<i> I have compiled the CAN-stuff into the kernel. And there
+</I>&gt;<i> is some problem with the presentation of symbols; matching
+</I>
+Hm, why? Do you have CONFIG_KALLSYMS=y in your .config?
+
+&gt;<i> the call trace with System.map gives the following:
+</I>&gt;<i> 
+</I>&gt;<i> c010f3db __wake_up_common
+</I>&gt;<i> c0110e7f __wake_up_sync
+</I>&gt;<i> c0207c53 sock_def_write_space
+</I>&gt;<i> c0207de8 sock_wfree
+</I>&gt;<i> c0209757 skb_release_head_state
+</I>&gt;<i> c0209fc8 skb_release_all
+</I>&gt;<i> c0209778 __kfree_skb
+</I>&gt;<i> c0211418 net_tx_action
+</I>&gt;<i> c0117565 __do_softirq
+</I>&gt;<i> c0117617 do_softirq
+</I>&gt;<i> c0105196 do_IRQ
+</I>&gt;<i> c0103f93 common_interrupt
+</I>&gt;<i> c010869e default_idle
+</I>&gt;<i> c0101a13 cpu_idle
+</I>&gt;<i> 
+</I>&gt;<i> Crashing the unmodified code from branches/netlink
+</I>&gt;<i> looks similar:
+</I>&gt;<i> 
+</I>&gt;<i> BUG: unable to handle kernel paging request at 361cbba8
+</I>&gt;<i> IP: [&lt;c6c39281&gt;] 0xc6c39281
+</I>&gt;<i> *pde = 00000000
+</I>&gt;<i> Oops: 0000 [#1]
+</I>&gt;<i> last sysfs file: /sys/class/net/can0/can_state
+</I>&gt;<i> Modules linked in:
+</I>&gt;<i> 
+</I>&gt;<i> Pid: 0, comm: swapper Not tainted (2.6.28.7 #12)
+</I>&gt;<i> EIP: 0060:[&lt;c6c39281&gt;] EFLAGS: 00010083 CPU: 0
+</I>&gt;<i> EAX: c6c39775 EBX: c6c39774 ECX: 00000001 EDX: 00000001
+</I>&gt;<i> ESI: c71c0bf4 EDI: 00000000 EBP: c6c39c7c ESP: c02c5ec0
+</I>&gt;<i>  DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 0068
+</I>&gt;<i> Process swapper (pid: 0, ti=c02c4000 task=c02a4300 task.ti=c02c4000)
+</I>&gt;<i> Stack:
+</I>&gt;<i>  c010f3db 00000000 00000001 00000001 00000282 c6c39c7c 00000000 00000000
+</I>&gt;<i>  c0110e7f 00000001 00000000 c70ffe00 c7053780 c0207c53 c70ffe00 c0207de8
+</I>&gt;<i>  c7036000 c01e123f c7036380 c70ffe00 00000212 c7036000 00000001 c7036380
+</I>&gt;<i> Call Trace:
+</I>&gt;<i>  [&lt;c010f3db&gt;] 0xc010f3db
+</I>&gt;<i>  [&lt;c0110e7f&gt;] 0xc0110e7f
+</I>&gt;<i>  [&lt;c0207c53&gt;] 0xc0207c53
+</I>&gt;<i>  [&lt;c0207de8&gt;] 0xc0207de8
+</I>&gt;<i>  [&lt;c01e123f&gt;] 0xc01e123f
+</I>&gt;<i>  [&lt;c01e2983&gt;] 0xc01e2983
+</I>&gt;<i>  [&lt;c020f5ab&gt;] 0xc020f5ab
+</I>&gt;<i>  [&lt;c021aedd&gt;] 0xc021aedd
+</I>&gt;<i>  [&lt;c021145f&gt;] 0xc021145f
+</I>&gt;<i>  [&lt;c0117565&gt;] 0xc0117565
+</I>&gt;<i>  [&lt;c0117617&gt;] 0xc0117617
+</I>&gt;<i>  [&lt;c0105196&gt;] 0xc0105196
+</I>&gt;<i>  [&lt;c0103f93&gt;] 0xc0103f93
+</I>&gt;<i>  [&lt;c010869e&gt;] 0xc010869e
+</I>&gt;<i>  [&lt;c0101a13&gt;] 0xc0101a13
+</I>&gt;<i> Code: c3 c6 54 92 c3 c6 01 00 00 00 60 92 c3 c6 60 92 c3 c6 40 00 00 00 00 00 0
+</I>&gt;<i> EIP: [&lt;c6c39281&gt;]  SS:ESP 0068:c02c5ec0
+</I>&gt;<i> Kernel panic - not syncing: Fatal exception in interrupt
+</I>&gt;<i> 
+</I>&gt;<i> c010f3db __wake_up_common
+</I>&gt;<i> c0110e7f __wake_up_sync
+</I>&gt;<i> c0207c53 sock_def_write_space
+</I>&gt;<i> c0207de8 sock_wfree
+</I>&gt;<i> c01e123f can_put_echo_skb
+</I>&gt;<i> c01e2983 sja1000_start_xmit
+</I>&gt;<i> c020f5ab dev_hard_start_xmit
+</I>&gt;<i> c021aedd __qdisc_run
+</I>&gt;<i> c021145f net_tx_action
+</I>&gt;<i> c0117565 __do_softirq
+</I>&gt;<i> c0117617 do_softirq
+</I>&gt;<i> c0105196 do_IRQ
+</I>&gt;<i> c0103f93 common_interrupt
+</I>&gt;<i> c010869e default_idle
+</I>&gt;<i> c0101a13 cpu_idle
+</I>&gt;<i> 
+</I>&gt;<i> Admittedly, it is not easy to provoke the panics, but I
+</I>&gt;<i> often succeed with the following procedure:
+</I>&gt;<i> 
+</I>&gt;<i> 0. Start a script that repeatedly opens a can socket, sends
+</I>&gt;<i> some traffic, and then closes it. Also, start a script that
+</I>&gt;<i> repeatedly tries to reset CAN via sysfs.
+</I>
+By calling &quot;echo 1 &gt; /sys/.../can_restart&quot;?
+
+&gt;<i> 1. Detach and attach the physical CAN socket a few times.
+</I>&gt;<i> Leave socket detached.
+</I>&gt;<i> 
+</I>&gt;<i> 2. Bring the ethernet link (attached to the same machine)
+</I>&gt;<i> down and up a few times (Physically detach/attach cable).
+</I>
+Is this necessary to trigger the Oops? I can't see any obvious relation
+with CAN.
+
+&gt;<i> 3. Attach the physical CAN socket. Now, kernel panic may
+</I>&gt;<i> occur. If not, repeat from 1.
+</I>
+What do you mean with attach and detach.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000859.html">[Socketcan-users] Sporadic kernel panic
+</A></li>
+	<LI>Next message: <A HREF="000862.html">[Socketcan-users] Sporadic kernel panic
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#858">[ date ]</a>
+              <a href="thread.html#858">[ thread ]</a>
+              <a href="subject.html#858">[ subject ]</a>
+              <a href="author.html#858">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

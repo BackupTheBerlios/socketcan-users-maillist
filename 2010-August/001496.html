@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN in embedded system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20in%20embedded%20system&In-Reply-To=%3C4C77F888.7050202%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001495.html">
+   <LINK REL="Next"  HREF="001498.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN in embedded system</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20in%20embedded%20system&In-Reply-To=%3C4C77F888.7050202%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] CAN in embedded system">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Aug 27 19:40:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001495.html">[Socketcan-users] CAN in embedded system
+</A></li>
+        <LI>Next message: <A HREF="001498.html">[Socketcan-users] CAN in embedded system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1496">[ date ]</a>
+              <a href="thread.html#1496">[ thread ]</a>
+              <a href="subject.html#1496">[ subject ]</a>
+              <a href="author.html#1496">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 26.08.2010 23:26, Jorge A. Castro wrote:
+&gt;<i> Hi,
+</I>
+Hi Jorge,
+
+&gt;<i> I'm dealing with an embedded system and trying to implement the CAN bus
+</I>&gt;<i> for communication with some different modules. In the kernel
+</I>&gt;<i> configuration, I'm able to enable the CAN bus subsystem support and some
+</I>&gt;<i> CAN device drivers like the Virtual Local CAN Interface (vcan).
+</I>
+Have you already created your own vcan0, vcan1, etc. netdevices?
+(see Documentation/networking/can.txt)
+
+&gt;<i> I
+</I>&gt;<i> understand I can use CAN as chardev or netdev
+</I>
+The CAN subsystem of the Linux Kernel supports the netdevice driver model.
+
+&gt;<i>, but I can't see any
+</I>&gt;<i> interface of those available in the system.
+</I>
+Best is to create some vcan devices to check if everything works.
+
+They should appear in
+
+   cat /proc/net/dev
+
+then.
+
+&gt;<i> Any ideas on what I need to do in order to use the CAN bus?
+</I>
+See above. You can try out the tools in the SocketCAN SVN
+
+<A HREF="http://developer.berlios.de/svn/?group_id=6475">http://developer.berlios.de/svn/?group_id=6475</A>
+
+E.g. candump, cansend, cangen and friends should be able to guide you through
+the first steps ...
+
+&gt;<i> My target is an ARM-57TS-LPC3250 board from Future Design Inc. and I'm
+</I>&gt;<i> running Linux 2.6.27 on it. When I boot the system I got this:
+</I>&gt;<i> 
+</I>&gt;<i> TCP cubic registered
+</I>&gt;<i> NET: Registered protocol family 17
+</I>&gt;<i> /can: controller area network core (rev 20071116 abi 8)/
+</I>&gt;<i> NET: Registered protocol family 29
+</I>&gt;<i> /can: raw protocol (rev 20071116)
+</I>&gt;<i> can: broadcast manager protocol (rev 20080415)/
+</I>&gt;<i> RPC: Registered udp transport module.
+</I>&gt;<i> RPC: Registered tcp transport module.
+</I>&gt;<i> VFP support v0.3: implementor 41 architecture 1 part 10 variant 9 rev 1
+</I>&gt;<i> drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+</I>&gt;<i> IP-Config: Guessing netmask 255.255.255.0
+</I>&gt;<i> 
+</I>&gt;<i> where I can see some CAN configuration in it.
+</I>
+This is only the networklayer stuff - that fine, but there's no CAN
+networkdriver that provides a can0, can1, vcan0, ... interfaces.
+
+&gt;<i> In my host machine I have
+</I>&gt;<i> a PCAN-PCI card from Peak Systems to communicate with the target and
+</I>&gt;<i> check this bus functioning.
+</I>
+You can either use the PEAK driver (with netdev support) which would create
+can0 and can1 netdevices for you. Please read the PEAK documentation - there's
+also some information about the CAN netdevices.
+
+Or you may take the peak_pci driver which is in the SocketCAN SVN sources.
+The latter supports the the netlink configuration interface - but AFAIK only
+for newer kernels.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001495.html">[Socketcan-users] CAN in embedded system
+</A></li>
+	<LI>Next message: <A HREF="001498.html">[Socketcan-users] CAN in embedded system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1496">[ date ]</a>
+              <a href="thread.html#1496">[ thread ]</a>
+              <a href="subject.html#1496">[ subject ]</a>
+              <a href="author.html#1496">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

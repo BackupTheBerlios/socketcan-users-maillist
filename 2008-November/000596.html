@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Support for ESD Can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20for%20ESD%20Can&In-Reply-To=%3C492A9D8D.1030003%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000595.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Support for ESD Can</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20for%20ESD%20Can&In-Reply-To=%3C492A9D8D.1030003%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Support for ESD Can">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Nov 24 13:26:53 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000595.html">[Socketcan-users] Support for ESD Can
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#596">[ date ]</a>
+              <a href="thread.html#596">[ thread ]</a>
+              <a href="subject.html#596">[ subject ]</a>
+              <a href="author.html#596">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alan Walker wrote:
+&gt;<i> We are currently using the CAN kernel driver from ESD for their PCI 
+</I>&gt;<i> CAN Card.  If someone could point me to documentation on how to get 
+</I>&gt;<i> this kernel driver to work with the ESD CAN card it would be greatly 
+</I>&gt;<i> appreciated. 
+</I>
+Hi Alan,
+
+using 'an ESD PCI CAN card' is really underspecified ;-)
+
+There are several passive cards (== access a CAN controller directly via 
+PCI) or active cards that have a local 'intelligent CPU' that do the CAN 
+handling and usually communicate to the host CPU via DPRAM.
+
+In the case of a passive card you may have luck when the PCI Adapter is 
+similar to the adapters in the SocketCAN SVN and you can probably kick 
+it to work.
+
+This is e.g. a passive card from ESD:
+<A HREF="http://www.esd-electronics.com/esd2004/german/products/CAN/can-pci-266_e.htm">http://www.esd-electronics.com/esd2004/german/products/CAN/can-pci-266_e.htm</A>
+
+In the case of an active card you would need detailed information on the 
+CAN-CPU / Host-CPU interface (e.g. DPRAM layout) or a current Linux 
+driver source from ESD. On this base you are able to build a CAN driver 
+with the (simple) network device driver model that is similarly used for 
+ethernet devices.
+
+This is an e.g. active card from ESD powered by a PowerPC405:
+<A HREF="http://www.esd-electronics.com/esd2004/german/products/CAN/can-pci-405_e.htm">http://www.esd-electronics.com/esd2004/german/products/CAN/can-pci-405_e.htm</A>
+
+Or you just ask the ESD guys, if they are also supporting the Linux 
+Mainline CAN infrastructure, like many other vendors ;-)
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000595.html">[Socketcan-users] Support for ESD Can
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#596">[ date ]</a>
+              <a href="thread.html#596">[ thread ]</a>
+              <a href="subject.html#596">[ subject ]</a>
+              <a href="author.html#596">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

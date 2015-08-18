@@ -1,0 +1,364 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20peak_pci.c%3A%20Add%20support%20for%203rd%20and%0A%204th%20CAN%20channel%20on%20some%20Peak%20PCI%20cards&In-Reply-To=%3C4E36A25B.90604%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001994.html">
+   <LINK REL="Next"  HREF="001996.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20peak_pci.c%3A%20Add%20support%20for%203rd%20and%0A%204th%20CAN%20channel%20on%20some%20Peak%20PCI%20cards&In-Reply-To=%3C4E36A25B.90604%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Aug  1 14:55:55 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001994.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+        <LI>Next message: <A HREF="001996.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1995">[ date ]</a>
+              <a href="thread.html#1995">[ thread ]</a>
+              <a href="subject.html#1995">[ subject ]</a>
+              <a href="author.html#1995">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 08/01/2011 02:17 PM, Thomas Wiedemann wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> i've attached a patch for the Peak CAN PCI driver, which enables support 
+</I>&gt;<i> for the 3rd and 4th channel available on some cards. It works* for me.
+</I>
+Thanks for the patch. Please don't attach patches, rather post them
+inline. Please follow the cannonical patch format as documented here:
+<A HREF="http://lxr.linux.no/linux+v3.0/Documentation/SubmittingPatches">http://lxr.linux.no/linux+v3.0/Documentation/SubmittingPatches</A>
+
+See further remarks inline.
+
+I just noticed that this patch is against the berlios tree. I don't know
+if there is a mainline driver that supports the peak pci cards.
+
+&gt;<i> --- peak_pci.c.orig	2011-07-28 13:43:20.000000000 +0200
+</I>&gt;<i> +++ peak_pci.c	2011-07-28 14:08:08.000000000 +0200
+</I>&gt;<i> @@ -38,6 +38,9 @@
+</I>&gt;<i>  
+</I>&gt;<i>  #define DRV_NAME  &quot;peak_pci&quot;
+</I>&gt;<i>  
+</I>&gt;<i> +// Maximum number of PEAK CAN channels on a PCI device
+</I>
+No C++ comments, please use /* */ for comments.
+
+&gt;<i> +#define MAX_PCAN_CHANNELS_PER_CARD 4
+</I>&gt;<i> +
+</I>&gt;<i>  #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,23)
+</I>&gt;<i>  #error This driver does not support Kernel versions &lt; 2.6.23
+</I>&gt;<i>  #endif
+</I>&gt;<i> @@ -50,14 +53,10 @@
+</I>&gt;<i>  struct peak_pci {
+</I>&gt;<i>  	int channel;
+</I>&gt;<i>  	struct pci_dev *pci_dev;
+</I>&gt;<i> -	struct net_device *slave_dev;
+</I>&gt;<i> +	struct net_device *slave_dev[MAX_PCAN_CHANNELS_PER_CARD - 1];
+</I>&gt;<i>  	volatile void __iomem *conf_addr;
+</I>&gt;<i>  };
+</I>&gt;<i>  
+</I>&gt;<i> -#define PEAK_PCI_SINGLE	     0	/* single channel device */
+</I>&gt;<i> -#define PEAK_PCI_MASTER	     1	/* multi channel master device */
+</I>&gt;<i> -#define PEAK_PCI_SLAVE	     2	/* multi channel slave device */
+</I>&gt;<i> -
+</I>&gt;<i>  #define PEAK_PCI_CAN_CLOCK   (16000000 / 2)
+</I>&gt;<i>  
+</I>&gt;<i>  #define PEAK_PCI_CDR_SINGLE  (CDR_CBP | CDR_CLKOUT_MASK | CDR_CLK_OFF)
+</I>&gt;<i> @@ -108,12 +107,14 @@
+</I>&gt;<i>  
+</I>&gt;<i>  	/* Select and clear in Pita stored interrupt */
+</I>&gt;<i>  	icr_low = readw(board-&gt;conf_addr + PITA_ICR);
+</I>&gt;<i> -	if (board-&gt;channel == PEAK_PCI_SLAVE) {
+</I>&gt;<i> -		if (icr_low &amp; 0x0001)
+</I>&gt;<i> -			writew(0x0001, board-&gt;conf_addr + PITA_ICR);
+</I>&gt;<i> -	} else {
+</I>&gt;<i> -		if (icr_low &amp; 0x0002)
+</I>&gt;<i> -			writew(0x0002, board-&gt;conf_addr + PITA_ICR);
+</I>&gt;<i> +	switch(board-&gt;channel) {
+</I>&gt;<i> +		case 0: if (icr_low &amp; 0x0002) { writew(0x0002, board-&gt;conf_addr + PITA_ICR); } break;
+</I>&gt;<i> +		case 1: if (icr_low &amp; 0x0001) { writew(0x0001, board-&gt;conf_addr + PITA_ICR); } break;
+</I>&gt;<i> +		case 2: if (icr_low &amp; 0x0040) { writew(0x0040, board-&gt;conf_addr + PITA_ICR); } break;
+</I>&gt;<i> +		case 3: if (icr_low &amp; 0x0080) { writew(0x0080, board-&gt;conf_addr + PITA_ICR); } break;
+</I>&gt;<i> +		default:
+</I>&gt;<i> +					printk(KERN_INFO &quot;Peak CAN card with an enormous amount of channels detected: %d, channel disabled.\n&quot;, board-&gt;channel);
+</I>
+Use dev_&lt;LEVEL&gt; instead of printk(&lt;LEVEL&gt;, ). If possible stay below 80
+chars per line.
+
+I suggest to make a static inline function to that returns the bitmask
+instead of numerous switch case.
+
+&gt;<i> +					break;
+</I>&gt;<i>  	}
+</I>&gt;<i>  }
+</I>&gt;<i>  
+</I>&gt;<i> @@ -139,15 +140,17 @@
+</I>&gt;<i>  		unregister_sja1000dev(dev);
+</I>&gt;<i>  	case 4:
+</I>&gt;<i>  		icr_high = readw(board-&gt;conf_addr + PITA_ICR + 2);
+</I>&gt;<i> -		if (board-&gt;channel == PEAK_PCI_SLAVE)
+</I>&gt;<i> -			icr_high &amp;= ~0x0001;
+</I>&gt;<i> -		else
+</I>&gt;<i> -			icr_high &amp;= ~0x0002;
+</I>&gt;<i> +		switch(board-&gt;channel) {
+</I>&gt;<i> +			case 0: icr_high &amp;= ~0x0002; break;
+</I>&gt;<i> +			case 1: icr_high &amp;= ~0x0001; break;
+</I>&gt;<i> +			case 2: icr_high &amp;= ~0x0040; break;
+</I>&gt;<i> +			case 3: icr_high &amp;= ~0x0080; break;
+</I>&gt;<i> +		}
+</I>
+make use of the static inlne function I proposed earlier
+
+&gt;<i>  		writew(icr_high, board-&gt;conf_addr + PITA_ICR + 2);
+</I>&gt;<i>  	case 3:
+</I>&gt;<i>  		iounmap(priv-&gt;reg_base);
+</I>&gt;<i>  	case 2:
+</I>&gt;<i> -		if (board-&gt;channel != PEAK_PCI_SLAVE)
+</I>&gt;<i> +		if (board-&gt;channel == 0) // master channel
+</I>
+fix comment
+
+&gt;<i>  			iounmap((void *)board-&gt;conf_addr);
+</I>&gt;<i>  	case 1:
+</I>&gt;<i>  		free_sja1000dev(dev);
+</I>&gt;<i> @@ -177,7 +180,7 @@
+</I>&gt;<i>  	board-&gt;pci_dev = pdev;
+</I>&gt;<i>  	board-&gt;channel = channel;
+</I>&gt;<i>  
+</I>&gt;<i> -	if (channel != PEAK_PCI_SLAVE) {
+</I>&gt;<i> +	if (channel == 0) { // master channel only
+</I>fix comment
+&gt;<i>  
+</I>&gt;<i>  		addr = pci_resource_start(pdev, 0);
+</I>&gt;<i>  		board-&gt;conf_addr = ioremap(addr, PCI_CONFIG_PORT_SIZE);
+</I>&gt;<i> @@ -190,11 +193,9 @@
+</I>&gt;<i>  		/* Set GPIO control register */
+</I>&gt;<i>  		writew(0x0005, board-&gt;conf_addr + PITA_GPIOICR + 2);
+</I>&gt;<i>  
+</I>&gt;<i> -		/* Enable single or dual channel */
+</I>&gt;<i> -		if (channel == PEAK_PCI_MASTER)
+</I>&gt;<i> -			writeb(0x00, board-&gt;conf_addr + PITA_GPIOICR);
+</I>&gt;<i> -		else
+</I>&gt;<i> -			writeb(0x04, board-&gt;conf_addr + PITA_GPIOICR);
+</I>&gt;<i> +		// enable all channels of this card
+</I>fix comment
+&gt;<i> +		writeb(0x00, board-&gt;conf_addr + PITA_GPIOICR);
+</I>&gt;<i> +
+</I>&gt;<i>  		/* Toggle reset */
+</I>&gt;<i>  		writeb(0x05, board-&gt;conf_addr + PITA_MISC + 3);
+</I>&gt;<i>  		mdelay(5);
+</I>&gt;<i> @@ -203,13 +204,14 @@
+</I>&gt;<i>  	} else {
+</I>&gt;<i>  		struct sja1000_priv *master_priv = netdev_priv(*master_dev);
+</I>&gt;<i>  		struct peak_pci *master_board = master_priv-&gt;priv;
+</I>&gt;<i> -		master_board-&gt;slave_dev = dev;
+</I>&gt;<i> +		BUG_ON(! (channel - 1 &lt; sizeof(board-&gt;slave_dev)/sizeof(struct net_device *)));
+</I>                        ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+please remove that space
+we have ARRAY_SIZE for that
+&gt;<i> +		master_board-&gt;slave_dev[channel - 1] = dev;
+</I>&gt;<i>  		board-&gt;conf_addr = master_board-&gt;conf_addr;
+</I>&gt;<i>  	}
+</I>&gt;<i>  
+</I>&gt;<i>  	addr = pci_resource_start(pdev, 1);
+</I>&gt;<i> -	if (channel == PEAK_PCI_SLAVE)
+</I>&gt;<i> -		addr += PCI_PORT_SIZE;
+</I>&gt;<i> +	if (channel &gt; 0)
+</I>
+you can remove that if now :)
+
+&gt;<i> +		addr += PCI_PORT_SIZE * board-&gt;channel;
+</I>&gt;<i>  
+</I>&gt;<i>  	priv-&gt;reg_base = ioremap(addr, PCI_PORT_SIZE);
+</I>&gt;<i>  	if (priv-&gt;reg_base == 0) {
+</I>&gt;<i> @@ -226,7 +228,7 @@
+</I>&gt;<i>  
+</I>&gt;<i>  	priv-&gt;ocr = PEAK_PCI_OCR;
+</I>&gt;<i>  
+</I>&gt;<i> -	if (channel == PEAK_PCI_MASTER)
+</I>&gt;<i> +	if (channel == 0)
+</I>&gt;<i>  		priv-&gt;cdr = PEAK_PCI_CDR_MASTER;
+</I>&gt;<i>  	else
+</I>&gt;<i>  		priv-&gt;cdr = PEAK_PCI_CDR_SINGLE;
+</I>&gt;<i> @@ -239,10 +241,12 @@
+</I>&gt;<i>  #endif
+</I>&gt;<i>  	dev-&gt;irq = pdev-&gt;irq;
+</I>&gt;<i>  	icr_high = readw(board-&gt;conf_addr + PITA_ICR + 2);
+</I>&gt;<i> -	if (channel == PEAK_PCI_SLAVE)
+</I>&gt;<i> -		icr_high |= 0x0001;
+</I>&gt;<i> -	else
+</I>&gt;<i> -		icr_high |= 0x0002;
+</I>&gt;<i> +	switch(channel) {
+</I>&gt;<i> +		case 0: icr_high |= 0x0002; break;
+</I>&gt;<i> +		case 1: icr_high |= 0x0001; break;
+</I>&gt;<i> +		case 2: icr_high |= 0x0040; break;
+</I>&gt;<i> +		case 3: icr_high |= 0x0080; break;
+</I>&gt;<i> +     }
+</I>
+use the static inline
+
+&gt;<i>  	writew(icr_high, board-&gt;conf_addr + PITA_ICR + 2);
+</I>&gt;<i>  	init_step = 4;
+</I>&gt;<i>  
+</I>&gt;<i> @@ -256,7 +260,7 @@
+</I>&gt;<i>  		goto failure;
+</I>&gt;<i>  	}
+</I>&gt;<i>  
+</I>&gt;<i> -	if (channel != PEAK_PCI_SLAVE)
+</I>&gt;<i> +	if (channel == 0)
+</I>&gt;<i>  		*master_dev = dev;
+</I>&gt;<i>  
+</I>&gt;<i>  	printk(KERN_INFO &quot;%s: %s at reg_base=0x%p conf_addr=%p irq=%d\n&quot;,
+</I>&gt;<i> @@ -295,21 +299,20 @@
+</I>&gt;<i>  	if (err)
+</I>&gt;<i>  		goto failure_cleanup;
+</I>&gt;<i>  
+</I>&gt;<i> -	if (sub_sys_id &gt; 3) {
+</I>&gt;<i> -		err = peak_pci_add_chan(pdev,
+</I>&gt;<i> -					PEAK_PCI_MASTER, &amp;master_dev);
+</I>&gt;<i> -		if (err)
+</I>&gt;<i> -			goto failure_cleanup;
+</I>&gt;<i> -
+</I>&gt;<i> -		err = peak_pci_add_chan(pdev,
+</I>&gt;<i> -					PEAK_PCI_SLAVE, &amp;master_dev);
+</I>&gt;<i> -		if (err)
+</I>&gt;<i> -			goto failure_cleanup;
+</I>&gt;<i> -	} else {
+</I>&gt;<i> -		err = peak_pci_add_chan(pdev, PEAK_PCI_SINGLE,
+</I>&gt;<i> -					     &amp;master_dev);
+</I>&gt;<i> -		if (err)
+</I>&gt;<i> -			goto failure_cleanup;
+</I>&gt;<i> +	/* Add the CAN channels. The number of channels available depends on sub_sys_id */
+</I>&gt;<i> +								// 1st channel is always present
+</I>
+fix comment...multiline comments should look like this:
+
+/*
+ * no
+ * comment
+ */
+
+&gt;<i> +	if ((err = peak_pci_add_chan(pdev, 0, &amp;master_dev))) { goto failure_cleanup; }
+</I>&gt;<i> +
+</I>&gt;<i> +	if (sub_sys_id &gt;= 4) {		// 2nd channel
+</I>&gt;<i> +		if ((err = peak_pci_add_chan(pdev, 1, &amp;master_dev))) { goto failure_cleanup; }
+</I>&gt;<i> +	}
+</I>&gt;<i> +
+</I>&gt;<i> +	if (sub_sys_id &gt;= 10) {		// 3rd channel
+</I>                          ^^
+
+I don't know the datasheet of the card. If I designed the hardware, &quot;8&quot;
+would be the correct value here. But hardware guys are sometimes strange
+people :P
+
+&gt;<i> +		if ((err = peak_pci_add_chan(pdev, 2, &amp;master_dev))) { goto failure_cleanup; }
+</I>&gt;<i> +	}
+</I>&gt;<i> +
+</I>&gt;<i> +	if (sub_sys_id &gt;= 12) {		// 4th channel
+</I>&gt;<i> +		if ((err = peak_pci_add_chan(pdev, 3, &amp;master_dev))) { goto failure_cleanup; }
+</I>&gt;<i>  	}
+</I>
+please fix the comments, and reformat the if:
+
+if (foo)
+	bar();
+
+If the &quot;8&quot; would be correct, you cae use a &quot;for&quot; look to activate the
+slave channels.
+
+&gt;<i>  
+</I>&gt;<i>  	pci_set_drvdata(pdev, master_dev);
+</I>&gt;<i> @@ -332,8 +335,13 @@
+</I>&gt;<i>  	struct sja1000_priv *priv = netdev_priv(dev);
+</I>&gt;<i>  	struct peak_pci *board = priv-&gt;priv;
+</I>&gt;<i>  
+</I>&gt;<i> -	if (board-&gt;slave_dev)
+</I>&gt;<i> -		peak_pci_del_chan(board-&gt;slave_dev, 0);
+</I>&gt;<i> +	// close all associated CAN channels of this card
+</I>
+dix comment.
+
+&gt;<i> +	int i;
+</I>
+the declaration should go to the top...
+
+&gt;<i> +	for(i = 0; i &lt; sizeof(board-&gt;slave_dev)/sizeof(struct net_device *) ; i++) {
+</I>
+please use ARRAY_SIZE
+
+&gt;<i> +		if(board-&gt;slave_dev[i] != NULL) {
+</I>                  ^
+space please
+you cann remove the != NULL, YMMV
+
+&gt;<i> +			peak_pci_del_chan(board-&gt;slave_dev[i], 0);
+</I>&gt;<i> +		}
+</I>
+You can remove the { }...
+&gt;<i> +	}
+</I>&gt;<i>  	peak_pci_del_chan(dev, 0);
+</I>&gt;<i>  
+</I>&gt;<i>  	pci_release_regions(pdev);
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110801/c37f6f95/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110801/c37f6f95/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001994.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+	<LI>Next message: <A HREF="001996.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1995">[ date ]</a>
+              <a href="thread.html#1995">[ thread ]</a>
+              <a href="subject.html#1995">[ subject ]</a>
+              <a href="author.html#1995">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

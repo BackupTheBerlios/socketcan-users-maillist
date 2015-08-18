@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BDC61.9040803%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000444.html">
+   <LINK REL="Next"  HREF="000446.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BDC61.9040803%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">wg at grandegger.com
+       </A><BR>
+    <I>Wed Jul  2 21:52:01 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000444.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000446.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#445">[ date ]</a>
+              <a href="thread.html#445">[ thread ]</a>
+              <a href="subject.html#445">[ subject ]</a>
+              <a href="author.html#445">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Wed, Jul 02, 2008 at 09:32:20PM +0200, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> For one controller you may need to provide a certain set of the CiA
+</I>&gt;&gt;&gt;<i> Model Values (which are hardware dependend, yes). But the data format
+</I>&gt;&gt;&gt;<i> is standard and *not* hardware dependend, that makes a big
+</I>&gt;&gt;&gt;<i> difference.
+</I>&gt;&gt;<i> To be more precise, the settings depend on the CAN clock used, apart
+</I>&gt;&gt;<i> from the some very strange CAN controllers using non-standard ranges
+</I>&gt;&gt;<i> for the time phases.
+</I>&gt;<i> 
+</I>&gt;<i> Ok, so for one hardware platform.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> So either I havn't understood the problem or there is no problem or
+</I>&gt;&gt;&gt;<i> we need to collect more data :-)
+</I>&gt;&gt;<i> There is no problem. Most people voted for the hardware independent
+</I>&gt;&gt;<i> format. Let's go for it. But the indirect setting via table seems not
+</I>&gt;&gt;<i> that attractive.
+</I>&gt;<i> 
+</I>&gt;<i> How do you handle the case then that users want to switch bitrates? It
+</I>&gt;<i> doesn't work without tables.
+</I>&gt;<i> 
+</I>&gt;<i> 	canconfig can0 bitrate 125000
+</I>&gt;<i> 
+</I>&gt;<i> Where does the timing information for 125000 come from, if not from a
+</I>&gt;<i> table?
+</I>
+You can either set the bit-rate *or* the bit-timing. If you set the 
+bit-rate, the bit-timing will be determined by an algorithm or a 
+built-in table. Therefore the correct wording should have been: &quot;The 
+indirect setting via updatable table seems not that attractive&quot;.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000444.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000446.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#445">[ date ]</a>
+              <a href="thread.html#445">[ thread ]</a>
+              <a href="subject.html#445">[ subject ]</a>
+              <a href="author.html#445">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan-users Digest, Vol 41, Issue 10
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan-users%20Digest%2C%20Vol%2041%2C%20Issue%2010&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D1430581F37%40MSXHOME.rack.racksaver.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001375.html">
+   <LINK REL="Next"  HREF="001377.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan-users Digest, Vol 41, Issue 10</H1>
+    <B>Stephen Hellriegel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan-users%20Digest%2C%20Vol%2041%2C%20Issue%2010&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D1430581F37%40MSXHOME.rack.racksaver.com%3E"
+       TITLE="[Socketcan-users] Socketcan-users Digest, Vol 41, Issue 10">Stephen.Hellriegel at verari.com
+       </A><BR>
+    <I>Wed Apr 14 17:31:20 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001375.html">[Socketcan-users] slcand improvements
+</A></li>
+        <LI>Next message: <A HREF="001377.html">[Socketcan-users] slcand improvements
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1376">[ date ]</a>
+              <a href="thread.html#1376">[ thread ]</a>
+              <a href="subject.html#1376">[ subject ]</a>
+              <a href="author.html#1376">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Stuart wrote in the following that he doesn't have a way to assign which CAN interface the slcan device will be brought up on.  We developed a work around for this problem 2 years ago, and have been shipping production code since 2.6.28 with this patch.  We will resubmit the patch to Oliver.  We take advantage of an unused stty flag from teletype days to tell the slcan tty driver which device number we want to assign on the open. (by default it uses a pseudo round robin assignment, linearly increasing mod 10, but will reuse earlier numbers if they are unloaded)
+-Steve
+
+Hi Thorsten,
+
+On 2010-04-14 04:31, Thorsten Godau wrote:
+&gt;<i> Hi Stuart,
+</I>&gt;<i> 
+</I>&gt;<i> i am playing around with my TinyCAN-I in SLCAN mode and SocketCAN, but 
+</I>&gt;<i> can not get this thing working with SocketCAN.
+</I>&gt;<i> The CAN interface works well when i use a dumb terminal to send and 
+</I>&gt;<i> receive some frames.
+</I>&gt;<i> 
+</I>&gt;<i> Can you give me some quick hints how to setup the interface corectly?
+</I>&gt;<i> 
+</I>&gt;<i> What i do is (and it is based on an old description of Huber Hoegl, 
+</I>&gt;<i> who did some experiments with TinyCAN-I and SocketCAN in 2008):
+</I>&gt;<i> 
+</I>&gt;<i> - load the kernelmodules can, can_raw, can-dev and slcan on boot
+</I>&gt;<i>   (i checked this with lsmod, all modules loaded)
+</I>&gt;<i> - set up the ttyUSB0 baudrate with &quot;stty -F /dev/ttyUSB0 57600&quot;
+</I>&gt;<i> - Attach the interface with &quot;slcan_attach -o -s8 -c /dev/ttyUSB0&quot;
+</I>&gt;<i> - Start the daemon with &quot;slcand ttyUSB0&quot;
+</I>&gt;<i> - Setup network interface with &quot;ifconfig slc0 up&quot;
+</I>
+	We have the el-cheapo Lawicel AB CANUSB devices... which I note don't always function first-go under Windows.  In Linux; with the patch applied to the SocketCAN tree... if I manually have to set it up...
+
+# slcand ttyUSB0 S8 O -- C
+
+CANUSB device starts working at this point and a slc0 device is created.
+ To bring the interface up in Linux:
+
+# ifconfig slc0 up
+
+Host platform here is Gentoo Linux/MIPS on a Lemote Yeeloong.  I haven't tried the patch on i386 yet.  With the patch applied, it is possible for udev to handle CANUSB.  This is my /etc/udev/rules.d/99-canusb.rules file:
+
+SUBSYSTEM!=&quot;tty&quot;, GOTO=&quot;canusb_rules_end&quot;
+
+SYSFS{idVendor}==&quot;0403&quot;, SYSFS{idProduct}==&quot;ffa8&quot;, SUBSYSTEM==&quot;tty&quot;, KERNEL==&quot;ttyUSB[0-9]*&quot;, RUN+=&quot;/etc/hotplug/usb/canusb.hotplug&quot;
+
+LABEL=&quot;canusb_rules_end&quot;
+
+Then in /etc/hotplug/usb/canusb.hotplug:
+#!/bin/sh
+
+if [ &quot;${ACTION}&quot; = &quot;add&quot; ]; then
+	sleep 5
+	slcand $( basename ${DEVNAME} ) S8 O -- C
+	exit $?
+elif [ &quot;${ACTION}&quot; = &quot;remove&quot; ]; then
+	kill -TERM $(&lt; /var/run/slcand-$( basename ${DEVNAME} ).pid )
+	sleep 5
+	kill -KILL $(&lt; /var/run/slcand-$( basename ${DEVNAME} ).pid )
+	exit $?
+fi
+
+	With this arrangement, I can skip the slcand step when bringing the interface up.  I can't easily do the `ifconfig slc0 up` step however as I don't know which slcX device the unit will appear, otherwise you could add that after the slcand call.  (Or you can assume only one device is plugged in.)
+
+	The other interesting note, I can't seem to get slcand to terminate gracefully... I have to kill it with a SIGKILL.  This is before I attempt unplugging the CANUSB device.  Not sure what the procedure is for cleanly shutting down the slcan device before unplugging it... as merely bringing the slcX device down does not terminate slcand, and it won't respond to SIGTERM.
+
+Regards,
+-- 
+Stuart Longland (aka Redhatter, VK4MSL)      .'''.
+Gentoo Linux/MIPS Cobalt and Docs Developer  '.'` :
+. . . . . . . . . . . . . . . . . . . . . .   .'.'
+<A HREF="http://dev.gentoo.org/~redhatter">http://dev.gentoo.org/~redhatter</A>             :.'
+
+I haven't lost my mind...
+  ...it's backed up on a tape somewhere.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001375.html">[Socketcan-users] slcand improvements
+</A></li>
+	<LI>Next message: <A HREF="001377.html">[Socketcan-users] slcand improvements
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1376">[ date ]</a>
+              <a href="thread.html#1376">[ thread ]</a>
+              <a href="subject.html#1376">[ subject ]</a>
+              <a href="author.html#1376">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

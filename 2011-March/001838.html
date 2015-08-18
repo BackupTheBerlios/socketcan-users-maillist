@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Setting filter masks
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20filter%20masks&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D46038363%40NTMBOX.central.cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001837.html">
+   <LINK REL="Next"  HREF="001839.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Setting filter masks</H1>
+    <B>Jorge Fernandez Monteagudo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20filter%20masks&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D46038363%40NTMBOX.central.cirsa.com%3E"
+       TITLE="[Socketcan-users] Setting filter masks">jorgefm at cirsa.com
+       </A><BR>
+    <I>Mon Mar 21 08:25:23 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001837.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+        <LI>Next message: <A HREF="001839.html">[Socketcan-users] Setting filter masks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1838">[ date ]</a>
+              <a href="thread.html#1838">[ thread ]</a>
+              <a href="subject.html#1838">[ subject ]</a>
+              <a href="author.html#1838">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I would like to know how to set the filter masks in order to receive can frames.
+In my current code I'm using only standard frames with 11 bits. The three possible
+situations for me are:
+
+- Read frames from only an identifier: Then I set :
+  can_id = 0x1A4
+  can_mask = 0x00
+
+- Read all the frames from a service. For instance, to receive all frames from NMT
+  I set:
+  can_id = 0x700
+  can_mask = 0x7F
+
+  then I get 11 bit address like this : 111 0xxx xxxx
+
+- Read all the frames from a node. The I set:
+  can_id = 0x24
+  can_mask = 0x780
+
+  then I get 11 bit address like this : xxx x010 0100
+
+How can I recreate this situation using the socketcan filters?
+
+Regards,
+Jorge
+
+
+________________________________
+Este mensaje se dirige exclusivamente a su destinatario y puede contener informaci&#243;n privilegiada o CONFIDENCIAL. Si no es vd. el destinatario indicado, queda notificado de que la utilizaci&#243;n, divulgaci&#243;n y/o copia sin autorizaci&#243;n est&#225; prohibida en virtud de la legislaci&#243;n vigente. Si ha recibido este mensaje por error, le rogamos que nos lo comunique inmediatamente por esta misma v&#237;a y proceda a su destrucci&#243;n.
+
+This message is intended exclusively for its addressee and may contain information that is CONFIDENTIAL and protected by professional privilege.
+If you are not the intended recipient you are hereby notified that any dissemination, copy or disclosure of this communication is strictly prohibited by law. If this message has been received in error, please immediately notify us via e-mail and delete it.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110321/9621f8e1/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110321/9621f8e1/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001837.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+	<LI>Next message: <A HREF="001839.html">[Socketcan-users] Setting filter masks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1838">[ date ]</a>
+              <a href="thread.html#1838">[ thread ]</a>
+              <a href="subject.html#1838">[ subject ]</a>
+              <a href="author.html#1838">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

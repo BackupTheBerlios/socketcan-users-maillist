@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan sources?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20sources%3F&In-Reply-To=%3C454071F4.90802%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000076.html">
+   <LINK REL="Next"  HREF="000078.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan sources?</H1>
+    <B>Hartkopp, Oliver (K-GEFE/E)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20sources%3F&In-Reply-To=%3C454071F4.90802%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Socketcan sources?">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Thu Oct 26 10:29:40 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000076.html">[Socketcan-users] Socketcan sources?
+</A></li>
+        <LI>Next message: <A HREF="000078.html">[Socketcan-users] Socketcan sources?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#77">[ date ]</a>
+              <a href="thread.html#77">[ thread ]</a>
+              <a href="subject.html#77">[ subject ]</a>
+              <a href="author.html#77">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Wagner Scott (ST-IN/ENG1) wrote:
+&gt;<i> Please, can anyone tell me where sources / kernel patches for socketcan
+</I>&gt;<i> are kept?  I tried pengutronix.de and berlios.de; neither seems to have
+</I>&gt;<i> sources right now.  (I'm trying to patch socketcan into a 2.6.14.7
+</I>&gt;<i> kernel.)
+</I>
+Hi Scott,
+
+the socketcan sources can be found under the project site
+<A HREF="http://developer.berlios.de/projects/socketcan">http://developer.berlios.de/projects/socketcan</A>
+
+Just check out the current SVN source as described in
+<A HREF="http://developer.berlios.de/svn/?group_id=6475">http://developer.berlios.de/svn/?group_id=6475</A>
+
+The sources can be copied into the kernel tree manually (thanks to Marco for
+providing a complete patch for the 2.6.18).
+But you also can build the kernel modules outside the kernel tree (e.g. go
+into trunk/kernel/2.6/net/can and say 'make' and you will get kernel
+modules). You have to do this also in trunk/kernel/2.6/drivers/net/can to
+compile the current CAN network drivers.
+
+We're currently working on creating patch series out of this SVN. Therefore
+there was a sourcetree cleanup the last two days to match the 'kernel style'
+;-)
+
+You may be interested in subscribing the commit-mailing list to get informed
+on new versions.
+
+Regards, 
+Oliver
+
+Oliver Hartkopp
+--------------------------------------------
+ Senior Software Architect
+ Volkswagen Group Electronic Research
+ Vehicle System Electronic (K-GEFE/E)
+ Fon. +49(0)5361 / 9 - 36244  Fax. -5736244
+ Mobile. +49 (0) 160 746 20 73  BIK. -93073
+ Post: Brieffach 1776, D-38436 Wolfsburg
+ mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Oliver.Hartkopp at volkswagen.de</A> 
+--------------------------------------------
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000076.html">[Socketcan-users] Socketcan sources?
+</A></li>
+	<LI>Next message: <A HREF="000078.html">[Socketcan-users] Socketcan sources?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#77">[ date ]</a>
+              <a href="thread.html#77">[ thread ]</a>
+              <a href="subject.html#77">[ subject ]</a>
+              <a href="author.html#77">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

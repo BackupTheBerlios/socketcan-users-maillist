@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x remove module when there is CAN activity
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20remove%20module%20when%20there%20is%20CAN%20activity&In-Reply-To=%3Cf96d234e0902111127o9e4bcc6w31155cda60d51839%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000677.html">
+   <LINK REL="Next"  HREF="000670.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x remove module when there is CAN activity</H1>
+    <B>Cliff Brake</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20remove%20module%20when%20there%20is%20CAN%20activity&In-Reply-To=%3Cf96d234e0902111127o9e4bcc6w31155cda60d51839%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp251x remove module when there is CAN activity">cliff.brake at gmail.com
+       </A><BR>
+    <I>Wed Feb 11 20:27:24 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000677.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+        <LI>Next message: <A HREF="000670.html">[Socketcan-users] mcp251x remove module when there is CAN	activity
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#666">[ date ]</a>
+              <a href="thread.html#666">[ thread ]</a>
+              <a href="subject.html#666">[ subject ]</a>
+              <a href="author.html#666">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>If I try to rmmod the mcp251x module while there is CAN activity,
+rmmod either freezes, or segfaults.  Try again, I get ERROR: Removing
+'mcp251x': Device or resource busy.  The kernel fault below is likely
+related. I'll debug as I have time, but thought I would post here for
+now.
+
+Thanks,
+Cliff
+
+Unable to handle kernel paging request at virtual address 0264bd0a
+pgd = c38e0000
+[0264bd0a] *pgd=00000000
+Internal error: Oops: 803 [#1] PREEMPT
+Modules linked in: can_raw can ucb1400_ts snd_pxa2xx_ac97
+snd_ac97_codec ac97_bus snd_pxa2xx_pcm snd_pcm snd_timer snd soundcore
+snd_page_alloc rtl8150 ppp_generic slhc pegasus i2c_pxa i2c_dev
+i2c_core mcp251x(-) can_dev asix usbnet evdev
+CPU: 0    Not tainted  (2.6.27 #1)
+PC is at insert_work+0x40/0x60
+LR is at insert_wq_barrier+0x68/0x74
+pc : [&lt;c0048f5c&gt;]    lr : [&lt;c0048fe4&gt;]    psr: 00000093
+sp : c3a17d68  ip : c2f2f318  fp : c3a17d74
+r10: 00000880  r9 : c3a16000  r8 : c0024e84
+r7 : c02d5464  r6 : c2f2f318  r5 : c2f2f318  r4 : c3a17da4
+r3 : 0264bd0a  r2 : c3a17da8  r1 : c3a17da4  r0 : c2f2f318
+Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment user
+Control: 0000397f  Table: a38e0000  DAC: 00000015
+Process rmmod (pid: 1487, stack limit = 0xc3a16270)
+Stack: (0xc3a17d68 to 0xc3a18000)
+7d60:                   c3a17d9c c3a17d78 c0048fe4 c0048f28 c018d7f8 00000000
+7d80: 00000003 c2f2f318 c2ecb600 c02d5464 c3a17dd4 c3a17da0 c004913c c0048f88
+7da0: c3a17dcc c2f2f319 c2f2f318 c3a17da8 c004934c 00000000 c3a17db8 c3a17db8
+7dc0: c3a17de4 c2ebb000 c3a17de4 c3a17dd8 c004923c c00490d0 c3a17e04 c3a17de8
+7de0: bf015d98 c0049234 c02d5464 c2ebb000 c2ecb600 c2ebb000 c3a17e1c c3a17e08
+7e00: c01db170 bf015d50 c2ebb298 c2ebb000 c3a17e34 c3a17e20 c01db224 c01db0f8
+7e20: c00cfc7c c2ebb000 c3a17e4c c3a17e38 c01db304 c01db1a8 c01e5de0 c2ebb000
+7e40: c3a17e64 c3a17e50 c01db354 c01db2d4 c2ebb000 c2ebb000 c3a17e7c c3a17e68
+7e60: bf0102a0 c01db340 c2ebb000 c2ebb360 c3a17e9c c3a17e80 bf0164d8 bf01028c
+7e80: c2ecb600 bf017874 c3a16000 bf017874 c3a17eac c3a17ea0 c018df80 bf016464
+7ea0: c3a17ec4 c3a17eb0 c016553c c018df6c c2ecb6ac c2ecb600 c3a17ee4 c3a17ec8
+7ec0: c0165a00 c01654d0 bf017874 bf0178e0 c02e1984 00000880 c3a17f04 c3a17ee8
+7ee0: c0164808 c0165958 00000000 bf017874 bf0178e0 00000000 c3a17f24 c3a17f08
+7f00: c0165a9c c0164784 c3a17f34 00000000 bf0178e0 bf017a00 c3a17f34 c3a17f28
+7f20: bf016450 c0165a60 c3a17fa4 c3a17f38 c005d798 bf016448 c002a370 3270636d
+7f40: 00783135 c00315b0 c2d51360 00000000 c3a17fb0 00000000 00001000 ffffffff
+7f60: 40139000 00000000 00021000 4013a034 bef99c90 00000880 bf0178e0 00000880
+7f80: c3a17f84 00000000 00000000 bef97450 bef97430 00000081 00000000 c3a17fa8
+7fa0: c0024d00 c005d5ec 00000000 bef97450 bef97430 00000880 00000000 00000000
+7fc0: 00000000 bef97450 bef97430 00000081 bef99c50 bef99c90 00000880 bef99cc4
+7fe0: 00000000 bef97428 00009068 400dcd9c 60000010 bef97430 00000000 00000000
+Backtrace:
+[&lt;c0048f1c&gt;] (insert_work+0x0/0x60) from [&lt;c0048fe4&gt;]
+(insert_wq_barrier+0x68/0x74)
+[&lt;c0048f7c&gt;] (insert_wq_barrier+0x0/0x74) from [&lt;c004913c&gt;]
+(flush_cpu_workqueue+0x78/0xc4)
+ r6:c02d5464 r5:c2ecb600 r4:c2f2f318
+[&lt;c00490c4&gt;] (flush_cpu_workqueue+0x0/0xc4) from [&lt;c004923c&gt;]
+(flush_workqueue+0x14/0x18)
+ r4:c2ebb000
+[&lt;c0049228&gt;] (flush_workqueue+0x0/0x18) from [&lt;bf015d98&gt;]
+(mcp251x_stop+0x54/0xac [mcp251x])
+[&lt;bf015d44&gt;] (mcp251x_stop+0x0/0xac [mcp251x]) from [&lt;c01db170&gt;]
+(dev_close+0x84/0xb0)
+ r6:c2ebb000 r5:c2ecb600 r4:c2ebb000
+[&lt;c01db0ec&gt;] (dev_close+0x0/0xb0) from [&lt;c01db224&gt;]
+(rollback_registered+0x88/0x12c)
+ r4:c2ebb000
+[&lt;c01db19c&gt;] (rollback_registered+0x0/0x12c) from [&lt;c01db304&gt;]
+(unregister_netdevice+0x3c/0x6c)
+ r4:c2ebb000
+[&lt;c01db2c8&gt;] (unregister_netdevice+0x0/0x6c) from [&lt;c01db354&gt;]
+(unregister_netdev+0x20/0x28)
+ r4:c2ebb000
+[&lt;c01db334&gt;] (unregister_netdev+0x0/0x28) from [&lt;bf0102a0&gt;]
+(unregister_candev+0x20/0x24 [can_dev])
+ r4:c2ebb000
+[&lt;bf010280&gt;] (unregister_candev+0x0/0x24 [can_dev]) from [&lt;bf0164d8&gt;]
+(mcp251x_can_remove+0x80/0xa8 [mcp251x])
+ r4:c2ebb360
+[&lt;bf016458&gt;] (mcp251x_can_remove+0x0/0xa8 [mcp251x]) from [&lt;c018df80&gt;]
+(spi_drv_remove+0x20/0x24)
+ r7:bf017874 r6:c3a16000 r5:bf017874 r4:c2ecb600
+[&lt;c018df60&gt;] (spi_drv_remove+0x0/0x24) from [&lt;c016553c&gt;]
+(__device_release_driver+0x78/0x98)
+[&lt;c01654c4&gt;] (__device_release_driver+0x0/0x98) from [&lt;c0165a00&gt;]
+(driver_detach+0xb4/0xe0)
+ r5:c2ecb600 r4:c2ecb6ac
+[&lt;c016594c&gt;] (driver_detach+0x0/0xe0) from [&lt;c0164808&gt;]
+(bus_remove_driver+0x90/0xb8)
+ r7:00000880 r6:c02e1984 r5:bf0178e0 r4:bf017874
+[&lt;c0164778&gt;] (bus_remove_driver+0x0/0xb8) from [&lt;c0165a9c&gt;]
+(driver_unregister+0x48/0x4c)
+ r6:00000000 r5:bf0178e0 r4:bf017874
+[&lt;c0165a54&gt;] (driver_unregister+0x0/0x4c) from [&lt;bf016450&gt;]
+(mcp251x_can_exit+0x14/0x1c [mcp251x])
+ r6:bf017a00 r5:bf0178e0 r4:00000000
+[&lt;bf01643c&gt;] (mcp251x_can_exit+0x0/0x1c [mcp251x]) from [&lt;c005d798&gt;]
+(sys_delete_module+0x1b8/0x22c)
+[&lt;c005d5e0&gt;] (sys_delete_module+0x0/0x22c) from [&lt;c0024d00&gt;]
+(ret_fast_syscall+0x0/0x2c)
+ r7:00000081 r6:bef97430 r5:bef97450 r4:00000000
+Code: e4823004 e59c3004 e581c004 e58c2004 (e5832000)
+---[ end trace 96851911a85ea6cd ]---
+note: rmmod[1487] exited with preempt_count 1
+BUG: scheduling while atomic: rmmod/1487/0x40000002
+Modules linked in: can_raw can ucb1400_ts snd_pxa2xx_ac97
+snd_ac97_codec ac97_bus snd_pxa2xx_pcm snd_pcm snd_timer snd soundcore
+snd_page_alloc rtl8150 ppp_generic slhc pegasus i2c_pxa i2c_dev
+i2c_core mcp251x(-) can_dev asix usbnet evdev
+[&lt;c0028b2c&gt;] (dump_stack+0x0/0x14) from [&lt;c00319e8&gt;] (__schedule_bug+0x54/0x60)
+[&lt;c0031994&gt;] (__schedule_bug+0x0/0x60) from [&lt;c0237d24&gt;] (schedule+0x7c/0x348)
+ r4:c3a16000
+[&lt;c0237ca8&gt;] (schedule+0x0/0x348) from [&lt;c0031ac0&gt;] (__cond_resched+0x24/0x3c)
+[&lt;c0031a9c&gt;] (__cond_resched+0x0/0x3c) from [&lt;c02385c4&gt;]
+(_cond_resched+0x44/0x58)
+ r4:00000001
+[&lt;c0238580&gt;] (_cond_resched+0x0/0x58) from [&lt;c0076588&gt;] (unmap_vmas+0x534/0x620)
+ r4:c2d51498
+[&lt;c0076054&gt;] (unmap_vmas+0x0/0x620) from [&lt;c0078a44&gt;] (exit_mmap+0x94/0x170)
+[&lt;c00789b0&gt;] (exit_mmap+0x0/0x170) from [&lt;c0035584&gt;] (mmput+0x40/0xf8)
+ r7:c38cac60 r6:c2d51394 r5:c2d51360 r4:00000000
+[&lt;c0035544&gt;] (mmput+0x0/0xf8) from [&lt;c0039518&gt;] (exit_mm+0x13c/0x144)
+ r5:c2d51360 r4:00000000
+[&lt;c00393dc&gt;] (exit_mm+0x0/0x144) from [&lt;c003abe4&gt;] (do_exit+0x1a4/0x7a4)
+ r7:00000000 r6:0000000b r5:c38cac60 r4:c3a16000
+[&lt;c003aa40&gt;] (do_exit+0x0/0x7a4) from [&lt;c00289c4&gt;] (die+0x2c4/0x320)
+[&lt;c0028700&gt;] (die+0x0/0x320) from [&lt;c002a1dc&gt;] (__do_kernel_fault+0x6c/0x80)
+[&lt;c002a170&gt;] (__do_kernel_fault+0x0/0x80) from [&lt;c002a48c&gt;]
+(do_bad_area+0x60/0x6c)
+ r7:c3a17d20 r6:00000000 r5:e5832000 r4:00000000
+[&lt;c002a42c&gt;] (do_bad_area+0x0/0x6c) from [&lt;c002c3c0&gt;] (do_alignment+0x420/0x580)
+[&lt;c002bfa0&gt;] (do_alignment+0x0/0x580) from [&lt;c0024218&gt;] (do_DataAbort+0x3c/0xa0)
+[&lt;c00241dc&gt;] (do_DataAbort+0x0/0xa0) from [&lt;c002480c&gt;] (__dabt_svc+0x4c/0x60)
+Exception stack(0xc3a17d20 to 0xc3a17d68)
+7d20: c2f2f318 c3a17da4 c3a17da8 0264bd0a c3a17da4 c2f2f318 c2f2f318 c02d5464
+7d40: c0024e84 c3a16000 00000880 c3a17d74 c2f2f318 c3a17d68 c0048fe4 c0048f5c
+7d60: 00000093 ffffffff
+ r8:c0024e84 r7:c02d5464 r6:c2f2f318 r5:c3a17d54 r4:ffffffff
+[&lt;c0048f1c&gt;] (insert_work+0x0/0x60) from [&lt;c0048fe4&gt;]
+(insert_wq_barrier+0x68/0x74)
+[&lt;c0048f7c&gt;] (insert_wq_barrier+0x0/0x74) from [&lt;c004913c&gt;]
+(flush_cpu_workqueue+0x78/0xc4)
+ r6:c02d5464 r5:c2ecb600 r4:c2f2f318
+[&lt;c00490c4&gt;] (flush_cpu_workqueue+0x0/0xc4) from [&lt;c004923c&gt;]
+(flush_workqueue+0x14/0x18)
+ r4:c2ebb000
+[&lt;c0049228&gt;] (flush_workqueue+0x0/0x18) from [&lt;bf015d98&gt;]
+(mcp251x_stop+0x54/0xac [mcp251x])
+[&lt;bf015d44&gt;] (mcp251x_stop+0x0/0xac [mcp251x]) from [&lt;c01db170&gt;]
+(dev_close+0x84/0xb0)
+ r6:c2ebb000 r5:c2ecb600 r4:c2ebb000
+[&lt;c01db0ec&gt;] (dev_close+0x0/0xb0) from [&lt;c01db224&gt;]
+(rollback_registered+0x88/0x12c)
+ r4:c2ebb000
+[&lt;c01db19c&gt;] (rollback_registered+0x0/0x12c) from [&lt;c01db304&gt;]
+(unregister_netdevice+0x3c/0x6c)
+ r4:c2ebb000
+[&lt;c01db2c8&gt;] (unregister_netdevice+0x0/0x6c) from [&lt;c01db354&gt;]
+(unregister_netdev+0x20/0x28)
+ r4:c2ebb000
+[&lt;c01db334&gt;] (unregister_netdev+0x0/0x28) from [&lt;bf0102a0&gt;]
+(unregister_candev+0x20/0x24 [can_dev])
+ r4:c2ebb000
+[&lt;bf010280&gt;] (unregister_candev+0x0/0x24 [can_dev]) from [&lt;bf0164d8&gt;]
+(mcp251x_can_remove+0x80/0xa8 [mcp251x])
+ r4:c2ebb360
+[&lt;bf016458&gt;] (mcp251x_can_remove+0x0/0xa8 [mcp251x]) from [&lt;c018df80&gt;]
+(spi_drv_remove+0x20/0x24)
+ r7:bf017874 r6:c3a16000 r5:bf017874 r4:c2ecb600
+[&lt;c018df60&gt;] (spi_drv_remove+0x0/0x24) from [&lt;c016553c&gt;]
+(__device_release_driver+0x78/0x98)
+[&lt;c01654c4&gt;] (__device_release_driver+0x0/0x98) from [&lt;c0165a00&gt;]
+(driver_detach+0xb4/0xe0)
+ r5:c2ecb600 r4:c2ecb6ac
+[&lt;c016594c&gt;] (driver_detach+0x0/0xe0) from [&lt;c0164808&gt;]
+(bus_remove_driver+0x90/0xb8)
+ r7:00000880 r6:c02e1984 r5:bf0178e0 r4:bf017874
+[&lt;c0164778&gt;] (bus_remove_driver+0x0/0xb8) from [&lt;c0165a9c&gt;]
+(driver_unregister+0x48/0x4c)
+ r6:00000000 r5:bf0178e0 r4:bf017874
+[&lt;c0165a54&gt;] (driver_unregister+0x0/0x4c) from [&lt;bf016450&gt;]
+(mcp251x_can_exit+0x14/0x1c [mcp251x])
+ r6:bf017a00 r5:bf0178e0 r4:00000000
+[&lt;bf01643c&gt;] (mcp251x_can_exit+0x0/0x1c [mcp251x]) from [&lt;c005d798&gt;]
+(sys_delete_module+0x1b8/0x22c)
+[&lt;c005d5e0&gt;] (sys_delete_module+0x0/0x22c) from [&lt;c0024d00&gt;]
+(ret_fast_syscall+0x0/0x2c)
+ r7:00000081 r6:bef97430 r5:bef97450 r4:00000000
+Checked all inodes but still 0x3ec33f60 bytes of unchecked space?
+No space for garbage collection. Aborting GC thread
+
+
+-- 
+=======================
+Cliff Brake
+<A HREF="http://bec-systems.com">http://bec-systems.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000677.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+	<LI>Next message: <A HREF="000670.html">[Socketcan-users] mcp251x remove module when there is CAN	activity
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#666">[ date ]</a>
+              <a href="thread.html#666">[ thread ]</a>
+              <a href="subject.html#666">[ subject ]</a>
+              <a href="author.html#666">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

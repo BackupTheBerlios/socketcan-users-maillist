@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%09supported%20by%20protocol%22&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D6022FEDF8%40uss-am-xch-01.am.trimblecorp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000413.html">
+   <LINK REL="Next"  HREF="000418.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;</H1>
+    <B>Mike Timmons</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%09supported%20by%20protocol%22&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D6022FEDF8%40uss-am-xch-01.am.trimblecorp.net%3E"
+       TITLE="[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;">mike_timmons at trimble.com
+       </A><BR>
+    <I>Thu Jun 19 16:22:41 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000413.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+        <LI>Next message: <A HREF="000418.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#417">[ date ]</a>
+              <a href="thread.html#417">[ thread ]</a>
+              <a href="subject.html#417">[ subject ]</a>
+              <a href="author.html#417">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank's for the follow-up! To be clear and to guide anybody who wants to
+build a module and not take a patch...
+
+I built the modules from source (not a patch) according to Wolfgang's
+instructions below.
+
+I have yet to successfully, &quot;sniff&quot; traffic using cansniffer. I know I
+have CAN data on the bus because my bootloader utility can sniff and see
+traffic. I'll be debugging this issue now. 
+
+I'm thinking perhaps my dts file isn't set up properly sop I will
+confirm it maps correctly to the CAN peripherals on the mpc5200b,
+although I'm not getting any load errors so we'll see.
+
+After building as instructed below, I insmod the following modules
+before executing the cansniffer utility
+
+FYI to newbies like me: If you are cross-compiling You need to ad
+CC=&lt;your crosscompiler&gt; to the makefile that builds cansniffer and other
+utilities.
+
+Here are the modules I am loading before I run cansniffer:
+Vcan.ko
+Can-dev.ko
+Mscan-mpc52xx.ko
+Can.ko
+Can-raw.ko
+Can-bcm.ko
+
+
+
+
+&gt;<i>As a first try you can build Socket-CAN out of tree by just downloading
+</I>the &gt;SVN trunk repository as described here:
+&gt;<i>
+</I>&gt;<i><A HREF="http://developer.berlios.de/svn/?group_id=6475">http://developer.berlios.de/svn/?group_id=6475</A>
+</I>&gt;<i>
+</I>&gt;<i>Then go to trunk/kernel/2.6 and type:
+</I>&gt;<i>
+</I>&gt;<i>   $ make ARCH=powerpc KERNELDIR=&lt;path-to-kernel&gt; \
+</I>&gt;<i>     CONFIG_CAN_MSCAN=m CONFIG_CAN_MPC52XX=m
+</I>&gt;<i>
+</I>&gt;<i>You need the following modules on your target:
+</I>&gt;<i>
+</I>&gt;<i>   drivers/net/can/*.ko
+</I>&gt;<i>   drivers/net/can/mscan/*.ko
+</I>&gt;<i>
+</I>&gt;<i>There is a script to create kernel patches, but I don't known if it
+</I>works &gt;right now (there have been some issues recently). Please ask on
+the Socket-&gt;CAN mailing list.
+&gt;<i>
+</I>&gt;<i>Wolfgang.
+</I>&gt;<i>
+</I>-----Original Message-----
+From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>] 
+Sent: Thursday, June 19, 2008 2:28 AM
+To: Oliver Hartkopp
+Cc: Mike Timmons; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] cansniffer error: &quot;socket: Address family
+not supported by protocol&quot;
+
+Oliver Hartkopp wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> mtwallet wrote:
+</I>&gt;&gt;&gt;<i>      
+</I>&gt;&gt;&gt;&gt;<i> I'm popping over to this mailing list after acquiring the socket
+</I>can 
+&gt;&gt;&gt;&gt;<i> drivers
+</I>&gt;&gt;&gt;&gt;<i> for an mpc5200 powerpc. I've successfully buyilt and insmod' the 
+</I>&gt;&gt;&gt;&gt;<i> following:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> vcan.ko
+</I>&gt;&gt;&gt;&gt;<i> can-dev.ko
+</I>&gt;&gt;&gt;&gt;<i> mscan-mpc5200.ko
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I figured at this point I was ready to try some userspace app, so I
+</I>&gt;&gt;&gt;&gt;<i> cross-compiled cansniffer.c. When I run it I get an error:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> &quot;socket: Address family not supported by protocol&quot;
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I'm looking at the socket() call in cansniffer.c to try to figure 
+</I>&gt;&gt;&gt;&gt;<i> out what's
+</I>&gt;&gt;&gt;&gt;<i> up, but if you know of something I am missing please advise.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I'm running a linux kernel: 2.6.24. Anybody know what I might be 
+</I>&gt;&gt;&gt;&gt;<i> missing?
+</I>&gt;&gt;&gt;&gt;<i>       
+</I>&gt;<i> 
+</I>&gt;<i> Just to be sure here:
+</I>&gt;<i> The CAN Subsystem touched the mainline kernel in 2.6.25.
+</I>&gt;<i> 
+</I>&gt;<i> So when you are running a 2.6.24 you compiled the socketcan modules 
+</I>&gt;<i> externally or created a patch for your 2.6.24, right?
+</I>
+Yes, he asked initially on the linuxppc-embedded mailing list for a CAN 
+driver supporting MSCAN. I was not sure about the patch creation. 
+Oliver, does it work now?
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000413.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+	<LI>Next message: <A HREF="000418.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#417">[ date ]</a>
+              <a href="thread.html#417">[ thread ]</a>
+              <a href="subject.html#417">[ subject ]</a>
+              <a href="author.html#417">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

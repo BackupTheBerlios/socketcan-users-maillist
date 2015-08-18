@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4D3EE280.70305%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001758.html">
+   <LINK REL="Next"  HREF="001760.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4D3EE280.70305%40grandegger.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">wg at grandegger.com
+       </A><BR>
+    <I>Tue Jan 25 15:47:28 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001758.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="001760.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1759">[ date ]</a>
+              <a href="thread.html#1759">[ thread ]</a>
+              <a href="subject.html#1759">[ subject ]</a>
+              <a href="author.html#1759">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 01/25/2011 03:30 PM, uprinz wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What does the following command report on you target?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # ip link help
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> Usage: ip link add link DEV [ name ] NAME
+</I>&gt;<i>                    [ txqueuelen PACKETS ]
+</I>&gt;<i>                    [ address LLADDR ]
+</I>&gt;<i>                    [ broadcast LLADDR ]
+</I>&gt;<i>                    [ mtu MTU ]
+</I>&gt;<i>                    type TYPE [ ARGS ]
+</I>&gt;<i>        ip link delete DEV type TYPE [ ARGS ]
+</I>&gt;<i> 
+</I>&gt;<i>        ip link set DEVICE [ { up | down } ]
+</I>&gt;<i>                           [ arp { on | off } ]
+</I>&gt;<i>                           [ dynamic { on | off } ]
+</I>&gt;<i>                           [ multicast { on | off } ]
+</I>&gt;<i>                           [ allmulticast { on | off } ]
+</I>&gt;<i>                           [ promisc { on | off } ]
+</I>&gt;<i>                           [ trailers { on | off } ]
+</I>&gt;<i>                           [ txqueuelen PACKETS ]
+</I>&gt;<i>                           [ name NEWNAME ]
+</I>&gt;<i>                           [ address LLADDR ]
+</I>&gt;<i>                           [ broadcast LLADDR ]
+</I>&gt;<i>                           [ mtu MTU ]
+</I>&gt;<i>                           [ netns PID ]
+</I>&gt;<i>                           [ alias NAME ]
+</I>&gt;<i>                           [ vf NUM [ mac LLADDR ]
+</I>&gt;<i>                                    [ vlan VLANID [ qos VLAN-QOS ] ]
+</I>&gt;<i>                                    [ rate TXRATE ] ]
+</I>&gt;<i>        ip link show [ DEVICE ]
+</I>&gt;<i> 
+</I>&gt;<i> TYPE := { vlan | veth | vcan | dummy | ifb | macvlan | can }
+</I>
+Looks good. There is the TYPE &quot;can&quot;.
+
+&quot;# ip link set can0 type can help&quot; should then list
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.37/Documentation/networking/can.txt#L657">http://lxr.linux.no/#linux+v2.6.37/Documentation/networking/can.txt#L657</A>
+
+&gt;<i> I think it was the kernel.org version, not the 'shemminger' one. I'll try
+</I>&gt;<i> again...
+</I>
+Don't know what version comes from kernel.org.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001758.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="001760.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1759">[ date ]</a>
+              <a href="thread.html#1759">[ thread ]</a>
+              <a href="subject.html#1759">[ subject ]</a>
+              <a href="author.html#1759">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

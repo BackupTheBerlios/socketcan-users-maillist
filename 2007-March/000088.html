@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Memory leak with raw socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F1D76C.5030501%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000087.html">
+   <LINK REL="Next"  HREF="000089.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Memory leak with raw socket</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F1D76C.5030501%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Memory leak with raw socket">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Mar  9 22:53:48 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000087.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+        <LI>Next message: <A HREF="000089.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#88">[ date ]</a>
+              <a href="thread.html#88">[ thread ]</a>
+              <a href="subject.html#88">[ subject ]</a>
+              <a href="author.html#88">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell schrieb:
+&gt;<i> Robert Schwebel wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> On Fri, Mar 09, 2007 at 04:52:03PM +0100, Eberhard Stoll wrote:
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> i think i've discovered a memory leak problem when i want to send can
+</I>&gt;&gt;&gt;<i> packages over a raw socket which has a full tx queue.
+</I>&gt;&gt;&gt;<i> I'm using a MPC5200 board with mscan interface on a 2.4.25 kernel of
+</I>&gt;&gt;&gt;<i> denx. My socketcan version is commit 55 in subversion.
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> 2.4 is dead. Any chance to try it on 2.6?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Robert
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> We are using 2.4.25 from Denx on a MPC5200B as well and before nobody provides an official 2.6 support we will stick to it. The socketcan implementation should be the same even on 2.4 kernels.
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Hi all,
+
+Eberhard is right. There IS a memory leak when the all TX buffers inside 
+the MSCAN controller are in use.
+
+Instead of
+
+    if (buf == 3) {
+	/* No buffer is available */
+	printk(KERN_ERR &quot;%s: %s: no buffer is available\n&quot;, DRV_NAME, __FUNCTION__);
+	return 0;
+    }
+
+the 'return 0' should be something like 'goto out_free_skbuff' to jump 
+to the appropriate label and free the skbuff.
+
+Indeed i did not expect to use more than one of the MSCAN buffers. The 
+right way is at  mscan_start_xmit() :
+
+1. Stop netif queue
+2. Put frame to the controller
+3. Free skbuff
+
+On missing TX interrupt the function mscan_tx_timeout() is called. It has to
+
+1. Reset the controller
+2. Wake the netif queue
+
+So point 1 is currently missing. In the case of a tx-timeout the 
+TX-buffer should be purged before waking up the queue. So if you want to 
+fix the real problem, fix it here ;-)
+
+Regarding Roberts comment, that Kernel 2.4 is dead: As we are using an 
+old PPC405 with 4 SJA1000-CAN-busses (at 2.4.20) for us it's still 
+important to maintain the Kernel 2.4 path. Currently i'm very happy that 
+both Kernel implementations are on the same level, so that you can use 
+the socketcan application either on Kernel 2.4 and Kernel 2.6.
+
+But regarding the mscan-driver for Kernel 2.4, i have to admit, that it 
+was a quick hack for me, to use our sja1000-driver framework and put the 
+contoller specific access things from the patched PEAK-driver from the 
+WolfGangs (denx) inside. It was working fine for me, but i did not 
+continue working on it due to other priorities :-/
+
+I currently do not have the Kernel 2.4 MPC5200 environment on my Linux 
+box. So if you have some reasonable (&amp; tested) patches for this 2.4 
+driver feel free to submit them here.
+
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000087.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+	<LI>Next message: <A HREF="000089.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#88">[ date ]</a>
+              <a href="thread.html#88">[ thread ]</a>
+              <a href="subject.html#88">[ subject ]</a>
+              <a href="author.html#88">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

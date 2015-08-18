@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EE1EB4.70007%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000033.html">
+   <LINK REL="Next"  HREF="000036.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EE1EB4.70007%40web.de%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">jan.kiszka at web.de
+       </A><BR>
+    <I>Thu Aug 24 23:48:36 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000033.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000036.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Jan Kiszka schrieb:
+</I>&gt;&gt;<i> Hi Oliver,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> thinking about the whole issue also from your POV again, I realised that
+</I>&gt;&gt;<i> my position was too strict. When considering CAN frames as multicast,
+</I>&gt;&gt;<i> what certainly matches best, local delivery is reasonable. But, as this
+</I>&gt;&gt;<i> thread may have indicated, it's at the same time also a surprising
+</I>&gt;&gt;<i> feature for (I'm still convinced) a huge group of users.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think that all these misconceptions melt down to the question if you
+</I>&gt;&gt;<i> consider our CAN interface to be at data link or at network layer:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> CAN can be put quite well to the network layer. Then local loopback
+</I>&gt;&gt;<i> makes sense and provides a nice additional feature compared to existing
+</I>&gt;&gt;<i> CAN APIs. E.g., you could then run several CANopen nodes on the same
+</I>&gt;&gt;<i> host and they could communicate with each other - likely more of a test
+</I>&gt;&gt;<i> scenario than a reasonable production design, but still useful.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If you consider the CAN API more as an interface to the data link layer
+</I>&gt;&gt;<i> (and this is what I did yesterday implicitly), local loopback is no
+</I>&gt;&gt;<i> longer correct. You may argue this is not how users should see CAN, but
+</I>&gt;&gt;<i> that doesn't solve the problem.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So, what to do? Having a global switch like a module parameter is not an
+</I>&gt;&gt;<i> elegant solution in my eyes. The day will come when you have
+</I>&gt;&gt;<i> applications of both types on a complex host, requiring loopback on and
+</I>&gt;&gt;<i> off at the same time - boom. Actually, this property is more something
+</I>&gt;&gt;<i> the user should decide about in the transmitting application. How?
+</I>&gt;&gt;<i> Either via the socket type or the protocol. I would say the best way is
+</I>&gt;&gt;<i> now the latter, e.g. something like this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     socket(PF_CAN, SOCK_RAW, CAN_PROTO_NET); /* local loopback */
+</I>&gt;&gt;<i>     socket(PF_CAN, SOCK_RAW, CAN_PROTO_DEVICE); /* no loopback */
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This hands back the control to the individual user, the one who
+</I>&gt;&gt;<i> (typically) knows best what should happen to a frame in the core. :)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> And what should become protocol 0, i.e. the default one? Well, that's
+</I>&gt;&gt;<i> tricky, maybe we should do a poll on this. My believe is
+</I>&gt;&gt;<i> CAN_PROTO_DEVICE. But given good documentation of the differences (and
+</I>&gt;&gt;<i> the recommendation to RT users to always provide the protocol
+</I>&gt;&gt;<i> explicitly), I could personally also live with the other way around.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do you all think?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Jan
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Hi Jan,
+</I>&gt;<i> 
+</I>&gt;<i> thanks for these clarifying words! The differentiation is hitting the
+</I>&gt;<i> point! I was also active this afternoon and found out, that the guys
+</I>&gt;<i> working on AppleTalk (that allows the sending of broadcasts) and the
+</I>&gt;<i> PACKET-socket have the same problems of how to loop back their own sent
+</I>&gt;<i> stuff.
+</I>
+I may miss some path, but packet sockets really don't appear to me like
+they are looping anything back (only to taps - like any networking
+device). And what AppleTalk protocol precisely is looped back? I bet
+DDD, as it's comparable to IP. In contrast, IPX doesn't loop back (IIRC
+my &gt; 10 years old experiences) while it's also layer 3. No perfect world.
+
+&gt;<i> 
+</I>&gt;<i> The common behaviour i have recognized is: Loop back to everyone, except
+</I>&gt;<i> the originating socket. Aha! This sounds definitely like what we were
+</I>&gt;<i> searching here and what the users would probably expect most.
+</I>
+At least for IP multicast, there is no such filtering, only the socket
+option IP_MULTICAST_LOOP which works per host. I would therefore avoid
+such complications.
+
+&gt;<i> 
+</I>&gt;<i> I have been checking the skbuff-structure for appropriate space to save
+</I>&gt;<i> the pointer to the sock-structure as reference so that the receiving
+</I>&gt;<i> socket can identify his self created stuff. So you can discard the
+</I>&gt;<i> CAN-frames you have been sending before (as default).
+</I>&gt;<i> 
+</I>&gt;<i> And if there is any really need(?) to receive what you've been sending
+</I>&gt;<i> before, there could be some socket-option to disable the discarding. But
+</I>&gt;<i> this should be considered to be implemented only on request ...
+</I>&gt;<i> 
+</I>&gt;<i> That looks as a quite good idea to me (and i'm already thinking on a
+</I>&gt;<i> tiny patch).
+</I>&gt;<i> 
+</I>&gt;<i> What you you all think on this solution?
+</I>&gt;<i> 
+</I>&gt;<i> Additionally this idea can offer the possibility to decide for each
+</I>&gt;<i> socket, if the sent data should be looped back to other local users (by
+</I>&gt;<i> default) or not (by sockopt or protocol as you suggested above). E.g. if
+</I>&gt;<i> the pointer in the sent skbuff holding the sk is set to NULL the
+</I>&gt;<i> loopback for this CAN-frame is disabled. So you also have an
+</I>&gt;<i> runtime-configurable performance tuning - this meets your desires,
+</I>
+Don't forget: for hard RT, s/performance/WCET/. But low-end users
+without hard constraints will certainly also worry about the former.
+
+&gt;<i> right? ;-)
+</I>
+Protocols look more handy too me (from a user POV) and are easier
+acceptable if we really go for default on. Socket options are not that
+well visible, and we should better reduce the level of surprise.
+
+But let's ask for other opinions:
+
+POLL 1: How to control TX loopback behaviour?
+	[ ] socket option
+	[ ] two protocols
+	[ ] .................
+	    (please describe)
+
+POLL 2: What should be the default behaviour?
+	[ ] loopback
+	[ ] no loopback
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20060824/bce2e5bf/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20060824/bce2e5bf/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000033.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000036.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

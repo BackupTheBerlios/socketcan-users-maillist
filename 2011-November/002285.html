@@ -1,0 +1,508 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v5 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v5%202/4%5D%20can%3A%20cc770%3A%20add%20legacy%0A%09ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C1322641094-12175-3-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002287.html">
+   <LINK REL="Next"  HREF="002286.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v5 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v5%202/4%5D%20can%3A%20cc770%3A%20add%20legacy%0A%09ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C1322641094-12175-3-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v5 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov 30 09:18:12 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002287.html">[Socketcan-users] [PATCH net-next v5 1/4] can: cc770: add driver	core for the Bosch CC770 and Intel AN82527
+</A></li>
+        <LI>Next message: <A HREF="002286.html">[Socketcan-users] [PATCH net-next v5 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2285">[ date ]</a>
+              <a href="thread.html#2285">[ thread ]</a>
+              <a href="subject.html#2285">[ subject ]</a>
+              <a href="author.html#2285">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This patch adds support for legacy Bosch CC770 and Intel AN82527 CAN
+controllers on the ISA or PC-104 bus. The I/O port or memory address
+and the IRQ number must be specified via module parameters:
+
+  insmod cc770_isa.ko port=0x310,0x380 irq=7,11
+
+for ISA devices using I/O ports or:
+
+  insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11
+
+for memory mapped ISA devices.
+
+Indirect access via address and data port is supported as well:
+
+  insmod cc770_isa.ko port=0x310,0x380 indirect=1 irq=7,11
+
+Furthermore, the following mode parameter can be defined:
+
+  clk: External oscillator clock frequency (default=16000000 [16 MHz])
+  cir: CPU interface register (default=0x40 [DSC])
+  bcr: Bus configuration register (default=0x40 [CBY])
+  cor: Clockout register (default=0x00)
+
+Note: for clk, cir, bcr and cor, the first argument re-defines the
+default for all other devices, e.g.:
+
+  insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11 clk=24000000
+
+is equivalent to
+
+  insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11 clk=24000000,24000000
+
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+Acked-by: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+---
+ drivers/net/can/cc770/Kconfig     |   11 +
+ drivers/net/can/cc770/Makefile    |    1 +
+ drivers/net/can/cc770/cc770_isa.c |  367 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 379 insertions(+), 0 deletions(-)
+ create mode 100644 drivers/net/can/cc770/cc770_isa.c
+
+diff --git a/drivers/net/can/cc770/Kconfig b/drivers/net/can/cc770/Kconfig
+index 225131b..28e4d48 100644
+--- a/drivers/net/can/cc770/Kconfig
++++ b/drivers/net/can/cc770/Kconfig
+@@ -1,3 +1,14 @@
+ menuconfig CAN_CC770
+ 	tristate &quot;Bosch CC770 and Intel AN82527 devices&quot;
+ 	depends on CAN_DEV &amp;&amp; HAS_IOMEM
++
++if CAN_CC770
++
++config CAN_CC770_ISA
++	tristate &quot;ISA Bus based legacy CC770 driver&quot;
++	---help---
++	  This driver adds legacy support for CC770 and AN82527 chips
++	  connected to the ISA bus using I/O port, memory mapped or
++	  indirect access.
++
++endif
+diff --git a/drivers/net/can/cc770/Makefile b/drivers/net/can/cc770/Makefile
+index 34e8180..872ecff 100644
+--- a/drivers/net/can/cc770/Makefile
++++ b/drivers/net/can/cc770/Makefile
+@@ -3,5 +3,6 @@
+ #
+ 
+ obj-$(CONFIG_CAN_CC770) += cc770.o
++obj-$(CONFIG_CAN_CC770_ISA) += cc770_isa.o
+ 
+ ccflags-$(CONFIG_CAN_DEBUG_DEVICES) := -DDEBUG
+diff --git a/drivers/net/can/cc770/cc770_isa.c b/drivers/net/can/cc770/cc770_isa.c
+new file mode 100644
+index 0000000..4be5fe2
+--- /dev/null
++++ b/drivers/net/can/cc770/cc770_isa.c
+@@ -0,0 +1,367 @@
++/*
++ * Driver for CC770 and AN82527 CAN controllers on the legacy ISA bus
++ *
++ * Copyright (C) 2009, 2011 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the version 2 of the GNU General Public License
++ * as published by the Free Software Foundation
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ */
++
++/*
++ * Bosch CC770 and Intel AN82527 CAN controllers on the ISA or PC-104 bus.
++ * The I/O port or memory address and the IRQ number must be specified via
++ * module parameters:
++ *
++ *   insmod cc770_isa.ko port=0x310,0x380 irq=7,11
++ *
++ * for ISA devices using I/O ports or:
++ *
++ *   insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11
++ *
++ * for memory mapped ISA devices.
++ *
++ * Indirect access via address and data port is supported as well:
++ *
++ *   insmod cc770_isa.ko port=0x310,0x380 indirect=1 irq=7,11
++ *
++ * Furthermore, the following mode parameter can be defined:
++ *
++ *   clk: External oscillator clock frequency (default=16000000 [16 MHz])
++ *   cir: CPU interface register (default=0x40 [DSC])
++ *   bcr: Bus configuration register (default=0x40 [CBY])
++ *   cor: Clockout register (default=0x00)
++ *
++ * Note: for clk, cir, bcr and cor, the first argument re-defines the
++ * default for all other devices, e.g.:
++ *
++ *   insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11 clk=24000000
++ *
++ * is equivalent to
++ *
++ *   insmod cc770_isa.ko mem=0xd1000,0xd1000 irq=7,11 clk=24000000,24000000
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME &quot;: &quot; fmt
++
++#include &lt;linux/kernel.h&gt;
++#include &lt;linux/module.h&gt;
++#include &lt;linux/platform_device.h&gt;
++#include &lt;linux/interrupt.h&gt;
++#include &lt;linux/netdevice.h&gt;
++#include &lt;linux/delay.h&gt;
++#include &lt;linux/irq.h&gt;
++#include &lt;linux/io.h&gt;
++#include &lt;linux/can.h&gt;
++#include &lt;linux/can/dev.h&gt;
++#include &lt;linux/can/platform/cc770.h&gt;
++
++#include &quot;cc770.h&quot;
++
++#define MAXDEV 8
++
++MODULE_AUTHOR(&quot;Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;&quot;);
++MODULE_DESCRIPTION(&quot;Socket-CAN driver for CC770 on the ISA bus&quot;);
++MODULE_LICENSE(&quot;GPL v2&quot;);
++
++#define CLK_DEFAULT	16000000	/* 16 MHz */
++#define COR_DEFAULT	0x00
++#define BCR_DEFAULT	BUSCFG_CBY
++
++static unsigned long port[MAXDEV];
++static unsigned long mem[MAXDEV];
++static int __devinitdata irq[MAXDEV];
++static int __devinitdata clk[MAXDEV];
++static u8 __devinitdata cir[MAXDEV] = {[0 ... (MAXDEV - 1)] = 0xff};
++static u8 __devinitdata cor[MAXDEV] = {[0 ... (MAXDEV - 1)] = 0xff};
++static u8 __devinitdata bcr[MAXDEV] = {[0 ... (MAXDEV - 1)] = 0xff};
++static int __devinitdata indirect[MAXDEV] = {[0 ... (MAXDEV - 1)] = -1};
++
++module_param_array(port, ulong, NULL, S_IRUGO);
++MODULE_PARM_DESC(port, &quot;I/O port number&quot;);
++
++module_param_array(mem, ulong, NULL, S_IRUGO);
++MODULE_PARM_DESC(mem, &quot;I/O memory address&quot;);
++
++module_param_array(indirect, int, NULL, S_IRUGO);
++MODULE_PARM_DESC(indirect, &quot;Indirect access via address and data port&quot;);
++
++module_param_array(irq, int, NULL, S_IRUGO);
++MODULE_PARM_DESC(irq, &quot;IRQ number&quot;);
++
++module_param_array(clk, int, NULL, S_IRUGO);
++MODULE_PARM_DESC(clk, &quot;External oscillator clock frequency &quot;
++		 &quot;(default=16000000 [16 MHz])&quot;);
++
++module_param_array(cir, byte, NULL, S_IRUGO);
++MODULE_PARM_DESC(cir, &quot;CPU interface register (default=0x40 [DSC])&quot;);
++
++module_param_array(cor, byte, NULL, S_IRUGO);
++MODULE_PARM_DESC(cor, &quot;Clockout register (default=0x00)&quot;);
++
++module_param_array(bcr, byte, NULL, S_IRUGO);
++MODULE_PARM_DESC(bcr, &quot;Bus configuration register (default=0x40 [CBY])&quot;);
++
++#define CC770_IOSIZE          0x20
++#define CC770_IOSIZE_INDIRECT 0x02
++
++static struct platform_device *cc770_isa_devs[MAXDEV];
++
++static u8 cc770_isa_mem_read_reg(const struct cc770_priv *priv, int reg)
++{
++	return readb(priv-&gt;reg_base + reg);
++}
++
++static void cc770_isa_mem_write_reg(const struct cc770_priv *priv,
++				      int reg, u8 val)
++{
++	writeb(val, priv-&gt;reg_base + reg);
++}
++
++static u8 cc770_isa_port_read_reg(const struct cc770_priv *priv, int reg)
++{
++	return inb((unsigned long)priv-&gt;reg_base + reg);
++}
++
++static void cc770_isa_port_write_reg(const struct cc770_priv *priv,
++				       int reg, u8 val)
++{
++	outb(val, (unsigned long)priv-&gt;reg_base + reg);
++}
++
++static u8 cc770_isa_port_read_reg_indirect(const struct cc770_priv *priv,
++					     int reg)
++{
++	unsigned long base = (unsigned long)priv-&gt;reg_base;
++
++	outb(reg, base);
++	return inb(base + 1);
++}
++
++static void cc770_isa_port_write_reg_indirect(const struct cc770_priv *priv,
++						int reg, u8 val)
++{
++	unsigned long base = (unsigned long)priv-&gt;reg_base;
++
++	outb(reg, base);
++	outb(val, base + 1);
++}
++
++static int __devinit cc770_isa_probe(struct platform_device *pdev)
++{
++	struct net_device *dev;
++	struct cc770_priv *priv;
++	void __iomem *base = NULL;
++	int iosize = CC770_IOSIZE;
++	int idx = pdev-&gt;id;
++	int err;
++	u32 clktmp;
++
++	dev_dbg(&amp;pdev-&gt;dev, &quot;probing idx=%d: port=%#lx, mem=%#lx, irq=%d\n&quot;,
++		idx, port[idx], mem[idx], irq[idx]);
++	if (mem[idx]) {
++		if (!request_mem_region(mem[idx], iosize, KBUILD_MODNAME)) {
++			err = -EBUSY;
++			goto exit;
++		}
++		base = ioremap_nocache(mem[idx], iosize);
++		if (!base) {
++			err = -ENOMEM;
++			goto exit_release;
++		}
++	} else {
++		if (indirect[idx] &gt; 0 ||
++		    (indirect[idx] == -1 &amp;&amp; indirect[0] &gt; 0))
++			iosize = CC770_IOSIZE_INDIRECT;
++		if (!request_region(port[idx], iosize, KBUILD_MODNAME)) {
++			err = -EBUSY;
++			goto exit;
++		}
++	}
++
++	dev = alloc_cc770dev(0);
++	if (!dev) {
++		err = -ENOMEM;
++		goto exit_unmap;
++	}
++	priv = netdev_priv(dev);
++
++	dev-&gt;irq = irq[idx];
++	priv-&gt;irq_flags = IRQF_SHARED;
++	if (mem[idx]) {
++		priv-&gt;reg_base = base;
++		dev-&gt;base_addr = mem[idx];
++		priv-&gt;read_reg = cc770_isa_mem_read_reg;
++		priv-&gt;write_reg = cc770_isa_mem_write_reg;
++	} else {
++		priv-&gt;reg_base = (void __iomem *)port[idx];
++		dev-&gt;base_addr = port[idx];
++
++		if (iosize == CC770_IOSIZE_INDIRECT) {
++			priv-&gt;read_reg = cc770_isa_port_read_reg_indirect;
++			priv-&gt;write_reg = cc770_isa_port_write_reg_indirect;
++		} else {
++			priv-&gt;read_reg = cc770_isa_port_read_reg;
++			priv-&gt;write_reg = cc770_isa_port_write_reg;
++		}
++	}
++
++	if (clk[idx])
++		clktmp = clk[idx];
++	else if (clk[0])
++		clktmp = clk[0];
++	else
++		clktmp = CLK_DEFAULT;
++	priv-&gt;can.clock.freq = clktmp;
++
++	if (cir[idx] != 0xff) {
++		priv-&gt;cpu_interface = cir[idx];
++	} else if (cir[0] != 0xff) {
++		priv-&gt;cpu_interface = cir[0];
++	} else {
++		/* The system clock may not exceed 10 MHz */
++		if (clktmp &gt; 10000000) {
++			priv-&gt;cpu_interface |= CPUIF_DSC;
++			clktmp /= 2;
++		}
++		/* The memory clock may not exceed 8 MHz */
++		if (clktmp &gt; 8000000)
++			priv-&gt;cpu_interface |= CPUIF_DMC;
++	}
++
++	if (priv-&gt;cpu_interface &amp; CPUIF_DSC)
++		priv-&gt;can.clock.freq /= 2;
++
++	if (bcr[idx] != 0xff)
++		priv-&gt;bus_config = bcr[idx];
++	else if (bcr[0] != 0xff)
++		priv-&gt;bus_config = bcr[0];
++	else
++		priv-&gt;bus_config = BCR_DEFAULT;
++
++	if (cor[idx] != 0xff)
++		priv-&gt;clkout = cor[idx];
++	else if (cor[0] != 0xff)
++		priv-&gt;clkout = cor[0];
++	else
++		priv-&gt;clkout = COR_DEFAULT;
++
++	dev_set_drvdata(&amp;pdev-&gt;dev, dev);
++	SET_NETDEV_DEV(dev, &amp;pdev-&gt;dev);
++
++	err = register_cc770dev(dev);
++	if (err) {
++		dev_err(&amp;pdev-&gt;dev,
++			&quot;couldn't register device (err=%d)\n&quot;, err);
++		goto exit_unmap;
++	}
++
++	dev_info(&amp;pdev-&gt;dev, &quot;device registered (reg_base=0x%p, irq=%d)\n&quot;,
++		 priv-&gt;reg_base, dev-&gt;irq);
++	return 0;
++
++ exit_unmap:
++	if (mem[idx])
++		iounmap(base);
++ exit_release:
++	if (mem[idx])
++		release_mem_region(mem[idx], iosize);
++	else
++		release_region(port[idx], iosize);
++ exit:
++	return err;
++}
++
++static int __devexit cc770_isa_remove(struct platform_device *pdev)
++{
++	struct net_device *dev = dev_get_drvdata(&amp;pdev-&gt;dev);
++	struct cc770_priv *priv = netdev_priv(dev);
++	int idx = pdev-&gt;id;
++
++	unregister_cc770dev(dev);
++	dev_set_drvdata(&amp;pdev-&gt;dev, NULL);
++
++	if (mem[idx]) {
++		iounmap(priv-&gt;reg_base);
++		release_mem_region(mem[idx], CC770_IOSIZE);
++	} else {
++		if (priv-&gt;read_reg == cc770_isa_port_read_reg_indirect)
++			release_region(port[idx], CC770_IOSIZE_INDIRECT);
++		else
++			release_region(port[idx], CC770_IOSIZE);
++	}
++	free_cc770dev(dev);
++
++	return 0;
++}
++
++static struct platform_driver cc770_isa_driver = {
++	.probe = cc770_isa_probe,
++	.remove = __devexit_p(cc770_isa_remove),
++	.driver = {
++		.name = KBUILD_MODNAME,
++		.owner = THIS_MODULE,
++	},
++};
++
++static int __init cc770_isa_init(void)
++{
++	int idx, err;
++
++	for (idx = 0; idx &lt; ARRAY_SIZE(cc770_isa_devs); idx++) {
++		if ((port[idx] || mem[idx]) &amp;&amp; irq[idx]) {
++			cc770_isa_devs[idx] =
++				platform_device_alloc(KBUILD_MODNAME, idx);
++			if (!cc770_isa_devs[idx]) {
++				err = -ENOMEM;
++				goto exit_free_devices;
++			}
++			err = platform_device_add(cc770_isa_devs[idx]);
++			if (err) {
++				platform_device_put(cc770_isa_devs[idx]);
++				goto exit_free_devices;
++			}
++			pr_debug(&quot;platform device %d: port=%#lx, mem=%#lx, &quot;
++				 &quot;irq=%d\n&quot;,
++				 idx, port[idx], mem[idx], irq[idx]);
++		} else if (idx == 0 || port[idx] || mem[idx]) {
++			pr_err(&quot;insufficient parameters supplied\n&quot;);
++			err = -EINVAL;
++			goto exit_free_devices;
++		}
++	}
++
++	err = platform_driver_register(&amp;cc770_isa_driver);
++	if (err)
++		goto exit_free_devices;
++
++	pr_info(&quot;driver for max. %d devices registered\n&quot;, MAXDEV);
++
++	return 0;
++
++exit_free_devices:
++	while (--idx &gt;= 0) {
++		if (cc770_isa_devs[idx])
++			platform_device_unregister(cc770_isa_devs[idx]);
++	}
++
++	return err;
++}
++module_init(cc770_isa_init);
++
++static void __exit cc770_isa_exit(void)
++{
++	int idx;
++
++	platform_driver_unregister(&amp;cc770_isa_driver);
++	for (idx = 0; idx &lt; ARRAY_SIZE(cc770_isa_devs); idx++) {
++		if (cc770_isa_devs[idx])
++			platform_device_unregister(cc770_isa_devs[idx]);
++	}
++}
++module_exit(cc770_isa_exit);
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002287.html">[Socketcan-users] [PATCH net-next v5 1/4] can: cc770: add driver	core for the Bosch CC770 and Intel AN82527
+</A></li>
+	<LI>Next message: <A HREF="002286.html">[Socketcan-users] [PATCH net-next v5 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2285">[ date ]</a>
+              <a href="thread.html#2285">[ thread ]</a>
+              <a href="subject.html#2285">[ subject ]</a>
+              <a href="author.html#2285">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%20Protocol%0A%09functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%202.6.18-6-amd64%20%29&In-Reply-To=%3C413a6a950904050338q5691bca8q3888f6146d993057%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000746.html">
+   <LINK REL="Next"  HREF="000748.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )</H1>
+    <B>Daniel Baluta</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%20Protocol%0A%09functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%202.6.18-6-amd64%20%29&In-Reply-To=%3C413a6a950904050338q5691bca8q3888f6146d993057%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )">daniel.baluta at gmail.com
+       </A><BR>
+    <I>Sun Apr  5 12:38:31 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000746.html">[Socketcan-users] I want to implement CAN Protocol functionality in	normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+        <LI>Next message: <A HREF="000748.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#747">[ date ]</a>
+              <a href="thread.html#747">[ thread ]</a>
+              <a href="subject.html#747">[ subject ]</a>
+              <a href="author.html#747">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Apr 5, 2009 at 12:47 PM, lakshmi sreekanth
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">laki.sreekanth at gmail.com</A>&gt; wrote:
+&gt;<i> Hi,
+</I>&gt;<i> &#160;&#160;&#160;&#160;&#160; I am doing one project on my own.
+</I>&gt;<i>
+</I>&gt;<i> I know the functionality of CAN protocol, (I read from the internet).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I want to do it in the normal Linux machine, it is only for testing purpose.
+</I>&gt;<i> First tell me whether its possible or not to implement it.
+</I>&gt;<i>
+</I>&gt;<i> Please tell me what i have to install to run CANSOCKETS like
+</I>&gt;<i>
+</I>&gt;<i>  s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+</I>&gt;<i>  and
+</I>&gt;<i>  s = socket(PF_CAN, SOCK_DGRAM, CAN_BCM);
+</I>&gt;<i>
+</I>&gt;<i> Now i am reading the below link information:
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2009-February/002253.html">https://lists.berlios.de/pipermail/socketcan-core/2009-February/002253.html</A>
+</I>
+It should be possible. First of all you must compile your kernel with
+can support  and the to write user space applications as with normal
+sockets.
+
+My problem is that PF_CAN macro  is not recognized.
+
+I've looked into /usr/include/linux/socket.h and there is PF_CAN
+defined but only if the below line is true
+
+#if defined(__KERNEL__) || !defined(__GLIBC__) || (__GLIBC__ &lt; 2)
+
+When i try to use PF_CAN in user space program is not working.
+Does anyone has it working?
+
+thanks,
+Daniel.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000746.html">[Socketcan-users] I want to implement CAN Protocol functionality in	normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+	<LI>Next message: <A HREF="000748.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#747">[ date ]</a>
+              <a href="thread.html#747">[ thread ]</a>
+              <a href="subject.html#747">[ subject ]</a>
+              <a href="author.html#747">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

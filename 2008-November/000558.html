@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Added ISO 15765-2 CAN transport protocol for	protocol family CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Added%20ISO%2015765-2%20CAN%20transport%20protocol%20for%0A%09protocol%20family%20CAN&In-Reply-To=%3C49118C91.4070102%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000585.html">
+   <LINK REL="Next"  HREF="000561.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Added ISO 15765-2 CAN transport protocol for	protocol family CAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Added%20ISO%2015765-2%20CAN%20transport%20protocol%20for%0A%09protocol%20family%20CAN&In-Reply-To=%3C49118C91.4070102%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Added ISO 15765-2 CAN transport protocol for	protocol family CAN">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed Nov  5 13:07:45 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000585.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+        <LI>Next message: <A HREF="000561.html">[Socketcan-users] Unable to reserve mem region
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#558">[ date ]</a>
+              <a href="thread.html#558">[ thread ]</a>
+              <a href="subject.html#558">[ subject ]</a>
+              <a href="author.html#558">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+i added the CAN ISO-TP transport protocol for discussions and ongoing 
+development to the SocketCAN SVN (rev866).
+
+Even though this code is tested and settled for two month now it still 
+comes with absolute no warranty (of course :) and has ALPHA state due to 
+the possibility that we might change parts of the socket API caused by 
+discussions on this list.
+
+A brief introduction into the implementation, the tools and the things 
+you need to tweak in your system to have fun with CAN ISO-TP can be 
+found in trunk/README.isotp or here:
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/README.isotp">http://svn.berlios.de/svnroot/repos/socketcan/trunk/README.isotp</A>
+
+If you would like to have that modem-dialup-feeling back, the tool 
+'isotptun' creates an IP tunnel over ISO-TP PDUs over CAN for you. It's 
+quite funny to e.g. log in via ssh on CAN ...
+
+Feedback is most welcome!
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000585.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+	<LI>Next message: <A HREF="000561.html">[Socketcan-users] Unable to reserve mem region
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#558">[ date ]</a>
+              <a href="thread.html#558">[ thread ]</a>
+              <a href="subject.html#558">[ subject ]</a>
+              <a href="author.html#558">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Message Priorities
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Message%20Priorities&In-Reply-To=%3C48CE417D.8040301%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000491.html">
+   <LINK REL="Next"  HREF="000493.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Message Priorities</H1>
+    <B>tike64 at gmail.com</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Message%20Priorities&In-Reply-To=%3C48CE417D.8040301%40gmail.com%3E"
+       TITLE="[Socketcan-users] Message Priorities">tike64 at gmail.com
+       </A><BR>
+    <I>Mon Sep 15 13:05:33 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000491.html">[Socketcan-users] mcp251x (was: Re: Platfrom driver - was Re: At91_can transmitting error)
+</A></li>
+        <LI>Next message: <A HREF="000493.html">[Socketcan-users] Message Priorities
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#492">[ date ]</a>
+              <a href="thread.html#492">[ thread ]</a>
+              <a href="subject.html#492">[ subject ]</a>
+              <a href="author.html#492">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear List,
+
+I'm new here and trying to study if we should move to the SocketCAN API.
+
+We have a design with three MCP2515 parts on board and full Linux. I have used the old can4linux code as the base for my 
+driver and now stumbled into the SocketCAN project. If I have understood right, this should become the standard Linux 
+CAN API and, to stay current, we too should start to use it.
+
+One concern though: We are committing safety audit on one of our projects. In that process, it has been made clear that 
+generated messages must be sent in the order of priority. High priority messages must not be blocked by lower priority 
+messages in software or hardware queues.
+
+I have tried to grasp how this is in SocketCAN. Right now i'm in the belief that SocketCAN sends the messages in the 
+order they are introduced to the API. Am I right in this? Is this the way it is going to be? How have others solved this 
+problem?
+
+--
+
+Timo
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000491.html">[Socketcan-users] mcp251x (was: Re: Platfrom driver - was Re: At91_can transmitting error)
+</A></li>
+	<LI>Next message: <A HREF="000493.html">[Socketcan-users] Message Priorities
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#492">[ date ]</a>
+              <a href="thread.html#492">[ thread ]</a>
+              <a href="subject.html#492">[ subject ]</a>
+              <a href="author.html#492">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

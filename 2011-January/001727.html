@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTi%3D%2Bqgi4hSVHz9-efmmL2DYXNjAo8cONtP4cxpmp%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001724.html">
+   <LINK REL="Next"  HREF="001728.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTi%3D%2Bqgi4hSVHz9-efmmL2DYXNjAo8cONtP4cxpmp%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104">lambert.willy at gmail.com
+       </A><BR>
+    <I>Fri Jan 14 10:37:59 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001724.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+        <LI>Next message: <A HREF="001728.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1727">[ date ]</a>
+              <a href="thread.html#1727">[ thread ]</a>
+              <a href="subject.html#1727">[ subject ]</a>
+              <a href="author.html#1727">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/1/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 01/14/2011 12:57 AM, Willy Lambert wrote:
+</I>&gt;<i> &gt; 2011/1/13 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;<i> ...
+</I>&gt;<i> &gt; I am stuck with the test case setup, candump shows error messages when I
+</I>&gt;<i> try
+</I>&gt;<i> &gt; a cansend. I already have tricks with extended or standard data frame
+</I>&gt;<i> &gt; formats with Ixxat drivers. My motors seems to only accept standard
+</I>&gt;<i> frames.
+</I>&gt;<i> &gt; Is there a way to configure this ?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I booted my target with Ixxat driver and run my test cases to validate
+</I>&gt;<i> &gt; everything is in order. (BIOS options, jumpers, IRQ, wiring). I only use
+</I>&gt;<i> one
+</I>&gt;<i> &gt; controller on IRQ11 (as it is said as &quot;reserved&quot; in my CPU board IRQ
+</I>&gt;<i> &gt; mapping)
+</I>&gt;<i> &gt; I may run my motor and receive SDO from him, everything seems to be OK.
+</I>&gt;<i>
+</I>&gt;<i> The hardware seem to work. That's a good starting point.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Without changing anything except my init script which load can drivers
+</I>&gt;<i> (in
+</I>&gt;<i> &gt; order to load socket can drivers instead of Ixxat ones), I rebooted my
+</I>&gt;<i> CPU.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Here is the load script :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; modprobe sja1000_isa irq=11 mem=0xD0000
+</I>&gt;<i> &gt;&gt; ip link set can0 type can bitrate 250000 restart-ms 1000
+</I>&gt;<i> &gt;&gt; ifconfig can0 up
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Here is dmesg answer (which seems correc) :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; [    3.928467] sja1000_isa sja1000_isa.0: sja1000_isa device registered
+</I>&gt;<i> &gt;&gt; (reg_base=0xc00d0000, irq=11)
+</I>&gt;<i> &gt;&gt; [    3.928646] Legacy sja1000_isa driver for max. 8 devices registered
+</I>&gt;<i> &gt;&gt; [    3.938877] sja1000_isa sja1000_isa.0: setting BTR0=0x01 BTR1=0x1c
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Here is ifconfig result :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; can0      Link encap:UNSPEC  HWaddr
+</I>&gt;<i> &gt;&gt; 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i> &gt;&gt;           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i> &gt;&gt;           RX packets:2 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i> &gt;&gt;           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i> &gt;&gt;           collisions:0 lg file transmission:10
+</I>&gt;<i> &gt;&gt;           RX bytes:16 (16.0 B)  TX bytes:0 (0.0 B)
+</I>&gt;<i> &gt;&gt;           Interruption:11
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Here is /proc/iomem
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; 00000000-00000fff : reserved
+</I>&gt;<i> &gt;&gt; 00001000-0009fbff : System RAM
+</I>&gt;<i> &gt;&gt; 0009fc00-0009ffff : reserved
+</I>&gt;<i> &gt;&gt; 000a0000-000bffff : Video RAM area
+</I>&gt;<i> &gt;&gt; 000c0000-000c7fff : Video ROM
+</I>&gt;<i> &gt;&gt; 000d0000-000d001f : sja1000_isa
+</I>&gt;<i> &gt;&gt; ...
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Here is /proc/interrupts
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;            CPU0
+</I>&gt;<i> &gt;&gt;   0:        215   IO-APIC-edge      timer
+</I>&gt;<i> &gt;&gt;   1:          8   IO-APIC-edge      i8042
+</I>&gt;<i> &gt;&gt;   2:          0    XT-PIC-XT        cascade
+</I>&gt;<i> &gt;&gt;   8:         97   IO-APIC-edge      rtc0
+</I>&gt;<i> &gt;&gt;  11:          1   IO-APIC-edge      can0
+</I>&gt;<i> &gt;&gt;  12:          7   IO-APIC-edge      i8042
+</I>&gt;<i> &gt;&gt;  14:          0   IO-APIC-edge      ata_piix
+</I>&gt;<i> &gt;&gt;  15:       1017   IO-APIC-edge      ata_piix
+</I>&gt;<i> &gt;&gt;  19:          0   IO-APIC-fasteoi   uhci_hcd:usb3
+</I>&gt;<i> &gt;&gt;  23:         14   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+</I>&gt;<i> &gt;&gt;  40:        411   PCI-MSI-edge      eth0
+</I>&gt;<i> &gt;&gt; NMI:          0   Non-maskable interrupts
+</I>&gt;<i> &gt;&gt; LOC:     293000   Local timer interrupts
+</I>&gt;<i> &gt;&gt; SPU:          0   Spurious interrupts
+</I>&gt;<i> &gt;&gt; PMI:          0   Performance monitoring interrupts
+</I>&gt;<i> &gt;&gt; PND:          0   Performance pending work
+</I>&gt;<i> &gt;&gt; TRM:          0   Thermal event interrupts
+</I>&gt;<i> &gt;&gt; THR:          0   Threshold APIC interrupts
+</I>&gt;<i> &gt;&gt; MCE:          0   Machine check exceptions
+</I>&gt;<i> &gt;&gt; MCP:          1   Machine check polls
+</I>&gt;<i> &gt;&gt; ERR:          0
+</I>&gt;<i> &gt;&gt; MIS:          0
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I write this command to wake up everybody :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; ./cansend can0 000#0100
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; And at the same time, in another terminal, I run candump with theses
+</I>&gt;<i> results
+</I>&gt;<i> &gt; :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;  ./candump any,0:0,#FFFFFFFF
+</I>&gt;<i> &gt;&gt;   can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i> &gt;&gt;   can0  20000100  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i> &gt;&gt;   can0  20000004  [8] 00 04 00 00 00 00 00 71   ERRORFRAME
+</I>&gt;<i> &gt;&gt;   can0  20000004  [8] 00 10 00 00 00 00 00 81   ERRORFRAME
+</I>&gt;<i>
+</I>&gt;<i> The controller goes bus-off.
+</I>
+
+May I ask you how you decode the candump ERRORFRAME ? does the
+20000040/20000100/20000004 makes sens ? What the date behind ?
+
+
+&gt;<i> There are still some electrical problems.
+</I>&gt;<i>
+</I>
+Ok, BUT, I works before rebooting !
+
+
+
+&gt;<i> Next try to specific proper values for cdr and ocr:
+</I>&gt;<i>
+</I>&gt;<i>   modprobe sja1000_isa irq=11 mem=0xD0000 ocr=0x5e,0x5e
+</I>&gt;<i>
+</I>&gt;<i> and then
+</I>&gt;<i>
+</I>&gt;<i>   modprobe sja1000_isa irq=11 mem=0xD0000 ocr=0x5e,0x5e cdr=0,0
+</I>&gt;<i>
+</I>&gt;<i> I'll do it this afternoon
+</I>
+
+
+&gt;<i> As you know, there might still be the magic controller reset missing.
+</I>&gt;<i>
+</I>
+I forgot this, do you whant me to try a patch against this ?
+
+
+&gt;<i>
+</I>&gt;<i> Good luck.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110114/e452cc05/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110114/e452cc05/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001724.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+	<LI>Next message: <A HREF="001728.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1727">[ date ]</a>
+              <a href="thread.html#1727">[ thread ]</a>
+              <a href="subject.html#1727">[ subject ]</a>
+              <a href="author.html#1727">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

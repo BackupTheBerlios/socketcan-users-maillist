@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can device error flags unset?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20device%20error%20flags%20unset%3F&In-Reply-To=%3C201102080833.44831.alexander.stein%40systec-electronic.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001782.html">
+   <LINK REL="Next"  HREF="001784.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can device error flags unset?</H1>
+    <B>Alexander Stein</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20device%20error%20flags%20unset%3F&In-Reply-To=%3C201102080833.44831.alexander.stein%40systec-electronic.com%3E"
+       TITLE="[Socketcan-users] can device error flags unset?">alexander.stein at systec-electronic.com
+       </A><BR>
+    <I>Tue Feb  8 08:33:44 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001782.html">[Socketcan-users] can device error flags unset?
+</A></li>
+        <LI>Next message: <A HREF="001784.html">[Socketcan-users] can device error flags unset?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1783">[ date ]</a>
+              <a href="thread.html#1783">[ thread ]</a>
+              <a href="subject.html#1783">[ subject ]</a>
+              <a href="author.html#1783">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Monday 07 February 2011, 21:32:49 Wolfgang Grandegger wrote:
+&gt;<i> On 02/07/2011 05:09 PM, Alexander Stein wrote:
+</I>&gt;<i> &gt; On Monday 07 February 2011, 16:33:30 Wolfgang Grandegger wrote:
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt; Well, on the other hand, at91_can, flexcan and pch_can are the only
+</I>&gt;<i> &gt;&gt;&gt; controllers currently sending an CAN_ERR_ACK in can_id. Which you will
+</I>&gt;<i> &gt;&gt;&gt; be spammed with.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Yes, that are the infamous &quot;ack slot&quot; errors. Strictly speaking the
+</I>&gt;<i> &gt;&gt; CAN_ERR_ACK is not correct. It sneaked in some time ago. It's a normal
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; bus error and it should therefore be:
+</I>&gt;<i> &gt;&gt; 		cf-&gt;can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
+</I>&gt;<i> &gt;&gt; 		
+</I>&gt;<i> &gt;&gt; 	        cf-&gt;data[2] |= CAN_ERR_PROT_UNSPEC;
+</I>&gt;<i> &gt;&gt; 		
+</I>&gt;<i> &gt;&gt; 		cf-&gt;data[3] |= CAN_ERR_PROT_LOC_ACK; /* ACK slot */
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; That's what the SJA1000 reports and a few other drivers need to be fixed
+</I>&gt;<i> &gt;&gt; as well.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; See also
+</I>&gt;<i> &gt;&gt; <A HREF="http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00212.ht">http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00212.ht</A>
+</I>&gt;<i> &gt;&gt; ml
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Mh, for what was CAN_ERR_ACK inserted then, if this is not the ack slot
+</I>&gt;<i> &gt; error?
+</I>&gt;<i> 
+</I>&gt;<i> git blame says:
+</I>&gt;<i> 
+</I>&gt;<i>   $ git blame -L 25,25 error.h
+</I>&gt;<i>   0d66548a (Oliver Hartkopp 2007-11-16 15:52:17 -0800 25) #define
+</I>&gt;<i> CAN_ERR_ACK
+</I>&gt;<i> 
+</I>&gt;<i> Therefore it's in mainline since the beginning. I think it was intended
+</I>
+Well, the commanet after CAN_ERR_ACK says &quot;received no ACK on transmission&quot; 
+which is what I would expect. On the other hand CAN_ERR_PROT_LOC_ACK and 
+CAN_ERR_PROT_LOC_ACK_DEL seem to indicate a more detailed information about 
+the same error. I think CAN_ERR_ACK should be set in every case (also easy to 
+filter then as it is in can_id) and CAN_ERR_PROT_LOC_ACK and/or 
+CAN_ERR_PROT_LOC_ACK_DEL should be set if available/possible.
+
+&gt;<i> for CAN controllers using a simple error reporting like the i82527.
+</I> The
+&gt;<i> AT91 manual states:
+</I>&gt;<i> 
+</I>&gt;<i> &quot;Acknowledgment error (AERR bit in the CAN_SR register): The transmitter
+</I>&gt;<i> checks the Acknowledge Slot, which is transmitted by the transmitting node
+</I>&gt;<i> as a recessive bit, contains a dominant bit. If this is the case, at least
+</I>&gt;<i> one other node has received the frame correctly. If not, an Acknowledge
+</I>&gt;<i> Error has occurred and the transmitter will start in the next bit-time an
+</I>&gt;<i> Error Frame transmission.&quot;
+</I>&gt;<i> 
+</I>&gt;<i> I have no problem to set CAN_ERR_ACK if it's really useful. But then it
+</I>&gt;<i> should be done for all drivers.
+</I>
+Yes, of course, see above.
+
+&gt;<i> &gt;&gt;&gt; But using an own application to send/receive some CAN messages where I
+</I>&gt;<i> &gt;&gt;&gt; parse the error frames (ignoring ACK error though), I currently use
+</I>&gt;<i> &gt;&gt;&gt; CAN_ERR_PROT_ACTIVE to know when I got back active.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; That was implemented by Mark but we need a general solution for all
+</I>&gt;<i> &gt;&gt; drivers.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Mh, it would be good to know which flags are used for what. It seems the
+</I>&gt;<i> &gt; docs and examples are a bit quiet about error handling/messaging.
+</I>&gt;<i> 
+</I>&gt;<i> Well, we have:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37/Documentation/networking/can.txt#L434">http://lxr.linux.no/#linux+v2.6.37/Documentation/networking/can.txt#L434</A>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux/include/linux/can/error.h">http://lxr.linux.no/#linux/include/linux/can/error.h</A>
+</I>&gt;<i> 
+</I>&gt;<i> Could be improved, of course. Also be aware, that error reporting is
+</I>&gt;<i> heavily hardware dependent. The SJA100 has a very comprehensive error
+</I>&gt;<i> reporting while the MCP251x reports almost nothing.
+</I>
+Well, I expected that at least the most common errors are reported similar 
+from different CAN controllers, as far as possible.
+
+Alexander
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001782.html">[Socketcan-users] can device error flags unset?
+</A></li>
+	<LI>Next message: <A HREF="001784.html">[Socketcan-users] can device error flags unset?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1783">[ date ]</a>
+              <a href="thread.html#1783">[ thread ]</a>
+              <a href="subject.html#1783">[ subject ]</a>
+              <a href="author.html#1783">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

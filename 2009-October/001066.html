@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN communication with MCP2515
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Ccabda6420909302253h284081c3oac1999f805a6595f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001067.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN communication with MCP2515</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Ccabda6420909302253h284081c3oac1999f805a6595f%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] CAN communication with MCP2515">chripell at gmail.com
+       </A><BR>
+    <I>Thu Oct  1 07:53:33 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001067.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1066">[ date ]</a>
+              <a href="thread.html#1066">[ thread ]</a>
+              <a href="subject.html#1066">[ subject ]</a>
+              <a href="author.html#1066">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+On Wed, Sep 30, 2009 at 11:36 PM, Erik Calissendorff
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gumstix at tansaki.com</A>&gt; wrote:
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ------------[ cut here ]------------
+</I>&gt;<i> WARNING: at /home/plejd/overo-oe/tmp/work/overo-angstrom-linux-gnueabi/socketcan-modules-0.0+svnr1064-r46/trunk/kernel/2.6/drivers/net/can/mcp251x.c:796
+</I>
+this is a bit misleading actually. This warning is printed when we
+have an error on the bus (see below) but the tx buffer is full.
+Perhaps it shouldn't be printed. Didn't realize this when I put the
+warning there .....
+
+read using include/socketcat/can/error.h:
+
+&gt;<i> &#160;can0 &#160;20000040 &#160;[8] 00 00 00 00 00 00 00 00 &#160; ERRORFRAME
+</I>
+bus off
+
+&gt;<i> &#160;can0 &#160;20000004 &#160;[8] 00 20 00 00 00 00 00 00 &#160; ERRORFRAME
+</I>
+control problems: reached error passive status TX
+
+This basically means that there is something wrong with your CAN bus
+(bad connections, missing terminators, etc.). The loop is always
+triggered because you selected auto-restart.
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001067.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1066">[ date ]</a>
+              <a href="thread.html#1066">[ thread ]</a>
+              <a href="subject.html#1066">[ subject ]</a>
+              <a href="author.html#1066">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] at91_can: on acknowledge error also set	CAN_ERR_PROT_LOC_ACK error bit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20at91_can%3A%20on%20acknowledge%20error%20also%20set%0A%09CAN_ERR_PROT_LOC_ACK%20error%20bit&In-Reply-To=%3C1297238690-21374-1-git-send-email-alexander.stein%40systec-electronic.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001784.html">
+   <LINK REL="Next"  HREF="001786.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] at91_can: on acknowledge error also set	CAN_ERR_PROT_LOC_ACK error bit</H1>
+    <B>Alexander Stein</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20at91_can%3A%20on%20acknowledge%20error%20also%20set%0A%09CAN_ERR_PROT_LOC_ACK%20error%20bit&In-Reply-To=%3C1297238690-21374-1-git-send-email-alexander.stein%40systec-electronic.com%3E"
+       TITLE="[Socketcan-users] [PATCH] at91_can: on acknowledge error also set	CAN_ERR_PROT_LOC_ACK error bit">alexander.stein at systec-electronic.com
+       </A><BR>
+    <I>Wed Feb  9 09:04:50 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001784.html">[Socketcan-users] can device error flags unset?
+</A></li>
+        <LI>Next message: <A HREF="001786.html">[Socketcan-users] No can0 interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1785">[ date ]</a>
+              <a href="thread.html#1785">[ thread ]</a>
+              <a href="subject.html#1785">[ subject ]</a>
+              <a href="author.html#1785">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Signed-off-by: Alexander Stein &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">alexander.stein at systec-electronic.com</A>&gt;
+---
+Wolfgang,
+
+did you mean something like that?
+On ACK (slot) error it sets both CAN_ERR_ACK and CAN_ERR_PROT_LOC_ACK bits.
+
+Alexander
+
+ drivers/net/can/at91_can.c |    3 ++-
+ 1 files changed, 2 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/net/can/at91_can.c b/drivers/net/can/at91_can.c
+index 57d2ffb..708fa03 100644
+--- a/drivers/net/can/at91_can.c
++++ b/drivers/net/can/at91_can.c
+@@ -670,7 +670,8 @@ static void at91_poll_err_frame(struct net_device *dev,
+ 	if (reg_sr &amp; AT91_IRQ_AERR) {
+ 		netdev_dbg(dev, &quot;AERR irq\n&quot;);
+ 		dev-&gt;stats.tx_errors++;
+-		cf-&gt;can_id |= CAN_ERR_ACK;
++		cf-&gt;can_id |= CAN_ERR_ACK | CAN_ERR_PROT;
++		cf-&gt;data[3] |= CAN_ERR_PROT_LOC_ACK;
+ 	}
+ 
+ 	/* Form error */
+-- 
+1.7.3.4
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001784.html">[Socketcan-users] can device error flags unset?
+</A></li>
+	<LI>Next message: <A HREF="001786.html">[Socketcan-users] No can0 interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1785">[ date ]</a>
+              <a href="thread.html#1785">[ thread ]</a>
+              <a href="subject.html#1785">[ subject ]</a>
+              <a href="author.html#1785">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

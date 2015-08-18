@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C166589D0B9DD2547A1319599B9BADA1F5AA052%40vsv-exchange.ixxat.intranet.priv%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001578.html">
+   <LINK REL="Next"  HREF="001574.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>gribov at ixxat.de</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C166589D0B9DD2547A1319599B9BADA1F5AA052%40vsv-exchange.ixxat.intranet.priv%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">gribov at ixxat.de
+       </A><BR>
+    <I>Wed Oct 13 10:42:48 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001578.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001574.html">[Socketcan-users] [PATCH] Add BCM intro,	opcodes and TX_DELETE to can.txt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1548">[ date ]</a>
+              <a href="thread.html#1548">[ thread ]</a>
+              <a href="subject.html#1548">[ subject ]</a>
+              <a href="author.html#1548">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Alexander,
+
+&gt;<i> So, what can I do to get the information when the frame was sent?
+</I>
+that is the self-reception (socket option CAN_RAW_RECV_OWN_MSGS) 
+is useful for. If set, the Tx CAN message will be looped back in 
+the socket receive queue at the moment it is &quot;physically&quot; sent.
+
+Regards,
+Vladislav
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001578.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001574.html">[Socketcan-users] [PATCH] Add BCM intro,	opcodes and TX_DELETE to can.txt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1548">[ date ]</a>
+              <a href="thread.html#1548">[ thread ]</a>
+              <a href="subject.html#1548">[ subject ]</a>
+              <a href="author.html#1548">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

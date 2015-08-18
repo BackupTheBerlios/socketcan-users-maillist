@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080703070219.GZ4319%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000450.html">
+   <LINK REL="Next"  HREF="000458.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Robert Schwebel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080703070219.GZ4319%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">r.schwebel at pengutronix.de
+       </A><BR>
+    <I>Thu Jul  3 09:02:19 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000450.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000458.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#456">[ date ]</a>
+              <a href="thread.html#456">[ thread ]</a>
+              <a href="subject.html#456">[ subject ]</a>
+              <a href="author.html#456">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Jul 02, 2008 at 10:55:58PM +0200, Oliver Hartkopp wrote:
+&gt;<i> &gt; &gt; what is the special advantage to have this updatable table inside
+</I>&gt;<i> &gt; &gt; the driver?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Not necessarily inside the driver, but in the kernel.
+</I>&gt;<i>
+</I>&gt;<i> And what's the special advantage here? You did not really answer my
+</I>&gt;<i> question :)
+</I>
+Convenience.
+
+&gt;<i> Maybe i was misunderstood here.
+</I>&gt;<i>
+</I>&gt;<i> I want &quot;canconfig&quot; to perform all the &quot;echo $phase_seg1 &gt;
+</I>&gt;<i> /sys/bla/blub&quot; stuff setting.
+</I>
+That means that applications in C have to call canconfig if they want to
+set the bitrate. A mandatory tool/lib would be necessary which is not,
+currently. All we need in the application is open()/close()/write().
+
+rsc
+-- 
+ Dipl.-Ing. Robert Schwebel | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+ Pengutronix - Linux Solutions for Science and Industry
+   Handelsregister:  Amtsgericht Hildesheim, HRA 2686
+     Hannoversche Str. 2, 31134 Hildesheim, Germany
+   Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000450.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000458.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#456">[ date ]</a>
+              <a href="thread.html#456">[ thread ]</a>
+              <a href="subject.html#456">[ subject ]</a>
+              <a href="author.html#456">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

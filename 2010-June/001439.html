@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] error active (CAN_ERR_CRTL /	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20error%20active%20%28CAN_ERR_CRTL%0A%20/%09CAN_ERR_CRTL_UNSPEC%29%20not%20indicated%20in%09rev1181&In-Reply-To=%3C4C1A671A.1040100%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001437.html">
+   <LINK REL="Next"  HREF="001440.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] error active (CAN_ERR_CRTL /	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20error%20active%20%28CAN_ERR_CRTL%0A%20/%09CAN_ERR_CRTL_UNSPEC%29%20not%20indicated%20in%09rev1181&In-Reply-To=%3C4C1A671A.1040100%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] error active (CAN_ERR_CRTL /	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181">mkl at pengutronix.de
+       </A><BR>
+    <I>Thu Jun 17 20:19:06 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001437.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+        <LI>Next message: <A HREF="001440.html">[Socketcan-users] error active (CAN_ERR_CRTL	/	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1439">[ date ]</a>
+              <a href="thread.html#1439">[ thread ]</a>
+              <a href="subject.html#1439">[ subject ]</a>
+              <a href="author.html#1439">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> On 06/17/2010 06:54 PM, Marc Kleine-Budde wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i> Now I try to use more current version (rev 1181) of SocketCAN, because we 
+</I>&gt;&gt;&gt;&gt;<i> need netlink CAN control API. Here I see one problem - no error active is 
+</I>&gt;&gt;&gt;&gt;<i> indicated. The CAN_ERR_CRTL_UNSPEC error control messages are missed. 
+</I>&gt;&gt;&gt;&gt;<i> I observe this problem with both sysfs and netlink variants.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Is it known and wanted behavior, to not indicate CAN_ERR_CRTL_UNSPEC any more?
+</I>&gt;&gt;&gt;<i> Yes, this is the current (known) behavior and it has been discussed
+</I>&gt;&gt;&gt;<i> before. We only report &quot;increasing&quot; state changes
+</I>&gt;&gt;&gt;<i> active-&gt;warning-&gt;passive-&gt;bus-off. I think it's not what we really want.
+</I>&gt;&gt;&gt;<i> It should be fixed.
+</I>&gt;&gt;<i> Have a look at the statemachine in the at91_can driver[1]. I started to
+</I>&gt;&gt;<i> make it more generic in order to be usable as a generic component.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Cheers, Marc
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [1] <A HREF="http://lxr.linux.no/#linux+v2.6.34/drivers/net/can/at91_can.c#L757">http://lxr.linux.no/#linux+v2.6.34/drivers/net/can/at91_can.c#L757</A>
+</I>&gt;<i> 
+</I>&gt;<i> I see, we don't have a #define for state changes to error active. I tend
+</I>&gt;<i> to rename CAN_ERR_CRTL_UNSPEC to CAN_ERR_CRTL_ACTIVE. But this needs
+</I>&gt;<i> some more thoughts and discussion. &quot;CAN_ERR_CTRL&quot; stands for controller
+</I>&gt;<i> *problems* and that's what we have implemented. I will have a closer
+</I>&gt;<i> look tomorrow.
+</I>
+ACK, I see the need for discussion, too. However, if your time permits,
+have a look at the above mentioned state machine. Don't look to close at
+the individual bits that are send in the states, they can be discussed
+seperately.
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100617/91bdb471/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100617/91bdb471/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001437.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+	<LI>Next message: <A HREF="001440.html">[Socketcan-users] error active (CAN_ERR_CRTL	/	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1439">[ date ]</a>
+              <a href="thread.html#1439">[ thread ]</a>
+              <a href="subject.html#1439">[ subject ]</a>
+              <a href="author.html#1439">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

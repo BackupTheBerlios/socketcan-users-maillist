@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Running MCP2515 with custom SPI
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Running%20MCP2515%20with%20custom%20SPI&In-Reply-To=%3C4DE5F4A0.1090700%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001908.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Running MCP2515 with custom SPI</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Running%20MCP2515%20with%20custom%20SPI&In-Reply-To=%3C4DE5F4A0.1090700%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Running MCP2515 with custom SPI">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Jun  1 10:13:20 CEST 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001908.html">[Socketcan-users]  SPEAR320 SOC TX problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1907">[ date ]</a>
+              <a href="thread.html#1907">[ thread ]</a>
+              <a href="subject.html#1907">[ subject ]</a>
+              <a href="author.html#1907">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 05/31/2011 11:00 PM, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Gn0my at gmx.de</A> wrote:
+&gt;<i> i want to use the MCP2515 microchip for CAN communication.
+</I>&gt;<i> Unfortunately i can't use the included kernelheader
+</I>&gt;<i> &lt;linux/spi/spi.h&gt;, because it's a custom spi-driver. To read the SPI
+</I>&gt;<i> i simply call a function with three parameters: struct of the
+</I>&gt;<i> spi-configuration(CS,bit length, Mastermode, ...), a char
+</I>&gt;<i> destination_register and a short data-buffer to read data. To write
+</I>&gt;<i> the SPI i call another function with three parameters: struct of the
+</I>&gt;<i> spi-configuration(CS,bit length, Mastermode, ...), a char
+</I>&gt;<i> destination_register and a short data field to write data.
+</I>
+&gt;<i> Can i just call my spi transfer functions inside the functions
+</I>&gt;<i> mcp251x_read_reg(struct spi_device *spi, uint8_t reg) and
+</I>&gt;<i> mcp251x_write_reg(struct spi_device *spi, u8 reg, uint8_t val) and
+</I>&gt;<i> everything in CANSocket works fine?
+</I>
+Just try it out. Without code I cannot help you.
+
+However I strongly suggest to implement a standard Linux spi driver for
+your SPI host adapter. Then the mcp and all other spi device drivers
+will work out of the box.
+
+regards, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110601/d0023248/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110601/d0023248/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001908.html">[Socketcan-users]  SPEAR320 SOC TX problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1907">[ date ]</a>
+              <a href="thread.html#1907">[ thread ]</a>
+              <a href="subject.html#1907">[ subject ]</a>
+              <a href="author.html#1907">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

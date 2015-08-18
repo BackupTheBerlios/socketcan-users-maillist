@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A73E84.50201%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000243.html">
+   <LINK REL="Next"  HREF="000251.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A73E84.50201%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Mon Feb  4 17:34:12 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000243.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000251.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#250">[ date ]</a>
+              <a href="thread.html#250">[ thread ]</a>
+              <a href="subject.html#250">[ subject ]</a>
+              <a href="author.html#250">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> What version of -rt are you using and what is your .config.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I use rt-preempt-2.6.23.1-rt5 + some minor fixes + some board specific
+</I>&gt;<i> drivers.
+</I>
+Hm, 2.6.23 did not have proper support for clock events, IIRC.
+
+&gt;<i> Attached is my configuration. Mind off that I enabled some debugging
+</I>&gt;<i> features. But these should only add timing overhead.
+</I>
+Could you please enable CONFIG_RCU_TRACE. It is known to have some bad
+impact on the latencies and might make trouble. The reason is still
+unknown. I assume you are following the -rt mailing list.
+
+&gt;<i> How big is the difference between 2.6.23 and 2.6.24 in terms of MPC5200B
+</I>&gt;<i> ? Especially the oftree thingies change quite often and cause me a
+</I>&gt;<i> headache all the time. Could I just recompile 2.6.24 and use more or
+</I>&gt;<i> less the same device tree ?
+</I>
+I think 2.6.23 does not have complete support for the MPC5200,
+especially BESTCOMM and FEC driver are missing. For me, 2.6.24 (starting
+with -rc?) was the first official version supporting properly the
+MPC5200 and the Lite5200. Starting with that version it should be
+simpler to add support for your board. But the target is still moving
+fast including further changes to OF tree stuff :-(.
+
+As I said. I had once a configuration showing the errors but was unable
+to reproduce it :-(.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000243.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000251.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#250">[ date ]</a>
+              <a href="thread.html#250">[ thread ]</a>
+              <a href="subject.html#250">[ subject ]</a>
+              <a href="author.html#250">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

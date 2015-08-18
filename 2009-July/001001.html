@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] NOHZ: local_softirq_pending 08
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20NOHZ%3A%20local_softirq_pending%2008&In-Reply-To=%3C4A6E98E0.90001%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001000.html">
+   <LINK REL="Next"  HREF="001003.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] NOHZ: local_softirq_pending 08</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20NOHZ%3A%20local_softirq_pending%2008&In-Reply-To=%3C4A6E98E0.90001%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] NOHZ: local_softirq_pending 08">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Jul 28 08:21:20 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001000.html">[Socketcan-users] NOHZ: local_softirq_pending 08
+</A></li>
+        <LI>Next message: <A HREF="001003.html">[Socketcan-users] NOHZ: local_softirq_pending 08
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1001">[ date ]</a>
+              <a href="thread.html#1001">[ thread ]</a>
+              <a href="subject.html#1001">[ subject ]</a>
+              <a href="author.html#1001">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Haddon wrote:
+&gt;<i> 
+</I>&gt;<i>       When we moved to linux kernel 2.6.30, we starting getting this
+</I>&gt;<i>       obscure message on the root console.  Based on the timing, it
+</I>&gt;<i>       seems to occur when we first make a call to our CANopen library
+</I>&gt;<i>       (CANopen Magic Pro Library from www.esacademy.com
+</I>&gt;<i>       &lt;<A HREF="http://www.esacademy.com">http://www.esacademy.com</A>&gt;).  When the first CANopen call is made,
+</I>&gt;<i>       that&#8217;s when the can_raw module is loaded and shortly after that we
+</I>&gt;<i>       see the weird message.  It may have nothing to do with socketcan,
+</I>&gt;<i>       but I thought it wouldn&#8217;t hurt to ask if anyone has some insight
+</I>&gt;<i>       on what it means.  My googling turned up lots of hits, but after
+</I>&gt;<i>       quite a bit of time wallowing through various related posts, I
+</I>&gt;<i>       still don&#8217;t have a good understanding of that the error message means.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> // dmesg snippet:
+</I>&gt;<i> 
+</I>&gt;<i> [ 1136.226008] can: raw protocol (rev 20090105)
+</I>&gt;<i> 
+</I>&gt;<i> [ 1141.460062] NOHZ: local_softirq_pending 08
+</I>&gt;<i> 
+</I>&gt;<i> [ 1144.357058] NOHZ: local_softirq_pending 08
+</I>&gt;<i> 
+</I>
+Hi Robert,
+
+i also have a NO_HZ configured Kernel here and usually get this message 9
+times, when i invoke e.g. 'cangen vcan0'.
+
+I assume this has something to do with the nanosleep() usage inside cangen and
+has nothing to do with SocketCAN.
+
+Does your CANopen library also use nanosleep() ??
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001000.html">[Socketcan-users] NOHZ: local_softirq_pending 08
+</A></li>
+	<LI>Next message: <A HREF="001003.html">[Socketcan-users] NOHZ: local_softirq_pending 08
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1001">[ date ]</a>
+              <a href="thread.html#1001">[ thread ]</a>
+              <a href="subject.html#1001">[ subject ]</a>
+              <a href="author.html#1001">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

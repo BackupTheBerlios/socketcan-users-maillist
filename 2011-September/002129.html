@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3C4E67E68E.3060700%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002128.html">
+   <LINK REL="Next"  HREF="002127.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3C4E67E68E.3060700%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Sep  7 23:47:58 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002128.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+        <LI>Next message: <A HREF="002127.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2129">[ date ]</a>
+              <a href="thread.html#2129">[ thread ]</a>
+              <a href="subject.html#2129">[ subject ]</a>
+              <a href="author.html#2129">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 09/07/2011 10:29 PM, Francois Bouchard wrote:
+&gt;&gt;<i> what does &quot;the program reset by itself after a while&quot; mean?
+</I>&gt;<i> I mean yes the whole system seems to reboots apparently because of the test
+</I>&gt;<i> program.
+</I>
+It really seems to be a driver problem. Do you have any error messages
+prior to the reboot? Does the system hang or become unresponsive prior
+to rebooting?
+
+&gt;&gt;<i> Do you have a vanilla 2.6.29 Kernel or are there any patches from your BSP
+</I>&gt;&gt;<i> provider?
+</I>&gt;<i> Maybe there is a patch from Freescale, I'm checking right now.    What is
+</I>&gt;<i> vanilla?
+</I>
+Vanilla is the unmodified kernel from kernel.org
+(Like vanilla ice-cream is the base flavour of all ice-creams)
+
+&gt;&gt;<i> How do you set up your bitrate for your CAN bus? Using 'ip'?
+</I>&gt;<i> For setting the bit rate this command is typed to the target's terminal:
+</I>&gt;<i> echo 1000000 &gt;
+</I>&gt;<i> /sys/devices/platform/mcf-flexcan.1/net\:can1/can_bittiming/bitrate
+</I>
+The problem with your driver is that freescale provided it to you, it's
+not part of the vanilla (official) kernel. We don't even have access to
+the code. Do you have a technical contact at freescale? Can you provide
+us a link where to download the freescale patches for your kernel?
+
+cheers, Marc
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/512ededa/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/512ededa/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002128.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+	<LI>Next message: <A HREF="002127.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2129">[ date ]</a>
+              <a href="thread.html#2129">[ thread ]</a>
+              <a href="subject.html#2129">[ subject ]</a>
+              <a href="author.html#2129">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

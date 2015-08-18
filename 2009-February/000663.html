@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] candump stops, and how to test performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3Cf96d234e0902101435gc24c41cv3d4dc6d541e10549%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000662.html">
+   <LINK REL="Next"  HREF="000664.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] candump stops, and how to test performance</H1>
+    <B>Cliff Brake</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3Cf96d234e0902101435gc24c41cv3d4dc6d541e10549%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] candump stops, and how to test performance">cliff.brake at gmail.com
+       </A><BR>
+    <I>Tue Feb 10 23:35:06 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000662.html">[Socketcan-users] SPI problem with mcp251x driver
+</A></li>
+        <LI>Next message: <A HREF="000664.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#663">[ date ]</a>
+              <a href="thread.html#663">[ thread ]</a>
+              <a href="subject.html#663">[ subject ]</a>
+              <a href="author.html#663">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I'm doing a little testing with the following setup:
+
+- PXA270
+- MCP2515
+- 1Mbit/sec datarate
+
+On one system I run: cangen can0 -v -g1
+on the 2nd system I run: candump can0
+
+If I run it with -g10, it will run all day long.  With -g1, the
+receiving side soon stops, and the only way I can get it to work again
+is send something (cansend can0 123#DEADBEEF), and then it will
+receive again.  Is this expected?
+
+On a related note, what is the best way to test performance.  I'm
+interested in a app that:
+
+- can be run with real-time priorities
+- logs errors, etc.
+- measures jitter
+- can be used to determine effective bandwidth of the can bus (can we
+keep the can bus fully utilized on a moderately loaded system using
+kernel preemption and real-time priority apps).
+
+If nothing exists, I'll probably start writing something.
+
+Thanks,
+Cliff
+
+-- 
+=======================
+Cliff Brake
+<A HREF="http://bec-systems.com">http://bec-systems.com</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000662.html">[Socketcan-users] SPI problem with mcp251x driver
+</A></li>
+	<LI>Next message: <A HREF="000664.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#663">[ date ]</a>
+              <a href="thread.html#663">[ thread ]</a>
+              <a href="subject.html#663">[ subject ]</a>
+              <a href="author.html#663">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

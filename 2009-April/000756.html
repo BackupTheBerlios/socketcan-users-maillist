@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Limiting the send rate
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Limiting%20the%20send%20rate&In-Reply-To=%3C20090408105720.GA31068%40serio%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000755.html">
+   <LINK REL="Next"  HREF="000757.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Limiting the send rate</H1>
+    <B>Ayo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Limiting%20the%20send%20rate&In-Reply-To=%3C20090408105720.GA31068%40serio%3E"
+       TITLE="[Socketcan-users] Limiting the send rate">ayo at blicky.net
+       </A><BR>
+    <I>Wed Apr  8 12:57:20 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000755.html">[Socketcan-users] MCP251x driver: Probe failed.
+</A></li>
+        <LI>Next message: <A HREF="000757.html">[Socketcan-users] Limiting the send rate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#756">[ date ]</a>
+              <a href="thread.html#756">[ thread ]</a>
+              <a href="subject.html#756">[ subject ]</a>
+              <a href="author.html#756">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+This might be slightly off-topic here, but I figured this is a good place
+to ask anyway.
+
+I've written a simple CAN &lt;-&gt; Ethernet gateway application using SocketCAN.
+To handle packet bursts from ethernet, I increased the send buffer using:
+
+  ifconfig can0 txqueuelen 10000
+
+This introduces some latency on peak traffic, but works fine for our
+applications. The problem, however, is when this peak traffic happens, the
+CAN bus is fully occupied by my gateway, and other devices rarely have the
+chance to communicate anymore. What I would like to do is to limit the rate
+at which the gateway is sending packets to the CAN network.
+
+Our CAN network operates at 1Mbit/s, and I want to limit the gateway to
+send at approx. 250kbit/s. While I could implement something like this in the
+application, it does mean I would have to implement by own buffer and timing
+algorithm, and user-space timing is far from ideal.
+
+I've tried to play around with the tc utility provided by iproute2, which
+does look like it can do what I want, but I'm clueless as how to configure it
+to do what I want.
+
+Does anyone have experience with this, or could give me some directions?
+
+- Ayo
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000755.html">[Socketcan-users] MCP251x driver: Probe failed.
+</A></li>
+	<LI>Next message: <A HREF="000757.html">[Socketcan-users] Limiting the send rate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#756">[ date ]</a>
+              <a href="thread.html#756">[ thread ]</a>
+              <a href="subject.html#756">[ subject ]</a>
+              <a href="author.html#756">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Loosing frames on MPC5200B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB2ED8AE%40Zuse1.tracetronic.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001534.html">
+   <LINK REL="Next"  HREF="001536.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Loosing frames on MPC5200B</H1>
+    <B>&quot;M&#252;ller, Ren&#233;&quot;</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB2ED8AE%40Zuse1.tracetronic.local%3E"
+       TITLE="[Socketcan-users] Loosing frames on MPC5200B">Rene.Mueller at tracetronic.de
+       </A><BR>
+    <I>Mon Oct 11 17:01:47 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001534.html">[Socketcan-users] PCAN: Interrupt API change in Linux.2.6.36
+</A></li>
+        <LI>Next message: <A HREF="001536.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1535">[ date ]</a>
+              <a href="thread.html#1535">[ thread ]</a>
+              <a href="subject.html#1535">[ subject ]</a>
+              <a href="author.html#1535">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+we are loosing frames on our embedded target and currently we are searching for the cause.
+
+Our current setup is:
+- TQM5200 (a board made by TQ with an MPC5200B) on our own carrier-board
+- Kernel 2.6.35.7 from kernel.org (we initial used 2.6.27.18 from denx and had the same problems)
+- activated mscan in kernel-config
+
+- 2x CAN-sources connected to the 2 can interfaces of the board:
+  - first source (connected to can0):
+    - creates an message containing a counter every 5ms
+    - creates another message containing another counter every 2ms
+  - second source (connected to can1):
+    - creates 3 messages every 20ms containing some payload
+
+- both can interfaces are configured with 1Mbit/s
+
+Now we have two cases, one with missing frames and one without:
+Case 1:
+ - candump -l -s2 can0 -&gt; logging in an file which is stored in RAM
+ - we get all messages in the logfile
+
+Case 2:
+ - candump -l -s2 can0 -&gt; logging in an file which is stored on an CompactFlash-card
+ - the CF-card is connected via the IDE-interface without DMA (we don't get DMA working with the CF-card, unfortunately it only works with harddrives)
+ - we are loosing messages:
+   - every 35s we are missing messages in blocks, never we are missing 1 message, always 5-6 at once
+
+Anyone had similar problems? Any hints?
+
+
+Thanks,
+Ren&#233;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001534.html">[Socketcan-users] PCAN: Interrupt API change in Linux.2.6.36
+</A></li>
+	<LI>Next message: <A HREF="001536.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1535">[ date ]</a>
+              <a href="thread.html#1535">[ thread ]</a>
+              <a href="subject.html#1535">[ subject ]</a>
+              <a href="author.html#1535">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to receive error frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20error%20frames&In-Reply-To=%3C4759521A.4010306%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000211.html">
+   <LINK REL="Next"  HREF="000213.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to receive error frames</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20error%20frames&In-Reply-To=%3C4759521A.4010306%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Unable to receive error frames">wg at grandegger.com
+       </A><BR>
+    <I>Fri Dec  7 15:00:58 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000211.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+        <LI>Next message: <A HREF="000213.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#212">[ date ]</a>
+              <a href="thread.html#212">[ thread ]</a>
+              <a href="subject.html#212">[ subject ]</a>
+              <a href="author.html#212">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Bjorn_Roger.Lobersli at rolls-royce.com</A> wrote:
+&gt;<i> 
+</I>&gt;&gt;<i>Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Bjorn_Roger.Lobersli at rolls-royce.com</A> wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i> I am currently testing socketcan and it looks very good except for one
+</I>&gt;&gt;&gt;&gt;<i> thing, I am not
+</I>&gt;&gt;&gt;&gt;<i> able to receive any error frames from socketcan. I unplug the CAN bus
+</I>&gt;&gt;&gt;&gt;<i> cable and expect
+</I>&gt;&gt;&gt;&gt;<i> to get a CAN_ERR_BUSOFF error, but I get no error frame at all.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Unplugging a CAN bus mostly leads to bus errors or bus offs when you are
+</I>&gt;&gt;&gt;<i> currently writing CAN frames. Therefore receiving no error frames could
+</I>&gt;&gt;&gt;<i> be a correct behaviour when unplugging CAN bus cables.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> In my application I have enabled all errors like this:
+</I>&gt;&gt;&gt;&gt;<i> can_err_mask_t error_mask = CAN_ERR_MASK;
+</I>&gt;&gt;&gt;&gt;<i> setsockopt(m_Socket, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &amp;error_mask,
+</I>&gt;&gt;&gt;&gt;<i> sizeof(error_mask));
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> My test hardware has an i/o mapped SJA1000 CAN controller.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Using which driver? Did you take the one from
+</I>&gt;&gt;&gt;<i> trunk/kernel/2.6/drivers/net/can/sja1000 ??
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This 'old' sja1000 driver does not throw any error frames when detecting
+</I>&gt;&gt;&gt;<i> error conditions :-/
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> There was a posting from Wolfgang Grandegger that contains error frame
+</I>&gt;&gt;&gt;<i> support for some error conditions. And AFAIK the latest PEAK driver
+</I>&gt;&gt;&gt;<i> (<A HREF="http://www.peak-system.com/linux/index.htm">http://www.peak-system.com/linux/index.htm</A>) also supports error frames.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But it did not yet support I/O mapped devices. Oliver, could you please
+</I>&gt;&gt;<i> create a development branch which is clearly marked &quot;experimental&quot;. Then
+</I>&gt;&gt;<i> I could add my new SJA1000 driver as well giving interested people a
+</I>&gt;&gt;<i> chance to test the new stuff. What do you and the others think?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;<i> 
+</I>&gt;<i> I would really like to look at your sja1000 driver with error frame
+</I>&gt;<i> support.
+</I>&gt;<i> I can implement support for i/o mapped devices myself. At the moment I just
+</I>&gt;<i> want to test socketcan on my hardware, so I can modify the hw_readreg and
+</I>&gt;<i> hw_writereg functions to get it working.
+</I>
+Attached is my revised quilt patch stack for Socket-CAN trunk revision
+572 as announced in
+<A HREF="https://lists.berlios.de/pipermail/socketcan-core/2007-November/000808.html">https://lists.berlios.de/pipermail/socketcan-core/2007-November/000808.html</A>
+and
+<A HREF="https://lists.berlios.de/pipermail/socketcan-core/2007-December/000880.html.">https://lists.berlios.de/pipermail/socketcan-core/2007-December/000880.html.</A>
+
+Note that the SJA1000 drivers using the device interface are in
+&quot;drivers/net/sja1000dev&quot; and you should add a driver for ISA (I/O
+mapped) devices in there. And you can use &quot;candump -e 0xffff&quot; to list
+error frames.
+
+Good luck.
+
+Wolfgang.
+
+
+
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: socketcan-sja1000dev-r572.tar.bz2
+Type: application/x-bzip
+Size: 26284 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20071207/dd513180/attachment.bin">https://lists.berlios.de/pipermail/socketcan-users/attachments/20071207/dd513180/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000211.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+	<LI>Next message: <A HREF="000213.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#212">[ date ]</a>
+              <a href="thread.html#212">[ thread ]</a>
+              <a href="subject.html#212">[ subject ]</a>
+              <a href="author.html#212">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

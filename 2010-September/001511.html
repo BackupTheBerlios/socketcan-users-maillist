@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] Add timestamps description to can.txt
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Add%20timestamps%20description%20to%20can.txt&In-Reply-To=%3C20100929172923.GA32468%40milesteg.arr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001510.html">
+   <LINK REL="Next"  HREF="001517.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] Add timestamps description to can.txt</H1>
+    <B>Daniele Venzano</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Add%20timestamps%20description%20to%20can.txt&In-Reply-To=%3C20100929172923.GA32468%40milesteg.arr%3E"
+       TITLE="[Socketcan-users] [PATCH] Add timestamps description to can.txt">linux at brownhat.org
+       </A><BR>
+    <I>Wed Sep 29 19:29:23 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001510.html">[Socketcan-users] Translated API documentation available
+</A></li>
+        <LI>Next message: <A HREF="001517.html">[Socketcan-users] [PATCH] Add timestamps description to can.txt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1511">[ date ]</a>
+              <a href="thread.html#1511">[ thread ]</a>
+              <a href="subject.html#1511">[ subject ]</a>
+              <a href="author.html#1511">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This is a small patch, just to see if I'm doing everything correctly
+before starting with bigger stuff.
+I've copied the fix from the kernel version and added the description of
+timestamps.
+
+Did you use some tool to generate can.txt from LaTeX or SGML ?
+Also, what about the man pages available in the same directory as the
+LaTeX files ?
+
+Index: kernel/2.6/Documentation/networking/can.txt
+===================================================================
+--- kernel/2.6/Documentation/networking/can.txt	(revision 1197)
++++ kernel/2.6/Documentation/networking/can.txt	(working copy)
+@@ -25,6 +25,7 @@
+     4.2 Broadcast Manager protocol sockets (SOCK_DGRAM)
+     4.3 connected transport protocols (SOCK_SEQPACKET)
+     4.4 unconnected transport protocols (SOCK_DGRAM)
++    4.5 Timestamps
+ 
+   5 Socket CAN core module
+     5.1 can.ko module params
+@@ -334,7 +335,7 @@
+             return 1;
+     }
+ 
+-    /* paraniod check ... */
++    /* paranoid check ... */
+     if (nbytes &lt; sizeof(struct can_frame)) {
+             fprintf(stderr, &quot;read: incomplete CAN frame\n&quot;);
+             return 1;
+@@ -475,7 +476,19 @@
+   4.3 connected transport protocols (SOCK_SEQPACKET)
+   4.4 unconnected transport protocols (SOCK_DGRAM)
+ 
++  4.5 Timestamps
++  
++  For applications in the CAN environment it is often of interest an
++  accurate timestamp of the instant a message from CAN bus has been received.
++  Such a timestamp can be read with ioctl(2) after reading a message from
++  the socket. Example:
+ 
++    struct timeval tv;
++    ioctl(s, SIOCGSTAMP, &amp;tv);
++
++  The timestamp on Linux has a resolution of one microsecond and it is set
++  automatically at the reception of a CAN frame.
++
+ 5. Socket CAN core module
+ -------------------------
+ 
+--
+Daniele Venzano
+<A HREF="http://www.brownhat.org">http://www.brownhat.org</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001510.html">[Socketcan-users] Translated API documentation available
+</A></li>
+	<LI>Next message: <A HREF="001517.html">[Socketcan-users] [PATCH] Add timestamps description to can.txt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1511">[ date ]</a>
+              <a href="thread.html#1511">[ thread ]</a>
+              <a href="subject.html#1511">[ subject ]</a>
+              <a href="author.html#1511">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

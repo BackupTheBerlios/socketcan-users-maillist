@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 2/2] Messages used to debug the problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/2%5D%20Messages%20used%20to%20debug%20the%20problem&In-Reply-To=%3C1291640761-14374-2-git-send-email-sojkam1%40fel.cvut.cz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001688.html">
+   <LINK REL="Next"  HREF="001689.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 2/2] Messages used to debug the problem</H1>
+    <B>Michal Sojka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/2%5D%20Messages%20used%20to%20debug%20the%20problem&In-Reply-To=%3C1291640761-14374-2-git-send-email-sojkam1%40fel.cvut.cz%3E"
+       TITLE="[Socketcan-users] [PATCH 2/2] Messages used to debug the problem">sojkam1 at fel.cvut.cz
+       </A><BR>
+    <I>Mon Dec  6 14:06:01 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001688.html">[Socketcan-users] RFC cangw: removal of single hop routing ...
+</A></li>
+        <LI>Next message: <A HREF="001689.html">[Socketcan-users] [PATCH] more BCM documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1684">[ date ]</a>
+              <a href="thread.html#1684">[ thread ]</a>
+              <a href="subject.html#1684">[ subject ]</a>
+              <a href="author.html#1684">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>---
+ net/core/dev.c |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 660dd41..b8bfd8b 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -2061,11 +2061,15 @@ static struct netdev_queue *dev_pick_tx(struct net_device *dev,
+ 	const struct net_device_ops *ops = dev-&gt;netdev_ops;
+ 
+ 	if (ops-&gt;ndo_select_queue) {
++		if (skb-&gt;protocol == htons(ETH_P_CAN))
++			printk(KERN_INFO &quot;%s: ndo_select_queue\n&quot;, dev);
+ 		queue_index = ops-&gt;ndo_select_queue(dev, skb);
+ 		queue_index = dev_cap_txqueue(dev, queue_index);
+ 	} else {
+ 		struct sock *sk = skb-&gt;sk;
+ 		queue_index = sk_tx_queue_get(sk);
++		if (skb-&gt;protocol == htons(ETH_P_CAN))
++			printk(KERN_INFO &quot;%s: NO ndo_select_queue (queue_index=%d)\n&quot;, dev, queue_index);
+ 		if (queue_index &lt; 0) {
+ 
+ 			queue_index = 0;
+@@ -2181,6 +2185,8 @@ int dev_queue_xmit(struct sk_buff *skb)
+ 	rcu_read_lock_bh();
+ 
+ 	txq = dev_pick_tx(dev, skb);
++	if (skb-&gt;protocol == htons(ETH_P_CAN))
++		printk(KERN_INFO &quot;%s: txq = %p\n&quot;, dev ? dev-&gt;name : &quot;???&quot;, txq);
+ 	q = rcu_dereference_bh(txq-&gt;qdisc);
+ 
+ #ifdef CONFIG_NET_CLS_ACT
+-- 
+1.7.2.3
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001688.html">[Socketcan-users] RFC cangw: removal of single hop routing ...
+</A></li>
+	<LI>Next message: <A HREF="001689.html">[Socketcan-users] [PATCH] more BCM documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1684">[ date ]</a>
+              <a href="thread.html#1684">[ thread ]</a>
+              <a href="subject.html#1684">[ subject ]</a>
+              <a href="author.html#1684">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

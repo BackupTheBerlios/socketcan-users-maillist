@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C48161034.4050107%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000331.html">
+   <LINK REL="Next"  HREF="000330.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN problems</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C48161034.4050107%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] CAN problems">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Apr 28 19:58:12 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000331.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000330.html">[Socketcan-users] RT-Socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#326">[ date ]</a>
+              <a href="thread.html#326">[ thread ]</a>
+              <a href="subject.html#326">[ subject ]</a>
+              <a href="author.html#326">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Breno,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> first, please do not drop the CC to the mailing list.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Breno wrote:
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 		    	
+</I>&gt;&gt;&gt;<i>     	}
+</I>&gt;&gt;&gt;<i>     	//perror(&quot;ioctl&quot;);
+</I>&gt;&gt;&gt;<i>     	ifindex = ifr.ifr_ifindex;
+</I>&gt;&gt;&gt;<i>     	
+</I>&gt;&gt;&gt;<i>     	addr.can_family=AF_CAN;
+</I>&gt;&gt;&gt;<i>     	addr.can_ifindex=0; /* bind() a Todas as interfaces */
+</I>&gt;&gt;&gt;<i>       
+</I>
+This is the problem!
+
+You set the interface index to 0, which is ok so far - especially for 
+reading.
+
+But if you'd like to *send* on such a socket that's bound to all CAN 
+interfaces (ifindex == 0) you need to specify the specific interface 
+where the CAN frame has to be sent to.
+
+This can be done with using sendto() where you have to specify a *valid* 
+interface index in the sockaddr_can you pass to the socket with sendto().
+
+&gt;&gt;&gt;<i>     	
+</I>&gt;&gt;&gt;<i>     	
+</I>&gt;&gt;&gt;<i>       	nbytes = sendto(s, &amp;frame, sizeof(struct can_frame), 0, (struct sockaddr*)&amp;addr, sizeof(addr));
+</I>&gt;&gt;&gt;<i>       
+</I>
+But here you pass a sockaddr_can structure where you've set 
+addr.can_ifindex == 0 as can be seen above!
+
+Using sendto() and binding the socket to ifindex=0 is more a power-user 
+feature than a common use-case as sendto() needs much more data to be 
+transfered to the kernel than just using write().
+
+You should try the source under socketcan/trunk/test/* like
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/test/tst-raw.c">http://svn.berlios.de/svnroot/repos/socketcan/trunk/test/tst-raw.c</A>
+
+Here you can see code like (a bit optimized here):
+
+    strcpy(ifr.ifr_name, ifname);
+    if (ioctl(s, SIOCGIFINDEX, &amp;ifr) &lt; 0) {
+      perror(&quot;SIOCGIFINDEX&quot;);
+      exit(1);
+    }
+
+    addr.can_family = AF_CAN;
+    addr.can_ifindex = ifr.ifr_ifindex;
+
+    if (bind(s, (struct sockaddr *)&amp;addr, sizeof(addr)) &lt; 0) {
+      perror(&quot;bind&quot;);
+      return 1;
+    }
+
+    frame.can_id  = 0x123;
+    frame.can_dlc = 2;
+    frame.data[0] = 0x11;
+    frame.data[1] = 0x22;
+
+    nbytes = write(s, &amp;frame, sizeof(struct can_frame));
+
+
+Which definitely works ;-)
+
+Regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000331.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000330.html">[Socketcan-users] RT-Socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#326">[ date ]</a>
+              <a href="thread.html#326">[ thread ]</a>
+              <a href="subject.html#326">[ subject ]</a>
+              <a href="author.html#326">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

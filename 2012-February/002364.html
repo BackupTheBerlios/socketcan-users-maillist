@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newbie Question about the SJA1000_Platform	Driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newbie%20Question%20about%20the%20SJA1000_Platform%0A%09Driver&In-Reply-To=%3C001501ccf722%244ff38590%24efda90b0%24%40com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002363.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newbie Question about the SJA1000_Platform	Driver</H1>
+    <B>Fredric J. Einstein</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newbie%20Question%20about%20the%20SJA1000_Platform%0A%09Driver&In-Reply-To=%3C001501ccf722%244ff38590%24efda90b0%24%40com%3E"
+       TITLE="[Socketcan-users] Newbie Question about the SJA1000_Platform	Driver">feinstei at frontier.com
+       </A><BR>
+    <I>Wed Feb 29 21:40:02 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002363.html">[Socketcan-users] Newbie Question about the SJA1000_Platform Driver
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2364">[ date ]</a>
+              <a href="thread.html#2364">[ thread ]</a>
+              <a href="subject.html#2364">[ subject ]</a>
+              <a href="author.html#2364">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang, 
+
+Thanks for answering my question.  I loaded the latest version of Debian
+(yesterday) from their website (using the &quot;live&quot; version and then installing
+from that image).  I searched the installation and didn't find sja1000_isa
+at all, only sja1000 and sja1000_platform.  I have a 32 bit Atom board and
+the Debian installation went normally.  Did I perhaps install the wrong
+thing?  Thanks again for your patience!
+
+Fred E.
+
+-----Original Message-----
+From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>] 
+Sent: Wednesday, February 29, 2012 3:22 PM
+To: FredEi
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] Newbie Question about the SJA1000_Platform
+Driver
+
+On 02/29/2012 05:50 PM, FredEi wrote:
+&gt;<i> 
+</I>&gt;<i> Please excuse my ignorance, but I'm very new to compiling Linux kernels,
+</I>&gt;<i> setting parameters for Platform type drivers etc.   Our Intel Atom based
+</I>&gt;<i> board has an SJA1000 controller on it that worked in older versions of 
+</I>&gt;<i> Linux (such as Ubuntu 10.04) with the SJA1000_ISA driver that was 
+</I>&gt;<i> included with Ubuntu.  Unfortunately, with Debian Squeeze (the latest 
+</I>&gt;<i> version), it seems that this driver has been replaced with 
+</I>&gt;<i> SJA1000_PLATFORM.  However, unlike
+</I>
+Why do you think that? The sja1000_isa is still available in the mainline
+kernel. And the sja1000_platform driver is not replacing it? It serves a
+different bus. Is it possible that you switched to 64bit Linux at the same
+time? Older kernel versions do not support sja1000_isa on
+x86_64 but the issue has been fixed in the meantime.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002363.html">[Socketcan-users] Newbie Question about the SJA1000_Platform Driver
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2364">[ date ]</a>
+              <a href="thread.html#2364">[ thread ]</a>
+              <a href="subject.html#2364">[ subject ]</a>
+              <a href="author.html#2364">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

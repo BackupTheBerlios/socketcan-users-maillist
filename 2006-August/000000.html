@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [Canfestival-devel] Xenomai support /	Socket-CAN API
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCanfestival-devel%5D%20Xenomai%20support%20/%0A%09Socket-CAN%20API&In-Reply-To=%3C44E54261.5090600%40lolitech.fr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000001.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [Canfestival-devel] Xenomai support /	Socket-CAN API</H1>
+    <B>Edouard TISSERANT</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCanfestival-devel%5D%20Xenomai%20support%20/%0A%09Socket-CAN%20API&In-Reply-To=%3C44E54261.5090600%40lolitech.fr%3E"
+       TITLE="[Socketcan-users] [Canfestival-devel] Xenomai support /	Socket-CAN API">edouard.tisserant at lolitech.fr
+       </A><BR>
+    <I>Fri Aug 18 06:30:25 CEST 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000001.html">[Socketcan-users] [Canfestival-devel] Xenomai support /	Socket-CAN API
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#0">[ date ]</a>
+              <a href="thread.html#0">[ thread ]</a>
+              <a href="subject.html#0">[ subject ]</a>
+              <a href="author.html#0">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jan Kiszka wrote:
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> just noticed that CanFestival-3 has some Xenomai support built in. Sorry
+</I>&gt;<i> for being half-informed, I just quickly browsed the CVS. Mmm, I wonder
+</I>&gt;<i> what driver has been used so far there.
+</I>We used the still-not-publicly-available RTDM-patched PeakSystems Linux 
+PCAN driver. We are the author of the patch, and can send you the 
+patched driver if you will. Peak will release it soon.
+&gt;<i>  If I got this correctly from my
+</I>&gt;<i> first glance, CanFestival is a pure library + CAN API wrappers, over
+</I>&gt;<i> Linux running in user-space, so no own hardware drivers, right?
+</I>&gt;<i>   
+</I>Not exactly. CanFestival is a pure ansi-C CanOpen library, it does not 
+require Linux, and can also work on some &#181;C, without any OS. There is a 
+very basic &quot;CAN API&quot;, that you must conform with and write some C 
+bindings if you want your specific hardware work with it.
+
+This was not right for CanFestival 1.x and 2.x. There was a driver 
+embedded with it (called ArbraCan). It supported only Adlink PCI 7841 
+dual CAN bords, with Linux 2.4 and also with RTLinux. This is now 
+deprecated. A contributor, Anders Gnistrup, plan to provide a new 
+version of the driver, that would support Linux 2.6. and provide 
+bindings for CanFestival 3.0. The only interesting point in this driver 
+is that it respect CAL specifications, and sort CAN message FIFO as 
+regard their priority group (1-7) given in COB-ID (see older 
+releases/doc in CVS).
+&gt;<i> Anyway, you may be interested in the recent development in Xenomai's
+</I>&gt;<i> SVN: a socket-base CAN driver stack, see also the announcement at
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://mail.gna.org/public/xenomai-core/2006-08/msg00009.html">https://mail.gna.org/public/xenomai-core/2006-08/msg00009.html</A>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>This sound really interesting. I should add support for this CAN socket 
+in the RTDM-PCAN driver. Hope I will find time.
+&gt;<i> As time is scarce, I cannot provide a patch to add support for
+</I>&gt;<i> CanFestival, but maybe this community can pick up the idea. Would be nice.
+</I>&gt;<i>   
+</I>Should not be difficult. Bindings usually represent one or two page of C 
+code... Take model on can_peak.{c,h} in latest release of CanFestival
+&gt;<i> Feedback on the API and/or implementations (there is also a
+</I>&gt;<i> Linux-networking stack variant under development, see
+</I>&gt;<i> <A HREF="http://developer.berlios.de/projects/socketcan/">http://developer.berlios.de/projects/socketcan/</A>) is welcome, either here
+</I>&gt;<i> or on related lists.
+</I>&gt;<i>   
+</I>I will not find time to give a try to socketcan immediately. Moreover, 
+we are already using our RTDM enabled PCAN driver, that works rather 
+perfectly, that support all PCAN products (except USB), and that should 
+evolve with PCAN original branch ...
+
+Hope you may find time to write bindings for CanFestival.
+
+Regards
+
+Edouard
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000001.html">[Socketcan-users] [Canfestival-devel] Xenomai support /	Socket-CAN API
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#0">[ date ]</a>
+              <a href="thread.html#0">[ thread ]</a>
+              <a href="subject.html#0">[ subject ]</a>
+              <a href="author.html#0">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

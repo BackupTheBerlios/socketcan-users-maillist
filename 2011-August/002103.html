@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Performance issues with MPC5200B and socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3C4E539BA3.4090203%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002102.html">
+   <LINK REL="Next"  HREF="002107.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Performance issues with MPC5200B and socketcan</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3C4E539BA3.4090203%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Performance issues with MPC5200B and socketcan">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Tue Aug 23 14:22:59 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002102.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+        <LI>Next message: <A HREF="002107.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2103">[ date ]</a>
+              <a href="thread.html#2103">[ thread ]</a>
+              <a href="subject.html#2103">[ subject ]</a>
+              <a href="author.html#2103">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;<i> Ok, i must admit this is a bit like fishing in murky waters but i do not
+</I>&gt;<i> know which impact the recvmsg() syscall hass in this game.
+</I>&gt;<i>
+</I>&gt;<i> When integrating the support for dropcounts i moved the receiption of
+</I>&gt;<i> CAN frames from recvfrom() to recvmsg() to get all the information
+</I>&gt;<i> including timestamps and dropcounts with one syscall:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://svn.berlios.de/wsvn/socketcan?op=comp&amp;compare[">http://svn.berlios.de/wsvn/socketcan?op=comp&amp;compare[</A>]=/trunk/can-utils/<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">candump.c at 1110</A>&amp;compare[]=/trunk/can-utils/<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">candump.c at 1111</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> This has an increased effort in setting and parsing cmsg structures.
+</I>&gt;<i>
+</I>&gt;<i> Maybe you can try to modify the rev1110 to your needs (with the CAN
+</I>&gt;<i> frame array) or use the very simple socketcan/test/tst-raw.c source as a
+</I>&gt;<i> basis that only uses read() without any multi-socket- nor select()-support.
+</I>
+Another idea could be to use recvmmsg()
+
+See <A HREF="http://kernelnewbies.org/Linux_2_6_33">http://kernelnewbies.org/Linux_2_6_33</A> Chapter 1.4
+
+<A HREF="http://vger.kernel.org/netconf2009_slides/recvmmsg.pdf">http://vger.kernel.org/netconf2009_slides/recvmmsg.pdf</A>
+
+I did not test this so far ...
+
+&gt;<i>
+</I>&gt;<i> This would be interesting to see if we really can save remarkable
+</I>&gt;<i> amounts of CPU time without having the full-featured candump mechanisms.
+</I>&gt;<i>
+</I>&gt;<i> Best regards &amp; thanks for the interesting CPU/MEM tradeoff problem ;-)
+</I>&gt;<i>
+</I>&gt;<i> Oliver
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002102.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+	<LI>Next message: <A HREF="002107.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2103">[ date ]</a>
+              <a href="thread.html#2103">[ thread ]</a>
+              <a href="subject.html#2103">[ subject ]</a>
+              <a href="author.html#2103">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

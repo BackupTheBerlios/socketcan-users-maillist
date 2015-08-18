@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Find identifier in the can_id
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3C4E81FFCB.8060006%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002150.html">
+   <LINK REL="Next"  HREF="002151.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Find identifier in the can_id</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3C4E81FFCB.8060006%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Find identifier in the can_id">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Sep 27 18:54:35 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002150.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+        <LI>Next message: <A HREF="002151.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2152">[ date ]</a>
+              <a href="thread.html#2152">[ thread ]</a>
+              <a href="subject.html#2152">[ subject ]</a>
+              <a href="author.html#2152">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 09/27/11 09:35, Damien R. wrote:
+
+&gt;<i> On 26/09/11 18:40, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> There is no SFF flag!!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> if you look at the can_id in struct can_frame at check the CAN_EFF_FLAG:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> CAN_EFF_FLAG is set   -&gt;  EFF frame
+</I>&gt;&gt;<i> CAN_EFF_FLAG is clear -&gt;  SFF frame
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When working with SFF IDs (11 bit) the CAN_EFF_FLAG is always cleared.
+</I>&gt;<i> 
+</I>&gt;<i> Yes of course, but I associate !CAN_EFF_FLAG = imaginary SFF flag.
+</I>&gt;<i> Anyway, I did not express myself properly.
+</I>&gt;<i> 
+</I>&gt;<i> So, I meant that the CAN_EFF_FLAG is set and the specification say that it is
+</I>&gt;<i> a 11 bit ID.
+</I>
+
+This is a contradiction.
+
+Of course you can only use 11 of 29 bits ... but EFF is 29 bit by definition.
+
+&gt;<i> So, this frame is not CAN 2.0 A and not CAN 2.0 B compliant,
+</I>&gt;<i> isn't it?
+</I>
+
+CAN 2.0 B covers SFF &amp; EFF frames (even together on one medium).
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002150.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+	<LI>Next message: <A HREF="002151.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2152">[ date ]</a>
+              <a href="thread.html#2152">[ thread ]</a>
+              <a href="subject.html#2152">[ subject ]</a>
+              <a href="author.html#2152">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

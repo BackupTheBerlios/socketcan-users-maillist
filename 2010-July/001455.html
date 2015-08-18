@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] local loopback timestamp
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20local%20loopback%20timestamp&In-Reply-To=%3C18F8639CFC8C7C4D819AB347808079D4AE837F%40pluto.office.rac.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001452.html">
+   <LINK REL="Next"  HREF="001453.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] local loopback timestamp</H1>
+    <B>Sandro Anders | CarMediaLab</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20local%20loopback%20timestamp&In-Reply-To=%3C18F8639CFC8C7C4D819AB347808079D4AE837F%40pluto.office.rac.de%3E"
+       TITLE="[Socketcan-users] local loopback timestamp">sandro.anders at carmedialab.de
+       </A><BR>
+    <I>Wed Jul  7 09:41:52 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001452.html">[Socketcan-users] local loopback timestamp
+</A></li>
+        <LI>Next message: <A HREF="001453.html">[Socketcan-users] Do i need xenomai for RT-SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1455">[ date ]</a>
+              <a href="thread.html#1455">[ thread ]</a>
+              <a href="subject.html#1455">[ subject ]</a>
+              <a href="author.html#1455">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+Many thanks for your answer. I'll take a look into the sja1000 source code.
+
+Regards,
+Sandro
+
+&gt;<i> -----Urspr&#252;ngliche Nachricht-----
+</I>&gt;<i> Von: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;<i> Gesendet: Dienstag, 6. Juli 2010 19:17
+</I>&gt;<i> An: Sandro Anders | CarMediaLab
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Betreff: Re: [Socketcan-users] local loopback timestamp
+</I>&gt;<i> 
+</I>&gt;<i> Hi Sandro,
+</I>&gt;<i> 
+</I>&gt;<i> On 07/06/2010 04:55 PM, Sandro Anders | CarMediaLab wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have a question according the local loopback. At which time the
+</I>&gt;<i> &gt; timestamp for the sent messages is created (and the message is forwarded
+</I>&gt;<i> &gt; to the local clients)? Is it on calling write() inside the client code
+</I>&gt;<i> &gt; or when the driver calls netif_wake_queue() after successful
+</I>&gt;<i> &gt; transmission?
+</I>&gt;<i> 
+</I>&gt;<i> Most drivers send the loop back message upstream when the TX done
+</I>&gt;<i> interrupt is handled. Here is the code for the SJA1000:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.34.1/drivers/net/can/sja1000/sja1000.c#L50">http://lxr.linux.no/#linux+v2.6.34.1/drivers/net/can/sja1000/sja1000.c#L50</A>
+</I>&gt;<i> 5
+</I>&gt;<i> 
+</I>&gt;<i> netif_rx() ist called in can_get_echo_skb().
+</I>&gt;<i> 
+</I>&gt;<i> Unfortunately, a few CAN controllers do not trigger TX done interrupts
+</I>&gt;<i> and therefor the message is sent upstream earlier. Some other
+</I>&gt;<i> controllers, like the AT91 CAN, are even able to do the local loopback
+</I>&gt;<i> in hardware.
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001452.html">[Socketcan-users] local loopback timestamp
+</A></li>
+	<LI>Next message: <A HREF="001453.html">[Socketcan-users] Do i need xenomai for RT-SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1455">[ date ]</a>
+              <a href="thread.html#1455">[ thread ]</a>
+              <a href="subject.html#1455">[ subject ]</a>
+              <a href="author.html#1455">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

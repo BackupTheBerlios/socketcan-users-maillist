@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] TSCAN1 driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TSCAN1%20driver&In-Reply-To=%3C4AE5671A.9040007%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001091.html">
+   <LINK REL="Next"  HREF="001093.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] TSCAN1 driver</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TSCAN1%20driver&In-Reply-To=%3C4AE5671A.9040007%40grandegger.com%3E"
+       TITLE="[Socketcan-users] TSCAN1 driver">wg at grandegger.com
+       </A><BR>
+    <I>Mon Oct 26 10:08:42 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001091.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+        <LI>Next message: <A HREF="001093.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1092">[ date ]</a>
+              <a href="thread.html#1092">[ thread ]</a>
+              <a href="subject.html#1092">[ subject ]</a>
+              <a href="author.html#1092">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alexandre V&#233;zina wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> Frist, I attached my code if it can help.
+</I>&gt;<i> 
+</I>&gt;<i> A couple of month ago we started developing a driver for the ts-can1 board.
+</I>&gt;<i> (<A HREF="http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1">http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1</A>).
+</I>&gt;<i> 
+</I>&gt;<i> I just restarted the development of the driver and I have a problem that I
+</I>&gt;<i> hope you guys will understand.
+</I>&gt;<i> 
+</I>&gt;<i> Everything started when I got a segfault calling *&quot;rmmod tscan1*&quot;
+</I>&gt;<i> 
+</I>&gt;<i> I started debugging and found that the segfault occurred when calling
+</I>&gt;<i> *&quot;release_mem_region(res-&gt;start,
+</I>&gt;<i> (res-&gt;end - res-&gt;start + 1));&quot; *(line 352)
+</I>&gt;<i> 
+</I>&gt;<i> Debugging further showed me that *res == NULL*. I looked at the resources.
+</I>&gt;<i> There were still 2 resources, but the flags were not as I set them
+</I>&gt;<i> (IORESOURCE_IO or IORESOURCE_IRQ). Their values were like 0 and -97575452...
+</I>&gt;<i> This explains why *platform_get_resource()* was returning *NULL*.
+</I>&gt;<i> 
+</I>&gt;<i> I started debugging were this struct was getting messed up and I figured it
+</I>&gt;<i> was right after calling *register_sja1000dev()* (line 317); I traced
+</I>&gt;<i> until *register_netdev().
+</I>&gt;<i> *I stopped there because I didn't want to recompile my kernel :D.
+</I>&gt;<i> 
+</I>&gt;<i> I also got this when probing the module:
+</I>&gt;<i> 
+</I>&gt;<i> ...
+</I>&gt;<i> *WARNING: at net/core/rtnetlink.c:1232 rtmsg_ifinfo()
+</I>&gt;<i> [&lt;c0024134&gt;] (dump_stack+0x0/0x14) from [&lt;c018e480&gt;]
+</I>&gt;<i> (rtmsg_ifinfo+0xe4/0xf4)
+</I>&gt;<i> [&lt;c018e39c&gt;] (rtmsg_ifinfo+0x0/0xf4) from [&lt;c018e75c&gt;]
+</I>&gt;<i> (rtnetlink_event+0x84/0xb0)
+</I>&gt;<i> [&lt;c018e6d8&gt;] (rtnetlink_event+0x0/0xb0) from [&lt;c0058d84&gt;]
+</I>&gt;<i> (notifier_call_chain+0x48/0x88)
+</I>&gt;<i> [&lt;c0058d3c&gt;] (notifier_call_chain+0x0/0x88) from [&lt;c005908c&gt;]
+</I>&gt;<i> (__raw_notifier_call_chain+0x1c/0x20)
+</I>&gt;<i>  r8:bf0582e8 r7:c5087800 r6:c02bb860 r5:c5087800 r4:00000000
+</I>&gt;<i> [&lt;c0059070&gt;] (__raw_notifier_call_chain+0x0/0x20) from [&lt;c00590b0&gt;]
+</I>&gt;<i> (raw_notifier_call_chain+0x20/0x24)
+</I>&gt;<i> [&lt;c0059090&gt;] (raw_notifier_call_chain+0x0/0x24) from [&lt;c018076c&gt;]
+</I>&gt;<i> (call_netdevice_notifiers+0x20/0x28)
+</I>&gt;<i> [&lt;c018074c&gt;] (call_netdevice_notifiers+0x0/0x28) from [&lt;c01846e0&gt;]
+</I>&gt;<i> (register_netdevice+0x1d8/0x350)
+</I>&gt;<i> [&lt;c0184508&gt;] (register_netdevice+0x0/0x350) from [&lt;c01848a4&gt;]
+</I>&gt;<i> (register_netdev+0x4c/0x5c)
+</I>&gt;<i>  r6:c5079f30 r5:c5087800 r4:00000000
+</I>&gt;<i> [&lt;c0184858&gt;] (register_netdev+0x0/0x5c) from [&lt;bf04df18&gt;]
+</I>&gt;<i> (register_candev+0x18/0x20 [can_dev])
+</I>&gt;<i>  r5:c5087800 r4:c5087b60
+</I>&gt;<i> [&lt;bf04df00&gt;] (register_candev+0x0/0x20 [can_dev]) from [&lt;bf051ea8&gt;]
+</I>&gt;<i> (register_sja1000dev+0x140/0x17c [sja1000])
+</I>&gt;<i> [&lt;bf051d68&gt;] (register_sja1000dev+0x0/0x17c [sja1000]) from [&lt;bf05a118&gt;]
+</I>&gt;<i> (tscan1_probe+0x118/0x224 [tscan1])
+</I>&gt;<i>  r5:bf0582f0 r4:c5087b60
+</I>&gt;<i> [&lt;bf05a000&gt;] (tscan1_probe+0x0/0x224 [tscan1]) from [&lt;c0128e84&gt;]
+</I>&gt;<i> (platform_drv_probe+0x20/0x24)
+</I>&gt;<i> [&lt;c0128e64&gt;] (platform_drv_probe+0x0/0x24) from [&lt;c0126e70&gt;]
+</I>&gt;<i> (driver_probe_device+0xe8/0x1a4)
+</I>&gt;<i> [&lt;c0126d88&gt;] (driver_probe_device+0x0/0x1a4) from [&lt;c0126f3c&gt;]
+</I>&gt;<i> (__device_attach+0x10/0x14)
+</I>&gt;<i>  r8:00000021 r7:c0126f2c r6:bf0582f0 r5:c5079e5c r4:00000000
+</I>&gt;<i> [&lt;c0126f2c&gt;] (__device_attach+0x0/0x14) from [&lt;c012601c&gt;]
+</I>&gt;<i> (bus_for_each_drv+0x60/0x8c)
+</I>&gt;<i> [&lt;c0125fbc&gt;] (bus_for_each_drv+0x0/0x8c) from [&lt;c0126fe0&gt;]
+</I>&gt;<i> (device_attach+0xa0/0xac)
+</I>&gt;<i>  r7:bf058378 r6:00000000 r5:bf058394 r4:bf0582f0
+</I>&gt;<i> [&lt;c0126f40&gt;] (device_attach+0x0/0xac) from [&lt;c01263a8&gt;]
+</I>&gt;<i> (bus_attach_device+0x7c/0x9c)
+</I>&gt;<i>  r5:c029a178 r4:bf0582f0
+</I>&gt;<i> [&lt;c012632c&gt;] (bus_attach_device+0x0/0x9c) from [&lt;c01244e4&gt;]
+</I>&gt;<i> (device_add+0x1e4/0x634)
+</I>&gt;<i>  r6:00000000 r5:00000000 r4:bf0582f0
+</I>&gt;<i> [&lt;c0124300&gt;] (device_add+0x0/0x634) from [&lt;c0128c38&gt;]
+</I>&gt;<i> (platform_device_add+0x100/0x188)
+</I>&gt;<i> [&lt;c0128b38&gt;] (platform_device_add+0x0/0x188) from [&lt;c0128ce0&gt;]
+</I>&gt;<i> (platform_device_register+0x20/0x24)
+</I>&gt;<i>  r7:bf057370 r6:bf0582e0 r5:bf0582e8 r4:c60101b3
+</I>&gt;<i> [&lt;c0128cc0&gt;] (platform_device_register+0x0/0x24) from [&lt;bf05a360&gt;]
+</I>&gt;<i> (tscan1_init+0x13c/0x214 [tscan1])
+</I>&gt;<i>  r5:c5079f30
+</I>&gt;<i> [&lt;bf05a224&gt;] (tscan1_init+0x0/0x214 [tscan1]) from [&lt;c0062538&gt;]
+</I>&gt;<i> (sys_init_module+0xfc/0x144)
+</I>&gt;<i>  r8:c0020124 r7:00000080 r6:2aac9000 r5:00000000 r4:bf058180
+</I>&gt;<i> [&lt;c006243c&gt;] (sys_init_module+0x0/0x144) from [&lt;c001ff80&gt;]
+</I>&gt;<i> (ret_fast_syscall+0x0/0x2c)
+</I>&gt;<i>  r6:00000000 r5:0000d0bc r4:0000a8c8*
+</I>&gt;<i> *tscan1 tscan1: device registered (reg_base=c6012100, irq=33)*
+</I>&gt;<i> 
+</I>&gt;<i> I can tell you that I also use  *rt73usb* driver for my ASUS wifi dongle.
+</I>&gt;<i> Don't know if it can conflict or whatever...
+</I>&gt;<i> 
+</I>&gt;<i> I don't know where to debug now... Hope you guys can help me.
+</I>
+Does this problem show up with CONFIG_CAN_DEV_SYSFS=y?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001091.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+	<LI>Next message: <A HREF="001093.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1092">[ date ]</a>
+              <a href="thread.html#1092">[ thread ]</a>
+              <a href="subject.html#1092">[ subject ]</a>
+              <a href="author.html#1092">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

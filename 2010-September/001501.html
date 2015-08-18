@@ -1,0 +1,266 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP 2515 RX problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3CCBD3E33FD996A94B9BF13F028D8D86C8100B1BC196%40CNX-SBS.connexionz.co.nz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001500.html">
+   <LINK REL="Next"  HREF="001504.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP 2515 RX problems</H1>
+    <B>Michael Stocks</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3CCBD3E33FD996A94B9BF13F028D8D86C8100B1BC196%40CNX-SBS.connexionz.co.nz%3E"
+       TITLE="[Socketcan-users] MCP 2515 RX problems">Michael.Stocks at connexionz.co.nz
+       </A><BR>
+    <I>Thu Sep  2 06:48:31 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001500.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+        <LI>Next message: <A HREF="001504.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1501">[ date ]</a>
+              <a href="thread.html#1501">[ thread ]</a>
+              <a href="subject.html#1501">[ subject ]</a>
+              <a href="author.html#1501">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear All,
+I'm experiencing lost frames and id 0, 8 byte all zero packets now that we have equipment sending back to back packets on a 250Kb network.
+I have plenty of hardware attached to Gumstix Overos so I'll test your patch once the kernel is rebuilt.
+
+Cheers Mike.
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of christian pellegrin
+Sent: Thursday, 2 September 2010 02:36
+To: Benny B. Simonsen
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] MCP 2515 RX problems
+
+Hi, first of all sorry for the late response. Just now I managed to put together the needed hardware (you know, in Italy it's near impossible to do anything not related to holidays in august ;-) )
+
+I had a quick look at your patch and it's similar to the one I prepared and I'm attaching below. I think both of them solve the problem with out of order frame. What is worrying me is that packet with all zeros. I never saw something similar. I'll put my system on test during the next night to see if I can reproduce it. I guess you put the code to reset RX flags in case of error to try to solve this glitch, didn't you?
+
+Anyway I will try your patch tomorrow.
+
+diff --git a/drivers/net/can/mcp251x.c b/drivers/net/can/mcp251x.c index 177f2e1..e8c5e37 100644
+--- a/drivers/net/can/mcp251x.c
++++ b/drivers/net/can/mcp251x.c
+@@ -773,8 +773,9 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 	struct mcp251x_priv *priv = dev_id;
+ 	struct spi_device *spi = priv-&gt;spi;
+ 	struct net_device *net = priv-&gt;net;
++	u8 intf;
+ #ifdef STATS
+-	static int irqs, runs, ov0, ov1, rx0, rx1;
++	static int irqs, runs;
+ 	static int ee[8], ii[8];
+ 	static unsigned long last;
+ 	unsigned long now;
+@@ -788,7 +789,7 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 		now = jiffies;
+ 		if (now &gt;= last + HZ) {
+ 			last = now;
+-			printk(&quot;%lu: i %d r %d r0 %d r1 %d o0 %d o1 %d err&quot;, now, irqs,
+runs, rx0, rx1, ov0, ov1);
++			printk(&quot;%lu: i %d r %d err&quot;, now, irqs, runs);
+ 			for(i = 0; i &lt; 8; i++) {
+ 				printk(&quot;,%d&quot;, ee[i]);
+ 				ee[i] = 0;
+@@ -799,24 +800,20 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 				ii[i] = 0;
+ 			}
+ 			printk(&quot;\n&quot;);
+-			irqs = runs = rx0 = rx1 = ov0 = ov1 = 0;
++			irqs = runs = 0;
+ 		}
+ 	}
+ 	irqs += 1;
+ #endif
+
+ 	mutex_lock(&amp;priv-&gt;mcp_lock);
+-	while (!priv-&gt;force_quit) {
++	intf = mcp251x_read_reg(spi, CANINTF);
++	do {
+ 		enum can_state new_state;
+-		u8 intf = mcp251x_read_reg(spi, CANINTF);
+-		u8 eflag;
++		u8 eflag = 0;
+ 		int can_id = 0, data1 = 0;
+ #ifdef STATS
+ 		runs += 1;
+-		if (intf &amp; CANINTF_RX0IF)
+-			rx0 += 1;
+-		if (intf &amp; CANINTF_RX1IF)
+-			rx1 += 1;
+ 		{
+ 			int i;
+ 			for(i = 0; i &lt; 8; i++) {
+@@ -828,25 +825,31 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+
+ 		if (intf &amp; CANINTF_RX0IF) {
+ 			mcp251x_hw_rx(spi, 0);
+-			/* Free one buffer ASAP */
+-			mcp251x_write_bits(spi, CANINTF, intf &amp; CANINTF_RX0IF,
+-					   0x00);
++
++			/* check that a packet didn't come while emptying RX0 */
++			if ((intf &amp; CANINTF_RX1IF) == 0)
++				intf |= mcp251x_read_reg(spi, CANINTF);
+ 		}
+
+ 		if (intf &amp; CANINTF_RX1IF)
+ 			mcp251x_hw_rx(spi, 1);
+
++		/* This is needed to close a race condition that causes
++		 * packet reordening: we must assure that we never empty
++		 * RX0 but not RX1. If this happens the next packet will
++		 * land in RX0. As a conseuqence on the next do { } while
++		 * spin we will have packets out of order.
++		 */
++		intf |= CANINTF_RX1IF;
++
+ 		mcp251x_write_bits(spi, CANINTF, intf, 0x00);
+
+-		eflag = mcp251x_read_reg(spi, EFLG);
+-		mcp251x_write_reg(spi, EFLG, 0x00);
++		if (intf &amp;&amp; CANINTF_ERRIF) {
++			eflag = mcp251x_read_reg(spi, EFLG);
++			mcp251x_write_reg(spi, EFLG, 0x00);
++		}
+
+ #ifdef STATS
+-		if (eflag &amp; EFLG_RX0OVR)
+-			ov0 += 1;
+-
+-		if (eflag &amp; EFLG_RX1OVR)
+-			ov1 += 1;
+ 		{
+ 			int i;
+ 			for(i = 0; i &lt; 8; i++) {
+@@ -924,9 +927,6 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 			}
+ 		}
+
+-		if (intf == 0)
+-			break;
+-
+ 		if (intf &amp; (CANINTF_TX2IF | CANINTF_TX1IF | CANINTF_TX0IF)) {
+ 			net-&gt;stats.tx_packets++;
+ 			net-&gt;stats.tx_bytes += priv-&gt;tx_len - 1; @@ -936,7 +936,8 @@ static irqreturn_t mcp251x_can_ist(int irq, void *dev_id)
+ 			}
+ 			netif_wake_queue(net);
+ 		}
+-	}
++		intf = mcp251x_read_reg(spi, CANINTF);
++	} while (!priv-&gt;force_quit &amp;&amp; intf);
+ 	mutex_unlock(&amp;priv-&gt;mcp_lock);
+ 	return IRQ_HANDLED;
+ }
+
+
+
+On Sat, Aug 28, 2010 at 2:20 PM, Benny B. Simonsen &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bbs at serenergy.com</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2010/8/6 christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Fri, Aug 6, 2010 at 3:56 PM, Wolfgang Grandegger 
+</I>&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> wrote:
+</I>&gt;&gt;<i> &gt; To be clear, out-of-order messages are also not OK.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes I was looking at this with some interleave analysis. I think the 
+</I>&gt;&gt;<i> problem lies in the following race:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // suppose we come here with RXB0 filled with packet X
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;u8 intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;u8 eflag;
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;int can_id = 0, data1 = 0;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // packet X+1 arrives and lands in RXB1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;if (intf &amp; CANINTF_RX0IF) {
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;mcp251x_hw_rx(spi, 0);
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;/* Free one buffer ASAP */
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;mcp251x_write_bits(spi, CANINTF, intf &amp; 
+</I>&gt;&gt;<i> CANINTF_RX0IF,
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00);
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;}
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> // packet X+2 arrives and lands in RXB0 // unfortunately variable 
+</I>&gt;&gt;<i> intf is old and doesn't show that we have something in RXB1 // (*1)
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;if (intf &amp; CANINTF_RX1IF)
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;mcp251x_hw_rx(spi, 1);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> now on the next turn we will have packet X+2 in RXB0 and X+1 in RXB1 
+</I>&gt;&gt;<i> so we read them out-of-order. The easiest way to solve the problem is 
+</I>&gt;&gt;<i> to take out the line:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;/* Free one buffer ASAP */
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160;mcp251x_write_bits(spi, CANINTF, intf &amp; 
+</I>&gt;&gt;<i> CANINTF_RX0IF,
+</I>&gt;&gt;<i> &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; &#160; 0x00);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> but we risk to lose more packets. Perhaps also rereading intf in (*1) 
+</I>&gt;&gt;<i> could work but we must be careful when we reset CANINTF register to 
+</I>&gt;&gt;<i> not lose an interrupt for RXB0. I will do some tests but after next 
+</I>&gt;&gt;<i> week because I don't have the access to the hardware until then.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> --
+</I>&gt;&gt;<i> Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A> &quot;Real 
+</I>&gt;&gt;<i> Programmers don't play tennis, or any other sport which requires you 
+</I>&gt;&gt;<i> to change clothes. Mountain climbing is OK, and Real Programmers wear 
+</I>&gt;&gt;<i> their climbing boots to work in case a mountain should suddenly 
+</I>&gt;&gt;<i> spring up in the middle of the computer room.&quot;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi Christian,
+</I>&gt;<i> Did you have a chance to look on the problem and / or the patch I send 
+</I>&gt;<i> to the list?
+</I>&gt;<i> BR
+</I>&gt;<i> Benny
+</I>
+
+
+--
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A> &quot;Real Programmers don't play tennis, or any other sport which requires you to change clothes. Mountain climbing is OK, and Real Programmers wear their climbing boots to work in case a mountain should suddenly spring up in the middle of the computer room.&quot;
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001500.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+	<LI>Next message: <A HREF="001504.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1501">[ date ]</a>
+              <a href="thread.html#1501">[ thread ]</a>
+              <a href="subject.html#1501">[ subject ]</a>
+              <a href="author.html#1501">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

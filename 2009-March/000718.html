@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] LPC2478 CAN driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20LPC2478%20CAN%20driver&In-Reply-To=%3C49CA2338.4090208%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000717.html">
+   <LINK REL="Next"  HREF="000719.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] LPC2478 CAN driver</H1>
+    <B>Christopher Lapointe</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20LPC2478%20CAN%20driver&In-Reply-To=%3C49CA2338.4090208%40gmail.com%3E"
+       TITLE="[Socketcan-users] LPC2478 CAN driver">christopherlpnt at gmail.com
+       </A><BR>
+    <I>Wed Mar 25 13:27:36 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000717.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+        <LI>Next message: <A HREF="000719.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#718">[ date ]</a>
+              <a href="thread.html#718">[ thread ]</a>
+              <a href="subject.html#718">[ subject ]</a>
+              <a href="author.html#718">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+&gt;<i> In the datasheet of the microncotroller says :
+</I>&gt;<i> &quot;Each CAN controller has a register structure similar to the NXP
+</I>&gt;<i> SJA1000 and the PeliCAN
+</I>&gt;<i> Library block, but the 8-bit registers of those devices have been
+</I>&gt;<i> combined in 32-bit words
+</I>&gt;<i> to allow simultaneous access in the ARM environment. The main
+</I>&gt;<i> operational difference is
+</I>&gt;<i> that the recognition of received Identifiers, known in CAN terminology
+</I>&gt;<i> as Acceptance
+</I>&gt;<i> Filtering, has been removed from the CAN controllers and centralized in a global
+</I>&gt;<i> Acceptance Filter.&quot;
+</I>&gt;<i>   
+</I>
+Somebody at NXP deserves to be spanked for writing this, because it is 
+totally misleading. It should read: &quot;We have made some registers look 
+similar to those of the SJA1000/PeliCAN. The CAN controller can 
+therefore be accessed in a similar manner, but it functions 
+differently&quot;. In other words, the LPC24xx CAN controller is just like 
+the SJA1000, except it is totally different... ;-)
+&gt;<i> so i think i could use the sja1000 driver
+</I>Nope, it needs a new driver.
+&gt;<i> , but how do i configure it ?
+</I>&gt;<i>
+</I>&gt;<i> Can anybody help me ?
+</I>&gt;<i>   
+</I>Either write the driver yourself (and contribute!) or ask somebody to do 
+it for you.
+
+Chris
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000717.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+	<LI>Next message: <A HREF="000719.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#718">[ date ]</a>
+              <a href="thread.html#718">[ thread ]</a>
+              <a href="subject.html#718">[ subject ]</a>
+              <a href="author.html#718">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

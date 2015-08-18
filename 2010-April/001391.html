@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket can h/w filter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20can%20h/w%20filter&In-Reply-To=%3C4BD6D58A.3060208%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001390.html">
+   <LINK REL="Next"  HREF="001387.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket can h/w filter</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20can%20h/w%20filter&In-Reply-To=%3C4BD6D58A.3060208%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Socket can h/w filter">wg at grandegger.com
+       </A><BR>
+    <I>Tue Apr 27 14:16:10 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001390.html">[Socketcan-users] Socket can h/w filter
+</A></li>
+        <LI>Next message: <A HREF="001387.html">[Socketcan-users] Socket can h/w filter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1391">[ date ]</a>
+              <a href="thread.html#1391">[ thread ]</a>
+              <a href="subject.html#1391">[ subject ]</a>
+              <a href="author.html#1391">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Subhasish Ghosh wrote:
+&gt;<i> Thank you for the clarification.
+</I>&gt;<i> 
+</I>&gt;<i> Actually, our controller is still in the implementation stage.
+</I>&gt;<i> Basically, we can configure an ID for each mailbox.
+</I>
+Historically we distinguish between &quot;basic&quot; and &quot;full&quot; CAN controllers.
+In contrast to basic CAN controllers, full CAN controllers allow to do
+filtering in hardware via various RX message objects unloading the CPU.
+For Socket-CAN, Basic CAN controllers are definitely the better
+solution, especially if they provide reasonable buffering of RX
+messages, like the SJA1000.
+
+Wolfgang.
+
+&gt;<i> ________________________________
+</I>&gt;<i> From: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> To: Subhasish Ghosh &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">subhasish82 at yahoo.com</A>&gt;
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Sent: Tue, 27 April, 2010 12:55:57 PM
+</I>&gt;<i> Subject: Re: [Socketcan-users] Socket can h/w filter
+</I>&gt;<i> 
+</I>&gt;<i> Subhasish Ghosh wrote:
+</I>&gt;&gt;<i> Hi!,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The CAN controller that I am using allows configuring per-mailbox IDs. CAN being a broadcast network, this feature reduces the interrupts to the processor. 
+</I>&gt;<i> 
+</I>&gt;<i> What CAN controller are you using.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> From Documentation/can.txt, what I understand is that the socketcan interface does not provide any mechanism to configure the h/w for this purpose (chapter 6.3).
+</I>&gt;<i> 
+</I>&gt;<i> Right, hardware filtering is not yet supported.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Instead, the h/w is configured to receive all identifiers and the filtering is done on the stack (like ti_hecc.c) and to avoid hogging the processor some interrupt mitigation techniques like NAPI is implemented.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Isn't this a work around?
+</I>&gt;<i> 
+</I>&gt;<i> Well, software filtering is used for the sake of portability.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> My question is, did I miss something, is there any way to configure the h/w for this purpose. Is it a good idea if I cook up a sysfs interface for my driver for this.
+</I>&gt;<i> 
+</I>&gt;<i> The problem is that the filtering capabilities of CAN controllers are
+</I>&gt;<i> very hardware specific and providing a generic interface is not trivial.
+</I>&gt;<i> But that's definetely something on the to-do list for Socket-CAN. Any
+</I>&gt;<i> ideas, suggestions or even patches are welcome. What are your specific
+</I>&gt;<i> requirements?
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001390.html">[Socketcan-users] Socket can h/w filter
+</A></li>
+	<LI>Next message: <A HREF="001387.html">[Socketcan-users] Socket can h/w filter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1391">[ date ]</a>
+              <a href="thread.html#1391">[ thread ]</a>
+              <a href="subject.html#1391">[ subject ]</a>
+              <a href="author.html#1391">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

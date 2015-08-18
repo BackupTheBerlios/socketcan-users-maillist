@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Driver for the Peak-USB-CAN-Card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Driver%20for%20the%20Peak-USB-CAN-Card&In-Reply-To=%3C26B4E6A46012A1469B4EB3BC2A7CAAEC97391B%40vwagwox00084.vw.vwg%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001519.html">
+   <LINK REL="Next"  HREF="001521.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Driver for the Peak-USB-CAN-Card</H1>
+    <B>Hartkopp, Oliver (K-EFFI/P)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Driver%20for%20the%20Peak-USB-CAN-Card&In-Reply-To=%3C26B4E6A46012A1469B4EB3BC2A7CAAEC97391B%40vwagwox00084.vw.vwg%3E"
+       TITLE="[Socketcan-users] Driver for the Peak-USB-CAN-Card">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Fri Oct  1 10:52:43 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001519.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+        <LI>Next message: <A HREF="001521.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1520">[ date ]</a>
+              <a href="thread.html#1520">[ thread ]</a>
+              <a href="subject.html#1520">[ subject ]</a>
+              <a href="author.html#1520">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Ewgenij,
+
+please get the latest PEAK Linux driver (v6.20) from their website.
+
+The driver includes some good documentation (PDF).
+
+After compiling the driver with netdev-support (default on Kernels &gt;= 2.6.25) a can0 device will appear in /proc/pcan after plugging in the adapter.
+
+Only the bitrate setting is a bit different, as you still need the chardev-entry for that:
+
+E.g. 
+
+echo &quot;i 0x4914 e&quot; &gt; /dev/pcanusb0
+
+will set the adapter to 100kBit/s
+
+The default bitrate is 500 kBit/s.
+
+Regards,
+Oliver
+
+-----Urspr&#252;ngliche Nachricht-----
+Von: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] Im Auftrag von Ewgenij Sokolovski
+Gesendet: Freitag, 1. Oktober 2010 10:24
+An: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Betreff: [Socketcan-users] Driver for the Peak-USB-CAN-Card
+
+Hello, list. I have a Peak USB CAN adapter here. Is there a socketcan module for this device? Is it possible to use it with socketcans at all? In the German documentation dated 2006 I read that there supposed to be a &quot;Modifizierter Linux-Treiber v2.15 von PEAK-System&quot;, I could use for that purpose. However, we have 2010 now, so what is the current state of affairs?:)
+
+BR
+Ewgenij
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001519.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+	<LI>Next message: <A HREF="001521.html">[Socketcan-users] Driver for the Peak-USB-CAN-Card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1520">[ date ]</a>
+              <a href="thread.html#1520">[ thread ]</a>
+              <a href="subject.html#1520">[ subject ]</a>
+              <a href="author.html#1520">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

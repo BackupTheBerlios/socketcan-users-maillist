@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Bitrate calculations seem wrong
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bitrate%20calculations%20seem%20wrong&In-Reply-To=%3C491C6F3B.3010908%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000579.html">
+   <LINK REL="Next"  HREF="000583.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Bitrate calculations seem wrong</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bitrate%20calculations%20seem%20wrong&In-Reply-To=%3C491C6F3B.3010908%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Bitrate calculations seem wrong">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov 13 19:17:31 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000579.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+        <LI>Next message: <A HREF="000583.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#582">[ date ]</a>
+              <a href="thread.html#582">[ thread ]</a>
+              <a href="subject.html#582">[ subject ]</a>
+              <a href="author.html#582">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> Looking at the bitrate calculations for the SJA1000 @16MHz,
+</I>&gt;<i> I get different values in the driver than what's recommended
+</I>&gt;<i> by CiA.
+</I>&gt;<i> 
+</I>&gt;<i> $ ./can-calc-bit-timing -c 16000000
+</I>
+&gt;<i> Bit timing parameters for sja1000 using 16000000Hz
+</I>&gt;<i> Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+</I>&gt;<i> 1000000     62   7    4    4   1   1 75.0%  0.0% 0x00 0x3a
+</I>&gt;<i>  800000     62  11    4    4   1   1 80.0%  0.0% 0x00 0x3e
+</I>&gt;<i>  500000    125  11    2    2   1   2 87.5%  0.0% 0x01 0x1c
+</I>&gt;<i>  250000    250  11    2    2   1   4 87.5%  0.0% 0x03 0x1c
+</I>&gt;<i>  125000    500  11    2    2   1   8 87.5%  0.0% 0x07 0x1c
+</I>&gt;<i>  100000    625  11    2    2   1  10 87.5%  0.0% 0x09 0x1c
+</I>&gt;<i>   50000   1250  11    2    2   1  20 87.5%  0.0% 0x13 0x1c
+</I>&gt;<i>   20000   3125  11    2    2   1  50 87.5%  0.0% 0x31 0x1c
+</I>&gt;<i>   10000   4000   8    8    8   1  64 68.0%  0.0% 0x3f 0x7f
+</I>
+The CAN clock frequency is usually 16/2 = 8 MHz.
+
+$ ./can-calc-bit-timing -c 8000000 sja1000
+Bit timing parameters for sja1000 using 8000000Hz
+Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+1000000    125   3    2    2   1   1 75.0%  0.0% 0x00 0x14
+ 800000    125   5    2    2   1   1 80.0%  0.0% 0x00 0x16
+ 500000    125  11    2    2   1   1 87.5%  0.0% 0x00 0x1c
+ 250000    250  11    2    2   1   2 87.5%  0.0% 0x01 0x1c
+ 125000    500  11    2    2   1   4 87.5%  0.0% 0x03 0x1c
+ 100000    625  11    2    2   1   5 87.5%  0.0% 0x04 0x1c
+  50000   1250  11    2    2   1  10 87.5%  0.0% 0x09 0x1c
+  20000   3125  11    2    2   1  25 87.5%  0.0% 0x18 0x1c
+  10000   6250  11    2    2   1  50 87.5%  0.0% 0x31 0x1c
+
+&gt;&gt;<i>From the CiA calculator (only their desired setups):
+</I>
+What CIA calculator did you use? 
+
+&gt;<i> Rate                                    SP      BTR0    BTR1
+</I>&gt;<i> 1000	1	16	13	2	87.5	0x00	0x1c
+</I>&gt;<i> 500	2	16	13	2	87.5	0x01	0x1c
+</I>&gt;<i> 250	4	16	13	2	87.5	0x03	0x1c
+</I>&gt;<i> 125	8	16	13	2	87.5	0x07	0x1c
+</I>&gt;<i> 100	10	16	13	2	87.5	0x09	0x1c
+</I>&gt;<i> 50	20	16	13	2	87.5	0x13	0x1c
+</I>&gt;<i> 20	50	16	13	2	87.5	0x31	0x1c
+</I>&gt;<i> 
+</I>&gt;<i> Any ideas why the difference(s)?
+</I>
+I understood that the CIA recommended sample points are the one listed
+above, e.g. 75% for 1MBit, 80% for 800 kbit and 87.5 for &lt;= 500kbit.
+
+&gt;<i> Note: the values don't seem to match up @8Mhz either.
+</I>
+To show a few references. The above parameters match the one calculated
+or listed by:
+
+  <A HREF="http://www.esacademy.com/faq/calc/sja1000.htm">http://www.esacademy.com/faq/calc/sja1000.htm</A>
+  <A HREF="http://www.port.de/engl/canprod/sv_req_form.html">http://www.port.de/engl/canprod/sv_req_form.html</A>
+  <A HREF="http://www.softing.com/home/en/industrial-automation/products/can-bus/more-can-bus/high-speed/cia-ds-102-baudrates.php">http://www.softing.com/home/en/industrial-automation/products/can-bus/more-can-bus/high-speed/cia-ds-102-baudrates.php</A>
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000579.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+	<LI>Next message: <A HREF="000583.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#582">[ date ]</a>
+              <a href="thread.html#582">[ thread ]</a>
+              <a href="subject.html#582">[ subject ]</a>
+              <a href="author.html#582">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%0A%20on%09PC104&In-Reply-To=%3C4A329CED.90003%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000914.html">
+   <LINK REL="Next"  HREF="000913.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%0A%20on%09PC104&In-Reply-To=%3C4A329CED.90003%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Jun 12 20:22:37 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000914.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+        <LI>Next message: <A HREF="000913.html">[Socketcan-users] Does Socket CAN support PC-104 CAN-Interface	CPC-104M?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#917">[ date ]</a>
+              <a href="thread.html#917">[ thread ]</a>
+              <a href="subject.html#917">[ subject ]</a>
+              <a href="author.html#917">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> khurram gulzar wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i> Finally, Thanx to you guys, I am able to recieve data using candump now 
+</I>&gt;&gt;<i> the problem in recieve was not from the socketcan side
+</I>&gt;<i> 
+</I>&gt;<i> Concrats!
+</I>&gt;<i> 
+</I>&gt;&gt;<i> The irq 3 4 10 and 11 were mapped in the kernel with COM 1 to COM 4 as
+</I>&gt;&gt;<i> seen in this document
+</I>&gt;&gt;<i> <A HREF="http://www.microcomputersystems.com/MSI-6354.pdf">http://www.microcomputersystems.com/MSI-6354.pdf</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I just disabled from the bios all the COMs from 1 to 4 and the
+</I>&gt;&gt;<i> additional USB ports i.e. 2 and 3 so it disable the board level
+</I>&gt;&gt;<i> interrupt association
+</I>&gt;<i> 
+</I>&gt;<i> OK.
+</I>
+Hi guys,
+
+nice to read that you got a working environment!
+
+The interrupt mapping  caused problems until i managed to reserve exclusive
+irqs in my system and connected the i28527 controllers with the Eurotech DOS
+tool to IRQ5 and IRQ15 ...
+
+Have fun,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000914.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+	<LI>Next message: <A HREF="000913.html">[Socketcan-users] Does Socket CAN support PC-104 CAN-Interface	CPC-104M?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#917">[ date ]</a>
+              <a href="thread.html#917">[ thread ]</a>
+              <a href="subject.html#917">[ subject ]</a>
+              <a href="author.html#917">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

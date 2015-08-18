@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SocketCAN Status ( API / tools / drivers / patch	2.6.21-rc3 )
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20Status%20%28%20API%20/%20tools%20/%20drivers%20/%20patch%0A%092.6.21-rc3%20%29&In-Reply-To=%3C45F474EB.1070206%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000092.html">
+   <LINK REL="Next"  HREF="000096.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SocketCAN Status ( API / tools / drivers / patch	2.6.21-rc3 )</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20Status%20%28%20API%20/%20tools%20/%20drivers%20/%20patch%0A%092.6.21-rc3%20%29&In-Reply-To=%3C45F474EB.1070206%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] SocketCAN Status ( API / tools / drivers / patch	2.6.21-rc3 )">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Mar 11 22:30:19 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000092.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+        <LI>Next message: <A HREF="000096.html">[Socketcan-users] SocketCAN Mailing List Topics - new ML for CAN	driver development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#95">[ date ]</a>
+              <a href="thread.html#95">[ thread ]</a>
+              <a href="subject.html#95">[ subject ]</a>
+              <a href="author.html#95">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+just to give you an update on the status of the SocketCAN project:
+
+** API:
+The SocketCAN API can be expected to be stable. The basic structs (like 
+the can_frame, sockaddr_can, sockopts, defaults, etc.) have been 
+discussed and approved. The implementation of the protocol family CAN 
+for Kernel 2.4 (trunk/kernel/2.4) is on the same level like the Kernel 
+2.6, so SocketCAN applications compiled with Kernel 2.6 Includes are 
+also working in Kernel 2.4 environments.
+
+** Tools:
+Under trunk/can-utils you can find several tools to start with SocketCAN:
+
+* candump - dump CAN traffic from one or more CAN-interfaces (optional 
+colorized, with timestamps, etc). Candump may also create a compact 
+logfile format output (for one or more CAN interfaces) that can be 
+replayed with 'canplayer'
+
+* canplayer.c - replays a compact CAN frame logfile to CAN devices. Due 
+to device-assignments it is possible to replay the CAN-frames to other 
+than the originating CAN-devices (e.g. replay Frames received on can0 to 
+vcan0 for local replay without real CAN hardware)
+
+Several tools to convert the compact logfiles:
+* asc2log.c - convert ASC logfile to compact CAN frame logfile
+* log2asc.c - convert compact CAN frame logfile to ASC logfile
+* log2long.c - convert compact CAN frame representation into user readable
+
+* cangen.c - CAN frames generator for testing purposes
+
+* cansend.c - simple command line tool to send CAN-frames via CAN_RAW 
+sockets
+
+* can-sniffer.c - find content changes in (cyclic) CAN-frames (optional 
+colorized, bitwise-mode, filtered) using the Broadcast Manager (bcm) sockets
+
+* slcan_attach.c - userspace tool for serial line CAN interface driver 
+SLCAN (Kernel 2.6 only!)
+
+** Drivers:
+
+For Kernel 2.4 &amp; 2.6 there are drivers for SJA1000 and MSCAN. Partly beta.
+
+There is also a virtual CAN-driver (VCAN) which provides a loopback 
+CAN-device, if you don't have 'real' CAN hardware.
+
+For Kernel 2.6 there is a (alpha) driver for low-cost CAN hardware using 
+the LAWICEL serial protocol:
+<A HREF="https://lists.berlios.de/pipermail/socketcan-commit/2007-February/000140.html">https://lists.berlios.de/pipermail/socketcan-commit/2007-February/000140.html</A>
+
+NEW: The official mainstream Linux (2.4/2.6) driver from PEAK-System 
+(ISA/PCI/PCCard/USB/Parport) is now supporting the SocketCAN netdevice 
+driver model. Look for details (and Install-docs) at 
+<A HREF="http://www.peak-system.com/linux/index.htm">http://www.peak-system.com/linux/index.htm</A>
+Thanks to PEAK for the great support and the adoption of the SocketCAN 
+approach.
+
+The &quot;ioctls&quot; to setup CAN-controllers under SocketCAN are still in 
+discussion. For this reason the first patch for the Linux Kernel 
+mainline integration will only carry the virtual CAN-driver (VCAN), 
+which brings all the necessary infrastructure for following drivers ...
+
+** Patches:
+
+There is a patch for the current 2.6.21-rc3 Kernel available under
+trunk/patches/linux-2.6.21-rc3
+
+This patch contains the protocol family CAN core, the (CAN_)RAW sockets, 
+the BroadcastManager (CAN_)BCM sockets and the virtual CAN driver (VCAN).
+
+
+So that's it for today.
+
+Best regards &amp; have a nice start into your week,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000092.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+	<LI>Next message: <A HREF="000096.html">[Socketcan-users] SocketCAN Mailing List Topics - new ML for CAN	driver development
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#95">[ date ]</a>
+              <a href="thread.html#95">[ thread ]</a>
+              <a href="subject.html#95">[ subject ]</a>
+              <a href="author.html#95">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

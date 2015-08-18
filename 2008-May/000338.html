@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C482300E4.8050001%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000337.html">
+   <LINK REL="Next"  HREF="000333.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C482300E4.8050001%40grandegger.com%3E"
+       TITLE="[Socketcan-users] HW Clock">wg at grandegger.com
+       </A><BR>
+    <I>Thu May  8 15:32:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000337.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000333.html">[Socketcan-users] General Dentists Contact List in America
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#338">[ date ]</a>
+              <a href="thread.html#338">[ thread ]</a>
+              <a href="subject.html#338">[ subject ]</a>
+              <a href="author.html#338">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Wolfgang Grandegger schrieb:
+</I>&gt;&gt;<i> Breno wrote:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i>    
+</I>&gt;&gt;&gt;&gt;<i> Hi Breno,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">breno at das.ufsc.br</A> wrote:
+</I>&gt;&gt;&gt;&gt;<i>        
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Wolfgang, I found  a message that seems somehow strange to me
+</I>&gt;&gt;&gt;&gt;&gt;<i> while the
+</I>&gt;&gt;&gt;&gt;&gt;<i> kernel is being loaded on my lite5200 board. It said at the end
+</I>&gt;&gt;&gt;&gt;&gt;<i> that the
+</I>&gt;&gt;&gt;&gt;&gt;<i> HW clock can't be read. Does it have any relevance? Could implicate on
+</I>&gt;&gt;&gt;&gt;&gt;<i> unexpected behavior for RT process?
+</I>&gt;&gt;&gt;&gt;&gt;<i>             
+</I>&gt;&gt;&gt;&gt;<i> I think it has nothing to do with Socket-CAN. Just disable
+</I>&gt;&gt;&gt;&gt;<i> Socket-CAN in
+</I>&gt;&gt;&gt;&gt;<i> your kernel to check. And please be more precise next time by providing
+</I>&gt;&gt;&gt;&gt;<i>   more information, e.g. log output.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> What do you mean with RT process? In case you are using Xenomai or
+</I>&gt;&gt;&gt;&gt;<i> RT-Soccket-CAN, you are off-topic here. Please send such questions to
+</I>&gt;&gt;&gt;&gt;<i> the Xenomai-help mailing list.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;<i> Hi Wolfgang, I'm trying to send can packages from CAN0 interface and
+</I>&gt;&gt;&gt;<i> receive them from CAN1 interface. I started two separated processes, one
+</I>&gt;&gt;&gt;<i> sending and another one receiving.  Unfortunately my read or recvfrom
+</I>&gt;&gt;&gt;<i> commands is blocked, I mean it seems that no bytes are read.
+</I>&gt;&gt;&gt;<i> The ifconfig command didn't return any packages sent or received at any
+</I>&gt;&gt;&gt;<i> interface.
+</I>&gt;&gt;&gt;<i> But the /proc/net/can/stats show messages like:
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hm, &quot;/proc/net/can/stats&quot; does not exist.
+</I>
+Ah, it exists, of course. Sorry for the noise.
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> Hi Wolfgang and Breno,
+</I>&gt;<i> 
+</I>&gt;<i> i'm a bit confused about the /proc/net/can/stats . Especially because
+</I>&gt;<i> these exorbitant values ...
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i>       100 % current match ratio (CRXMR)
+</I>&gt;&gt;&gt;<i>     29635 frames/s current tx rate (CTXR)
+</I>&gt;&gt;&gt;<i>     29635 frames/s current rx rate (CRXR)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;<i> 
+</I>&gt;<i> ... do not look very sane.
+</I>&gt;<i> 
+</I>&gt;<i> The only way to produce these high frame rates is to work with the
+</I>&gt;<i> virtual CAN driver (vcan).
+</I>&gt;<i> 
+</I>&gt;<i> A 'real' CAN bus can handle up to 2.000 - 3.000 frames.
+</I>&gt;<i> 
+</I>&gt;<i> Could it be that you mixed the SocketCAN sources with the RT-SocketCAN
+</I>&gt;<i> sources?
+</I>&gt;<i> 
+</I>&gt;<i> I don't know if RT-SocketCAN also supports the procfs  statistics ?!?
+</I>
+Yes, but under /proc/rtnet. Breno, could you please tell use what
+Software you are using e.g.
+
+- Kernel source and version
+- Socket-CAN source and version
+- RT-Socket-CAN?
+
+Thanks,
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000337.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000333.html">[Socketcan-users] General Dentists Contact List in America
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#338">[ date ]</a>
+              <a href="thread.html#338">[ thread ]</a>
+              <a href="subject.html#338">[ subject ]</a>
+              <a href="author.html#338">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

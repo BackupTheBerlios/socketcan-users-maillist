@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can device error flags unset?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20device%20error%20flags%20unset%3F&In-Reply-To=%3C201102071709.35465.alexander.stein%40systec-electronic.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001780.html">
+   <LINK REL="Next"  HREF="001782.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can device error flags unset?</H1>
+    <B>Alexander Stein</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20device%20error%20flags%20unset%3F&In-Reply-To=%3C201102071709.35465.alexander.stein%40systec-electronic.com%3E"
+       TITLE="[Socketcan-users] can device error flags unset?">alexander.stein at systec-electronic.com
+       </A><BR>
+    <I>Mon Feb  7 17:09:35 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001780.html">[Socketcan-users] can device error flags unset?
+</A></li>
+        <LI>Next message: <A HREF="001782.html">[Socketcan-users] can device error flags unset?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1781">[ date ]</a>
+              <a href="thread.html#1781">[ thread ]</a>
+              <a href="subject.html#1781">[ subject ]</a>
+              <a href="author.html#1781">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Monday 07 February 2011, 16:33:30 Wolfgang Grandegger wrote:
+&gt;<i> &gt;&gt; 2. I forced the controller into bus-off by short-circuiting
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt;    the low and high lines and sending a message (*), Then I
+</I>&gt;<i> &gt;&gt;    restarted the controller manually with
+</I>&gt;<i> &gt;&gt;    &quot;ip link set can0 type can restart&quot;:
+</I>&gt;<i> &gt;&gt;    
+</I>&gt;<i> &gt;&gt;    On SJA1000:
+</I>&gt;<i> &gt;&gt;    
+</I>&gt;<i> &gt;&gt;    # ./candump -t d any,0:0,#FFFFFFFF
+</I>&gt;<i> &gt;&gt;    (*)
+</I>&gt;<i> &gt;&gt;    can0  20000004  [8] 00 08 00 00 00 00 88 00   ERROR-WARNING
+</I>&gt;<i> &gt;&gt;    can0  20000004  [8] 00 20 00 00 00 00 88 00   ERROR-PASSIVE
+</I>&gt;<i> &gt;&gt;    can0  20000044  [8] 00 00 00 00 00 00 7F 00   BUS-OFF
+</I>&gt;<i> &gt;&gt;    (**)
+</I>&gt;<i> &gt;&gt;    can0  20000100  [8] 00 00 00 00 00 00 00 00   RESTARTED
+</I>&gt;<i> &gt;&gt;    can0  20000004  [8] 00 40 00 00 00 00 00 00   ERROR-ACTIVE
+</I>&gt;<i> &gt;&gt;    
+</I>&gt;<i> &gt;&gt;    On SJA1000:
+</I>&gt;<i> &gt;&gt;    
+</I>&gt;<i> &gt;&gt;    # ./candump -t d any,0:0,#FFFFFFFF
+</I>&gt;<i> &gt;&gt;    (*)
+</I>&gt;<i> &gt;&gt;    can2  20000004  [8] 00 08 00 00 00 00 00 00   ERROR-WARNING
+</I>&gt;<i> &gt;&gt;    can2  20000040  [8] 00 00 00 00 00 00 00 00   BUS-OFF
+</I>&gt;<i> &gt;&gt;    (**)
+</I>&gt;<i> &gt;&gt;    can2  20000100  [8] 00 00 00 00 00 00 00 00   RESTARTED
+</I>&gt;<i> &gt;&gt;    can2  20000004  [8] 00 40 00 00 00 00 00 00   ERROR-ACTIVE
+</I>&gt;<i> &gt;&gt;    
+</I>&gt;<i> &gt;&gt;    The MSCAN seems not to signal the ERROR-PASSIVE state before
+</I>&gt;<i> &gt;&gt;    going bus-off.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; Would be interesting to see, how other CAN controllers behave.
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; What do you think? Would that patch/approach fit your/our needs?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Mh, it seems you have some other patches for candump.c/lib.c to actually
+</I>&gt;<i> &gt; print the state change.
+</I>&gt;<i> 
+</I>&gt;<i> I added the strings like &quot;ERROR_WARNING&quot; at the end manually. I think
+</I>&gt;<i> that's what you mean!? I once started to make a patch for candump to
+</I>&gt;<i> print the meaning of the CAN id and data fields in a human readable
+</I>&gt;<i> format. That would be a nice to have. I'm going to dig for it.
+</I>
+Ah, ic. Yes, this is what I want to know.
+
+&gt;<i> &gt; Well, on the other hand, at91_can, flexcan and pch_can are the only
+</I>&gt;<i> &gt; controllers currently sending an CAN_ERR_ACK in can_id. Which you will be
+</I>&gt;<i> &gt; spammed with.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, that are the infamous &quot;ack slot&quot; errors. Strictly speaking the
+</I>&gt;<i> CAN_ERR_ACK is not correct. It sneaked in some time ago. It's a normal
+</I>&gt;<i> bus error and it should therefore be:
+</I>&gt;<i> 
+</I>&gt;<i> 		cf-&gt;can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
+</I>&gt;<i> 	        cf-&gt;data[2] |= CAN_ERR_PROT_UNSPEC;
+</I>&gt;<i> 		cf-&gt;data[3] |= CAN_ERR_PROT_LOC_ACK; /* ACK slot */
+</I>&gt;<i> 
+</I>&gt;<i> That's what the SJA1000 reports and a few other drivers need to be fixed
+</I>&gt;<i> as well.
+</I>&gt;<i> 
+</I>&gt;<i> See also
+</I>&gt;<i> <A HREF="http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00212.html">http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00212.html</A>
+</I>
+Mh, for what was CAN_ERR_ACK inserted then, if this is not the ack slot error?
+
+&gt;<i> &gt; But using an own application to send/receive some CAN messages where I
+</I>&gt;<i> &gt; parse the error frames (ignoring ACK error though), I currently use
+</I>&gt;<i> &gt; CAN_ERR_PROT_ACTIVE to know when I got back active.
+</I>&gt;<i> 
+</I>&gt;<i> That was implemented by Mark but we need a general solution for all
+</I>&gt;<i> drivers.
+</I>
+Mh, it would be good to know which flags are used for what. It seems the docs 
+and examples are a bit quiet about error handling/messaging.
+
+Alexander
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001780.html">[Socketcan-users] can device error flags unset?
+</A></li>
+	<LI>Next message: <A HREF="001782.html">[Socketcan-users] can device error flags unset?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1781">[ date ]</a>
+              <a href="thread.html#1781">[ thread ]</a>
+              <a href="subject.html#1781">[ subject ]</a>
+              <a href="author.html#1781">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

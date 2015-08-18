@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to reserve mem region
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20reserve%20mem%20region&In-Reply-To=%3C9cf2ca450811130807s64537d29i8eb18a8f8c3e6da4%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000562.html">
+   <LINK REL="Next"  HREF="000584.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to reserve mem region</H1>
+    <B>g a</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20reserve%20mem%20region&In-Reply-To=%3C9cf2ca450811130807s64537d29i8eb18a8f8c3e6da4%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Unable to reserve mem region">aguirre.citcea at gmail.com
+       </A><BR>
+    <I>Thu Nov 13 17:07:30 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000562.html">[Socketcan-users] Unable to reserve mem region
+</A></li>
+        <LI>Next message: <A HREF="000584.html">[Socketcan-users] Unable to reserve mem region
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#581">[ date ]</a>
+              <a href="thread.html#581">[ thread ]</a>
+              <a href="subject.html#581">[ subject ]</a>
+              <a href="author.html#581">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Nov 9, 2008 at 9:59 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+&gt;<i> g a wrote:
+</I>&gt;&gt;<i> Hi!
+</I>&gt;&gt;<i>   i'd like to know if someone had a similar error. i  try to remember
+</I>&gt;&gt;<i> what i did before this and i put acpi=off at grub and also a system
+</I>&gt;&gt;<i> upgrade
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> dmesg shows
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i> CAN netdevice library
+</I>&gt;&gt;<i> sja1000 CAN netdevice driver
+</I>&gt;&gt;<i> sja1000: debug level set to 3.
+</I>&gt;&gt;<i> can-ixxat-pci 0000:00:09.0: Initializing device 10b5:9050
+</I>&gt;&gt;<i> PCI: Unable to reserve mem region #1:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">80 at 40000c00</A> for device 0000:00:09.0
+</I>&gt;&gt;<i> can-ixxat-pci: probe of 0000:00:09.9 failed with error -16
+</I>&gt;<i>
+</I>&gt;<i> See <A HREF="http://lxr.linux.no/linux+v2.6.27.5/include/asm-generic/errno-base.h">http://lxr.linux.no/linux+v2.6.27.5/include/asm-generic/errno-base.h</A>
+</I>&gt;<i>
+</I>&gt;<i> Another driver has already grabbed the memory region. Check /proc/iomem.
+</I>&gt;<i>
+</I>
+i still fighting with module, i do some test but i really don-t know
+what could happend, i decide to migrate to Debian Etch
+(2.6.24-etchnhalf.1-486) due to i got some Segfault on Lenny (2.6.26),
+but i still have the same problem
+
+The most weird thing is that i'm able to see (lsmod) the modules
+loaded (can-dev, sja1000 y ixxat-pci) also a see in the /proc/iomem
+
+---
+# cat /proc/iomem
+00000000-0009e7ff : System RAM
+0009e800-0009ffff : reserved
+000a0000-000bffff : Video RAM area
+000c0000-000c7fff : Video ROM
+000e0000-000effff : pnp 00:08
+000f0000-000fffff : System ROM
+00100000-3f7bffff : System RAM
+  00100000-002b6434 : Kernel code
+  002b6435-0036ade3 : Kernel data
+  003bf000-003f595b : Kernel bss
+40000000-400007ff : 0000:00:09.0
+40000800-40000bff : 0000:00:09.0
+  40000800-40000bff : ixxat_pci
+40000c00-40000c7f : 0000:00:09.0
+  40000c00-40000c7f : ixxat_pci
+ee000000-eeffffff : 0000:00:01.1
+effe8000-effebfff : 0000:00:01.1
+effec000-effeffff : 0000:00:01.1
+efff0000-efff3fff : 0000:00:01.1
+efff4000-efff7fff : 0000:00:01.2
+  efff4000-efff7fff : geode-aes-128
+efff8000-efffbfff : 0000:00:01.1
+efffd000-efffdfff : 0000:00:0f.5
+  efffd000-efffdfff : ehci_hcd
+efffe000-efffefff : 0000:00:0f.4
+  efffe000-efffefff : ohci_hcd
+effff000-effff0ff : 0000:00:0e.0
+  effff000-effff0ff : 8139too
+fee00000-fee0ffff : pnp 00:07
+ffff0000-ffffffff : reserved
+---
+
+when i unload them, and try to check the iomem i get this
+
+---
+pci104:/home/citcea# modprobe -rv ixxat-pci
+rmmod /lib/modules/2.6.24-etchnhalf.1-486/socketcan/ixxat_pci.ko
+rmmod /lib/modules/2.6.24-etchnhalf.1-486/socketcan/sja1000.ko
+rmmod /lib/modules/2.6.24-etchnhalf.1-486/socketcan/can-dev.ko
+pci104:/home/citcea# cat /proc/iomem
+Segmentation fault
+---
+
+i try to load once again and i get this error on dmesg.
+
+---
+BUG: unable to handle kernel paging request at virtual address f887b353
+printing eip: c01d51de *pde = 36dc0067 *pte = 00000000
+Oops: 0000 [#4]
+Modules linked in: ipv6 dm_snapshot dm_mirror dm_mod loop parport_pc
+parport geode_aes  blkcipher cs5535_gpio geode_rng floppy pcspkr rtc evdev
+ide_disk ata_generic libata scsi_mod generic ohci_hcd ehci_hcd amd74xx
+8139too ide_core usbcore 8139cp mii
+
+Pid: 1856, comm: cat Tainted: G      D (2.6.24-etchnhalf.1-486 #1)
+EIP: 0060:[&lt;c01d51de&gt;] EFLAGS: 00010297 CPU: 0
+EIP is at strnlen+0x6/0x18
+EAX: f887b353 EBX: f887b353 ECX: f887b353 EDX: fffffffe
+ESI: f6fcf196 EDI: f7f6df18 EBP: ffffffff ESP: f7f6de8c
+ DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 0068
+Process cat (pid: 1856, ti=f7f6c000 task=f7cc6750 task.ti=f7f6c000)
+Stack: c01d4956 00000000 00000000 00000010 00000008 ffffffff 00000001 00000e80
+       f6fcf180 0014ef54 00000010 f6fd0000 ffffffff 00000000 c03039a6 f6fcf180
+       f7203420 f7203420 00000400 c0179a58 f7f6def8 f7f6def8 00000001 c0346188
+Call Trace:
+ [&lt;c01d4956&gt;] vsnprintf+0x2ae/0x47d
+ [&lt;c0179a58&gt;] seq_printf+0x2e/0x4b
+ [&lt;c011f3e3&gt;] r_show+0x7f/0x88
+ [&lt;c0179ff2&gt;] seq_read+0x196/0x280
+ [&lt;c0179e5c&gt;] seq_read+0x0/0x280
+ [&lt;c018fdf6&gt;] proc_reg_read+0x35/0x46
+ [&lt;c018fdc1&gt;] proc_reg_read+0x0/0x46
+ [&lt;c016600a&gt;] vfs_read+0x9f/0x14e
+ [&lt;c0166393&gt;] sys_read+0x41/0x67
+ [&lt;c0103c72&gt;] syscall_call+0x7/0xb
+ =======================
+Code: c9 74 0c f2 ae 74 05 bf 01 00 00 00 4f 89 fa 5f 89 d0 c3 85 c9
+57 89 c7 89 d0 74 05 f2 ae 75 01 4f 89 f8 5f c3 89 c1 89 c8 eb 06 &lt;80&gt;
+38 00 74 07 40 4a 83 fa ff 75 f4 29 c8 c3 90 90 90 57 83 c9
+EIP: [&lt;c01d51de&gt;] strnlen+0x6/0x18 SS:ESP 0068:f7f6de8c
+---[ end trace 887670eecf1b74e6 ]---
+CAN netdevice library
+sja1000 CAN netdevice driver
+ixxat_pci 0000:00:09.0: Initializing device 10b5:9050
+PCI: Unable to reserve mem region #1:80 en 40000c00 for device 0000:00:09.0
+ixxat_pci: probe of 0000:00:09.0 failed with error -16
+---
+
+ and this is the device info, with a little change: now the device
+puts: Unknown device 2440, before Device 2540 (lspci from lenny)
+
+---
+# lspci -vvxxx -s 09
+00:09.0 Network controller: PLX Technology, Inc. PCI &lt;-&gt; IOBus Bridge (rev 02)
+        Subsystem: PLX Technology, Inc. Unknown device 2440
+        Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop-
+ParErr- Stepping- SERR- FastB2B-
+        Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium
+&gt;<i>TAbort- &lt;TAbort- &lt;MAbort- &gt;SERR- &lt;PERR+
+</I>        Interrupt: pin A routed to IRQ 10
+        Region 0: Memory at 40000c00 (32-bit, non-prefetchable) [size=128]
+        Region 1: I/O ports at ff00 [size=128]
+        Region 2: Memory at 40000800 (32-bit, non-prefetchable) [size=1K]
+        [virtual] Expansion ROM at 40000000 [disabled] [size=2K]
+00: b5 10 50 90 03 00 80 82 02 00 80 02 08 00 00 00
+10: 00 0c 00 40 01 ff 00 00 00 08 00 40 00 00 00 00
+20: 00 00 00 00 00 00 00 00 00 00 00 00 b5 10 40 24
+30: 00 00 00 00 00 00 00 00 00 00 00 00 0a 01 00 00
+40: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+50: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+60: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+70: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+90: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+b0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+---
+
+it could be a hardware error?
+thanks in advance!
+
+--
+Gonzalo Aguirre
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000562.html">[Socketcan-users] Unable to reserve mem region
+</A></li>
+	<LI>Next message: <A HREF="000584.html">[Socketcan-users] Unable to reserve mem region
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#581">[ date ]</a>
+              <a href="thread.html#581">[ thread ]</a>
+              <a href="subject.html#581">[ subject ]</a>
+              <a href="author.html#581">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

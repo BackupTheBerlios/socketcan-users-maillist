@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Getting started with socketcan and VAG-COM usb
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20started%20with%20socketcan%20and%20VAG-COM%20usb&In-Reply-To=%3CAANLkTinEzro%2BQOmDWAYYh%3DsutT8uuER96cMHNYF%2BhirQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001694.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Getting started with socketcan and VAG-COM usb</H1>
+    <B>bruce bushby</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20started%20with%20socketcan%20and%20VAG-COM%20usb&In-Reply-To=%3CAANLkTinEzro%2BQOmDWAYYh%3DsutT8uuER96cMHNYF%2BhirQ%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Getting started with socketcan and VAG-COM usb">bruce.bushby at gmail.com
+       </A><BR>
+    <I>Mon Jan  3 20:45:58 CET 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001694.html">[Socketcan-users] Getting started with socketcan and VAG-COM usb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1693">[ date ]</a>
+              <a href="thread.html#1693">[ thread ]</a>
+              <a href="subject.html#1693">[ subject ]</a>
+              <a href="author.html#1693">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+Today I found socketcan and started jumping about the house celebrating :)
+I've been playing with the &quot;arm cortex m3&quot; cpu  using this board:
+<A HREF="http://mbed.org/forum/news-announcements/topic/900/">http://mbed.org/forum/news-announcements/topic/900/</A>
+...but when I connect it to my Audi A4 I can't read anything.....hence the
+joy of finding socketcan and the hope of being able to work from my laptop.
+
+I'm hoping the list can offer me some quick start pointers
+
+I'm using Fedora 13, ran some modprobes and have the following modules
+loaded:
+can_bcm                11446  0
+can_raw                 5705  0
+can_dev                 7212  0
+can                    30238  2 can_bcm,can_raw
+
+I then used svn:
+svn checkout <A HREF="svn://svn.berlios.de/socketcan/trunk">svn://svn.berlios.de/socketcan/trunk</A>
+
+I compiled the modules and then I compiled the can-utils as I want to use
+&quot;candump&quot;, this brings me to my first question:
+
+1. Can I use the berlios can-utils with the existing Fedora kernel modules
+listed above?
+
+
+I then ran the &quot;ip&quot; commands to bring up the interfaces (Using the standard
+Fedora can modules listed above):
+
+ip link add type vcan
+ip link add dev can0 type vcan
+ifconfig can0 up
+
+and I now have:
+can0      Link encap:UNSPEC  HWaddr
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          UP RUNNING NOARP  MTU:16  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+vcan0     Link encap:UNSPEC  HWaddr
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:16  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+
+but the next question is:
+2. How do I associate a usb port with can0? .. I think my above interfaces
+are only virtual.
+
+My goal is to connect a VAG-COM cable (obd2 -&gt; usb) to my laptop, bring up
+can0 associating the interface with the usb port and then use &quot;candump&quot; to
+sniff my cars canbus......probably using a python
+script thanks to the wonderful python patch from matthias fuchs &quot;
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2010-July/001456.html">https://lists.berlios.de/pipermail/socketcan-users/2010-July/001456.html</A>&quot;
+
+
+Any pointers would be much appreciated!!!!
+
+PS: I'm still jumping about the house...even thought I can't get it to work
+yet :)
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110103/db384f61/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110103/db384f61/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001694.html">[Socketcan-users] Getting started with socketcan and VAG-COM usb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1693">[ date ]</a>
+              <a href="thread.html#1693">[ thread ]</a>
+              <a href="subject.html#1693">[ subject ]</a>
+              <a href="author.html#1693">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

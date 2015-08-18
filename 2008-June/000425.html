@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newbie got his socket CAN working...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newbie%20got%20his%20socket%20CAN%20working...&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D60235CFAC%40uss-am-xch-01.am.trimblecorp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000424.html">
+   <LINK REL="Next"  HREF="000426.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newbie got his socket CAN working...</H1>
+    <B>Mike Timmons</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newbie%20got%20his%20socket%20CAN%20working...&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D60235CFAC%40uss-am-xch-01.am.trimblecorp.net%3E"
+       TITLE="[Socketcan-users] Newbie got his socket CAN working...">mike_timmons at trimble.com
+       </A><BR>
+    <I>Fri Jun 20 07:56:43 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000424.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+        <LI>Next message: <A HREF="000426.html">[Socketcan-users] Newbie got his socket CAN working...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#425">[ date ]</a>
+              <a href="thread.html#425">[ thread ]</a>
+              <a href="subject.html#425">[ subject ]</a>
+              <a href="author.html#425">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>My Socket CAN is working! Thanks you for GREAT assistance, Here are a
+couple notes for any other newbies...
+
+1) &quot;ifconfig can0 up&quot; (and/or can1, etc)
+Do this to start the can interface. Confirm it is up via ifconfig. This
+is obvious, but I didn't think about it at all until Oliver asked me to
+run ifconfig.
+
+2) make sure the datarate on your bus mathches what the interface
+expects. 
+
+In my case, my other devices on the bus are at 250kbs, so the default
+500kbs that gets assigned in dev.c doesn't work for me. It looks like an
+ioctl will fix that up, but as I was getting it working I hacked-in a
+default of 250kbs.
+
+Thanks again to Wolfgang and Oliver! Also thanks to all contributors.
+This socket API for CAN is great!
+
+-Mike
+
+
+
+
+
+
+-----Original Message-----
+From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>] 
+Sent: Thursday, June 19, 2008 4:17 PM
+To: Mike Timmons
+Cc: Oliver Hartkopp; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] cansniffer error: &quot;socket: Address family
+not supported by protocol&quot;
+
+Mike Timmons wrote:
+&gt;<i> I've tried two methods to get this to work for me:
+</I>&gt;<i> 1) Wolfgang's module build approach
+</I>&gt;<i> 2) Oliver's kernel patch for my 2.6.24 kernel.
+</I>
+Both should work.
+
+&gt;<i> Both produce a clean build. Once loaded, I run &quot;cansniffer any&quot;, and
+</I>&gt;<i> I've tried Wolfgang's &quot;candump&quot; below (although the -e option is not
+</I>&gt;<i> supported by my version.).
+</I>
+Hm, well, yes, the syntax seems to have changed recently:
+
+   # ./candump any,0:0,#ffff
+   can0  123  [3] AB CD EF
+   can1  123  [3] AB CD EF
+   can1  20000004  [8] 00 08 00 00 00 00 00 00   ERRORFRAME
+   can1  20000004  [8] 00 10 00 00 00 00 00 00   ERRORFRAME
+
+&gt;<i> At this point I don't see any screen output. I'm expecting some
+</I>&gt;<i> streaming output, given some traffic I know is there, based on running
+</I>a
+&gt;<i> sniffer utlity from my U-boot command line before booting the kernel.
+</I>&gt;<i> 
+</I>&gt;<i> So far I have confirmed my gpio port_config looks correct (CAN on
+</I>PSC2),
+&gt;<i> and I do have the lite5200 mscan nodes in my device tree.
+</I>&gt;<i> 
+</I>&gt;<i> I'm not seeing any errors or warnings on load. Could it be that this
+</I>is
+&gt;<i> actually, &quot;working&quot; and that I'm just too dumb to know what utility to
+</I>&gt;<i> use to prove it to myself?
+</I>
+When you the MSCAN module is loaded, you should find in your kernel log:
+
+  mpc52xx-mscan mpc52xx-mscan.0: probe for port 0xC9074900 done
+(irq=145)
+  mpc52xx-mscan mpc52xx-mscan.1: probe for port 0xC9076980 done
+(irq=146)
+
+If not, then most likely the MSCAN nodes are still missing in your FDT 
+blob. There should be the following directories on your system:
+
+   /sys/devices/f0000000.soc5200/f0000900.mscan/
+   /sys/devices/f0000000.soc5200/f0000980.mscan/
+
+&gt;<i> What are the interface names to use for CAN1 and CAN2 on the mpc5200?
+</I>So
+&gt;<i> far I'm asking for, &quot;any&quot;. I tried 0, 1, 2, mscan, etc but cansniffer
+</I>&gt;<i> doesn't like any of these. It's not yet clear to me after a quick look
+</I>&gt;<i> at the source, but I'll keep looking.
+</I>&gt;<i> 
+</I>&gt;<i> Please advise. In the meantime I'm wading through source code and
+</I>&gt;<i> inserting some printk's in an attempt to learn how all this works so
+</I>&gt;<i> that I can see some action on the CAN interface.
+</I>
+I have it working here with 2.6.24.7 on my TQM5200 module.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000424.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+	<LI>Next message: <A HREF="000426.html">[Socketcan-users] Newbie got his socket CAN working...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#425">[ date ]</a>
+              <a href="thread.html#425">[ thread ]</a>
+              <a href="subject.html#425">[ subject ]</a>
+              <a href="author.html#425">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

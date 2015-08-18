@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20CAN%3A%20make%20checking%20in%20can_rcv%20less%0A%20restrictive&In-Reply-To=%3C4A7C117E.5010005%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001017.html">
+   <LINK REL="Next"  HREF="001019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20CAN%3A%20make%20checking%20in%20can_rcv%20less%0A%20restrictive&In-Reply-To=%3C4A7C117E.5010005%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Aug  7 13:35:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001017.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv	less restrictive
+</A></li>
+        <LI>Next message: <A HREF="001019.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1018">[ date ]</a>
+              <a href="thread.html#1018">[ thread ]</a>
+              <a href="subject.html#1018">[ subject ]</a>
+              <a href="author.html#1018">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>R&#233;mi Denis-Courmont wrote:
+&gt;<i> Moving to netdev....
+</I>&gt;<i> 
+</I>&gt;<i> On Thursday 06 August 2009 19:48:23 ext Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> The CAN applications can rely on getting proper CAN frames with this check.
+</I>&gt;&gt;<i> It was introduced some time ago together with several other sanity checks -
+</I>&gt;&gt;<i> even on the TX path.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The CAN core *only* consumes skbuffs originated from a CAN netdevice
+</I>&gt;&gt;<i> (ARPHRD_CAN).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When this BUG() triggers, someone provided a definitely broken *CAN*
+</I>&gt;&gt;<i> network driver, and this needs to be fixed on that level. It is really not
+</I>&gt;&gt;<i> that problematic to ensure proper CAN frames on driver level ... this
+</I>&gt;&gt;<i> sanity check should not be needed to be performed by every single
+</I>&gt;&gt;<i> application.
+</I>&gt;<i> 
+</I>&gt;<i> AFAIK, the TUN driver can inject layer-2 frames of any type, any size and any 
+</I>&gt;<i> content from userspace into the packet type handler. Sure enough, you need 
+</I>&gt;<i> CAP_NET_ADMIN and r/w access to /dev/net/tun but is it sufficient to bring the 
+</I>&gt;<i> system down?
+</I>&gt;<i> 
+</I>
+The complete code section currently looks like this:
+
+
+static int can_rcv(struct sk_buff *skb, struct net_device *dev,
+                   struct packet_type *pt, struct net_device *orig_dev)
+{
+        struct dev_rcv_lists *d;
+        struct can_frame *cf = (struct can_frame *)skb-&gt;data;
+        int matches;
+
+        if (dev-&gt;type != ARPHRD_CAN || !net_eq(dev_net(dev), &amp;init_net)) {
+                kfree_skb(skb);
+                return 0;
+        }
+
+        BUG_ON(skb-&gt;len != sizeof(struct can_frame) || cf-&gt;can_dlc &gt; 8);
+
+(..)
+
+So you would need to have an originating interface with ARPHRD_CAN ...
+
+Do you think, it's still possible with the TUN driver?
+
+
+@Luotao: I talked to Urs and we discussed to prepare a patch that only creates
+a warning and drops the skb afterwards, as the problem is not critical for a
+proper ongoing kernel operation. I think, that was you original intention:
+
+       if (!net_eq(dev_net(dev), &amp;init_net) ||
+           WARN_ON(dev-&gt;type != ARPHRD_CAN) ||
+           WARN_ON(skb-&gt;len != sizeof(struct can_frame) || cf-&gt;can_dlc &gt; 8)) {
+               kfree_skb(skb);
+               return NET_RX_BAD;
+       }
+
+Would this be ok for you?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001017.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv	less restrictive
+</A></li>
+	<LI>Next message: <A HREF="001019.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1018">[ date ]</a>
+              <a href="thread.html#1018">[ thread ]</a>
+              <a href="subject.html#1018">[ subject ]</a>
+              <a href="author.html#1018">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

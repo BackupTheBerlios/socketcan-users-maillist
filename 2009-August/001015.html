@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20CAN%3A%20make%20checking%20in%20can_rcv%20less%0A%20restrictive&In-Reply-To=%3C4A7B43EE.8050601%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001014.html">
+   <LINK REL="Next"  HREF="001016.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20CAN%3A%20make%20checking%20in%20can_rcv%20less%0A%20restrictive&In-Reply-To=%3C4A7B43EE.8050601%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [PATCH] CAN: make checking in can_rcv less restrictive">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Aug  6 22:58:22 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001014.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv	less	restrictive
+</A></li>
+        <LI>Next message: <A HREF="001016.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv	less	restrictive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1015">[ date ]</a>
+              <a href="thread.html#1015">[ thread ]</a>
+              <a href="subject.html#1015">[ subject ]</a>
+              <a href="author.html#1015">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi Oliver,
+</I>&gt;<i> 
+</I>
+&gt;&gt;&gt;<i> -	BUG_ON(skb-&gt;len != sizeof(struct can_frame) || cf-&gt;can_dlc &gt; 8);
+</I>&gt;&gt;&gt;<i> +	WARN_ON(skb-&gt;len != sizeof(struct can_frame) || cf-&gt;can_dlc &gt; 8);
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>  	/* update statistics */
+</I>&gt;&gt;&gt;<i>  	can_stats.rx_frames++;
+</I>&gt;&gt;<i> NAK.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The CAN applications can rely on getting proper CAN frames with this check. It
+</I>&gt;&gt;<i> was introduced some time ago together with several other sanity checks - even
+</I>&gt;&gt;<i> on the TX path.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The CAN core *only* consumes skbuffs originated from a CAN netdevice
+</I>&gt;&gt;<i> (ARPHRD_CAN).
+</I>&gt;<i> 
+</I>&gt;<i> I don't quite get it. The problem here is a broken can message sent to
+</I>&gt;<i> the device can bring down the kernel.
+</I>
+I assume you mean from the wire via the controller to the Kernel here, right?
+
+&gt;<i> 
+</I>&gt;&gt;<i> When this BUG() triggers, someone provided a definitely broken *CAN* network
+</I>&gt;&gt;<i> driver, and this needsfp to be fixed on that level. 
+</I>&gt;<i> 
+</I>&gt;<i> In our case a sender (a FPGA) generates correct can frames carrying
+</I>&gt;<i> wrong dlc length.
+</I>
+Which is therefore *NOT* a correct CAN frame.
+
+&gt;<i> This way the can driver on our side runs into the bug
+</I>&gt;<i> though the driver itself is allright.
+</I>
+Whatever there is on the bus or whatever your CAN controller provides in it's
+dlc value: You need to ensure that the dlc is 0..8 before you push it into the
+skbuff and call netif_rx(). Everything else *is* broken and not CAN conform.
+
+&gt;<i> The opposite needed to be fixed,
+</I>&gt;<i> not our side.
+</I>
+Sure but it's your turn to be robust against obviously wrongs stuff, that's
+provided by your (obviously sloppy) CAN controller.
+
+&gt;<i>  Though we do suffer a system crash only because the
+</I>&gt;<i> sender sends trash into the can network. This is imo quite bad.
+</I>
+No. You suffer because you allow the trash to climb up into the system.
+
+Anyway i really wonder that there is a CAN controller that provides you
+information in its registers that describe a non conform CAN frame.
+
+This discussion shows that using BUG() was the correct approach :-)
+
+Fix your driver and do not allow to pass broken stuff into the system.
+
+Cheers,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001014.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv	less	restrictive
+</A></li>
+	<LI>Next message: <A HREF="001016.html">[Socketcan-users] [PATCH] CAN: make checking in can_rcv	less	restrictive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1015">[ date ]</a>
+              <a href="thread.html#1015">[ thread ]</a>
+              <a href="subject.html#1015">[ subject ]</a>
+              <a href="author.html#1015">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

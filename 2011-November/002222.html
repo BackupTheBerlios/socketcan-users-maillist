@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Bit rate configuration of PEAK USB devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bit%20rate%20configuration%20of%20PEAK%20USB%20devices&In-Reply-To=%3CB3B3BE5A55ED7743A83865E234A22B1D1B91F2BDFE%40SBSPORT.portnet.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002227.html">
+   <LINK REL="Next"  HREF="002223.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Bit rate configuration of PEAK USB devices</H1>
+    <B>Heinz-J&#252;rgen Oertel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bit%20rate%20configuration%20of%20PEAK%20USB%20devices&In-Reply-To=%3CB3B3BE5A55ED7743A83865E234A22B1D1B91F2BDFE%40SBSPORT.portnet.local%3E"
+       TITLE="[Socketcan-users] Bit rate configuration of PEAK USB devices">oe at port.de
+       </A><BR>
+    <I>Tue Nov 15 15:13:18 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002227.html">[Socketcan-users] Info request about sja1000_isa.c
+</A></li>
+        <LI>Next message: <A HREF="002223.html">[Socketcan-users] Bit rate configuration of PEAK USB devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2222">[ date ]</a>
+              <a href="thread.html#2222">[ thread ]</a>
+              <a href="subject.html#2222">[ subject ]</a>
+              <a href="author.html#2222">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hello,
+
+I tried
+ ip link set can0 type can bitrate 125000
+and I tried socketcanlib
+can_set_bitrate(&quot;can0&quot;, 125000);
+but everytime got the error 
+RTNETLINK answers: Operation not permitted.
+Reading the &quot;PCAN driver for Linux - User Manual&quot; v7.1
+I could not find instructions to set the bit rate for netdev.
+ 
+Who knows the best and/or correct way?
+
+ Regards
+   Heinz
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002227.html">[Socketcan-users] Info request about sja1000_isa.c
+</A></li>
+	<LI>Next message: <A HREF="002223.html">[Socketcan-users] Bit rate configuration of PEAK USB devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2222">[ date ]</a>
+              <a href="thread.html#2222">[ thread ]</a>
+              <a href="subject.html#2222">[ subject ]</a>
+              <a href="author.html#2222">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

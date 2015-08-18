@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BD7C4.8060408%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000441.html">
+   <LINK REL="Next"  HREF="000444.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BD7C4.8060408%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">wg at grandegger.com
+       </A><BR>
+    <I>Wed Jul  2 21:32:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000441.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000444.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#443">[ date ]</a>
+              <a href="thread.html#443">[ thread ]</a>
+              <a href="subject.html#443">[ subject ]</a>
+              <a href="author.html#443">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Wed, Jul 02, 2008 at 09:36:28AM +0200, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i> The second method would be nice if the setting would be hardware
+</I>&gt;&gt;&gt;&gt;<i> independent. Unfortunately, that's not the case and therefore I see no
+</I>&gt;&gt;&gt;&gt;<i> real benefit using a hardware independent format.
+</I>&gt;&gt;&gt;<i> Hmm? I don't understand what you mean.
+</I>&gt;&gt;<i> A bit-time stetting for one CAN controller may not work for another one,
+</I>&gt;&gt;<i> hence the setting is hardware dependent. You agree?
+</I>&gt;<i> 
+</I>&gt;<i> For one controller you may need to provide a certain set of the CiA
+</I>&gt;<i> Model Values (which are hardware dependend, yes). But the data format is
+</I>&gt;<i> standard and *not* hardware dependend, that makes a big difference.
+</I>
+To be more precise, the settings depend on the CAN clock used, apart 
+from the some very strange CAN controllers using non-standard ranges for 
+the time phases.
+
+&gt;&gt;&gt;<i> Note, however, that Linux is no democracy. We want the *best*
+</I>&gt;&gt;&gt;<i> solution, not the one most people vote for.
+</I>&gt;&gt;<i> And who decides what the best solution is?. Fact is that most people
+</I>&gt;&gt;<i> would implement it differently :-(.
+</I>&gt;<i> 
+</I>&gt;<i> Nonono, if we still do not agree on the *right* way, we may need to
+</I>&gt;<i> either find more concrete use cases or somehow haven't seen all the
+</I>&gt;<i> corner cases.
+</I>&gt;<i> 
+</I>&gt;<i> With Juergen's original patch, we have shown that the generic, hardware
+</I>&gt;<i> independend timing model solves the problem that different controllers
+</I>&gt;<i> have to be parametrized differently, in order to get what the system
+</I>&gt;<i> designer supposes to be the right timing. Until now, I still havn't seen
+</I>&gt;<i> an argument for a case where it does *not* work.
+</I>
+OK.
+
+&gt;<i> So either I havn't understood the problem or there is no problem or we
+</I>&gt;<i> need to collect more data :-)
+</I>
+There is no problem. Most people voted for the hardware independent 
+format. Let's go for it. But the indirect setting via table seems not 
+that attractive.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000441.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000444.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#443">[ date ]</a>
+              <a href="thread.html#443">[ thread ]</a>
+              <a href="subject.html#443">[ subject ]</a>
+              <a href="author.html#443">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

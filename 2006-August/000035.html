@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C200608250655.k7P6tHp19974%40web10.manitu.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000031.html">
+   <LINK REL="Next"  HREF="000037.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C200608250655.k7P6tHp19974%40web10.manitu.net%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">wg at grandegger.com
+       </A><BR>
+    <I>Fri Aug 25 08:55:17 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000031.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000037.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+&gt;<i> This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+</I>&gt;<i> 
+</I>&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;<i> &gt; Jan Kiszka schrieb:
+</I>&gt;<i> &gt;&gt; Hi Oliver,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; thinking about the whole issue also from your POV again, I realised
+</I>that
+&gt;<i> &gt;&gt; my position was too strict. When considering CAN frames as multicast,
+</I>&gt;<i> &gt;&gt; what certainly matches best, local delivery is reasonable. But, as this
+</I>&gt;<i> &gt;&gt; thread may have indicated, it's at the same time also a surprising
+</I>&gt;<i> &gt;&gt; feature for (I'm still convinced) a huge group of users.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; I think that all these misconceptions melt down to the question if you
+</I>&gt;<i> &gt;&gt; consider our CAN interface to be at data link or at network layer:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; CAN can be put quite well to the network layer. Then local loopback
+</I>&gt;<i> &gt;&gt; makes sense and provides a nice additional feature compared to existing
+</I>&gt;<i> &gt;&gt; CAN APIs. E.g., you could then run several CANopen nodes on the same
+</I>&gt;<i> &gt;&gt; host and they could communicate with each other - likely more of a test
+</I>&gt;<i> &gt;&gt; scenario than a reasonable production design, but still useful.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; If you consider the CAN API more as an interface to the data link layer
+</I>&gt;<i> &gt;&gt; (and this is what I did yesterday implicitly), local loopback is no
+</I>&gt;<i> &gt;&gt; longer correct. You may argue this is not how users should see CAN, but
+</I>&gt;<i> &gt;&gt; that doesn't solve the problem.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; So, what to do? Having a global switch like a module parameter is
+</I>not an
+&gt;<i> &gt;&gt; elegant solution in my eyes. The day will come when you have
+</I>&gt;<i> &gt;&gt; applications of both types on a complex host, requiring loopback on and
+</I>&gt;<i> &gt;&gt; off at the same time - boom. Actually, this property is more something
+</I>&gt;<i> &gt;&gt; the user should decide about in the transmitting application. How?
+</I>&gt;<i> &gt;&gt; Either via the socket type or the protocol. I would say the best way is
+</I>&gt;<i> &gt;&gt; now the latter, e.g. something like this:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;     socket(PF_CAN, SOCK_RAW, CAN_PROTO_NET); /* local loopback */
+</I>&gt;<i> &gt;&gt;     socket(PF_CAN, SOCK_RAW, CAN_PROTO_DEVICE); /* no loopback */
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; This hands back the control to the individual user, the one who
+</I>&gt;<i> &gt;&gt; (typically) knows best what should happen to a frame in the core. :)
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; And what should become protocol 0, i.e. the default one? Well, that's
+</I>&gt;<i> &gt;&gt; tricky, maybe we should do a poll on this. My believe is
+</I>&gt;<i> &gt;&gt; CAN_PROTO_DEVICE. But given good documentation of the differences (and
+</I>&gt;<i> &gt;&gt; the recommendation to RT users to always provide the protocol
+</I>&gt;<i> &gt;&gt; explicitly), I could personally also live with the other way around.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; What do you all think?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Jan
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;   
+</I>&gt;<i> &gt; Hi Jan,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; thanks for these clarifying words! The differentiation is hitting the
+</I>&gt;<i> &gt; point! I was also active this afternoon and found out, that the guys
+</I>&gt;<i> &gt; working on AppleTalk (that allows the sending of broadcasts) and the
+</I>&gt;<i> &gt; PACKET-socket have the same problems of how to loop back their own sent
+</I>&gt;<i> &gt; stuff.
+</I>&gt;<i> 
+</I>&gt;<i> I may miss some path, but packet sockets really don't appear to me like
+</I>&gt;<i> they are looping anything back (only to taps - like any networking
+</I>&gt;<i> device). And what AppleTalk protocol precisely is looped back? I bet
+</I>&gt;<i> DDD, as it's comparable to IP. In contrast, IPX doesn't loop back (IIRC
+</I>&gt;<i> my &gt; 10 years old experiences) while it's also layer 3. No perfect world.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The common behaviour i have recognized is: Loop back to everyone, except
+</I>&gt;<i> &gt; the originating socket. Aha! This sounds definitely like what we were
+</I>&gt;<i> &gt; searching here and what the users would probably expect most.
+</I>&gt;<i> 
+</I>&gt;<i> At least for IP multicast, there is no such filtering, only the socket
+</I>&gt;<i> option IP_MULTICAST_LOOP which works per host. I would therefore avoid
+</I>&gt;<i> such complications.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I have been checking the skbuff-structure for appropriate space to save
+</I>&gt;<i> &gt; the pointer to the sock-structure as reference so that the receiving
+</I>&gt;<i> &gt; socket can identify his self created stuff. So you can discard the
+</I>&gt;<i> &gt; CAN-frames you have been sending before (as default).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; And if there is any really need(?) to receive what you've been sending
+</I>&gt;<i> &gt; before, there could be some socket-option to disable the discarding. But
+</I>&gt;<i> &gt; this should be considered to be implemented only on request ...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; That looks as a quite good idea to me (and i'm already thinking on a
+</I>&gt;<i> &gt; tiny patch).
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; What you you all think on this solution?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Additionally this idea can offer the possibility to decide for each
+</I>&gt;<i> &gt; socket, if the sent data should be looped back to other local users (by
+</I>&gt;<i> &gt; default) or not (by sockopt or protocol as you suggested above). E.g. if
+</I>&gt;<i> &gt; the pointer in the sent skbuff holding the sk is set to NULL the
+</I>&gt;<i> &gt; loopback for this CAN-frame is disabled. So you also have an
+</I>&gt;<i> &gt; runtime-configurable performance tuning - this meets your desires,
+</I>&gt;<i> 
+</I>&gt;<i> Don't forget: for hard RT, s/performance/WCET/. But low-end users
+</I>&gt;<i> without hard constraints will certainly also worry about the former.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; right? ;-)
+</I>&gt;<i> 
+</I>&gt;<i> Protocols look more handy too me (from a user POV) and are easier
+</I>&gt;<i> acceptable if we really go for default on. Socket options are not that
+</I>&gt;<i> well visible, and we should better reduce the level of surprise.
+</I>
+Socket options allow to change the behaviour during run-time.
+Is this useful?
+
+&gt;<i> But let's ask for other opinions:
+</I>&gt;<i> 
+</I>&gt;<i> POLL 1: How to control TX loopback behaviour?
+</I>&gt;<i> 	[ ] socket option
+</I>&gt;<i> 	[x] two protocols
+</I>&gt;<i> 	[ ] .................
+</I>&gt;<i> 	    (please describe)
+</I>&gt;<i> 
+</I>&gt;<i> POLL 2: What should be the default behaviour?
+</I>&gt;<i> 	[ ] loopback
+</I>&gt;<i> 	[x] no loopback
+</I>
+I think the second question is not relevant if the TX loopback 
+behaviour is defined via protocol (just what 0 means). And 
+Oliver rised further questions and I have extended the poll:
+
+  POLL 1: How to control TX loopback behaviour?
+  	[ ] socket option
+  	[ ] two protocols
+  	[ ] .................
+  	    (please describe)
+
+        Note: Controlling with socket options allows to change
+        the behaviour during run-time.
+  
+  POLL 2: What should be the default behaviour?
+  	[ ] loopback
+  	[ ] no loopback
+
+  POLL 3: Should the message be looped back to the
+          sending socket as well? 
+
+  	[ ] no 
+  	[ ] yes 
+  	[ ] the option should be configurable (via setsockopt) 
+
+        Note: looping back to all sockets can be easily implemented
+              while the other choices are more complex/tricky.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000031.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000037.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

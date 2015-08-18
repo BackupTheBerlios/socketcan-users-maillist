@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] nonblocking socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20nonblocking%20socketcan&In-Reply-To=%3CCAOHwv55igo35AHoz1UHR44PV1FoNo%3DoBvuh5X_Z3wqyLwR%2Bhhg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000945.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] nonblocking socketcan</H1>
+    <B>Luka Rahne</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20nonblocking%20socketcan&In-Reply-To=%3CCAOHwv55igo35AHoz1UHR44PV1FoNo%3DoBvuh5X_Z3wqyLwR%2Bhhg%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] nonblocking socketcan">luka.rahne at gmail.com
+       </A><BR>
+    <I>Thu Mar 29 15:20:18 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000945.html">No subject
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2367">[ date ]</a>
+              <a href="thread.html#2367">[ thread ]</a>
+              <a href="subject.html#2367">[ subject ]</a>
+              <a href="author.html#2367">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I do not know if this is correct address, but I have been playing whit
+socket can using python. (Python 3.3.0a1+)
+
+I was able to set socket as non-blocking but I got io.BlockingIOError
+if there is no data after calling receive.
+
+Putting it in try - except(io.BlockingIOError): works just fine
+
+full working source is here <A HREF="http://pastebin.com/TBX85TrN">http://pastebin.com/TBX85TrN</A>
+
+I am just asking  if this is normal behaviour, bug or misconfiguration?
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000945.html">No subject
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2367">[ date ]</a>
+              <a href="thread.html#2367">[ thread ]</a>
+              <a href="subject.html#2367">[ subject ]</a>
+              <a href="author.html#2367">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Missing error counters?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Missing%20error%20counters%3F&In-Reply-To=%3C49DD20CE.4020200%40mlbassoc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000761.html">
+   <LINK REL="Next"  HREF="000763.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Missing error counters?</H1>
+    <B>Gary Thomas</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Missing%20error%20counters%3F&In-Reply-To=%3C49DD20CE.4020200%40mlbassoc.com%3E"
+       TITLE="[Socketcan-users] Missing error counters?">gary at mlbassoc.com
+       </A><BR>
+    <I>Thu Apr  9 00:10:22 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000761.html">[Socketcan-users] Missing error counters?
+</A></li>
+        <LI>Next message: <A HREF="000763.html">[Socketcan-users] Missing error counters?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#762">[ date ]</a>
+              <a href="thread.html#762">[ thread ]</a>
+              <a href="subject.html#762">[ subject ]</a>
+              <a href="author.html#762">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Gary Thomas wrote:
+</I>&gt;&gt;<i> I have a system running SocketCAN via SJA1000 devices (FPGA
+</I>&gt;&gt;<i> cores).  If I have a bus with no devices (and possibly not
+</I>&gt;&gt;<i> terminated), I get deluged with BUS ERROR interrupts.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We're trying to figure out how to get rid of these (probably
+</I>&gt;&gt;<i> by terminating the bus, but it's 6000 miles [literally] from
+</I>&gt;&gt;<i> me and I have to rely on others to make that happen).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anyway, my real question is that these errors don't seem to
+</I>&gt;&gt;<i> be getting out of the device layer.  I'm checking the status
+</I>&gt;&gt;<i> of the devices like this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # cat /proc/net/dev
+</I>&gt;&gt;<i> Inter-|   Receive                                                |  Transmit
+</I>&gt;&gt;<i>  face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compresse
+</I>&gt;&gt;<i> d
+</I>&gt;&gt;<i>     lo:    3335      27    0    0    0     0          0         0     3335      27    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>   eth0:   17015     133    0    0    0     0          0         8        0       0    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>   can0: 7024584  878073    0    0    0     0          0         0        1       0    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>   can1: 7024472  878059    0    0    0     0          0         0        1       0    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>   can2: 7024368  878046    0    0    0     0          0         0        1       0    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>   can3: 7024344  878043    0    0    0     0          0         0        1       0    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>   can4:     524     524    0    0    0     0          0         0        3       2    0    0    0     0       0
+</I>&gt;&gt;<i> 0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You can see that the busses without devices are getting interrupted
+</I>&gt;&gt;<i> to death, but no error indicators.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What am I missing?
+</I>&gt;<i> 
+</I>&gt;<i> Bus error interrupts will generate error frames, which are treated like
+</I>&gt;<i> normal messages, and which an application can inspect, e.g. with
+</I>&gt;<i> &quot;candump any,0:0,#FFFFFFFF&quot;. Unfortunately, they can come at a very high
+</I>&gt;<i> rate, especially with 1MB/s. Typically when no cable is connected and
+</I>&gt;<i> you send a message or if there is some other electrical problem. You
+</I>&gt;<i> should see them with: &quot;cat /sys/class/net/can0/can_statistics/bus_error&quot;.
+</I>
+Thanks.  Why don't these show up in the normal 'netstat' data?
+
+-- 
+------------------------------------------------------------
+Gary Thomas                 |  Consulting for the
+MLB Associates              |    Embedded world
+------------------------------------------------------------
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000761.html">[Socketcan-users] Missing error counters?
+</A></li>
+	<LI>Next message: <A HREF="000763.html">[Socketcan-users] Missing error counters?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#762">[ date ]</a>
+              <a href="thread.html#762">[ thread ]</a>
+              <a href="subject.html#762">[ subject ]</a>
+              <a href="author.html#762">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

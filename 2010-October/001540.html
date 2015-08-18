@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Loosing frames on MPC5200B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB2ED90D%40Zuse1.tracetronic.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001538.html">
+   <LINK REL="Next"  HREF="001542.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Loosing frames on MPC5200B</H1>
+    <B>&quot;M&#252;ller, Ren&#233;&quot;</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB2ED90D%40Zuse1.tracetronic.local%3E"
+       TITLE="[Socketcan-users] Loosing frames on MPC5200B">Rene.Mueller at tracetronic.de
+       </A><BR>
+    <I>Tue Oct 12 19:11:14 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001538.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+        <LI>Next message: <A HREF="001542.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1540">[ date ]</a>
+              <a href="thread.html#1540">[ thread ]</a>
+              <a href="subject.html#1540">[ subject ]</a>
+              <a href="author.html#1540">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am 12.10.2010 12:53, schrieb Michal Sojka:
+&gt;<i> On Mon, 11 Oct 2010, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> On 10/11/2010 05:01 PM, &quot;M&#252;ller, Ren&#233;&quot; wrote:
+</I>&gt;&gt;&gt;<i> Now we have two cases, one with missing frames and one without:
+</I>&gt;&gt;&gt;<i> Case 1:
+</I>&gt;&gt;&gt;<i>  - candump -l -s2 can0 -&gt; logging in an file which is stored in RAM
+</I>&gt;&gt;&gt;<i>  - we get all messages in the logfile
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Case 2:
+</I>&gt;&gt;&gt;<i>  - candump -l -s2 can0 -&gt; logging in an file which is stored on an CompactFlash-card
+</I>&gt;&gt;&gt;<i>  - the CF-card is connected via the IDE-interface without DMA (we don't get DMA working with the CF-card, unfortunately it only works with harddrives)
+</I>&gt;&gt;&gt;<i>  - we are loosing messages:
+</I>&gt;&gt;&gt;<i>    - every 35s we are missing messages in blocks, never we are missing 1 message, always 5-6 at once
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Anyone had similar problems? Any hints?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sounds like a receive buffer overrun when the application is not able to
+</I>&gt;&gt;<i> read messages fast enough. You could use setsockopt(... ,SOL_SOCKET,
+</I>&gt;&gt;<i> SO_RCVBUF, ....) to increase the buffer size. It's also possible to
+</I>&gt;&gt;<i> detect dropped CAN frames as described here:
+</I>&gt;<i>
+</I>&gt;<i> I'm not sure whether this is receive buffer overrun. AFAIK 5200 has some
+</I>&gt;<i> problems with ATA. People using 5200 with CF complain about hudge
+</I>&gt;<i> latencies caused by ATA interrupts. I do not know whether this is
+</I>&gt;<i> related to using DMA or not.
+</I>&gt;<i>
+</I>
+This sounds like our problem. As I wrote in the other mail, we only loose frames, if we have IDE-traffic.
+
+Do you know anyone with an solution to the high latencies caused by IDE interrupts?
+
+&gt;<i> The CAN controller on 5200 has hardware buffers only for 2 messages. The
+</I>&gt;<i> driver reads the received messages in soft-irq so if the soft-irq is
+</I>&gt;<i> delayed you loose the mesasges because of hardware buffer overruns. I
+</I>&gt;<i> gess this is very likely especially if you use CF.
+</I>&gt;<i>
+</I>
+I don't think so. If we use candump with the '-d' option it reports dropped frames. These frames are dropped of the buffer in the kernel, so the frames are already read out of the hardware buffers. Maybe I'm wrong on this, but this is how I understand it.
+
+&gt;<i> We were able to avoid losing messages by reading them in hard-irq
+</I>&gt;<i> context (with lincan driver), but I'm not sure whether this will help if
+</I>&gt;<i> you use CF (we do not use it).
+</I>
+What's this lincan driver? I found it on sourceforge, but it seems to lack MPC5200-support. In addition we are happy with socketcan, but if we are stuck with bad hardware (MPC5200), we are open to every chance...
+
+Thanks,
+Ren&#233;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001538.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+	<LI>Next message: <A HREF="001542.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1540">[ date ]</a>
+              <a href="thread.html#1540">[ thread ]</a>
+              <a href="subject.html#1540">[ subject ]</a>
+              <a href="author.html#1540">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

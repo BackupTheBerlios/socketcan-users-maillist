@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%20supported%20by%20protocol%22&In-Reply-To=%3C485A7CFB.6030105%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000417.html">
+   <LINK REL="Next"  HREF="000419.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%20supported%20by%20protocol%22&In-Reply-To=%3C485A7CFB.6030105%40grandegger.com%3E"
+       TITLE="[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jun 19 17:36:27 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000417.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+</A></li>
+        <LI>Next message: <A HREF="000419.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#418">[ date ]</a>
+              <a href="thread.html#418">[ thread ]</a>
+              <a href="subject.html#418">[ subject ]</a>
+              <a href="author.html#418">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Mike Timmons wrote:
+&gt;<i> Thank's for the follow-up! To be clear and to guide anybody who wants to
+</I>&gt;<i> build a module and not take a patch...
+</I>&gt;<i> 
+</I>&gt;<i> I built the modules from source (not a patch) according to Wolfgang's
+</I>&gt;<i> instructions below.
+</I>&gt;<i> 
+</I>&gt;<i> I have yet to successfully, &quot;sniff&quot; traffic using cansniffer. I know I
+</I>&gt;<i> have CAN data on the bus because my bootloader utility can sniff and see
+</I>&gt;<i> traffic. I'll be debugging this issue now. 
+</I>&gt;<i> 
+</I>&gt;<i> I'm thinking perhaps my dts file isn't set up properly sop I will
+</I>&gt;<i> confirm it maps correctly to the CAN peripherals on the mpc5200b,
+</I>&gt;<i> although I'm not getting any load errors so we'll see.
+</I>
+Check for the mscan nodes in your DTS file. If they are missing, copy 
+them from lite5200.dts. When you load mscan-mpc52xx.ko, you should find 
+messages in your kernel log indicating if the devices have been found 
+and initialized.
+
+&gt;<i> After building as instructed below, I insmod the following modules
+</I>&gt;<i> before executing the cansniffer utility
+</I>&gt;<i> 
+</I>&gt;<i> FYI to newbies like me: If you are cross-compiling You need to ad
+</I>&gt;<i> CC=&lt;your crosscompiler&gt; to the makefile that builds cansniffer and other
+</I>&gt;<i> utilities.
+</I>
+Yep.
+
+&gt;<i> Here are the modules I am loading before I run cansniffer:
+</I>&gt;<i> Vcan.ko
+</I>&gt;<i> Can-dev.ko
+</I>&gt;<i> Mscan-mpc52xx.ko
+</I>&gt;<i> Can.ko
+</I>&gt;<i> Can-raw.ko
+</I>&gt;<i> Can-bcm.ko
+</I>
+The more logical load order is:
+
+can.ko
+can-raw.ko
+can-bcm.ko
+can-dev.ko
+mscan-mpc52xx.ko
+
+For using MSCAN, you do not need vcan.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000417.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+</A></li>
+	<LI>Next message: <A HREF="000419.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#418">[ date ]</a>
+              <a href="thread.html#418">[ thread ]</a>
+              <a href="subject.html#418">[ subject ]</a>
+              <a href="author.html#418">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

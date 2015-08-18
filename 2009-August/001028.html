@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C4A92C031.1080805%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001027.html">
+   <LINK REL="Next"  HREF="001029.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C4A92C031.1080805%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Aug 24 18:30:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001027.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+        <LI>Next message: <A HREF="001029.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1028">[ date ]</a>
+              <a href="thread.html#1028">[ thread ]</a>
+              <a href="subject.html#1028">[ subject ]</a>
+              <a href="author.html#1028">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Lipkowski, Merten wrote:
+&gt;<i>  
+</I>&gt;<i> I tried each module that I found in 
+</I>&gt;<i> /lib/modules/2.6.29.6-rt23/extra/drivers/net/can/sja1000
+</I>
+Hi Merten,
+
+this brute force approach won't help you.
+
+
+&gt;<i> I also tried the SJA100 ISA driver, at first I had to compile my Kernel
+</I>&gt;<i> again, because ISA support isn't enabled by default...
+</I>&gt;<i> But which IRQ should I use? 
+</I>&gt;<i> except pipcan, pipcan says allways &quot;invalid base address&quot; I know the
+</I>&gt;<i> base adress, because I configured it within the BIOS, but I don't know
+</I>&gt;<i> how to tell pipcan the base adress. I tried &quot;base=&quot;, &quot;baseaddress&quot; and
+</I>&gt;<i> &quot;port=&quot;...
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> less /proc/interrupts
+</I>&gt;<i>            CPU0
+</I>&gt;<i>   0:        216    XT-PIC-XT        timer
+</I>
+(..)
+
+You'll see the interrupt attached to can0 once the interface is up and running
+- and not at this stage.
+
+
+&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Well, It's easy if you know the bus, base address and irq number used
+</I>&gt;<i> by
+</I>&gt;&gt;<i> the SJA1000 controller ;-).
+</I>&gt;<i> 
+</I>&gt;<i> Any hints, how to figure out, which Bus is used?
+</I>
+Look into the documentation - or the BIOS setup.
+
+For ISA devices you need to know where they are located in the i/o address
+space and which interrupt is connected to the CAN controller chip.
+
+
+&gt;<i> 
+</I>&gt;<i> Do I have to understand and configure &quot;udev&quot; ??
+</I>
+No.
+
+As Wolfgang worte before just provide *the correct module parameters*, when
+you invoke
+
+   modprobe sja1000_isa port=... irq=...
+
+When you use 'modprobe' all other needed modules like 'sja1000' and 'can_dev'
+are loaded automatically - so you don't need to load whatever you can find in
+the CAN modules anyway.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001027.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+	<LI>Next message: <A HREF="001029.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1028">[ date ]</a>
+              <a href="thread.html#1028">[ thread ]</a>
+              <a href="subject.html#1028">[ subject ]</a>
+              <a href="author.html#1028">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

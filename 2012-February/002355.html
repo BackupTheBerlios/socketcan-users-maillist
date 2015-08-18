@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Message stalls in SocketCan Layer?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Message%20stalls%20in%20SocketCan%20Layer%3F&In-Reply-To=%3C4F2AA5DF.9080304%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002352.html">
+   <LINK REL="Next"  HREF="002353.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Message stalls in SocketCan Layer?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Message%20stalls%20in%20SocketCan%20Layer%3F&In-Reply-To=%3C4F2AA5DF.9080304%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Message stalls in SocketCan Layer?">wg at grandegger.com
+       </A><BR>
+    <I>Thu Feb  2 16:03:59 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002352.html">[Socketcan-users] Message stalls in SocketCan Layer?
+</A></li>
+        <LI>Next message: <A HREF="002353.html">[Socketcan-users] CAN Data Transfer not happening at 1Mbps
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2355">[ date ]</a>
+              <a href="thread.html#2355">[ thread ]</a>
+              <a href="subject.html#2355">[ subject ]</a>
+              <a href="author.html#2355">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 02/01/2012 10:42 AM, Michael J&#228;ntsch wrote:
+&gt;<i> Hi everyone,
+</I>&gt;<i> 
+</I>&gt;<i> for about a month now, I have a problem with messages that get stalled,
+</I>&gt;<i> causing the select system call on several CAN sockets to time out. We're
+</I>&gt;<i> using the PEAK PCAN-USB interface on a Ubuntu 11.10 (kernel:
+</I>&gt;<i> 3.0.0-15-generic). I've been using the system for about 2 years now and
+</I>&gt;<i> there were no revelant changes to the protocol or software lately. This
+</I>&gt;<i> problem occurs quite frequently now.
+</I>
+When did the reported problems start to show up? After switching to a
+new kernel?
+
+&gt;<i> What happens is, that our master sends out a message and receives 13
+</I>&gt;<i> reply messages from 13 different nodes on the bus, at a frequency of
+</I>&gt;<i> 50Hz. This works for some time (minutes) and then a timeout on the
+</I>&gt;<i> select system call occurs that reads from the 13 sockets. Wireshark
+</I>&gt;<i> shows that there is an unusual time delay between the messages. They get
+</I>&gt;<i> sent at the same time and are normally received within the time of
+</I>&gt;<i> 2-4ms. When the timeout occurs, this time is 30ms. When I turn on the
+</I>&gt;<i> debug information in the peak driver I see debug output with time
+</I>&gt;<i> stamps. On this layer the times are still ok when the timeout occurs.
+</I>&gt;<i> Talking to the peak support, I got pointed at the socket can layer which
+</I>&gt;<i> in this case might be causing the problem. However, I have no idea how
+</I>&gt;<i> to debug this and find out more about the problem.
+</I>
+Hm, is there some other activity blocking the kernel? You could use
+ftrace to find out what's going on.
+
+Wolfgang.
+
+PS:
+
+please do not use this mailing list any longer but send your questions
+to the new &quot;linux-can&quot; mailing list address &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A>&quot;.
+For subscription or mailing list archives please have a look to:
+
+   <A HREF="http://vger.kernel.org/vger-lists.html#linux-can">http://vger.kernel.org/vger-lists.html#linux-can</A>
+
+Mail archives of the new linux-can mailing list can be found at:
+
+   <A HREF="http://dir.gmane.org/gmane.linux.can">http://dir.gmane.org/gmane.linux.can</A>
+   <A HREF="http://marc.info/?l=linux-can&amp;r=1&amp;w=2">http://marc.info/?l=linux-can&amp;r=1&amp;w=2</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002352.html">[Socketcan-users] Message stalls in SocketCan Layer?
+</A></li>
+	<LI>Next message: <A HREF="002353.html">[Socketcan-users] CAN Data Transfer not happening at 1Mbps
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2355">[ date ]</a>
+              <a href="thread.html#2355">[ thread ]</a>
+              <a href="subject.html#2355">[ subject ]</a>
+              <a href="author.html#2355">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

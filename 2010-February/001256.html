@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100205090537.GA327%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001255.html">
+   <LINK REL="Next"  HREF="001257.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100205090537.GA327%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Fri Feb  5 10:05:37 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001255.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001257.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1256">[ date ]</a>
+              <a href="thread.html#1256">[ thread ]</a>
+              <a href="subject.html#1256">[ subject ]</a>
+              <a href="author.html#1256">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Feb 04, 2010 at 07:13:46PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Marc Kleine-Budde wrote:
+</I>&gt;<i> &gt; Kurt Van Dijck wrote:
+</I>&gt;<i> &gt;&gt;&gt; I think a &quot;pure&quot; ratelimit isn't a good choice. From my point of view
+</I>&gt;<i> &gt;&gt;&gt; (with no CAN background) we should limit only if the errors are
+</I>&gt;<i> &gt;&gt;&gt; consecutive, a successfully transmitted or received CAN frame should
+</I>&gt;<i> &gt;&gt;&gt; reset our limiter.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; Or a bus-off indication.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; ACK
+</I>&gt;<i> 
+</I>&gt;<i> ACK.
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt; Resetting the rate-limit at successfull tx or rx requires disabling
+</I>&gt;<i> &gt;&gt; _only_  the bus-error interrupt and not the TX &amp; RX interrupt,
+</I>&gt;<i> &gt;&gt; and is therefore chip specific?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Yes, of course. We just want to limit the error interrupts but not the
+</I>&gt;<i> &gt; active/passive/warning/busoff and of course the rx/tx interrupts.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; On the at91_can you can individually mask the errors. IIRC the sja1000
+</I>&gt;<i> &gt; can do likewise.
+</I>&gt;<i> 
+</I>&gt;<i> Normally bus-error interrupts have a dedicated bit in the interrupt
+</I>&gt;<i> enable register. This approach is, as I expected, complex and rather
+</I>&gt;<i> tricky and delicate. I still prefer the simple solution of disabling the
+</I>&gt;<i> bus error interrupts globally. I believe, that most people/apps do not
+</I>&gt;<i> check bus-errors at all. Other opinions? It would be nice to hear real
+</I>&gt;<i> CAN users and experts.
+</I>I use CAN for ~11 years (rather much, we do automotive).
+I never enabled the bus-error interrupts anywhere embedded.
+To research odd behaviour, the error counters were helpfull,
+ and oscilloscope devices on the bus.
+Even a normal oscilloscope nowadays can catch error frames, given the baud rate.
+
+That is because on a production system (automobile or such), the bus
+should not have bus-errors at all, and if it does (we live in the real
+ world), then that's a problem we can't influence with software
+(except for disabling CAN).
+Of course, during develpment I see more problems, but
+I make much more mistakes. That's when debugging was invented.
+
+When a single (or few) bus-error is encountered, then you can/should
+ignore it.
+When a bunch of bus-errors is encountered, the chip will go into
+error-passive(I tend to confuse the names :-) ) and in bus-off.
+This triggers a bus-state change, which is interesting to alert an
+application that things are getting bad.
+so, on embedded device, I would never activate the bus-error interrupts. My
+software is capable of dealing with CAN bus status as a binary value: 
+&quot;it's gone&quot; or &quot;it's not gone&quot;
+Anything in between is a test facility, and not production level.
+
+I see some uses on a laptop. Then, you could investigate CAN bus quality
+on a real machine/CAN bus. So, enable/disable globally is good enough. I my
+system gets loaded in that situation, yep, so be it. I don't do that
+every week :-). I only need it when I didn't bring the oscilloscope.
+
+That's my opinion.
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>Kurt
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001255.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001257.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1256">[ date ]</a>
+              <a href="thread.html#1256">[ thread ]</a>
+              <a href="subject.html#1256">[ subject ]</a>
+              <a href="author.html#1256">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

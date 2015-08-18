@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47AC166D.3070601%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000280.html">
+   <LINK REL="Next"  HREF="000282.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47AC166D.3070601%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Fri Feb  8 09:44:29 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000280.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000282.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#281">[ date ]</a>
+              <a href="thread.html#281">[ thread ]</a>
+              <a href="subject.html#281">[ subject ]</a>
+              <a href="author.html#281">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> Spinlocks patch applied: still no change.
+</I>&gt;<i> 
+</I>&gt;<i> I am investigating our watchdog behaviour. There doesn't seem to happen
+</I>&gt;<i> much unexpected. Some in_8's and out_8's to some GPIO line several times
+</I>&gt;<i> a second to keep the external watchdog happy.
+</I>&gt;<i> 
+</I>&gt;<i> But it will restart the timer every time it expires. Do you know in
+</I>&gt;<i> which tasks the timers are handled and which RT prio they get ? Maybe
+</I>&gt;<i> any correlation with netdev or mscan timers ? Maybe some spinlocks
+</I>&gt;<i> missing ?
+</I>
+I have added a new patch with some simple tracing. Could you run it and
+send me the output.
+
+Thanks,
+
+Wolfgang.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mscan-debug-tx-bug.patch
+Type: text/x-patch
+Size: 6969 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080208/14b87091/attachment.bin">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080208/14b87091/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000280.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000282.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#281">[ date ]</a>
+              <a href="thread.html#281">[ thread ]</a>
+              <a href="subject.html#281">[ subject ]</a>
+              <a href="author.html#281">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

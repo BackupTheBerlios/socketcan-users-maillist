@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BEB5E.3050106%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000449.html">
+   <LINK REL="Next"  HREF="000456.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BEB5E.3050106%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Jul  2 22:55:58 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000449.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000456.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#450">[ date ]</a>
+              <a href="thread.html#450">[ thread ]</a>
+              <a href="subject.html#450">[ subject ]</a>
+              <a href="author.html#450">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Wed, Jul 02, 2008 at 10:16:22PM +0200, Oliver Hartkopp wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> what is the special advantage to have this updatable table inside the
+</I>&gt;&gt;<i> driver?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Not necessarily inside the driver, but in the kernel.
+</I>&gt;<i>   
+</I>
+And what's the special advantage here? You did not really answer my 
+question :)
+
+&gt;<i>   
+</I>&gt;&gt;<i> When i would like to change the settings of the speed, what would be the
+</I>&gt;&gt;<i> difference, if i select a formerly(!) uploaded table entry OR if i would
+</I>&gt;&gt;<i> write a *set* of values directly into the hw-independent can_sjw, ...
+</I>&gt;&gt;<i> values?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Letting the user select the bitrate on the commandline with
+</I>&gt;<i>
+</I>&gt;<i> 	canconfig can0 125000
+</I>&gt;<i>
+</I>&gt;<i> is easy to remember. He may have invented what 125000 means before and
+</I>&gt;<i> has configured his /etc/network/interfaces correctly, but in the moment
+</I>&gt;<i> of changing he just has to use this line.
+</I>&gt;<i>
+</I>&gt;<i> You surely can also do
+</I>&gt;<i>
+</I>&gt;<i> 	echo $phase_seg1 &gt; /sys/bla/blub
+</I>&gt;<i>   
+</I>
+I really do not want that in my daily work. Only if i become an expert 
+one day ;-)
+
+&gt;<i> for all the values in this moment, but it is error prone, many steps and
+</I>&gt;<i> counter intuitive. Such a table in the kernel is cheap and we should
+</I>&gt;<i> make it easy for the user to express simple things like &quot;use 125000
+</I>&gt;<i> kbit&quot; in an easy and intuitive way.
+</I>&gt;<i>
+</I>&gt;<i> Imagine you would be sitting in front of some random hardware *now*:
+</I>&gt;<i> would you have the CiA values in your mind? I don't. I'm a lazy bastard.
+</I>&gt;<i> I just want to say &quot;canconfig can0 125000&quot;.
+</I>&gt;<i>   
+</I>
+Yes. Me to!
+
+Maybe i was misunderstood here.
+
+I want &quot;canconfig&quot; to perform all the &quot;echo $phase_seg1 &gt; /sys/bla/blub&quot; 
+stuff setting.
+
+Oliver.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000449.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000456.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#450">[ date ]</a>
+              <a href="thread.html#450">[ thread ]</a>
+              <a href="subject.html#450">[ subject ]</a>
+              <a href="author.html#450">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

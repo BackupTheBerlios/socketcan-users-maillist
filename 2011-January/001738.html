@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Documentation of canutils
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Documentation%20of%20canutils&In-Reply-To=%3CAANLkTi%3DxC6Ed9XyZFJ9%2BW_GLYcj%3DDOb%3DcOTzrr0QGb2%2B%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001737.html">
+   <LINK REL="Next"  HREF="001739.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Documentation of canutils</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Documentation%20of%20canutils&In-Reply-To=%3CAANLkTi%3DxC6Ed9XyZFJ9%2BW_GLYcj%3DDOb%3DcOTzrr0QGb2%2B%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Documentation of canutils">lambert.willy at gmail.com
+       </A><BR>
+    <I>Sat Jan 15 18:50:32 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001737.html">[Socketcan-users] Documentation of canutils
+</A></li>
+        <LI>Next message: <A HREF="001739.html">[Socketcan-users] Advantech PCI-1680U card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1738">[ date ]</a>
+              <a href="thread.html#1738">[ thread ]</a>
+              <a href="subject.html#1738">[ subject ]</a>
+              <a href="author.html#1738">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/1/15 Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+
+&gt;<i> On 15.01.2011 18:26, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; On 01/15/2011 06:18 PM, Oliver Hartkopp wrote:
+</I>&gt;<i> &gt;&gt; On 14.01.2011 09:35, Heinz-J&#252;rgen Oertel wrote:
+</I>&gt;<i> &gt;&gt;&gt; Am Freitag, 14. Januar 2011, 07:44:18 schrieb Oliver Hartkopp:
+</I>&gt;<i> &gt;&gt;&gt;&gt; e.g. try to use candump or cansend without commandline parameters (or
+</I>&gt;<i> with
+</I>&gt;<i> &gt;&gt;&gt;&gt; '-?')
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; according to GNU guidelines and also POSIX
+</I>&gt;<i> &gt;&gt;&gt; it should be '--help'   (or '-h')
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Heinz
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Yes. Good point.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Will add '-h' option to all canutils that are currently only supporting
+</I>&gt;<i> '-?'
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Or even better, if an *invalid* option is specified, and error message
+</I>&gt;<i> &gt; and the usage string should be printed out.
+</I>&gt;<i>
+</I>&gt;<i> I checked that any indeed this is already the case ...
+</I>&gt;<i>
+</I>&gt;<i> So i finally wonder about the problems Willy got when invoking 'cansend -h'
+</I>&gt;<i> :
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at host</A>:~$ cansend -h
+</I>&gt;<i> Usage: cansend &lt;device&gt; &lt;can_frame&gt;.
+</I>&gt;<i>
+</I>
+It would have helped if was the same result as a mismatch canframe arguement
+arguments :
+
+Wrong CAN-frame format!
+Try: &lt;can_id&gt;#{R|data}
+can_id can have 3 (SFF) or 8 (EFF) hex chars
+data has 0 to 8 hex-values that can (optionally) be seperated by '.'
+e.g. 5A1#11.2233.44556677.88 / 123#DEADBEEF / 5AA# /
+     1F334455#1122334455667788 / 123#R for remote transmission request.
+
+After having use those tools I can say they are really great. In a very
+simple way I can do things that would require a can analyser. I am thinking
+about embeding them onto my target for developement and integration works.
+You really should spend some time into documenting this, because they are
+very usefull.
+
+
+
+
+&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110115/4964a096/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110115/4964a096/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001737.html">[Socketcan-users] Documentation of canutils
+</A></li>
+	<LI>Next message: <A HREF="001739.html">[Socketcan-users] Advantech PCI-1680U card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1738">[ date ]</a>
+              <a href="thread.html#1738">[ thread ]</a>
+              <a href="subject.html#1738">[ subject ]</a>
+              <a href="author.html#1738">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

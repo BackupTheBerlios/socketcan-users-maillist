@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [CAN] kernel 2.6.28 integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A515DF.9090704%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000685.html">
+   <LINK REL="Next"  HREF="000687.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [CAN] kernel 2.6.28 integration</H1>
+    <B>Hector Oron</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A515DF.9090704%40gmail.com%3E"
+       TITLE="[Socketcan-users] [CAN] kernel 2.6.28 integration">hector.oron at gmail.com
+       </A><BR>
+    <I>Wed Feb 25 10:56:47 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000685.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+        <LI>Next message: <A HREF="000687.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#686">[ date ]</a>
+              <a href="thread.html#686">[ thread ]</a>
+              <a href="subject.html#686">[ subject ]</a>
+              <a href="author.html#686">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+   I have some errors, just because some struct has changed:
+
+  error: 'struct can_priv' has no member named 'can_sys_clock'
+  error: 'CAN_BITTIME_STD' undeclared
+  error: 'CAN_BITTIME_BTR' undeclared (first use in this function)
+  error: 'struct can_priv' has no member named 'bitrate'
+  error: 'struct can_priv' has no member named 'bittime'
+  In function 'register_fim_can':
+    error: 'struct can_priv' has no member named 'do_set_bittime'
+    error: 'struct can_priv' has no member named 'can_sys_clock'
+    error: 'struct can_priv' has no member named 'max_brp'
+    error: 'struct can_priv' has no member named 'max_sjw'
+    error: 'struct can_priv' has no member named 'bitrate'
+
+
+   I guess i have to go thought some fixing, but it makes a difference 
+when i include dev.h and ioctl.h, it looks like those are mutually 
+exclusive. I am currently finding out what are differences.
+
+   #include &lt;linux/can/dev.h&gt;
+   // #include &lt;linux/can/ioctl.h&gt;
+
+Thanks
+
+
+Oliver Hartkopp wrote:
+&gt;<i> Hector Oron wrote:
+</I>&gt;&gt;<i> Hello Oliver,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> I added a new symlink for 2.6.28 as the vcan driver did not change up to
+</I>&gt;&gt;&gt;<i> 2.6.28.
+</I>&gt;&gt;&gt;<i> Use 'svn up' to update this file.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Also FILES-2.6.25x-DRIVERS looks good so far.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So you can also go with this patch generation solution.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>    
+</I>&gt;&gt;&gt;&gt;<i> But please check first, if you still have compilation problems, when
+</I>&gt;&gt;&gt;&gt;<i> compiling the external modules as suggested in (1). If so we are 
+</I>&gt;&gt;&gt;&gt;<i> probably
+</I>&gt;&gt;&gt;&gt;<i> having a different issue on your side.
+</I>&gt;&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I did so this evening, mostly everything looks up to date to me, now,
+</I>&gt;&gt;<i> I have to do some work on my driver. I'll let you know how everything
+</I>&gt;&gt;<i> goes.
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> Fine!
+</I>&gt;<i> 
+</I>&gt;&gt;<i> BTW, i tried to build latex documentation, but it was failing because
+</I>&gt;&gt;<i> i was missing some *.sty files. I did not look into it farther as
+</I>&gt;&gt;<i> documentation is in german. Does it build for you?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> I did not check for years ...
+</I>&gt;<i> 
+</I>&gt;<i> The most up-to-date documentation is in Documentation/networking/can.txt 
+</I>&gt;<i> (in Mainline or here in the SVN). I hope to find some time to add the 
+</I>&gt;<i> CAN_BCM documentation there in the future. But the other documentation 
+</I>&gt;<i> (besides the CAN_BCM) is much better in can.txt.
+</I>&gt;<i> 
+</I>&gt;<i> For the can-utils you can always try '-?' as argument to get a help 
+</I>&gt;<i> text. For the can-utils the TeX doc is also outdated. But if you like to 
+</I>&gt;<i> read it, try: <A HREF="http://www.llcf.de">http://www.llcf.de</A>
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000685.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+	<LI>Next message: <A HREF="000687.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#686">[ date ]</a>
+              <a href="thread.html#686">[ thread ]</a>
+              <a href="subject.html#686">[ subject ]</a>
+              <a href="author.html#686">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

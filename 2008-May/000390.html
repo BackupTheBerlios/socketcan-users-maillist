@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Transport Protocol ISO-TP
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Transport%20Protocol%20ISO-TP&In-Reply-To=%3C483C672C.4070606%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000389.html">
+   <LINK REL="Next"  HREF="000391.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Transport Protocol ISO-TP</H1>
+    <B>Ren&#233; M&#252;ller</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Transport%20Protocol%20ISO-TP&In-Reply-To=%3C483C672C.4070606%40gmx.de%3E"
+       TITLE="[Socketcan-users] Transport Protocol ISO-TP">mue.r at gmx.de
+       </A><BR>
+    <I>Tue May 27 21:55:24 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000389.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+        <LI>Next message: <A HREF="000391.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#390">[ date ]</a>
+              <a href="thread.html#390">[ thread ]</a>
+              <a href="subject.html#390">[ subject ]</a>
+              <a href="author.html#390">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Ren&#233; M&#252;ller wrote:
+</I>&gt;&gt;<i> I found in the documentation for Socketcan a chapter about transport 
+</I>&gt;&gt;<i> protocols. There are some manufacture specific protocols (VAG TP1.6, 
+</I>&gt;&gt;<i> VAG TP2.0, ...) and the ISO-TP. In the documentation is stated, that 
+</I>&gt;&gt;<i> VW is working on ISO-TP and wants to publish it under the BSD/GPL. 
+</I>&gt;&gt;<i> How is the status of this? Is there an implementation available?
+</I>&gt;<i>
+</I>&gt;<i> Hi Ren&#233;,
+</I>&gt;<i>
+</I>&gt;<i> indeed i'm working on it (currently only in my spare time) and have 
+</I>&gt;<i> just designed the receive path, which is fortunately pretty easy. The 
+</I>&gt;<i> design follows the UDP approach which is also an unreliable datagram 
+</I>&gt;<i> protocol like ISO-TP.
+</I>&gt;<i>
+</I>Hi Oliver,
+
+yes I'm working with ISO-TP and I have the opportunity to do it in my 
+work time :)
+
+&gt;<i> My main concern is the 'direct feedback' to the application in the 
+</I>&gt;<i> case of failed PDU transmits, which are defined in the ISO15765-2 but 
+</I>&gt;<i> do not fit into the commonly known 'unreliable datagram' design.
+</I>&gt;<i>
+</I>&gt;<i> And having a blocking write for each PDU is also crude ... so i'm not 
+</I>&gt;<i> yet finished with the tx path. Finally  ISO-TP is a common standard 
+</I>&gt;<i> and therefore it can/will go into kernel under GPL.
+</I>&gt;<i>
+</I>&gt;<i> Are you currently working with ISO-TP? Maybe you can give some 
+</I>&gt;<i> feedback on my approach or you'd like to be an early adopter ;-)
+</I>&gt;<i>
+</I>
+We use socketcan to communicate on the CAN with a PEAK card and a 
+MPC5200, but only for the raw messages. All the stuff about 
+interpretation of the data is done in an application on top of socketcan 
+(including the transport layer). We need to deal with transport 
+protocols, like ISO-TP, and we have the &quot;problems&quot; with the direct 
+feedback, too. That's the reason why we decided to step away from ISO 
+15765-2 at this point and integrate ISO-TP as part of our application. 
+This way we don't need to implement the feedback as stated in the ISO, 
+but in some proprietary way. We need ISO-TP only in this application and 
+this approach avoids headache with the datagram design, as you mentioned 
+already.
+
+I know that this proprietary approach is not the best, as the transport 
+layer is only limited reusable. Maybe we will switch over to the 
+integration of transport protocols in socketcan at some later point. At 
+the moment we have some limited time and implementation of ISO-TP is 
+much easier, when you can do some simplifications.
+
+For now, I offer you my help with ISO-TP and socketcan. I'd love to test 
+your implementation.
+
+Greetings,
+Ren&#233;
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080527/6b77abb9/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080527/6b77abb9/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000389.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+	<LI>Next message: <A HREF="000391.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#390">[ date ]</a>
+              <a href="thread.html#390">[ thread ]</a>
+              <a href="subject.html#390">[ subject ]</a>
+              <a href="author.html#390">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

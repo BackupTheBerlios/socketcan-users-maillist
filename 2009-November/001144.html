@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0BEA2B.9070608%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001143.html">
+   <LINK REL="Next"  HREF="001145.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0BEA2B.9070608%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">l.fu at pengutronix.de
+       </A><BR>
+    <I>Tue Nov 24 15:14:03 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001143.html">[Socketcan-users] mcp2515 on ARM9 s3c2440
+</A></li>
+        <LI>Next message: <A HREF="001145.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1144">[ date ]</a>
+              <a href="thread.html#1144">[ thread ]</a>
+              <a href="subject.html#1144">[ subject ]</a>
+              <a href="author.html#1144">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi folks,
+
+I was trying to integrate socketcan control in an application the last days and
+spent quite a lot of time getting clear how to deal with the netlink interface.
+Besides I just couldn't remember the correct order of parameter when using the
+iproute tool for can ;-). So I stripped some code from the iproute package and
+put them with some own stuffs together in a library to access can configuration
+functions with netlink, which I call libsocketcan-nl. (nl stand for netlink, not
+netherland ;-)). The library provides some simple APIs to do common CAN stuffs,
+lacking of a proper documentation I'll start here with the content of the header
+file:
+int scan_set_restart(const char *name);
+int scan_set_bitrate(const char *name, __u32 bitrate);
+int scan_set_restart_ms(const char *name, __u32 restart_ms);
+int scan_set_ctrlmode(const char *name, __u32 mode, __u32 flags);
+
+int scan_get_state(const char *name, int *state);
+int scan_get_restart_ms(const char *name, __u32 *restart_ms);
+int scan_get_bittiming(const char *name, struct can_bittiming *bt);
+int scan_get_ctrlmode(const char *name, struct can_ctrlmode *cm);
+
+Usage is quite straight forward. The functions await simply the name of the can
+interface and, if any, configuration values and return 0 for success and -1 if
+something went wrong.
+
+This library provides some benefits, which the hookup code in iproute doesn't do:
+* more clear error messages and takes care of special cases, e.g. restarting a
+device can only be done while the interface is in BUS_OFF. Neither kernel nor
+the iproute tool provides some useful hint if restarting failed.
+* simple portabilty
+* API for use in own applications.
+
+I updated the canutils tool to make use of this library. Now we can finally
+again use the canconfig tool with really simple parameters:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at target</A>:~ canconfig can0
+can0 bitrate: 250000
+can0 state: ACTIVE
+can0 restart_ms: 1000
+can0 mode: loopback[OFF], listen-only[OFF], tripple-sampling[OFF]
+
+Setting works as well, usage is just like in the older versions:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at target</A>:~ canconfig can0 bitrate 125000
+can0 bitrate: 125000
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at target</A>:~ canconfig can0 mode loopback on
+can0 mode: loopback[ON], listen-only[OFF], tripple-sampling[OFF]
+
+and so on.
+
+The repository of the library can be obtained at
+<A HREF="git://git.pengutronix.de/git/tools/libsocketcan-nl.git">git://git.pengutronix.de/git/tools/libsocketcan-nl.git</A>
+Repo of Canutils can be found at
+<A HREF="git://git.pengutronix.de/git/tools/canutils.git">git://git.pengutronix.de/git/tools/canutils.git</A>
+
+Additionally I put the recent version of the library and the tool in our ftp
+server. They might stay there only as long as as I don't have a proper webspace
+for the stuff:
+<A HREF="ftp://ftp.pengutronix.de/pub/socketcan/">ftp://ftp.pengutronix.de/pub/socketcan/</A>
+
+The library is still not complete. For example there's still no documentation
+for this, also we are only able to set the bitrate, but not the bittimings. I
+will add these stuffs later.
+
+Comments, tests and reviews are highly welcome.
+
+
+Cheers
+Luotao Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001143.html">[Socketcan-users] mcp2515 on ARM9 s3c2440
+</A></li>
+	<LI>Next message: <A HREF="001145.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1144">[ date ]</a>
+              <a href="thread.html#1144">[ thread ]</a>
+              <a href="subject.html#1144">[ subject ]</a>
+              <a href="author.html#1144">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

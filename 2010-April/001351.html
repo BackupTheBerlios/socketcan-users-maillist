@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem in cross compiling socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cy2y7401a78a1004060624i743082ffp6f80633ce5e6518b%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001350.html">
+   <LINK REL="Next"  HREF="001352.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem in cross compiling socketcan</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cy2y7401a78a1004060624i743082ffp6f80633ce5e6518b%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] problem in cross compiling socketcan">nudtrobert at gmail.com
+       </A><BR>
+    <I>Tue Apr  6 15:24:35 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001350.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001352.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1351">[ date ]</a>
+              <a href="thread.html#1351">[ thread ]</a>
+              <a href="subject.html#1351">[ subject ]</a>
+              <a href="author.html#1351">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2010/4/6 Alexandre V&#233;zina &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">alexandre.vez at gmail.com</A>&gt;
+&gt;<i>
+</I>&gt;<i> On Mon, Apr 5, 2010 at 9:46 PM, Lei Luo &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nudtrobert at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> Hi
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am a newbie of socketcan, I compiled and installed it in the direction
+</I>of <A HREF="http://dave.limoilux.org/trac/wiki/UseSocketCAN">http://dave.limoilux.org/trac/wiki/UseSocketCAN</A>   There are two mcp2510
+can  controllers in my arm at91rm9200 board.
+&gt;&gt;<i> It failed when run &quot;can_setup start&quot;, saying that &quot;cannot creat
+</I>/sys/class/net/can0&quot;.
+&gt;<i>
+</I>&gt;<i> If you look in SocketCAN's makefile, did you uncomment export
+</I>CONFIG_CAN_MCP251X=m?
+&gt;<i> You will also need to uncomment export CONFIG_CAN_DEV_SYSFS=y which is
+</I>legacy. We need to patch our kernel, but didn't have the time yet.
+
+Yes, I have done it. I used the newest source code from the svn server and
+patched it manually. Configration is as follows:
+CONFIG_CAN=y;
+CONFIG_CAN_RAW=y;
+CONFIG_CAN_BCM=y;
+CONFIG_CAN_GW=y;
+CONFIG_CAN_ISOTP=y;
+
+CONFIG_CAN_VCAN=y;
+CONFIG_CAN_DEV=y;
+CONFIG_CAN_CALC_BITTIMING=y;
+CONFIG_CAN_MCP251X=y;
+
+&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Then I use &quot;ip link add type vcan&quot; to create the a vcan interface. But
+</I>cmd &quot;add&quot; is not recognised, ip tool is the newest one which is compiled
+with iproute2-2.6.33.tar.bz2. Linux kernel I used is  2.6.28.
+&gt;<i>
+</I>&gt;<i> Again, in the makefile, did you uncomment export CONFIG_CAN_VCAN=m?
+</I>&gt;<i> Thank you
+</I>
+The problem of &quot;ip link add&quot; is OK after recompiling kernel,
+/sys/class/net/can0 is created if I type in &quot;ip link add dev can0 type
+vcan&quot;. But it says &quot;cannot create /sys/class/net/can0&quot; whenever I did it or
+not.
+And how should I do to add the mcp251x_info to the platform definition file
+as what is said in the beginning of mcp251x.c? I added it into
+at91rm9200_device.c, and include &lt;socketcan/can/platform/mcp251x.h&gt;, some
+err informations such as &quot;mcp251x_setup&quot; presented.
+
+Thanks for your quick help very much.
+Regards
+Luo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100406/af35160e/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100406/af35160e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001350.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001352.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1351">[ date ]</a>
+              <a href="thread.html#1351">[ thread ]</a>
+              <a href="subject.html#1351">[ subject ]</a>
+              <a href="author.html#1351">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

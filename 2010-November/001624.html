@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Get all CAN interfaces on a machine
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Get%20all%20CAN%20interfaces%20on%20a%20machine&In-Reply-To=%3C1289147924.2149.8.camel%40Krikkit1%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001623.html">
+   <LINK REL="Next"  HREF="001625.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Get all CAN interfaces on a machine</H1>
+    <B>Jan-Niklas Meier</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Get%20all%20CAN%20interfaces%20on%20a%20machine&In-Reply-To=%3C1289147924.2149.8.camel%40Krikkit1%3E"
+       TITLE="[Socketcan-users] Get all CAN interfaces on a machine">dschanoeh at googlemail.com
+       </A><BR>
+    <I>Sun Nov  7 17:38:44 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001623.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+        <LI>Next message: <A HREF="001625.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1624">[ date ]</a>
+              <a href="thread.html#1624">[ thread ]</a>
+              <a href="subject.html#1624">[ subject ]</a>
+              <a href="author.html#1624">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thank you for your answer!
+I was not able to find any indication that I could somehow change the
+ioctl() call to return all interfaces.
+I will now let the user name the interfaces he wants to use which even
+could be a more elegant method.
+
+Regards,
+Jan-Niklas
+
+Am Mittwoch, den 03.11.2010, 20:48 +0100 schrieb Oliver Hartkopp:
+&gt;<i> On 01.11.2010 11:16, Jan-Niklas Meier wrote:
+</I>&gt;<i> &gt; Hello!
+</I>&gt;<i> &gt; I am currently trying to get a list of all CAN interfaces on my machine.
+</I>&gt;<i> &gt; Im am using ioctl() with SIOCGIFCONF for this purpose as already
+</I>&gt;<i> &gt; mentioned in a previous post on this mailinglist
+</I>&gt;<i> &gt; (<A HREF="http://old.nabble.com/Enumerating-a-list-of-CAN-interfaces-td27603207.html">http://old.nabble.com/Enumerating-a-list-of-CAN-interfaces-td27603207.html</A>).
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I found out that it makes no difference with which protocol I create the
+</I>&gt;<i> &gt; socket - I always get all interfaces like lo and eth0. My problem is
+</I>&gt;<i> &gt; that there also is a vcan0 which is not listed. Does this method only
+</I>&gt;<i> &gt; work for nonvirtual CAN interfaces and is there any possibility to get
+</I>&gt;<i> &gt; them listed too? Unfortunately I don't have a &quot;real&quot; CAN device for
+</I>&gt;<i> &gt; testing...
+</I>&gt;<i> 
+</I>&gt;<i> Hi Jan-Niklas,
+</I>&gt;<i> 
+</I>&gt;<i> i checked both your code and this example:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://www.doctort.org/adam/nerd-notes/enumerating-network-interfaces-on-linux.html">http://www.doctort.org/adam/nerd-notes/enumerating-network-interfaces-on-linux.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> It looks like that only interfaces are listed, that have an assigned
+</I>&gt;<i> IP-address. No matter if they are up or down.
+</I>&gt;<i> 
+</I>&gt;<i> Maybe there can be passed some flags to the ioctl() that removes the need for
+</I>&gt;<i> assigned IP-addresses ?!?
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Here is the code I am using:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; struct ifreq *ifr;
+</I>&gt;<i> &gt; struct ifconf ifc;
+</I>&gt;<i> &gt; int sock, i;
+</I>&gt;<i> &gt; int numif;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; memset(&amp;ifc, 0, sizeof(ifc));
+</I>&gt;<i> &gt; ifc.ifc_ifcu.ifcu_req = NULL;
+</I>&gt;<i> &gt; ifc.ifc_len = 0;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; /* Create a socket to be able to use ioctl */
+</I>&gt;<i> &gt; if ((sock = socket(PF_CAN, SOCK_RAW, CAN_RAW)) &lt; 0) {
+</I>&gt;<i> &gt; 	perror(&quot;socket&quot;);
+</I>&gt;<i> &gt; 	exit(1);
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; /* First call to determin how much memory will be needed */
+</I>&gt;<i> &gt; if (ioctl(sock, SIOCGIFCONF, &amp;ifc) &lt; 0) {
+</I>&gt;<i> &gt; 	perror(&quot;ioctl&quot;);
+</I>&gt;<i> &gt; 	exit(2);
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt; 		
+</I>&gt;<i> &gt; /* Malloc the necessary memory */   
+</I>&gt;<i> &gt; if ((ifr = malloc(ifc.ifc_len)) == NULL) {
+</I>&gt;<i> &gt; 	perror(&quot;malloc&quot;);
+</I>&gt;<i> &gt; 	exit(3);
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt; ifc.ifc_ifcu.ifcu_req = ifr;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; /* Request the infomation */
+</I>&gt;<i> &gt; if (ioctl(sock, SIOCGIFCONF, &amp;ifc) &lt; 0) {
+</I>&gt;<i> &gt; 	perror(&quot;ioctl2&quot;);
+</I>&gt;<i> &gt; 	exit(4);
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt; close(sock);
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; numif = ifc.ifc_len / sizeof(struct ifreq);
+</I>&gt;<i> &gt; for (i = 0; i &lt; numif; i++) {
+</I>&gt;<i> &gt; 	struct ifreq *r = &amp;ifr[i];
+</I>&gt;<i> &gt; 	printf(&quot;%-8s\n&quot;, r-&gt;ifr_name);
+</I>&gt;<i> &gt; }
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; free(ifr);
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Regards,
+</I>&gt;<i> &gt; Jan-Niklas
+</I>&gt;<i> &gt; 
+</I>-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 490 bytes
+Desc: This is a digitally signed message part
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101107/a8eda019/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101107/a8eda019/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001623.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+	<LI>Next message: <A HREF="001625.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1624">[ date ]</a>
+              <a href="thread.html#1624">[ thread ]</a>
+              <a href="subject.html#1624">[ subject ]</a>
+              <a href="author.html#1624">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

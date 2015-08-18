@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using multiple CAN-channels
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20multiple%20CAN-channels&In-Reply-To=%3C4B22A899.5090705%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001217.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using multiple CAN-channels</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20multiple%20CAN-channels&In-Reply-To=%3C4B22A899.5090705%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Using multiple CAN-channels">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Dec 11 21:16:25 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001217.html">[Socketcan-users] Using multiple CAN-channels
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1218">[ date ]</a>
+              <a href="thread.html#1218">[ thread ]</a>
+              <a href="subject.html#1218">[ subject ]</a>
+              <a href="author.html#1218">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>ferrymax wrote:
+&gt;<i> First of all, thanks for the quick reply.
+</I>&gt;<i> 
+</I>&gt;<i> Now I'm sure that I'm missing something fundamental here :-)
+</I>&gt;<i> 
+</I>&gt;<i> The hardware-thing is, unfortunately, a little bit more complex.
+</I>&gt;<i> I have an EXTERNAL microprocessor with 5 CAN-interfaces. The idea is to
+</I>&gt;<i> provide these to the main CPU by means of sockets, so the usage is simple,
+</I>&gt;<i> transparent, and standardized for the user. The two CPUs communicate via
+</I>&gt;<i> SPI.
+</I>&gt;<i> So I need to write a module that handles transmit-requests (to a specific
+</I>&gt;<i> CAN-device using the respective socket, or ifindex as you mentioned), and
+</I>&gt;<i> sends some SPI message to the external CPU, which in turn controls the real
+</I>&gt;<i> CAN-hardware. The same applies for receiving messages, clearly the other way
+</I>&gt;<i> around.
+</I>
+The point is, that you need to establish some communication protocol between
+your host CPU and the external processor to control the five CAN controllers
+from the (Linux powered) host CPU.
+
+Your (new) CAN netdevice driver needs to create as much canX instances as you
+have on your communication CPU (in your case five instances).
+
+If you look into the PCI CAN drivers you can see how a multiple channel CAN
+driver creates multiple instances of CAN netdevices to have a 1:1 canX &lt;-&gt; CAN
+controller connection.
+
+In the end you'll have five CAN netdevice interfaces (e.g. can0 .. can4) on
+your Linux box that represent the five CAN controllers on your external
+communication processor.
+
+Once you created a &quot;standard CAN netdevice&quot; you can use it with PF_CAN sockets
+(aka SocketCAN). In your case you need to create five of them :-)
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001217.html">[Socketcan-users] Using multiple CAN-channels
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1218">[ date ]</a>
+              <a href="thread.html#1218">[ thread ]</a>
+              <a href="subject.html#1218">[ subject ]</a>
+              <a href="author.html#1218">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

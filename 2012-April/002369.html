@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detect Up/Down State of  CAN-Bus in C-program
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detect%20Up/Down%20State%20of%20%20CAN-Bus%20in%20C-program&In-Reply-To=%3Cloom.20120416T105841-857%40post.gmane.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002368.html">
+   <LINK REL="Next"  HREF="002370.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detect Up/Down State of  CAN-Bus in C-program</H1>
+    <B>Chris</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detect%20Up/Down%20State%20of%20%20CAN-Bus%20in%20C-program&In-Reply-To=%3Cloom.20120416T105841-857%40post.gmane.org%3E"
+       TITLE="[Socketcan-users] Detect Up/Down State of  CAN-Bus in C-program">fixed-term.Christian.Schlasza at de.bosch.com
+       </A><BR>
+    <I>Mon Apr 16 11:07:49 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002368.html">[Socketcan-users] CPU load inhibits CAN interrupts
+</A></li>
+        <LI>Next message: <A HREF="002370.html">[Socketcan-users] Detect Up/Down State of CAN-Bus in C-program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2369">[ date ]</a>
+              <a href="thread.html#2369">[ thread ]</a>
+              <a href="subject.html#2369">[ subject ]</a>
+              <a href="author.html#2369">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello, I&#8217;m a new user of SocketCAN and I&#8217;m working on an embedded system with
+built-in CAN-controller. I have to realize a system which has to act as a
+communication interface between two busses, analyze/filter values coded into
+these messages and respond with calculated values.
+
+My first Test-C-Programs for RAW and BCM Sockets work fine, so my hardware is
+supported by SocketCAN.
+
+My problem:
+I always power up the bus manually using ifconfig.
+Now I&#8217;m wondering how I could detect in my program if the bus is already powered
+up or if not.  
+When I use socket() bind()/connect() everything seems to work well also if the
+bus is shut down. Normally I would expect to get an error (-1) calling these
+functions. The error comes later when I try to use sendto(), recvfrom()&#8230;
+
+Is this the normal behavior of SocketCAN and is there a possibility to easily
+(and securely!) detect a shut down bus?
+
+If possible I would also like to power up/down the bus and set its bitrate
+directly in my C-program. Surely I could do it with a system call. But maybe
+this functionality is already built in the SocketCAN library and accessible in C?
+
+Thank you for your ideas/proposals! 
+
+
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002368.html">[Socketcan-users] CPU load inhibits CAN interrupts
+</A></li>
+	<LI>Next message: <A HREF="002370.html">[Socketcan-users] Detect Up/Down State of CAN-Bus in C-program
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2369">[ date ]</a>
+              <a href="thread.html#2369">[ thread ]</a>
+              <a href="subject.html#2369">[ subject ]</a>
+              <a href="author.html#2369">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

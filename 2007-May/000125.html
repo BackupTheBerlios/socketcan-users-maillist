@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C20070524070918.GN12319%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000127.html">
+   <LINK REL="Next"  HREF="000128.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can driver</H1>
+    <B>Robert Schwebel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C20070524070918.GN12319%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] socketcan c_can driver">r.schwebel at pengutronix.de
+       </A><BR>
+    <I>Thu May 24 09:09:18 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000127.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+        <LI>Next message: <A HREF="000128.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#125">[ date ]</a>
+              <a href="thread.html#125">[ thread ]</a>
+              <a href="subject.html#125">[ subject ]</a>
+              <a href="author.html#125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Simon,
+
+On Wed, May 23, 2007 at 11:20:28AM +0200, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">simon.kallweit at intefo.ch</A> wrote:
+&gt;<i> I have now ported the c_can driver to the socketcan trunk. So far it 
+</I>&gt;<i> compiles and sort of works.
+</I>
+Great!
+
+&gt;<i> * The hynix h7202 hardware design really is braindamaged. Robert, did
+</I>&gt;<i> the driver really work back when it was written?
+</I>
+Yea, although I think it was back in the 2.6.11 era and without
+preemption, so that would explain the effects you are seeing.
+
+&gt;<i> So what I did as a temporary hack is putting the CAN register
+</I>&gt;<i> read/write methods into the big kernel lock so no other peripheral can
+</I>&gt;<i> read/write to the AMBA bus. This seems to work, but of course is a
+</I>&gt;<i> very very poor solution. Btw. is it allowed to take the kernel lock
+</I>&gt;<i> inside an ISR? Any ideas how to implement a finer grained locking
+</I>&gt;<i> mechanisms for all AMBA peripherals without completely hacking up the
+</I>&gt;<i> kernel?
+</I>
+Well, I'm not sure if it is worth the efford to hack up the whole
+kernel, just to make such a braindamaged piece of hardware work. If
+socketcan was maintained as a patch stack, I'd vote for marking the
+h720x driver patch as &quot;not for upstream&quot; and just let the people who
+really need it patch it into their BSPs.
+
+&gt;<i> * There is a candev module in the socketcan trunk. I adapted the driver 
+</I>&gt;<i> to use the candev module. Is this the right thing to do? Also I've seen 
+</I>&gt;<i> that the candev driver is not tagged with a mod license, so it 'taints' 
+</I>&gt;<i> the kernel when loading.
+</I>
+I suppose from our side GPL is ok - Sascha, could you add your
+Signed-off?
+
+&gt;<i> * I have changed the driver (h7202 part) to be a platform_driver as
+</I>&gt;<i> the CAN is directly on the hynix chip. I hope this is the correct way
+</I>&gt;<i> to do it?
+</I>
+Yes.
+
+&gt;<i> * Currently to load the h7202can driver as a module I have to load
+</I>&gt;<i> candev, c_can and h7202can modules. I just wondered if this isn't a
+</I>&gt;<i> bit too modular. What you think?
+</I>
+No, looks good. The ccan core is also on other chips, so we want to have
+only one generic driver which is independend of the underlying SoC.
+
+Robert
+-- 
+ Dipl.-Ing. Robert Schwebel | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+ Pengutronix - Linux Solutions for Science and Industry
+   Handelsregister:  Amtsgericht Hildesheim, HRA 2686
+     Hannoversche Str. 2, 31134 Hildesheim, Germany
+   Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000127.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+	<LI>Next message: <A HREF="000128.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#125">[ date ]</a>
+              <a href="thread.html#125">[ thread ]</a>
+              <a href="subject.html#125">[ subject ]</a>
+              <a href="author.html#125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

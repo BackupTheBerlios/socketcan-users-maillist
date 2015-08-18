@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTi%3DdGizvPextnzrgvHEEaxhfW1snzzR8mMO8Osoe%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001663.html">
+   <LINK REL="Next"  HREF="001665.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTi%3DdGizvPextnzrgvHEEaxhfW1snzzR8mMO8Osoe%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Nov 29 23:00:21 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001663.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001665.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1664">[ date ]</a>
+              <a href="thread.html#1664">[ thread ]</a>
+              <a href="subject.html#1664">[ subject ]</a>
+              <a href="author.html#1664">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I found in the code that the driver supports another option than the one tha
+was suggested by Ixxat to me for module loading :
+type=04ISA instead of old use of type=03ISA, I don't really know if it
+change something else than printed messages but you have to know I changed
+this (and waiting for an Ixxat confirmation of this).
+
+Here is the piece of code doing ioremap (hope I won't broke a license, it's
+quite minimal) :
+
+&gt;<i>     Dev-&gt;DPRAM.VirtAddr =
+</I>&gt;<i>       (unsigned long) ioremap (Dev-&gt;DPRAM.PhysAddr, Dev-&gt;DPRAM.Size);
+</I>&gt;<i>
+</I>&gt;<i>     PRINTD (&quot;DPRAM requested at 0x%lx size %d and remapped to 0x%lx\n&quot;,
+</I>&gt;<i>             Dev-&gt;DPRAM.PhysAddr, Dev-&gt;DPRAM.Size, Dev-&gt;DPRAM.VirtAddr);
+</I>&gt;<i>
+</I>
+I activated Debug messages in dmesg so I have :
+[ 2871.507705] KDEB: DPRAM requested at 0xd0000 size 4096 and remapped to
+0xc00d0000
+
+[ 2871.480450] can: controller area network core (rev 20090105 abi 8)
+[ 2871.480525] NET: Registered protocol family 29
+[ 2871.487568] can: raw protocol (rev 20090105)
+[ 2871.496096] can: broadcast manager protocol (rev 20090105 t)
+[ 2871.502655] sja1000 CAN netdevice driver
+[ 2871.507657] KINF: CAN PC-I driver v4.1b for BCI v4.5.8 Compiled Nov 29
+2010 at 22:46:27
+[ 2871.507690] KDEB: Device : type [04ISA], addr 0xd000
+[ 2871.507696] KDEB: Device name is [PCI-I04 ISA Passive PC/CAN Interface]
+[ 2871.507705] KDEB: DPRAM requested at 0xd0000 size 4096 and remapped to
+0xc00d0000
+[ 2871.507795] KDEB: Port 0 found. Ptr 0xc00d0000 with ret 0
+[ 2871.507799] KDEB: Release port 0
+[ 2871.507887] KDEB: Port 1 found. Ptr 0xc00d0200 with ret 0
+[ 2871.507891] KDEB: Release port 1
+[ 2871.507899] KINF: Device registered successfully for 2 ports. Major [250]
+[ 2871.507905] KDEB: Allocate
+[ 2871.508131] KDEB: Free
+[ 2871.508164] KINF: IRQ number [5] registered
+[ 2871.508170] KDEB: Allocate
+[ 2871.508370] KDEB: Free
+[ 2871.508381] KINF: IRQ will be not registered for port 1
+
+
+
+2010/11/29 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 11/29/2010 10:00 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt; My docs says :
+</I>&gt;<i> &gt; _ basis adress (0xD0000 for me) + 0x0000 to 0x00FF : CAN-Controller 1
+</I>&gt;<i> &gt; _ basis adress + 0x0100 to 0x01FF : Reset CAN1
+</I>&gt;<i> &gt; _ basis adress + 0x0200 to 0x02FF : CAN-Controller 2
+</I>&gt;<i> &gt; _ basis adress + 0x0300 to 0x03FF : Reset CAN2
+</I>&gt;<i> &gt; So I there is still a stange difference between one controller range and
+</I>&gt;<i> the
+</I>&gt;<i> &gt; 0x20 byte register of SJA1000. Maybe the only problem interfacing my
+</I>&gt;<i> board
+</I>&gt;<i> &gt; with socket can is here...
+</I>&gt;<i>
+</I>&gt;<i> Well, it just says that the Reset-Region starts at offset 0x200. Does
+</I>&gt;<i> the IXXAT driver touch that region? If yes, where? And how are the
+</I>&gt;<i> registers accessed?
+</I>&gt;<i>
+</I>&gt;<i> &gt; They told me explicitly to use only one IRQ for both controllers :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; me  &gt; I can't write irq=5,7 as stated in the docs
+</I>&gt;<i> &gt;&gt; ixxat &gt; Please use the same IRQ for both CAN controllers.
+</I>&gt;<i>
+</I>&gt;<i> OK, then irq=5,5 should just work fine.
+</I>&gt;<i>
+</I>&gt;<i> &gt; But anyway, at the moment making just one working is enougth. I will
+</I>&gt;<i> setup
+</I>&gt;<i> &gt; the second one when I'll have something working.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'll do my best to instrument this code and give you the result
+</I>&gt;<i>
+</I>&gt;<i> Good luck.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101129/8c65a86e/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101129/8c65a86e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001663.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001665.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1664">[ date ]</a>
+              <a href="thread.html#1664">[ thread ]</a>
+              <a href="subject.html#1664">[ subject ]</a>
+              <a href="author.html#1664">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

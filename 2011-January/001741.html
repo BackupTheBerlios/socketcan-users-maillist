@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] write: No buffer space available
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20write%3A%20No%20buffer%20space%20available&In-Reply-To=%3C30729007.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001768.html">
+   <LINK REL="Next"  HREF="001746.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] write: No buffer space available</H1>
+    <B>uprinz</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20write%3A%20No%20buffer%20space%20available&In-Reply-To=%3C30729007.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users] write: No buffer space available">uprinz2 at netscape.net
+       </A><BR>
+    <I>Fri Jan 21 15:22:33 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001768.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="001746.html">[Socketcan-users] No can0 interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1741">[ date ]</a>
+              <a href="thread.html#1741">[ thread ]</a>
+              <a href="subject.html#1741">[ subject ]</a>
+              <a href="author.html#1741">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Michael Stocks wrote:
+&gt;<i> 
+</I>&gt;&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I've found that after one or more sends (which don't get to the bus) an
+</I>&gt;<i> 'ifconfig can0 down' will flush the first unsent message onto the bus, all
+</I>&gt;<i> other unsent messages are lost.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> Using the same hardware with my previous image, kernel 2.6.30 using out
+</I>&gt;&gt;&gt;<i> of kernel (svn) socketcan everything works.
+</I>&gt;&gt;&gt;<i> Using vcan instead of real hardware everything thing works OK.
+</I>&gt;<i> 
+</I>&gt;<i> I'll try the SVN driver to see if I get different behaviour.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> I did a trawl of the net before posting and found a similar thread in
+</I>&gt;&gt;&gt;<i> the socketcan-core forum but there was no conclusion.
+</I>&gt;<i> 
+</I>&gt;<i> I'll see if I can find the patch and give that a go as well.
+</I>&gt;<i> I need to solve this problem so any other hints or ideas would be welcome.
+</I>&gt;<i> 
+</I>&gt;<i> Cheers Mike.
+</I>&gt;<i> 
+</I>
+Hi Mike!
+
+Did you succeed? 
+I have same problem here with a system based on i.MX. But I have two
+applications running on the same system using the same bus but different
+NodeIDs. The first packets can be exchanged without any problem, then I only
+see 'No buffer space available'. The rest of the story is exactly like
+yours.
+
+(Unfortunately I just stepped into CAN and may be I need a helping hand in
+patching and recompiling it. Still crawling the docs...)
+
+Ulrich
+
+
+-----
+Best regards
+Ulrich
+-- 
+View this message in context: <A HREF="http://old.nabble.com/write%3A-No-buffer-space-available-tp29329439p30729007.html">http://old.nabble.com/write%3A-No-buffer-space-available-tp29329439p30729007.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001768.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="001746.html">[Socketcan-users] No can0 interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1741">[ date ]</a>
+              <a href="thread.html#1741">[ thread ]</a>
+              <a href="subject.html#1741">[ subject ]</a>
+              <a href="author.html#1741">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

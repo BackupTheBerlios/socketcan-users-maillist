@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%20Channel%20CAN%20PC104%20Module.&In-Reply-To=%3C4A38B327.7000009%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000947.html">
+   <LINK REL="Next"  HREF="000946.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%20Dual%0A%20Channel%20CAN%20PC104%20Module.&In-Reply-To=%3C4A38B327.7000009%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Jun 17 11:11:03 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000947.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+        <LI>Next message: <A HREF="000946.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#949">[ date ]</a>
+              <a href="thread.html#949">[ thread ]</a>
+              <a href="subject.html#949">[ subject ]</a>
+              <a href="author.html#949">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> /* read from controller register */
+</I>&gt;&gt;<i> u8 hw_readreg(unsigned long base, int reg) {
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 	outb(reg, base);	/* address */
+</I>&gt;&gt;<i> 	return inb(base + 1);	/* data */
+</I>&gt;&gt;<i> }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> /* write to controller register */
+</I>&gt;&gt;<i> void hw_writereg(unsigned long base, int reg, u8 val) {
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 	outb(reg, base);	/* address */
+</I>&gt;&gt;<i> 	outb(val, base + 1);	/* data */
+</I>&gt;&gt;<i> }
+</I>&gt;<i> 
+</I>&gt;<i> I think we should add callback functions for this general and simple case
+</I>&gt;<i> to sja1000_isa as well, which can be selected by:
+</I>&gt;<i> 
+</I>&gt;<i>  insmod sja1000_isa.ko ... indirect=1  (or mux=1)
+</I>
+Good idea!
+
+  indirect=1,1,0
+
+is fine - should be implemented like clock/odr/cdr then.
+
+
+&gt;<i> 
+</I>&gt;<i> Or do we need a more general approach allowing selection of the address
+</I>&gt;<i> and data port, e.g.:
+</I>&gt;<i> 
+</I>&gt;<i>  insmod sja1000_isa_indirect.ko addrport=0x300,0x304 dataport=0x301,0x305 irq=3,5 
+</I>
+Ugh. It's open source. So if somebody needs this, he could modify it for this
+kind of crude hardware :-)
+
+&gt;<i> 
+</I>&gt;<i> For the time being, I tend to just implement the first option.
+</I>
+Definitely.
+
+
+Regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000947.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+	<LI>Next message: <A HREF="000946.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#949">[ date ]</a>
+              <a href="thread.html#949">[ thread ]</a>
+              <a href="subject.html#949">[ subject ]</a>
+              <a href="author.html#949">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ifconfig can0 up fails using ems_pci
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ifconfig%20can0%20up%20fails%20using%20ems_pci&In-Reply-To=%3C498C08C7.70002%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000656.html">
+   <LINK REL="Next"  HREF="000658.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ifconfig can0 up fails using ems_pci</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ifconfig%20can0%20up%20fails%20using%20ems_pci&In-Reply-To=%3C498C08C7.70002%40grandegger.com%3E"
+       TITLE="[Socketcan-users] ifconfig can0 up fails using ems_pci">wg at grandegger.com
+       </A><BR>
+    <I>Fri Feb  6 10:54:15 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000656.html">[Socketcan-users] ifconfig can0 up fails using ems_pci
+</A></li>
+        <LI>Next message: <A HREF="000658.html">[Socketcan-users] ifconfig can0 up fails using ems_pci
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#657">[ date ]</a>
+              <a href="thread.html#657">[ thread ]</a>
+              <a href="subject.html#657">[ subject ]</a>
+              <a href="author.html#657">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> this issue is caused by the introduction of the Kconfig entry of 
+</I>&gt;<i> CONFIG_CAN_CALC_BITTIMING in rev 920.
+</I>
+I may have broken somehting :-(.
+
+&gt;<i> Is there any chance to create some Makefile Define to have 
+</I>&gt;<i> CONFIG_CAN_CALC_BITTIMING set by default, when compiling the SocketCAN 
+</I>&gt;<i> trunk?
+</I>
+It's enable by the default in the Kconfig file. Hm, is that not
+sufficient? If not please feel free to add some defines in the top level
+Makefile.
+
+Wolfgang.
+
+&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> Andr&#233; Lochotzke wrote:
+</I>&gt;&gt;<i> When I do a ifconfig can0 up using rev 929 from the svn repo I get 
+</I>&gt;&gt;<i> &quot;SIOCSIFFLAGS: Das Argument ist ung&#252;ltig&quot;. I did echo 1000000 &gt; 
+</I>&gt;&gt;<i> /sys/class/net/can0/can_bittiming/bitrate  before usign ifconfig. It 
+</I>&gt;&gt;<i> used to work.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What am I doing wrong?
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000656.html">[Socketcan-users] ifconfig can0 up fails using ems_pci
+</A></li>
+	<LI>Next message: <A HREF="000658.html">[Socketcan-users] ifconfig can0 up fails using ems_pci
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#657">[ date ]</a>
+              <a href="thread.html#657">[ thread ]</a>
+              <a href="subject.html#657">[ subject ]</a>
+              <a href="author.html#657">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

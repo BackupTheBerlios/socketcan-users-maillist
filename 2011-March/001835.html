@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Setting the clock, ocr and cdr values
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20the%20clock%2C%20ocr%20and%20cdr%20values&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D45E90B35%40NTMBOX.central.cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001834.html">
+   <LINK REL="Next"  HREF="001836.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Setting the clock, ocr and cdr values</H1>
+    <B>Jorge Fernandez Monteagudo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20the%20clock%2C%20ocr%20and%20cdr%20values&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D45E90B35%40NTMBOX.central.cirsa.com%3E"
+       TITLE="[Socketcan-users] Setting the clock, ocr and cdr values">jorgefm at cirsa.com
+       </A><BR>
+    <I>Mon Mar 14 17:02:05 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001834.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+        <LI>Next message: <A HREF="001836.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1835">[ date ]</a>
+              <a href="thread.html#1835">[ thread ]</a>
+              <a href="subject.html#1835">[ subject ]</a>
+              <a href="author.html#1835">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+&gt;<i> -----Mensaje original-----
+</I>&gt;<i> De: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;<i> Enviado el: Monday, March 14, 2011 3:25 PM
+</I>&gt;<i> Para: Jorge Fernandez Monteagudo
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Asunto: Re: [Socketcan-users] Setting the clock, ocr and cdr values
+</I>&gt;<i>
+</I>&gt;<i> On 03/14/2011 03:06 PM, Jorge Fernandez Monteagudo wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; -----Mensaje original-----
+</I>&gt;<i> &gt;&gt; De: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;<i> &gt;&gt; Enviado el: Monday, March 14, 2011 2:51 PM
+</I>&gt;<i> &gt;&gt; Para: Jorge Fernandez Monteagudo
+</I>&gt;<i> &gt;&gt; CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt; Asunto: Re: [Socketcan-users] Setting the clock, ocr and cdr values
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; On 03/14/2011 02:37 PM, Jorge Fernandez Monteagudo wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt; -----Mensaje original-----
+</I>&gt;<i> &gt;&gt;&gt;&gt; De: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;<i> &gt;&gt;&gt;&gt; Enviado el: Monday, March 14, 2011 1:06 PM
+</I>&gt;<i> &gt;&gt;&gt;&gt; Para: Jorge Fernandez Monteagudo
+</I>&gt;<i> &gt;&gt;&gt;&gt; CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; Asunto: Re: [Socketcan-users] Setting the clock, ocr and cdr
+</I>&gt;<i> values
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; On 03/14/2011 11:42 AM, Jorge Fernandez Monteagudo wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Hi,
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; I'm trying to implement my can infrastructure with socketcan. I
+</I>&gt;<i> &gt;&gt; would
+</I>&gt;<i> &gt;&gt;&gt;&gt; like to know where to find
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; information about the values from sja1000_priv struct, the
+</I>&gt;<i> &gt;&gt;&gt;&gt; can.clock.freq, ocr and cdr.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; Not sure what you are looking for. The meaning of theses values is
+</I>&gt;<i> &gt;&gt;&gt;&gt; described in the SJA1000 datasheet.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Well, I'm trying to setup the sja1000 chip using the socketcan
+</I>&gt;<i> &gt;&gt; architecture.
+</I>&gt;<i> &gt;&gt;&gt; In my old code I had the registers CDR, BTR0, BTR1, OCR, CMR and
+</I>&gt;<i> IER
+</I>&gt;<i> &gt;&gt;&gt; loaded with some values in order to set the pelican mode with 1Mbps
+</I>&gt;<i> &gt;&gt;&gt; and let the chip ready to serve interruptions. Now I'm trying to
+</I>&gt;<i> &gt;&gt; replicate
+</I>&gt;<i> &gt;&gt;&gt; this in a modified version of the plx_pci.c but I've seen that the
+</I>&gt;<i> &gt;&gt; only
+</I>&gt;<i> &gt;&gt;&gt; register used are from the sja1000_priv struct.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; You need to provide proper cdr, ocr and the CAN clock sources
+</I>&gt;<i> &gt;&gt; frequency.
+</I>&gt;<i> &gt;&gt; See also:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37.3/drivers/net/can/sja1000/sja1000.c#">http://lxr.linux.no/#linux+v2.6.37.3/drivers/net/can/sja1000/sja1000.c#</A>
+</I>&gt;<i> &gt;&gt; L242
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; The rest is handled by the SJA1000 driver.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Oh yes, I see where this sja1000_priv struct fields are used!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;From the 'static int sja1000_set_bittiming(struct net_device *dev)'
+</I>&gt;<i> method
+</I>&gt;<i> &gt; there is some way to set manually the btr0 and btr1 values? In my
+</I>&gt;<i> code I set
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; BTR0 &lt;- 0x01
+</I>&gt;<i> &gt; BTR1 &lt;- 0x10
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; to set the 1000 Kbs.
+</I>&gt;<i>
+</I>&gt;<i> You can use the methods described in
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37.3/Documentation/networking/can.txt#L">http://lxr.linux.no/#linux+v2.6.37.3/Documentation/networking/can.txt#L</A>
+</I>&gt;<i> 635
+</I>&gt;<i>
+</I>&gt;<i> to set the bit-timing parameters. You cannot set btr0/1 directly. Make
+</I>&gt;<i> sure you define a proper CAN clock source frequency. The BTR0/1 values
+</I>&gt;<i> above indicate that it's not 8 MHz.
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; I'm following the plx_pci.c code but in my driver I setup these
+</I>&gt;<i> &gt;&gt;&gt;&gt; register in a different way.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; First, I set the CDR &lt;- 0xC0, then I set the clock using the BTR0
+</I>&gt;<i> &gt;&gt; and
+</I>&gt;<i> &gt;&gt;&gt;&gt; BTR1 registers to set the 1Mbps
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; baudrate, BTR0 &lt;- 0x01, BTR1 &lt;- 0x10 and finally the OCR register
+</I>&gt;<i> &gt;&gt; is
+</I>&gt;<i> &gt;&gt;&gt;&gt; initialized with OCR &lt;- 0x1A.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; The input clock frequency, cdr and ocr must be defined by the
+</I>&gt;<i> &gt;&gt; SJA1000
+</I>&gt;<i> &gt;&gt;&gt;&gt; driver, e.g.:
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37.3/drivers/net/can/sja1000/plx_pci.c#">http://lxr.linux.no/#linux+v2.6.37.3/drivers/net/can/sja1000/plx_pci.c#</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; L526
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; Some drivers allow to set these values via module parameter. So,
+</I>&gt;<i> &gt;&gt;&gt;&gt; depending on the driver appropriate for your CAN hardware, you
+</I>&gt;<i> need
+</I>&gt;<i> &gt;&gt; to
+</I>&gt;<i> &gt;&gt;&gt;&gt; adjust them. The bit-timing have to be defined via netlink
+</I>&gt;<i> interface
+</I>&gt;<i> &gt;&gt; as
+</I>&gt;<i> &gt;&gt;&gt;&gt; described here:
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37.3/Documentation/networking/can.txt#L">http://lxr.linux.no/#linux+v2.6.37.3/Documentation/networking/can.txt#L</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt; 635
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Thanks for the info, now I get an error in dmesg: &quot;bit-timing not
+</I>&gt;<i> yet
+</I>&gt;<i> &gt;&gt; defined&quot;
+</I>&gt;<i> &gt;&gt;&gt; then I suppose I'll need to follow this last link.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Yes, you need to set the bit-timing before you can start the device.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Where I can found the iproute2 utility suite? I have debian 5.0.7,
+</I>&gt;<i> but
+</I>&gt;<i> &gt; the command
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # ip link set can0 type can help
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; don't print any bitrate or tq option...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # ip -V
+</I>&gt;<i> &gt; ip utility, iproute2-ss080725
+</I>&gt;<i>
+</I>&gt;<i> You need a recent version of the IPROUTE2 utility suite, which you can
+</I>&gt;<i> get from:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.linuxfoundation.org/collaborate/workgroups/networking/iprout">http://www.linuxfoundation.org/collaborate/workgroups/networking/iprout</A>
+</I>&gt;<i> e2
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+Hi, I have something running...
+
+I've installed the last iproute2:
+
+# cd /opt/iproute2-2.6.37/ip
+# ./ip link set can0 type can bitrate 1000000
+# ifconfig can0 up
+can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          UP RUNNING NOARP  MTU:16  Metric:1
+          RX packets:8061 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:10
+          RX bytes:8061 (7.8 KiB)  TX bytes:0 (0.0 B)
+          Interrupt:21
+
+# dmesg
+...
+device 0000:01:03.0: setting BTR0=0x00 BTR1=0x14
+
+# cat /proc/net/can/stats
+
+        0 transmitted frames (TXF)
+     7410 received frames (RXF)
+        4 matched frames (RXMF)
+
+        0 % total match ratio (RXMR)
+        0 frames/s total tx rate (TXR)
+        0 frames/s total rx rate (RXR)
+
+        0 % current match ratio (CRXMR)
+        0 frames/s current tx rate (CTXR)
+        9 frames/s current rx rate (CRXR)
+
+       27 % max match ratio (MRXMR)
+        0 frames/s max tx rate (MTXR)
+       11 frames/s max rx rate (MRXR)
+
+        0 current receive list entries (CRCV)
+        1 maximum receive list entries (MRCV)
+
+# cd /opt/socketcan/can-utils
+# ./candump can0 0:0,#FFFFFFFF
+SIOCGIFINDEX: No such device
+
+The can0 device is up and receiving frames? but I can read them.
+Maybe the /dev/can0 is not set properly, because I'm using the
+old one:
+
+# ls -al /dev/can0
+crw-rw-rw- 1 root root 91, 0 2011-03-11 14_39 /dev/can0
+
+Regards,
+Jorge
+
+Este mensaje se dirige exclusivamente a su destinatario y puede contener informaci&#243;n privilegiada o CONFIDENCIAL. Si no es vd. el destinatario indicado, queda notificado de que la utilizaci&#243;n, divulgaci&#243;n y/o copia sin autorizaci&#243;n est&#225; prohibida en virtud de la legislaci&#243;n vigente. Si ha recibido este mensaje por error, le rogamos que nos lo comunique inmediatamente por esta misma v&#237;a y proceda a su destrucci&#243;n.
+
+This message is intended exclusively for its addressee and may contain information that is CONFIDENTIAL and protected by professional privilege.
+If you are not the intended recipient you are hereby notified that any dissemination, copy or disclosure of this communication is strictly prohibited by law. If this message has been received in error, please immediately notify us via e-mail and delete it.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001834.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+	<LI>Next message: <A HREF="001836.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1835">[ date ]</a>
+              <a href="thread.html#1835">[ thread ]</a>
+              <a href="subject.html#1835">[ subject ]</a>
+              <a href="author.html#1835">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

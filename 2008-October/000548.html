@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Little OT and newbie: How to wait	for	received CAN messages?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%0A%09for%09received%20CAN%20messages%3F&In-Reply-To=%3C20081030124614.GA2651%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000547.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Little OT and newbie: How to wait	for	received CAN messages?</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%0A%09for%09received%20CAN%20messages%3F&In-Reply-To=%3C20081030124614.GA2651%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] Little OT and newbie: How to wait	for	received CAN messages?">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Thu Oct 30 13:46:14 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000547.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#548">[ date ]</a>
+              <a href="thread.html#548">[ thread ]</a>
+              <a href="subject.html#548">[ subject ]</a>
+              <a href="author.html#548">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Oct 30, 2008 at 12:10:03PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Christopher Lapointe wrote:
+</I>&gt;<i> &gt; Hello list,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I am a new user of socketcan under Linux/386 with 2.6.24 kernel. I am in
+</I>&gt;<i> &gt; the process of writing a multi-threaded application that uses CAN and
+</I>&gt;<i> &gt; wanted to ask the list what people use to check efficiently for new
+</I>&gt;<i> &gt; received CAN messages. Is only polling supported? Ideally I am looking
+</I>&gt;<i> &gt; for a way to &quot;peek&quot; for new incoming frames without reading them such as
+</I>&gt;<i> &gt; by using a Linux signal with socketcan.
+</I>this more or less is my basic (in many flavors).
+
+         struct pollfd pollfd = {
+            .fd = can_fd,
+            .events = POLLIN,
+         };
+         ret = poll(&amp;pollfd, 1, -1);
+         if (ret &lt; 0)
+            error();
+         else if (pollfd.revents &amp; POLLIN) {
+            // something's ready
+         }
+
+man poll :-)
+btw, with poll, select &amp; epoll working well, I rarely find reason to
+spawn threads.
+To guarantee timing, one should do this on outgoing (write) too.
+&gt;<i> 
+</I>&gt;<i> You can receive CAN messages from a socket as usual with recv() and
+</I>&gt;<i> alike functions. By default the function will block but the MSG_DONTWAIT
+</I>&gt;<i> is support as well. Read &quot;man recv&quot; for further information. It seems
+</I>&gt;<i> that MSG_PEEK is not supported but it would be a nice to have. Oliver,
+</I>&gt;<i> what do you think.
+</I>&gt;<i> Also select/poll is supported to get informed about messages arrived.
+</I>&gt;<i> Maybe the latter is what you are looking for.
+</I>Most prorams that run forever are built around one of these.
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000547.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#548">[ date ]</a>
+              <a href="thread.html#548">[ thread ]</a>
+              <a href="subject.html#548">[ subject ]</a>
+              <a href="author.html#548">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

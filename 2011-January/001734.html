@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%0A%09PC-I%0904/104&In-Reply-To=%3C4D309B69.8040202%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001733.html">
+   <LINK REL="Next"  HREF="001753.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%0A%09PC-I%0904/104&In-Reply-To=%3C4D309B69.8040202%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104">wg at grandegger.com
+       </A><BR>
+    <I>Fri Jan 14 19:52:25 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001733.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+        <LI>Next message: <A HREF="001753.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1734">[ date ]</a>
+              <a href="thread.html#1734">[ thread ]</a>
+              <a href="subject.html#1734">[ subject ]</a>
+              <a href="author.html#1734">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 01/14/2011 05:56 PM, Willy Lambert wrote:
+&gt;&gt;<i>
+</I>&gt;&gt;<i> So it seems to communicating :)
+</I>
+Congrats!
+
+&gt;<i> During a &quot;stress test&quot; I have 2 controller error messages :
+</I>&gt;<i> 
+</I>&gt;<i>  39 &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L39">http://lxr.linux.no/linux+*/include/linux/can/error.h#L39</A>&gt;#define
+</I>&gt;<i> CAN_ERR_CRTL_TX_WARNING
+</I>&gt;<i> &lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_WARNING">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_WARNING</A>&gt;  0x08 /*
+</I>&gt;<i> reached warning level for TX errors */
+</I>&gt;<i> &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L40">http://lxr.linux.no/linux+*/include/linux/can/error.h#L40</A>&gt;
+</I>&gt;<i> &lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_RX_PASSIVE">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_RX_PASSIVE</A>&gt;
+</I>&gt;<i>  41 &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L41">http://lxr.linux.no/linux+*/include/linux/can/error.h#L41</A>&gt;#define
+</I>&gt;<i> CAN_ERR_CRTL_TX_PASSIVE
+</I>&gt;<i> &lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_PASSIVE">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_PASSIVE</A>&gt;  0x20 /*
+</I>&gt;<i> reached error passive status TX */
+</I>
+...
+
+&gt;<i> candump view :
+</I>&gt;<i> 
+</I>&gt;<i>   can0    0  [2] 81 00
+</I>&gt;&gt;<i>   can0  721  [1] 00
+</I>&gt;&gt;<i>   can0    0  [2] 01 00
+</I>&gt;&gt;<i>   can0  1A1  [2] 60 00
+</I>&gt;&gt;<i>   can0  721  [0] remote request
+</I>&gt;&gt;<i>   can0  321  [5] FD FF FF FF FF
+</I>&gt;&gt;<i>   can0  721  [1] 05
+</I>&gt;&gt;<i>   can0  321  [5] 0F 00 00 00 00
+</I>&gt;&gt;<i>   can0  721  [0] remote request
+</I>&gt;&gt;<i>   can0  1A1  [2] 27 00
+</I>&gt;&gt;<i>   can0  721  [1] 85
+</I>&gt;&gt;<i>   can0  321  [5] 93 FF 04 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 00 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 01 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 02 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 03 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 04 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 05 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 06 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 07 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 08 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 09 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 10 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 11 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 12 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 13 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 14 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 15 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 16 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 17 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 18 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 19 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 20 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 19 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 18 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 17 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 16 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 15 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 14 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 13 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 12 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 11 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 10 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 09 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 08 00 00
+</I>&gt;&gt;<i>   can0  20000004  [8] 00 08 00 00 00 00 67 0C   ERRORFRAME
+</I>&gt;&gt;<i>   can0  20000004  [8] 00 20 00 00 00 00 87 0C   ERRORFRAME
+</I>&gt;&gt;<i>   can0  721  [1] 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 07 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 06 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 05 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 04 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 03 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 02 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 01 00 00
+</I>&gt;&gt;<i>   can0  321  [5] 93 00 00 00 00
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> May this be due to wiring quality ?
+</I>
+Yes, or some mismatching bittiming. The bus errors are reported by the
+SAJ1000 chip and you can get more details information, if you use the
+&quot;ip&quot; argument &quot;berr-reporting on&quot;. Also &quot;ip -d -s link show can0&quot;
+reports the number of bus-errors.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001733.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+	<LI>Next message: <A HREF="001753.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1734">[ date ]</a>
+              <a href="thread.html#1734">[ thread ]</a>
+              <a href="subject.html#1734">[ subject ]</a>
+              <a href="author.html#1734">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

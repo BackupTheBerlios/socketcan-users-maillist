@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%20for%0A%20received%20CAN%20messages%3F&In-Reply-To=%3C4910145F.9030508%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000552.html">
+   <LINK REL="Next"  HREF="000554.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%20for%0A%20received%20CAN%20messages%3F&In-Reply-To=%3C4910145F.9030508%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Tue Nov  4 10:22:39 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000552.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+        <LI>Next message: <A HREF="000554.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#553">[ date ]</a>
+              <a href="thread.html#553">[ thread ]</a>
+              <a href="subject.html#553">[ subject ]</a>
+              <a href="author.html#553">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> AFAICS MSG_PEEK is already working in the current mainline implementation!
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Ah, I see:
+</I>&gt;<i>
+</I>&gt;<i>   <A HREF="http://lxr.linux.no/linux+v2.6.27.4/net/can/raw.c#L679">http://lxr.linux.no/linux+v2.6.27.4/net/can/raw.c#L679</A>
+</I>&gt;<i>
+</I>&gt;<i> raw_recvmsg() calls skb_recv_datagram() which handles MSG_PEEK already.
+</I>&gt;<i>
+</I>&gt;<i> Thinking futher, should we not add a proper check of the supported flags
+</I>&gt;<i> like:
+</I>&gt;<i>
+</I>&gt;<i>   <A HREF="http://lxr.linux.no/linux+v2.6.27.4/net/packet/af_packet.c#L1107">http://lxr.linux.no/linux+v2.6.27.4/net/packet/af_packet.c#L1107</A>
+</I>&gt;<i>   
+</I>
+Yes. I also noticed the supported flags check in af_packet.c ...
+
+I'll take a look on that.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000552.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+	<LI>Next message: <A HREF="000554.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#553">[ date ]</a>
+              <a href="thread.html#553">[ thread ]</a>
+              <a href="subject.html#553">[ subject ]</a>
+              <a href="author.html#553">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

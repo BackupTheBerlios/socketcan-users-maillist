@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] getting the fill level of rx and tx fifos
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20getting%20the%20fill%20level%20of%20rx%20and%20tx%20fifos&In-Reply-To=%3C4ED4ED30.4010904%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002279.html">
+   <LINK REL="Next"  HREF="002281.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] getting the fill level of rx and tx fifos</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20getting%20the%20fill%20level%20of%20rx%20and%20tx%20fifos&In-Reply-To=%3C4ED4ED30.4010904%40grandegger.com%3E"
+       TITLE="[Socketcan-users] getting the fill level of rx and tx fifos">wg at grandegger.com
+       </A><BR>
+    <I>Tue Nov 29 15:33:20 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002279.html">[Socketcan-users] getting the fill level of rx and tx fifos
+</A></li>
+        <LI>Next message: <A HREF="002281.html">[Socketcan-users] getting the fill level of rx and tx fifos
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2280">[ date ]</a>
+              <a href="thread.html#2280">[ thread ]</a>
+              <a href="subject.html#2280">[ subject ]</a>
+              <a href="author.html#2280">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/29/2011 12:25 PM, Heinz-J&#252;rgen Oertel wrote:
+&gt;<i> Hello,
+</I>&gt;<i> reading can.txt and list emails I could not  manage to get this information.
+</I>&gt;<i> Can please someone explain if and how it is possible to get this information.
+</I>&gt;<i> I need to know how many frames are still in the net layer and not yet handled by the application.
+</I>&gt;<i> And as well importand, how many not yet sent CAN Frames are in the socket layer or the driver. 
+</I>
+CAN messages are queued as skb's in the socket's receive and send
+buffer. What counts is the *total* size of the skb, which requires more
+space than a CAN frame, of course. For CAN I do not know of any
+interface allowing to retreive the fill level. But other protocols seem
+to have something like that, e.g. AF_PACKET provides ioctl request:
+
+#define SIOCINQ  FIONREAD
+#define SIOCOUTQ TIOCOUTQ /* output queue size (not sent + not acked) */
+
+&gt;<i> Mit freundlichen Gr&#252;&#223;en / With best regards
+</I>&gt;<i> 
+</I>&gt;<i> Heinz 
+</I>&gt;<i> 
+</I>&gt;<i> PS:
+</I>&gt;<i> I saw in candump.c getsockopt(fd, SO_SOCKET, SO_RCVBUF, &amp;rcvbuf_size,....)
+</I>&gt;<i> Is used.
+</I>&gt;<i> But what does the result mean?
+</I>&gt;<i> I get large numbers here : 124928
+</I>
+It means that there is space for &quot;124928 / sizeof(skb)&quot; skb's ==
+messages. I will try to find out the overhead later today.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002279.html">[Socketcan-users] getting the fill level of rx and tx fifos
+</A></li>
+	<LI>Next message: <A HREF="002281.html">[Socketcan-users] getting the fill level of rx and tx fifos
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2280">[ date ]</a>
+              <a href="thread.html#2280">[ thread ]</a>
+              <a href="subject.html#2280">[ subject ]</a>
+              <a href="author.html#2280">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan on 2.6.13 kernel
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20on%202.6.13%20kernel&In-Reply-To=%3C4625E6BD.6040007%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan on 2.6.13 kernel</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20on%202.6.13%20kernel&In-Reply-To=%3C4625E6BD.6040007%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan on 2.6.13 kernel">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Wed Apr 18 11:37:01 CEST 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000113.html">[Socketcan-users] socketcan on 2.6.13 kernel
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hello
+
+i'm trying to get socketcan running on a 2.6.13 kernel. first, i had to 
+backport the kzalloc() and skb_get/set_timestamp() functions. i hope i 
+didn't make mistakes there. anyway, i can now load the can kernel 
+modules successfully. i don't yet have a driver for our hardware (a 
+bosch c_can module) so i could only load the vcan driver. the 4 vcan are 
+successfully created and can be seen with an ifconfig -a. however, as 
+soon as i try to candump on any of the devices, i get a segmentation 
+fault and the following kernel error:
+
+kernel BUG at include/linux/module.h:357!
+Unable to handle kernel NULL pointer dereference at virtual address 00000000
+pgd = c18a4000
+[00000000] *pgd=4187d031, *pte=00000000, *ppte=00000000
+Internal error: Oops: 1a000817 [#2]
+Modules linked in: vcan can_raw can icc tacho spi rtc pwm power onewire 
+keyb gpo gpio adc lcd
+CPU: 0
+PC is at __bug+0x40/0x54
+LR is at 0x1
+pc : [&lt;c0020ed4&gt;]    lr : [&lt;00000001&gt;]    Tainted: P
+sp : c1dede9c  ip : 60000093  fp : c1dedeac
+r10: c02298d4  r9 : 00000001  r8 : 00000000
+r7 : 0000001d  r6 : 00000001  r5 : bf02db40  r4 : 00000000
+r3 : 00000000  r2 : 00000000  r1 : c1dec000  r0 : 00000001
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  Segment user
+Control: 217F  Table: 418A4015  DAC: 00000015
+Process candump (pid: 213, stack limit = 0xc1dec194)
+Stack: (0xc1dede9c to 0xc1dee000)
+de80:                                                                
+c1fd0200
+dea0: c1dedecc c1dedeb0 c0146094 c0020ea4 00000001 00000001 c1866d00 
+bf02a2f4
+dec0: c1dedf10 c1deded0 bf024388 c0146004 c02298e4 c1dedefc c1dedee4 
+c008c1b4
+dee0: c008b70c 0000001d 00000003 00000000 0000001d 00000001 c1866d00 
+c02298e4
+df00: ffffff9f c1dedf40 c1dedf14 c01442b4 bf0242b0 c1dedf58 00000000 
+00000000
+df20: 00000000 00000066 c001b284 c1dec000 beb50de8 c1dedf54 c1dedf44 
+c014447c
+df40: c014414c 00000000 c1dedf6c c1dedf58 c01444b8 c0144470 0000000c 
+00000000
+df60: c1dedfa4 c1dedf70 c014520c c01444b0 c0022294 c0022164 0000001d 
+00000003
+df80: 00000001 00000000 00000000 00000002 00000000 beb50e34 00000000 
+c1dedfa8
+dfa0: c001b100 c0145144 00000000 c0022410 00000001 beb50bb4 00000001 
+00000002
+dfc0: 00000000 beb50e34 00000000 00000000 00000002 00000001 beb50de8 
+000129c0
+dfe0: 400ec9c0 beb50bb4 000092c0 400ec9d0 60000010 00000001 00000000 
+00000000
+Backtrace:
+[&lt;c0020e94&gt;] (__bug+0x0/0x54) from [&lt;c0146094&gt;] (sk_alloc+0xa0/0xf8)
+ r4 = C1FD0200
+[&lt;c0145ff4&gt;] (sk_alloc+0x0/0xf8) from [&lt;bf024388&gt;] 
+(can_create+0xe8/0x1bc [can])
+ r7 = BF02A2F4  r6 = C1866D00  r5 = 00000001  r4 = 00000001
+[&lt;bf0242a0&gt;] (can_create+0x0/0x1bc [can]) from [&lt;c01442b4&gt;] 
+(__sock_create+0x178/0x324)
+ r8 = FFFFFF9F  r7 = C02298E4  r6 = C1866D00  r5 = 00000001
+ r4 = 0000001D
+[&lt;c014413c&gt;] (__sock_create+0x0/0x324) from [&lt;c014447c&gt;] 
+(sock_create+0x1c/0x20)
+[&lt;c0144460&gt;] (sock_create+0x0/0x20) from [&lt;c01444b8&gt;] (sys_socket+0x18/0x44)
+[&lt;c01444a0&gt;] (sys_socket+0x0/0x44) from [&lt;c014520c&gt;] 
+(sys_socketcall+0xd8/0x1e4)
+ r4 = 00000000
+[&lt;c0145134&gt;] (sys_socketcall+0x0/0x1e4) from [&lt;c001b100&gt;] 
+(ret_fast_syscall+0x0/0x2c)
+ r5 = BEB50E34  r4 = 00000000
+Code: 1b003ecd e59f0014 eb003ecb e3a03000 (e5833000)
+
+
+do you have any idea where this could come from? also, how can i enable 
+debugging message from the can drivers? i would really like to get 
+socketcan running because it seems like the best bet also for the 
+future. is there anyone already working on a c_can driver?
+
+best regards,
+simon
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000113.html">[Socketcan-users] socketcan on 2.6.13 kernel
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

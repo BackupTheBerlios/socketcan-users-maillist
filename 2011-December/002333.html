@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EF22625.5000109%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002332.html">
+   <LINK REL="Next"  HREF="002334.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EF22625.5000109%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Wed Dec 21 19:32:05 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002332.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002334.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2333">[ date ]</a>
+              <a href="thread.html#2333">[ thread ]</a>
+              <a href="subject.html#2333">[ subject ]</a>
+              <a href="author.html#2333">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> On 12/12/2011 12:18 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 12/11/2011 07:33 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 12/07/2011 02:42 PM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> On 12/06/2011 10:08 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Let me know if You need more or some other tests.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> You could provoke some state changes or bus-off conditions to see
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> if the
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> berr-counter shows reasonable results. I'm currently consolidating and
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> unifying error state and bus-off handling. Would be nice if you
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> could do
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> some further tests when I have the patches ready...
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I just pushed the mentioned modifications to the &quot;devel&quot; branch of my
+</I>&gt;&gt;&gt;&gt;&gt;<i> &quot;wg-linux-can-next&quot; [1] repository. You can get it as shown below:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>      $ git clone --reference=&lt;some-recent-net-next-tree&gt;    \
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="git://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next.git">git://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next.git</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>      $ git checkout -b devel devel
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> [1] <A HREF="https://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next">https://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> OK, I was trying so far and You will find below the results.
+</I>&gt;&gt;&gt;&gt;<i> Just FYI the states on the PLC side couldn't be verified because the
+</I>&gt;&gt;&gt;&gt;<i> function
+</I>&gt;&gt;&gt;&gt;<i> provided by the manufacturer is not working at all and CAN analyser
+</I>&gt;&gt;&gt;&gt;<i> was not
+</I>&gt;&gt;&gt;&gt;<i> available.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> We are running CANopen and therefore the PLC will send automatically a
+</I>&gt;&gt;&gt;&gt;<i> heartbeat.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I produced the bus-off state through a short circuit between L/H
+</I>&gt;&gt;&gt;&gt;<i> which was
+</I>&gt;&gt;&gt;&gt;<i> working as expected.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> A bit odd was that on the second try I had to reload the module
+</I>&gt;&gt;&gt;&gt;<i> because a ip down/up was not enough.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Oops, not good.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But might be in connection with the strange behaviour of the PLC.
+</I>&gt;<i>
+</I>&gt;<i> It's a bug! netif_start_queue is missing at the end of the open
+</I>&gt;<i> function. Got lost some how. I have just updated (rebased!) my
+</I>&gt;<i> wg-linux-can-next repository.
+</I>
+Ok, I was checking out last week and since I'm running one test series
+after the other.
+
+There are several odd issues I could found and I'm trying to trace them
+down beside some other work.
+
+Even with an assumed correct configuration like I was using with the lincan
+driver I'm loosing telegrams so around 1 till 2 in 500000 but might be a
+different sample-point at the PLC which is opaque due the predefined setting.
+For the next test I'll set the BTR's directly.
+Further sometimes I can find one in dropped but mostly not.
+
+But more odd is that after an undefined time the transmission gets
+stuck followed by a buffer overrun but can receive.
+No error messages nor changes in ip -d -s link show can0.
+
+Additional it seems that neither the automatic restart nor
+the manual one works.
+
+ip link set can0 up type can restart gives me 'RTNETLINK answers: Invalid
+argument' and ip link set can0 up type can bitrate 500000 restart a
+RTNETLINK answers: Device or resource busy but nothing connected to can0.
+
+So I have to perform per example  ip link set can0 down;ip link set can0 up
+type can bitrate 500000 restart-ms 2000 sample-point 0.75
+but this is emptying the buffer and these telegrams are lost then as well.
+
+I was comparing with my lincan driver which was running so far ok also
+to confirm a proper working PLC.
+
+First I assumed that maybe the set_reset_mode procedure is responsible for
+that misbehaviour because according to the cc770 manual we should wait for
+a zero of bit 7 RstST of the CPU interface register but when the transmission
+gets stuck there was no call for set_reset_mode.
+
+Maybe it's ending up somehow recessive.
+
+Anyway, I might compare the registers of both drivers just to figure out
+what's going on but maybe You have an idea as well.
+
+Problem is just it runs always quite some time until the issues happen
+otherwise it would be more easy.
+
+
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+
+Wolfgang
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002332.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002334.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2333">[ date ]</a>
+              <a href="thread.html#2333">[ thread ]</a>
+              <a href="subject.html#2333">[ subject ]</a>
+              <a href="author.html#2333">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

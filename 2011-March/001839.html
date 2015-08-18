@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Setting filter masks
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20filter%20masks&In-Reply-To=%3C4D8702F2.4070401%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001838.html">
+   <LINK REL="Next"  HREF="001840.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Setting filter masks</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20filter%20masks&In-Reply-To=%3C4D8702F2.4070401%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Setting filter masks">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Mon Mar 21 08:49:06 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001838.html">[Socketcan-users] Setting filter masks
+</A></li>
+        <LI>Next message: <A HREF="001840.html">[Socketcan-users] Setting filter masks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1839">[ date ]</a>
+              <a href="thread.html#1839">[ thread ]</a>
+              <a href="subject.html#1839">[ subject ]</a>
+              <a href="author.html#1839">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 21.03.2011 08:25, Jorge Fernandez Monteagudo wrote:
+
+&gt;<i> I would like to know how to set the filter masks in order to receive can
+</I>&gt;<i> frames.
+</I>
+Hello Jorge,
+
+please read
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.38/Documentation/networking/can.txt#L378">http://lxr.linux.no/#linux+v2.6.38/Documentation/networking/can.txt#L378</A>
+
+It tells that ...
+
+A filter matches, when
+
+    &lt;received_can_id&gt; &amp; mask == can_id &amp; mask
+
+which is analogous to known CAN controllers hardware filter semantics.
+
+
+&gt;<i>
+</I>&gt;<i> In my current code I'm using only standard frames with 11 bits. The
+</I>&gt;<i> three possible
+</I>&gt;<i>
+</I>&gt;<i> situations for me are:
+</I>&gt;<i>
+</I>&gt;<i> - Read frames from only an identifier: Then I set :
+</I>&gt;<i>
+</I>&gt;<i> can_id = 0x1A4
+</I>&gt;<i>
+</I>&gt;<i> can_mask = 0x00
+</I>&gt;<i>
+</I>
+No.
+
+Setting the can_mask to '0' means that no bits are relevant for the 
+filter and therefore you'll receive *anything* with this filter.
+
+If you would like to filter only for 0x1A4 the filter mask must be 0x7FF 
+and as you would like to have no RTR nor EFF frames the higher bits must 
+be set:
+
+can_mask = 0xC00007FF
+
+which is the #defines (CAN_EFF_FLAG | CAN_RTR_FLAG | CAN_SFF_MASK) in can.h
+
+Your other examples are flipped in the can_mask bits also.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001838.html">[Socketcan-users] Setting filter masks
+</A></li>
+	<LI>Next message: <A HREF="001840.html">[Socketcan-users] Setting filter masks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1839">[ date ]</a>
+              <a href="thread.html#1839">[ thread ]</a>
+              <a href="subject.html#1839">[ subject ]</a>
+              <a href="author.html#1839">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

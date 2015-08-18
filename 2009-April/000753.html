@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] I want to implement CAN	Protocol	functionality in normal Linux machine( Debian Linux	2.6.18-6-amd64 )
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%0A%09Protocol%09functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%0A%092.6.18-6-amd64%20%29&In-Reply-To=%3C20090406081709.GA2822%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000749.html">
+   <LINK REL="Next"  HREF="000764.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] I want to implement CAN	Protocol	functionality in normal Linux machine( Debian Linux	2.6.18-6-amd64 )</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%0A%09Protocol%09functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%0A%092.6.18-6-amd64%20%29&In-Reply-To=%3C20090406081709.GA2822%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] I want to implement CAN	Protocol	functionality in normal Linux machine( Debian Linux	2.6.18-6-amd64 )">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Mon Apr  6 10:17:09 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000749.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+        <LI>Next message: <A HREF="000764.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#753">[ date ]</a>
+              <a href="thread.html#753">[ thread ]</a>
+              <a href="subject.html#753">[ subject ]</a>
+              <a href="author.html#753">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Apr 05, 2009 at 03:55:13PM +0200, Oliver Hartkopp wrote:
+&gt;<i> 
+</I>&gt;<i> Daniel Baluta wrote:
+</I>&gt;<i> &gt; On Sun, Apr 5, 2009 at 12:47 PM, lakshmi sreekanth
+</I>&gt;<i> &gt; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">laki.sreekanth at gmail.com</A>&gt; wrote:
+</I>&gt;<i> 
+</I>&gt;<i> Please tell me what i have to install to run CANSOCKETS like
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;  s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+</I>&gt;<i> &gt;&gt;  and
+</I>&gt;<i> &gt;&gt;  s = socket(PF_CAN, SOCK_DGRAM, CAN_BCM);
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Now i am reading the below link information:
+</I>&gt;<i> &gt;&gt; <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2009-February/002253.html">https://lists.berlios.de/pipermail/socketcan-core/2009-February/002253.html</A>
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; It should be possible. First of all you must compile your kernel with
+</I>&gt;<i> &gt; can support  and the to write user space applications as with normal
+</I>&gt;<i> &gt; sockets.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; My problem is that PF_CAN macro  is not recognized.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I've looked into /usr/include/linux/socket.h and there is PF_CAN
+</I>&gt;<i> &gt; defined but only if the below line is true
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; #if defined(__KERNEL__) || !defined(__GLIBC__) || (__GLIBC__ &lt; 2)
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; When i try to use PF_CAN in user space program is not working.
+</I>&gt;<i> &gt; Does anyone has it working?
+</I>&gt;<i> 
+</I>&gt;<i> Hi Daniel,
+</I>&gt;<i> 
+</I>&gt;<i> the Makefile in socketcan/trunk/can-utils contains
+</I>&gt;<i> 
+</I>&gt;<i> CFLAGS    = -O2 -Wall -Wno-parentheses -I../kernel/2.6/include \
+</I>&gt;<i>             -fno-strict-aliasing \
+</I>&gt;<i>             -DPF_CAN=29 \
+</I>&gt;<i>             -DAF_CAN=PF_CAN
+</I>&gt;<i> 
+</I>&gt;<i> but this does not fix the original problem why PF_INET is working and PF_CAN
+</I>&gt;<i> not ...
+</I>&gt;<i> 
+</I>&gt;<i> I assume this is distribution depended. Im running a Debian Lenny where PF_CAN
+</I>&gt;<i> is defined in /usr/incluse/linux/socket.h as you mentioned. So i'm also
+</I>&gt;<i> confused how to make it work like PF_INET ...
+</I>While building our gcc, we found that PF_CAN should really
+be defined in bits/socket.h
+therefore, this I attached our patch (for glibc 2.6.1). This makes
+our gcc let PF_CAN work link PF_INET
+note: this patch is for building compilers with ct-ng. I'm sure
+anyone can see what needs to be done.
+&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+Add the PF_CAN &amp; AF_CAN numbers in sys/socket.h (on linux)
+
+---
+ sysdeps/unix/sysv/linux/bits/socket.h |    2 ++
+ 1 file changed, 2 insertions(+)
+
+Index: glibc-2.6.1/sysdeps/unix/sysv/linux/bits/socket.h
+===================================================================
+--- glibc-2.6.1.orig/sysdeps/unix/sysv/linux/bits/socket.h	2009-02-19 17:02:44.000000000 +0100
++++ glibc-2.6.1/sysdeps/unix/sysv/linux/bits/socket.h	2009-02-19 17:03:40.000000000 +0100
+@@ -89,6 +89,7 @@
+ #define	PF_IRDA		23	/* IRDA sockets.  */
+ #define	PF_PPPOX	24	/* PPPoX sockets.  */
+ #define	PF_WANPIPE	25	/* Wanpipe API sockets.  */
++#define	PF_CAN		29
+ #define	PF_BLUETOOTH	31	/* Bluetooth sockets.  */
+ #define	PF_MAX		32	/* For now..  */
+ 
+@@ -121,6 +122,7 @@
+ #define	AF_IRDA		PF_IRDA
+ #define	AF_PPPOX	PF_PPPOX
+ #define	AF_WANPIPE	PF_WANPIPE
++#define	AF_CAN		PF_CAN
+ #define	AF_BLUETOOTH	PF_BLUETOOTH
+ #define	AF_MAX		PF_MAX
+ 
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000749.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+	<LI>Next message: <A HREF="000764.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#753">[ date ]</a>
+              <a href="thread.html#753">[ thread ]</a>
+              <a href="subject.html#753">[ subject ]</a>
+              <a href="author.html#753">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

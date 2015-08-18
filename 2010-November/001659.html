@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTinc1UuvoXzrxCsib-H0CWnAmqOVTtTKrYi49oyM%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001653.html">
+   <LINK REL="Next"  HREF="001660.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTinc1UuvoXzrxCsib-H0CWnAmqOVTtTKrYi49oyM%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Nov 29 20:08:28 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001653.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001660.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1659">[ date ]</a>
+              <a href="thread.html#1659">[ thread ]</a>
+              <a href="subject.html#1659">[ subject ]</a>
+              <a href="author.html#1659">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I am still trying to setup my can interface. From last time I have wired a
+resistively correct bus with my motor and manage to find a can analyser. For
+information, as my motor as a 0xFF nodeID and automatic baudrate detection
+by default which means that I still need to configure it to a proper nodeID
+and baudrate before I can put it on the bus.
+
+I would like to try both socketCan and Ixxat drivers with the can analyser
+so I am preparing this a bit and I remark this : ISA adress range is not the
+same with ixxat and socket can drivers :
+--&gt; here is Ixxat adresses which seems correct : d0000 to d0fff
+&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin# cat /proc/iomem
+</I>&gt;<i> 00000000-0000ffff : reserved
+</I>&gt;<i> 00010000-0009fbff : System RAM
+</I>&gt;<i> 0009fc00-0009ffff : reserved
+</I>&gt;<i> 000a0000-000bffff : Video RAM area
+</I>&gt;<i> 000c0000-000c7fff : Video ROM
+</I>&gt;<i> 000d0000-000d0fff : PCI-I03 ISA [0] DPRAM area
+</I>&gt;<i>
+</I>
+--&gt; here is SocketCan which seems incorrect : d0000 to d001f
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin# cat /proc/iomem
+</I>&gt;<i> 00000000-0000ffff : reserved
+</I>&gt;<i> 00010000-0009fbff : System RAM
+</I>&gt;<i> 0009fc00-0009ffff : reserved
+</I>&gt;<i> 000a0000-000bffff : Video RAM area
+</I>&gt;<i> 000c0000-000c7fff : Video ROM
+</I>&gt;<i> 000d0000-000d001f : sja1000_isa
+</I>&gt;<i> 000e0000-000fffff : reserved
+</I>&gt;<i>
+</I>
+Maybe something stands behind this ?
+
+
+---------------------------------------------------------------------------------------------------------------------------
+complementary informations for the curious
+
+dmesg for Ixxat drivers :
+
+&gt;<i> [ 2252.093040] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> [ 2252.093112] NET: Registered protocol family 29
+</I>&gt;<i> [ 2252.100195] can: raw protocol (rev 20090105)
+</I>&gt;<i> [ 2252.108650] can: broadcast manager protocol (rev 20090105 t)
+</I>&gt;<i> [ 2252.115236] sja1000 CAN netdevice driver
+</I>&gt;<i> [ 2252.120307] KINF: CAN PC-I driver v4.1b for BCI v4.5.8 Compiled Nov 22
+</I>&gt;<i> 2010 at 00:30:34
+</I>&gt;<i> [ 2252.120529] KINF: Device registered successfully for 2 ports. Major
+</I>&gt;<i> [250]
+</I>&gt;<i> [ 2252.120700] KINF: IRQ number [5] registered
+</I>&gt;<i> [ 2252.120846] KINF: IRQ will be not registered for port 1
+</I>&gt;<i> [ 2811.803121] KINF: IRQ number [5] freed for port 0
+</I>&gt;<i> [ 2811.803146] KINF: IRQ number [0] for port 1 was not registered! Do
+</I>&gt;<i> nothing.
+</I>&gt;<i> [ 2811.803155] KINF: Character device unregistered successfully. Major
+</I>&gt;<i> [250]
+</I>&gt;<i> [ 2811.827665] sja1000: driver removed
+</I>&gt;<i> [ 2811.860547] NET: Unregistered protocol family 29
+</I>&gt;<i>
+</I>
+/proc/interrupts for Ixxat drivers
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin# cat /proc/interrupts
+</I>&gt;<i>             CPU0       CPU1
+</I>&gt;<i>    0:       6901       7463   IO-APIC-edge      timer
+</I>&gt;<i>    1:       1667        998   IO-APIC-edge      i8042
+</I>&gt;<i>    5:          0          0   IO-APIC-edge      PCI-I03 ISA Port 0
+</I>&gt;<i>    8:          0          1   IO-APIC-edge      rtc0
+</I>&gt;<i>    9:          0          0   IO-APIC-fasteoi   acpi
+</I>&gt;<i>   14:          0          0   IO-APIC-edge      ata_piix
+</I>&gt;<i>   15:       1211       1215   IO-APIC-edge      ata_piix
+</I>&gt;<i>   19:          0          0   IO-APIC-fasteoi   uhci_hcd:usb3
+</I>&gt;<i>   23:          0          0   IO-APIC-fasteoi   ehci_hcd:usb1,
+</I>&gt;<i> uhci_hcd:usb2
+</I>&gt;<i>   24:       9687       9687   PCI-MSI-edge      eth0
+</I>&gt;<i>  NMI:          0          0   Non-maskable interrupts
+</I>&gt;<i>  LOC:       4004       4529   Local timer interrupts
+</I>&gt;<i>  SPU:          0          0   Spurious interrupts
+</I>&gt;<i>  PMI:          0          0   Performance monitoring interrupts
+</I>&gt;<i>  PND:          0          0   Performance pending work
+</I>&gt;<i>  RES:        131        159   Rescheduling interrupts
+</I>&gt;<i>  CAL:          8         20   Function call interrupts
+</I>&gt;<i>  TLB:        143        100   TLB shootdowns
+</I>&gt;<i>  TRM:          0          0   Thermal event interrupts
+</I>&gt;<i>  THR:          0          0   Threshold APIC interrupts
+</I>&gt;<i>  MCE:          0          0   Machine check exceptions
+</I>&gt;<i>  MCP:         10         10   Machine check polls
+</I>&gt;<i>  ERR:          1
+</I>&gt;<i>  MIS:          0
+</I>&gt;<i>
+</I>
+
+dmesg for socketCan drivers :
+
+&gt;<i> [ 2969.292003] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> [ 2969.292101] NET: Registered protocol family 29
+</I>&gt;<i> [ 2969.299121] can: raw protocol (rev 20090105)
+</I>&gt;<i> [ 2969.307471] can: broadcast manager protocol (rev 20090105 t)
+</I>&gt;<i> [ 2969.313987] sja1000 CAN netdevice driver
+</I>&gt;<i> [ 2969.319597] sja1000_isa sja1000_isa.0: sja1000_isa device registered
+</I>&gt;<i> (reg_base=0xc00d0000, irq=5)
+</I>&gt;<i> [ 2969.325516] Legacy sja1000_isa driver for max. 8 devices registered
+</I>&gt;<i> [ 2969.329204] sja1000_isa sja1000_isa.0: setting BTR0=0x01 BTR1=0x1c
+</I>&gt;<i>
+</I>
+
+/proc/interrupts for socketCan drivers
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin# cat /proc/interrupts
+</I>&gt;<i>             CPU0       CPU1
+</I>&gt;<i>    0:       7662       8194   IO-APIC-edge      timer
+</I>&gt;<i>    1:       1667        998   IO-APIC-edge      i8042
+</I>&gt;<i>    5:          0          0   IO-APIC-edge      can0
+</I>&gt;<i>    8:          0          1   IO-APIC-edge      rtc0
+</I>&gt;<i>    9:          0          0   IO-APIC-fasteoi   acpi
+</I>&gt;<i>   14:          0          0   IO-APIC-edge      ata_piix
+</I>&gt;<i>   15:       1221       1226   IO-APIC-edge      ata_piix
+</I>&gt;<i>   19:          0          0   IO-APIC-fasteoi   uhci_hcd:usb3
+</I>&gt;<i>   23:          0          0   IO-APIC-fasteoi   ehci_hcd:usb1,
+</I>&gt;<i> uhci_hcd:usb2
+</I>&gt;<i>   24:       9949       9977   PCI-MSI-edge      eth0
+</I>&gt;<i>  NMI:          0          0   Non-maskable interrupts
+</I>&gt;<i>  LOC:       4296       4865   Local timer interrupts
+</I>&gt;<i>  SPU:          0          0   Spurious interrupts
+</I>&gt;<i>  PMI:          0          0   Performance monitoring interrupts
+</I>&gt;<i>  PND:          0          0   Performance pending work
+</I>&gt;<i>  RES:        145        164   Rescheduling interrupts
+</I>&gt;<i>  CAL:          9         20   Function call interrupts
+</I>&gt;<i>  TLB:        144        100   TLB shootdowns
+</I>&gt;<i>  TRM:          0          0   Thermal event interrupts
+</I>&gt;<i>  THR:          0          0   Threshold APIC interrupts
+</I>&gt;<i>  MCE:          0          0   Machine check exceptions
+</I>&gt;<i>  MCP:         11         11   Machine check polls
+</I>&gt;<i>  ERR:          1
+</I>&gt;<i>  MIS:          0
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt/ard/bin#
+</I>&gt;<i>
+</I>
+
+
+
+2010/11/15 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+
+&gt;<i> Ok thanks for all Wolfang, you are an angel to deal my request with such
+</I>&gt;<i> efficiency.
+</I>&gt;<i>
+</I>&gt;<i> I am already waiting for an answer from Ixxat.
+</I>&gt;<i> I will check resistors terminaisons
+</I>&gt;<i> I will manage to record something with an analyzer, could you describe what
+</I>&gt;<i> should I look at ? Just messages ? Particular messages like Emergency  ?
+</I>&gt;<i> Heartbits ?
+</I>&gt;<i>
+</I>&gt;<i> and I will inform you about this.
+</I>&gt;<i>
+</I>&gt;<i> Is there any chance that rtCan drivers manage this hardware better ?
+</I>&gt;<i> Because we were firstly going to use a xenomai kernel and then turn back
+</I>&gt;<i> into a nature one for planning issues. As we need the can interface to go
+</I>&gt;<i> on, it is possible to change this.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2010/11/15 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i>
+</I>&gt;&gt;<i> On 11/15/2010 08:55 PM, Willy Lambert wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; Arg, I can't read German (at least not Technical German) so I makes
+</I>&gt;&gt;<i> things
+</I>&gt;&gt;<i> &gt; more complicate for me :)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Well, apart from the OCR setting, this document is not really useful.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; I am going to read this. It makes me thinking about time quantas as
+</I>&gt;&gt;<i> describe
+</I>&gt;&gt;<i> &gt; in Documentation/networking/can.txt:
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; 708 &lt;
+</I>&gt;&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#708">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#708</A>&gt;
+</I>&gt;&gt;<i> &gt;    &quot;tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1&quot;
+</I>&gt;&gt;<i> &gt; 709 &lt;
+</I>&gt;&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#709">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#709</A>&gt;
+</I>&gt;&gt;<i>         Shows
+</I>&gt;&gt;<i> &gt; the time quanta in ns, propagation segment, phase buffer
+</I>&gt;&gt;<i> &gt; 710 &lt;
+</I>&gt;&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#710">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#710</A>&gt;
+</I>&gt;&gt;<i>         segment
+</I>&gt;&gt;<i> &gt; 1 and 2 and the synchronisation jump width in units of
+</I>&gt;&gt;<i> &gt; 711 &lt;
+</I>&gt;&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#711">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#711</A>&gt;
+</I>&gt;&gt;<i>         tq.
+</I>&gt;&gt;<i> &gt; They allow to define the CAN bit-timing in a hardware
+</I>&gt;&gt;<i> &gt; 712 &lt;
+</I>&gt;&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#712">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#712</A>&gt;
+</I>&gt;&gt;<i>         independent
+</I>&gt;&gt;<i> &gt; format as proposed by the Bosch CAN 2.0 spec (see
+</I>&gt;&gt;<i> &gt; 713 &lt;
+</I>&gt;&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#713">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#713</A>&gt;
+</I>&gt;&gt;<i>         chapter
+</I>&gt;&gt;<i> &gt; 8 of <A HREF="http://www.semiconductors.bosch.de/pdf/can2spec.pdf">http://www.semiconductors.bosch.de/pdf/can2spec.pdf</A>).
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Could I have something to precise after defining baudrate ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No. If the chips is mapped correctly, it should work like with any other
+</I>&gt;&gt;<i> SJA1000 hardware.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> To be honest, I'm not even sure if this IXXAT card is supported properly
+</I>&gt;&gt;<i> by the sja1000_isa driver. I still think there is a problem with the irq
+</I>&gt;&gt;<i> setup or the ocr and cdr setting. Or it needs some special treatment.
+</I>&gt;&gt;<i> You could try contacting the IXXAT service. Maybe they can tell you more.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also, a CAN analyzer would be useful.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101129/09377c0f/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101129/09377c0f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001653.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001660.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1659">[ date ]</a>
+              <a href="thread.html#1659">[ thread ]</a>
+              <a href="subject.html#1659">[ subject ]</a>
+              <a href="author.html#1659">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

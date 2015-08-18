@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3Ccabda6421002050124v403e61feyfb7727561f92e2b2%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001256.html">
+   <LINK REL="Next"  HREF="001258.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3Ccabda6421002050124v403e61feyfb7727561f92e2b2%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">chripell at gmail.com
+       </A><BR>
+    <I>Fri Feb  5 10:24:52 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001256.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001258.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1257">[ date ]</a>
+              <a href="thread.html#1257">[ thread ]</a>
+              <a href="subject.html#1257">[ subject ]</a>
+              <a href="author.html#1257">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, Feb 5, 2010 at 10:05 AM, Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt; wrote:
+
+&gt;<i> I never enabled the bus-error interrupts anywhere embedded.
+</I>&gt;<i> To research odd behaviour, the error counters were helpfull,
+</I>
+I like this idea much. I speak from a point of view of meanness ;-) :
+we have paid the chip manufacturer for the REC and TEC counters that
+are cleverly incremented and decremented (AFAIK it's more likely they
+are incremented that decremented, so there is always a window in which
+the user space application can catch an increase in them even if not
+polling at an excessive rate) by the controller itself so they could
+be easily exported to user space. Perhaps all we need is a function
+for this in can_priv such do_get_err_counters. Even better if these
+counters are exported via sysfs so the function above is guaranteed to
+be called in  non-atomic context.
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001256.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001258.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1257">[ date ]</a>
+              <a href="thread.html#1257">[ thread ]</a>
+              <a href="subject.html#1257">[ subject ]</a>
+              <a href="author.html#1257">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

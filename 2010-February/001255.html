@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6B0E5A.9000405%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001254.html">
+   <LINK REL="Next"  HREF="001256.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6B0E5A.9000405%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Thu Feb  4 19:13:46 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001254.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001256.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1255">[ date ]</a>
+              <a href="thread.html#1255">[ thread ]</a>
+              <a href="subject.html#1255">[ subject ]</a>
+              <a href="author.html#1255">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marc Kleine-Budde wrote:
+&gt;<i> Kurt Van Dijck wrote:
+</I>&gt;&gt;&gt;<i> I think a &quot;pure&quot; ratelimit isn't a good choice. From my point of view
+</I>&gt;&gt;&gt;<i> (with no CAN background) we should limit only if the errors are
+</I>&gt;&gt;&gt;<i> consecutive, a successfully transmitted or received CAN frame should
+</I>&gt;&gt;&gt;<i> reset our limiter.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Or a bus-off indication.
+</I>&gt;<i> 
+</I>&gt;<i> ACK
+</I>
+ACK.
+
+&gt;&gt;<i> Resetting the rate-limit at successfull tx or rx requires disabling
+</I>&gt;&gt;<i> _only_  the bus-error interrupt and not the TX &amp; RX interrupt,
+</I>&gt;&gt;<i> and is therefore chip specific?
+</I>&gt;<i> 
+</I>&gt;<i> Yes, of course. We just want to limit the error interrupts but not the
+</I>&gt;<i> active/passive/warning/busoff and of course the rx/tx interrupts.
+</I>&gt;<i> 
+</I>&gt;<i> On the at91_can you can individually mask the errors. IIRC the sja1000
+</I>&gt;<i> can do likewise.
+</I>
+Normally bus-error interrupts have a dedicated bit in the interrupt
+enable register. This approach is, as I expected, complex and rather
+tricky and delicate. I still prefer the simple solution of disabling the
+bus error interrupts globally. I believe, that most people/apps do not
+check bus-errors at all. Other opinions? It would be nice to hear real
+CAN users and experts.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001254.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001256.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1255">[ date ]</a>
+              <a href="thread.html#1255">[ thread ]</a>
+              <a href="subject.html#1255">[ subject ]</a>
+              <a href="author.html#1255">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

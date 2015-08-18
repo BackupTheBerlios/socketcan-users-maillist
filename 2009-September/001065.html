@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN communication with MCP2515
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Cc79f5d650909301436u1d915190p1c5709923c9551be%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001060.html">
+   <LINK REL="Next"  HREF="001061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN communication with MCP2515</H1>
+    <B>Erik Calissendorff</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20communication%20with%20MCP2515&In-Reply-To=%3Cc79f5d650909301436u1d915190p1c5709923c9551be%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] CAN communication with MCP2515">gumstix at tansaki.com
+       </A><BR>
+    <I>Wed Sep 30 23:36:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001060.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+        <LI>Next message: <A HREF="001061.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1065">[ date ]</a>
+              <a href="thread.html#1065">[ thread ]</a>
+              <a href="subject.html#1065">[ subject ]</a>
+              <a href="author.html#1065">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang, thanks for your great debug tips.
+
+Here is the output of the various commands:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ip link set can0 up type can bitrate 250000
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ------------[ cut here ]------------
+WARNING: at /home/plejd/overo-oe/tmp/work/overo-angstrom-linux-gnueabi/socketcan-modules-0.0+svnr1064-r46/trunk/kernel/2.6/drivers/net/can/mcp251x.c:796
+mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x]()
+Modules linked in: mcp251x can_dev
+[&lt;c00f45d4&gt;] (unwind_backtrace+0x0/0xdc) from [&lt;c0116278&gt;]
+(warn_slowpath_common+0x4c/0x80)
+[&lt;c0116278&gt;] (warn_slowpath_common+0x4c/0x80) from [&lt;bf008ef8&gt;]
+(mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x])
+[&lt;bf008ef8&gt;] (mcp251x_irq_work_handler+0x244/0x5c0 [mcp251x]) from
+[&lt;c0126d1c&gt;] (worker_thread+0x19c/0x218)
+[&lt;c0126d1c&gt;] (worker_thread+0x19c/0x218) from [&lt;c012a6b0&gt;] (kthread+0x78/0x80)
+[&lt;c012a6b0&gt;] (kthread+0x78/0x80) from [&lt;c00f0800&gt;] (kernel_thread_exit+0x0/0x8)
+---[ end trace 28b396a9ed8a4478 ]---
+NOHZ: local_softirq_pending 08
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# candump any,0:0,#ffffffff &amp;
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# can: controller area network core (rev 20090105 abi 8)
+NET: Registered protocol family 29
+can: raw protocol (rev 20090105)
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# cansend can0 000#
+  can0  20000004  [8] 00 20 00 00 00 00 00 00   ERRORFRAME
+  caNOHZ: local_softirq_pending 08
+n0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at oveNOHZ</A>: local_softirq_pending 08
+ro:~#   can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000004  [8] 00 20 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000004  [8] 00 20 00 00 00 00 00 00   ERRORFRAME
+  can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+  can0  20000004  [8] 00 20 00 00 00 00 00 00   ERRORFRAME
+
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~# ip -d -s link show can0
+2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10
+    link/can
+    can state ERROR-ACTIVE restart-ms 0
+    bitrate 250000 sample-point 0.850
+    tq 200 prop-seg 8 phase-seg1 8 phase-seg2 3 sjw 1
+    : tseg1 3..16 tseg2 2..8 sjw 1..4 brp 1..64 brp-inc 1
+    clock 10000000
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          0          5          5          11
+    RX: bytes  packets  errors  dropped overrun mcast
+    0          0        0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    0          0        0       0       0       0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at overo</A>:~#
+---
+
+Even if I don't understand why the problem is I'm very delighted to be
+able to see it in the software, have used an oscillosope to check the
+signal previously and from what I could see there it appears to be
+running at 1Mbit instead of 250kbit as requested. Where my fault
+finding has ended now is that the chip doesn't seams to enter
+configuration mode and therefore isn't setting the bittimiing
+correctly either. If this is because of the reset instruction not
+being correct or something else is still unknown to me however.
+
+Hope the additional information can help you guide me further.
+
+
+Kindest regards,
+
+//Erik
+
+On Wed, Sep 30, 2009 at 9:37 AM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+&gt;<i> Erik Calissendorff wrote:
+</I>&gt;&gt;<i> Hi I have tried to get the mcp251x driver to work with the Overo
+</I>&gt;&gt;<i> Gumstix for sometime now.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I finally got the driver and the SPI communication to work with kernel
+</I>&gt;&gt;<i> 2.6.31 and was thereafter able to use iproute to initiate the bitrate,
+</I>&gt;&gt;<i> which didn't work with previous kernel versions. But I still can't see
+</I>&gt;<i>
+</I>&gt;<i> Hm, could you please be more precise? What did not work which what
+</I>&gt;<i> version of the kernel, iproute2 and Socket-CAN?
+</I>&gt;<i>
+</I>&gt;&gt;<i> any data sent or received on the can0 interface. I have inserted print
+</I>&gt;&gt;<i> statements in the module to be able to debug it but I'm still stuck.
+</I>&gt;&gt;<i> If someone could point me in the right direction it would be highly
+</I>&gt;&gt;<i> appreciated. I'm running the modules from SVN rev 1064.
+</I>&gt;<i>
+</I>&gt;<i> I suspect either a electrical problem on the CAN bus or with the SPI
+</I>&gt;<i> transfer. Chris already commented on that latter. Here just some useful
+</I>&gt;<i> commands for debugging:
+</I>&gt;<i>
+</I>&gt;<i> - Run &quot;candump any,0:0,#ffffffff&quot; to check if messages are received.
+</I>&gt;<i> &#160;including error messages.
+</I>&gt;<i>
+</I>&gt;<i> - The &quot;ip&quot; program has some nice statistics information:
+</I>&gt;<i>
+</I>&gt;<i> &#160;&quot;ip -d -s link show can0&quot;
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001060.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+	<LI>Next message: <A HREF="001061.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1065">[ date ]</a>
+              <a href="thread.html#1065">[ thread ]</a>
+              <a href="subject.html#1065">[ subject ]</a>
+              <a href="author.html#1065">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 2/4] [flexcan] Introduce a flexcan_clk set	of functions.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/4%5D%20%5Bflexcan%5D%20Introduce%20a%20flexcan_clk%20set%0A%09of%20functions.&In-Reply-To=%3C1312488803-7523-3-git-send-email-holt%40sgi.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002069.html">
+   <LINK REL="Next"  HREF="002067.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 2/4] [flexcan] Introduce a flexcan_clk set	of functions.</H1>
+    <B>Robin Holt</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/4%5D%20%5Bflexcan%5D%20Introduce%20a%20flexcan_clk%20set%0A%09of%20functions.&In-Reply-To=%3C1312488803-7523-3-git-send-email-holt%40sgi.com%3E"
+       TITLE="[Socketcan-users] [PATCH 2/4] [flexcan] Introduce a flexcan_clk set	of functions.">holt at sgi.com
+       </A><BR>
+    <I>Thu Aug  4 22:13:21 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002069.html">[Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.
+</A></li>
+        <LI>Next message: <A HREF="002067.html">[Socketcan-users] [PATCH 3/4] [flexcan] Add of_match to	platform_device definition.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2066">[ date ]</a>
+              <a href="thread.html#2066">[ thread ]</a>
+              <a href="subject.html#2066">[ subject ]</a>
+              <a href="author.html#2066">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The freescale P1010RDB board does not have a
+clk_{get,put,get_rate,enable,disable} set of functions.  Wrap these with a
+flexcan_ #define for arm, and implement a more complete function for ppc.
+
+Signed-off-by: Robin Holt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">holt at sgi.com</A>&gt;
+To: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+To: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+---
+ drivers/net/can/flexcan.c |   90 ++++++++++++++++++++++++++++++++++++++++----
+ 1 files changed, 81 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 74b1706..0f68fad 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -220,6 +220,78 @@ static inline void flexcan_write(u32 val, void __iomem *addr)
+ }
+ #endif
+ 
++#if defined(__powerpc__)
++struct flexcan_clk {
++	unsigned long		rate;
++	void			*data;
++};
++
++#define DIV_ROUND(n, d)		(((n) + ((d)/2)) / (d))
++
++static struct clk *flexcan_clk_get(struct device *dev, const char *id)
++{
++	struct flexcan_clk *clock;
++	u32 *clock_freq = NULL;
++	u32 *clock_divider = NULL;
++	int err;
++
++	clock = kmalloc(sizeof(struct flexcan_clk), GFP_KERNEL);
++	if (!clock) {
++		dev_err(dev, &quot;Cannot allocate memory\n&quot;);
++		err = -ENOMEM;
++		goto failed_clock;
++	}
++	clock_freq = (u32 *) of_get_property(dev-&gt;of_node, &quot;clock_freq&quot;, NULL);
++	if (clock_freq == NULL) {
++		dev_err(dev, &quot;Cannot find clock_freq property\n&quot;);
++		err = -EINVAL;
++		kfree(clock);
++		goto failed_clock;
++	}
++
++	clock_divider = (u32 *) of_get_property(dev-&gt;of_node, \
++					&quot;fsl,flexcan-clock-divider&quot;, NULL);
++	if (clock_divider == NULL) {
++		dev_err(dev, &quot;Cannot find fsl,flexcan-clock-divider \
++						property\n&quot;);
++		err = -EINVAL;
++		kfree(clock);
++		goto failed_clock;
++	}
++
++	clock-&gt;rate = DIV_ROUND(*clock_freq / *clock_divider, 1000) * 1000;
++
++	return (struct clk *)clock;
++
++ failed_clock:
++	return ERR_PTR(err);
++}
++
++static void flexcan_clk_put(struct clk *_clk)
++{
++	struct flexcan_clk *clk = (struct flexcan_clk *)_clk;
++
++	kfree(clk);
++}
++
++static unsigned long flexcan_clk_get_rate(struct clk *_clk)
++{
++	struct flexcan_clk *clk = (struct flexcan_clk *)_clk;
++
++	return clk-&gt;rate;
++}
++
++#define flexcan_clk_enable(_p)	do {} while (0)
++#define flexcan_clk_disable(_p)	do {} while (0)
++
++#else
++#define flexcan_clk_get_rate	clk_get_rate
++#define flexcan_clk_put		clk_put
++#define flexcan_clk_get		clk_get
++#define flexcan_clk_enable	clk_enable
++#define flexcan_clk_disable	clk_disable
++#endif
++
+ /*
+  * Swtich transceiver on or off
+  */
+@@ -807,7 +879,7 @@ static int flexcan_open(struct net_device *dev)
+ 	struct flexcan_priv *priv = netdev_priv(dev);
+ 	int err;
+ 
+-	clk_enable(priv-&gt;clk);
++	flexcan_clk_enable(priv-&gt;clk);
+ 
+ 	err = open_candev(dev);
+ 	if (err)
+@@ -829,7 +901,7 @@ static int flexcan_open(struct net_device *dev)
+  out_close:
+ 	close_candev(dev);
+  out:
+-	clk_disable(priv-&gt;clk);
++	flexcan_clk_disable(priv-&gt;clk);
+ 
+ 	return err;
+ }
+@@ -843,7 +915,7 @@ static int flexcan_close(struct net_device *dev)
+ 	flexcan_chip_stop(dev);
+ 
+ 	free_irq(dev-&gt;irq, dev);
+-	clk_disable(priv-&gt;clk);
++	flexcan_clk_disable(priv-&gt;clk);
+ 
+ 	close_candev(dev);
+ 
+@@ -882,7 +954,7 @@ static int __devinit register_flexcandev(struct net_device *dev)
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+ 	u32 reg, err;
+ 
+-	clk_enable(priv-&gt;clk);
++	flexcan_clk_enable(priv-&gt;clk);
+ 
+ 	/* select &quot;bus clock&quot;, chip must be disabled */
+ 	flexcan_chip_disable(priv);
+@@ -916,7 +988,7 @@ static int __devinit register_flexcandev(struct net_device *dev)
+  out:
+ 	/* disable core and turn off clocks */
+ 	flexcan_chip_disable(priv);
+-	clk_disable(priv-&gt;clk);
++	flexcan_clk_disable(priv-&gt;clk);
+ 
+ 	return err;
+ }
+@@ -936,7 +1008,7 @@ static int __devinit flexcan_probe(struct platform_device *pdev)
+ 	resource_size_t mem_size;
+ 	int err, irq;
+ 
+-	clk = clk_get(&amp;pdev-&gt;dev, NULL);
++	clk = flexcan_clk_get(&amp;pdev-&gt;dev, NULL);
+ 	if (IS_ERR(clk)) {
+ 		dev_err(&amp;pdev-&gt;dev, &quot;no clock defined\n&quot;);
+ 		err = PTR_ERR(clk);
+@@ -973,7 +1045,7 @@ static int __devinit flexcan_probe(struct platform_device *pdev)
+ 	dev-&gt;flags |= IFF_ECHO; /* we support local echo in hardware */
+ 
+ 	priv = netdev_priv(dev);
+-	priv-&gt;can.clock.freq = clk_get_rate(clk);
++	priv-&gt;can.clock.freq = flexcan_clk_get_rate(clk);
+ 	priv-&gt;can.bittiming_const = &amp;flexcan_bittiming_const;
+ 	priv-&gt;can.do_set_mode = flexcan_set_mode;
+ 	priv-&gt;can.do_get_berr_counter = flexcan_get_berr_counter;
+@@ -1008,7 +1080,7 @@ static int __devinit flexcan_probe(struct platform_device *pdev)
+  failed_map:
+ 	release_mem_region(mem-&gt;start, mem_size);
+  failed_get:
+-	clk_put(clk);
++	flexcan_clk_put(clk);
+  failed_clock:
+ 	return err;
+ }
+@@ -1026,7 +1098,7 @@ static int __devexit flexcan_remove(struct platform_device *pdev)
+ 	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	release_mem_region(mem-&gt;start, resource_size(mem));
+ 
+-	clk_put(priv-&gt;clk);
++	flexcan_clk_put(priv-&gt;clk);
+ 
+ 	free_candev(dev);
+ 
+-- 
+1.7.2.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002069.html">[Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.
+</A></li>
+	<LI>Next message: <A HREF="002067.html">[Socketcan-users] [PATCH 3/4] [flexcan] Add of_match to	platform_device definition.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2066">[ date ]</a>
+              <a href="thread.html#2066">[ thread ]</a>
+              <a href="subject.html#2066">[ subject ]</a>
+              <a href="author.html#2066">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

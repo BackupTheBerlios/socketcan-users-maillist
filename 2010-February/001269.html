@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6E9841.3000100%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001266.html">
+   <LINK REL="Next"  HREF="001270.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6E9841.3000100%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">mkl at pengutronix.de
+       </A><BR>
+    <I>Sun Feb  7 11:38:57 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001266.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001270.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1269">[ date ]</a>
+              <a href="thread.html#1269">[ thread ]</a>
+              <a href="subject.html#1269">[ subject ]</a>
+              <a href="author.html#1269">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>christian pellegrin wrote:
+&gt;<i> The following patch adds the possibility to monitor TEC/REC. I found
+</I>&gt;<i> it quite useful for understanding how the bus works. I see that not
+</I>&gt;<i> all controllers support is but for those that do it might be useful.
+</I>&gt;<i> 
+</I>&gt;&gt;<i>From 8a1260a1ac881aa49c0e8ebd92e56d83c722a7fd Mon Sep 17 00:00:00 2001
+</I>&gt;<i> From: Christian Pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at fsfe.org</A>&gt;
+</I>&gt;<i> Date: Sun, 7 Feb 2010 09:57:47 +0100
+</I>&gt;<i> Subject: [PATCH] rec tec
+</I>&gt;<i> 
+</I>&gt;<i> ---
+</I>&gt;<i>  drivers/net/can/dev.c       |    3 +++
+</I>&gt;<i>  drivers/net/can/mcp251x.c   |   13 +++++++++++++
+</I>&gt;<i>  include/linux/can/dev.h     |    1 +
+</I>&gt;<i>  include/linux/can/netlink.h |    2 ++
+</I>&gt;<i>  4 files changed, 19 insertions(+), 0 deletions(-)
+</I>&gt;<i> 
+</I>&gt;<i> diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+</I>&gt;<i> index f08f120..900a467 100644
+</I>&gt;<i> --- a/drivers/net/can/dev.c
+</I>&gt;<i> +++ b/drivers/net/can/dev.c
+</I>&gt;<i> @@ -688,6 +688,9 @@ static int can_fill_xstats(struct sk_buff *skb,
+</I>&gt;<i> const struct net_device *dev)
+</I>&gt;<i>  {
+</I>&gt;<i>  	struct can_priv *priv = netdev_priv(dev);
+</I>&gt;<i> 
+</I>&gt;<i> +	if (priv-&gt;do_update_stats)
+</I>&gt;<i> +		priv-&gt;do_update_stats(dev);
+</I>&gt;<i> +
+</I>&gt;<i>  	NLA_PUT(skb, IFLA_INFO_XSTATS,
+</I>&gt;<i>  		sizeof(priv-&gt;can_stats), &amp;priv-&gt;can_stats);
+</I>&gt;<i> 
+</I>&gt;<i> diff --git a/drivers/net/can/mcp251x.c b/drivers/net/can/mcp251x.c
+</I>&gt;<i> index 2608817..e343bbf 100644
+</I>&gt;<i> --- a/drivers/net/can/mcp251x.c
+</I>&gt;<i> +++ b/drivers/net/can/mcp251x.c
+</I>&gt;<i> @@ -506,6 +506,18 @@ static int mcp251x_do_set_mode(struct net_device
+</I>&gt;<i> *net, enum can_mode mode)
+</I>&gt;<i>  	return 0;
+</I>&gt;<i>  }
+</I>&gt;<i> 
+</I>&gt;<i> +static int mcp251x_do_update_stats(struct net_device *net)
+</I>&gt;<i> +{
+</I>&gt;<i> +	struct mcp251x_priv *priv = netdev_priv(net);
+</I>&gt;<i> +
+</I>&gt;<i> +	mutex_lock(&amp;priv-&gt;mcp_lock);
+</I>&gt;<i> +	priv-&gt;can.can_stats.tec = mcp251x_read_reg(priv-&gt;spi, TEC);
+</I>&gt;<i> +	priv-&gt;can.can_stats.rec = mcp251x_read_reg(priv-&gt;spi, REC);
+</I>&gt;<i> +	mutex_unlock(&amp;priv-&gt;mcp_lock);
+</I>&gt;<i> +	return 0;
+</I>&gt;<i> +}
+</I>&gt;<i> +
+</I>&gt;<i> +
+</I>&gt;<i>  static int mcp251x_set_normal_mode(struct spi_device *spi)
+</I>&gt;<i>  {
+</I>&gt;<i>  	struct mcp251x_priv *priv = dev_get_drvdata(&amp;spi-&gt;dev);
+</I>&gt;<i> @@ -1015,6 +1027,7 @@ static int __devinit mcp251x_can_probe(struct
+</I>&gt;<i> spi_device *spi)
+</I>&gt;<i>  	priv = netdev_priv(net);
+</I>&gt;<i>  	priv-&gt;can.bittiming_const = &amp;mcp251x_bittiming_const;
+</I>&gt;<i>  	priv-&gt;can.do_set_mode = mcp251x_do_set_mode;
+</I>&gt;<i> +	priv-&gt;can.do_update_stats = mcp251x_do_update_stats;
+</I>&gt;<i>  	priv-&gt;can.clock.freq = pdata-&gt;oscillator_frequency / 2;
+</I>&gt;<i>  	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
+</I>&gt;<i>  		CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_LISTENONLY |
+</I>&gt;<i> diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+</I>&gt;<i> index 4cb4f72..2bfecab 100644
+</I>&gt;<i> --- a/include/linux/can/dev.h
+</I>&gt;<i> +++ b/include/linux/can/dev.h
+</I>&gt;<i> @@ -47,6 +47,7 @@ struct can_priv {
+</I>&gt;<i>  	int (*do_set_mode)(struct net_device *dev, enum can_mode mode);
+</I>&gt;<i>  	int (*do_get_state)(const struct net_device *dev,
+</I>&gt;<i>  			    enum can_state *state);
+</I>&gt;<i> +	int (*do_update_stats)(const struct net_device *dev);
+</I>&gt;<i> 
+</I>&gt;<i>  	unsigned int echo_skb_max;
+</I>&gt;<i>  	struct sk_buff **echo_skb;
+</I>&gt;<i> diff --git a/include/linux/can/netlink.h b/include/linux/can/netlink.h
+</I>&gt;<i> index 49960e4..ef6fbf1 100644
+</I>&gt;<i> --- a/include/linux/can/netlink.h
+</I>&gt;<i> +++ b/include/linux/can/netlink.h
+</I>&gt;<i> @@ -93,6 +93,8 @@ struct can_device_stats {
+</I>&gt;<i>  	__u32 bus_off;		/* Changes to bus off state */
+</I>&gt;<i>  	__u32 arbitration_lost; /* Arbitration lost errors */
+</I>&gt;<i>  	__u32 restarts;		/* CAN controller re-starts */
+</I>&gt;<i> +	__u8 tec;
+</I>&gt;<i> +	__u8 rec;
+</I>
+One of these errors can go to 255 which is 0x100, and doesn't fit into
+an u8.
+
+cheers. Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100207/5e38d3a6/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100207/5e38d3a6/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001266.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001270.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1269">[ date ]</a>
+              <a href="thread.html#1269">[ thread ]</a>
+              <a href="subject.html#1269">[ subject ]</a>
+              <a href="author.html#1269">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

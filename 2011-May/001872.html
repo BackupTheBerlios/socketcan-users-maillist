@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Lost arbitration errors
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Lost%20arbitration%20errors&In-Reply-To=%3CBANLkTim%2B3UvO2nqe6rV0zOPy5d3dCdY7PA%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001871.html">
+   <LINK REL="Next"  HREF="001878.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Lost arbitration errors</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Lost%20arbitration%20errors&In-Reply-To=%3CBANLkTim%2B3UvO2nqe6rV0zOPy5d3dCdY7PA%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Lost arbitration errors">lambert.willy at gmail.com
+       </A><BR>
+    <I>Tue May  3 20:55:09 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001871.html">[Socketcan-users] problem with the kernelmodule can-isotp
+</A></li>
+        <LI>Next message: <A HREF="001878.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1872">[ date ]</a>
+              <a href="thread.html#1872">[ thread ]</a>
+              <a href="subject.html#1872">[ subject ]</a>
+              <a href="author.html#1872">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I have a &quot;visibly working&quot; can network but some arbitration errors often
+occur. I am using socket_can under canfestival and have configure a set of 3
+node (0x05,0x32,0x33) with periodic PDO (TX and RX) plus a nodeguarding on
+each node. The bus is at 250K and the period of the SYNC word is 10ms. Here
+is the candump extract of a period (there are always in the same order) :
+
+ can1   80  [0]
+  can1  332  [5] 93 00 00 00 00
+  can1  1B2  [2] 27 00
+  can1  20000002  [8] 01 00 00 00 00 00 00 00   ERRORFRAME
+  can1  1B3  [2] 27 00
+  can1  20000002  [8] 02 00 00 00 00 00 00 00   ERRORFRAME
+  can1  2B2  [6] 93 00 00 00 00 01
+  can1  20000002  [8] 02 00 00 00 00 00 00 00   ERRORFRAME
+  can1  2B3  [6] 93 00 00 00 00 01
+  can1  333  [5] 93 00 00 00 00
+  can1  3B2  [7] 00 00 00 00 04 00 0A
+  can1  3B3  [7] FE FF FF FF 02 00 0A
+  can1  705  [0] remote request
+  can1  732  [0] remote request
+  can1  733  [0] remote request
+  can1  705  [1] 05
+  can1  732  [1] 05
+  can1  733  [1] 05
+
+
+Here is some additionnal stats :
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~# ip -d -s link show can1
+4: can1: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen
+10
+    link/can
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 1000
+    bitrate 250000 sample-point 0.875
+    tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+    sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+    clock 8000000
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          9684       0          0          0
+    RX: bytes  packets  errors  dropped overrun mcast
+    225353     84576    0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    32163      66462    9684    0       0       0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~#
+
+
+Should I ignore these errors ? Should I review my scheduling ?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110503/5b511531/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110503/5b511531/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001871.html">[Socketcan-users] problem with the kernelmodule can-isotp
+</A></li>
+	<LI>Next message: <A HREF="001878.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1872">[ date ]</a>
+              <a href="thread.html#1872">[ thread ]</a>
+              <a href="subject.html#1872">[ subject ]</a>
+              <a href="author.html#1872">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

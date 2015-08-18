@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBAC7E.9090704%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001676.html">
+   <LINK REL="Next"  HREF="001677.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kenrel panic with CAN gateway on MPC5200</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBAC7E.9090704%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Kenrel panic with CAN gateway on MPC5200">mkl at pengutronix.de
+       </A><BR>
+    <I>Sun Dec  5 16:15:10 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001676.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+        <LI>Next message: <A HREF="001677.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1675">[ date ]</a>
+              <a href="thread.html#1675">[ thread ]</a>
+              <a href="subject.html#1675">[ subject ]</a>
+              <a href="author.html#1675">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 12/05/2010 10:54 AM, Michal Sojka wrote:
+&gt;<i> thanks for the tip. Now, with &quot;Spinlock debugging: sleep-inside-spinlock
+</I>&gt;<i> checking&quot; I get the following, which seems a bit more useful:
+</I>&gt;<i> 
+</I>&gt;<i>     BUG: sleeping function called from invalid context at /home/wsh/projects/can-benchmark/kernel/2.6.36/mm/slab.c:3101
+</I>&gt;<i>     in_atomic(): 1, irqs_disabled(): 0, pid: 379, name: cangw
+</I>&gt;<i>     Call Trace:
+</I>&gt;<i>     [c7abdb50] [c0009c04] show_stack+0xb0/0x1d4 (unreliable)
+</I>&gt;<i>     [c7abdba0] [c02ffe54] dump_stack+0x2c/0x44
+</I>&gt;<i>     [c7abdbb0] [c002157c] __might_sleep+0xfc/0x124
+</I>&gt;<i>     [c7abdbc0] [c00c45bc] kmem_cache_alloc+0x15c/0x180
+</I>&gt;<i>     [c7abdbf0] [c02d60d8] can_rx_register+0x78/0x210
+</I>&gt;<i>     [c7abdc30] [c02d9ebc] cgw_create_job+0x1cc/0x220
+</I>&gt;<i>     [c7abdc50] [c026c208] rtnetlink_rcv_msg+0x21c/0x28c
+</I>&gt;<i>     [c7abdc70] [c02762a4] netlink_rcv_skb+0xb8/0x100
+</I>&gt;<i>     [c7abdc90] [c026bfd0] rtnetlink_rcv+0x40/0x5c
+</I>&gt;<i>     [c7abdcb0] [c0275e9c] netlink_unicast+0x320/0x368
+</I>&gt;<i>     [c7abdd00] [c0276a0c] netlink_sendmsg+0x2e0/0x33c
+</I>&gt;<i>     [c7abdd50] [c0244cc0] sock_sendmsg+0x9c/0xd4
+</I>&gt;<i>     [c7abde20] [c0247194] sys_sendto+0xcc/0x108
+</I>&gt;<i>     [c7abdf00] [c0248980] sys_socketcall+0x17c/0x218
+</I>&gt;<i>     [c7abdf40] [c0012524] ret_from_syscall+0x0/0x38
+</I>&gt;<i>     --- Exception: c01 at 0xff3413c
+</I>&gt;<i>         LR = 0x10001f9c
+</I>&gt;<i>     BUG: spinlock bad magic on CPU#0, swapper/0
+</I>&gt;<i>      lock: c798aabc, .magic: c0000000, .owner: &lt;none&gt;/-1, .owner_cpu: -1069424200
+</I>&gt;<i>     Call Trace:
+</I>&gt;<i>     [c7ffbd00] [c0009c04] show_stack+0xb0/0x1d4 (unreliable)
+</I>&gt;<i>     [c7ffbd50] [c02ffe54] dump_stack+0x2c/0x44
+</I>&gt;<i>     [c7ffbd60] [c01afa50] spin_bug+0x84/0xd0
+</I>&gt;<i>     [c7ffbd80] [c01afbfc] do_raw_spin_lock+0x3c/0x15c
+</I>&gt;<i>     [c7ffbdb0] [c02ff70c] _raw_spin_lock+0x34/0x4c
+</I>&gt;<i>     [c7ffbdd0] [c025bbdc] dev_queue_xmit+0xa4/0x428
+</I>&gt;<i>     [c7ffbe00] [c02d630c] can_send+0x9c/0x1a0
+</I>&gt;<i>     [c7ffbe20] [c02d991c] can_can_gw_rcv+0x108/0x164
+</I>&gt;<i>     [c7ffbe50] [c02d53b4] can_rcv_filter+0xf8/0x2e8
+</I>&gt;<i>     [c7ffbe70] [c02d566c] can_rcv+0xc8/0x140
+</I>&gt;<i>     [c7ffbe90] [c025a0d0] __netif_receive_skb+0x2cc/0x338
+</I>&gt;<i>     [c7ffbed0] [c025a314] netif_receive_skb+0x5c/0x98
+</I>&gt;<i>     [c7ffbef0] [c0208374] mscan_rx_poll+0x1c0/0x454
+</I>&gt;<i>     [c7ffbf50] [c025a644] net_rx_action+0x104/0x230
+</I>&gt;<i>     [c7ffbfa0] [c00317a8] __do_softirq+0x118/0x22c
+</I>&gt;<i>     [c7ffbff0] [c0011eec] call_do_softirq+0x14/0x24
+</I>&gt;<i>     [c042fe60] [c0006d78] do_softirq+0x84/0xa8
+</I>&gt;<i>     [c042fe80] [c00314cc] irq_exit+0x88/0xb4
+</I>&gt;<i>     [c042fe90] [c0006efc] do_IRQ+0xe0/0x234
+</I>&gt;<i>     [c042fec0] [c0012bbc] ret_from_except+0x0/0x14
+</I>&gt;<i>     --- Exception: 501 at cpu_idle+0xfc/0x10c
+</I>&gt;<i>         LR = cpu_idle+0xfc/0x10c
+</I>&gt;<i>     [c042ff80] [c000afb8] cpu_idle+0x68/0x10c (unreliable)
+</I>&gt;<i>     [c042ffa0] [c0003ec0] rest_init+0x9c/0xbc
+</I>&gt;<i>     [c042ffc0] [c03da91c] start_kernel+0x2c0/0x2d8
+</I>&gt;<i>     [c042fff0] [00003438] 0x3438
+</I>&gt;<i> 
+</I>&gt;<i> I tried to fix the sleeping call by the following patches, but the
+</I>&gt;<i> original problem still appears.
+</I>&gt;<i> 
+</I>&gt;<i> diff --git a/net/can/gw.c b/net/can/gw.c
+</I>&gt;<i> index 94ba3f1..7779ca6 100644
+</I>&gt;<i> --- a/net/can/gw.c
+</I>&gt;<i> +++ b/net/can/gw.c
+</I>&gt;<i> @@ -822,11 +822,14 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
+</I>&gt;<i>         if (gwj-&gt;dst.dev-&gt;type != ARPHRD_CAN)
+</I>&gt;<i>                 goto put_src_dst_out;
+</I>&gt;<i>                 
+</I>&gt;<i> -       spin_lock(&amp;cgw_list_lock);
+</I>&gt;<i>  
+</I>&gt;<i>         err = cgw_register_filter(gwj);
+</I>&gt;<i> -       if (!err)
+</I>&gt;<i> -               hlist_add_head_rcu(&amp;gwj-&gt;list, &amp;cgw_list);
+</I>&gt;<i> +       if (err)
+</I>&gt;<i> +               goto put_src_dst_out;
+</I>&gt;<i> +
+</I>&gt;<i> +       spin_lock(&amp;cgw_list_lock);
+</I>&gt;<i> +
+</I>&gt;<i> +       hlist_add_head_rcu(&amp;gwj-&gt;list, &amp;cgw_list);
+</I>&gt;<i>  
+</I>&gt;<i>         spin_unlock(&amp;cgw_list_lock);
+</I>
+The fix looks good!
+
+&gt;<i> My second attempt was:
+</I>&gt;<i> 
+</I>&gt;<i> diff --git a/net/can/af_can.c b/net/can/af_can.c
+</I>&gt;<i> index 702be5a..b046ff0 100644
+</I>&gt;<i> --- a/net/can/af_can.c
+</I>&gt;<i> +++ b/net/can/af_can.c
+</I>&gt;<i> @@ -418,7 +418,7 @@ int can_rx_register(struct net_device *dev, canid_t can_id, canid_t mask,
+</I>&gt;<i>         if (dev &amp;&amp; dev-&gt;type != ARPHRD_CAN)
+</I>&gt;<i>                 return -ENODEV;
+</I>&gt;<i>  
+</I>&gt;<i> -       r = kmem_cache_alloc(rcv_cache, GFP_KERNEL);
+</I>&gt;<i> +       r = kmem_cache_alloc(rcv_cache, GFP_ATOMIC);
+</I>&gt;<i>         if (!r)
+</I>&gt;<i>                 return -ENOMEM;
+</I>&gt;<i>  
+</I>&gt;<i> With both patches I still get the original panic (now preceeded with
+</I>&gt;<i> spinlock bad magic):
+</I>&gt;<i>                 
+</I>&gt;<i>     BUG: spinlock bad magic on CPU#0, swapper/0
+</I>&gt;<i>      lock: c7986abc, .magic: c0000000, .owner: &lt;none&gt;/-1, .owner_cpu: -1069424200
+</I>                               ^^^^^^^^
+BTW:
+This is the border between userspace and kernel mapping. In a standard
+3G/1G split the userspace goes from 0x0-0xbfffffff and the kernel from
+0xc0000000-0xffffffff.
+
+Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101205/b5bc8b87/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101205/b5bc8b87/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001676.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+	<LI>Next message: <A HREF="001677.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1675">[ date ]</a>
+              <a href="thread.html#1675">[ thread ]</a>
+              <a href="subject.html#1675">[ subject ]</a>
+              <a href="author.html#1675">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

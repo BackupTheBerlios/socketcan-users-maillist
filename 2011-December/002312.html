@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus	error reporting enable berr interrupt
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2003/14%5D%20can%3A%20flexcan%3A%20only%20for%20bus%0A%09error%20reporting%20enable%20berr%20interrupt&In-Reply-To=%3C1323269728-17491-4-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002318.html">
+   <LINK REL="Next"  HREF="002324.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus	error reporting enable berr interrupt</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2003/14%5D%20can%3A%20flexcan%3A%20only%20for%20bus%0A%09error%20reporting%20enable%20berr%20interrupt&In-Reply-To=%3C1323269728-17491-4-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus	error reporting enable berr interrupt">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:17 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002318.html">[Socketcan-users] [RFC PATCH 02/14] can: replace the	dev_dbg/info/err/... with the new netdev_xxx macros
+</A></li>
+        <LI>Next message: <A HREF="002324.html">[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus error reporting enable berr interrupt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2312">[ date ]</a>
+              <a href="thread.html#2312">[ thread ]</a>
+              <a href="subject.html#2312">[ subject ]</a>
+              <a href="author.html#2312">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>So far, the bus error (berr) interrupt source is always enabled,
+even if bus error reporting is not requested (via ctrlmode flag
+CAN_CTRLMODE_BERR_REPORTING). This is not necessay, at least on
+the Flexcan of the i.MX28 SOC and it avoids flooding with with
+bus error interrupts. State changes interrupts do still arrive
+as documented. The function flexcan_has_and_handle_berr() has
+been removed and error state changes and bus errors are now
+packed into one error message by a common poll function, like
+for other CAN controllers.
+
+CC: Reuben Dowle &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Reuben.Dowle at navico.com</A>&gt;
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/flexcan.c |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 0ce914a..095b74b 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -705,7 +705,10 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	reg_ctrl = flexcan_read(&amp;regs-&gt;ctrl);
+ 	reg_ctrl &amp;= ~FLEXCAN_CTRL_TSYN;
+ 	reg_ctrl |= FLEXCAN_CTRL_BOFF_REC | FLEXCAN_CTRL_LBUF |
+-		FLEXCAN_CTRL_ERR_STATE | FLEXCAN_CTRL_ERR_MSK;
++		FLEXCAN_CTRL_ERR_STATE;
++
++	if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_BERR_REPORTING)
++		reg_ctrl |= FLEXCAN_CTRL_ERR_MSK;
+ 
+ 	/* save for later use */
+ 	priv-&gt;reg_ctrl_default = reg_ctrl;
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002318.html">[Socketcan-users] [RFC PATCH 02/14] can: replace the	dev_dbg/info/err/... with the new netdev_xxx macros
+</A></li>
+	<LI>Next message: <A HREF="002324.html">[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus error reporting enable berr interrupt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2312">[ date ]</a>
+              <a href="thread.html#2312">[ thread ]</a>
+              <a href="subject.html#2312">[ subject ]</a>
+              <a href="author.html#2312">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] FlexCAN driver -RTNETLINK operation not permitter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FlexCAN%20driver%20-RTNETLINK%20operation%20not%0A%20permitter&In-Reply-To=%3C4ED62A07621E9C41B8CB2F608655EF45F2D6%40POCITMSEXMB01.LntUniverse.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001897.html">
+   <LINK REL="Next"  HREF="001900.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] FlexCAN driver -RTNETLINK operation not permitter</H1>
+    <B>Nikhil Kamath</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FlexCAN%20driver%20-RTNETLINK%20operation%20not%0A%20permitter&In-Reply-To=%3C4ED62A07621E9C41B8CB2F608655EF45F2D6%40POCITMSEXMB01.LntUniverse.com%3E"
+       TITLE="[Socketcan-users] FlexCAN driver -RTNETLINK operation not permitter">Nikhil.Kamath at lnties.com
+       </A><BR>
+    <I>Wed May 25 19:37:38 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001897.html">[Socketcan-users] FlexCAN driver -RTNETLINK operation not	permitter
+</A></li>
+        <LI>Next message: <A HREF="001900.html">[Socketcan-users] FlexCAN driver -RTNETLINK operation not	permitter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1898">[ date ]</a>
+              <a href="thread.html#1898">[ thread ]</a>
+              <a href="subject.html#1898">[ subject ]</a>
+              <a href="author.html#1898">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+Tried the  command -ip link set can type can bitrate 125000...still no solution :(
+
+________________________________________
+From: Oliver Hartkopp [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>]
+Sent: Wednesday, May 25, 2011 10:59 PM
+To: Nikhil Kamath
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] FlexCAN driver -RTNETLINK operation not permitter
+
+On 25.05.2011 18:33, Nikhil Kamath wrote:
+
+&gt;<i> I get the following message when I execute  &#8220; ip link set can0 up type can
+</I>&gt;<i> bitrate 125000&#8221;
+</I>&gt;<i>
+</I>&gt;<i> -RTNETLINK answers: Operation not supported.
+</I>
+Hm, i'm not really sure, how iproute parses it's commandline, but you could
+try to put this command into two steps:
+
+0. (be sure the interface is 'down')
+1. configure the bitrate
+2. set the interface 'up'
+
+Does this help?
+
+Regards,
+Oliver
+
+
+Larsen &amp; Toubro Limited
+
+www.larsentoubro.com
+
+This Email may contain confidential or privileged information for the intended recipient (s) If you are not the intended recipient, please do not use or disseminate the information, notify the sender and delete it from your system.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001897.html">[Socketcan-users] FlexCAN driver -RTNETLINK operation not	permitter
+</A></li>
+	<LI>Next message: <A HREF="001900.html">[Socketcan-users] FlexCAN driver -RTNETLINK operation not	permitter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1898">[ date ]</a>
+              <a href="thread.html#1898">[ thread ]</a>
+              <a href="subject.html#1898">[ subject ]</a>
+              <a href="author.html#1898">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

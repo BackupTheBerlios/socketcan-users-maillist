@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Where to permanent set the bitrate
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Where%20to%20permanent%20set%20the%20bitrate&In-Reply-To=%3C20366.62479.788236.563357%40elektron.ikp.physik.tu-darmstadt.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002370.html">
+   <LINK REL="Next"  HREF="002372.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Where to permanent set the bitrate</H1>
+    <B>Uwe Bonnes</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Where%20to%20permanent%20set%20the%20bitrate&In-Reply-To=%3C20366.62479.788236.563357%40elektron.ikp.physik.tu-darmstadt.de%3E"
+       TITLE="[Socketcan-users] Where to permanent set the bitrate">bon at elektron.ikp.physik.tu-darmstadt.de
+       </A><BR>
+    <I>Wed Apr 18 19:04:15 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002370.html">[Socketcan-users] Detect Up/Down State of CAN-Bus in C-program
+</A></li>
+        <LI>Next message: <A HREF="002372.html">[Socketcan-users] Configuration CAN sja1000_isa
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2371">[ date ]</a>
+              <a href="thread.html#2371">[ thread ]</a>
+              <a href="subject.html#2371">[ subject ]</a>
+              <a href="author.html#2371">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+running  a recent 3.4.0-rc2 Kernel, I needed to access my PEAK USB
+Adapters. As there is now an In-Kernel peak_usb.ko Module versus the
+out-of-kernel pcan.ko module, i needed to set the bitrate. After long
+searching, I found that
+&gt;<i>  ip link set canX up type can bitrate 1000000
+</I>did the trick for me.
+
+1. The kernel documentation does not tell about these support commands. It
+   would be helpfull if it would.
+2. Where ist the place to put those commands in the /etc tree? 
+
+Otherwise Thanks for the work to get peak_usb in the kernel!
+
+Bye
+-- 
+Uwe Bonnes                <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bon at elektron.ikp.physik.tu-darmstadt.de</A>
+
+Institut fuer Kernphysik  Schlossgartenstrasse 9  64289 Darmstadt
+--------- Tel. 06151 162516 -------- Fax. 06151 164321 ----------
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002370.html">[Socketcan-users] Detect Up/Down State of CAN-Bus in C-program
+</A></li>
+	<LI>Next message: <A HREF="002372.html">[Socketcan-users] Configuration CAN sja1000_isa
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2371">[ date ]</a>
+              <a href="thread.html#2371">[ thread ]</a>
+              <a href="subject.html#2371">[ subject ]</a>
+              <a href="author.html#2371">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

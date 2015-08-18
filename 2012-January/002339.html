@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4F051927.8010600%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002338.html">
+   <LINK REL="Next"  HREF="002340.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4F051927.8010600%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Thu Jan  5 04:29:43 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002338.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002340.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2339">[ date ]</a>
+              <a href="thread.html#2339">[ thread ]</a>
+              <a href="subject.html#2339">[ subject ]</a>
+              <a href="author.html#2339">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i>
+</I>&gt;<i> On 12/31/2011 10:39 AM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 12/21/2011 07:32 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Again, please check if you have netif_start_queue() at the end of the
+</I>&gt;&gt;&gt;&gt;<i> open function.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> As said I'm using eec921ac28fde243456078a557768808d93d94a3
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> However, I'll try further to investigate that issue due the fact
+</I>&gt;&gt;&gt;<i> having it
+</I>&gt;&gt;&gt;<i> running with my lincan without problems and therefore it should be
+</I>&gt;&gt;&gt;<i> possible
+</I>&gt;&gt;&gt;<i> to find the problem.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I found the problem which was then at the end quite simple to understand
+</I>&gt;&gt;<i> why it
+</I>&gt;&gt;<i> get stuck due the fact not receiving an interrupt for TX and due that no
+</I>&gt;&gt;<i> reactivation of the queue.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think that maybe also the hacks in the TX functions are obsolete with the
+</I>&gt;&gt;<i> fix assuming that the repeated interrupts just happen by indirect access.
+</I>&gt;<i>
+</I>&gt;<i> OK, to understand you correctly...
+</I>&gt;<i>
+</I>&gt;&gt;<i> Here my fix which worked for me:
+</I>&gt;&gt;<i> --------------------------------------------------------------------------------------------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> diff --git a/drivers/net/can/cc770/cc770.c b/drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i> index 2d12f89..dad6707 100644
+</I>&gt;&gt;<i> --- a/drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i> +++ b/drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i> @@ -460,15 +460,6 @@ static netdev_tx_t cc770_start_xmit(struct sk_buff
+</I>&gt;&gt;<i> *skb, struct net_device *dev)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>       stats-&gt;tx_bytes += dlc;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -
+</I>&gt;&gt;<i> -    /*
+</I>&gt;&gt;<i> -     * HM: We had some cases of repeated IRQs so make sure the
+</I>&gt;&gt;<i> -     * INT is acknowledged I know it's already further up, but
+</I>&gt;&gt;<i> -     * doing again fixed the issue
+</I>&gt;&gt;<i> -     */
+</I>&gt;&gt;<i> -    cc770_write_reg(priv, msgobj[mo].ctrl0,
+</I>&gt;&gt;<i> -            MSGVAL_UNC | TXIE_UNC | RXIE_UNC | INTPND_RES);
+</I>&gt;&gt;<i> -
+</I>&gt;&gt;<i>       return NETDEV_TX_OK;
+</I>&gt;&gt;<i>   }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> @@ -689,12 +680,6 @@ static void cc770_tx_interrupt(struct net_device
+</I>&gt;&gt;<i> *dev, unsigned int o)
+</I>&gt;&gt;<i>       /* Nothing more to send, switch off interrupts */
+</I>&gt;&gt;<i>       cc770_write_reg(priv, msgobj[mo].ctrl0,
+</I>&gt;&gt;<i>               MSGVAL_RES | TXIE_RES | RXIE_RES | INTPND_RES);
+</I>&gt;&gt;<i> -    /*
+</I>&gt;&gt;<i> -     * We had some cases of repeated IRQ so make sure the
+</I>&gt;&gt;<i> -     * INT is acknowledged
+</I>&gt;&gt;<i> -     */
+</I>&gt;&gt;<i> -    cc770_write_reg(priv, msgobj[mo].ctrl0,
+</I>&gt;&gt;<i> -            MSGVAL_UNC | TXIE_UNC | RXIE_UNC | INTPND_RES);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>       stats-&gt;tx_packets++;
+</I>&gt;&gt;<i>       can_get_echo_skb(dev, 0);
+</I>&gt;&gt;<i> diff --git a/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;<i> b/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;<i> index 4be5fe2..48fc128 100644
+</I>&gt;&gt;<i> --- a/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;<i> +++ b/drivers/net/can/cc770/cc770_isa.c
+</I>&gt;&gt;<i> @@ -148,8 +148,7 @@ static void cc770_isa_port_write_reg_indirect(const
+</I>&gt;&gt;<i> struct cc770_priv *priv,
+</I>&gt;&gt;<i>   {
+</I>&gt;&gt;<i>       unsigned long base = (unsigned long)priv-&gt;reg_base;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -    outb(reg, base);
+</I>&gt;&gt;<i> -    outb(val, base + 1);
+</I>&gt;&gt;<i> +    outw( reg + ( val&lt;&lt;  8), base);
+</I>&gt;<i>
+</I>&gt;<i> That modification does fix your problem, right? The others above don't
+</I>&gt;<i> help nor harm but we don't know if it's really realted to the same
+</I>&gt;<i> problem. I wll dig a bit deeper.
+</I>
+Exactly. The others above I removed because facing the opposite, even
+missing interrupts but then just to avoid other possible side effects
+and then assuming that they might be related.
+
+
+&gt;<i>
+</I>&gt;&gt;<i>   }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   static int __devinit cc770_isa_probe(struct platform_device *pdev)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ---------------------------------------------------------------------------------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Please let me know if this is OK for You, maybe You can do some tests as
+</I>&gt;&gt;<i> well.
+</I>&gt;<i>
+</I>&gt;<i> My board does not use indirect accesses.
+</I>&gt;<i>
+</I>
+Ah Ok, I see, but let me know if I may help with additional tests You would
+like to have beside the other mentioned tests as long as I have the hardware.
+
+&gt;&gt;<i> Would continue then with further tests regarding error conditions, however
+</I>&gt;&gt;<i> I realised another small issue with dropped packages at reception.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As soon as You read the first time from the socket and then You stop
+</I>&gt;&gt;<i> reading
+</I>&gt;&gt;<i> the packages are not counted as 'dropped' any more which is IMHO not
+</I>&gt;&gt;<i> correct
+</I>&gt;&gt;<i> because as soon as You stop reading they should be counted as dropped
+</I>&gt;&gt;<i> again.
+</I>&gt;<i>
+</I>&gt;<i> Will have a closer look now...
+</I>
+Thanks a lot.
+Also I'll inform You as soon as I can continue with some further tests
+regarding bus states and error counters and maybe also with patches in
+case I have.
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+Wolfgang
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002338.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002340.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2339">[ date ]</a>
+              <a href="thread.html#2339">[ thread ]</a>
+              <a href="subject.html#2339">[ subject ]</a>
+              <a href="author.html#2339">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

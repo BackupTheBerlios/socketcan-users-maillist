@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] My own CAN backend
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20My%20own%20CAN%20backend&In-Reply-To=%3C4E929A9D.8080001%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002168.html">
+   <LINK REL="Next"  HREF="002170.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] My own CAN backend</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20My%20own%20CAN%20backend&In-Reply-To=%3C4E929A9D.8080001%40grandegger.com%3E"
+       TITLE="[Socketcan-users] My own CAN backend">wg at grandegger.com
+       </A><BR>
+    <I>Mon Oct 10 09:11:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002168.html">[Socketcan-users] My own CAN backend
+</A></li>
+        <LI>Next message: <A HREF="002170.html">[Socketcan-users] ColdFire Flexcan module
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2169">[ date ]</a>
+              <a href="thread.html#2169">[ thread ]</a>
+              <a href="subject.html#2169">[ subject ]</a>
+              <a href="author.html#2169">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Yuriy,
+
+On 10/09/2011 08:44 PM, Yuriy Kiselev wrote:
+&gt;<i> Hi!
+</I>&gt;<i> I apologize in advance for the dummy question.
+</I>&gt;<i> I have to write driver for my own device based on arm (xScale) processor
+</I>&gt;<i> pxa270 &amp; sja1000 placed on separate chip select (CS) behind FPGA organizing
+</I>&gt;<i> multiplexer for CAN-transceiver.
+</I>&gt;<i> For access to corresponding sja1000 register I should write to/read from
+</I>&gt;<i> [(remaped) base pointer plus multiplied by 2 register address] (it's just
+</I>&gt;<i> realization of multiplexer in FPGA). Ie sja_write() in my own driver looks
+</I>&gt;<i> like (we use 16bit bus):
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> void *iomem_cs4 = ioremap(nCS4, SJA_MEMREG_SIZE);
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> void sja_write((volatile u8 data, void __iomem* sja_reg_addr)
+</I>&gt;<i> {
+</I>&gt;<i>     extern void *iomem_cs4;
+</I>&gt;<i>     *(u16*)(iomem_cs4 + ((u32)sja_reg_addr * 2)) = data;
+</I>&gt;<i> }
+</I>&gt;<i> 
+</I>&gt;<i> Interrupt from SJA1000 lives on pxa270 GPIO.
+</I>&gt;<i> 
+</I>&gt;<i> I want to use SocketCAN, but I couldn't found write place in driver and docs
+</I>&gt;<i> for my needs.
+</I>&gt;<i> Regards.
+</I>
+At a first glance, I think that the SJA1000 platform driver already
+supports your hardware:
+
+<A HREF="http://lxr.linux.no/#linux/drivers/net/can/sja1000/sja1000_platform.c">http://lxr.linux.no/#linux/drivers/net/can/sja1000/sja1000_platform.c</A>
+
+You mainly need to provide proper platform data in your platform code
+similar to:
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.4/arch/arm/mach-imx/mach-pcm037.c#L505">http://lxr.linux.no/#linux+v3.0.4/arch/arm/mach-imx/mach-pcm037.c#L505</A>
+
+Be aware of IORESOURCE_MEM_16BIT.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002168.html">[Socketcan-users] My own CAN backend
+</A></li>
+	<LI>Next message: <A HREF="002170.html">[Socketcan-users] ColdFire Flexcan module
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2169">[ date ]</a>
+              <a href="thread.html#2169">[ thread ]</a>
+              <a href="subject.html#2169">[ subject ]</a>
+              <a href="author.html#2169">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

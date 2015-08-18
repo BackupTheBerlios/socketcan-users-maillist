@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ask : CAN Frames Interpertation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C20090331075628.GA6321%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000740.html">
+   <LINK REL="Next"  HREF="000741.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ask : CAN Frames Interpertation</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C20090331075628.GA6321%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] ask : CAN Frames Interpertation">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Tue Mar 31 09:56:28 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000740.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+        <LI>Next message: <A HREF="000741.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#739">[ date ]</a>
+              <a href="thread.html#739">[ thread ]</a>
+              <a href="subject.html#739">[ subject ]</a>
+              <a href="author.html#739">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>looks like J1939, I'll try to answer
+
+On Tue, Mar 31, 2009 at 05:23:43AM +0200, Bino Oetomo wrote:
+&gt;<i> 
+</I>&gt;<i> Dear All ...
+</I>&gt;<i> 
+</I>&gt;<i> With the help of CANOe (Demo) from &quot;Vector Informatik GmbH 
+</I>&gt;<i> &lt;<A HREF="http://www.vector-informatik.com/english/index.html?../products?download.php">http://www.vector-informatik.com/english/index.html?../products?download.php</A>&gt;&quot; 
+</I>I didn't watch the link
+&gt;<i> ,
+</I>&gt;<i> I made a note for some structure of PGN 65132 (TCO 1).
+</I>&gt;<i> 
+</I>&gt;<i>  From what I read, the &quot;content&quot; of PGN 65132 (Please give me correction) :
+</I>&gt;<i> 
+</I>&gt;<i> Byte/Bit/Len : 1/1/3
+</I>&gt;<i> Name : Driver 1 Working State
+</I>&gt;<i> Example : 001
+</I>&gt;<i> 
+</I>&gt;<i> Byte/Bit/Len = 1/4/3
+</I>&gt;<i> Name : Driver 1 Working State
+</I>&gt;<i> Example : 000
+</I>&gt;<i> 
+</I>&gt;<i> Byte/Bit/Len : 1/7/2
+</I>&gt;<i> Name : Vehicle Motion Detect
+</I>&gt;<i> Example : 01 (detected)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Byte 1 Binary : 00100001
+</I>&gt;<i> Byte 1 Hex : 21
+</I>This is nothing j1939 related, from the above I'd make 0x41
+&gt;<i> -----------------------------------------
+</I>&gt;<i> ...
+</I>&gt;<i> ------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> My Interpertation is ==
+</I>&gt;<i> Final Data Hex : 21.04.00.00.3E.80.50.00 , and
+</I>&gt;<i> Since the PGN is 61532,
+</I>&gt;<i> If I want SocketCan to emulate using cansend, the CAN Frame will be :  
+</I>&gt;<i> 00065132#21.04.00.00.3E.80.50.00
+</I>&gt;<i> ----&gt; cansend vcan0 00065132#21.04.00.00.3E.80.50.00
+</I>PGN (or 'parameter group number') is something j1939 specific.
+A 29 bit CAN id is split up into 
+(lsb)
+* 8bit SA (source address)
+* 16bit PGN
+* 1 bit data page (just a kind of 'extension' bit)
+* 1 bit reserved
+* finally, 3 priority bits
+(msg).
+
+The SA is static or dynamic on a bus, but at least, each sender has a
+unique SA.
+example: an engine controller has always SA = 0x00
+
+In your example, 61532 is decimal, cansend is uses hex.
+
+so typically you'd do :
+cansend vcan0 18FE6C00#....
+with the lowest 2 digits in the can_id the hex representation of the SA
+you use
+&gt;<i> 
+</I>&gt;<i> Is that right ?
+</I>&gt;<i> 
+</I>&gt;<i> Sincerely
+</I>&gt;<i> -bino-
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000740.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+	<LI>Next message: <A HREF="000741.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#739">[ date ]</a>
+              <a href="thread.html#739">[ thread ]</a>
+              <a href="subject.html#739">[ subject ]</a>
+              <a href="author.html#739">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

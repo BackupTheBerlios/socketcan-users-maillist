@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C20081029142058.GA9852%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000540.html">
+   <LINK REL="Next"  HREF="000542.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Robert Schwebel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C20081029142058.GA9852%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">r.schwebel at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 29 15:20:58 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000540.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000542.html">[Socketcan-users] [SPAM?] Re:  Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#541">[ date ]</a>
+              <a href="thread.html#541">[ thread ]</a>
+              <a href="subject.html#541">[ subject ]</a>
+              <a href="author.html#541">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Oct 29, 2008 at 02:44:31PM +0100, Oliver Hartkopp wrote:
+&gt;<i> Robert Schwebel wrote:
+</I>&gt;&gt;<i> The network layer alone is absolutely irrelevant.
+</I>&gt;<i>
+</I>&gt;<i> Sorry this is really nonsense. The networklayer defines the socket API
+</I>&gt;<i> which is *the* relevant API for all CAN applications in userspace.
+</I>&gt;<i> This  is indeed the *only* really relevant API - the rest is peanuts
+</I>&gt;<i> and can  be handled by thousands of OSS contractors/distributors.
+</I>
+Try to take a vanilla mainline 2.6.26 or 2.6.27 and make an industry
+project out of it. You'll find out what I mean.
+
+&gt;<i> &gt; For production projects, you need the *whole* stack, including
+</I>&gt;<i> &gt; bittime setting, being able to work on random non-release kernels
+</I>&gt;<i> &gt; etc and all this is extraordinarily complicated until now and was
+</I>&gt;<i> &gt; the reason for Marc to move to git.
+</I>&gt;<i>
+</I>&gt;<i> You are heavily mixing up things: Stack != userspace utils != git
+</I>
+With &quot;stack&quot; I mean everything you need to do real applications.
+
+- Network Core
+- Bit Timing API
+- Driver Layer
+- Drivers
+- Bug fixing for things that make it impossible to run industry
+  protocols ontop of the vanilla stack.
+- User space tools
+
+&gt;<i> The thing that has to be done is finalizing the TODO list for the CAN
+</I>&gt;<i> driver lib from Wolfgang and to bring the drivers into mainline. There
+</I>&gt;<i> is nothing &quot;extraordinarily complicated&quot; ... you always try to make
+</I>&gt;<i> things complicated but this is no sales conversation here so you can
+</I>&gt;<i> also skip that.
+</I>
+For 2.6.26, it was a matter of Marc working on it for about 3 days
+before we had a clean and separated patch series against mainline that
+finally worked.
+
+&gt;<i> - trash your crappy 'candump', 'canecho' and 'cansend' apps
+</I>
+You are free to do whatever you want, and so are we.
+
+&gt;<i> SocketCAN related topics are discussed here. And whenever there are
+</I>&gt;<i> questions from people using the ptx-dist OSEALS-BSP tools the
+</I>&gt;<i> confusion starts. This is not really nice for OSEALS-BSP users. As
+</I>&gt;<i> you are always claim to speak for your $CUSTOMERS you should ask
+</I>&gt;<i> them, if they feel comfortable with that situation. I do not (as one
+</I>&gt;<i> of your BSP $CUSTOMERS) ...
+</I>
+Well, in that case you know what you have to do in order to improve the
+situation. Tell us what you want to have in your BSP and you'll get it.
+I don't see the problem with that.
+
+We have a need for cross compilable userspace tools for SocketCAN since
+2005, there had been none at that time out there who have been
+maintained on a regular base, with well defined releases against
+in-kernel patch stacks etc. So we made a package of our own, in order to
+solve real problems. They have been maintained since 2005 and released
+on a regular base, they work with all releases we have out there (up to
+2.6.26 so far) and they do what they are supposed to in their respective
+usecases. We have several tests in our automatic test suites based upon
+them, so they solve *our* problems. Nobody said that it works for
+everyone else out there. This is Open Source, anyone can do what solves
+his problems.
+
+We agree on the fact that things should be unified and this discussion
+is completely silly. You told me &quot;why don't you do it&quot; and I told you
+that we will do when we either have project time or too much spare time.
+
+It's really that simple.
+
+rsc
+-- 
+ Dipl.-Ing. Robert Schwebel | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+ Pengutronix - Linux Solutions for Science and Industry
+   Handelsregister:  Amtsgericht Hildesheim, HRA 2686
+     Hannoversche Str. 2, 31134 Hildesheim, Germany
+   Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000540.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000542.html">[Socketcan-users] [SPAM?] Re:  Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#541">[ date ]</a>
+              <a href="thread.html#541">[ thread ]</a>
+              <a href="subject.html#541">[ subject ]</a>
+              <a href="author.html#541">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

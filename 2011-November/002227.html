@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Info request about sja1000_isa.c
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Info%20request%20about%20sja1000_isa.c&In-Reply-To=%3C4EC4C321.7000103%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002226.html">
+   <LINK REL="Next"  HREF="002222.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Info request about sja1000_isa.c</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Info%20request%20about%20sja1000_isa.c&In-Reply-To=%3C4EC4C321.7000103%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Info request about sja1000_isa.c">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov 17 09:17:37 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002226.html">[Socketcan-users] Info request about sja1000_isa.c
+</A></li>
+        <LI>Next message: <A HREF="002222.html">[Socketcan-users] Bit rate configuration of PEAK USB devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2227">[ date ]</a>
+              <a href="thread.html#2227">[ thread ]</a>
+              <a href="subject.html#2227">[ subject ]</a>
+              <a href="author.html#2227">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Michael,
+
+On 11/17/2011 09:08 AM, Michael A. Purwoadi wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You can still get it from our BerliOS SVN repository (soon we will
+</I>&gt;&gt;<i> switch to github):
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   <A HREF="http://developer.berlios.de/svn/?group_id=6475">http://developer.berlios.de/svn/?group_id=6475</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In the README is described how to build the relevant kernel modules. Be
+</I>&gt;&gt;<i> aware that for that old version only the old SysFS interface is
+</I>&gt;&gt;<i> available to setup the bit-timing parameters (bitrate, etc.).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Thank you for the info. I've downloaded all files from trunk/linux-2.6/
+</I>&gt;<i> but still an error when compiling the source code  as below :
+</I>&gt;<i> 
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">purwoadi at linux-source-2.6.20.18-rt8</A>]# make ARCH=arm
+</I>&gt;<i> CROSS_COMPILE=arm-linux- modules
+</I>&gt;<i>   CHK     include/linux/version.h
+</I>&gt;<i> make[1]: `include/asm-arm/mach-types.h' is up to date.
+</I>&gt;<i>   CHK     include/linux/utsrelease.h
+</I>&gt;<i>   CC [M]  drivers/net/can/dev.o
+</I>
+I recommend to build the Socket-CAN kernel modules out-of-tree as
+described in the README mentioned in my previous mail, at least for
+getting started (less error prune).
+
+&gt;<i> drivers/net/can/dev.c:37:2: #error &quot;CAN sysfs interface not support by this
+</I>&gt;<i> kernel version&quot;
+</I>&gt;<i> 
+</I>&gt;<i> ---------------- dev.c -----------------
+</I>&gt;<i> 
+</I>&gt;<i> #ifndef CONFIG_CAN_DEV_SYSFS
+</I>&gt;<i> #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,24)
+</I>&gt;<i> #error &quot;CAN netlink interface not support by this kernel version&quot;
+</I>&gt;<i> #endif
+</I>&gt;<i> #include &lt;socketcan/can/netlink.h&gt;
+</I>&gt;<i> #include &lt;net/rtnetlink.h&gt;
+</I>&gt;<i> #else
+</I>&gt;<i> #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,21)
+</I>&gt;<i> #error &quot;CAN sysfs interface not support by this kernel version&quot;
+</I>&gt;<i> #endif
+</I>&gt;<i> 
+</I>&gt;<i> -------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> Regarding part of code above, it is impossible to use socketcan
+</I>&gt;<i> for linux-2.6.20. Is there any way to around the problem ?
+</I>
+As written in my previous mail, you need to use the old SysFS interface
+enabling CONFIG_CAN_DEV_SYSFS:
+
+  config CAN_DEV_SYSFS
+        bool &quot;Support for sysfs interface (deprecated)&quot;
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002226.html">[Socketcan-users] Info request about sja1000_isa.c
+</A></li>
+	<LI>Next message: <A HREF="002222.html">[Socketcan-users] Bit rate configuration of PEAK USB devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2227">[ date ]</a>
+              <a href="thread.html#2227">[ thread ]</a>
+              <a href="subject.html#2227">[ subject ]</a>
+              <a href="author.html#2227">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

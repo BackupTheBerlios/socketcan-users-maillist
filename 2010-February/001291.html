@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100208091528.GE344%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001289.html">
+   <LINK REL="Next"  HREF="001274.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100208091528.GE344%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Mon Feb  8 10:15:29 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001289.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001274.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1291">[ date ]</a>
+              <a href="thread.html#1291">[ thread ]</a>
+              <a href="subject.html#1291">[ subject ]</a>
+              <a href="author.html#1291">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, Feb 08, 2010 at 10:56:36AM +0200, Daniel Baluta wrote:
+&gt;<i> 
+</I>&gt;<i> Hi,
+</I>&gt;<i> On Mon, Feb 8, 2010 at 10:47 AM, Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt; wrote:
+</I>&gt;<i> &gt; Hey,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I opened the CAN 2.0B spec (from Bosch, part A, page 26).
+</I>&gt;<i> &gt; an error counter can go to 256, which equals
+</I>&gt;<i> &gt; bus-off. Any CAN chip that goes beyond 256 is not according this spec.
+</I>&gt;<i> 
+</I>&gt;<i> Hmm, can you post a link to this document?
+</I>&gt;<i> 
+</I>&gt;<i> I've opened CAN 2.0 spec [1] ( part A, pag 26) and here it says:
+</I>&gt;<i> 
+</I>&gt;<i> &lt;quote&gt;
+</I>&gt;<i> A node is &#8217;bus off&#8217; when the TRANSMIT ERROR COUNT is greater than or equal to
+</I>&gt;<i> 256.
+</I>&gt;<i> &lt;/quote&gt;
+</I>&gt;<i> 
+</I>&gt;<i> So according to this tec can be greater than 256 :).
+</I>Your quote is exact.
+My interpretation is this:
+when a TEC reaches 256, it stops bus access. Therefore, TEC should not
+grow beyond 256 (well, it can as the TEC is not necessarily increased by
+      1, steps may be bigger, if I remember correct).
+
+TEC stops being a usefull thing there at 256. You should have stopped
+looking at it then.
+
+&gt;<i> 
+</I>&gt;<i> thanks,
+</I>&gt;<i> Daniel.
+</I>&gt;<i> [1]<A HREF="http://www.semiconductors.bosch.de/pdf/can2spec.pdf">http://www.semiconductors.bosch.de/pdf/can2spec.pdf</A>
+</I>Yep, there it is.
+
+Kurt
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001289.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001274.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1291">[ date ]</a>
+              <a href="thread.html#1291">[ thread ]</a>
+              <a href="subject.html#1291">[ subject ]</a>
+              <a href="author.html#1291">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

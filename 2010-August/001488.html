@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C66D60D.6050605%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001487.html">
+   <LINK REL="Next"  HREF="001489.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C66D60D.6050605%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices">mkl at pengutronix.de
+       </A><BR>
+    <I>Sat Aug 14 19:44:45 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001487.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+        <LI>Next message: <A HREF="001489.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1488">[ date ]</a>
+              <a href="thread.html#1488">[ thread ]</a>
+              <a href="subject.html#1488">[ subject ]</a>
+              <a href="author.html#1488">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;&gt;&gt;&gt;<i> I see that you typical use a sample point at 75%.
+</I>&gt;&gt;&gt;&gt;<i> CANopen has a &quot;Recommended location of sample point&quot; at 87.5%. (CiA 301).
+</I>&gt;&gt;&gt;<i> I don't have access to the standard, but [1] lists a sample point of 75%
+</I>&gt;&gt;&gt;<i> for 1000 kbit/s and 80% for 800 kbit/s. All slower bitrates have the
+</I>&gt;&gt;&gt;<i> 87.5% sample point.
+</I>
+&gt;&gt;&gt;<i> [1] www.can-cia.org/fileadmin/cia/files/icc/9/koppe.pdf
+</I>&gt;&gt;<i> It's from 2003
+</I>&gt;&gt;<i> I hope the list will accept small pictures. 
+</I>&gt;&gt;<i> From CiA301   Version 4.1, 11. April 2007
+</I>&gt;<i> 
+</I>&gt;<i> Grrr, our current settings are based on the following mail:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2008-May/001231.html">https://lists.berlios.de/pipermail/socketcan-core/2008-May/001231.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> For backward compatibility, I'm not sure if I want to modify them silently?
+</I>
+I just checked with the &quot;can-calc-bit-timing&quot;. The current algorithm
+find the same bit timing parameters for all can cores, no matter if
+we're using the older or the newer CIA recommendations.
+
+Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100814/3e6ddcd2/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100814/3e6ddcd2/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001487.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+	<LI>Next message: <A HREF="001489.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1488">[ date ]</a>
+              <a href="thread.html#1488">[ thread ]</a>
+              <a href="subject.html#1488">[ subject ]</a>
+              <a href="author.html#1488">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

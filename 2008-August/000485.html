@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem with 82527 PC/104 board
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%2082527%20PC/104%20board&In-Reply-To=%3Cab0aa4dc0808250357h7e48b840lec375f9dcef1febe%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000484.html">
+   <LINK REL="Next"  HREF="000486.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem with 82527 PC/104 board</H1>
+    <B>Alexey Serov</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%2082527%20PC/104%20board&In-Reply-To=%3Cab0aa4dc0808250357h7e48b840lec375f9dcef1febe%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] problem with 82527 PC/104 board">alexey.serov at gmail.com
+       </A><BR>
+    <I>Mon Aug 25 12:57:59 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000484.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+        <LI>Next message: <A HREF="000486.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#485">[ date ]</a>
+              <a href="thread.html#485">[ thread ]</a>
+              <a href="subject.html#485">[ subject ]</a>
+              <a href="author.html#485">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks! It finally worked with the following configuration:
+
+options i82527-iomem irq=4,6 base=0xD0000,0xD0100 speed=125,125
+irq_mode=2,2 force_dmc=1,1 clk=8000000,8000000
+
+(by default the clock value was set to 16MHz, and that was wrong)
+
+Alexey
+
+On Sat, Aug 23, 2008 at 3:53 PM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+&gt;<i> Alexey Serov wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Maybe I should calculate and set BTR0 and BTR1 parameters manually? I
+</I>&gt;&gt;<i> didn't try this, but ECAN527 driver I tried before didn't require such
+</I>&gt;&gt;<i> parameters anywhere. Can I find somewhere a working example of
+</I>&gt;&gt;<i> i82527-iomem module parameters?
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I personally had some problems with the DMC bit, that usually is derived
+</I>&gt;<i> from the clock. For that reason, i added 'force_dmc=1' as module parameter.
+</I>&gt;<i> You should probably try it.
+</I>&gt;<i>
+</I>&gt;<i> Also the bus configuration register may be set different in your setup -
+</I>&gt;<i> there is a module parameter for that.
+</I>&gt;<i>
+</I>&gt;<i> Additionally calculating BTR0 and BTR1 manually may be also a good choice.
+</I>&gt;<i>
+</I>&gt;<i> With the 'old' i82527 driver you can look in the procfs
+</I>&gt;<i>
+</I>&gt;<i> /proc/driver/i82527_regs to look how the registers are set (and compare it
+</I>&gt;<i> to your working setup).
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000484.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+	<LI>Next message: <A HREF="000486.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#485">[ date ]</a>
+              <a href="thread.html#485">[ thread ]</a>
+              <a href="subject.html#485">[ subject ]</a>
+              <a href="author.html#485">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] candump stops, and how to test performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3Cf96d234e0902111149u5f19ee0fyc5ea06c909c4df1e%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000665.html">
+   <LINK REL="Next"  HREF="000668.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] candump stops, and how to test performance</H1>
+    <B>Cliff Brake</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3Cf96d234e0902111149u5f19ee0fyc5ea06c909c4df1e%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] candump stops, and how to test performance">cliff.brake at gmail.com
+       </A><BR>
+    <I>Wed Feb 11 20:49:32 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000665.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+        <LI>Next message: <A HREF="000668.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#667">[ date ]</a>
+              <a href="thread.html#667">[ thread ]</a>
+              <a href="subject.html#667">[ subject ]</a>
+              <a href="author.html#667">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Feb 11, 2009 at 9:59 AM, christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt; wrote:
+
+&gt;<i> I had a look at the code (right now I don't have a system to do
+</I>&gt;<i> testing) and perhaps found a problem. If the rate of incoming packets
+</I>&gt;<i> is high enough (as you describe) at least one of the RX buffer is
+</I>&gt;<i> always full (there is not enough time for the mcp251x workqueue to
+</I>&gt;<i> empty both of them) so the interrupt line stays always asserted. But
+</I>&gt;<i> the workqueue exits after MAX_LOOPS loops anyway (with interrupt line
+</I>&gt;<i> low). The interrupts are edge triggers so we will never get an
+</I>&gt;<i> interrupt again until something (a transmission) triggers the work
+</I>&gt;<i> handler that clears the interrupt state.
+</I>&gt;<i>
+</I>&gt;<i> So there are 3 ways I can think of to cure this problem:
+</I>&gt;<i>
+</I>&gt;<i> 1) use level triggered interrupts but this needs a rework with some
+</I>&gt;<i> enable/disable irq to avoind an interrupt storm. And some platform
+</I>&gt;<i> (PXA being one of these if I remember well) don't support level
+</I>&gt;<i> interrupts.
+</I>
+Correct, the PXA does not support level interrupts.
+
+&gt;<i> Cliff, can you kindly try 2 or 3 and stress test the the system again?
+</I>
+I'm now running different commands to test as it makes it easier to
+tell when the receiver can't keep up and causes the cangen to quit,
+and when its locked up.
+
+&#8728; candump can0,0:0,#FFFFFFFF
+&#8728; cangen can0 -g0 -i -x -Ii  (spew data as fast as possible)
+
+During my testing, I observed that the problem only occurred when
+sending data from unit A to unit B.  Going from B-&gt;A did not produce
+the failure.  The only difference I could observe between the units
+was a linksys vs D-Link USB-Network adapter.  I switched USB network
+adapters, and the problem followed the adapter.  I then tried running
+candump on the console (instead of remote ssh session), and that seems
+fairly reliable, so it seems related to running candump in a ssh
+terminal.  Starting a fairly busy application on the candump unit that
+consumes 60% of the CPU did not impact the test.
+
+After candump gets stuck, the interrupts for the mcp2515 no longer
+increment (/proc/interrupts).  The cangen unit is still sending data
+as I can see it on a scope.
+
+I do notice a fair number of errors (see below) -- not sure yet if
+this is expected.
+
+I've tried 2 &amp; 3 -- they both seem to improve the situation, and have
+not observed any failures yet.
+
+Thanks for all the ideas.
+
+Cliff
+
+-- 
+=======================
+Cliff Brake
+<A HREF="http://bec-systems.com">http://bec-systems.com</A>
+
+  can0  20000004  [8] 5D 01 8F 04 63 99 C8 7B   ERRORFRAME
+  can0  739  [8] F3 78 60 6A 81 D1 BE 44
+  can0  71E  [2] 47 E7
+  can0  752  [6] 57 C8 B2 04 FB 0E
+  can0  755  [7] 5B C5 D3 11 C6 30 4B
+  can0  20000004  [8] 9E 01 F2 2C 68 5C E1 2C   ERRORFRAME
+  can0  75D  [0]
+  can0  765  [8] AD 96 00 27 D3 95 B9 4B
+  can0  76C  [8] 4B 96 C5 60 EB 5D E6 7E
+  can0  76F  [6] 6B 11 DD 79 9F 5A
+  can0  779  [4] 0C F6 49 7C
+  can0  781  [3] 75 AF 15
+  can0  20000004  [8] 40 01 40 06 03 3A C0 A8   ERRORFRAME
+  can0  794  [8] 73 0D AE 39 53 BD 0D 69
+  can0  795  [8] E6 D8 2C 6E 54 94 5A 60
+  can0  796  [3] 1E 7D 32
+  can0  20000004  [8] 78 01 77 12 77 48 F6 1A   ERRORFRAME
+  can0  7AE  [8] 85 F1 6B 6D 0E C4 27 74
+  can0  7B3  [4] E5 0E A2 54
+  can0  292  [8] 69 D7 40 4C 4D FC 2D 31
+  can0  297  [6] 4B 9A DA 05 1F 31
+  can0  29A  [8] D7 1B 23 19 A7 55 09 4E
+  can0  2A0  [8] D5 77 F7 3A FF 4F 3D 31
+  can0  2AB  [8] 74 A4 8F 17 58 52 16 4E
+  can0  2B6  [8] 27 CF F4 4E 7E C3 68 65
+  can0  2BC  [7] 96 F3 4F 3C 8C CC 52
+  can0  2C7  [8] B2 94 27 5B 91 8A A9 23
+  can0  20000004  [8] 40 01 40 06 03 38 C0 A8   ERRORFRAME
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000665.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+	<LI>Next message: <A HREF="000668.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#667">[ date ]</a>
+              <a href="thread.html#667">[ thread ]</a>
+              <a href="subject.html#667">[ subject ]</a>
+              <a href="author.html#667">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

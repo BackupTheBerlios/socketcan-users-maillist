@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bit%20timing%20-%20was%20Re%3A%20mscan%20problems%20for%0A%09settings%20%3E%20125kbit&In-Reply-To=%3C491AC760.6080603%40mlbassoc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000567.html">
+   <LINK REL="Next"  HREF="000569.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit</H1>
+    <B>Gary Thomas</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bit%20timing%20-%20was%20Re%3A%20mscan%20problems%20for%0A%09settings%20%3E%20125kbit&In-Reply-To=%3C491AC760.6080603%40mlbassoc.com%3E"
+       TITLE="[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit">gary at mlbassoc.com
+       </A><BR>
+    <I>Wed Nov 12 13:09:04 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000567.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+        <LI>Next message: <A HREF="000569.html">[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#568">[ date ]</a>
+              <a href="thread.html#568">[ thread ]</a>
+              <a href="subject.html#568">[ subject ]</a>
+              <a href="author.html#568">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Hi Daniel,
+</I>&gt;<i> 
+</I>&gt;<i> Daniel Schnell wrote:
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I found out that the successful communication with MSCAN is depending on
+</I>&gt;&gt;<i> the IPB clock frequency.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The following bit rates are working for an IPB Frequency of _132_ MHz:
+</I>&gt;<i> 
+</I>&gt;<i> OK.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> 125Kbit (BTR0=0x2f BTR1=0x4f), 250 Kbit (BTR0=0x20 BTR1=0x1c),
+</I>&gt;&gt;<i> 1Mbit(BTR0=0x0a BTR1=0x27)
+</I>&gt;&gt;<i> 500 Kbit(BTR0=0x20 BTR1=0x05) is not working and an attached scope shows
+</I>&gt;&gt;<i> that the bittime of the sent packets is more like 71 Kbit.
+</I>&gt;<i> 
+</I>&gt;<i> These are the calculated values for the MSCAN at 132MHz:
+</I>&gt;<i> 
+</I>&gt;<i> $ ./can-calc-bit-timing -c 132000000 mscan
+</I>&gt;<i> Bit timing parameters for mscan using 132000000Hz
+</I>&gt;<i> Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+</I>&gt;<i> 1000000     83   5    3    3   1  11 75.0%  0.0% 0x0a 0x27
+</I>&gt;<i>  800000     83   8    3    3   1  11 80.0%  0.0% 0x0a 0x2a
+</I>&gt;<i>  500000    250   5    1    1   1  33 87.5%  0.0% 0x20 0x05
+</I>&gt;<i>  250000    250  11    2    2   1  33 87.5%  0.0% 0x20 0x1c
+</I>&gt;<i>  125000    363  11    5    5   1  48 77.2%  0.0% 0x2f 0x4f
+</I>&gt;<i>  100000    454  11    5    5   1  60 77.2%  0.0% 0x3b 0x4f
+</I>&gt;<i>   50000 ***bitrate not possible***
+</I>&gt;<i>   20000 ***bitrate not possible***
+</I>&gt;<i>   10000 ***bitrate not possible***
+</I>
+I'm a bit concerned with these calculations as well.  I'm
+building an embedded system using the SJA1000 and the BTR0/BYR1
+values don't see to quite work out.
+
+To verify, I configured my driver to use the same hardware
+clock as the Peak CAN/PCI card (since I also have one of those
+to play with).  Some of the BTR0/BTR1 values match what Peak
+uses in their own drivers spot on, but only those with bitrates &gt;= 125K.
+
+For example:
+  Bitrate     Peak     SocketCAN
+  1000000     0x0014   0x0014
+   125000     0x031C   0x031C
+   100000     0x432F   0x041C
+    50000     0x472F   0x091C
+
+Is it possible to see all the calculations, like what's quoted
+above for the MSCAN?  I'm not familiar with &quot;./can-calc-bit-timing&quot;.
+Is that something that I could use to verify my settings?
+
+Thanks
+
+-- 
+------------------------------------------------------------
+Gary Thomas                 |  Consulting for the
+MLB Associates              |    Embedded world
+------------------------------------------------------------
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000567.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+	<LI>Next message: <A HREF="000569.html">[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#568">[ date ]</a>
+              <a href="thread.html#568">[ thread ]</a>
+              <a href="subject.html#568">[ subject ]</a>
+              <a href="author.html#568">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

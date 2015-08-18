@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: default NET capabilites for external	compilation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20default%20NET%20capabilites%20for%20external%0A%09compilation&In-Reply-To=%3C200707051759.l65HxcnZ003250%40post.webmailer.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000142.html">
+   <LINK REL="Next"  HREF="000144.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: default NET capabilites for external	compilation</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20default%20NET%20capabilites%20for%20external%0A%09compilation&In-Reply-To=%3C200707051759.l65HxcnZ003250%40post.webmailer.de%3E"
+       TITLE="[Socketcan-users] RFC: default NET capabilites for external	compilation">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jul  5 19:59:38 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000142.html">[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+</A></li>
+        <LI>Next message: <A HREF="000144.html">[Socketcan-users] Compiling on 64 bit machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#143">[ date ]</a>
+              <a href="thread.html#143">[ thread ]</a>
+              <a href="subject.html#143">[ subject ]</a>
+              <a href="author.html#143">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+as stated in Documentation/networking/can.txt Chapter 3.3, it makes sense to allow 'normal' non-root users to access the CAN bus (e.g. via the CAN_RAW socket). In multi-user systems (e.g. your development box) it is mostly unwanted to be root to access the CAN bus.
+
+The defaults in the Kconfig are set conservative analogue to other networking capabilities - but it's easy to change the defaults in the kernel configuration process.
+
+In the case of external compilation i would suggest to set the defaults to allow non-root users to access the CAN bus:
+
+Index: trunk/kernel/2.6/net/can/Makefile
+===================================================================
+--- trunk/kernel/2.6/net/can/Makefile   (revision 404)
++++ trunk/kernel/2.6/net/can/Makefile   (working copy)
+@@ -71,6 +71,8 @@
+                -DETH_P_CAN=0x000C \
+                -DPF_CAN=29 \
+                -DAF_CAN=PF_CAN \
++               -DCONFIG_CAN_RAW_USER \
++               -DCONFIG_CAN_BCM_USER \
+                -DARPHRD_CAN=280
+ endif
+ 
+----
+
+If there are no objections to change these defaults, i would like to commit this change.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000142.html">[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+</A></li>
+	<LI>Next message: <A HREF="000144.html">[Socketcan-users] Compiling on 64 bit machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#143">[ date ]</a>
+              <a href="thread.html#143">[ thread ]</a>
+              <a href="subject.html#143">[ subject ]</a>
+              <a href="author.html#143">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

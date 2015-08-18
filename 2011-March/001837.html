@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Setting the clock, ocr and cdr values
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20the%20clock%2C%20ocr%20and%20cdr%20values&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D45E90BB7%40NTMBOX.central.cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001836.html">
+   <LINK REL="Next"  HREF="001838.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Setting the clock, ocr and cdr values</H1>
+    <B>Jorge Fernandez Monteagudo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20the%20clock%2C%20ocr%20and%20cdr%20values&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D45E90BB7%40NTMBOX.central.cirsa.com%3E"
+       TITLE="[Socketcan-users] Setting the clock, ocr and cdr values">jorgefm at cirsa.com
+       </A><BR>
+    <I>Mon Mar 14 17:19:35 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001836.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+        <LI>Next message: <A HREF="001838.html">[Socketcan-users] Setting filter masks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1837">[ date ]</a>
+              <a href="thread.html#1837">[ thread ]</a>
+              <a href="subject.html#1837">[ subject ]</a>
+              <a href="author.html#1837">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+&gt;<i> -----Mensaje original-----
+</I>&gt;<i> De: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;<i> Enviado el: Monday, March 14, 2011 5:12 PM
+</I>&gt;<i> Para: Jorge Fernandez Monteagudo
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Asunto: Re: [Socketcan-users] Setting the clock, ocr and cdr values
+</I>&gt;<i>
+</I>&gt;<i> On 03/14/2011 05:02 PM, Jorge Fernandez Monteagudo wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Hi, I have something running...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I've installed the last iproute2:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # cd /opt/iproute2-2.6.37/ip
+</I>&gt;<i> &gt; # ./ip link set can0 type can bitrate 1000000
+</I>&gt;<i> &gt; # ifconfig can0 up
+</I>&gt;<i> &gt; can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-
+</I>&gt;<i> 00-00-00-00-00
+</I>&gt;<i> &gt;           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i> &gt;           RX packets:8061 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i> &gt;           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i> &gt;           collisions:0 txqueuelen:10
+</I>&gt;<i> &gt;           RX bytes:8061 (7.8 KiB)  TX bytes:0 (0.0 B)
+</I>&gt;<i> &gt;           Interrupt:21
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> What does &quot;./ip -d -s link show can0&quot; report?
+</I>&gt;<i>
+</I>
+7: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+    link/can
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+    bitrate 1000000 sample-point 0.750
+    tq 125 prop-seg 2 phase-seg1 3 phase-seg2 2 sjw 1
+    sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+    clock 8000000
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          0          0          0          0
+    RX: bytes  packets  errors  dropped overrun mcast
+    20999      20999    0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    0          0        0       0       0       0
+
+
+&gt;<i> &gt; # dmesg
+</I>&gt;<i> &gt; ...
+</I>&gt;<i> &gt; device 0000:01:03.0: setting BTR0=0x00 BTR1=0x14
+</I>&gt;<i>
+</I>&gt;<i> OK, that's the BTR0/1 for a 16 MHz oscillator.
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # cat /proc/net/can/stats
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         0 transmitted frames (TXF)
+</I>&gt;<i> &gt;      7410 received frames (RXF)
+</I>&gt;<i> &gt;         4 matched frames (RXMF)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         0 % total match ratio (RXMR)
+</I>&gt;<i> &gt;         0 frames/s total tx rate (TXR)
+</I>&gt;<i> &gt;         0 frames/s total rx rate (RXR)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         0 % current match ratio (CRXMR)
+</I>&gt;<i> &gt;         0 frames/s current tx rate (CTXR)
+</I>&gt;<i> &gt;         9 frames/s current rx rate (CRXR)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;        27 % max match ratio (MRXMR)
+</I>&gt;<i> &gt;         0 frames/s max tx rate (MTXR)
+</I>&gt;<i> &gt;        11 frames/s max rx rate (MRXR)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;         0 current receive list entries (CRCV)
+</I>&gt;<i> &gt;         1 maximum receive list entries (MRCV)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # cd /opt/socketcan/can-utils
+</I>&gt;<i> &gt; # ./candump can0 0:0,#FFFFFFFF
+</I>&gt;<i> &gt; SIOCGIFINDEX: No such device
+</I>&gt;<i>
+</I>&gt;<i> Try
+</I>&gt;<i>
+</I>&gt;<i> ./candump can0,0:0,#FFFFFFF or even better
+</I>&gt;<i> ./candump any,0:0,#FFFFFFFF
+</I>&gt;<i>
+</I>
+Yes, the first one is working for me!
+
+# ./candump can0,0:0,#FFFFFFFF
+  can0  721  [1] 7F
+  can0  720  [1] 05
+  can0  724  [1] 05
+  can0  725  [1] 05
+  can0  722  [1] 05
+  can0  723  [1] 7F
+  can0  70C  [1] 7F
+  can0  729  [1] 7F
+  can0  70B  [1] 7F
+  can0  71F  [1] 7F
+  can0  714  [1] 7F
+
+&gt;<i> &gt; The can0 device is up and receiving frames? but I can read them.
+</I>&gt;<i> &gt; Maybe the /dev/can0 is not set properly, because I'm using the
+</I>&gt;<i> &gt; old one:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; # ls -al /dev/can0
+</I>&gt;<i> &gt; crw-rw-rw- 1 root root 91, 0 2011-03-11 14_39 /dev/can0
+</I>&gt;<i>
+</I>&gt;<i> SocketCAN is a *network* driver (and not a character device driver).
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+Thanks a lot!
+Regards,
+Jorge
+
+Este mensaje se dirige exclusivamente a su destinatario y puede contener informaci&#243;n privilegiada o CONFIDENCIAL. Si no es vd. el destinatario indicado, queda notificado de que la utilizaci&#243;n, divulgaci&#243;n y/o copia sin autorizaci&#243;n est&#225; prohibida en virtud de la legislaci&#243;n vigente. Si ha recibido este mensaje por error, le rogamos que nos lo comunique inmediatamente por esta misma v&#237;a y proceda a su destrucci&#243;n.
+
+This message is intended exclusively for its addressee and may contain information that is CONFIDENTIAL and protected by professional privilege.
+If you are not the intended recipient you are hereby notified that any dissemination, copy or disclosure of this communication is strictly prohibited by law. If this message has been received in error, please immediately notify us via e-mail and delete it.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001836.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+	<LI>Next message: <A HREF="001838.html">[Socketcan-users] Setting filter masks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1837">[ date ]</a>
+              <a href="thread.html#1837">[ thread ]</a>
+              <a href="subject.html#1837">[ subject ]</a>
+              <a href="author.html#1837">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

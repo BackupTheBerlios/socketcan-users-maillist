@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can0 doesn't show after modprobe at91_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C4B1D4CF3.5000309%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001203.html">
+   <LINK REL="Next"  HREF="001199.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can0 doesn't show after modprobe at91_can</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C4B1D4CF3.5000309%40grandegger.com%3E"
+       TITLE="[Socketcan-users] can0 doesn't show after modprobe at91_can">wg at grandegger.com
+       </A><BR>
+    <I>Mon Dec  7 19:44:03 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001203.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+        <LI>Next message: <A HREF="001199.html">[Socketcan-users] Capture frames from SocketCAN interface with Libpcap/Tcpdump/Wireshark
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1193">[ date ]</a>
+              <a href="thread.html#1193">[ thread ]</a>
+              <a href="subject.html#1193">[ subject ]</a>
+              <a href="author.html#1193">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Chris Verges wrote:
+&gt;<i> Hi list,
+</I>&gt;<i> 
+</I>&gt;<i> I'm attempting to build the SocketCAN kernel modules external to the
+</I>&gt;<i> kernel and load them in.  When I do, I see the following:
+</I>&gt;<i> 
+</I>&gt;<i>    # modprobe can-raw
+</I>&gt;<i>    can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i>    NET: Registered protocol family 29
+</I>&gt;<i>    can: raw protocol (rev 20090105)
+</I>&gt;<i> 
+</I>&gt;<i>    # modprobe at91_can
+</I>&gt;<i>    CAN device driver interface using the deprecated SYSFS interface
+</I>&gt;<i>    at91_can netdevice driver
+</I>&gt;<i> 
+</I>&gt;<i>    # ip link show
+</I>&gt;<i>    1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 16436 qdisc noqueue state UNKNOWN
+</I>&gt;<i>        link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</I>&gt;<i>    2: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast
+</I>&gt;<i> state UNKN0
+</I>&gt;<i>        link/ether 00:09:e6:ff:ff:fe brd ff:ff:ff:ff:ff:ff
+</I>&gt;<i> 
+</I>&gt;<i> How do I get the can0 interface to show up after modprobing the at91_can
+</I>&gt;<i> driver?  I assumed it would automagically happen.
+</I>&gt;<i> 
+</I>&gt;<i> (Prior to this, I've been porting the SocketCAN code directly into the
+</I>&gt;<i> kernel and building monolithic.  However, this is cumbersome so I'd like
+</I>&gt;<i> to just use the external modules rather than maintain my own kernel
+</I>&gt;<i> line.  When building into the kernel directly, can0 does show up.)
+</I>
+FYI, at91_can is mainline:
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.32/drivers/net/can/Kconfig#L38">http://lxr.linux.no/#linux+v2.6.32/drivers/net/can/Kconfig#L38</A>
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001203.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+	<LI>Next message: <A HREF="001199.html">[Socketcan-users] Capture frames from SocketCAN interface with Libpcap/Tcpdump/Wireshark
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1193">[ date ]</a>
+              <a href="thread.html#1193">[ thread ]</a>
+              <a href="subject.html#1193">[ subject ]</a>
+              <a href="author.html#1193">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

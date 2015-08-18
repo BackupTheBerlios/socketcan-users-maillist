@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C20091104203006.GA25667%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001128.html">
+   <LINK REL="Next"  HREF="001130.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C20091104203006.GA25667%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">l.fu at pengutronix.de
+       </A><BR>
+    <I>Wed Nov  4 21:30:06 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001128.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001130.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1129">[ date ]</a>
+              <a href="thread.html#1129">[ thread ]</a>
+              <a href="subject.html#1129">[ subject ]</a>
+              <a href="author.html#1129">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+On Wed, Nov 04, 2009 at 08:37:00PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Hi Fu,
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; Luotao Fu wrote:
+</I>&gt;<i> &gt;&gt; Hi,
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; On Wed, Nov 04, 2009 at 03:25:16PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt; Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt; Luotao Fu wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Hi Wolfgang,
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; On Wed, Nov 04, 2009 at 09:30:18AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Luotao Fu wrote:
+</I>&gt;<i> &gt;&gt; ....
+</I>&gt;<i> &gt;&gt;&gt;&gt; As I already said, I use an old MPC5200 (without *B*). Will try later
+</I>&gt;<i> &gt;&gt;&gt;&gt; today with a MPC5200B.
+</I>&gt;<i> &gt;&gt;&gt; I switched to &quot;MPC5200B v2.2, Core v1.4 at 396 MHz&quot; and the problem does
+</I>&gt;<i> &gt;&gt;&gt; *not* show up any more. Before I used a &quot;MPC5200 v1.2, Core v1.1 at 396
+</I>&gt;<i> &gt;&gt;&gt; MHz&quot;. Now I remember vaguely, that I was indeed fighting with this
+</I>&gt;<i> &gt;&gt;&gt; strange behavior.
+</I>&gt;<i> &gt;&gt; Ah, great to get confirmation that I was not hallucinating :-). It
+</I>&gt;<i> &gt;&gt; indeed took me some time to sort out what was going wrong in this
+</I>&gt;<i> &gt;&gt; strange issue. We shall probably ask freescale if this issue is konwn.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Good luck ;-).
+</I>&gt;<i> &gt; 
+</I>;-)
+
+&gt;<i> &gt;&gt; BTW. I just checked the datasheet of mpc5200. The slprq should always
+</I>&gt;<i> &gt;&gt; acked, just like in mpc5200b, and otherwise the controller should be in
+</I>&gt;<i> &gt;&gt; idle mode with slprq set. It looks really strange that your mpc5200
+</I>&gt;<i> &gt;&gt; board works properly without being able to get the slpack. Could you do
+</I>&gt;<i> &gt;&gt; some more inspection on this one by occassion (don't have a mpc5200
+</I>&gt;<i> &gt;&gt; board here)?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I don't think it's related to my board. I'm quite sure that it's like
+</I>&gt;<i> &gt; that on all mpc5200a. Oliver has a board with such a processor, IIRC.
+</I>&gt;<i> &gt; I will try to find another mpc5200a board.
+</I>&gt;<i> 
+</I>&gt;<i> Here are the values of the canctrl0/1 registers after the sleep and init loop:
+</I>&gt;<i> 
+</I>&gt;<i>  mpc52xx_can f0000980.can: setting BTR0=0x2f BTR1=0x4f
+</I>&gt;<i>  Sleep: ctrl0=0x12 ctrl1=0xc0
+</I>&gt;<i>  mpc52xx_can f0000900.can: SLPRQ timeout reached, failed to enter 
+</I>&gt;<i>  Init: ctrl0=0x03 ctrl1=0xc3
+</I>&gt;<i> 
+</I>
+So the slprq is kept set, interesting, Could you please try instrument
+the canctl0 and canctl1 value withouth my pathc? The code would not set
+initrq because the ret value will be set to error after failing waiting
+for slpack and the slprq will be kept set. According to the datasheet:
+SLPRQ:
+0 Running MSCAN functions normally
+1 Sleep Mode Request&#8212;MSCAN locks in idle state
+
+I'm wondering heavily how this could work at all, if the datasheet is
+right.
+
+&gt;<i> Unfortunately, I do not have another mpc5200a board at hand.
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt; The manual instructs to enter sleep mode first and thereafter the init
+</I>&gt;<i> &gt;&gt;&gt; mode, but as that did'nt work, sleep and init are set in one step.
+</I>&gt;<i> &gt;&gt; Well, usually it works already. In case of a failed slprq the we now
+</I>&gt;<i> &gt;&gt; just force the init.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Well, the mpc5200a obviously does not enter properly the sleep mode.
+</I>&gt;<i> &gt; Nevertheless, the board still works fine after an &quot;ifconfig up&quot;.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt;&gt; Maybe we simply do s/dev_err/dev_dbg/. What do you think?
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt; Fail to enter sleep mode could indeed be a trouble. I personally would
+</I>&gt;<i> &gt;&gt; prefer a dev_err here, since it's nevertheless a little hacky here. In
+</I>&gt;<i> &gt;&gt; the end the message would not appear to frequently since it occures only
+</I>&gt;<i> &gt;&gt; when we (re)initialize the interface, so it should not be too annoying.
+</I>&gt;<i> 
+</I>&gt;<i> I would apply the patch witch a more descriptive warning message.
+</I>&gt;<i> 
+</I>
+Hmm, something like this?
+&quot;Sleep request failed, device could not enter sleep mode. We force to
+proceed any how to avoid freeze. All active transmit actions, if still
+any, will be aborted.&quot;
+Since we are experiencing funny behaviours on mpc5200a too. I agree you
+with the point on dev_err vs. dev_debug. I'll change it in dev_dbg then.
+
+&gt;<i> Just for curiosity. Could you try the patch below waiting to
+</I>&gt;<i> the TX messages to get aborted. Does that help? 
+</I>&gt;<i> 
+</I>
+In my testscenarios the tx_active is mostly not set. So I don't
+think this will change the behaviour. Nevertheless I'll try this out
+tommorow.
+&gt;<i> Wolfgang.
+</I> 
+cheers
+Luotao Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091104/4cc95880/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091104/4cc95880/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001128.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001130.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1129">[ date ]</a>
+              <a href="thread.html#1129">[ thread ]</a>
+              <a href="subject.html#1129">[ subject ]</a>
+              <a href="author.html#1129">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

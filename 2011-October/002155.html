@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Some questions about using socket can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20questions%20about%20using%20socket%20can&In-Reply-To=%3C4E8979E5.50203%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002154.html">
+   <LINK REL="Next"  HREF="002156.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Some questions about using socket can</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20questions%20about%20using%20socket%20can&In-Reply-To=%3C4E8979E5.50203%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Some questions about using socket can">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Oct  3 11:01:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002154.html">[Socketcan-users] Some questions about using socket can
+</A></li>
+        <LI>Next message: <A HREF="002156.html">[Socketcan-users] BerliOS will be closed, how to proceed...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2155">[ date ]</a>
+              <a href="thread.html#2155">[ thread ]</a>
+              <a href="subject.html#2155">[ subject ]</a>
+              <a href="author.html#2155">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/03/11 05:21, li guohu wrote:
+
+&gt;<i> I am using the socketcan to try to send can message. But now I encounter some
+</I>&gt;<i> questions. So I write this mail to seek help.
+</I>&gt;<i> 
+</I>&gt;<i> The CPU I am using is freescale's MPC5125. And the board is TWR-MPC1525. The
+</I>&gt;<i> linux kernel I am using is linux 2.6.29.1 and patched by freescale.
+</I>
+
+As i can see from the source code you provided in the zip file ...
+
+    ifr.ifr_ifru.ifru_ivalue = 1000000;
+    ret = ioctl(s, SIOCSCANBAUDRATE, &amp;ifr);
+
+you set the baudrate via ioctl() which is specific to the freescale patches.
+
+The best is, if you could upgrade to a recent mainline kernel which uses the
+netlink configuration interface for the bitrate setting (with the 'ip' tool
+from the iproute2 package). Or you can ask freescale to provide mainline CAN
+support in their BSP ;-)
+
+Also the
+
+&gt;<i> NETDEV WATCHDOG: can0 (fsl-mscan): transmit timed out 
+</I>
+
+handling has changed in the mainline kernel.
+
+Btw. if you don't have the chance to update (or only put the stuff from
+linux/drivers/net/can into your tree) you can try to go with your current setup.
+
+I assume that you CAN setup has some general problems.
+
+Please check, if you have
+
+- a second(!) CAN node using the same(!) bitrate that can acknowledge your
+sent data
+
+- a properly terminated(!) and connected CAN bus
+
+Having only one CAN node does NOT work!
+
+Usually it's the best approach to connect to a working CAN network first and
+to check, if the reception of CAN frames works properly on your system. This
+ensures the two points above are solved.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002154.html">[Socketcan-users] Some questions about using socket can
+</A></li>
+	<LI>Next message: <A HREF="002156.html">[Socketcan-users] BerliOS will be closed, how to proceed...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2155">[ date ]</a>
+              <a href="thread.html#2155">[ thread ]</a>
+              <a href="subject.html#2155">[ subject ]</a>
+              <a href="author.html#2155">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

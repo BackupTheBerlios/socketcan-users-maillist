@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4EC0E4BE.4010101%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002206.html">
+   <LINK REL="Next"  HREF="002208.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4EC0E4BE.4010101%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 14 10:51:58 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002206.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+        <LI>Next message: <A HREF="002208.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2207">[ date ]</a>
+              <a href="thread.html#2207">[ thread ]</a>
+              <a href="subject.html#2207">[ subject ]</a>
+              <a href="author.html#2207">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/13/2011 08:31 PM, Wolfgang Grandegger wrote:
+&gt;<i> On 11/13/2011 10:15 AM, Willy Lambert wrote:
+</I>&gt;&gt;<i> 2011/11/13 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;:
+</I>&gt;&gt;&gt;<i> 2011/11/12 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;:
+</I>&gt;&gt;&gt;&gt;<i> On 11/12/2011 10:08 PM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 11/12/2011 10:55 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> I failed to apply the patch, is it for 2.6.38.8 kernels ?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> No, it's for up-to-date *mainline* linux version 3.1.x. Any chance to
+</I>&gt;&gt;&gt;&gt;&gt;<i> switch to David Miller's &quot;net-nex-2.6&quot; tree?. Otherwise I'm going to
+</I>&gt;&gt;&gt;&gt;&gt;<i> adapt the patch to 2.6.38.8.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Well, the patch also applies to 2.6.38.8. Maybe you have some problems
+</I>&gt;&gt;&gt;&gt;<i> extracting the patch. Therefore I have attached it as attachment this
+</I>&gt;&gt;&gt;&gt;<i> time. Good luck.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> It's ok now :
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">ard at ard-host</A>:~/src/linux-2.6.38.8$ patch -p1 &lt; wg_platform.patch
+</I>&gt;&gt;&gt;<i> patching file drivers/net/can/sja1000/Kconfig
+</I>&gt;&gt;&gt;<i> patching file drivers/net/can/sja1000/sja1000_isa.c
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I must have done something wrong. I am going to test it now
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> arg, it doesn't compile I had a look a sources but I don't see the error :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   CC [M]  drivers/xenomai/can/rtcan_raw_dev.o
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c: In function &#8216;sja1000_isa_init&#8217;:
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:297: error: invalid storage
+</I>&gt;&gt;<i> class for function &#8216;sja1000_isa_exit&#8217;
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:296: warning: ISO C90 forbids
+</I>&gt;&gt;<i> mixed declarations and code
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:307: error: invalid storage
+</I>&gt;&gt;<i> class for function &#8216;__inittest&#8217;
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:307: warning: &#8216;alias&#8217; attribute ignored
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:308: error: invalid storage
+</I>&gt;&gt;<i> class for function &#8216;__exittest&#8217;
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:308: warning: ISO C90 forbids
+</I>&gt;&gt;<i> mixed declarations and code
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:308: warning: &#8216;alias&#8217; attribute ignored
+</I>&gt;&gt;<i> drivers/net/can/sja1000/sja1000_isa.c:308: error: expected declaration
+</I>&gt;&gt;<i> or statement at end of input
+</I>&gt;&gt;<i> make[5]: *** [drivers/net/can/sja1000/sja1000_isa.o] Error 1
+</I>&gt;<i> 
+</I>&gt;<i> Argh, a &quot;}&quot; is missing, sorry. I will test the patch more carefully
+</I>&gt;<i> before re-sending.
+</I>
+See attachment.
+
+Wolfgang.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: sja1000-isa-platform-x86-64.patch
+Type: text/x-diff
+Size: 7240 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20111114/b1181732/attachment.patch">https://lists.berlios.de/pipermail/socketcan-users/attachments/20111114/b1181732/attachment.patch</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002206.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+	<LI>Next message: <A HREF="002208.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2207">[ date ]</a>
+              <a href="thread.html#2207">[ thread ]</a>
+              <a href="subject.html#2207">[ subject ]</a>
+              <a href="author.html#2207">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

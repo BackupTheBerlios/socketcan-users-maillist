@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Running MCP2515 with custom SPI
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Running%20MCP2515%20with%20custom%20SPI&In-Reply-To=%3C20110531211505.279910%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001905.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Running MCP2515 with custom SPI</H1>
+    <B>Gn0my at gmx.de</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Running%20MCP2515%20with%20custom%20SPI&In-Reply-To=%3C20110531211505.279910%40gmx.net%3E"
+       TITLE="[Socketcan-users] Running MCP2515 with custom SPI">Gn0my at gmx.de
+       </A><BR>
+    <I>Tue May 31 23:15:05 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001905.html">[Socketcan-users] Running MCP2515 with custom SPI
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1906">[ date ]</a>
+              <a href="thread.html#1906">[ thread ]</a>
+              <a href="subject.html#1906">[ subject ]</a>
+              <a href="author.html#1906">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+i want to use the MCP2515 microchip for CAN communication. Unfortunately i can't use the included kernelheader &lt;linux/spi/spi.h&gt;, because it's a custom spi-driver.
+To read the SPI i simply call a function with three parameters: struct of the spi-configuration(CS,bit length, Mastermode, ...), a char destination_register and a short data-buffer to read data.
+To write the SPI i call another function with three parameters: struct of the spi-configuration(CS,bit length, Mastermode, ...), a char destination_register and a short data field to write data.
+
+Can i just call my spi transfer functions inside the functions mcp251x_read_reg(struct spi_device *spi, uint8_t reg) and mcp251x_write_reg(struct spi_device *spi, u8 reg, uint8_t val) and everything in CANSocket works fine?
+
+
+
+
+
+ 
+
+
+   
+-- 
+NEU: FreePhone - kostenlos mobil telefonieren!			
+Jetzt informieren: <A HREF="http://www.gmx.net/de/go/freephone">http://www.gmx.net/de/go/freephone</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001905.html">[Socketcan-users] Running MCP2515 with custom SPI
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1906">[ date ]</a>
+              <a href="thread.html#1906">[ thread ]</a>
+              <a href="subject.html#1906">[ subject ]</a>
+              <a href="author.html#1906">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

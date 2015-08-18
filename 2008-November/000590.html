@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using ioctl with Peak CAN interface
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20ioctl%20with%20Peak%20CAN%20interface&In-Reply-To=%3C4926D1E6.1070209%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000587.html">
+   <LINK REL="Next"  HREF="000592.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using ioctl with Peak CAN interface</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20ioctl%20with%20Peak%20CAN%20interface&In-Reply-To=%3C4926D1E6.1070209%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Using ioctl with Peak CAN interface">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Nov 21 16:21:10 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000587.html">[Socketcan-users]  Using ioctl with Peak CAN interface
+</A></li>
+        <LI>Next message: <A HREF="000592.html">[Socketcan-users] Using ioctl with Peak CAN interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#590">[ date ]</a>
+              <a href="thread.html#590">[ thread ]</a>
+              <a href="subject.html#590">[ subject ]</a>
+              <a href="author.html#590">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>chrislpnt wrote:
+&gt;<i> I need to set the CAN bitrate and the Peak manual and using the chardev for
+</I>&gt;<i> this seems a little clumsy. It would be so much more elegant to be able to
+</I>&gt;<i> use an ioctl call. The Peak installation manual says:
+</I>&gt;<i>
+</I>&gt;<i> &quot;Naturally a faster &#8222;ioctl()&#8220;-interface is also defined.&quot;
+</I>&gt;<i>
+</I>&gt;<i> Great, and the file pcan.h has the ioctls control codes but I still don't
+</I>&gt;<i> know how to use it. Is there anybody who can shed some light on this?
+</I>&gt;<i>   
+</I>
+I don't use the ioctl() stuff and only use
+
+echo &quot;i 0x4114 e&quot; &gt; /dev/pcan32
+
+to set the bitrates.
+
+But you may take a look into lib/src/libpcan.c for an example of how 
+ioctls are used for the pcan driver.
+
+&gt;<i> On that note, any news on getting full sysfs support for setting such
+</I>&gt;<i> parameters with the Peak interfaces? That way, I wouldn't have to resort to
+</I>&gt;<i> very Peak-specific calls.
+</I>&gt;<i>   
+</I>
+It probably makes more sense to split up the monolithic PEAK driver into 
+several drivers like the peak_pci already is. So that you would have a 
+peak_usb, peak_pcmcia, ... also.
+
+But this is up to the PEAK guys.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000587.html">[Socketcan-users]  Using ioctl with Peak CAN interface
+</A></li>
+	<LI>Next message: <A HREF="000592.html">[Socketcan-users] Using ioctl with Peak CAN interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#590">[ date ]</a>
+              <a href="thread.html#590">[ thread ]</a>
+              <a href="subject.html#590">[ subject ]</a>
+              <a href="author.html#590">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

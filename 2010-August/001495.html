@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN in embedded system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20in%20embedded%20system&In-Reply-To=%3C4C76DBFE.3020007%40canam-technology.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001494.html">
+   <LINK REL="Next"  HREF="001496.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN in embedded system</H1>
+    <B>Jorge A. Castro</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20in%20embedded%20system&In-Reply-To=%3C4C76DBFE.3020007%40canam-technology.com%3E"
+       TITLE="[Socketcan-users] CAN in embedded system">jcastro at canam-technology.com
+       </A><BR>
+    <I>Thu Aug 26 23:26:22 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001494.html">[Socketcan-users] CAN device selection
+</A></li>
+        <LI>Next message: <A HREF="001496.html">[Socketcan-users] CAN in embedded system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1495">[ date ]</a>
+              <a href="thread.html#1495">[ thread ]</a>
+              <a href="subject.html#1495">[ subject ]</a>
+              <a href="author.html#1495">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I'm dealing with an embedded system and trying to implement the CAN bus 
+for communication with some different modules. In the kernel 
+configuration, I'm able to enable the CAN bus subsystem support and some 
+CAN device drivers like the Virtual Local CAN Interface (vcan). I 
+understand I can use CAN as chardev or netdev, but I can't see any 
+interface of those available in the system.
+
+Any ideas on what I need to do in order to use the CAN bus?
+
+My target is an ARM-57TS-LPC3250 board from Future Design Inc. and I'm 
+running Linux 2.6.27 on it. When I boot the system I got this:
+
+TCP cubic registered
+NET: Registered protocol family 17
+/can: controller area network core (rev 20071116 abi 8)/
+NET: Registered protocol family 29
+/can: raw protocol (rev 20071116)
+can: broadcast manager protocol (rev 20080415)/
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+VFP support v0.3: implementor 41 architecture 1 part 10 variant 9 rev 1
+drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+IP-Config: Guessing netmask 255.255.255.0
+
+where I can see some CAN configuration in it. In my host machine I have 
+a PCAN-PCI card from Peak Systems to communicate with the target and 
+check this bus functioning.
+
+Any suggestion and help will be welcome!
+
+Best regards
+
+-- 
+Jorge A. Castro
+Canam-Technology, Inc.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100826/7bb00911/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100826/7bb00911/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001494.html">[Socketcan-users] CAN device selection
+</A></li>
+	<LI>Next message: <A HREF="001496.html">[Socketcan-users] CAN in embedded system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1495">[ date ]</a>
+              <a href="thread.html#1495">[ thread ]</a>
+              <a href="subject.html#1495">[ subject ]</a>
+              <a href="author.html#1495">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

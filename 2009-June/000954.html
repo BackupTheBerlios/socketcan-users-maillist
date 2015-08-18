@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] atomic operations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3C4A39592E.50806%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000953.html">
+   <LINK REL="Next"  HREF="000957.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] atomic operations</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3C4A39592E.50806%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] atomic operations">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Jun 17 22:59:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000953.html">[Socketcan-users] atomic operations
+</A></li>
+        <LI>Next message: <A HREF="000957.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#954">[ date ]</a>
+              <a href="thread.html#954">[ thread ]</a>
+              <a href="subject.html#954">[ subject ]</a>
+              <a href="author.html#954">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi folks,
+</I>&gt;<i> I was playing around with a mcp2510 card on a i.MX27 platform with 2.6.30
+</I>&gt;<i> lately. I turned on preempt support in kernel and ran quite quickly into the
+</I>&gt;<i> issue of scheduling in atomic operations while trying to get the if state by
+</I>&gt;<i> doing a cat on can_state.
+</I>
+Hi Lutao,
+
+i assume this to be one of the reasons why using the sysfs has been rejected
+on netdev-ML withing the mainline process.
+
+Did you follow the activities for the netlink configuration for CAN interfaces
+that becomes part of 2.6.31 ?
+
+Do you have this problems also with the netlink interface?
+
+Regards,
+Oliver
+
+&gt;<i> The issue has been apparently already describe on this
+</I>&gt;<i> list. The thread can be found here:
+</I>&gt;<i>  <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2009-April/002427.html.">https://lists.berlios.de/pipermail/socketcan-core/2009-April/002427.html.</A>
+</I>&gt;<i> Christians workaround works fine. But as he's already written in the thread,
+</I>&gt;<i> this is no solution. Taking a look a can_dev_show: The read_lock forces an
+</I>&gt;<i> atomic path on systems with preemption. Hence there's always a chance to
+</I>&gt;<i> run into similar situations for cards connecting to slower busses with its own
+</I>&gt;<i> transfer waiting queue like mcp251x. The situation is quite similar to the one
+</I>&gt;<i> once gpiolib faced to. The access clearly has to be locked to avoid racing. But
+</I>&gt;<i> the rwlock is probably wrong here. I have no ide what else will have to be
+</I>&gt;<i> changed to fix this behaviour or whether this issue has already been discussed
+</I>&gt;<i> before. If the issue is already known, sorry for double posting than.
+</I>&gt;<i> 
+</I>&gt;<i> cheers
+</I>&gt;<i> Luotao Fu
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000953.html">[Socketcan-users] atomic operations
+</A></li>
+	<LI>Next message: <A HREF="000957.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#954">[ date ]</a>
+              <a href="thread.html#954">[ thread ]</a>
+              <a href="subject.html#954">[ subject ]</a>
+              <a href="author.html#954">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

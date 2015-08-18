@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48232A11.5090809%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000340.html">
+   <LINK REL="Next"  HREF="000342.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48232A11.5090809%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] HW Clock">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu May  8 18:28:01 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000340.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000342.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#341">[ date ]</a>
+              <a href="thread.html#341">[ thread ]</a>
+              <a href="subject.html#341">[ subject ]</a>
+              <a href="author.html#341">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> I tried to compile the candump.c but it returned a error:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at breno-HP</A>:/home/breno/ELDK/ppc_6xx/home/breno/Desktop/Application# 
+</I>&gt;<i> ppc_6xx-gcc candump.c -o candump
+</I>&gt;<i> /tmp/ccM097MA.o: In function `main':
+</I>&gt;<i> candump.c:(.text+0x12f4): undefined reference to `fprint_canframe'
+</I>&gt;<i> candump.c:(.text+0x1380): undefined reference to `fprint_canframe'
+</I>&gt;<i> candump.c:(.text+0x1738): undefined reference to `fprint_long_canframe'
+</I>&gt;<i> collect2: ld returned 1 exit status
+</I>
+Hm - the Makefile also compiles a lib.o (in the same directory).
+
+Saying &quot;gcc candump.c -o candump&quot; is not enough here. Try
+
+make CC=&lt;yourpath&gt;/ppc_6xx-gcc
+
+or something like this.
+
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000340.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000342.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#341">[ date ]</a>
+              <a href="thread.html#341">[ thread ]</a>
+              <a href="subject.html#341">[ subject ]</a>
+              <a href="author.html#341">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

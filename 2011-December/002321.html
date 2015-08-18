@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 13/14] can: cc770: consolidate error	state handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2013/14%5D%20can%3A%20cc770%3A%20consolidate%20error%0A%09state%20handling&In-Reply-To=%3C1323269728-17491-14-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002316.html">
+   <LINK REL="Next"  HREF="002322.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 13/14] can: cc770: consolidate error	state handling</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2013/14%5D%20can%3A%20cc770%3A%20consolidate%20error%0A%09state%20handling&In-Reply-To=%3C1323269728-17491-14-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 13/14] can: cc770: consolidate error	state handling">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:27 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002316.html">[Socketcan-users] [RFC PATCH 12/14] can: mscan: consolidate bus-off	handling
+</A></li>
+        <LI>Next message: <A HREF="002322.html">[Socketcan-users] [RFC PATCH 14/14] can: cc770: consolidate bus-off	handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2321">[ date ]</a>
+              <a href="thread.html#2321">[ thread ]</a>
+              <a href="subject.html#2321">[ subject ]</a>
+              <a href="author.html#2321">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Allow state to decrease bus-off-&gt;passive-&gt;warning-&gt;active.
+Use the common function can_chage_state().
+
+Here is an example output of &quot;candump -candump -td -e any,0:0,#FFFFFFFF&quot;
+for a recovery from error passive state due to no ack/cable (reconnect
+after 5s) for an Intel 82527 on a TQM855L board:
+
+ (000.200637)  can0   58  [4] 51 C0 12 C4
+ (000.202869)  can0  20000224  [8] 00 0C 00 00 00 00 00 00   ERRORFRAME
+        controller-problem{rx-error-warning,tx-error-warning}
+        no-acknowledgement-on-tx
+        state-change{rx-error-warning,tx-error-warning}
+ (004.928599)  can0   59  [8] 50 69 F9 1F 6A 88 4B 3A
+ (000.000429)  can0   5A  [8] 29 1C 44 49 06 8C F8 07
+ ...
+ (000.200789)  can0   8A  [8] 38 6B F1 09 0B A2 6D 80
+ (000.200831)  can0  20000200  [8] 00 40 00 00 00 00 00 00   ERRORFRAME
+        state-change{back-to-error-active}
+ (000.000021)  can0   8B  [7] 4B 9A 8A E7 5B C5 CD
+
+The Intel 82527 does not report state changes to error passive.
+
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/cc770/cc770.c |   37 ++++++++++++-------------------------
+ 1 files changed, 12 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/net/can/cc770/cc770.c b/drivers/net/can/cc770/cc770.c
+index 7668967..905a3ca 100644
+--- a/drivers/net/can/cc770/cc770.c
++++ b/drivers/net/can/cc770/cc770.c
+@@ -349,8 +349,8 @@ static int cc770_set_mode(struct net_device *dev, enum can_mode mode)
+ {
+ 	switch (mode) {
+ 	case CAN_MODE_START:
+-		cc770_start(dev);
+ 		netif_wake_queue(dev);
++		cc770_start(dev);
+ 		break;
+ 
+ 	default:
+@@ -513,6 +513,7 @@ static int cc770_err(struct net_device *dev, u8 status)
+ {
+ 	struct cc770_priv *priv = netdev_priv(dev);
+ 	struct net_device_stats *stats = &amp;dev-&gt;stats;
++	enum can_state new_state;
+ 	struct can_frame *cf;
+ 	struct sk_buff *skb;
+ 	u8 lec;
+@@ -523,38 +524,25 @@ static int cc770_err(struct net_device *dev, u8 status)
+ 	if (!skb)
+ 		return -ENOMEM;
+ 
+-	/* Use extended functions of the CC770 */
+-	if (priv-&gt;control_normal_mode &amp; CTRL_EAF) {
+-		cf-&gt;data[6] = cc770_read_reg(priv, tx_error_counter);
+-		cf-&gt;data[7] = cc770_read_reg(priv, rx_error_counter);
+-	}
+-
++	/* Handle state changes */
+ 	if (status &amp; STAT_BOFF) {
+ 		/* Disable interrupts */
+ 		cc770_write_reg(priv, control, CTRL_INI);
+-		cf-&gt;can_id |= CAN_ERR_BUSOFF;
+-		priv-&gt;can.state = CAN_STATE_BUS_OFF;
++		new_state = CAN_STATE_BUS_OFF;
+ 		can_bus_off(dev);
+ 	} else if (status &amp; STAT_WARN) {
+-		cf-&gt;can_id |= CAN_ERR_CRTL;
+ 		/* Only the CC770 does show error passive */
+-		if (cf-&gt;data[7] &gt; 127) {
+-			cf-&gt;data[1] = CAN_ERR_CRTL_RX_PASSIVE |
+-				CAN_ERR_CRTL_TX_PASSIVE;
+-			priv-&gt;can.state = CAN_STATE_ERROR_PASSIVE;
+-			priv-&gt;can.can_stats.error_passive++;
+-		} else {
+-			cf-&gt;data[1] = CAN_ERR_CRTL_RX_WARNING |
+-				CAN_ERR_CRTL_TX_WARNING;
+-			priv-&gt;can.state = CAN_STATE_ERROR_WARNING;
+-			priv-&gt;can.can_stats.error_warning++;
+-		}
++		if (priv-&gt;control_normal_mode &amp; CTRL_EAF &amp;&amp;
++		    cc770_read_reg(priv, rx_error_counter) &gt; 127)
++			new_state = CAN_STATE_ERROR_PASSIVE;
++		else
++			new_state = CAN_STATE_ERROR_WARNING;
+ 	} else {
+ 		/* Back to error avtive */
+-		cf-&gt;can_id |= CAN_ERR_PROT;
+-		cf-&gt;data[2] = CAN_ERR_PROT_ACTIVE;
+-		priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
++		new_state = CAN_STATE_ERROR_ACTIVE;
+ 	}
++	if (new_state != priv-&gt;can.state)
++		can_change_state(dev, cf, new_state, CAN_ERR_DIR_UNKNOWN);
+ 
+ 	lec = status &amp; STAT_LEC_MASK;
+ 	if (lec &lt; 7 &amp;&amp; lec &gt; 0) {
+@@ -770,7 +758,6 @@ static int cc770_open(struct net_device *dev)
+ 	cc770_start(dev);
+ 
+ 	netif_start_queue(dev);
+-
+ 	return 0;
+ }
+ 
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002316.html">[Socketcan-users] [RFC PATCH 12/14] can: mscan: consolidate bus-off	handling
+</A></li>
+	<LI>Next message: <A HREF="002322.html">[Socketcan-users] [RFC PATCH 14/14] can: cc770: consolidate bus-off	handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2321">[ date ]</a>
+              <a href="thread.html#2321">[ thread ]</a>
+              <a href="subject.html#2321">[ subject ]</a>
+              <a href="author.html#2321">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

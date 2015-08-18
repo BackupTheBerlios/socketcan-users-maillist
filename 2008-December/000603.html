@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN USB
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20USB&In-Reply-To=%3C493837F6.2020902%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000602.html">
+   <LINK REL="Next"  HREF="000604.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN USB</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20USB&In-Reply-To=%3C493837F6.2020902%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] CAN USB">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Dec  4 21:05:10 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000602.html">[Socketcan-users] CAN USB
+</A></li>
+        <LI>Next message: <A HREF="000604.html">[Socketcan-users] CAN USB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#603">[ date ]</a>
+              <a href="thread.html#603">[ thread ]</a>
+              <a href="subject.html#603">[ subject ]</a>
+              <a href="author.html#603">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> For example, I have some of the Lawicel AB devices.  The interface
+</I>&gt;<i> looks like a [USB] serial port with specialized commands to perform
+</I>&gt;<i> the actual CAN bus operations.
+</I>&gt;<i>
+</I>&gt;<i> Has anyone ever thought about supporting these [various] dongles?
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Yes me ;-)
+
+They are already supported by the slcan driver which supports a class of 
+devices that implements the Lawicel protocol aka SLCAN (Serial Line CAN) 
+protocol.
+
+<A HREF="http://download.berlios.de/socketcan/SLCAN-API.pdf">http://download.berlios.de/socketcan/SLCAN-API.pdf</A>
+
+I implemented this driver as a Linux serial line discipline (N_SLCAN 
+since 2.6.25) on the base of slip.c to push the tty ASCII CAN frames 
+into a slc0, slc1, ... CAN netdevices.
+
+The slcan driver is in the SocketCAN SVN (but not default compile target).
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/drivers/net/can/slcan.c">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/drivers/net/can/slcan.c</A>
+
+If you go into
+
+socketcan/trunk/kernel/2.6/drivers/net/can
+
+and say
+
+make CONFIG_CAN_SLCAN=m
+
+it is build.
+
+You need the tool 'slcan_attach' from socketcan/trunk/can-utils also.
+
+But for an unknown reason it is not possible to attach, detach and 
+re-attach a (USB/) serial device.
+
+But the fist attach runs excellent for first tests. Maybe you catch the 
+problem ;-)
+
+Give it a try.
+
+Have fun,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000602.html">[Socketcan-users] CAN USB
+</A></li>
+	<LI>Next message: <A HREF="000604.html">[Socketcan-users] CAN USB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#603">[ date ]</a>
+              <a href="thread.html#603">[ thread ]</a>
+              <a href="subject.html#603">[ subject ]</a>
+              <a href="author.html#603">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

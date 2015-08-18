@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x driver for linux-2.6.22
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20driver%20for%20linux-2.6.22&In-Reply-To=%3Cfcd93b000903241831i249a2f5fj5aa95be5ddface28%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000714.html">
+   <LINK REL="Next"  HREF="000716.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x driver for linux-2.6.22</H1>
+    <B>Yonghui Shen</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20driver%20for%20linux-2.6.22&In-Reply-To=%3Cfcd93b000903241831i249a2f5fj5aa95be5ddface28%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp251x driver for linux-2.6.22">shenyonghui at gmail.com
+       </A><BR>
+    <I>Wed Mar 25 02:31:09 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000714.html">[Socketcan-users] SocketCAN Logo uploaded in SocketCAN project files
+</A></li>
+        <LI>Next message: <A HREF="000716.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#715">[ date ]</a>
+              <a href="thread.html#715">[ thread ]</a>
+              <a href="subject.html#715">[ subject ]</a>
+              <a href="author.html#715">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hello,
+
+i am trying to apply mcp251x driver from socketcan to linux 2.6.22.
+
+the problem is that i can not successfully create the can0 in order to test
+the mcp2515 chip on my target. the patch-series was applied to 2.6.22 and
+the patched files were updated by merging socketcan/kernel/2.6 into the
+kernel source. i compiled all the features like can raw, bcm, isotp as well
+as the 'prompt for platform can drivers with sysfs support' directly into
+the kernel and mcp251x as a module. after that the socketcan was compiled
+out of tree to create mcp251x.ko.
+
+after loading the kernel on the target, colibri pxa270 module, i tried to
+use modprobe mcp251x, it shows mcp251x spi1.1: probe failed. dmesg shows:
+
+pxa2xx-spi pxa2xx-spi.1: registered master spi1
+spi spi1.0: 8 bits/word, 13000000 Hz, mode 0
+pxa2xx-spi pxa2xx-spi.1: registered child spi1.0
+spi spi1.1: 8 bits/word, 6500000 Hz, mode 0
+pxa2xx-spi pxa2xx-spi.1: registered child spi1.1
+spi spi1.2: 8 bits/word, 6500000 Hz, mode 0
+pxa2xx-spi pxa2xx-spi.1: registered child spi1.2
+spi spi1.3: 8 bits/word, 6500000 Hz, mode 0
+pxa2xx-spi pxa2xx-spi.1: registered child spi1.3
+...
+NET: Registered protocol family 1
+can: controller area network core (rev 20090105 abi 8)
+NET: Registered protocol family 29
+can: raw protocol (rev 20090105)
+can: broadcast manager protocol (rev 20090105 t)
+can: isotp protocol (rev 20090105 alpha)
+...
+mcp251x spi1.1: 8 bits/word, 6500000 Hz, mode 0
+mcp251x spi1.1: Probe failed
+mcp251x spi1.1: probe failed
+mcp251x spi1.2: 8 bits/word, 6500000 Hz, mode 0
+mcp251x spi1.2: Probe failed
+mcp251x spi1.2: probe failed
+mcp251x spi1.3: 8 bits/word, 6500000 Hz, mode 0
+mcp251x spi1.3: Probe failed
+mcp251x spi1.3: probe failed
+...
+
+does anybody know where the problem might be? did i do anything wrong or
+forget something?
+
+many, many thanks in advance.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090325/4934e30f/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090325/4934e30f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000714.html">[Socketcan-users] SocketCAN Logo uploaded in SocketCAN project files
+</A></li>
+	<LI>Next message: <A HREF="000716.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#715">[ date ]</a>
+              <a href="thread.html#715">[ thread ]</a>
+              <a href="subject.html#715">[ subject ]</a>
+              <a href="author.html#715">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

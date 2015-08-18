@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan for 2.6.18
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20for%202.6.18&In-Reply-To=%3CA72213DEF96741A9B4F1B50B1B406681%40pcduronb%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001334.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan for 2.6.18</H1>
+    <B>Juraj</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20for%202.6.18&In-Reply-To=%3CA72213DEF96741A9B4F1B50B1B406681%40pcduronb%3E"
+       TITLE="[Socketcan-users] socketcan for 2.6.18">juraj at amit.sk
+       </A><BR>
+    <I>Mon Mar  1 12:02:05 CET 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001334.html">[Socketcan-users] socketcan for 2.6.18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1333">[ date ]</a>
+              <a href="thread.html#1333">[ thread ]</a>
+              <a href="subject.html#1333">[ subject ]</a>
+              <a href="author.html#1333">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+&gt;<i> Please switch to a recent version of the Linux kernel, if it's an option.
+</I>
+Unfortunately I have to use version 2.6.18 :-(
+
+&gt;<i> Well, the MCP251x driver relies on the SPI interface, which might not
+</I>&gt;<i> even be available in 2.6.18.
+</I>
+We have already some SPI support prepared, so it should not be problem.
+
+&gt;<i> You need support for the CAN protocol (in net/can) and a CAN driver (in
+</I>&gt;<i> drivers/net/can). The basic CAN support including device interface is
+</I>&gt;<i> available. You just need to port the MCP251x driver, which might be
+</I>&gt;<i> non-trivial, I'm afraid. But if you are lucky, I might be wrong.
+</I>
+I have compiled support for the CAN protocol (in net/can) except isotp.c (I
+hope I do not need it).
+
+Then now I need to port only MCP251x.c, or do I need compile also dev.c and
+sysfs.c?
+
+Thanks a lot
+Juraj
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001334.html">[Socketcan-users] socketcan for 2.6.18
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1333">[ date ]</a>
+              <a href="thread.html#1333">[ thread ]</a>
+              <a href="subject.html#1333">[ subject ]</a>
+              <a href="author.html#1333">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

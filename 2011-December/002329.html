@@ -1,0 +1,668 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EE4F76E.3000506%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002328.html">
+   <LINK REL="Next"  HREF="002330.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EE4F76E.3000506%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Sun Dec 11 19:33:18 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002328.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002330.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2329">[ date ]</a>
+              <a href="thread.html#2329">[ thread ]</a>
+              <a href="subject.html#2329">[ subject ]</a>
+              <a href="author.html#2329">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+&gt;<i> On 12/07/2011 02:42 PM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 12/06/2011 10:08 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 12/04/2011 07:47 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Should be not a problem at all.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Great, thanks.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Ok, here we go:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> uname -r: 3.2.0-rc4
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+</I>&gt;&gt;&gt;<i> ip link set can0 up type can bitrate 500000;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> kern.log
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.900735] CAN device driver interface
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.903072] cc770: CAN netdevice driver
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.904692] cc770_isa: platform
+</I>&gt;&gt;&gt;<i> device 0: port=0x384, mem=0x0, irq=10
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.904726] cc770_isa cc770_isa.0:
+</I>&gt;&gt;&gt;<i> probing idx=0: port=0x384, mem=0x0, irq=10
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.904779] cc770_isa cc770_isa.0:
+</I>&gt;&gt;&gt;<i> (unregistered net_device): i82527 mode with additional functions
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.906407] cc770_isa cc770_isa.0:
+</I>&gt;&gt;&gt;<i> device registered (reg_base=0x00000384, irq=10)
+</I>&gt;&gt;&gt;<i> Dec  6 20:42:19 svserv01 kernel: [ 2111.906457] cc770_isa: driver for
+</I>&gt;&gt;&gt;<i> max. 8 devices registered
+</I>&gt;&gt;&gt;<i>    6 20:44:17 svserv01 kernel: [ 2229.886845] cc770_isa cc770_isa.0:
+</I>&gt;&gt;&gt;<i> can0: setting BTR0=0x00 BTR1=0x1c
+</I>&gt;&gt;&gt;<i> Dec  6 20:44:17 svserv01 kernel: [ 2229.886920] cc770_isa cc770_isa.0:
+</I>&gt;&gt;&gt;<i> can0: Message object 15 for RX data, RTR, SFF and EFF
+</I>&gt;&gt;&gt;<i> Dec  6 20:44:17 svserv01 kernel: [ 2229.886937] cc770_isa cc770_isa.0:
+</I>&gt;&gt;&gt;<i> can0: Message object 11 for TX data, RTR, SFF and EFF
+</I>&gt;&gt;&gt;<i> Dec  6 20:52:40 svserv01 kernel: [ 2733.172845] can: controller area
+</I>&gt;&gt;&gt;<i> network core (rev 20090105 abi 8)
+</I>&gt;&gt;&gt;<i> Dec  6 20:52:40 svserv01 kernel: [ 2733.172967] NET: Registered protocol
+</I>&gt;&gt;&gt;<i> family 29
+</I>&gt;&gt;&gt;<i> Dec  6 20:52:40 svserv01 kernel: [ 2733.178187] can: raw protocol (rev
+</I>&gt;&gt;&gt;<i> 20090105)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ip -d -s link show
+</I>&gt;&gt;&gt;<i> 4: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;&gt;<i> qlen 10
+</I>&gt;&gt;&gt;<i>      link/can
+</I>&gt;&gt;&gt;<i>      can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+</I>&gt;&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;&gt;<i>      0          0          0          0          0          0
+</I>&gt;&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;&gt;<i>      0          0        0       0       0       0
+</I>&gt;&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;&gt;<i>      0          0        0       0       0       0
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> After rebooting the PLC with proprietary buggy kernel:
+</I>&gt;&gt;&gt;<i> 4: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;&gt;<i> qlen 10
+</I>&gt;&gt;&gt;<i>      link/can
+</I>&gt;&gt;&gt;<i>      can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+</I>&gt;&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;&gt;<i>      0          0          0          0          0          0
+</I>&gt;&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;&gt;<i>      414        267      0       267     0       0
+</I>&gt;&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;&gt;<i>      0          0        0       0       0       0
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> After sending 100,000 PDO's with 13ms displacement:
+</I>&gt;&gt;&gt;<i> 4: can0:&lt;NOARP,UP,LOWER_UP,ECHO&gt;  mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;&gt;<i> qlen 10
+</I>&gt;&gt;&gt;<i>      link/can
+</I>&gt;&gt;&gt;<i>      can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+</I>&gt;&gt;&gt;<i>      bitrate 500000 sample-point 0.875
+</I>&gt;&gt;&gt;<i>      tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;&gt;<i>      cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;&gt;<i>      clock 8000000
+</I>&gt;&gt;&gt;<i>      re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;&gt;<i>      0          0          0          0          0          0
+</I>&gt;&gt;&gt;<i>      RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;&gt;<i>      4544       4284     0       331     0       0
+</I>&gt;&gt;&gt;<i>      TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;&gt;<i>      802660     202653   0       0       0       0
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The dropped ones of RX may be the not processed input packages and
+</I>&gt;&gt;&gt;<i> therefore ok.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Let me know if You need more or some other tests.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You could provoke some state changes or bus-off conditions to see if the
+</I>&gt;&gt;<i> berr-counter shows reasonable results. I'm currently consolidating and
+</I>&gt;&gt;<i> unifying error state and bus-off handling. Would be nice if you could do
+</I>&gt;&gt;<i> some further tests when I have the patches ready...
+</I>&gt;<i>
+</I>&gt;<i> I just pushed the mentioned modifications to the &quot;devel&quot; branch of my
+</I>&gt;<i> &quot;wg-linux-can-next&quot; [1] repository. You can get it as shown below:
+</I>&gt;<i>
+</I>&gt;<i>    $ git clone --reference=&lt;some-recent-net-next-tree&gt;  \
+</I>&gt;<i>        <A HREF="git://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next.git">git://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next.git</A>
+</I>&gt;<i>    $ git checkout -b devel devel
+</I>&gt;<i>
+</I>&gt;<i> [1] <A HREF="https://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next">https://gitorious.org/~wgrandegger/linux-can/wg-linux-can-next</A>
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+OK, I was trying so far and You will find below the results.
+Just FYI the states on the PLC side couldn't be verified because the function
+provided by the manufacturer is not working at all and CAN analyser was not
+available.
+
+We are running CANopen and therefore the PLC will send automatically a heartbeat.
+
+I produced the bus-off state through a short circuit between L/H which was
+working as expected.
+
+A bit odd was that on the second try I had to reload the module
+because a ip down/up was not enough.
+
+Let me know if You would need further tests or different procedure.
+
+
+
+Starting procedure:
+Cable disconnected
+Restarting PC with new driver
+Restarting PLC
+Connecting cable
+modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+dmesg:
+[  221.996751] CAN device driver interface
+[  222.036036] cc770: CAN netdevice driver
+[  222.054260] cc770_isa: platform device 0: port=0x384, mem=0x0, irq=10
+[  222.054293] cc770_isa cc770_isa.0: probing idx=0: port=0x384, mem=0x0, irq=10
+[  222.054343] cc770_isa cc770_isa.0: (unregistered net_device): i82527 mode with additional functions
+[  222.055925] cc770_isa cc770_isa.0: device registered (reg_base=0x00000384, irq=10)
+[  222.055972] cc770_isa: driver for max. 8 devices registered
+
+ip -d -s link show can0
+4: can0: &lt;NOARP,ECHO&gt; mtu 16 qdisc noop state DOWN qlen 10
+     link/can
+     can state STOPPED (berr-counter tx 92 rx 103) restart-ms 0
+     bitrate 0 sample-point 0.000
+     tq 0 prop-seg 0 phase-seg1 0 phase-seg2 0 sjw 0
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     0          0        0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     0          0        0       0       0       0
+
+ip link set can0 up type can bitrate 500000
+dmesg:
+[  287.871983] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+[  287.872103] cc770_isa cc770_isa.0: can0: Message object 15 for RX data, RTR, SFF and EFF
+[  287.872119] cc770_isa cc770_isa.0: can0: Message object 11 for TX data, RTR, SFF and EFF
+
+ip -d -s link show can0
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     0          0        0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     0          0        0       0       0       0
+
+PLC stays in unknown CAN state (as usual )
+Rebooting PLC
+
+dmesg:
+[  466.169054] can: controller area network core (rev 20090105 abi 8)
+[  466.169178] NET: Registered protocol family 29
+[  466.174339] can: raw protocol (rev 20090105)
+
+
+PLC is sending heartbeat
+Starting PC heartbeats
+
+ip -d -s link show can0
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     513        365      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     20         20       0       0       0       0
+
+
+Producing L/H short circuit for 2 seconds
+dmesg:
+[  885.409058] cc770_isa cc770_isa.0: can0: status interrupt (0x5b)
+[  885.420475] cc770_isa cc770_isa.0: can0: status interrupt (0xc5)
+[  885.420496] cc770_isa cc770_isa.0: can0: bus-off
+
+ip -d -s link show can0
+4: can0: &lt;NO-CARRIER,NOARP,UP,ECHO&gt; mtu 16 qdisc pfifo_fast state DOWN qlen 10
+     link/can
+     can state BUS-OFF (berr-counter tx 92 rx 103) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          1
+     RX: bytes  packets  errors  dropped overrun mcast
+     544        382      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     30         29       0       0       0       0
+
+Sending and receiving stops.
+
+Trying to recover on PC:
+ip link set can0 down;
+ip -d -s link show can0
+4: can0: &lt;NOARP,ECHO&gt; mtu 16 qdisc pfifo_fast state DOWN qlen 10
+     link/can
+     can state STOPPED (berr-counter tx 92 rx 103) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          1
+     RX: bytes  packets  errors  dropped overrun mcast
+     544        382      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     30         29       0       1       0       0
+
+ip link set can0 up type can bitrate 500000;
+dmesg:
+[ 1090.937778] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+[ 1090.937869] cc770_isa cc770_isa.0: can0: Message object 15 for RX data, RTR, SFF and EFF
+[ 1090.937885] cc770_isa cc770_isa.0: can0: Message object 11 for TX data, RTR, SFF and EFF
+[ 1090.938050] ADDRCONF(NETDEV_CHANGE): can0: link becomes ready
+[ 1090.940769] cc770_isa cc770_isa.0: can0: status interrupt (0x5)
+
+ip -d -s link show can0
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          1
+     RX: bytes  packets  errors  dropped overrun mcast
+     552        383      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     30         29       0       1       0       0
+
+PLC in unknown state but not sending heartbeat,
+Rebooting PLC
+PLC sends heartbeat but PC cannot send (buffer overrun)
+
+ip -d -s link show can0
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          1
+     RX: bytes  packets  errors  dropped overrun mcast
+     582        398      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     30         29       0       1       0       0
+
+
+Reloading driver
+
+modprobe -r cc770_isa
+dmesg:
+[ 1457.133359] cc770: driver removed
+
+modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+dmesg:
+[ 1474.051479] CAN device driver interface
+[ 1474.053180] cc770: CAN netdevice driver
+[ 1474.054416] cc770_isa: platform device 0: port=0x384, mem=0x0, irq=10
+[ 1474.054449] cc770_isa cc770_isa.0: probing idx=0: port=0x384, mem=0x0, irq=10
+[ 1474.054500] cc770_isa cc770_isa.0: (unregistered net_device): i82527 mode with additional functions
+[ 1474.056097] cc770_isa cc770_isa.0: device registered (reg_base=0x00000384, irq=10)
+[ 1474.056146] cc770_isa: driver for max. 8 devices registered
+
+ip link set can0 up type can bitrate 500000;
+[ 1484.586697] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+[ 1484.586775] cc770_isa cc770_isa.0: can0: Message object 15 for RX data, RTR, SFF and EFF
+[ 1484.586791] cc770_isa cc770_isa.0: can0: Message object 11 for TX data, RTR, SFF and EFF
+
+Receiving and sending heartbeat
+ip -d -s link show can0
+5: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     158        157      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     16         16       0       0       0       0
+
+
+-----------------------------------------
+
+Producing L/H short circuit again for 2 seconds
+
+dmesg:
+[ 1719.018116] cc770_isa cc770_isa.0: can0: status interrupt (0x5b)
+
+ip -d -s link show can0
+5: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-WARNING (berr-counter tx 128 rx 128) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     271        263      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     88         87       0       0       0       0
+
+
+Sending and receiving stops.
+
+Trying to recover on PC with driver reload:
+modprobe -r cc770_isa
+dmesg:
+[ 1820.358418] cc770: driver removed
+
+modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+dmesg:
+[ 1826.810914] CAN device driver interface
+[ 1826.812619] cc770: CAN netdevice driver
+[ 1826.814126] cc770_isa: platform device 0: port=0x384, mem=0x0, irq=10
+[ 1826.814158] cc770_isa cc770_isa.0: probing idx=0: port=0x384, mem=0x0, irq=10
+[ 1826.814211] cc770_isa cc770_isa.0: (unregistered net_device): i82527 mode with additional functions
+[ 1826.815789] cc770_isa cc770_isa.0: device registered (reg_base=0x00000384, irq=10)
+[ 1826.815839] cc770_isa: driver for max. 8 devices registered
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,ECHO&gt; mtu 16 qdisc noop state DOWN qlen 10
+     link/can
+     can state STOPPED (berr-counter tx 92 rx 103) restart-ms 0
+     bitrate 0 sample-point 0.000
+     tq 0 prop-seg 0 phase-seg1 0 phase-seg2 0 sjw 0
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     0          0        0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     0          0        0       0       0       0
+
+ip link set can0 up type can bitrate 500000;
+dmesg:
+[ 1861.776977] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+[ 1861.777102] cc770_isa cc770_isa.0: can0: Message object 15 for RX data, RTR, SFF and EFF
+[ 1861.777118] cc770_isa cc770_isa.0: can0: Message object 11 for TX data, RTR, SFF and EFF
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 128 rx 128) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     0          0        0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     1          0        0       0       0       0
+
+PLC in unknown state
+Unable to send and receive heartbeat
+Rebooting PLC
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 115 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     0          0        0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     13         13       0       0       0       0
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 107 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     30         15       0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     21         21       0       0       0       0
+
+dmesg:
+[ 2102.085718] cc770_isa cc770_isa.0: can0: status interrupt (0x18)
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 32 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     310        156      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     96         96       0       0       0       0
+
+And with counters on zero:
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     358        204      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     129        129      0       0       0       0
+
+
+-----------------------------------------
+Disconnecting cable for around 4 seconds:
+
+dmesg:
+[ 2339.660283] cc770_isa cc770_isa.0: can0: status interrupt (0x5b)
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-WARNING (berr-counter tx 128 rx 128) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     459        298      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     193        192      0       0       0       0
+
+Connecting again:
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-WARNING (berr-counter tx 120 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     473        311      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     200        200      0       0       0       0
+
+After some time (around 125 seconds):
+dmesg:
+[ 2387.172008] cc770_isa cc770_isa.0: can0: status interrupt (0x18)
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 29 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          1          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     616        447      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     291        291      0       0       0       0
+
+
+
+-----------------------------------------
+Disconnecting cable for around 55 seconds:
+
+dmesg:
+[ 2658.896959] cc770_isa cc770_isa.0: can0: status interrupt (0x5b)
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-WARNING (berr-counter tx 128 rx 128) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          2          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     797        621      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     408        407      0       0       0       0
+
+
+
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-WARNING (berr-counter tx 112 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          2          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     837        661      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     423        423      0       0       0       0
+
+
+dmesg:
+[ 2765.805486] cc770_isa cc770_isa.0: can0: status interrupt (0x18)
+
+ip -d -s link show can0
+6: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 94 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          2          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     872        689      0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     441        441      0       0       0       0
+
+
+
+
+Thanks a lot.
+
+
+Wolfgang
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002328.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002330.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2329">[ date ]</a>
+              <a href="thread.html#2329">[ thread ]</a>
+              <a href="subject.html#2329">[ subject ]</a>
+              <a href="author.html#2329">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AE89220.5000109%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001104.html">
+   <LINK REL="Next"  HREF="001106.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AE89220.5000109%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">wg at grandegger.com
+       </A><BR>
+    <I>Wed Oct 28 19:49:04 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001104.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001106.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1105">[ date ]</a>
+              <a href="thread.html#1105">[ thread ]</a>
+              <a href="subject.html#1105">[ subject ]</a>
+              <a href="author.html#1105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Fu,
+
+Luotao Fu wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> On Wed, Oct 28, 2009 at 04:45:10PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i> I made a patch which solves this issue. Actually the controller got stuck
+</I>&gt;&gt;&gt;<i> already while calling mscan_set_mode(dev, MSCAN_INIT_MODE). Since the return
+</I>&gt;&gt;&gt;<i> value is not checked there. The error is not catched. I now simple switch the
+</I>&gt;&gt;&gt;<i> order of SLPRQ and INITRQ. It actually solve the prolbem. I'm however still
+</I>&gt;&gt;&gt;<i> wondering why the driver calls SLPRQ first, didn't find any hint in the
+</I>&gt;&gt;&gt;<i> datasheet about in which order the both states are supposed to be set. Please
+</I>&gt;&gt;&gt;<i> review and test on your setup if possible.
+</I>&gt;&gt;<i> The manual says in &quot;19.7.8.5 MSCAN Initialization Mode&quot; that sleep mode
+</I>&gt;&gt;<i> should be entered first:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ------------------
+</I>&gt;&gt;<i>                                    NOTE
+</I>&gt;&gt;<i> The user is responsible for ensuring that the MSCAN is not active when
+</I>&gt;&gt;<i> Initialization Mode is entered. The recommended procedure is to bring the
+</I>&gt;&gt;<i> MSCAN into Sleep Mode (SLPRQ=1 and SLPAK=1) before setting the
+</I>&gt;&gt;<i> INITRQ bit in the CANCTL0 register. Otherwise the abort of an ongoing
+</I>&gt;&gt;<i> message can cause an error condition and can have an impact on the other
+</I>&gt;&gt;<i> bus devices.
+</I>&gt;&gt;<i> -------------------
+</I>&gt;<i> 
+</I>&gt;<i> I thought about this quite right after I sent away the patch. doh! ;-)
+</I>&gt;<i> However the the slprq fails while there're irregular activities on the
+</I>&gt;<i> bus is definitively a bug. No idea if we can blaim the hardware for this
+</I>
+We can blame the hardware, but it will not help us. We need a proper
+workaround sooner than later.
+
+&gt;<i> behaviour. Nevertheless It awed to be worked around somehow. What do you
+</I>&gt;<i> think about kicking out the loop checking for SLPAK, so that we will
+</I>&gt;<i> give the controller a small chance to first get to sleep mode and
+</I>&gt;<i> otherwise reinit any way. This is ugly, since it still could break the
+</I>&gt;<i> bus somehow in rare conditions, however this still better than a
+</I>&gt;<i> controller, which will get stucked for sure for certain scenarios.
+</I>
+That's a resonable option, indeed, if it works. Also, it would give us
+some time to understand the real cause of the problem.
+
+&gt;<i> Or we could add a flag to save the status of slprq while closing the
+</I>&gt;<i> device and check it again while reopening, so that we could at least
+</I>&gt;<i> get a clue, which is going wrong. With the current driver this problem
+</I>&gt;<i> is not even catched, which is also bad. What do you think?
+</I>
+The error conditions should be checked. Everthing else is a bug. I
+remember, that the start and stop of the MSCAN was tricky from the
+beginning.
+
+Thanks,
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001104.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001106.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1105">[ date ]</a>
+              <a href="thread.html#1105">[ thread ]</a>
+              <a href="subject.html#1105">[ subject ]</a>
+              <a href="author.html#1105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

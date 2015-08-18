@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [HOWTO] Creating virtual CAN devices (with ip	tools and others)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BHOWTO%5D%20Creating%20virtual%20CAN%20devices%20%28with%20ip%0A%09tools%20and%20others%29&In-Reply-To=%3C48CE8F67.2030609%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000493.html">
+   <LINK REL="Next"  HREF="000495.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [HOWTO] Creating virtual CAN devices (with ip	tools and others)</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BHOWTO%5D%20Creating%20virtual%20CAN%20devices%20%28with%20ip%0A%09tools%20and%20others%29&In-Reply-To=%3C48CE8F67.2030609%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [HOWTO] Creating virtual CAN devices (with ip	tools and others)">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Sep 15 18:37:59 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000493.html">[Socketcan-users] Message Priorities
+</A></li>
+        <LI>Next message: <A HREF="000495.html">[Socketcan-users] [HOWTO] Creating virtual CAN devices (with	ip	tools and others)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#494">[ date ]</a>
+              <a href="thread.html#494">[ thread ]</a>
+              <a href="subject.html#494">[ subject ]</a>
+              <a href="author.html#494">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The creation of virtual CAN network devices differs in various matters.
+
+I tried to create a summary on vcan creation and added it to 
+trunk/Documentation/networking/can.txt
+
+Please take this as a suggested HOWTO and give me feedback if you see 
+any typos or *incomprehensible formulations :-)
+
+Thanks,
+Oliver
+
+--------8&lt;----------snip!-------------------------*
+
+  6.4 The virtual CAN driver (vcan)
+
+  Similar to the network loopback devices, vcan offers a virtual local
+  CAN interface. A full qualified address on CAN consists of
+
+  - an unique CAN Identifier (CAN ID)
+  - the CAN bus this CAN ID is transmitted on (e.g. can0)
+
+  so in common use cases more than one virtual CAN interface is needed.
+
+  The virtual CAN interfaces allow the transmision and receiption of CAN
+  frames without real CAN controller hardware. Virtual CAN network
+  devices are usually named 'vcanX', like vcan0 vcan1 vcan2 ...
+  When compiled as module the virtual CAN driver module is called vcan.ko
+
+  Since Linux Kernel version 2.6.24 the vcan driver supports the Kernel
+  netlink interface to create vcan network devices. The creation and
+  removal of vcan network devices can be managed with the ip(8) tool:
+
+  - Create a virtual CAN network interface:
+       ip link add type vcan
+
+  - Create a virtual CAN network interface with a specific name 'vcan42':
+       ip link add dev vcan42 type vcan
+
+  - Remove a (virtual CAN) network interface 'vcan42':
+       ip link del vcan42
+
+  The tool 'vcan' from the SocketCAN SVN repository on BerliOS is obsolete.
+
+  Virtual CAN network device creation in older Kernels:
+  In Linux Kernel versions &lt; 2.6.24 the vcan driver creates 4 vcan
+  netdevices at module load time by default. This value can be changed
+  with the module parameter 'numdev'. E.g. 'modprobe vcan numdev=8'
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000493.html">[Socketcan-users] Message Priorities
+</A></li>
+	<LI>Next message: <A HREF="000495.html">[Socketcan-users] [HOWTO] Creating virtual CAN devices (with	ip	tools and others)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#494">[ date ]</a>
+              <a href="thread.html#494">[ thread ]</a>
+              <a href="subject.html#494">[ subject ]</a>
+              <a href="author.html#494">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

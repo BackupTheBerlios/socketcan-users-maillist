@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Going up the learning curve
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Going%20up%20the%20learning%20curve&In-Reply-To=%3C45F9600B.104%40probestar.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000104.html">
+   <LINK REL="Next"  HREF="000108.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Going up the learning curve</H1>
+    <B>Neal Probert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Going%20up%20the%20learning%20curve&In-Reply-To=%3C45F9600B.104%40probestar.com%3E"
+       TITLE="[Socketcan-users] Going up the learning curve">nprobert at probestar.com
+       </A><BR>
+    <I>Thu Mar 15 16:02:35 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000104.html">[Socketcan-users] SocketCAN Mailing List Topics - new ML for	CAN driver development
+</A></li>
+        <LI>Next message: <A HREF="000108.html">[Socketcan-users] Going up the learning curve
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>While cansniffer works (under root), my own code doesn't.  I based my code on 
+cansniffer's as best I can.
+
+connect: Operation not supported
+
+Here's my code, called with Open( &quot;vcan0&quot;, CAN_BCM );  Any ideas what's wrong?
+
+int CanSocket::Open( const char *dev, int proto )
+{
+     if ( !dev || !strlen(dev) )
+         return -1;
+     if ( strlen(dev) &gt;= IFNAMSIZ )
+         return -1;
+
+     // socket
+     if ( (SockCan = socket(PF_CAN, SOCK_DGRAM, proto)) &lt; 0 )
+         return -1;
+
+     // ioctl
+     struct ifreq ifr;
+     bzero( &amp;ifr, sizeof(ifr) );
+     strcpy(ifr.ifr_name, dev);
+     if ( ioctl(SockCan, SIOCGIFINDEX, &amp;ifr) != 0 )
+     {
+         perror(&quot;ioctl&quot;);
+         return -1;
+     }
+
+     // addr
+     struct sockaddr_can addr;
+     bzero( &amp;addr, sizeof(addr) );
+     addr.can_family = AF_CAN;
+     addr.can_ifindex = ifr.ifr_ifindex;
+
+     // connect
+     if ( connect(SockCan, (struct sockaddr *)&amp;addr, sizeof(addr)) != 0 )
+     {
+         perror(&quot;connect&quot;);
+         return -1;
+     }
+
+     return SockCan;
+}
+
+
+-- 
+
+         *** ProbeStar Technical Systems, LLC.  ***
+  Design &amp; Development of Embedded Systems or Instrumentation
+         for Engineering and Scientific Applications
+
+==// Neal W. Probert (President)       / Email: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nprobert at probestar.com</A> //
+=// Web: www.probestar.com            / Phone: 248-522-6836           //=
+// Fax:                              / Cell:                         //==
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000104.html">[Socketcan-users] SocketCAN Mailing List Topics - new ML for	CAN driver development
+</A></li>
+	<LI>Next message: <A HREF="000108.html">[Socketcan-users] Going up the learning curve
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

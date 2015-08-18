@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] merging branches/netlink: please test
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20merging%20branches/netlink%3A%20please%20test&In-Reply-To=%3C4A38F083.1070602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000950.html">
+   <LINK REL="Next"  HREF="000952.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] merging branches/netlink: please test</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20merging%20branches/netlink%3A%20please%20test&In-Reply-To=%3C4A38F083.1070602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] merging branches/netlink: please test">wg at grandegger.com
+       </A><BR>
+    <I>Wed Jun 17 15:32:51 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000950.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+        <LI>Next message: <A HREF="000952.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#951">[ date ]</a>
+              <a href="thread.html#951">[ thread ]</a>
+              <a href="subject.html#951">[ subject ]</a>
+              <a href="author.html#951">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Kurt,
+
+Kurt Van Dijck wrote:
+&gt;<i> I got rid of SECTION mismatch warnings.
+</I>&gt;<i> 
+</I>&gt;<i> ---
+</I>&gt;<i>  kernel/2.6/drivers/net/can/sja1000/ems_104m.c   |    2 +-
+</I>&gt;<i>  kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c |    2 +-
+</I>&gt;<i>  2 files changed, 2 insertions(+), 2 deletions(-)
+</I>&gt;<i> 
+</I>&gt;<i> Index: netlink/kernel/2.6/drivers/net/can/sja1000/ems_104m.c
+</I>&gt;<i> ===================================================================
+</I>&gt;<i> --- netlink.orig/kernel/2.6/drivers/net/can/sja1000/ems_104m.c	2009-06-17 14:57:33.000000000 +0200
+</I>&gt;<i> +++ netlink/kernel/2.6/drivers/net/can/sja1000/ems_104m.c	2009-06-17 14:58:05.000000000 +0200
+</I>&gt;<i> @@ -47,7 +47,7 @@
+</I>&gt;<i>  #define EMS_104M_MAX_DEV  4
+</I>&gt;<i>  
+</I>&gt;<i>  static unsigned long __devinitdata mem[EMS_104M_MAX_DEV];
+</I>&gt;<i> -static int __devinitdata irq[EMS_104M_MAX_DEV];
+</I>&gt;<i> +static int irq[EMS_104M_MAX_DEV];
+</I>
+I prefer to fix this differently as shown below. Thanks for pointing
+that out. Need to fix the sja1000-isa driver as well :-(.
+
+Wolfgang.
+
+---
+ kernel/2.6/drivers/net/can/sja1000/ems_104m.c   |    8 +++++---
+ kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c |    3 +--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+Index: netlink/kernel/2.6/drivers/net/can/sja1000/ems_104m.c
+===================================================================
+--- netlink.orig/kernel/2.6/drivers/net/can/sja1000/ems_104m.c
++++ netlink/kernel/2.6/drivers/net/can/sja1000/ems_104m.c
+@@ -63,6 +63,7 @@ struct ems_104m_card {
+ 	struct net_device *net_dev[EMS_104M_MAX_CHAN];
+ 
+ 	void __iomem *base;
++	int irq;
+ };
+ 
+ #define EMS_104M_CAN_CLOCK (16000000 / 2)
+@@ -192,6 +193,7 @@ static int __devinit ems_104m_probe(stru
+ 	dev_set_drvdata(pdev, card);
+ 
+ 	card-&gt;channels = 0;
++	card-&gt;irq = irq[idx];
+ 
+ 	card-&gt;base = ioremap_nocache(mem[idx], EMS_104M_MEM_SIZE);
+ 	if (card-&gt;base == NULL) {
+@@ -282,10 +284,10 @@ static int __devinit ems_104m_probe(stru
+ 	}
+ 
+ #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,18)
+-	err = request_irq(irq[idx], &amp;ems_104m_interrupt, SA_SHIRQ,
++	err = request_irq(card-&gt;irq, &amp;ems_104m_interrupt, SA_SHIRQ,
+ 		DRV_NAME, (void *)card);
+ #else
+-	err = request_irq(irq[idx], &amp;ems_104m_interrupt, IRQF_SHARED,
++	err = request_irq(card-&gt;irq, &amp;ems_104m_interrupt, IRQF_SHARED,
+ 		DRV_NAME, (void *)card);
+ #endif
+ 
+@@ -319,7 +321,7 @@ static int __devexit ems_104m_remove(str
+ 	if (!card)
+ 		return 0;
+ 
+-	free_irq(irq[idx], card);
++	free_irq(card-&gt;irq, card);
+ 
+ 	for (i = 0; i &lt; card-&gt;channels; i++) {
+ 		dev = card-&gt;net_dev[i];
+Index: netlink/kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c
+===================================================================
+--- netlink.orig/kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c
++++ netlink/kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c
+@@ -63,7 +63,6 @@ struct ems_pcmcia_card {
+ };
+ 
+ #define EMS_PCMCIA_CAN_CLOCK (16000000 / 2)
+-
+ /*
+  * The board configuration is probably following:
+  * RX1 is connected to ground.
+@@ -362,7 +361,7 @@ static int __devinit ems_pcmcia_probe(st
+ /*
+  * Configure PCMCIA socket
+  */
+-static void ems_pcmcia_config(struct pcmcia_device *dev)
++static void __devinit ems_pcmcia_config(struct pcmcia_device *dev)
+ {
+ 	win_req_t req;
+ 	memreq_t mem;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000950.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+	<LI>Next message: <A HREF="000952.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#951">[ date ]</a>
+              <a href="thread.html#951">[ thread ]</a>
+              <a href="subject.html#951">[ subject ]</a>
+              <a href="author.html#951">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

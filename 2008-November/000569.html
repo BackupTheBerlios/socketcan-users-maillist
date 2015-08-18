@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bit%20timing%20-%20was%20Re%3A%20mscan%20problems%20for%0A%09settings%20%3E%20125kbit&In-Reply-To=%3C491ACB9D.10205%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000568.html">
+   <LINK REL="Next"  HREF="000570.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bit%20timing%20-%20was%20Re%3A%20mscan%20problems%20for%0A%09settings%20%3E%20125kbit&In-Reply-To=%3C491ACB9D.10205%40grandegger.com%3E"
+       TITLE="[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov 12 13:27:09 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000568.html">[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+</A></li>
+        <LI>Next message: <A HREF="000570.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#569">[ date ]</a>
+              <a href="thread.html#569">[ thread ]</a>
+              <a href="subject.html#569">[ subject ]</a>
+              <a href="author.html#569">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Daniel,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Daniel Schnell wrote:
+</I>&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I found out that the successful communication with MSCAN is depending on
+</I>&gt;&gt;&gt;<i> the IPB clock frequency.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The following bit rates are working for an IPB Frequency of _132_ MHz:
+</I>&gt;&gt;<i> OK.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 125Kbit (BTR0=0x2f BTR1=0x4f), 250 Kbit (BTR0=0x20 BTR1=0x1c),
+</I>&gt;&gt;&gt;<i> 1Mbit(BTR0=0x0a BTR1=0x27)
+</I>&gt;&gt;&gt;<i> 500 Kbit(BTR0=0x20 BTR1=0x05) is not working and an attached scope shows
+</I>&gt;&gt;&gt;<i> that the bittime of the sent packets is more like 71 Kbit.
+</I>&gt;&gt;<i> These are the calculated values for the MSCAN at 132MHz:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ ./can-calc-bit-timing -c 132000000 mscan
+</I>&gt;&gt;<i> Bit timing parameters for mscan using 132000000Hz
+</I>&gt;&gt;<i> Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+</I>&gt;&gt;<i> 1000000     83   5    3    3   1  11 75.0%  0.0% 0x0a 0x27
+</I>&gt;&gt;<i>  800000     83   8    3    3   1  11 80.0%  0.0% 0x0a 0x2a
+</I>&gt;&gt;<i>  500000    250   5    1    1   1  33 87.5%  0.0% 0x20 0x05
+</I>&gt;&gt;<i>  250000    250  11    2    2   1  33 87.5%  0.0% 0x20 0x1c
+</I>&gt;&gt;<i>  125000    363  11    5    5   1  48 77.2%  0.0% 0x2f 0x4f
+</I>&gt;&gt;<i>  100000    454  11    5    5   1  60 77.2%  0.0% 0x3b 0x4f
+</I>&gt;&gt;<i>   50000 ***bitrate not possible***
+</I>&gt;&gt;<i>   20000 ***bitrate not possible***
+</I>&gt;&gt;<i>   10000 ***bitrate not possible***
+</I>&gt;<i> 
+</I>&gt;<i> I'm a bit concerned with these calculations as well.  I'm
+</I>&gt;<i> building an embedded system using the SJA1000 and the BTR0/BYR1
+</I>&gt;<i> values don't see to quite work out.
+</I>
+These values are for MSCAN at *132MHz*. You are using a SJA1000. What
+does not work?
+
+&gt;<i> To verify, I configured my driver to use the same hardware
+</I>&gt;<i> clock as the Peak CAN/PCI card (since I also have one of those
+</I>&gt;<i> to play with).  Some of the BTR0/BTR1 values match what Peak
+</I>&gt;<i> uses in their own drivers spot on, but only those with bitrates &gt;= 125K.
+</I>&gt;<i> 
+</I>&gt;<i> For example:
+</I>&gt;<i>   Bitrate     Peak     SocketCAN
+</I>&gt;<i>   1000000     0x0014   0x0014
+</I>&gt;<i>    125000     0x031C   0x031C
+</I>&gt;<i>    100000     0x432F   0x041C
+</I>&gt;<i>     50000     0x472F   0x091C
+</I>&gt;<i> 
+</I>&gt;<i> Is it possible to see all the calculations, like what's quoted
+</I>&gt;<i> above for the MSCAN?  I'm not familiar with &quot;./can-calc-bit-timing&quot;.
+</I>
+Here is the output for the SJA1000 for a CAN clock frequency of 8 MHz:
+
+./can-calc-bit-timing sja1000
+Bit timing parameters for sja1000 using 8000000Hz
+Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+1000000    125   3    2    2   1   1 75.0%  0.0% 0x00 0x14
+ 800000    125   5    2    2   1   1 80.0%  0.0% 0x00 0x16
+ 500000    125  11    2    2   1   1 87.5%  0.0% 0x00 0x1c
+ 250000    250  11    2    2   1   2 87.5%  0.0% 0x01 0x1c
+ 125000    500  11    2    2   1   4 87.5%  0.0% 0x03 0x1c
+ 100000    625  11    2    2   1   5 87.5%  0.0% 0x04 0x1c
+  50000   1250  11    2    2   1  10 87.5%  0.0% 0x09 0x1c
+  20000   3125  11    2    2   1  25 87.5%  0.0% 0x18 0x1c
+  10000   6250  11    2    2   1  50 87.5%  0.0% 0x31 0x1c
+
+These are the CIA recommended values for the SJA100 and match well the
+values calculated by <A HREF="http://www.port.de/engl/canprod/sv_req_form.html.">http://www.port.de/engl/canprod/sv_req_form.html.</A>
+
+&gt;<i> Is that something that I could use to verify my settings?
+</I>
+can-calc-bit-timing is a user-space program to calculate bit-timing
+parameters. It actually uses the same algorithm than the correspnding
+kernel function. I posted it some time ago to this list.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000568.html">[Socketcan-users] CAN bit timing - was Re: mscan problems for	settings &gt; 125kbit
+</A></li>
+	<LI>Next message: <A HREF="000570.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#569">[ date ]</a>
+              <a href="thread.html#569">[ thread ]</a>
+              <a href="subject.html#569">[ subject ]</a>
+              <a href="author.html#569">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

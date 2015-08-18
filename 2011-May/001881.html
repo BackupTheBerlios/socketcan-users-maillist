@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Lost arbitration errors
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Lost%20arbitration%20errors&In-Reply-To=%3C4DCD050D.1050503%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001880.html">
+   <LINK REL="Next"  HREF="001882.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Lost arbitration errors</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Lost%20arbitration%20errors&In-Reply-To=%3C4DCD050D.1050503%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Lost arbitration errors">wg at grandegger.com
+       </A><BR>
+    <I>Fri May 13 12:16:45 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001880.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+        <LI>Next message: <A HREF="001882.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1881">[ date ]</a>
+              <a href="thread.html#1881">[ thread ]</a>
+              <a href="subject.html#1881">[ subject ]</a>
+              <a href="author.html#1881">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05/13/2011 12:09 PM, Willy Lambert wrote:
+&gt;<i> 2011/5/13 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi Willy,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 05/13/2011 10:42 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;<i> 2011/5/3 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I have a &quot;visibly working&quot; can network but some arbitration errors often
+</I>&gt;&gt;&gt;&gt;<i> occur. I am using socket_can under canfestival and have configure a set
+</I>&gt;&gt;<i> of 3
+</I>&gt;&gt;&gt;&gt;<i> node (0x05,0x32,0x33) with periodic PDO (TX and RX) plus a nodeguarding
+</I>&gt;&gt;<i> on
+</I>&gt;&gt;&gt;&gt;<i> each node. The bus is at 250K and the period of the SYNC word is 10ms.
+</I>&gt;&gt;<i> Here
+</I>&gt;&gt;&gt;&gt;<i> is the candump extract of a period (there are always in the same order)
+</I>&gt;&gt;<i> :
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>  can1   80  [0]
+</I>&gt;&gt;&gt;&gt;<i>   can1  332  [5] 93 00 00 00 00
+</I>&gt;&gt;&gt;&gt;<i>   can1  1B2  [2] 27 00
+</I>&gt;&gt;&gt;&gt;<i>   can1  20000002  [8] 01 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;<i>   can1  1B3  [2] 27 00
+</I>&gt;&gt;&gt;&gt;<i>   can1  20000002  [8] 02 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;<i>   can1  2B2  [6] 93 00 00 00 00 01
+</I>&gt;&gt;&gt;&gt;<i>   can1  20000002  [8] 02 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;<i>   can1  2B3  [6] 93 00 00 00 00 01
+</I>&gt;&gt;&gt;&gt;<i>   can1  333  [5] 93 00 00 00 00
+</I>&gt;&gt;&gt;&gt;<i>   can1  3B2  [7] 00 00 00 00 04 00 0A
+</I>&gt;&gt;&gt;&gt;<i>   can1  3B3  [7] FE FF FF FF 02 00 0A
+</I>&gt;&gt;&gt;&gt;<i>   can1  705  [0] remote request
+</I>&gt;&gt;&gt;&gt;<i>   can1  732  [0] remote request
+</I>&gt;&gt;&gt;&gt;<i>   can1  733  [0] remote request
+</I>&gt;&gt;&gt;&gt;<i>   can1  705  [1] 05
+</I>&gt;&gt;&gt;&gt;<i>   can1  732  [1] 05
+</I>&gt;&gt;&gt;&gt;<i>   can1  733  [1] 05
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Here is some additionnal stats :
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~# ip -d -s link show can1
+</I>&gt;&gt;&gt;&gt;<i> 4: can1: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;&gt;&gt;&gt;<i> qlen 10
+</I>&gt;&gt;&gt;&gt;<i>     link/can
+</I>&gt;&gt;&gt;&gt;<i>     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 1000
+</I>&gt;&gt;&gt;&gt;<i>     bitrate 250000 sample-point 0.875
+</I>&gt;&gt;&gt;&gt;<i>     tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;&gt;&gt;<i>     sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+</I>&gt;&gt;&gt;&gt;<i>     clock 8000000
+</I>&gt;&gt;&gt;&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;&gt;&gt;<i>     0          0          9684       0          0          0
+</I>&gt;&gt;&gt;&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;&gt;&gt;&gt;<i>     225353     84576    0       0       0       0
+</I>&gt;&gt;&gt;&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;&gt;&gt;&gt;<i>     32163      66462    9684    0       0       0
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~#
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Should I ignore these errors ? Should I review my scheduling ?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> My I bump this ? If the question is mal-formed or innapropriate on this
+</I>&gt;&gt;&gt;<i> mailing liste please tell me so I don't wait for an answer :p
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The error is definitely reported by the CAN controller and therefore
+</I>&gt;&gt;<i> it's due to an electrical problem on the CAN bus. Well, I'm not a CAN
+</I>&gt;&gt;<i> *hardware* expert and therefore I can't tell if such error do harm or
+</I>&gt;&gt;<i> can even be ignored. Googling for &quot;can arbiration lost&quot; revealed:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://www.cancapture.com/knowledgebase/18-cancaptureknowledgebase/33-kb-arbitration-lost-error-messages.html">http://www.cancapture.com/knowledgebase/18-cancaptureknowledgebase/33-kb-arbitration-lost-error-messages.html</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> which seem to answer you question to some extend.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Thanks, your are really better than me in googleling
+</I>
+Does that document explain your problems? I mean, do you have more than
+one node sending CAN messages?
+
+&gt;<i> Is there a mean to disable this error un socketCan ?
+</I>
+No, but it will only be delivered to user-space sockets on request (via
+setsockopt ...).
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001880.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+	<LI>Next message: <A HREF="001882.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1881">[ date ]</a>
+              <a href="thread.html#1881">[ thread ]</a>
+              <a href="subject.html#1881">[ subject ]</a>
+              <a href="author.html#1881">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [cangen] Patch to send count frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5Bcangen%5D%20Patch%20to%20send%20count%20frames&In-Reply-To=%3C19699.43652.469715.757015%40elektron.ikp.physik.tu-darmstadt.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001656.html">
+   <LINK REL="Next"  HREF="001658.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [cangen] Patch to send count frames</H1>
+    <B>Uwe Bonnes</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5Bcangen%5D%20Patch%20to%20send%20count%20frames&In-Reply-To=%3C19699.43652.469715.757015%40elektron.ikp.physik.tu-darmstadt.de%3E"
+       TITLE="[Socketcan-users] [cangen] Patch to send count frames">bon at elektron.ikp.physik.tu-darmstadt.de
+       </A><BR>
+    <I>Mon Nov 29 14:28:36 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001656.html">[Socketcan-users] [PATCH] Split documentation files
+</A></li>
+        <LI>Next message: <A HREF="001658.html">[Socketcan-users] [cangen] Patch to send count frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1657">[ date ]</a>
+              <a href="thread.html#1657">[ thread ]</a>
+              <a href="subject.html#1657">[ subject ]</a>
+              <a href="author.html#1657">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+with appended patch, I could run e.g
+./cangen can0 -g 1 -e -I 0x06042008 -L 0 -n 20
+
+to send 20 frames.
+
+Bye
+-- 
+Uwe Bonnes                <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bon at elektron.ikp.physik.tu-darmstadt.de</A>
+
+Institut fuer Kernphysik  Schlossgartenstrasse 9  64289 Darmstadt
+--------- Tel. 06151 162516 -------- Fax. 06151 164321 ----------
+Index: cangen.c
+===================================================================
+--- cangen.c	(Revision 1215)
++++ cangen.c	(Arbeitskopie)
+@@ -95,6 +95,8 @@
+ 		&quot; generation mode - see below)\n&quot;);
+ 	fprintf(stderr, &quot;         -p &lt;timeout&gt;  (poll on -ENOBUFS to write frames&quot;
+ 		&quot; with &lt;timeout&gt; ms)\n&quot;);
++	fprintf(stderr, &quot;         -n &lt;count&gt;    (write count frames )&quot;
++                &quot;- default: infinite\n&quot;);
+ 	fprintf(stderr, &quot;         -i            (ignore -ENOBUFS return values on&quot;
+ 		&quot; write() syscalls)\n&quot;);
+ 	fprintf(stderr, &quot;         -x            (disable local loopback of &quot;
+@@ -149,6 +151,7 @@
+ 	static struct can_frame frame;
+ 	int nbytes;
+ 	int i;
++	int runs = 0, count = 0;
+ 	struct ifreq ifr;
+ 
+ 	struct timespec ts;
+@@ -157,7 +160,7 @@
+ 	signal(SIGHUP, sigterm);
+ 	signal(SIGINT, sigterm);
+ 
+-	while ((opt = getopt(argc, argv, &quot;ig:eI:L:D:xp:vh?&quot;)) != -1) {
++	while ((opt = getopt(argc, argv, &quot;ig:eI:L:D:xp:vn:h?&quot;)) != -1) {
+ 		switch (opt) {
+ 
+ 		case 'i':
+@@ -220,6 +223,10 @@
+ 			polltimeout = strtoul(optarg, NULL, 10);
+ 			break;
+ 
++		case 'n':
++			count = strtoul(optarg, NULL, 10);
++			break;
++
+ 		case '?':
+ 		case 'h':
+ 		default:
+@@ -398,6 +405,9 @@
+ 			for (i=0; i&lt;8 ;i++)
+ 				frame.data[i] = (incdata &gt;&gt; i*8) &amp; 0xFFULL;
+ 		}
++                runs++;
++                if (count &amp;&amp; (runs &gt;= count))
++                    running = 0;
+ 	}
+ 
+ 	if (enobufs_count)
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001656.html">[Socketcan-users] [PATCH] Split documentation files
+</A></li>
+	<LI>Next message: <A HREF="001658.html">[Socketcan-users] [cangen] Patch to send count frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1657">[ date ]</a>
+              <a href="thread.html#1657">[ thread ]</a>
+              <a href="subject.html#1657">[ subject ]</a>
+              <a href="author.html#1657">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

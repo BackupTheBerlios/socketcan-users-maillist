@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C481580F2.9090707%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000321.html">
+   <LINK REL="Next"  HREF="000323.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN problems</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20problems&In-Reply-To=%3C481580F2.9090707%40grandegger.com%3E"
+       TITLE="[Socketcan-users] CAN problems">wg at grandegger.com
+       </A><BR>
+    <I>Mon Apr 28 09:46:58 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000321.html">[Socketcan-users] CAN problems
+</A></li>
+        <LI>Next message: <A HREF="000323.html">[Socketcan-users] CAN problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#322">[ date ]</a>
+              <a href="thread.html#322">[ thread ]</a>
+              <a href="subject.html#322">[ subject ]</a>
+              <a href="author.html#322">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">breno at das.ufsc.br</A> wrote:
+&gt;<i> Hi all, I'm embedding a Linux kernel from DENX ELDK-2.6.24 on lite5200 v2
+</I>&gt;<i> board with a PowerPC core MPC5200 processor.
+</I>&gt;<i> On kernel configuration I enabled the CAN support and the Freescale MSCAN
+</I>&gt;<i> based chips support but when I got the kernel loaded on my system I
+</I>&gt;<i> couldn't find at /dev dir the device can0 or can1. Not even at
+</I>&gt;<i> /proc/devices regardless of all positive messages along kernel loading
+</I>&gt;<i> process.I mean, no errors reported!!!
+</I>&gt;<i>  Then I made a simple application in order to use the socket can but the
+</I>&gt;<i> call to sendto() or write() return something like &quot;no such device or
+</I>&gt;<i> address&quot;. Well, I wonder know what else is necessary on configuration
+</I>&gt;<i> steps to get my can interface working out. The step enabled option on
+</I>&gt;<i> kernel menuconfig is enough or there is another step to be accomplished.
+</I>&gt;<i> 
+</I>&gt;<i> At my /proc/net/dev files I have lo,eth0,can0 and can1 lines with
+</I>&gt;<i> informations about transmitted and received packages.
+</I>&gt;<i> 
+</I>&gt;<i> Can anyone help me?
+</I>
+There should be the network devices can0 and can1, which you can list
+with &quot;ifconfig&quot;. To use the device, you need &quot;ifconfig can0 up&quot;. Does
+that work? And please check your boot log for (MS)CAN related messages,
+e.g. with &quot;dmesg&quot;.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000321.html">[Socketcan-users] CAN problems
+</A></li>
+	<LI>Next message: <A HREF="000323.html">[Socketcan-users] CAN problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#322">[ date ]</a>
+              <a href="thread.html#322">[ thread ]</a>
+              <a href="subject.html#322">[ subject ]</a>
+              <a href="author.html#322">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

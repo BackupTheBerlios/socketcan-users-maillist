@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%20receive%20own%20messages%20problem&In-Reply-To=%3C4C0557DF.6000806%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001415.html">
+   <LINK REL="Next"  HREF="001417.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%20receive%20own%20messages%20problem&In-Reply-To=%3C4C0557DF.6000806%40grandegger.com%3E"
+       TITLE="[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem">wg at grandegger.com
+       </A><BR>
+    <I>Tue Jun  1 20:56:31 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001415.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+        <LI>Next message: <A HREF="001417.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1416">[ date ]</a>
+              <a href="thread.html#1416">[ thread ]</a>
+              <a href="subject.html#1416">[ subject ]</a>
+              <a href="author.html#1416">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 06/01/2010 06:00 PM, Navaneethan P wrote:
+&gt;&gt;<i> Does it work if you *unset* IFF_ECHO and do *not* use 
+</I>&gt;<i> can_get/put_echo_skb?
+</I>&gt;<i> Case 1
+</I>&gt;<i> ------
+</I>&gt;<i> I commented IFF_ECHO and also commented the can_get/put_echo_skb, now, 
+</I>&gt;<i> without enabling the loopback itself, the data is looped back.
+</I>
+OK, enabling the hardware loopback does not make sense anyway. See below.
+
+&gt;<i> 
+</I>&gt;<i> Case 2
+</I>&gt;<i> ----------
+</I>&gt;<i> If I enable IFF_ECHO, and commented can_get/put_echo_skb, now, data is 
+</I>&gt;<i> looped back when the loopback is on (#ip link set can0 type can loopback 
+</I>&gt;<i> on) but CAN_RAW_RECV_OWN_MSGS is not working.
+</I>
+If you set IFF_ECHO, your driver *must* support local loopback by using
+can_get/put_echo_skb. It will not work otherwise. And again, forget the
+hardware loopback.
+
+&gt;<i> case 3
+</I>&gt;<i> ----------
+</I>&gt;<i> If I enable  IFF_ECHO and also enabled can_get/put_echo_skb, result is 
+</I>&gt;<i> same as case 1. without enabling the loopback data is looped back.
+</I>
+Good, that's what you want, right?
+
+The hardware loopback enabled via &quot;ip link set can0 type can loopback&quot;
+is only useful for testing and debugging. *No* message will go out to
+the wire. It is not even available on for other CAN controllers.
+Therefore, you should not mix it with the software loopbacks, which
+serve a different purpose.
+
+How do you test if CAN_RAW_RECV_OWN_MSGS is working?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001415.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+	<LI>Next message: <A HREF="001417.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1416">[ date ]</a>
+              <a href="thread.html#1416">[ thread ]</a>
+              <a href="subject.html#1416">[ subject ]</a>
+              <a href="author.html#1416">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

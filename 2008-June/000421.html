@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%09supported%20by%20protocol%22&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D60235CE1C%40uss-am-xch-01.am.trimblecorp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000420.html">
+   <LINK REL="Next"  HREF="000422.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;</H1>
+    <B>Mike Timmons</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%09supported%20by%20protocol%22&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D60235CE1C%40uss-am-xch-01.am.trimblecorp.net%3E"
+       TITLE="[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;">mike_timmons at trimble.com
+       </A><BR>
+    <I>Thu Jun 19 20:43:51 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000420.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+        <LI>Next message: <A HREF="000422.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#421">[ date ]</a>
+              <a href="thread.html#421">[ thread ]</a>
+              <a href="subject.html#421">[ subject ]</a>
+              <a href="author.html#421">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I've tried two methods to get this to work for me:
+1) Wolfgang's module build approach
+2) Oliver's kernel patch for my 2.6.24 kernel.
+
+Both produce a clean build. Once loaded, I run &quot;cansniffer any&quot;, and
+I've tried Wolfgang's &quot;candump&quot; below (although the -e option is not
+supported by my version.).
+
+At this point I don't see any screen output. I'm expecting some
+streaming output, given some traffic I know is there, based on running a
+sniffer utlity from my U-boot command line before booting the kernel.
+
+So far I have confirmed my gpio port_config looks correct (CAN on PSC2),
+and I do have the lite5200 mscan nodes in my device tree.
+
+I'm not seeing any errors or warnings on load. Could it be that this is
+actually, &quot;working&quot; and that I'm just too dumb to know what utility to
+use to prove it to myself?
+
+What are the interface names to use for CAN1 and CAN2 on the mpc5200? So
+far I'm asking for, &quot;any&quot;. I tried 0, 1, 2, mscan, etc but cansniffer
+doesn't like any of these. It's not yet clear to me after a quick look
+at the source, but I'll keep looking.
+
+Please advise. In the meantime I'm wading through source code and
+inserting some printk's in an attempt to learn how all this works so
+that I can see some action on the CAN interface.
+
+Thanks for any additional guidance you can provide.
+
+-Mike
+
+-----Original Message-----
+From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>] 
+Sent: Thursday, June 19, 2008 11:06 AM
+To: Mike Timmons
+Cc: Oliver Hartkopp; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] cansniffer error: &quot;socket: Address family
+not supported by protocol&quot;
+
+Mike Timmons wrote:
+&gt;<i> Wolfgang, when I attempt the module load order you recommend
+</I>cansniffer
+&gt;<i> throws an error on init and aborts: &quot;SIOCGIFINDEX: No such device&quot;.
+</I>
+Well, I actually don't use can-bcm.ko but just:
+
+insmod can.ko
+insmod can-raw.ko
+insmod can-dev.ko
+insmod mscan-mpc52xx.ko
+
+&gt;<i> FYI I'm attempting running, &quot;cansniffer all&quot;, which I'm thinking
+</I>should
+&gt;<i> show me any action on either of the two ports.
+</I>
+And &quot;candump -e 0xffff any&quot; for that purpose.
+
+&gt;<i> When I revert to the order I was using that error goes away, although
+</I>&gt;<i> I'm still not seeing traffic, as explained earlier.
+</I>&gt;<i> 
+</I>&gt;<i> Please do advise on the module dependencies if possible.
+</I>
+See above, I have to check.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000420.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+	<LI>Next message: <A HREF="000422.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#421">[ date ]</a>
+              <a href="thread.html#421">[ thread ]</a>
+              <a href="subject.html#421">[ subject ]</a>
+              <a href="author.html#421">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

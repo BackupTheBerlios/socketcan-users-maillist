@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] debugging at91 problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20debugging%20at91%20problem&In-Reply-To=%3C4DD3CE1B.2000002%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001891.html">
+   <LINK REL="Next"  HREF="001893.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] debugging at91 problem</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20debugging%20at91%20problem&In-Reply-To=%3C4DD3CE1B.2000002%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] debugging at91 problem">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed May 18 15:48:11 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001891.html">[Socketcan-users] debugging at91 problem
+</A></li>
+        <LI>Next message: <A HREF="001893.html">[Socketcan-users] debugging at91 problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1892">[ date ]</a>
+              <a href="thread.html#1892">[ thread ]</a>
+              <a href="subject.html#1892">[ subject ]</a>
+              <a href="author.html#1892">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05/18/2011 03:43 PM, Mark Slicker wrote:
+&gt;<i> On Wed, May 18, 2011 at 10:24 AM, Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt; wrote:
+</I>&gt;&gt;<i> On 05/18/2011 02:59 PM, Mark Slicker wrote:
+</I>&gt;&gt;&gt;<i> Marc,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks for your quick response. I reverted to my old kernel/file
+</I>&gt;&gt;&gt;<i> system and did a simple test just to make sure there are no hardware
+</I>&gt;&gt;&gt;<i> problems, everything seems ok, and the single packet is received. But
+</I>&gt;&gt;&gt;<i> with the new configuration, no packet is received. I did the following
+</I>&gt;&gt;&gt;<i> command to set up the can:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> /sbin/ip link set can0 type can bitrate 500000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> you have to use &quot;ifconfig can0 up&quot; afterwords... :)
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Thanks, that solves one problem for me, I can see the message now. It
+</I>&gt;<i> seems silly but interface changed at lot here since I last used
+</I>&gt;<i> SocketCAN.
+</I>
+Hmmm...I don't remember a time that ifconfig up wasn't necessary.
+
+&gt;&gt;&gt;<i> And then I run my application, which listens for a message, and on my
+</I>&gt;&gt;&gt;<i> pc I send a single packet. Actually in ifconfig now it shows no
+</I>&gt;&gt;&gt;<i> packets received or transmitted and no errors, not sure what caused
+</I>&gt;&gt;&gt;<i> the errors before, but I can be certain that it is a software problem
+</I>&gt;&gt;&gt;<i> now.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What happens if you send a single CAN frame on the at91? Are you
+</I>&gt;&gt;<i> properly switching on any transceivers in you board file?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I'm just using the default board setup for sam9263-ek which I think
+</I>&gt;<i> does this correctly.
+</I>&gt;<i> 
+</I>&gt;<i> I ran the other program again, this one uses libsocketcan for
+</I>&gt;<i> configuration, and I see the errors again, I didn't write this code so
+</I>&gt;<i> I have look into this issue more.
+</I>
+Changing the bitrate is only possible if the interface is down. Hence
+you need to bring it up again, after changing the bitrate.
+
+regards, Marc
+
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110518/e2a60836/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110518/e2a60836/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001891.html">[Socketcan-users] debugging at91 problem
+</A></li>
+	<LI>Next message: <A HREF="001893.html">[Socketcan-users] debugging at91 problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1892">[ date ]</a>
+              <a href="thread.html#1892">[ thread ]</a>
+              <a href="subject.html#1892">[ subject ]</a>
+              <a href="author.html#1892">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

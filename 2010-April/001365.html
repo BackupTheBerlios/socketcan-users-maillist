@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem in cross compiling socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cn2q7401a78a1004081746o56a86b6dxa313a47170fc7334%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001362.html">
+   <LINK REL="Next"  HREF="001366.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem in cross compiling socketcan</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20in%20cross%20compiling%20socketcan&In-Reply-To=%3Cn2q7401a78a1004081746o56a86b6dxa313a47170fc7334%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] problem in cross compiling socketcan">nudtrobert at gmail.com
+       </A><BR>
+    <I>Fri Apr  9 02:46:36 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001362.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001366.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1365">[ date ]</a>
+              <a href="thread.html#1365">[ thread ]</a>
+              <a href="subject.html#1365">[ subject ]</a>
+              <a href="author.html#1365">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2010/4/8 Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+
+&gt;<i> Lei Luo wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt;     &gt; I discovered some problems if you build the kernel with CAN
+</I>&gt;<i> &gt;     support and then
+</I>&gt;<i> &gt;     &gt; mix the modules at load time (e.g. can.ko from /lib/modules/...
+</I>&gt;<i> &gt;     and can.ko
+</I>&gt;<i> &gt;     &gt; from the SVN tree).
+</I>&gt;<i> &gt;     &gt;
+</I>&gt;<i> &gt;     &gt; So when you e.g. load can-raw.ko from the SVN tree build you
+</I>&gt;<i> &gt;     should also load
+</I>&gt;<i> &gt;     &gt; can.ko from the SVN tree before.
+</I>&gt;<i> &gt;     Ack.
+</I>&gt;<i> &gt;     To prevent the kernel CAN modules to load, I don't even compile the
+</I>&gt;<i> &gt;     kernel CAN support. This way, I'm sure I'm using SVN modules.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; That is a good idea. I do this at first, but then I patched SVN souces
+</I>&gt;<i> &gt; files into kernel manully, becaused I do not kown the function of each
+</I>&gt;<i> &gt; module and the  dependents of  them.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> $ grep can /lib/modules/2.6.34-rc3-00288-gab195c5/modules.dep
+</I>&gt;<i>
+</I>&gt;<i> kernel/drivers/scsi/scsi_wait_scan.ko:
+</I>&gt;<i>
+</I>&gt;<i> kernel/drivers/net/can/usb/ems_usb.ko: kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i>
+</I>&gt;<i> kernel/drivers/net/can/vcan.ko:
+</I>&gt;<i>
+</I>&gt;<i> kernel/drivers/net/can/can-dev.ko:
+</I>&gt;<i> kernel/drivers/net/can/sja1000/sja1000.ko:
+</I>&gt;<i> kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i>
+</I>&gt;<i> kernel/drivers/net/can/sja1000/sja1000_platform.ko:
+</I>&gt;<i> kernel/drivers/net/can/sja1000/sja1000.ko kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i> kernel/drivers/net/can/sja1000/ems_pci.ko:
+</I>&gt;<i> kernel/drivers/net/can/sja1000/sja1000.ko kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i> kernel/drivers/net/can/sja1000/kvaser_pci.ko:
+</I>&gt;<i> kernel/drivers/net/can/sja1000/sja1000.ko kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i> kernel/drivers/net/can/sja1000/plx_pci.ko:
+</I>&gt;<i> kernel/drivers/net/can/sja1000/sja1000.ko kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i>
+</I>&gt;<i> kernel/drivers/net/can/mcp251x.ko: kernel/drivers/net/can/can-dev.ko
+</I>&gt;<i>
+</I>&gt;<i> kernel/net/can/can.ko:
+</I>&gt;<i> kernel/net/can/can-raw.ko: kernel/net/can/can.ko
+</I>&gt;<i> kernel/net/can/can-bcm.ko: kernel/net/can/can.ko
+</I>&gt;<i>
+</I>&gt;<i> Here you can see:
+</I>&gt;<i>
+</I>&gt;<i> - vcan.ko depends on nothing
+</I>&gt;<i>
+</I>&gt;<i> - can-raw.ko depends on can.ko (the PF_CAN network infrastructure)
+</I>&gt;<i>
+</I>&gt;<i> - sja1000.ko depends on can-dev.ko (the CAN driver library)
+</I>&gt;<i> - mcp251x.ko depends on can-dev.ko (the CAN driver library)
+</I>&gt;<i> - ems_usb.ko depends on can-dev.ko (the CAN driver library)
+</I>
+
+Yes, thanks a lot!
+And is can-isotp used to communicate between two nodes by their address?
+What is the function of can-bcm?
+I add two vcan nodes, ifconfig them up, then run the demos in can-test and
+can-uitl , but can receive nothing.
+
+Regards,
+Luo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100409/25d446ac/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100409/25d446ac/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001362.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001366.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1365">[ date ]</a>
+              <a href="thread.html#1365">[ thread ]</a>
+              <a href="subject.html#1365">[ subject ]</a>
+              <a href="author.html#1365">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

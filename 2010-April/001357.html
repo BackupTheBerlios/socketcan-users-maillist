@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcand improvements
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcand%20improvements&In-Reply-To=%3C20100407235002.GB24009%40www.longlandclan.yi.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001354.html">
+   <LINK REL="Next"  HREF="001358.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcand improvements</H1>
+    <B>Stuart Longland</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcand%20improvements&In-Reply-To=%3C20100407235002.GB24009%40www.longlandclan.yi.org%3E"
+       TITLE="[Socketcan-users] slcand improvements">redhatter at gentoo.org
+       </A><BR>
+    <I>Thu Apr  8 01:50:02 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001354.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001358.html">[Socketcan-users] slcand improvements
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1357">[ date ]</a>
+              <a href="thread.html#1357">[ thread ]</a>
+              <a href="subject.html#1357">[ subject ]</a>
+              <a href="author.html#1357">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+	I've made some improvements to the slcand utility in SocketCAN.
+The Lawicel CANUSB devices require some initialisation before starting
+up.  I find myself often having to open minicom and manually enter the
+appropriate codes to set up the CAN baud rate and open the CAN channel,
+which is inconvenient to say the least.
+
+	This adds in the ability to send arbitrary codes at startup and
+shutdown of slcand.  This is specified on the command line:
+
+	slcand &lt;ttydevice&gt; [&lt;init strings&gt; [-- &lt;shutdown strings&gt;]]
+
+	e.g. 	slcand ttyUSB1 S8 O -- C
+		sets the CAN baud rate to 1Mbps, then opens the channel
+		on startup, closes the channel on shutdown.
+
+	The strings are terminated with \r automatically.  This allows
+udev (for example) to create the slcX device.
+
+	I've also dealt with a warning from the C library regarding an
+ignored return value from freopen().  The patch is against r1164.
+
+Regards,
+-- 
+Stuart Longland (aka Redhatter, VK4MSL)      .'''.
+Gentoo Linux/MIPS Cobalt and Docs Developer  '.'` :
+. . . . . . . . . . . . . . . . . . . . . .   .'.'
+<A HREF="http://dev.gentoo.org/~redhatter">http://dev.gentoo.org/~redhatter</A>             :.'
+
+I haven't lost my mind...
+  ...it's backed up on a tape somewhere.
+-------------- next part --------------
+Index: slcand.c
+===================================================================
+--- slcand.c	(revision 1164)
++++ slcand.c	(working copy)
+@@ -52,6 +52,7 @@
+ #include &lt;pwd.h&gt;
+ #include &lt;signal.h&gt;
+ #include &lt;sys/ioctl.h&gt;
++#include &lt;termios.h&gt;
+ 
+ /* default slcan line discipline since Kernel 2.6.25 */
+ #define LDISC_N_SLCAN 17
+@@ -67,9 +68,10 @@
+ 
+ void print_usage(char *prg)
+ {
+-	fprintf(stderr, &quot;\nUsage: %s tty\n\n&quot;, prg);
++	fprintf(stderr, &quot;\nUsage: %s tty [init opts... [-- close opts]]\n\n&quot;,
++		prg);
+ 	fprintf(stderr, &quot;Example:\n&quot;);
+-	fprintf(stderr, &quot;%s ttyUSB1\n&quot;, prg);
++	fprintf(stderr, &quot;%s ttyUSB1 S8 O -- C\n&quot;, prg);
+ 	fprintf(stderr, &quot;%s ttyS0\n&quot;, prg);
+ 	fprintf(stderr, &quot;\n&quot;);
+ 	exit(EXIT_FAILURE);
+@@ -197,9 +199,12 @@
+ 	}
+ 
+ 	/* Redirect standard files to /dev/null */
+-	freopen (&quot;/dev/null&quot;, &quot;r&quot;, stdin);
+-	freopen (&quot;/dev/null&quot;, &quot;w&quot;, stdout);
+-	freopen (&quot;/dev/null&quot;, &quot;w&quot;, stderr);
++	if ( freopen (&quot;/dev/null&quot;, &quot;r&quot;, stdin) == NULL )
++		syslog (LOG_NOTICE, &quot;failed to redirect stdin&quot;);
++	if ( freopen (&quot;/dev/null&quot;, &quot;w&quot;, stdout) == NULL )
++		syslog (LOG_NOTICE, &quot;failed to redirect stdout&quot;);
++	if ( freopen (&quot;/dev/null&quot;, &quot;w&quot;, stderr) == NULL )
++		syslog (LOG_NOTICE, &quot;failed to redirect stderr&quot;);
+ 
+ 	/* Tell the parent process that we are A-okay */
+ 	kill (parent, SIGUSR1);
+@@ -215,7 +220,7 @@
+ 	openlog (DAEMON_NAME, LOG_PID, LOG_LOCAL5);
+ 
+ 	/* See how we're called */
+-	if (argc != 2)
++	if (argc &lt; 2)
+ 		print_usage(argv[0]);
+ 	tty = argv[1];
+ 
+@@ -225,7 +230,7 @@
+ 	if (pch == tty) {
+ 		print_usage(argv[0]);
+ 	}
+-	ttypath = malloc((strlen(devprefix) + strlen(tty)) * sizeof(char));
++	ttypath = malloc((strlen(devprefix) + strlen(tty) + 1) * sizeof(char));
+ 	sprintf (ttypath, &quot;%s%s&quot;, devprefix, tty);
+ 	syslog (LOG_INFO, &quot;starting on TTY device %s&quot;, ttypath);
+ 
+@@ -233,14 +238,56 @@
+ 	daemonize (&quot;/var/lock/&quot; DAEMON_NAME, tty);
+ 
+ 	/* Now we are a daemon -- do the work for which we were paid */
++	int arg;
+ 	int fd;
+ 	int ldisc = LDISC_N_SLCAN;
++	struct termios serialopt;
+ 
+-	if ((fd = open (ttypath, O_WRONLY | O_NOCTTY )) &lt; 0) {
++	if ((fd = open (ttypath,  O_WRONLY | O_NOCTTY )) &lt; 0) {
+ 		perror(ttypath);
+ 		exit(1);
+ 	}
+ 
++	/* Initialise serialopt */
++	if ( tcgetattr( fd, &amp;serialopt ) ) {
++		perror(&quot;Failed to get serial line options&quot;);
++		return(1);
++	}
++
++	/* Set the serial speed */
++	if ( cfsetospeed( &amp;serialopt, B115200 ) ) {
++		perror(&quot;Failed to set output speed in serialopt&quot;);
++		return(1);
++	}
++
++	/* Store serialopt */
++	if ( tcsetattr( fd, TCSANOW, &amp;serialopt ) ) {
++		perror(&quot;Failed to store serial line options&quot;);
++		return(1);
++	}
++	
++	/* Send initialisation arguments if any */
++	if ( argc &gt; 2 ) {
++		syslog (LOG_INFO, &quot;sending initialisation&quot;);
++		arg = 2;
++		while( ( arg &lt; argc ) &amp;&amp; 
++				( strstr( argv[arg], &quot;--&quot; ) == NULL ) ) {
++			syslog (LOG_INFO, &quot;write \&quot;%s\&quot;&quot;, argv[arg]);
++			if ( write( fd, argv[arg], strlen(argv[arg]) ) &lt;
++					strlen(argv[arg]) ) {
++				syslog (LOG_ERR, &quot;write \&quot;%s\&quot; failed&quot;,
++						argv[arg]);
++				exit(1);
++			}
++			if ( write( fd, &quot;\r&quot;, 1 ) &lt; 1 ) {
++				syslog (LOG_ERR, &quot;write \&quot;%s\&quot; newline failed&quot;,
++						argv[arg]);
++				exit(1);
++			}
++			arg++;
++		}
++	}
++
+ 	if (ioctl (fd, TIOCSETD, &amp;ldisc) &lt; 0) {
+ 		perror(&quot;ioctl&quot;);
+ 		exit(1);
+@@ -251,6 +298,23 @@
+ 		sleep(60); /* wait 60 seconds */
+ 	}
+ 
++	/* Send closing arguments if any (we should be on the &quot;--&quot; part) */
++	arg++;
++	if ( argc &lt; arg )
++		syslog (LOG_INFO, &quot;sending shutdown&quot;);
++	while ( arg &lt; argc ) {
++		syslog (LOG_INFO, &quot;write \&quot;%s\&quot;&quot;, argv[arg]);
++		if ( write( fd, argv[arg], strlen(argv[arg]) ) &lt;
++				strlen(argv[arg]) ) {
++			syslog (LOG_ERR, &quot;write \&quot;%s\&quot; failed&quot;,
++					argv[arg]);
++		}
++		if ( write( fd, &quot;\r&quot;, 1 ) &lt; 1 ) {
++			syslog (LOG_ERR, &quot;write \&quot;%s\&quot; newline failed&quot;,
++					argv[arg]);
++		}
++	}
++
+ 	/* Finish up */
+ 	syslog (LOG_NOTICE, &quot;terminated on %s&quot;, ttypath);
+ 	closelog ();
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001354.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001358.html">[Socketcan-users] slcand improvements
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1357">[ date ]</a>
+              <a href="thread.html#1357">[ thread ]</a>
+              <a href="subject.html#1357">[ subject ]</a>
+              <a href="author.html#1357">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

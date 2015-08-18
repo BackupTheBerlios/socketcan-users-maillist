@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem with the kernelmodule can-isotp
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%20the%20kernelmodule%20can-isotp&In-Reply-To=%3C4DBD372B.6020007%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001872.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem with the kernelmodule can-isotp</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%20the%20kernelmodule%20can-isotp&In-Reply-To=%3C4DBD372B.6020007%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] problem with the kernelmodule can-isotp">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun May  1 12:34:19 CEST 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001872.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1871">[ date ]</a>
+              <a href="thread.html#1871">[ thread ]</a>
+              <a href="subject.html#1871">[ subject ]</a>
+              <a href="author.html#1871">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 30.04.2011 14:09, AD wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> I hope that someone can give me a hint for the following problem.
+</I>&gt;<i> 
+</I>&gt;<i> That's what I did:
+</I>&gt;<i> 
+</I>&gt;<i> checkout socketcan from svn (revision 1240)
+</I>&gt;<i> 
+</I>&gt;<i> in the folder socketcan/kernel/2.6:
+</I>&gt;<i> 
+</I>&gt;<i> make
+</I>&gt;<i> make modules_install
+</I>&gt;<i> 
+</I>&gt;<i> modprobe can-isotp
+</I>&gt;<i> 
+</I>&gt;<i> This results in the following error:
+</I>&gt;<i> FATAL: Error inserting can_isotp
+</I>&gt;<i> /lib/modules/2.6.32-bpo.5-686/extra/can-isotp.ko): Unknown symbol in module,
+</I>&gt;<i> or unknown parameter (see dmesg)
+</I>&gt;<i> 
+</I>&gt;<i> dmesg | tail output:
+</I>&gt;<i> 
+</I>&gt;<i> [41334.983203] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> [41334.984140] NET: Registered protocol family 29
+</I>&gt;<i> [41334.985885] can_isotp: disagrees about version of symbol can_proto_register
+</I>&gt;<i> [41334.985891] can_isotp: Unknown symbol can_proto_register
+</I>&gt;<i> [41334.986323] can_isotp: Unknown symbol can_ioctl
+</I>&gt;<i> [41334.987262] can_isotp: disagrees about version of symbol can_proto_unregister
+</I>&gt;<i> [41334.987265] can_isotp: Unknown symbol can_proto_unregister
+</I>&gt;<i> 
+</I>&gt;<i> lsmod | grep can results in this output
+</I>&gt;<i> can                    17795  0
+</I>&gt;<i> 
+</I>&gt;<i> this does also work:
+</I>&gt;<i> modprobe can-raw
+</I>&gt;<i> modprobe can-bcm
+</I>&gt;<i> 
+</I>&gt;<i> lsmod | grep can results in this output
+</I>&gt;<i> 
+</I>&gt;<i> can_bcm                 9527  0
+</I>&gt;<i> can_raw                 4235  0
+</I>&gt;<i> can                    17795  2 can_bcm,can_raw
+</I>&gt;<i> 
+</I>&gt;<i> So any ideas how the problem can be fixed?
+</I>
+Yes.
+
+The problem is, that you have a mix of mainline CAN sources (that came with
+your Debian kernel) and the SocketCAN SVN sources.
+
+You built the SocketCAN sources against the includes from the SVN which
+contain some updates that will emerge in the 2.6.39 mainline kernel (but not
+in your 2.6.32-bpo.5-686).
+
+You need to load consistent modules from mainline *OR* the BerliOS SVN:
+
+By default the Mainline modules are loaded (that's why can_raw and can_bcm are
+loading without problems). They are located in
+
+/lib/modules/2.6.32-bpo.5-686/kernel/net/can/*.ko
+
+The SocketCAN SVN modules are located in
+
+/lib/modules/2.6.32-bpo.5-686/extra/net/can/*.ko
+
+or (in your setup seen above)
+
+/lib/modules/2.6.32-bpo.5-686/extra/*.ko
+
+which therefore interferes ...
+
+So if you would like to run can-isotp you must be sure not to load the
+mainline modules:
+
+Unload all 'mainline' modules:
+
+modprobe -r can-bcm
+modprobe -r can-raw
+modprobe -r can
+
+cd /lib/modules/2.6.32-bpo.5-686/extra/
+
+insmod ./can.ko
+insmod ./can-isotp.ko
+insmod ./can-raw.ko
+insmod ./can-bcm.ko
+
+This works :-)
+
+If you would like to use the SocketCAN modules generally you may remove the
+mainline CAN modules from the mainline modules directory:
+
+rm /lib/modules/2.6.32-bpo.5-686/kernel/net/can/*.ko
+
+and reorder the module depencies to select the stuff from
+/lib/modules/2.6.32-bpo.5-686/extra/
+
+depmod -a
+
+But this is your choice - if you know what you're doing ;-)
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001872.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1871">[ date ]</a>
+              <a href="thread.html#1871">[ thread ]</a>
+              <a href="subject.html#1871">[ subject ]</a>
+              <a href="author.html#1871">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

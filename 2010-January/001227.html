@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ANNOUNCE%3A%20new%20socket%20level%20option%20to%20report%0A%20number%20of%20rx%20queue%20overflows&In-Reply-To=%3C4B522907.3060509%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001226.html">
+   <LINK REL="Next"  HREF="001242.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ANNOUNCE%3A%20new%20socket%20level%20option%20to%20report%0A%20number%20of%20rx%20queue%20overflows&In-Reply-To=%3C4B522907.3060509%40grandegger.com%3E"
+       TITLE="[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows">wg at grandegger.com
+       </A><BR>
+    <I>Sat Jan 16 22:00:55 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001226.html">[Socketcan-users] ANNOUNCE: new socket level option to report	number of rx queue overflows
+</A></li>
+        <LI>Next message: <A HREF="001242.html">[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1227">[ date ]</a>
+              <a href="thread.html#1227">[ thread ]</a>
+              <a href="subject.html#1227">[ subject ]</a>
+              <a href="author.html#1227">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> beginning with 2.6.33 there will be the functionality to detect dropped
+</I>&gt;<i> CAN frames that had not be consumed by the userspace application in time:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=3b885787ea4112eaa80945999ea0901bf742707f">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=3b885787ea4112eaa80945999ea0901bf742707f</A>
+</I>&gt;<i> 
+</I>&gt;<i> By enabling the socket option SO_RXQ_OVFL a new control message can be passed
+</I>&gt;<i> to the application that tells how many packets have been dropped in the
+</I>&gt;<i> specific(!) sockets receive path until the last received CAN frame.
+</I>&gt;<i> 
+</I>&gt;<i> I added this functionality to the latest candump in the SocketCAN SVN rev 1111
+</I>&gt;<i> and moved the formerly recvfrom() to recvmsg() to read CAN frames together
+</I>&gt;<i> with the control-messages (cmsg) from the socket. See the diffs in:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://svn.berlios.de/viewcvs/socketcan/trunk/can-utils/candump.c?r1=968&amp;r2=1111">http://svn.berlios.de/viewcvs/socketcan/trunk/can-utils/candump.c?r1=968&amp;r2=1111</A>
+</I>&gt;<i> 
+</I>&gt;<i> To check the functionality on your own, you can follow this example:
+</I>&gt;<i> 
+</I>&gt;<i> - use a 2.6.33-rcX Linux Kernel
+</I>&gt;<i> - run e.g. 'cangen -g4 vcan0' on a separate console
+</I>&gt;<i> - run 'candump -ta -d any' ('-d' is the new dropcount option)
+</I>&gt;<i> - CAN traffic on vcan0 will show up
+</I>&gt;<i> - type CTRL-Z to stop the candump process (will cause packets to drop)
+</I>&gt;<i> - wait  3-5 seconds to surely overflow the sockets rx queue
+</I>&gt;<i> - type 'fg &lt;RETURN&gt;' to (re)start candump and *directly* after that: CTRL-C
+</I>&gt;<i> 
+</I>&gt;<i> When you scroll up in the terminal, you'll see something like this:
+</I>&gt;<i> 
+</I>&gt;<i> ...
+</I>&gt;<i>  (1263646787.527205)  vcan1  2AB  [8] 7F C0 27 00 C3 BA DE 18
+</I>&gt;<i>  (1263646787.532330)  vcan1   38  [8] 7B FC EF 62 BC F4 DC 25
+</I>&gt;<i>  (1263646787.537472)  vcan1  5BA  [8] CE BD B4 64 C6 3C 1D 56
+</I>&gt;<i> DROPCOUNT: dropped 67 CAN frames on 'any' socket (total drops 67)
+</I>&gt;<i>  (1263646787.892871)  vcan1  7B6  [6] 60 54 0D 41 45 D8
+</I>&gt;<i>  (1263646787.897970)  vcan1  16E  [8] AA AA D6 64 3A CD 40 1C
+</I>&gt;<i>  (1263646787.903048)  vcan1  3FD  [8] C2 A5 A0 13 3E A8 E7 6C
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> I think this new functionality is a great improvement for CAN users to make
+</I>&gt;<i> things inside the kernel transparent to the userspace application.
+</I>
+Cool stuff, indeed.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001226.html">[Socketcan-users] ANNOUNCE: new socket level option to report	number of rx queue overflows
+</A></li>
+	<LI>Next message: <A HREF="001242.html">[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1227">[ date ]</a>
+              <a href="thread.html#1227">[ thread ]</a>
+              <a href="subject.html#1227">[ subject ]</a>
+              <a href="author.html#1227">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

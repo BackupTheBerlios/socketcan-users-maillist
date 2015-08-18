@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE185AD.4030705%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001644.html">
+   <LINK REL="Next"  HREF="001646.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE185AD.4030705%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 15 20:10:37 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001644.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001646.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1645">[ date ]</a>
+              <a href="thread.html#1645">[ thread ]</a>
+              <a href="subject.html#1645">[ subject ]</a>
+              <a href="author.html#1645">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 11/15/2010 06:59 PM, Willy Lambert wrote:
+&gt;<i> Here is my dmesg :
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/opt# dmesg
+</I>&gt;<i> [    0.000000] Initializing cgroup subsys cpuset
+</I>&gt;<i> [    0.000000] Initializing cgroup subsys cpu
+</I>&gt;<i> [    0.000000] Linux version 2.6.32.11-target-alpha-v2 (<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at ard-host-4</A>)
+</I>&gt;<i> (gcc version 4.4.5 20100728 (prerelease) (Debian 4.4.4-8) ) #3 SMP Tue Nov 9
+</I>&gt;<i> 19:07:02 CET 2010
+</I>...
+
+I do not see anything obvious. But maybe the default &quot;cdr&quot; and &quot;ocr&quot;
+values are not OK for that card. Could you please add the module parameters:
+
+  ocr=0xdc cdr=0
+
+when loading the SJA1000 ISA driver.
+
+Hope it helps.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001644.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001646.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1645">[ date ]</a>
+              <a href="thread.html#1645">[ thread ]</a>
+              <a href="subject.html#1645">[ subject ]</a>
+              <a href="author.html#1645">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

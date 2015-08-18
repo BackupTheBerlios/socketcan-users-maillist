@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%09supported%20by%20protocol%22&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D60235CE5A%40uss-am-xch-01.am.trimblecorp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000422.html">
+   <LINK REL="Next"  HREF="000424.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;</H1>
+    <B>Mike Timmons</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cansniffer%20error%3A%20%22socket%3A%20Address%20family%20not%0A%09supported%20by%20protocol%22&In-Reply-To=%3C161B3BAD77161449A144FF054231C3D60235CE5A%40uss-am-xch-01.am.trimblecorp.net%3E"
+       TITLE="[Socketcan-users] cansniffer error: &quot;socket: Address family not	supported by protocol&quot;">mike_timmons at trimble.com
+       </A><BR>
+    <I>Thu Jun 19 22:04:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000422.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+        <LI>Next message: <A HREF="000424.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#423">[ date ]</a>
+              <a href="thread.html#423">[ thread ]</a>
+              <a href="subject.html#423">[ subject ]</a>
+              <a href="author.html#423">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for the tips. Here's what I have after compiling your patch with
+the kernel (not as a module).
+
+Summary:
+-no action with candump any
+-dmesg output shows a few can-related output statements (see #1 below)
+-ifconfig shows no can info.
+-/proc/net/dev does contain reference to can0 and can1
+-nothing relevant in /proc/interrupts
+
+So, it looks like I'm 1-for-5 (Pretty poor batting average in
+Baseball!).
+
+Details follow. It looks like I need to start the interface. Any tips on
+that and the interrupt issue will be much appreciated!
+
+
+1) relevant dmesg output 
+
+   1.616336] drivers/hid/usbhid/hid-core.c: v2.6:USB HID core driver
+[    1.622916] TCP cubic registered
+[    1.626350] NET: Registered protocol family 1
+[    1.630912] NET: Registered protocol family 17
+[    1.635512] can: controller area network core (rev 20071116 abi 8)
+[    1.641951] NET: Registered protocol family 29
+[    1.646844] can: raw protocol (rev 20071116)
+[    1.651292] can: broadcast manager protocol (rev 20071116)
+[    1.657620] RPC: Registered udp transport module.
+[    1.662486] RPC: Registered tcp transport module.
+[    2.173413] net eth0: attached phy 1 to driver Generic PHY
+[    3.181313] IP-Config: Guessing netmask 255.255.0.0
+[    3.186514] IP-Config: Complete:
+[    3.189675]       device=eth0, addr=172.30.1.40, mask=255.255.0.0,
+gw=255.255.255.,
+[    3.197729]      host=castor, domain=, nis-domain=(none),
+[    3.203261]      bootserver=172.30.1.39, rootserver=172.30.1.39,
+rootpath=
+[    3.211092] Looking up port of RPC 100003/2 on 172.30.1.39
+[    5.171619] PHY: f0003000:01 - Link is Up - 10/Full
+[    5.218915] Looking up port of RPC 100005/1 on 172.30.1.39
+[    5.237505] VFS: Mounted root (nfs filesystem).
+[    5.242401] Freeing unused kernel memory: 152k init
+
+
+2) ifconfig output
+
+-sh-2.05b# ifconfig        
+eth0      Link encap:Ethernet  HWaddr 72:30:01:40:00:00  
+          inet addr:172.30.1.41  Bcast:172.30.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4415 errors:7 dropped:1 overruns:0 frame:7
+          TX packets:2841 errors:0 dropped:0 overruns:0 carrier:1
+          collisions:0 txqueuelen:1000 
+          RX bytes:4327440 (4.1 Mb)  TX bytes:1140292 (1.0 Mb)
+          Interrupt:133 Base address:0x3000 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+
+
+3) cat /proc/net/dev
+
+-sh-2.05b# cat /proc/net/dev
+Inter-|   Receive                                                |
+Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes
+packets errs drop fifo colls carrier compressed
+    lo:       0       0    0    0    0     0          0         0
+0       0    0    0    0     0       0          0
+  can0:       0       0    0    0    0     0          0         0
+0       0    0    0    0     0       0          0
+  can1:       0       0    0    0    0     0          0         0
+0       0    0    0    0     0       0          0
+  eth0: 4331456    4444    7    1    0     7          0         0
+1144564    2870    0    0    0     0       1          0
+-sh-2.05b# 
+
+
+4) cat /proc/interrupts
+
+-sh-2.05b# cat /proc/interrupts 
+           CPU0       
+ 16:          0   MPC52xx IRQ[0-3]  Edge      MB86290
+129:       2069  MPC52xx Peripherals Edge      mpc52xx_psc_uart
+133:          0  MPC52xx Peripherals Edge      mpc52xx-fec_ctrl
+134:          0  MPC52xx Peripherals Edge      ohci_hcd:usb1
+135:          6  MPC52xx Peripherals Edge      mpc52xx_ata
+143:          0  MPC52xx Peripherals Edge      i2c-mpc
+144:          0  MPC52xx Peripherals Edge      i2c-mpc
+192:       4451  MPC52xx SDMA Edge      mpc52xx-fec_rx
+193:       2848  MPC52xx SDMA Edge      mpc52xx-fec_tx
+BAD:          3
+-sh-2.05b# 
+-sh-2.05b#
+
+
+
+
+
+
+
+-----Original Message-----
+From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>] 
+Sent: Thursday, June 19, 2008 2:50 PM
+To: Mike Timmons
+Cc: Wolfgang Grandegger; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] cansniffer error: &quot;socket: Address family
+not supported by protocol&quot;
+
+Mike Timmons wrote:
+&gt;<i> I've tried two methods to get this to work for me:
+</I>&gt;<i> 1) Wolfgang's module build approach
+</I>&gt;<i> 2) Oliver's kernel patch for my 2.6.24 kernel.
+</I>&gt;<i>
+</I>&gt;<i> Both produce a clean build. Once loaded, I run &quot;cansniffer any&quot;, and
+</I>&gt;<i> I've tried Wolfgang's &quot;candump&quot; below (although the -e option is not
+</I>&gt;<i> supported by my version.).
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Using &quot;candump any&quot; is a save method to dump all valid CAN traffic the
+system receives.
+
+Receiving error frame (the former -e option) is mostly not necessary for
+first test, when you have attached a proper working CAN source and
+correct termination.
+
+&gt;<i> At this point I don't see any screen output. I'm expecting some
+</I>&gt;<i> streaming output, given some traffic I know is there, based on running
+</I>a
+&gt;<i> sniffer utlity from my U-boot command line before booting the kernel.
+</I>&gt;<i>
+</I>&gt;<i> So far I have confirmed my gpio port_config looks correct (CAN on
+</I>PSC2),
+&gt;<i> and I do have the lite5200 mscan nodes in my device tree.
+</I>&gt;<i>
+</I>&gt;<i> I'm not seeing any errors or warnings on load. Could it be that this
+</I>is
+&gt;<i> actually, &quot;working&quot; and that I'm just too dumb to know what utility to
+</I>&gt;<i> use to prove it to myself?
+</I>&gt;<i>   
+</I>
+Please check, if ...
+
+- your can0 or can1 network interface is up and running (e.g. by typing
+ifconfig without  any parameter)
+- you can see the CAN devices in 'cat /proc/net/dev'
+- you can see the CAN devices in 'cat /proc/interrupts'
+
+Feel free to post parts of your kernel log messages (e.g. the output of
+'dmsg')
+
+
+&gt;<i> What are the interface names to use for CAN1 and CAN2 on the mpc5200?
+</I>So
+&gt;<i> far I'm asking for, &quot;any&quot;. I tried 0, 1, 2, mscan, etc but cansniffer
+</I>&gt;<i> doesn't like any of these. It's not yet clear to me after a quick look
+</I>&gt;<i> at the source, but I'll keep looking.
+</I>&gt;<i>   
+</I>
+CAN interfaces are named can0, can1, can2 (like eth0, wlan0, ...)
+The virtual CAN interfaces (some kind of loopback software interface)
+are named vcan0, vcan1, vcan2, ...
+
+&gt;<i> Please advise. In the meantime I'm wading through source code and
+</I>&gt;<i> inserting some printk's in an attempt to learn how all this works so
+</I>&gt;<i> that I can see some action on the CAN interface.
+</I>&gt;<i>   
+</I>
+Don't give up! We'll get it ;-))
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000422.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+	<LI>Next message: <A HREF="000424.html">[Socketcan-users] cansniffer error: &quot;socket: Address family not supported by protocol&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#423">[ date ]</a>
+              <a href="thread.html#423">[ thread ]</a>
+              <a href="subject.html#423">[ subject ]</a>
+              <a href="author.html#423">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

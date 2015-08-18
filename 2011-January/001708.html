@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SLCAN serial baudrate...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C4D29879D.70508%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001707.html">
+   <LINK REL="Next"  HREF="001709.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SLCAN serial baudrate...</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C4D29879D.70508%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] SLCAN serial baudrate...">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Jan  9 11:02:05 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001707.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+        <LI>Next message: <A HREF="001709.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1708">[ date ]</a>
+              <a href="thread.html#1708">[ thread ]</a>
+              <a href="subject.html#1708">[ subject ]</a>
+              <a href="author.html#1708">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 08.01.2011 17:32, Thorsten Godau wrote:
+
+&gt;<i> So i tried to use &quot;slcan_attach -o -s6 -c /dev/ttyUSB0&quot;  ...
+</I>
+(..)
+
+&gt;<i> so the correct command should be &quot;slcan_attach -c -s6 -o /dev/ttyUSB0&quot;.
+</I>
+(..)
+
+&gt;<i> Nevertheless i can't get the bitrate changed properly with slcan_attach.
+</I>&gt;<i> The solution was the echo command (to be honest i tried to change the
+</I>&gt;<i> CAN bitrate before determining the working serial parameters):
+</I>&gt;<i> 
+</I>&gt;<i> echo -e -n &quot;C\rS6\rO\r&quot; &gt; /dev/ttyUSB0
+</I>
+Hi Thorsten,
+
+thanks for your extensive investigation on this topic!
+
+Currently the slcan_attach only uses the commandline options as boolean
+switches to send &quot;O\r&quot;, &quot;C\r&quot;, &quot;S?\r&quot; and &quot;s????\r&quot; in this order:
+
+    S? -&gt; s???? -&gt; O -&gt; (attach tty) -&gt; (wait) -&gt; (detach tty) -&gt; C
+
+And this works fine in the case the slcan adapter is in 'close' state at the
+start of slcan_attach.
+
+So the _order_ of the commandline has no effect on the behaviour as you tried
+in the two examples in the beginning of this mail.
+
+To fix this behaviour, i would suggest to force a close of the slcan adapter
+before setting the bitrate (which is also common for other CAN
+adapters/controllers). E.g. by sending
+
+    &quot;C\rS?\r&quot; instead of only &quot;S?\r&quot;
+
+Then we would have this possible init sequence of slcan_attach:
+
+    CS? -&gt; Cs???? -&gt; O -&gt; (attach tty) -&gt; (wait) -&gt; (detach tty) -&gt; C
+
+Can you try this (also attached) patch to check whether a 'close' before
+setting the bitrate brings back the wanted functionality?
+
+Index: slcan_attach.c
+===================================================================
+--- slcan_attach.c	(Revision 1227)
++++ slcan_attach.c	(Arbeitskopie)
+@@ -150,12 +150,12 @@
+ 	if (waitkey || !detach) {
+
+ 		if (speed) {
+-			sprintf(buf, &quot;S%s\r&quot;, speed);
++			sprintf(buf, &quot;C\rS%s\r&quot;, speed);
+ 			write(fd, buf, strlen(buf));
+ 		}
+
+ 		if (btr) {
+-			sprintf(buf, &quot;s%s\r&quot;, btr);
++			sprintf(buf, &quot;C\rs%s\r&quot;, btr);
+ 			write(fd, buf, strlen(buf));
+ 		}
+
+
+
+Finally your approach with the
+
+    echo -e -n &quot;C\rS6\rO\r&quot; &gt; /dev/ttyUSB0
+
+command looks also very good as it uses the standard unix idea to have simple
+and clearly arranged tools for each use-case :-)
+
+Btw. when slcan_attach provides some functionality on the commandline, it
+should JUST WORK like expected ;-)
+
+73!
+
+Oliver (DK4AM)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: slcan_attach_clode_before_bitrate_setting.patch
+Type: text/x-patch
+Size: 459 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110109/5bd2aa1b/attachment.bin">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110109/5bd2aa1b/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001707.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+	<LI>Next message: <A HREF="001709.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1708">[ date ]</a>
+              <a href="thread.html#1708">[ thread ]</a>
+              <a href="subject.html#1708">[ subject ]</a>
+              <a href="author.html#1708">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

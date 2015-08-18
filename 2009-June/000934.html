@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 0/5]: softing CAN card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%200/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090616151146.GF2830%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000873.html">
+   <LINK REL="Next"  HREF="000935.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 0/5]: softing CAN card</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%200/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090616151146.GF2830%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] [PATCH 0/5]: softing CAN card">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Tue Jun 16 17:11:46 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000873.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+        <LI>Next message: <A HREF="000935.html">[Socketcan-users] [PATCH 4/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#934">[ date ]</a>
+              <a href="thread.html#934">[ thread ]</a>
+              <a href="subject.html#934">[ subject ]</a>
+              <a href="author.html#934">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I went through the softing driver:
+I tested all this module-wise on a 2.6.28.3
+I will send a series of patches.
+
+[1/5]: export can_flush_echo_skb() so other drivers can use it.
+[2/5]: softing_flush_echo_skb() fixed to only flush the echo skb.
+      softing_reinit() calls netif_wake_queue(), so transmission
+      resumes
+      start_xmit() does not free the skb.
+      This solves at least some serious kernel problems during heavy
+      transmissions. The bus-off behaviour need some more testing still.
+[3/5]: do something on the coding style
+[4/5]: make some flows easier to understand. not every single action
+   needs its own function.
+[5/5]: modify the help text in Kconfig. This explains a little bit the
+   strange behaviour of the softing firmware with regard to bus control
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000873.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+	<LI>Next message: <A HREF="000935.html">[Socketcan-users] [PATCH 4/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#934">[ date ]</a>
+              <a href="thread.html#934">[ thread ]</a>
+              <a href="subject.html#934">[ subject ]</a>
+              <a href="author.html#934">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to receive error frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20error%20frames&In-Reply-To=%3COFD498D800.25D9FD79-ONC12573A9.004EA14A-C12573A9.0051EE4C%40rollsroycemarine.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000209.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to receive error frames</H1>
+    <B>Bjorn_Roger.Lobersli at rolls-royce.com</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20error%20frames&In-Reply-To=%3COFD498D800.25D9FD79-ONC12573A9.004EA14A-C12573A9.0051EE4C%40rollsroycemarine.com%3E"
+       TITLE="[Socketcan-users] Unable to receive error frames">Bjorn_Roger.Lobersli at rolls-royce.com
+       </A><BR>
+    <I>Thu Dec  6 15:54:54 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000209.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#208">[ date ]</a>
+              <a href="thread.html#208">[ thread ]</a>
+              <a href="subject.html#208">[ subject ]</a>
+              <a href="author.html#208">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+I am currently testing socketcan and it looks very good except for one 
+thing, I am not
+able to receive any error frames from socketcan. I unplug the CAN bus 
+cable and expect
+to get a CAN_ERR_BUSOFF error, but I get no error frame at all.
+
+In my application I have enabled all errors like this:
+can_err_mask_t error_mask = CAN_ERR_MASK;
+setsockopt(m_Socket, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &amp;error_mask, sizeof
+(error_mask));
+
+My test hardware has an i/o mapped SJA1000 CAN controller.
+The CAN bus is connected to a Vector CANcaseXL piece of hardware and I use 
+the Vector
+CANalyzer software to monitor the bus and send messages to my socketcan 
+application.
+
+I have also tried the tst-err sample application, but still no error 
+frames.
+
+Hints anyone?
+
+Best regards,
+Bj&#248;rn Roger
+
+ 
+ 
+The data contained in, or attached to, this e-mail, may contain confidential information. If you have received it in error you should notify the sender immediately by reply e-mail, delete the message from your system and contact +44 (0) 1332 242424 (the Rolls-Royce IT Security Director) if you need assistance. Please do not copy it for any purpose, or disclose its contents to any other person.
+ 
+ 
+An e-mail response to this address may be subject to interception or monitoring for operational reasons or for lawful business practices.
+ 
+ 
+(c) 2007 Rolls-Royce plc
+ 
+ 
+Registered office: 65 Buckingham Gate, London SW1E 6AT Company number: 1003142. Registered in England.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20071206/42ff39fd/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20071206/42ff39fd/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000209.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#208">[ date ]</a>
+              <a href="thread.html#208">[ thread ]</a>
+              <a href="subject.html#208">[ subject ]</a>
+              <a href="author.html#208">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

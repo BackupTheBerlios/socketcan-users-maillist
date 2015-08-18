@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] can: flexcan: fix IFF_ECHO problem,	remove FLEXCAN_MCR_SRX_DIS
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20can%3A%20flexcan%3A%20fix%20IFF_ECHO%20problem%2C%0A%09remove%20FLEXCAN_MCR_SRX_DIS&In-Reply-To=%3C1311347980-32582-1-git-send-email-mkl%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001968.html">
+   <LINK REL="Next"  HREF="001991.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] can: flexcan: fix IFF_ECHO problem,	remove FLEXCAN_MCR_SRX_DIS</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20can%3A%20flexcan%3A%20fix%20IFF_ECHO%20problem%2C%0A%09remove%20FLEXCAN_MCR_SRX_DIS&In-Reply-To=%3C1311347980-32582-1-git-send-email-mkl%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] can: flexcan: fix IFF_ECHO problem,	remove FLEXCAN_MCR_SRX_DIS">mkl at pengutronix.de
+       </A><BR>
+    <I>Fri Jul 22 17:19:40 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001968.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+        <LI>Next message: <A HREF="001991.html">[Socketcan-users] [PATCH 1/2] RFC: can: flexcan: re-add	CAN_CTRLMODE_LOOPBACK handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1988">[ date ]</a>
+              <a href="thread.html#1988">[ thread ]</a>
+              <a href="subject.html#1988">[ subject ]</a>
+              <a href="author.html#1988">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This patch remove the setting of the FLEXCAN_MCR_SRX_DIS. This bit
+disables the self reception of transmitted can frames. Which breaks
+IFF_ECHO.
+
+Signed-off-by: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+Cc: Bhaskar Upadhaya &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bhaskar.upadhaya at freescale.com</A>&gt;
+Cc: Scott Wood &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">scottwood at freescale.com</A>&gt;
+---
+Hello Bhaskar and Scott,
+
+can you please add this patch to your powerpc linux-2.6.35 kernel, as your
+driver breaks the IFF_ECHO feature.
+
+Are you interested in collaborating to mainline the device tree support
+for the flexcan driver?
+
+cheers, Marc
+
+ drivers/net/can/flexcan.c |    3 +--
+ 1 files changed, 1 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 5b1a967..0c5adae 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -542,8 +542,7 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	 */
+ 	reg_mcr = flexcan_cb-&gt;read(&amp;regs-&gt;mcr);
+ 	reg_mcr |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_FEN | FLEXCAN_MCR_HALT |
+-		FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN | FLEXCAN_MCR_IDAM_C |
+-		FLEXCAN_MCR_SRX_DIS;
++		FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN | FLEXCAN_MCR_IDAM_C;
+ 	dev_dbg(dev-&gt;dev.parent, &quot;%s: writing mcr=0x%08x&quot;, __func__, reg_mcr);
+ 	flexcan_cb-&gt;write(reg_mcr, &amp;regs-&gt;mcr);
+ 
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001968.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+	<LI>Next message: <A HREF="001991.html">[Socketcan-users] [PATCH 1/2] RFC: can: flexcan: re-add	CAN_CTRLMODE_LOOPBACK handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1988">[ date ]</a>
+              <a href="thread.html#1988">[ thread ]</a>
+              <a href="subject.html#1988">[ subject ]</a>
+              <a href="author.html#1988">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

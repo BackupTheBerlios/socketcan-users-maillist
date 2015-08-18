@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SocketCAN problems with mpc52xx
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20problems%20with%20mpc52xx&In-Reply-To=%3C4988A445.9000808%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000646.html">
+   <LINK REL="Next"  HREF="000648.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SocketCAN problems with mpc52xx</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20problems%20with%20mpc52xx&In-Reply-To=%3C4988A445.9000808%40grandegger.com%3E"
+       TITLE="[Socketcan-users] SocketCAN problems with mpc52xx">wg at grandegger.com
+       </A><BR>
+    <I>Tue Feb  3 21:08:37 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000646.html">[Socketcan-users] SocketCAN problems with mpc52xx
+</A></li>
+        <LI>Next message: <A HREF="000648.html">[Socketcan-users] SocketCAN problems with mpc52xx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#647">[ date ]</a>
+              <a href="thread.html#647">[ thread ]</a>
+              <a href="subject.html#647">[ subject ]</a>
+              <a href="author.html#647">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>igorg wrote:
+&gt;<i> Hi Everyone,
+</I>&gt;<i> 
+</I>&gt;<i> I'm trying to get SocketCan working on my board (MPC5200B) and have a
+</I>&gt;<i> couple of problems:
+</I>&gt;<i> 
+</I>&gt;<i> - I'm not able to receive anything back on CAN bus (I'm sure there are
+</I>&gt;<i> messages coming down as I can see them with CAN/USB device)
+</I>&gt;<i> - I'm able to send messages out - however after third message driver
+</I>&gt;<i> stops sending and &quot;ifconfig can0 down&quot; crashes the kernel:
+</I>
+While you send the messages, what does the following command report:
+
+# candump any,0:0,#FFFFFFFF
+
+&gt;<i> ================
+</I>&gt;<i> bash-3.00# ifconfig can0 down
+</I>&gt;<i> [ 1264.451863] Unable to handle kernel paging request for data at
+</I>&gt;<i> address 0xffffffff
+</I>&gt;<i> [ 1264.459476] Faulting instruction address: 0xc0019884
+</I>&gt;<i> [ 1264.464516] Oops: Kernel access of bad area, sig: 11 [#1]
+</I>&gt;<i> [ 1264.469990] PREEMPT motion5200b
+</I>&gt;<i> [ 1264.473176] Modules linked in:
+</I>&gt;<i> [ 1264.476278] NIP: c0019884 LR: c001b9f8 CTR: c02480b4
+</I>&gt;<i> [ 1264.481320] REGS: c7b13c40 TRAP: 0300   Not tainted  (2.6.27.7)
+</I>&gt;<i> [ 1264.487326] MSR: 00001032 &lt;ME,IR,DR&gt;  CR: 82002024  XER: 20000000
+</I>&gt;<i> [ 1264.493536] DAR: ffffffff, DSISR: 20000000
+</I>&gt;<i> [ 1264.497693] TASK = c7915ba0[384] 'ifconfig' THREAD: c7b12000
+</I>&gt;<i> [ 1264.503254] GPR00: c001b9f8 c7b13cf0 c7915ba0 c795c41c 00000001
+</I>&gt;<i> 00000001 00000001 00000000
+</I>&gt;<i> [ 1264.511787] GPR08: 00000000 fffffff3 00000000 c7b12000 42002024
+</I>&gt;<i> 101b7d70 bff4f768 1013b4d8
+</I>&gt;<i> [ 1264.520320] GPR16: 1013b720 1013b5cc bff4f778 00000000 c7b13e48
+</I>&gt;<i> ffff8914 c7849a20 c78afd28
+</I>&gt;<i> [ 1264.528852] GPR24: 00000000 00000001 00000001 00000000 00000001
+</I>&gt;<i> 00009032 c795c41c c795c73c
+</I>&gt;<i> [ 1264.537596] NIP [c0019884] __wake_up_common+0x30/0x9c
+</I>&gt;<i> [ 1264.542729] LR [c001b9f8] __wake_up_sync+0x48/0x90
+</I>&gt;<i> [ 1264.547592] Call Trace:
+</I>&gt;<i> [ 1264.550085] [c7b13cf0] [c01407b8] nfs_file_read+0x114/0x158 (unreliable)
+</I>&gt;<i> [ 1264.556915] [c7b13d20] [c001b9f8] __wake_up_sync+0x48/0x90
+</I>&gt;<i> [ 1264.562494] [c7b13d40] [c0248174] sock_def_write_space+0xc0/0xe0
+</I>&gt;<i> [ 1264.568595] [c7b13d50] [c02484c4] sock_wfree+0x90/0x94
+</I>&gt;<i> [ 1264.573824] [c7b13d60] [c024acc8] skb_release_all+0x70/0x90
+</I>&gt;<i> [ 1264.579492] [c7b13d70] [c024a25c] __kfree_skb+0x18/0xe8
+</I>&gt;<i> [ 1264.584801] [c7b13d80] [c02637e4] pfifo_fast_reset+0x68/0xa4
+</I>&gt;<i> [ 1264.590555] [c7b13da0] [c02626e4] qdisc_reset+0x24/0x34
+</I>&gt;<i> [ 1264.595860] [c7b13db0] [c026289c] dev_deactivate_queue+0x50/0x90
+</I>&gt;<i> [ 1264.601966] [c7b13dd0] [c0263134] dev_deactivate+0x4c/0x25c
+</I>&gt;<i> [ 1264.607651] [c7b13df0] [c02526a4] dev_close+0x70/0xd8
+</I>&gt;<i> [ 1264.612788] [c7b13e00] [c025252c] dev_change_flags+0x158/0x1ac
+</I>&gt;<i> [ 1264.618719] [c7b13e20] [c02985d0] devinet_ioctl+0x62c/0x75c
+</I>&gt;<i> [ 1264.624380] [c7b13e90] [c0298dd0] inet_ioctl+0xcc/0xf8
+</I>&gt;<i> [ 1264.629624] [c7b13ea0] [c0242b84] sock_ioctl+0x110/0x2bc
+</I>&gt;<i> [ 1264.635044] [c7b13ec0] [c008a618] vfs_ioctl+0x40/0xc0
+</I>&gt;<i> [ 1264.640182] [c7b13ee0] [c008a9c4] do_vfs_ioctl+0x32c/0x498
+</I>&gt;<i> [ 1264.645758] [c7b13f10] [c008ab70] sys_ioctl+0x40/0x74
+</I>&gt;<i> [ 1264.650902] [c7b13f40] [c00128b4] ret_from_syscall+0x0/0x38
+</I>&gt;<i> [ 1264.656569] --- Exception: c01 at 0x100eca2c
+</I>&gt;<i> [ 1264.656575]     LR = 0x10002e44
+</I>&gt;<i> [ 1264.664082] Instruction dump:
+</I>&gt;<i> [ 1264.667089] 9421ffd0 7c0802a6 bf210014 7c7e1b78 7c992378 90010034
+</I>&gt;<i> 7cbc2b78 7cda3378
+</I>&gt;<i> [ 1264.674984] 7cfb3b78 81230000 7f891800 3929fff4 &lt;8169000c&gt; 419e0054
+</I>&gt;<i> 800900087d234b78
+</I>&gt;<i> [ 1264.683077] Kernel panic - not syncing: Fatal exception in interrupt
+</I>&gt;<i> ================
+</I>
+That might be a different issue with bringing down the interface. I will
+check that here om my MPC5200-Board.
+
+&gt;<i> my kernel boot looks like this:
+</I>&gt;<i> ================
+</I>&gt;<i> ...
+</I>&gt;<i> [    0.450876] vcan: Virtual CAN interface driver
+</I>&gt;<i> [    0.462081] mpc52xx-mscan mpc52xx-mscan.0: probe for port 0xC9030900
+</I>&gt;<i> done (irq=151)
+</I>&gt;<i> [    0.471319] mpc52xx-mscan mpc52xx-mscan.1: probe for port 0xC9032980
+</I>&gt;<i> done (irq=152)
+</I>&gt;<i> ...
+</I>&gt;<i> [    1.006707] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> [    1.017862] can: raw protocol (rev 20090105)
+</I>&gt;<i> [    1.022288] can: broadcast manager protocol (rev 20090105 t)
+</I>&gt;<i> ...
+</I>&gt;<i> ================
+</I>
+Hm, the MSCAN driver is loaded before the CAN protocols. Could you try:
+
+  insmod can.ko
+  insmod can-raw.ko
+  insmod can-dev.ko
+  insmod mscan-mpc52xx.ko
+
+Does that make a difference?
+
+&gt;<i> my can0 configure looks like this:
+</I>&gt;<i> ================
+</I>&gt;<i> echo 250000 &gt; /sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;<i> ifconfig can0 up
+</I>&gt;<i> ================
+</I>&gt;<i> After which I get:
+</I>&gt;<i> mpc52xx-mscan mpc52xx-mscan.0: BTR0=0x20 BTR1=0x1c
+</I>
+Looks good.
+
+&gt;<i> Does anybody knows what the problem is or have any suggestions what I
+</I>&gt;<i> should try?
+</I>
+See above.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000646.html">[Socketcan-users] SocketCAN problems with mpc52xx
+</A></li>
+	<LI>Next message: <A HREF="000648.html">[Socketcan-users] SocketCAN problems with mpc52xx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#647">[ date ]</a>
+              <a href="thread.html#647">[ thread ]</a>
+              <a href="subject.html#647">[ subject ]</a>
+              <a href="author.html#647">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

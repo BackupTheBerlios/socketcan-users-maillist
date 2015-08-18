@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Results of the Poll on bit time setting with	Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Results%20of%20the%20Poll%20on%20bit%20time%20setting%20with%0A%09Socket-CAN&In-Reply-To=%3C486B4467.3090006%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000452.html">
+   <LINK REL="Next"  HREF="000440.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Results of the Poll on bit time setting with	Socket-CAN</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Results%20of%20the%20Poll%20on%20bit%20time%20setting%20with%0A%09Socket-CAN&In-Reply-To=%3C486B4467.3090006%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Results of the Poll on bit time setting with	Socket-CAN">wg at grandegger.com
+       </A><BR>
+    <I>Wed Jul  2 11:03:35 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000452.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000440.html">[Socketcan-users] controller recommendation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#439">[ date ]</a>
+              <a href="thread.html#439">[ thread ]</a>
+              <a href="subject.html#439">[ subject ]</a>
+              <a href="author.html#439">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo,
+
+here are the results of the poll:
+
+6 people voted. The &quot;x&quot; in the &quot;[ ]&quot; field means &quot;yes&quot; and &quot;-&quot; means &quot;no&quot;:
+
+------------------------------------------------------------------------
+Non-export mode:
+
+ By default, no bit-timing is set. Before opening the device, the user
+ must specifiy a bit-timing by setting the bit-rate:
+
+   $ echo &quot;125000&quot; &gt; /sys/class/net/can0/can_bitrate
+
+ We need to decide how the *default* CAN bit-timing parameters
+ should be determined:
+
+   [-x-x-x] By a built-in algorithm (function).
+
+   [x-x-x-] By a built-in table of bit timing parameters (registers)
+       for the commonly used bit-rates. This requires tables for
+       the commonly used CAN clock frequencies, which is
+       problematic for on-chip controllers using very oftern
+       &quot;bad&quot; CAN clock frequencies.
+
+ CIA recommended bit-timing parameters should be used whenever
+ possible.
+
+ If bit-timing parameters are calculated, we may also want the
+ following option:
+
+   [-x-x--] The sample point could be specified through the SYSFS file
+       &quot;sys/class/net/can0/can_samplepoint&quot;. The value &quot;0&quot; means
+       using CIA recommended sample points.
+
+Expert mode:
+
+  This mode should allow to set any possible bit-timing parameters
+  for CAN experts.
+
+  We have to choose between two general modes of setting bit-timing
+  parameters:
+
+  [-xxxxx] Set the bit-timing parameters directly, e.g.:
+
+        $ echo 0x01c0 &gt; /sys/class/net/can0/can_btreg
+
+      or:
+
+        $ echo 125 &gt; /sys/class/net/can0/can_tq
+        $ echo 1 &gt; /sys/class/net/can0/can_prop_seg
+        $ echo 2 &gt; /sys/class/net/can0/can_phase_seg1
+        $ echo 5 &gt; /sys/class/net/can0/can_phase_seg2
+        $ echo 1 &gt; /sys/class/net/can0/can_sjw
+        $ echo 0 &gt; /sys/class/net/can0/can_sam
+
+  [x--x-] Set the bit-timing parameters in an indirect way. A built-in
+      table defines bit-timing parameters for specific bit-rates.
+      The actual bit-timing parameters are then selected by
+      setting the corresponding bit-rate:
+
+        $ echo &quot;125000&quot; &gt; /sys/class/net/can0/can_bitrate
+
+      The table might be overwritten using SYSFS or ConfigFS.
+
+
+  Furthermore, we need to decide in what format we want to specify the
+  bit-timing parameters:
+
+  [----xx] Hardware-dependent mode: 4 bytes can be used to set the
+      controller specific bit-timing registers, usually BTR0 and BTR1.
+      e.g.:
+
+        $ echo &quot;0x01c0&quot; &gt; /sys/class/net/can0/can_btregs
+
+  [xxxxx-] Hardware-independent mode: the bit-timing parameters are defined
+      in an hardware independent way:
+
+        $ echo 125 &gt; /sys/class/net/can0/can_tq
+        $ echo 1 &gt; /sys/class/net/can0/can_prop_seg
+        $ echo 2 &gt; /sys/class/net/can0/can_phase_seg1
+        $ echo 5 &gt; /sys/class/net/can0/can_phase_seg2
+        $ echo 1 &gt; /sys/class/net/can0/can_sjw
+        $ echo 0 &gt; /sys/class/net/can0/can_sam
+
+      A built-in algorithm tries to determine proper hardware-dependent
+      bit-timing parameters/registers. Note that a certain definition
+      may not work on all controllers mainly due to different CAN clock
+      frequencies used. They may require special, hardware-dependent,
+      non-portable settings.
+------------------------------------------------------------------------
+
+For the &quot;Non-export mode&quot; we have a par between using an algorithm or a
+table. For the &quot;Expert mode&quot; the majority prefers setting the bit-timing
+parameters directly and in an hardware-independent way.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000452.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000440.html">[Socketcan-users] controller recommendation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#439">[ date ]</a>
+              <a href="thread.html#439">[ thread ]</a>
+              <a href="subject.html#439">[ subject ]</a>
+              <a href="author.html#439">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

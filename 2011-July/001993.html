@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] Freescale P1010 BSP : can-raw: Fix	skb_orphan_try handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Freescale%20P1010%20BSP%20%3A%20can-raw%3A%20Fix%0A%09skb_orphan_try%20handling&In-Reply-To=%3C4E2DBDFA.50900%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001992.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] Freescale P1010 BSP : can-raw: Fix	skb_orphan_try handling</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20Freescale%20P1010%20BSP%20%3A%20can-raw%3A%20Fix%0A%09skb_orphan_try%20handling&In-Reply-To=%3C4E2DBDFA.50900%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [PATCH] Freescale P1010 BSP : can-raw: Fix	skb_orphan_try handling">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Jul 25 21:03:22 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001992.html">[Socketcan-users] [PATCH 2/2] RFC: can: flexcan: disable chip and	clock in register_flexcandev
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1993">[ date ]</a>
+              <a href="thread.html#1993">[ thread ]</a>
+              <a href="subject.html#1993">[ subject ]</a>
+              <a href="author.html#1993">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Bhaskar / Scott,
+
+as Mike had no problem to apply this patch on your Freescale '2.6.35.13'
+kernel from the P1010 BSP you should apply this network layer patch too.
+
+This patch is part of the 2.6.35.4 stable kernel and fixes the CAN frame
+flow in the networking stack. Details see below.
+
+Additionally to the fixes that have been sent by Marc this missing item
+should finally fix the CAN support in your BSP. Please keep the mainline
+maintainers informed, when you change mainline code in the BSP, so that
+users do not get a different system behaviour due to your changes.
+
+To have the CAN working properly there are some guidelines described in
+linux/Documentation/networking/can.txt you should bear in mind.
+
+Regards,
+Oliver
+
+
+-------- Original Message --------
+Subject: Re: [Socketcan-users] Help with CAN_RAW_LOOPBACK
+Date: Fri, 15 Jul 2011 20:22:56 +0200
+
+On 15.07.2011 20:01, Mike Brown wrote:
+&gt;<i> I'm developing software for the Freescale P1010 microcontroller, running:
+</I>&gt;<i> 
+</I>&gt;<i>     Linux buildroot 2.6.35.13 #30 Mon Jun 20 10:49:21 CDT 2011 ppc GNU/Linux
+</I>
+(..)
+
+&gt;<i> What might need to do to get the Flexcan interface to behave the same as the
+</I>&gt;<i> virtual can interface?
+</I>
+There was a problem that has been introduced in the 2.6.35 in the networking
+stack that has been fixed in the stable series, see:
+
+<A HREF="http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.35.y.git;a=commitdiff;h=a5f18b1cca50987eb7773bb0be0d8730dfb10306">http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.35.y.git;a=commitdiff;h=a5f18b1cca50987eb7773bb0be0d8730dfb10306</A>
+
+Please check, if this patch is also part of your 2.6.35.13 tree.
+
+-----
+
+can-raw: Fix skb_orphan_try handling
+
+commit cff0d6e6edac7672b3f915bb4fb59f279243b7f9 upstream.
+
+Commit fc6055a5ba31e2c14e36e8939f9bf2b6d586a7f5 (net: Introduce
+skb_orphan_try()) allows an early orphan of the skb and takes care on
+tx timestamping, which needs the sk-reference in the skb on driver level.
+So does the can-raw socket, which has not been taken into account here.
+
+The patch below adds a 'prevent_sk_orphan' bit in the skb tx shared info,
+which fixes the problem discovered by Matthias Fuchs here:
+
+      <A HREF="http://marc.info/?t=128030411900003&amp;r=1&amp;w=2">http://marc.info/?t=128030411900003&amp;r=1&amp;w=2</A>
+
+Even if it's not a primary tx timestamp topic it fits well into some skb
+shared tx context. Or should be find a different place for the information to
+protect the sk reference until it reaches the driver level?
+
+Signed-off-by: Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+Signed-off-by: David S. Miller &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">davem at davemloft.net</A>&gt;
+Signed-off-by: Greg Kroah-Hartman &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gregkh at suse.de</A>&gt;
+---
+
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index f89e7fd..eb674b7 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -169,6 +169,7 @@ struct skb_shared_hwtstamps {
+  * @software:		generate software time stamp
+  * @in_progress:	device driver is going to provide
+  *			hardware time stamp
++ * @prevent_sk_orphan:	make sk reference available on driver level
+  * @flags:		all shared_tx flags
+  *
+  * These flags are attached to packets as part of the
+@@ -178,7 +179,8 @@ union skb_shared_tx {
+ 	struct {
+ 		__u8	hardware:1,
+ 			software:1,
+-			in_progress:1;
++			in_progress:1,
++			prevent_sk_orphan:1;
+ 	};
+ 	__u8 flags;
+ };
+diff --git a/net/can/raw.c b/net/can/raw.c
+index da99cf1..1650599 100644
+--- a/net/can/raw.c
++++ b/net/can/raw.c
+@@ -655,6 +655,10 @@ static int raw_sendmsg(struct kiocb *iocb, struct socket *sock,
+ 	err = sock_tx_timestamp(msg, sk, skb_tx(skb));
+ 	if (err &lt; 0)
+ 		goto free_skb;
++
++	/* to be able to check the received tx sock reference in raw_rcv() */
++	skb_tx(skb)-&gt;prevent_sk_orphan = 1;
++
+ 	skb-&gt;dev = dev;
+ 	skb-&gt;sk  = sk;
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001992.html">[Socketcan-users] [PATCH 2/2] RFC: can: flexcan: disable chip and	clock in register_flexcandev
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1993">[ date ]</a>
+              <a href="thread.html#1993">[ thread ]</a>
+              <a href="subject.html#1993">[ subject ]</a>
+              <a href="author.html#1993">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

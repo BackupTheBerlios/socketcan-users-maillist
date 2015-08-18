@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu	8.04/9.04
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Some%20problems%20with%20CANUSB%20and%20Ubuntu%0A%098.04/9.04&In-Reply-To=%3C29c18e410907240223g9b57382o7cfbca4e57002ce8%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000997.html">
+   <LINK REL="Next"  HREF="000999.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu	8.04/9.04</H1>
+    <B>Bernhard Perun</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Some%20problems%20with%20CANUSB%20and%20Ubuntu%0A%098.04/9.04&In-Reply-To=%3C29c18e410907240223g9b57382o7cfbca4e57002ce8%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu	8.04/9.04">torn878 at googlemail.com
+       </A><BR>
+    <I>Fri Jul 24 11:23:36 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000997.html">[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04
+</A></li>
+        <LI>Next message: <A HREF="000999.html">[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#998">[ date ]</a>
+              <a href="thread.html#998">[ thread ]</a>
+              <a href="subject.html#998">[ subject ]</a>
+              <a href="author.html#998">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2009/7/23 Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+
+&gt;<i> Bernhard Perun wrote:
+</I>&gt;<i> &gt; At the moment I try it with Ubuntu 8.04 (2.6.24 kernel) - you are right.
+</I>&gt;<i> &gt; Today I can't access a 9.04 Ubuntu with a newer kernel. I will try it
+</I>&gt;<i> &gt; tomorrow.
+</I>&gt;<i> &gt; Does it work with a newer kernel?
+</I>&gt;<i>
+</I>&gt;<i> Yes, definitely!
+</I>&gt;<i>
+</I>&gt;<i> The 2.6.24 seems to be the problem.
+</I>&gt;<i>
+</I>&gt;<i> If you would like to bring it to work with a precompiled Kernel that does
+</I>&gt;<i> not
+</I>&gt;<i> have a correct include with LDISC_N_SLCAN, you can try the following idea,
+</I>&gt;<i> that has be documented in slcan.c:
+</I>&gt;<i>
+</I>&gt;<i>  * HACK for precompiled Kernels:
+</I>&gt;<i>  *
+</I>&gt;<i>  * In order to use the slcan driver without rebuilding the kernel, the
+</I>&gt;<i> slcan
+</I>&gt;<i>  * driver must be compiled to use an existing line discipline.
+</I>&gt;<i>  * The N_MOUSE line discipline is documented to be free for custom use and
+</I>&gt;<i>  * using it *should* not cause any side effect.
+</I>&gt;<i>  *
+</I>&gt;<i>  * Then, before compiling the slcan driver, add a -DN_SLCAN=N_MOUSE
+</I>&gt;<i>  * compilation option in its Makefile. The slcan_attach tool must(!!) also
+</I>&gt;<i> be
+</I>&gt;<i>  * rebuild to use the right value for N_SLCAN. This workaround will allow
+</I>&gt;<i>  * to use the slcan driver with an existing kernel.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>Hi Oliver,
+thanks a lot. With Ubuntu 9.04 - and a newer kernel - it works very well.
+I wrote a little HowTo &quot;HowTo - socketcan with LAWICEL CANUSB and Ubuntu
+9.04&quot;.
+Mabye other people have the same problem...
+This works for me:
+
+HowTo - socketcan with LAWICEL CANUSB and Ubuntu 9.04
+-----------------------------------------------------
+
+1. Preface
+----------
+    - Use a current kernel (&gt;= 2.6.28) for example with Ubuntu 9.04
+
+2. Checkout socketcan - sources (zB mit RapidSVN)
+-------------------------------------------------------
+    - svn checkout <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk">http://svn.berlios.de/svnroot/repos/socketcan/trunk</A>
+
+3. Edit the Makefile at [socketcan-verzeichnis]/kernel/2.6/
+-----------------------------------------------------------
+    - Attach following line after &quot;export CONFIG_CAN_MCP251X=m&quot; (without
+quotes): &quot;export CONFIG_CAN_SLCAN=m&quot;
+
+4. Edit the Makefiles at [socketcan-verzeichnis]/kernel/2.6/drivers/net/can/
+----------------------------------------------------------------------------
+    - Also attach following line after &quot;export CONFIG_CAN_MCP251X=m&quot;
+(without quotes): &quot;export CONFIG_CAN_SLCAN=m&quot;
+
+5. Build and install kernelmodules for socketcan
+------------------------------------------------
+    - change back to [socketcan-verzeichnis]/kernel/2.6/
+    - make
+    - mkdir /lib/modules/$(uname -r)/socketcan
+        - find -name \*.ko | xargs install -t /lib/modules/$(uname
+-r)/socketcan
+        - depmod $(uname -r)
+
+6. Build can-utils and install it
+---------------------------------
+    - cd can-utils
+    - make
+    - make install
+
+7. Build test - applications for socketcan and install it
+---------------------------------------------------------
+    - cd ../test
+    - make
+    - make install
+
+8. Get serial interface &quot;ttyUSB0&quot; to networksocket &quot;slc0&quot;
+---------------------------------------------------------
+    - slcan_attach -o -s6 /dev/ttyUSB0
+    - slcand ttyUSB0
+    - ifconfig slc0 up
+
+9. Running candump (testapplication)
+------------------------------------
+    - candump slc0,0:0,#FFFFFFFF
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090724/1609da1f/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090724/1609da1f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000997.html">[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04
+</A></li>
+	<LI>Next message: <A HREF="000999.html">[Socketcan-users] Fwd: Some problems with CANUSB and Ubuntu 8.04/9.04
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#998">[ date ]</a>
+              <a href="thread.html#998">[ thread ]</a>
+              <a href="subject.html#998">[ subject ]</a>
+              <a href="author.html#998">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

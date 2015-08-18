@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF284E8.80100%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001129.html">
+   <LINK REL="Next"  HREF="001131.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF284E8.80100%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov  5 08:55:20 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001129.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001131.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1130">[ date ]</a>
+              <a href="thread.html#1130">[ thread ]</a>
+              <a href="subject.html#1130">[ subject ]</a>
+              <a href="author.html#1130">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Wed, Nov 04, 2009 at 08:37:00PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Hi Fu,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> On Wed, Nov 04, 2009 at 03:25:16PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> On Wed, Nov 04, 2009 at 09:30:18AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> ....
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> As I already said, I use an old MPC5200 (without *B*). Will try later
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> today with a MPC5200B.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I switched to &quot;MPC5200B v2.2, Core v1.4 at 396 MHz&quot; and the problem does
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> *not* show up any more. Before I used a &quot;MPC5200 v1.2, Core v1.1 at 396
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> MHz&quot;. Now I remember vaguely, that I was indeed fighting with this
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> strange behavior.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Ah, great to get confirmation that I was not hallucinating :-). It
+</I>&gt;&gt;&gt;&gt;&gt;<i> indeed took me some time to sort out what was going wrong in this
+</I>&gt;&gt;&gt;&gt;&gt;<i> strange issue. We shall probably ask freescale if this issue is konwn.
+</I>&gt;&gt;&gt;&gt;<i> Good luck ;-).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> ;-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> BTW. I just checked the datasheet of mpc5200. The slprq should always
+</I>&gt;&gt;&gt;&gt;&gt;<i> acked, just like in mpc5200b, and otherwise the controller should be in
+</I>&gt;&gt;&gt;&gt;&gt;<i> idle mode with slprq set. It looks really strange that your mpc5200
+</I>&gt;&gt;&gt;&gt;&gt;<i> board works properly without being able to get the slpack. Could you do
+</I>&gt;&gt;&gt;&gt;&gt;<i> some more inspection on this one by occassion (don't have a mpc5200
+</I>&gt;&gt;&gt;&gt;&gt;<i> board here)?
+</I>&gt;&gt;&gt;&gt;<i> I don't think it's related to my board. I'm quite sure that it's like
+</I>&gt;&gt;&gt;&gt;<i> that on all mpc5200a. Oliver has a board with such a processor, IIRC.
+</I>&gt;&gt;&gt;&gt;<i> I will try to find another mpc5200a board.
+</I>&gt;&gt;&gt;<i> Here are the values of the canctrl0/1 registers after the sleep and init loop:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  mpc52xx_can f0000980.can: setting BTR0=0x2f BTR1=0x4f
+</I>&gt;&gt;&gt;<i>  Sleep: ctrl0=0x12 ctrl1=0xc0
+</I>&gt;&gt;&gt;<i>  mpc52xx_can f0000900.can: SLPRQ timeout reached, failed to enter 
+</I>&gt;&gt;&gt;<i>  Init: ctrl0=0x03 ctrl1=0xc3
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> So the slprq is kept set, interesting, Could you please try instrument
+</I>&gt;&gt;<i> the canctl0 and canctl1 value withouth my pathc? The code would not set
+</I>&gt;&gt;<i> initrq because the ret value will be set to error after failing waiting
+</I>&gt;&gt;<i> for slpack and the slprq will be kept set. According to the datasheet:
+</I>&gt;&gt;<i> SLPRQ:
+</I>&gt;&gt;<i> 0 Running MSCAN functions normally
+</I>&gt;&gt;<i> 1 Sleep Mode Request&#8212;MSCAN locks in idle state
+</I>&gt;<i> 
+</I>&gt;<i> Yes, I realized as well that the MSCAN did not enter init mode properly.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I'm wondering heavily how this could work at all, if the datasheet is
+</I>&gt;&gt;<i> right.
+</I>&gt;<i> 
+</I>&gt;<i> ... and after a &quot;ifconfig up&quot; it continues working as usual. But I
+</I>&gt;<i> remember wired problems with the error state not being reset to &quot;error
+</I>&gt;<i> active&quot; after the restart.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> Unfortunately, I do not have another mpc5200a board at hand.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> The manual instructs to enter sleep mode first and thereafter the init
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> mode, but as that did'nt work, sleep and init are set in one step.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Well, usually it works already. In case of a failed slprq the we now
+</I>&gt;&gt;&gt;&gt;&gt;<i> just force the init.
+</I>&gt;&gt;&gt;&gt;<i> Well, the mpc5200a obviously does not enter properly the sleep mode.
+</I>&gt;&gt;&gt;&gt;<i> Nevertheless, the board still works fine after an &quot;ifconfig up&quot;.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Maybe we simply do s/dev_err/dev_dbg/. What do you think?
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Fail to enter sleep mode could indeed be a trouble. I personally would
+</I>&gt;&gt;&gt;&gt;&gt;<i> prefer a dev_err here, since it's nevertheless a little hacky here. In
+</I>&gt;&gt;&gt;&gt;&gt;<i> the end the message would not appear to frequently since it occures only
+</I>&gt;&gt;&gt;&gt;&gt;<i> when we (re)initialize the interface, so it should not be too annoying.
+</I>&gt;&gt;&gt;<i> I would apply the patch witch a more descriptive warning message.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> Hmm, something like this?
+</I>&gt;&gt;<i> &quot;Sleep request failed, device could not enter sleep mode. We force to
+</I>&gt;&gt;<i> proceed any how to avoid freeze. All active transmit actions, if still
+</I>&gt;&gt;<i> any, will be aborted.&quot;
+</I>
+I'm thinking about some words avoiding the user to panic (taking the
+message too serious).
+
+&gt;&gt;<i> Since we are experiencing funny behaviours on mpc5200a too. I agree you
+</I>&gt;&gt;<i> with the point on dev_err vs. dev_debug. I'll change it in dev_dbg then.
+</I>
+Yes, that would be nice.
+
+&gt;&gt;&gt;<i> Just for curiosity. Could you try the patch below waiting to
+</I>&gt;&gt;&gt;<i> the TX messages to get aborted. Does that help? 
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> In my testscenarios the tx_active is mostly not set. So I don't
+</I>&gt;&gt;<i> think this will change the behaviour. Nevertheless I'll try this out
+</I>&gt;&gt;<i> tommorow.
+</I>
+
+Right, the problem shows up when the controller receives messages. Just
+forget it.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001129.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001131.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1130">[ date ]</a>
+              <a href="thread.html#1130">[ thread ]</a>
+              <a href="subject.html#1130">[ subject ]</a>
+              <a href="author.html#1130">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

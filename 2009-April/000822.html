@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan_attach and resetting line disciplines
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan_attach%20and%20resetting%20line%20disciplines&In-Reply-To=%3C49F72B3A.6060701%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000821.html">
+   <LINK REL="Next"  HREF="000823.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan_attach and resetting line disciplines</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan_attach%20and%20resetting%20line%20disciplines&In-Reply-To=%3C49F72B3A.6060701%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] slcan_attach and resetting line disciplines">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Apr 28 18:13:46 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000821.html">[Socketcan-users] slcan_attach and resetting line disciplines
+</A></li>
+        <LI>Next message: <A HREF="000823.html">[Socketcan-users] slcan_attach and resetting line disciplines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#822">[ date ]</a>
+              <a href="thread.html#822">[ thread ]</a>
+              <a href="subject.html#822">[ subject ]</a>
+              <a href="author.html#822">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Haddon wrote:
+&gt;<i> Fwiw, I ended up making slcand to do the same thing.  I started off trying to turn off the LDISC reset in the kernel source but that yielded no love and I ceased that approach when I realized I was in over my head.
+</I>&gt;<i> I can share the source if desired, but 95% of it I lifted from wikipedia's example daemon code.
+</I>&gt;<i> 
+</I>
+Desired :-)
+
+Indeed the slcan_attach tool is just a proof-of-concept that should show how
+to switch the line discipline.
+
+@Lionel: I don't have general concerns regarding your patch, but can you tell
+me why '-w' does not work for you?
+
+Ok, there is a &quot;Press any key to ...&quot; but does this matter?
+
+Regards,
+Oliver
+
+&gt;<i> 
+</I>&gt;<i> ----- Original Message -----
+</I>&gt;<i> From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>&gt;
+</I>&gt;<i> To: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> Sent: Mon Apr 27 03:20:54 2009
+</I>&gt;<i> Subject: [Socketcan-users]  slcan_attach and resetting line disciplines
+</I>&gt;<i> 
+</I>&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> I did meet the same issue when I wanted slcan_attach to be called from  
+</I>&gt;<i> a startup script, without any user interaction.
+</I>&gt;<i> 
+</I>&gt;<i> This patch adds a -k option to keep slcan_attach indefinitely opened.  
+</I>&gt;<i> It is more a workaround than a clean solution, anyway it may help...
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> 
+</I>&gt;<i> Lionel
+</I>&gt;<i> 
+</I>&gt;<i> --- ../../../../socketcan/rev874/can-utils/slcan_attach.c         
+</I>&gt;<i> 2008-12-01 17:27:49.000000000 +0100
+</I>&gt;<i> +++ slcan_attach.c      2009-04-27 11:44:10.000000000 +0200
+</I>&gt;<i> @@ -64,6 +64,7 @@
+</I>&gt;<i>          fprintf(stderr, &quot;         -b &lt;btr&gt;   (set bit time register  
+</I>&gt;<i> value)\n&quot;);
+</I>&gt;<i>          fprintf(stderr, &quot;         -d         (only detach line  
+</I>&gt;<i> discipline)\n&quot;);
+</I>&gt;<i>          fprintf(stderr, &quot;         -w         (attach - wait for  
+</I>&gt;<i> keypess - detach)\n&quot;);
+</I>&gt;<i> +       fprintf(stderr, &quot;         -k         (attach - keep  
+</I>&gt;<i> indefinitely attached)\n&quot;);
+</I>&gt;<i>          fprintf(stderr, &quot;\nExamples:\n&quot;);
+</I>&gt;<i>          fprintf(stderr, &quot;slcan_attach -w -o -s6 -c /dev/ttyS1\n&quot;);
+</I>&gt;<i>          fprintf(stderr, &quot;slcan_attach /dev/ttyS1\n&quot;);
+</I>&gt;<i> @@ -80,13 +81,14 @@
+</I>&gt;<i>          int waitkey = 0;
+</I>&gt;<i>          int send_open = 0;
+</I>&gt;<i>          int send_close = 0;
+</I>&gt;<i> +        int keep_attached = 0;
+</I>&gt;<i>          char *speed = NULL;
+</I>&gt;<i>          char *btr = NULL;
+</I>&gt;<i>          char buf[10];
+</I>&gt;<i>          char *tty;
+</I>&gt;<i>          int opt;
+</I>&gt;<i> 
+</I>&gt;<i> -       while ((opt = getopt(argc, argv, &quot;l:dwocs:b:&quot;)) != -1) {
+</I>&gt;<i> +       while ((opt = getopt(argc, argv, &quot;l:dwocs:b:k&quot;)) != -1) {
+</I>&gt;<i>                  switch (opt) {
+</I>&gt;<i>                  case 'l':
+</I>&gt;<i>                          fprintf(stderr, &quot;Ignored option '-l'\n&quot;);
+</I>&gt;<i> @@ -120,6 +122,10 @@
+</I>&gt;<i>                                  print_usage(argv[0]);
+</I>&gt;<i>                          break;
+</I>&gt;<i> 
+</I>&gt;<i> +               case 'k':
+</I>&gt;<i> +                       keep_attached = 1;
+</I>&gt;<i> +                       break;
+</I>&gt;<i> +
+</I>&gt;<i>                  default:
+</I>&gt;<i>                          print_usage(argv[0]);
+</I>&gt;<i>                          break;
+</I>&gt;<i> @@ -159,6 +165,13 @@
+</I>&gt;<i>                  }
+</I>&gt;<i>          }
+</I>&gt;<i> 
+</I>&gt;<i> +       if (keep_attached) {
+</I>&gt;<i> +               while (1)
+</I>&gt;<i> +               {
+</I>&gt;<i> +                       sleep(10000000);
+</I>&gt;<i> +               }
+</I>&gt;<i> +       }
+</I>&gt;<i> +
+</I>&gt;<i>          if (waitkey) {
+</I>&gt;<i>                  printf(&quot;Press any key to detach %s ...\n&quot;, tty);
+</I>&gt;<i>                  getchar();
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000821.html">[Socketcan-users] slcan_attach and resetting line disciplines
+</A></li>
+	<LI>Next message: <A HREF="000823.html">[Socketcan-users] slcan_attach and resetting line disciplines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#822">[ date ]</a>
+              <a href="thread.html#822">[ thread ]</a>
+              <a href="subject.html#822">[ subject ]</a>
+              <a href="author.html#822">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

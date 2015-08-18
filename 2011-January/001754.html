@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTiknmuSUoKi6dU0YN5cYvdy8aJxwULKrAGNOWHmf%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001753.html">
+   <LINK REL="Next"  HREF="001717.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTiknmuSUoKi6dU0YN5cYvdy8aJxwULKrAGNOWHmf%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Jan 24 22:24:07 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001753.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+        <LI>Next message: <A HREF="001717.html">[Socketcan-users] How to design protocol stack with can-bus	driver of character driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1754">[ date ]</a>
+              <a href="thread.html#1754">[ thread ]</a>
+              <a href="subject.html#1754">[ subject ]</a>
+              <a href="author.html#1754">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/1/24 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2011/1/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i>
+</I>&gt;&gt;<i> On 01/14/2011 05:56 PM, Willy Lambert wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt; So it seems to communicating :)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Congrats!
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>(sorry for first one its a mistake)
+
+
+
+
+As I received an heavy support from here, here is a quick summary of what
+made things working (maybe it'll help someon a day) :
+
+
+   - The board is an Ixxat PC-I 04/104 an a top of a PC104 CPU into wich I
+   put a linux Debian with a personnal 2.6.35.7 kernel.
+   - Physical configuration to use &quot;Shared High interrupts&quot; : I needed to
+   solder the JP14 jumper to close it (just some tin, no resistor). JP20 has to
+   be left open (one is enougth and no more than one cloased is allowed). The
+   other jumpers where JP12 and JP13 on 3-4, JP15 and JP21 to defaults (2-3)
+   - Physical configuration for memory and interrupts : jumpers JP12 and
+   JP13 on the same interrupt call it IRQ_TOP_COOL, DIP switches on the default
+   D0000 memory address
+   - BIOS configuration : I needed to activate in the PCI/Pnp tab : Reserved
+   Memory = 64K (it migth be possible to lower it); Memory Adress = 0hD0000
+   ;  IRQ_TOP_COOL  in &#8220;Reserved&#8221;
+   - kernel config :
+
+I activated theses options :
+[*] Networking Support --&gt;
+--- [*] CAN bus subsystem support --&gt;
+----------[*] Raw Can Protocol (raw access with CAN-ID filtering)
+----------[*] Broadcast Manager CAN Protocol (with content filtering)
+----------     CAN Device Drivers ---&gt;
+----------------- [*] Virtual Local CAN Interface (vcan)
+----------------- [*] Platform CAN drivers with Netlonk support
+----------------- [*] CAN bit-timing calculation
+----------------- [*] Philips/NXP SJA1000 devices --&gt;
+-------------------------[M] ISA Bus based legacy SJA1000 driver
+
+with of course ISA bus required options (I can't remind). Everything is
+build into the kernel it's &quot;bad&quot; but for me it's enougth
+
+   - I installed the new kernel into my board (so I did not get anything
+   from a VCS, kernel sources were enougth)
+
+
+   - the driver is loaded with this script (you may have to load other
+   module if you did not compile all in the kernel ) :
+
+modprobe sja1000_isa irq=11,11 mem=0xD0000,0xD0200 ocr=0x5e,0x5e cdr=0,0
+ip link set can0 type can bitrate 250000 restart-ms 1000
+ip link set can1 type can bitrate 250000 restart-ms 1000
+ifconfig can0 up
+ifconfig can1 up
+
+the ocr and cdr option are mandatory.
+
+
+
+It is *NOT* possible to use different IRQs for the 2 CAN channels. It is
+*NOT* possible to use other Interrupt trigger mode whereas the doc suggest
+it. You *HAVE TO* solder something yourself. It is a pity Ixxat did not
+communicate this to me when I bougth it, but anyway they gave support.
+
+
+I tried several interrupts (3,5, and 11) and I don't think there is a
+problem with any of them (it migth be CPU-board dependant but IRQ 15 is not
+possible for me).
+
+
+
+
+Wolfgang, once again, you are an angel to have support my problem so many
+days :)
+
+
+
+
+
+
+
+
+
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; During a &quot;stress test&quot; I have 2 controller error messages :
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;  39 &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L39">http://lxr.linux.no/linux+*/include/linux/can/error.h#L39</A>&gt;#define
+</I>&gt;&gt;<i> &gt; CAN_ERR_CRTL_TX_WARNING
+</I>&gt;&gt;<i> &gt; &lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_WARNING">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_WARNING</A>&gt;  0x08 /*
+</I>&gt;&gt;<i> &gt; reached warning level for TX errors */
+</I>&gt;&gt;<i> &gt; &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L40">http://lxr.linux.no/linux+*/include/linux/can/error.h#L40</A>&gt;
+</I>&gt;&gt;<i> &gt; &lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_RX_PASSIVE">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_RX_PASSIVE</A>&gt;
+</I>&gt;&gt;<i> &gt;  41 &lt;<A HREF="http://lxr.linux.no/linux+*/include/linux/can/error.h#L41">http://lxr.linux.no/linux+*/include/linux/can/error.h#L41</A>&gt;#define
+</I>&gt;&gt;<i> &gt; CAN_ERR_CRTL_TX_PASSIVE
+</I>&gt;&gt;<i> &gt; &lt;<A HREF="http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_PASSIVE">http://lxr.linux.no/linux+*/+code=CAN_ERR_CRTL_TX_PASSIVE</A>&gt;  0x20 /*
+</I>&gt;&gt;<i> &gt; reached error passive status TX */
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &gt; candump view :
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;   can0    0  [2] 81 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  721  [1] 00
+</I>&gt;&gt;<i> &gt;&gt;   can0    0  [2] 01 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  1A1  [2] 60 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  721  [0] remote request
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] FD FF FF FF FF
+</I>&gt;&gt;<i> &gt;&gt;   can0  721  [1] 05
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 0F 00 00 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  721  [0] remote request
+</I>&gt;&gt;<i> &gt;&gt;   can0  1A1  [2] 27 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  721  [1] 85
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 FF 04 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 00 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 01 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 02 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 03 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 04 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 05 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 06 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 07 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 08 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 09 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 10 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 11 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 12 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 13 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 14 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 15 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 16 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 17 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 18 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 19 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 20 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 19 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 18 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 17 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 16 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 15 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 14 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 13 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 12 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 11 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 10 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 09 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 08 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  20000004  [8] 00 08 00 00 00 00 67 0C   ERRORFRAME
+</I>&gt;&gt;<i> &gt;&gt;   can0  20000004  [8] 00 20 00 00 00 00 87 0C   ERRORFRAME
+</I>&gt;&gt;<i> &gt;&gt;   can0  721  [1] 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 07 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 06 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 05 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 04 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 03 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 02 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 01 00 00
+</I>&gt;&gt;<i> &gt;&gt;   can0  321  [5] 93 00 00 00 00
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; May this be due to wiring quality ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes, or some mismatching bittiming. The bus errors are reported by the
+</I>&gt;&gt;<i> SAJ1000 chip and you can get more details information, if you use the
+</I>&gt;&gt;<i> &quot;ip&quot; argument &quot;berr-reporting on&quot;. Also &quot;ip -d -s link show can0&quot;
+</I>&gt;&gt;<i> reports the number of bus-errors.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110124/aaeec5f3/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110124/aaeec5f3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001753.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+	<LI>Next message: <A HREF="001717.html">[Socketcan-users] How to design protocol stack with can-bus	driver of character driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1754">[ date ]</a>
+              <a href="thread.html#1754">[ thread ]</a>
+              <a href="subject.html#1754">[ subject ]</a>
+              <a href="author.html#1754">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] candump stops, and how to test performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3C4992DC8D.9060909%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000663.html">
+   <LINK REL="Next"  HREF="000665.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] candump stops, and how to test performance</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3C4992DC8D.9060909%40grandegger.com%3E"
+       TITLE="[Socketcan-users] candump stops, and how to test performance">wg at grandegger.com
+       </A><BR>
+    <I>Wed Feb 11 15:11:25 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000663.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+        <LI>Next message: <A HREF="000665.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#664">[ date ]</a>
+              <a href="thread.html#664">[ thread ]</a>
+              <a href="subject.html#664">[ subject ]</a>
+              <a href="author.html#664">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Cliff Brake wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> I'm doing a little testing with the following setup:
+</I>&gt;<i> 
+</I>&gt;<i> - PXA270
+</I>&gt;<i> - MCP2515
+</I>&gt;<i> - 1Mbit/sec datarate
+</I>&gt;<i> 
+</I>&gt;<i> On one system I run: cangen can0 -v -g1
+</I>&gt;<i> on the 2nd system I run: candump can0
+</I>
+I would use &quot;candump can0,0:0,#FFFFFFFF&quot; to realize errors. Also be
+aware that the receiver might not keep up with processing and printing
+all messages.
+
+&gt;<i> If I run it with -g10, it will run all day long.  With -g1, the
+</I>&gt;<i> receiving side soon stops, and the only way I can get it to work again
+</I>&gt;<i> is send something (cansend can0 123#DEADBEEF), and then it will
+</I>&gt;<i> receive again.  Is this expected?
+</I>
+Looks like a race with interrupt handling.
+
+&gt;<i> On a related note, what is the best way to test performance.  I'm
+</I>&gt;<i> interested in a app that:
+</I>&gt;<i> 
+</I>&gt;<i> - can be run with real-time priorities
+</I>&gt;<i> - logs errors, etc.
+</I>&gt;<i> - measures jitter
+</I>&gt;<i> - can be used to determine effective bandwidth of the can bus (can we
+</I>&gt;<i> keep the can bus fully utilized on a moderately loaded system using
+</I>&gt;<i> kernel preemption and real-time priority apps).
+</I>&gt;<i> 
+</I>&gt;<i> If nothing exists, I'll probably start writing something.
+</I>
+For RT-Socket-CAN I have written a Round-Trip-Testprogram some time ago.
+  It should require just a few modification to get it work with
+Socket-CAN and vanilla or -rt Linux:
+
+<A HREF="http://www.rts.uni-hannover.de/xenomai/lxr/source/examples/rtdm/profiles/can/rtcan_rtt.c">http://www.rts.uni-hannover.de/xenomai/lxr/source/examples/rtdm/profiles/can/rtcan_rtt.c</A>
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000663.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+	<LI>Next message: <A HREF="000665.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#664">[ date ]</a>
+              <a href="thread.html#664">[ thread ]</a>
+              <a href="subject.html#664">[ subject ]</a>
+              <a href="author.html#664">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

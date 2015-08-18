@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E3BC5E7.5070300%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002068.html">
+   <LINK REL="Next"  HREF="002081.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E3BC5E7.5070300%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Aug  5 12:28:55 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002068.html">[Socketcan-users] [PATCH 4/4] [flexcan] Add support for	FLEXCAN_DEBUG
+</A></li>
+        <LI>Next message: <A HREF="002081.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2080">[ date ]</a>
+              <a href="thread.html#2080">[ thread ]</a>
+              <a href="subject.html#2080">[ subject ]</a>
+              <a href="author.html#2080">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 04.08.2011 23:54, Ulrich Prinz wrote:
+&gt;<i> Hi Oliver,
+</I>&gt;<i> 
+</I>&gt;<i> On 04.08.2011 19:35, Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;<i> That should be easy too, I thought...
+</I>&gt;&gt;&gt;<i> I have those can-utils in my target code so I just copied cangw.c there and
+</I>&gt;&gt;&gt;<i> added it to the Makefile....
+</I>&gt;&gt;&gt;<i> Then I rewrote the Makefile to be less talking and more informative...
+</I>&gt;&gt;&gt;<i> Then I hardened the compiler flags and then I was busy to remove all those
+</I>&gt;&gt;&gt;<i> double- and shadow-declarations from all of the tools, including cangw.c...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ??? - what do you mean in detail? Something to improve?
+</I>&gt;&gt;<i>
+</I>&gt;<i> I don't remember all now, but will make a diff against your release.
+</I>&gt;<i> Somewhere between kernel 2.6.34 and 2.6.39 the can.h has moved from
+</I>&gt;<i> socetcan/can.h to include/linux/can.h.
+</I>
+Not really!
+
+Not to mix the includes from mainline and SocketCAN SVN we placed the SVN
+includes in include/socketcan/can...
+
+I forgot to mention the tool trunk/strip-src that generates a source code for
+a specific kernel version and also replaces the SVN includes with real
+mainline includes, e.g. try:
+
+~/socketcan/trunk$ ./strip-src -v 2.6.39 -i -m kernel/2.6/net/can/gw.c | less
+
+It creates a clean source for the 2.6.39 you can copy to linux/net/can/gw.c
+
+Same with:
+./strip-src -v 2.6.39 -i -m kernel/2.6/include/socketcan/can/gw.h &gt; gw.h
+
+I assume this makes it much easier for you :-)
+
+&gt;<i> 
+</I>&gt;<i> Then I compile projects with -wshadow and other warnings enabled.
+</I>&gt;<i> So I came accross that you extern declarate variables of the command
+</I>&gt;<i> line parsing library. That leads to warnings. In other places functions
+</I>&gt;<i> have variables declared that shadow global variables.
+</I>&gt;<i> From past projects I learned how painful that could be. So I let no code
+</I>&gt;<i> pass to a project that gives these warnings.
+</I>
+Good point. I'll take a look at that.
+
+&gt;<i> Normally I accept no warnings, but even kernel 2.6.39 gives some that I
+</I>&gt;<i> had no time to dig down.
+</I>&gt;<i> 
+</I>&gt;<i> Could be that the command line library moved in the header files to a
+</I>&gt;<i> position where it is no found by the code. I think it is in &lt;unistd.h&gt;.
+</I>
+You talk about getopt() and friends? Yes that is in unistd.h
+
+&gt;<i> And the Makfile I used was the one provided by the can-utils, not the
+</I>&gt;<i> one you provided. It was full of long lists of files and didn't really
+</I>&gt;<i> fit in our build system. So I felt it was better to rewrite it for ease
+</I>&gt;<i> of use and understanding.
+</I>&gt;<i> Not all of us could read and write Makefiles... (If I catch the guy who
+</I>&gt;<i> invented this syntax...)
+</I>
+/me too :-))
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002068.html">[Socketcan-users] [PATCH 4/4] [flexcan] Add support for	FLEXCAN_DEBUG
+</A></li>
+	<LI>Next message: <A HREF="002081.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2080">[ date ]</a>
+              <a href="thread.html#2080">[ thread ]</a>
+              <a href="subject.html#2080">[ subject ]</a>
+              <a href="author.html#2080">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

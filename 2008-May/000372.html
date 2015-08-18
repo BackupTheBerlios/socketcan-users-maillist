@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RT - Socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RT%20-%20Socketcan&In-Reply-To=%3C482BD2D4.5070408%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000371.html">
+   <LINK REL="Next"  HREF="000373.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RT - Socketcan</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RT%20-%20Socketcan&In-Reply-To=%3C482BD2D4.5070408%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RT - Socketcan">wg at grandegger.com
+       </A><BR>
+    <I>Thu May 15 08:06:12 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000371.html">[Socketcan-users] RT - Socketcan
+</A></li>
+        <LI>Next message: <A HREF="000373.html">[Socketcan-users] RT - Socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#372">[ date ]</a>
+              <a href="thread.html#372">[ thread ]</a>
+              <a href="subject.html#372">[ subject ]</a>
+              <a href="author.html#372">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> Hi all, I have my socket can working properly and all application inside 
+</I>&gt;<i> can-utils dir are working out.
+</I>&gt;<i> Now, I want to use the rt - socket can and at long last I got the 
+</I>&gt;<i> rtcansend, rtcanrecv and rtcanconfig compiled on my system.
+</I>
+I wonder why it took that long. If you build the Xenomai user space
+part, they are built automatically:
+
+  $ cd &lt;xenomai-root&gt;
+  $ export DESTDIR=/opt/eldk/ppc_6xx
+  $ export CROSS_COMPILE=ppc_6xx
+  $ ./configure --host=ppc-linux --prefix=/root/xenomai
+  $ make
+  $ make install
+  $ ls /opt/eldk/ppc_6xx/root/xenomal/sbin/rtcan*
+  $ ls /opt/eldk/ppc_6xx/root/xenomal/bin/rtcan*
+
+See also
+<A HREF="http://www.rts.uni-hannover.de/xenomai/lxr/source/src/utils/can/README">http://www.rts.uni-hannover.de/xenomai/lxr/source/src/utils/can/README</A>
+
+
+&gt;<i> Unfortunately when I try to run those applications some errors appeared. 
+</I>&gt;<i> I posted below the errors message and messages from boot process:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> [ 0.000000] Kernel command line: root=/dev/nfs rw 
+</I>&gt;<i> nfsroot=192.168.1.100:/home/breno/ELDK/ppc_6xx 
+</I>&gt;<i> ip=192.168.1.101:192.168.1.100:192.168.1.100:255.255.255.0:icecube::off 
+</I>&gt;<i> console=ttyPSC0,115200 init 1 noinitrd
+</I>&gt;<i> [ 0.000000] MPC52xx PIC is up and running!
+</I>&gt;<i> [ 0.000000] PID hash table entries: 256 (order: 8, 1024 bytes)
+</I>&gt;<i> [ 0.000015] clocksource: timebase mult[79364d9] shift[22] registered
+</I>&gt;<i> [ 0.000621] I-pipe 2.1-01: pipeline enabled.
+</I>&gt;<i> [ 0.000856] console [ttyPSC0] enabled
+</I>&gt;<i> [ 0.094725] Dentry cache hash table entries: 8192 (order: 3, 32768 bytes)
+</I>&gt;<i> [ 0.102251] Inode-cache hash table entries: 4096 (order: 2, 16384 bytes)
+</I>&gt;<i> [ 0.118333] Memory: 61808k/65536k available (2644k kernel code, 3660k 
+</I>&gt;<i> reserved, 132k data, 252k bss, 156k init)
+</I>&gt;<i> [ 0.128816] SLUB: Genslabs=11, HWalign=32, Order=0-1, MinObjects=4, 
+</I>&gt;<i> CPUs=1, Nodes=1
+</I>&gt;<i> [ 0.229098] Mount-cache hash table entries: 512
+</I>&gt;<i> [ 0.238062] net_namespace: 64 bytes
+</I>&gt;<i> [ 0.243962] NET: Registered protocol family 16
+</I>&gt;<i> [ 0.270293] PCI: Probing PCI hardware
+</I>&gt;<i> [ 0.276232] DMA: MPC52xx BestComm driver
+</I>&gt;<i> [ 0.280666] DMA: MPC52xx BestComm engine @f0001200 ok !
+</I>&gt;<i> [ 0.299894] SCSI subsystem initialized
+</I>&gt;<i> [ 0.323939] Time: timebase clocksource has been installed.
+</I>&gt;<i> [ 0.332293] NET: Registered protocol family 2
+</I>&gt;<i> [ 0.376363] IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+</I>&gt;<i> [ 0.384780] TCP established hash table entries: 2048 (order: 2, 16384 bytes)
+</I>&gt;<i> [ 0.392249] TCP bind hash table entries: 2048 (order: 1, 8192 bytes)
+</I>&gt;<i> [ 0.398904] TCP: Hash tables configured (established 2048 bind 2048)
+</I>&gt;<i> [ 0.405454] TCP reno registered
+</I>&gt;<i> [ 0.423424] I-pipe: Domain Xenomai registered.
+</I>&gt;<i> [ 0.428093] Xenomai: hal/powerpc started.
+</I>&gt;<i> [ 0.452354] Xenomai: real-time nucleus v2.4.3 (Back to Shalla-Bal) loaded.
+</I>&gt;<i> [ 0.460259] Xenomai: starting native API services.
+</I>&gt;<i> [ 0.465261] Xenomai: starting POSIX services.
+</I>&gt;<i> [ 0.470003] Xenomai: starting RTDM services.
+</I>&gt;<i> [ 0.515319] io scheduler noop registered
+</I>&gt;<i> [ 0.519433] io scheduler anticipatory registered (default)
+</I>&gt;<i> [ 0.525208] io scheduler deadline registered
+</I>&gt;<i> [ 0.529868] io scheduler cfq registered
+</I>&gt;<i> [ 0.961543] Serial: MPC52xx PSC UART driver
+</I>&gt;<i> [ 0.966818] f0002000.serial: ttyPSC0 at MMIO 0xf0002000 (irq = 129) is a 
+</I>&gt;<i> MPC52xx PSC
+</I>&gt;<i> [ 0.986052] RAMDISK driver initialized: 16 RAM disks of 32768K size 1024 
+</I>&gt;<i> blocksize
+</I>&gt;<i> [ 0.999085] loop: module loaded
+</I>&gt;<i> [ 1.003911] mpc52xx-mscan initializing
+</I>&gt;<i> [ 1.010346] mpc52xx-mscan mpc52xx-mscan.0: probe for a port 0xC500A900 done
+</I>&gt;<i> [ 1.019625] mpc52xx-mscan mpc52xx-mscan.1: probe for a port 0xC500C980 done
+</I>&gt;<i> [ 1.062078] mpc52xx MII bus: probed
+</I>&gt;<i> [ 1.069223] ata: MPC52xx IDE/ATA libata driver
+</I>&gt;<i> [ 1.075353] scsi0 : mpc52xx_ata
+</I>&gt;<i> [ 1.079406] ata1: PATA max PIO4 ata_regs 0xf0003a00 irq 135
+</I>&gt;<i> [ 1.251310] RT-Socket-CAN 0.90.2 - (C) 2006 RT-Socket-CAN Development Team
+</I>&gt;<i> [ 1.258614] MSCAN: CAN 1 and 2 routed to PSC2 pins
+</I>&gt;<i> [ 1.263767] rtcan: registered rtcan0
+</I>&gt;<i> [ 1.267527] rtcan0: MSCAN driver loaded (port 1, base-addr 0xf0000900 
+</I>&gt;<i> irq 145)
+</I>&gt;<i> [ 1.275147] rtcan: registered rtcan1
+</I>&gt;<i> [ 1.278899] rtcan1: MSCAN driver loaded (port 2, base-addr 0xf0000980 
+</I>&gt;<i> irq 146)
+</I>&gt;<i> [ 1.286819] TCP cubic registered
+</I>&gt;<i> [ 1.290220] Initializing XFRM netlink socket
+</I>&gt;<i> [ 1.295708] NET: Registered protocol family 1
+</I>&gt;<i> [ 1.300348] NET: Registered protocol family 17
+</I>&gt;<i> [ 1.305001] can: controller area network core (rev 20071116 abi 8)
+</I>&gt;<i> [ 1.311598] NET: Registered protocol family 29
+</I>&gt;<i> [ 1.317995] RPC: Registered udp transport module.
+</I>&gt;<i> [ 1.322901] RPC: Registered tcp transport module.
+</I>&gt;<i> [ 1.328163] drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+</I>&gt;<i> [ 1.842029] net eth0: attached phy 0 to driver LXT971
+</I>&gt;<i> [ 2.848274] IP-Config: Complete:
+</I>&gt;<i> [ 2.851411] device=eth0, addr=192.168.1.101, mask=255.255.255.0, 
+</I>&gt;<i> gw=192.168.1.100,
+</I>&gt;<i> [ 2.859759] host=icecube, domain=, nis-domain=(none),
+</I>&gt;<i> [ 2.865427] bootserver=192.168.1.100, rootserver=192.168.1.100, rootpath=
+</I>&gt;<i> [ 2.873718] Looking up port of RPC 100003/2 on 192.168.1.100
+</I>&gt;<i> Telling INIT to go to single user mode.
+</I>&gt;<i> 
+</I>&gt;<i> INIT: Going single user
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> INIT: Sending processes the TERM signal
+</I>&gt;<i> 
+</I>&gt;<i> sh-3.00# ls
+</I>&gt;<i> 
+</I>&gt;<i> bin dev etc home images lib mnt opt proc root sbin tmp usr var
+</I>&gt;<i> sh-3.00# cd home/breno/Desktop/rt-can-utils/
+</I>&gt;<i> 
+</I>&gt;<i> sh-3.00# ./rtcanconfig rtcan0 -b 1000000
+</I>&gt;<i> sh-3.00# ./rtcanconfig rtcan1 -b 1000000
+</I>
+You should add &quot;up&quot; or &quot;start&quot; to the above commands to start the device:
+
+ ./rtcanconfig rtcan0 -b 1000000 start
+
+&gt;<i> sh-3.00# ifconfig can0 up
+</I>&gt;<i> sh-3.00# ifconfig can1 up
+</I>
+The ifconfig is for Linux network devices. It does not work or even make
+sense to use the MSCAN devices for both, Socket-CAN and RT-Socket-CAN.
+Therefore please disable Socket-CAN support in your kernel.
+
+&gt;<i> sh-3.00# ./rtcansend can0 ABCDEFG
+</I>&gt;<i> rt_dev_ioctl: No such device
+</I>&gt;<i> sh-3.00# ./rtcansend can1 ABCDEFG
+</I>&gt;<i> rt_dev_ioctl: No such device
+</I>
+RT-Socket-CAN devices are named rtcan*!!!
+
+&gt;<i> sh-3.00# ./rtcansend rtcan0 ABCDEFG
+</I>&gt;<i> rt_dev_send: Network is down
+</I>&gt;<i> sh-3.00# ./rtcansend rtcan0 ABCDEFG
+</I>&gt;<i> rt_dev_send: Network is down
+</I>
+See above.
+
+&gt;<i> On my kernel options I have:
+</I>&gt;<i> 
+</I>&gt;<i> Real-time sub-system ---&gt; Drivers ---&gt; CAN drivers [*] RT-Socket-CAN, 
+</I>&gt;<i> CAN raw socket interface
+</I>&gt;<i> Pin Configuration (CAN 1 and 2 on PSC2 pins) ---&gt; (X) CAN 1 and 2 on 
+</I>&gt;<i> PSC2 pins
+</I>
+That depends on your hardware.
+
+&gt;<i> Networking ---&gt; [*] CAN bus subsystem support ---&gt; CAN Device Drivers 
+</I>&gt;<i> ---&gt; [*] Support for a Freescale MSCAN based chips
+</I>&gt;<i> [*] Freescale MPC5200 onboard controller
+</I>
+Please disable the CAN bus subsystem.
+
+&gt;<i> Thats' all option I have enable related with CAN interface. Dis I miss 
+</I>&gt;<i> anything?
+</I>
+Be aware, that Socket-CAN And RT-Socket-CAN are two distinct pieces of
+software. The only common things that they both use the (almost) same API.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000371.html">[Socketcan-users] RT - Socketcan
+</A></li>
+	<LI>Next message: <A HREF="000373.html">[Socketcan-users] RT - Socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#372">[ date ]</a>
+              <a href="thread.html#372">[ thread ]</a>
+              <a href="subject.html#372">[ subject ]</a>
+              <a href="author.html#372">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

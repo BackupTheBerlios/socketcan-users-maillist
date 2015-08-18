@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20net/can%3A%20activate%20bit-timing%0A%20calculation%20and%20netlink%20based%20drivers%20by%20default&In-Reply-To=%3C20110627135044.GF318%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001919.html">
+   <LINK REL="Next"  HREF="001922.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20net/can%3A%20activate%20bit-timing%0A%20calculation%20and%20netlink%20based%20drivers%20by%20default&In-Reply-To=%3C20110627135044.GF318%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Mon Jun 27 15:50:44 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001919.html">[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+</A></li>
+        <LI>Next message: <A HREF="001922.html">[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1921">[ date ]</a>
+              <a href="thread.html#1921">[ thread ]</a>
+              <a href="subject.html#1921">[ subject ]</a>
+              <a href="author.html#1921">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Is this modification then also the right thing to do?
+
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index 1d699e3..ac48574 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -4,7 +4,6 @@ menu &quot;CAN Device Drivers&quot;
+ config CAN_VCAN
+ 	tristate &quot;Virtual Local CAN Interface (vcan)&quot;
+ 	depends on CAN
+-	default N
+ 	---help---
+ 	  Similar to the network loopback devices, vcan offers a
+ 	  virtual local CAN interface.
+@@ -15,7 +14,6 @@ config CAN_VCAN
+ config CAN_SLCAN
+ 	tristate &quot;Serial / USB serial CAN Adaptors (slcan)&quot;
+ 	depends on CAN
+-	default N
+ 	---help---
+ 	  CAN driver for several 'low cost' CAN interfaces that are attached
+ 	  via serial lines or via USB-to-serial adapters using the LAWICEL
+@@ -124,7 +122,6 @@ source &quot;drivers/net/can/softing/Kconfig&quot;
+ config CAN_DEBUG_DEVICES
+ 	bool &quot;CAN devices debugging messages&quot;
+ 	depends on CAN
+-	default N
+ 	---help---
+ 	  Say Y here if you want the CAN device drivers to produce a bunch of
+ 	  debug messages to the system log.  Select this if you are having
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001919.html">[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+</A></li>
+	<LI>Next message: <A HREF="001922.html">[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1921">[ date ]</a>
+              <a href="thread.html#1921">[ thread ]</a>
+              <a href="subject.html#1921">[ subject ]</a>
+              <a href="author.html#1921">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

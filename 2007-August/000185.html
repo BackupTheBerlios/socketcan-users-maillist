@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Very NEWBIE needs help
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3C46C1F5BA.9030709%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000184.html">
+   <LINK REL="Next"  HREF="000194.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Very NEWBIE needs help</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3C46C1F5BA.9030709%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Very NEWBIE needs help">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Aug 14 20:34:34 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000184.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+        <LI>Next message: <A HREF="000194.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#185">[ date ]</a>
+              <a href="thread.html#185">[ thread ]</a>
+              <a href="subject.html#185">[ subject ]</a>
+              <a href="author.html#185">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;&gt;<i> In order to verify that everything is ok I only need to execute the
+</I>&gt;&gt;<i> programs
+</I>&gt;&gt;<i> contained in the &quot;test&quot; dir, right?
+</I>&gt;&gt;<i>     
+</I>
+Hi Fabrizio,
+
+Ren&#233; is right. If you want the modules to be loaded _automatically_ his
+described way is needed (and recommended).
+For a simple test, the modules like e.g. can.ko can also be loaded with
+&quot;modprobe can&quot; (when the modules are installed in
+/lib/modules/2.6.xx/... and the depmod worked well).
+
+To test the basic CAN functionality, you can use the applications in
+trunk/can-utils, as the stuff below trunk/test is mainly for testing the
+CAN kernel modules and to give some examples how to write your own
+applications.
+
+For a simple test you can say ...
+
+&quot;ifconfig vcan0 up&quot; to enable the vcan0 netdevice interface.
+&quot;cangen vcan0&quot; to send some random data on vcan0
+
+In a *different* Terminal type &quot;candump any&quot; to display 'any'
+CAN-traffic on your linux box (candump can also be used with a specific
+CAN interface - see 'candump -?' for help).
+
+When you can see CAN traffic at least the vcan driver, the CAN core
+(can.ko) and the CAN RAW socket (can-raw.ko) is working fine and you
+might see several information in /proc/net/can/* or the standard netdev
+statistics in /proc/net/dev .
+And then it's time to get any real CAN-hardware :-)
+
+Have fun and feel free to ask more of these questions ;-)
+
+Best regards,
+Oliver
+
+ps. When you are running the Kernel 2.6.23 there are no vcanX-devices
+created at vcan.ko module loading time as there is a recommended
+netlink-interface for creating software network devices in Kernel
+2.6.23. In this case use the &quot;trunk/can-utils/vcan&quot; tool to create
+yourself as many vcans as you need.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000184.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+	<LI>Next message: <A HREF="000194.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#185">[ date ]</a>
+              <a href="thread.html#185">[ thread ]</a>
+              <a href="subject.html#185">[ subject ]</a>
+              <a href="author.html#185">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

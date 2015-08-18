@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan in barebox bootloader
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20in%20barebox%20bootloader&In-Reply-To=%3C4F3372C3.3040902%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002356.html">
+   <LINK REL="Next"  HREF="002358.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan in barebox bootloader</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20in%20barebox%20bootloader&In-Reply-To=%3C4F3372C3.3040902%40grandegger.com%3E"
+       TITLE="[Socketcan-users] socketcan in barebox bootloader">wg at grandegger.com
+       </A><BR>
+    <I>Thu Feb  9 08:16:19 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002356.html">[Socketcan-users] socketcan in barebox bootloader
+</A></li>
+        <LI>Next message: <A HREF="002358.html">[Socketcan-users] socketcan in barebox bootloader
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2357">[ date ]</a>
+              <a href="thread.html#2357">[ thread ]</a>
+              <a href="subject.html#2357">[ subject ]</a>
+              <a href="author.html#2357">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian,
+
+On 02/08/2012 04:42 PM, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">christian.buettner at rafi.de</A> wrote:
+&gt;<i> Hi everyone,
+</I>&gt;<i> 
+</I>&gt;<i> we use the i.MX28 from freescale and need a socketcan driver 
+</I>&gt;<i> implementation in the barebox bootloader.
+</I>
+Well, a Socket-CAN implementation seems a bit heavy and overkill for a
+boot loader.
+
+&gt;<i> The goal is to flash a linux or rootfs image through the barebox 
+</I>&gt;<i> bootloader using a CAN bus connection.
+</I>
+CAN is slow! Seem not be a good idea to transfer megabytes of data that way.
+
+&gt;<i> We need it to make a field update of the target possible. 
+</I>&gt;<i> 
+</I>&gt;<i> Has anyone done something like that yet?
+</I>
+Not that I know of.
+
+Wolfgang.
+
+PS:
+
+please do not use this mailing list any longer but send your questions
+to the new &quot;linux-can&quot; mailing list address &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A>&quot;.
+For subscription or mailing list archives please have a look to:
+
+   <A HREF="http://vger.kernel.org/vger-lists.html#linux-can">http://vger.kernel.org/vger-lists.html#linux-can</A>
+
+Mail archives of the new linux-can mailing list can be found at:
+
+   <A HREF="http://dir.gmane.org/gmane.linux.can">http://dir.gmane.org/gmane.linux.can</A>
+   <A HREF="http://marc.info/?l=linux-can&amp;r=1&amp;w=2">http://marc.info/?l=linux-can&amp;r=1&amp;w=2</A>
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002356.html">[Socketcan-users] socketcan in barebox bootloader
+</A></li>
+	<LI>Next message: <A HREF="002358.html">[Socketcan-users] socketcan in barebox bootloader
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2357">[ date ]</a>
+              <a href="thread.html#2357">[ thread ]</a>
+              <a href="subject.html#2357">[ subject ]</a>
+              <a href="author.html#2357">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

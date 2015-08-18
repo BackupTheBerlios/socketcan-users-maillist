@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan problems for settings &gt; 125kbit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C491C39C9.10008%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000577.html">
+   <LINK REL="Next"  HREF="000579.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan problems for settings &gt; 125kbit</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C491C39C9.10008%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan problems for settings &gt; 125kbit">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov 13 15:29:29 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000577.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+        <LI>Next message: <A HREF="000579.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#578">[ date ]</a>
+              <a href="thread.html#578">[ thread ]</a>
+              <a href="subject.html#578">[ subject ]</a>
+              <a href="author.html#578">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> I think I found the problem. There are constraints for tseg1 and tseg2
+</I>&gt;&gt;<i> which I have overlooked. The attached patch should fix that. Please
+</I>&gt;&gt;<i> give it a try and let me know.
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> This looks so much better now !
+</I>
+Obviously settings with tseg2=1 did not work at all.
+
+&gt;<i> I tested quickly on IPB Clock 132 and 66 MHz the CAN rates 125, 250 and
+</I>&gt;<i> 500 Kbit with an attached IO-Unit and all of these settings work now. I
+</I>&gt;<i> have not tested 1Mbit, because we don't need it and my I/O unit doesn't
+</I>&gt;<i> support it.
+</I>&gt;<i> 
+</I>&gt;<i> Here are the settings I get for different IPB frequencies:
+</I>&gt;<i> 
+</I>&gt;<i> IPB: 66MHz
+</I>&gt;<i> 125 Kbit, BTR0=0x20 BTR1=0x1c, SP 87,5 %
+</I>&gt;<i> 250 Kbit, BTR0=0x15 BTR1=0x18, SP 83,3 %
+</I>&gt;<i> 500 Kbit, BTR0=0x0a BTR1=0x18, SP 83,3%,
+</I>&gt;<i> 
+</I>&gt;<i> IPB: 132MHz
+</I>&gt;<i> 125 Kbit, BTR0=0x2f BTR1=0x4f, SP 77,2%
+</I>&gt;<i> 250 Kbit, BTR0=0x20 BTR1=0x1c, SP 87,5 %
+</I>&gt;<i> 500 Kbit, BTR0=0x15 BTR1=0x18, SP 83,3%
+</I>&gt;<i> 
+</I>&gt;<i> The sampling points (SP) are the default settings of the driver.
+</I>
+If you don't specify the sampling point, the CIA recommended values will
+be used.
+
+&gt;<i> If I want to change the SP, then I see that writing to the file
+</I>&gt;<i> /sys/class/net/can0/can_bittiming/sample_point, the driver makes a best
+</I>&gt;<i> effort to come near the requested sample point, like that:
+</I>&gt;<i> 
+</I>&gt;<i> ifconfig can0 down
+</I>&gt;<i> echo &quot;500000&quot;&gt;/sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;<i> echo &quot;772&quot;&gt;/sys/class/net/can0/can_bittiming/sample_point
+</I>&gt;<i> ifconfig can0 up
+</I>&gt;<i> [  288.019680] mpc52xx-mscan mpc52xx-mscan.0: BTR0=0x20 BTR1=0x14
+</I>&gt;<i> cat /sys/class/net/can0/can_bittiming/sample_point
+</I>&gt;<i> 750
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> This is indeed very nice. Thanks for the fix.
+</I>
+Be aware that the calculation of bit-timing parameters for the MSCAN is
+delicate due to the improper CAN source clock frequency. Good
+frequencies would be 32, 64 or 128 MHz:
+
+  $ ./can-calc-bit-timing -c 32000000 mscan
+  Bit timing parameters for mscan using 32000000Hz
+  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+  1000000     62   7    4    4   1   2 75.0%  0.0% 0x01 0x3a
+   800000     62  11    4    4   1   2 80.0%  0.0% 0x01 0x3e
+   500000    125  11    2    2   1   4 87.5%  0.0% 0x03 0x1c
+   250000    250  11    2    2   1   8 87.5%  0.0% 0x07 0x1c
+   125000    500  11    2    2   1  16 87.5%  0.0% 0x0f 0x1c
+   100000    625  11    2    2   1  20 87.5%  0.0% 0x13 0x1c
+    50000   1250  11    2    2   1  40 87.5%  0.0% 0x27 0x1c
+    20000   2000   8    8    8   1  64 68.0%  0.0% 0x3f 0x7f
+    10000 ***bitrate not possible***
+
+Apart from 20k, the bitrate and the sampling point would match
+perfectly, like for the SJA1000 at 8 MHz. Unfortunately, most MPC5200
+boards use bad frequencies, e.g. multiples of 33 MHz:
+
+  Bit timing parameters for mscan using 132000000Hz
+  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+  1000000     83   5    3    3   1  11 75.0%  0.0% 0x0a 0x27
+   800000     83   8    3    3   1  11 80.0%  0.0% 0x0a 0x2a
+   500000    166   7    2    2   1  22 83.3%  0.0% 0x15 0x18
+   250000    250  11    2    2   1  33 87.5%  0.0% 0x20 0x1c
+   125000    363  11    5    5   1  48 77.2%  0.0% 0x2f 0x4f
+   100000    454  11    5    5   1  60 77.2%  0.0% 0x3b 0x4f
+    50000 ***bitrate not possible***
+    20000 ***bitrate not possible***
+    10000 ***bitrate not possible***
+
+The algorithm tries first to match the bitrate (Error==0). Then it tries
+to get as close as possible to the desired sampling point. For 125k, the
+sampling point is at 77.2% instead of 87.5%. Here are the parameters for
+33 MHz:
+
+  $ ./can-calc-bit-timing -c 33000000 mscan
+  Bit timing parameters for mscan using 33000000Hz
+  Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+  1000000     90   4    3    3   1   3 72.7%  0.0% 0x02 0x26
+   800000    181   2    2    2   1   6 71.4%  1.8% 0x05 0x13
+   500000    181   6    2    2   1   6 81.8%  0.0% 0x05 0x17
+   250000    333   7    2    2   1  11 83.3%  0.0% 0x0a 0x18
+   125000    666   7    2    2   1  22 83.3%  0.0% 0x15 0x18
+   100000    666  10    2    2   1  22 86.6%  0.0% 0x15 0x1b
+    50000   1333  10    2    2   1  44 86.6%  0.0% 0x2b 0x1b
+    20000 ***bitrate not possible***
+    10000 ***bitrate not possible***
+
+If the calculated parameters are not perfect, errors may occur and you
+my need to provide better values by setting tq, prop_seg, phase_seg1,
+phase_seg2 and sjw directly. It's not a trivial task and I actually
+don't have the experience to resolve it.
+
+Hope this makes the dilemma with calculating bit-timing parameters a bit
+clearer.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000577.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+	<LI>Next message: <A HREF="000579.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#578">[ date ]</a>
+              <a href="thread.html#578">[ thread ]</a>
+              <a href="subject.html#578">[ subject ]</a>
+              <a href="author.html#578">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

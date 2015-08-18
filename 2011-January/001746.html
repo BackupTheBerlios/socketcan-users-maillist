@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] No can0 interface
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20No%20can0%20interface&In-Reply-To=%3C4D3B315D.8060407%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001741.html">
+   <LINK REL="Next"  HREF="001747.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] No can0 interface</H1>
+    <B>vislavie</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20No%20can0%20interface&In-Reply-To=%3C4D3B315D.8060407%40gmx.de%3E"
+       TITLE="[Socketcan-users] No can0 interface">vislavie at gmx.de
+       </A><BR>
+    <I>Sat Jan 22 20:34:53 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001741.html">[Socketcan-users] write: No buffer space available
+</A></li>
+        <LI>Next message: <A HREF="001747.html">[Socketcan-users] No can0 interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1746">[ date ]</a>
+              <a href="thread.html#1746">[ thread ]</a>
+              <a href="subject.html#1746">[ subject ]</a>
+              <a href="author.html#1746">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi All!
+
+My first time that I work with CAN. The corresponding modules are
+enabled in the kernel.
+CAN0 device is not created. I find no indication in the log.
+
+Does anyone have an idea.
+
+Thanks in advance
+Jochen
+
+
+system arm kirkwood ubuntu 9.04
+kernel 2.6.35.7
+
+# modprobe can
+# modprobe can_dev
+# modprobe can_raw
+# modprobe mcp251x
+# lsmod
+Module                  Size  Used by
+mcp251x                 8936  0
+can_raw                 5631  0
+can_dev                 7512  1 mcp251x
+can                    21670  1 can_raw
+ipv6                  269969  16
+lm75                    3494  0
+hwmon                   1547  1 lm75
+sg                     17106  0
+hmac                    2559  0
+sha1_generic            1861  0
+mv_cesa                 9494  0
+
+#dmesg | fgrep -i spi
+[    0.243226] bus: 'spi': registered
+[    0.243236] device class 'spi_master': registering
+[    0.245452] Registering platform device 'orion_spi.0'. Parent at platform
+[    0.245464] device: 'orion_spi.0': device_add
+[    0.245482] bus: 'platform': add device orion_spi.0
+[    0.641819] bus: 'platform': add driver spi_gpio
+[    0.641949] bus: 'platform': remove driver spi_gpio
+[    0.642059] driver: 'spi_gpio': driver_release
+[    0.642143] bus: 'platform': add driver orion_spi
+[    0.642171] bus: 'platform': driver_probe_device: matched device
+orion_spi.0 with driver orion_spi
+[    0.642186] bus: 'platform': really_probe: probing driver orion_spi
+with device orion_spi.0
+[    0.642216] device: 'spi0': device_add
+[    0.642353] orion_spi orion_spi.0: registered master spi0
+[    0.642369] orion_spi orion_spi.0: cs7 &gt;= max 1
+[    0.646922] driver: 'orion_spi.0': driver_bound: bound to device
+'orion_spi'
+[    0.646934] bus: 'platform': really_probe: bound device orion_spi.0
+to driver orion_spi
+[    0.647063] device class 'spidev': registering
+[    0.647185] bus: 'spi': add driver spidev
+[   60.261929] bus: 'spi': add driver mcp251x
+
+#dmesg | fgrep -i can
+[   44.168787] can: controller area network core (rev 20090105 abi 8)
+[   46.963810] CAN device driver interface
+[   51.985386] can: raw protocol (rev 20090105)
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110122/a82d7187/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110122/a82d7187/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001741.html">[Socketcan-users] write: No buffer space available
+</A></li>
+	<LI>Next message: <A HREF="001747.html">[Socketcan-users] No can0 interface
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1746">[ date ]</a>
+              <a href="thread.html#1746">[ thread ]</a>
+              <a href="subject.html#1746">[ subject ]</a>
+              <a href="author.html#1746">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

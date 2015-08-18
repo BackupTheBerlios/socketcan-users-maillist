@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Testing socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Testing%20socketcan&In-Reply-To=%3C4521155B.3030701%40koansoftware.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Testing socketcan</H1>
+    <B>Marco Cavallini [KOAN]</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Testing%20socketcan&In-Reply-To=%3C4521155B.3030701%40koansoftware.com%3E"
+       TITLE="[Socketcan-users] Testing socketcan">m.cavallini at koansoftware.com
+       </A><BR>
+    <I>Mon Oct  2 15:34:19 CEST 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000061.html">[Socketcan-users] Testing socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Assuming you have an existing /proc/net directory you may change 
+</I>&gt;<i> PROCBASE to just &quot;net&quot;.
+</I>&gt;<i> After loading the sja1000 driver you should find new procfs-entries 
+</I>&gt;<i> /proc/net/sja1000_*
+</I>
+Hi Oliver
+
+# cat /proc/net/sja1000-isa
+CAN bus device statistics:
+        errwarn  overrun   wakeup   buserr   errpass  arbitr   restarts 
+clock        baud
+can0:        0        0        0        0        0        0        0 
+16000000      100
+can0: bus status: OK, RXERR: 0, TXERR: 0
+
+# cat /proc/net/sja1000_regs
+SJA1000 registers:
+can0 SJA1000 registers:
+00: 00 00 0c 00 ff 00 43 cd 1a 00 00 00 00 60 00 00
+10: f9 5f ff af 00 07 40 01 fa f7 ff fb 40 00 00 cf
+
+
+# cat /proc/net/sja1000_reset
+resetting can0 done
+
+What could I do to test the tx/rx channel ?
+
+TIA
+-- 
+Marco Cavallini
+Koan s.a.s. - Bergamo - ITALIA
+Embedded and Real-Time Software Engineering
+  - Atmel Third Party Consultant
+Tel. +39-(0)35-255.235 - Fax +39-178-223.9748
+www.KoanSoftware.com   |    www.KaeilOS.com
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000061.html">[Socketcan-users] Testing socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

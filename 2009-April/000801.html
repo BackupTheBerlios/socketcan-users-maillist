@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socket CAN error handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%20CAN%20error%20handling&In-Reply-To=%3C49F0A83E.8030702%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000800.html">
+   <LINK REL="Next"  HREF="000803.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socket CAN error handling</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%20CAN%20error%20handling&In-Reply-To=%3C49F0A83E.8030702%40grandegger.com%3E"
+       TITLE="[Socketcan-users] socket CAN error handling">wg at grandegger.com
+       </A><BR>
+    <I>Thu Apr 23 19:41:18 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000800.html">[Socketcan-users] socket CAN error handling
+</A></li>
+        <LI>Next message: <A HREF="000803.html">[Socketcan-users] socket CAN error handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#801">[ date ]</a>
+              <a href="thread.html#801">[ thread ]</a>
+              <a href="subject.html#801">[ subject ]</a>
+              <a href="author.html#801">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Heinz-J&#252;rgen Oertel wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> I'm looking for a socket CAN API documentation and hope someone can point to 
+</I>&gt;<i> it.
+</I>&gt;<i> My application is already working, it can send and receive CAN frames.
+</I>&gt;<i> But I have no idea how to handle CAN bus errors.
+</I>&gt;<i> Are there any examples in the can-utils/ showing how to handle CAN errors
+</I>&gt;<i> like rx buffer overflow or CAN bus state ?
+</I>&gt;<i> It would also be nice to have read access to the CAN controllers,
+</I>&gt;<i> in this case msCAN, error counters.
+</I>&gt;<i> 
+</I>&gt;<i> I searched a lot of messages in the [Socketcan-users] list, without success so 
+</I>&gt;<i> far, and hope someone can help.
+</I>&gt;<i> The best so far, which I found yesterday is 
+</I>&gt;<i>  href=&quot;<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+</I>&gt;<i> I will try to following the advice given there, but anyway, an small example 
+</I>&gt;<i> would help much more. e.g. a CAN transmit application which sows the current 
+</I>&gt;<i> CAN controller state and state changes.
+</I>
+An application can receive error messages from the device like normal
+message and act apon. This also includes state changes. See &quot;4.1.2 RAW
+socket option CAN_RAW_ERR_FILTER&quot; of the above document. The &quot;candump&quot;
+program of the can-utils shows how to enable and display error frames:
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/candump.c">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/candump.c</A>
+
+You can dump them with
+
+# candump any,0:0,#FFFFFFFF
+
+The errors are described briefly in
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/include/linux/can/error.h">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/include/linux/can/error.h</A>
+
+but they depend on the CAN controller used. Bus-off recovery is a
+different issue. Either the application can trigger a recovery or an
+automatic recovery after a specified amount of milliseconds can be enabled.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000800.html">[Socketcan-users] socket CAN error handling
+</A></li>
+	<LI>Next message: <A HREF="000803.html">[Socketcan-users] socket CAN error handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#801">[ date ]</a>
+              <a href="thread.html#801">[ thread ]</a>
+              <a href="subject.html#801">[ subject ]</a>
+              <a href="author.html#801">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

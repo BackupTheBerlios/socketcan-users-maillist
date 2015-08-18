@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Many%20Steps%20Closer%2C%0A%20But%20A%20Helping%20Hand%20Still%20Needed%20...&In-Reply-To=%3C4E179FC5.3090609%40wirelessglue.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001944.html">
+   <LINK REL="Next"  HREF="001946.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...</H1>
+    <B>Stu Statman</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Many%20Steps%20Closer%2C%0A%20But%20A%20Helping%20Hand%20Still%20Needed%20...&In-Reply-To=%3C4E179FC5.3090609%40wirelessglue.com%3E"
+       TITLE="[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...">sstatman at wirelessglue.com
+       </A><BR>
+    <I>Sat Jul  9 02:24:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001944.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+        <LI>Next message: <A HREF="001946.html">[Socketcan-users] SocketCan on s3c64xx Board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1945">[ date ]</a>
+              <a href="thread.html#1945">[ thread ]</a>
+              <a href="subject.html#1945">[ subject ]</a>
+              <a href="author.html#1945">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Just wanted to drop a note that we found the issue, and after playing 
+with some configurations, are successfully sending ISO Request frames to 
+the inverter and getting valid responses back.
+
+Thank you all so much for your help; if another person comes along and 
+needs help getting SocketCAN set up on a vanilla CentOS/RHEL system, 
+please point them my way (if I'm not still on the mailing list) ...
+
+On 7/8/11 3:10 AM, Oliver Hartkopp wrote:
+&gt;<i> Am 08.07.2011 11:36, schrieb Stu Statman:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 7/8/11 1:59 AM, Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;&gt;<i> How do I create a virtual CAN interface? (Sorry for the n00b question
+</I>&gt;&gt;&gt;&gt;<i> ...)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Always welcome :-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Thank you!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L607">http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L607</A> 
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> There's also a script i personally use in /etc/init.d which creates
+</I>&gt;&gt;&gt;<i> four vcans (vcan0 .. vcan3) by default:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://svn.berlios.de/wsvn/socketcan/trunk/etc/can_if">http://svn.berlios.de/wsvn/socketcan/trunk/etc/can_if</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Well, this is interesting :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wgn at dess-aopen1</A> ~]$ sudo ip link add dev vcan01 type vcan
+</I>&gt;&gt;<i>     RTNETLINK answers: Operation not supported
+</I>&gt;<i>
+</I>&gt;<i> If you're not using the script, you need to load the vcan module first:
+</I>&gt;<i>
+</I>&gt;<i> modprobe vcan
+</I>&gt;<i>
+</I>&gt;<i> And then try again :-)
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> However, that document pointed out some other interesting things to look
+</I>&gt;&gt;<i> at. It looks like the connection is, itself, having deeper problems.
+</I>&gt;&gt;<i> When I run the ip details command, then run the cansend command, the the
+</I>&gt;&gt;<i> ip details command, it looks like the TX connection dies. (I modified
+</I>&gt;&gt;<i> the cansend command to display the packet it thinks it's sending; it
+</I>&gt;&gt;<i> just involved removing a comment.) I should point out that candump
+</I>&gt;&gt;<i> continues to hum along, showing traffic from the connected device ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wgn at dess-aopen1</A> ~]$ ip -details -statistics link show can0
+</I>&gt;&gt;<i>     3: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state
+</I>&gt;&gt;<i>     UNKNOWN qlen 10
+</I>&gt;&gt;<i>     link/can
+</I>&gt;&gt;<i>     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+</I>&gt;&gt;<i>     bitrate 250000 sample-point 0.875
+</I>&gt;&gt;<i>     tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>     esd_usb2: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
+</I>&gt;&gt;<i>     clock 60000000
+</I>&gt;&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>     0 1 0 0 0 0
+</I>&gt;&gt;<i>     RX: bytes packets errors dropped overrun mcast
+</I>&gt;&gt;<i>     26639 3392 1 0 0 0
+</I>&gt;&gt;<i>     TX: bytes packets errors dropped carrier collsns
+</I>&gt;&gt;<i>     0 0 0 0 0 0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wgn at dess-aopen1</A> ~]$ cansend can0 18EA0001#03.F0.01
+</I>&gt;&gt;<i>     18EA0001 [3] 03 F0 01
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wgn at dess-aopen1</A> ~]$ ip -details -statistics link show can0
+</I>&gt;&gt;<i>     3: can0: &lt;NO-CARRIER,NOARP,UP,ECHO&gt; mtu 16 qdisc pfifo_fast state
+</I>&gt;&gt;<i>     DOWN qlen 10
+</I>&gt;&gt;<i>     link/can
+</I>&gt;&gt;<i>     can state ERROR-PASSIVE (berr-counter tx 0 rx 144) restart-ms 0
+</I>&gt;&gt;<i>     bitrate 250000 sample-point 0.875
+</I>&gt;&gt;<i>     tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;&gt;<i>     esd_usb2: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..1024 brp-inc 1
+</I>&gt;&gt;<i>     clock 60000000
+</I>&gt;&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;&gt;<i>     0 4737 0 274 274 273
+</I>&gt;&gt;<i>     RX: bytes packets errors dropped overrun mcast
+</I>&gt;&gt;<i>     80703 10167 4737 0 0 0
+</I>&gt;&gt;<i>     TX: bytes packets errors dropped carrier collsns
+</I>&gt;&gt;<i>     0 0 0 0 0 0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any thoughts on this? Any idea where to look next?
+</I>&gt;<i>
+</I>&gt;<i> Obviously the CAN adapter as some problems to the the frame onto the 
+</I>&gt;<i> bus. As you seem to have the correct bitrate (because you can receive 
+</I>&gt;<i> msgs), i would check for correct CAN bus termination.
+</I>&gt;<i>
+</I>&gt;<i> After that: Can you add a third CAN node on the bus? I personally had 
+</I>&gt;<i> some problems with commercial tools, if they were the only counterpart 
+</I>&gt;<i> for CAN communication. A third CAN node may send the CAN acknowledge 
+</I>&gt;<i> in a way that your sending node get's it better. I know this is 
+</I>&gt;<i> somehow strange but i got that problem with some commercial tools ...
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001944.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+	<LI>Next message: <A HREF="001946.html">[Socketcan-users] SocketCan on s3c64xx Board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1945">[ date ]</a>
+              <a href="thread.html#1945">[ thread ]</a>
+              <a href="subject.html#1945">[ subject ]</a>
+              <a href="author.html#1945">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

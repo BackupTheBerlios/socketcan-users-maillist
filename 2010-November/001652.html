@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTikHqpMOMPZH3cYtxaJ3ckW5H2KAs8J%2Bzpd675gW%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001651.html">
+   <LINK REL="Next"  HREF="001653.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTikHqpMOMPZH3cYtxaJ3ckW5H2KAs8J%2Bzpd675gW%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Nov 15 21:56:22 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001651.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001653.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1652">[ date ]</a>
+              <a href="thread.html#1652">[ thread ]</a>
+              <a href="subject.html#1652">[ subject ]</a>
+              <a href="author.html#1652">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok thanks for all Wolfang, you are an angel to deal my request with such
+efficiency.
+
+I am already waiting for an answer from Ixxat.
+I will check resistors terminaisons
+I will manage to record something with an analyzer, could you describe what
+should I look at ? Just messages ? Particular messages like Emergency  ?
+Heartbits ?
+
+and I will inform you about this.
+
+Is there any chance that rtCan drivers manage this hardware better ? Because
+we were firstly going to use a xenomai kernel and then turn back into a
+nature one for planning issues. As we need the can interface to go on, it is
+possible to change this.
+
+
+2010/11/15 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 11/15/2010 08:55 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt; Arg, I can't read German (at least not Technical German) so I makes
+</I>&gt;<i> things
+</I>&gt;<i> &gt; more complicate for me :)
+</I>&gt;<i>
+</I>&gt;<i> Well, apart from the OCR setting, this document is not really useful.
+</I>&gt;<i>
+</I>&gt;<i> &gt; I am going to read this. It makes me thinking about time quantas as
+</I>&gt;<i> describe
+</I>&gt;<i> &gt; in Documentation/networking/can.txt:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 708 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#708">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#708</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;    &quot;tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1&quot;
+</I>&gt;<i> &gt; 709 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#709">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#709</A>&gt;
+</I>&gt;<i>             Shows
+</I>&gt;<i> &gt; the time quanta in ns, propagation segment, phase buffer
+</I>&gt;<i> &gt; 710 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#710">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#710</A>&gt;
+</I>&gt;<i>             segment
+</I>&gt;<i> &gt; 1 and 2 and the synchronisation jump width in units of
+</I>&gt;<i> &gt; 711 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#711">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#711</A>&gt;
+</I>&gt;<i>             tq.
+</I>&gt;<i> &gt; They allow to define the CAN bit-timing in a hardware
+</I>&gt;<i> &gt; 712 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#712">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#712</A>&gt;
+</I>&gt;<i>             independent
+</I>&gt;<i> &gt; format as proposed by the Bosch CAN 2.0 spec (see
+</I>&gt;<i> &gt; 713 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#713">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#713</A>&gt;
+</I>&gt;<i>             chapter
+</I>&gt;<i> &gt; 8 of <A HREF="http://www.semiconductors.bosch.de/pdf/can2spec.pdf">http://www.semiconductors.bosch.de/pdf/can2spec.pdf</A>).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Could I have something to precise after defining baudrate ?
+</I>&gt;<i>
+</I>&gt;<i> No. If the chips is mapped correctly, it should work like with any other
+</I>&gt;<i> SJA1000 hardware.
+</I>&gt;<i>
+</I>&gt;<i> To be honest, I'm not even sure if this IXXAT card is supported properly
+</I>&gt;<i> by the sja1000_isa driver. I still think there is a problem with the irq
+</I>&gt;<i> setup or the ocr and cdr setting. Or it needs some special treatment.
+</I>&gt;<i> You could try contacting the IXXAT service. Maybe they can tell you more.
+</I>&gt;<i>
+</I>&gt;<i> Also, a CAN analyzer would be useful.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101115/5a808362/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101115/5a808362/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001651.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001653.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1652">[ date ]</a>
+              <a href="thread.html#1652">[ thread ]</a>
+              <a href="subject.html#1652">[ subject ]</a>
+              <a href="author.html#1652">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [CAN] kernel 2.6.28 integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49D61FA8.4010801%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000745.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [CAN] kernel 2.6.28 integration</H1>
+    <B>Hector Oron</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49D61FA8.4010801%40gmail.com%3E"
+       TITLE="[Socketcan-users] [CAN] kernel 2.6.28 integration">hector.oron at gmail.com
+       </A><BR>
+    <I>Fri Apr  3 16:39:36 CEST 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000745.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#744">[ date ]</a>
+              <a href="thread.html#744">[ thread ]</a>
+              <a href="subject.html#744">[ subject ]</a>
+              <a href="author.html#744">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi again,
+
+  I got my driver working a while ago (good for me and thank to you).
+
+  I'd like to comment that I removed CAN vanilla kernel code and I added
+socket-can project code, but when looking to sysfs to change bitrate I
+found this:
+
+/ # ls /sys/class/net/can0/
+addr_len      dev_id        ifalias       mtu           subsystem
+address       dormant       ifindex       operstate     tx_queue_len
+broadcast     features      iflink        power         type
+carrier       flags         link_mode     statistics    uevent
+
+I have seen some patches on LKLM[1] which I believe are still waiting to
+be approved (if ever net-dev people accept them).
+
+So, the question would be what would be the recommended way to add
+bitrate attribute to sysfs, nowadays (today)?
+
+TIA
+
+[1] <A HREF="http://lkml.org/lkml/2009/2/19/300">http://lkml.org/lkml/2009/2/19/300</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000745.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#744">[ date ]</a>
+              <a href="thread.html#744">[ thread ]</a>
+              <a href="subject.html#744">[ subject ]</a>
+              <a href="author.html#744">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

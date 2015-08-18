@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%09PC104&In-Reply-To=%3Cb2da33020906110947q63857b2x6c786461977bd45f%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000889.html">
+   <LINK REL="Next"  HREF="000891.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104</H1>
+    <B>khurram gulzar</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%09PC104&In-Reply-To=%3Cb2da33020906110947q63857b2x6c786461977bd45f%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104">khurramgulzar at gmail.com
+       </A><BR>
+    <I>Thu Jun 11 18:47:55 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000889.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+        <LI>Next message: <A HREF="000891.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#890">[ date ]</a>
+              <a href="thread.html#890">[ thread ]</a>
+              <a href="subject.html#890">[ subject ]</a>
+              <a href="author.html#890">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>well i tried setting the clock to 32 but what happen is it shows the clock
+is 32 but it didnt have any affect on baud it still remain 500
+i wonder why changing clock dont have any effect.?
+
+On Thu, Jun 11, 2009 at 7:37 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+
+&gt;<i> khurram gulzar wrote:
+</I>&gt;<i> &gt; I tried the candump by
+</I>&gt;<i> &gt; ./candump can0,0:0,#FFFFFFFF
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; The acknowlegement is recieved by the remote host
+</I>&gt;<i> &gt; but unable to recieve packets on the 82527? with Baud
+</I>&gt;<i>
+</I>
+&gt;<i>
+</I>&gt;<i> Do you see the interrupts count going up (via /proc/interrupts).
+</I>&gt;<i>
+</I>&gt;<i> &gt; About the baud the BitRate register is already set to 0 so that means to
+</I>&gt;<i> &gt; double the baud rate either i need to double the clock or i need to turn
+</I>&gt;<i> &gt; off the dmc if its already enabled  ???
+</I>&gt;<i>
+</I>&gt;<i> Hier is the description from the i82527 manual
+</I>&gt;<i>
+</I>&gt;<i>  DSC Divide System Clock (SCLK) The SCLK may
+</I>&gt;<i>    not exceed 10 MHz See section 4.5
+</I>&gt;<i>
+</I>
+&gt;<i>  one    The system clock SCLK is equal to
+</I>&gt;<i>        XTAL/2
+</I>&gt;<i>
+</I>
+&gt;<i>  zero   The system clock SCLK is equal to XTAL
+</I>&gt;<i>        This bit is written by the CPU
+</I>&gt;<i>
+</I>&gt;<i>  DMC Divide Memory Clock The memory clock may
+</I>&gt;<i>    not exceed 8 MHz See section 4 5
+</I>&gt;<i>
+</I>&gt;<i>  one    The memory clock MCLK is equal to
+</I>&gt;<i>        SCLK/2
+</I>&gt;<i>
+</I>&gt;<i>  zero   The memory clock MCLK is equal to SCLK
+</I>&gt;<i>        This bit is written by the CPU
+</I>&gt;<i>
+</I>&gt;<i> For 16MHz, with is the usual XTAL, the bits should be DSC=1 and DMC=0.
+</I>&gt;<i> Try playing with clk and force_dmc. Do you known the real XTAL of the
+</I>&gt;<i> card? Do you have the Linux driver for the card from Eurotech?
+</I>&gt;<i> I also believe, that the bit-time calculation of the driver should work,
+</I>&gt;<i> but it uses some strange defaults. Oliver?
+</I>&gt;<i>
+</I>&gt;<i> BTW: do you have the Linux driver for the card from Eurotech?
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090611/cdf79b09/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090611/cdf79b09/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000889.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+	<LI>Next message: <A HREF="000891.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#890">[ date ]</a>
+              <a href="thread.html#890">[ thread ]</a>
+              <a href="subject.html#890">[ subject ]</a>
+              <a href="author.html#890">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

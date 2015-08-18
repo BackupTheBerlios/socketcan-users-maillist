@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Bit rate configuration of PEAK USB devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bit%20rate%20configuration%20of%20PEAK%20USB%20devices&In-Reply-To=%3C4EC5321D.7030604%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002240.html">
+   <LINK REL="Next"  HREF="002229.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Bit rate configuration of PEAK USB devices</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bit%20rate%20configuration%20of%20PEAK%20USB%20devices&In-Reply-To=%3C4EC5321D.7030604%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Bit rate configuration of PEAK USB devices">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Nov 17 17:11:09 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002240.html">[Socketcan-users] Bit rate configuration of PEAK USB devices
+</A></li>
+        <LI>Next message: <A HREF="002229.html">[Socketcan-users] Fwd:  sja1000 BasicCAN mode
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2230">[ date ]</a>
+              <a href="thread.html#2230">[ thread ]</a>
+              <a href="subject.html#2230">[ subject ]</a>
+              <a href="author.html#2230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 17.11.2011 07:49, Heinz-J&#252;rgen Oertel wrote:
+
+&gt;<i> 
+</I>&gt;<i> On 15.11.2011 19:33, Oliver Hartkopp wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I forgot to mention that you can also use the PCAN ioctl() interface on the
+</I>&gt;&gt;<i> PEAK chardevices or their pcanlib ...
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Danke Oliver,
+</I>&gt;<i> 
+</I>&gt;<i> for now I decided to use something like
+</I>&gt;<i> 
+</I>&gt;<i> system(&quot;echo \&quot;i 0x4914 e\&quot; &gt; /dev/pcan0&quot;);
+</I>&gt;<i> 
+</I>&gt;<i> Unfortunately at the moment I have  no idea how to determine if I'm just talking to an Peak or an EMS interface  to select the method of setting the bit rate.
+</I>
+
+An idea is to write different udev rules due to the different USB Vendor IDs,
+that do the initialization in different manners.
+
+If you want to set the default bitrate for all PEAK devices, you can set the
+global default bitrate on the module commandline.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002240.html">[Socketcan-users] Bit rate configuration of PEAK USB devices
+</A></li>
+	<LI>Next message: <A HREF="002229.html">[Socketcan-users] Fwd:  sja1000 BasicCAN mode
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2230">[ date ]</a>
+              <a href="thread.html#2230">[ thread ]</a>
+              <a href="subject.html#2230">[ subject ]</a>
+              <a href="author.html#2230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.6.1331738229.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000779.html">
+   <LINK REL="Next"  HREF="000945.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.6.1331738229.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 16:17:01 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000779.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="000945.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#849">[ date ]</a>
+              <a href="thread.html#849">[ thread ]</a>
+              <a href="subject.html#849">[ subject ]</a>
+              <a href="author.html#849">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>the ATCANMINI_PELICAN driver and I've seen a lot of people using the
+pipcan driver for pilcan compatible cards. What would be the proper
+procedure (assuming I can just use the pipcan driver) to create the
+can device? Is it as simple as `modprobe pipcan`?
+
+I've tried that and I a kernel message saying &quot;pipcan invalid base
+address&quot;. Is there a way to specify the base address anywhere?
+
+Thanks!
+-Chris
+
+
+On Thu, May 21, 2009 at 11:08 AM, Sven Geggus
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lists at fuchsschwanzdomain.de</A>&gt; wrote:
+&gt;<i> Christopher Armenio &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">arsinio at gmail.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> When I insert the sja1000 module, I get no positive feedback that it
+</I>&gt;&gt;<i> actually finds my board. I'm assuming I need to set a base address
+</I>&gt;&gt;<i> somewhere, if so, how? Also, am I correct in assuming that once the SJA1000
+</I>&gt;&gt;<i> driver is loaded properly, the can device is created automatically?
+</I>&gt;<i>
+</I>&gt;<i> AFAIK there is no such thing as a generic driver for sja1000 based
+</I>&gt;<i> devices.
+</I>&gt;<i>
+</I>&gt;<i> As far as legacy devices are concerned I have already seen three
+</I>&gt;<i> different kinds of address-schemes for sja1000 register access:
+</I>&gt;<i> Memory-mapped, io-mapped and indexed io-mapped.
+</I>&gt;<i>
+</I>&gt;<i> In addition to this different interfaces tend to be different as far as the
+</I>&gt;<i> device reset is performed.
+</I>&gt;<i>
+</I>&gt;<i> Thus what you need to do is to write a small driver which wraps around the
+</I>&gt;<i> functions already provided by sja1000.ko
+</I>&gt;<i>
+</I>&gt;<i> pipcan.c might be the example code you are looking for.
+</I>&gt;<i>
+</I>&gt;<i> Regards
+</I>&gt;<i>
+</I>&gt;<i> Sven
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> This golden age of communication Means everyone talks at the same time
+</I>&gt;<i> (Lyrics of &quot;New Model Army&quot; song &quot;225&quot;)
+</I>&gt;<i>
+</I>&gt;<i> /me is <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giggls at ircnet</A>, <A HREF="http://sven.gegg.us/">http://sven.gegg.us/</A> on the Web
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000779.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="000945.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#849">[ date ]</a>
+              <a href="thread.html#849">[ thread ]</a>
+              <a href="subject.html#849">[ subject ]</a>
+              <a href="author.html#849">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

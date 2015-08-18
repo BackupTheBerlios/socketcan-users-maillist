@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] question : Simulator that work with VCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20question%20%3A%20Simulator%20that%20work%20with%20VCAN&In-Reply-To=%3C49D07659.4060506%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000731.html">
+   <LINK REL="Next"  HREF="000734.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] question : Simulator that work with VCAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20question%20%3A%20Simulator%20that%20work%20with%20VCAN&In-Reply-To=%3C49D07659.4060506%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] question : Simulator that work with VCAN">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Mon Mar 30 09:35:53 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000731.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+        <LI>Next message: <A HREF="000734.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#733">[ date ]</a>
+              <a href="thread.html#733">[ thread ]</a>
+              <a href="subject.html#733">[ subject ]</a>
+              <a href="author.html#733">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Bino Oetomo wrote:
+&gt;<i> Dear All ..
+</I>&gt;<i>
+</I>&gt;<i> I've no knowledge of CAN.
+</I>&gt;<i> I just read some documentation, and found that SocketCan have feature of 
+</I>&gt;<i> &quot;Virtual device&quot; that called &quot;vcan&quot;
+</I>&gt;<i>
+</I>&gt;<i> So .. Is there any application that keep sending some CAN data via a vcan ?
+</I>&gt;<i>   
+</I>
+Hello Bino,
+
+the vcan driver can create as much virtual CAN network devices as you like.
+
+It's something like the 'lo' loopback device you might know from the 
+Internet-Protocol world.
+
+I would suggest to read the appropriate section 6.4 from 
+linux/Documentation/networking/can.txt
+
+e.g. from the SVN repo:
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+
+
+-----8&lt;----- snip!
+
+  6.4 The virtual CAN driver (vcan)
+
+  Similar to the network loopback devices, vcan offers a virtual local
+  CAN interface. A full qualified address on CAN consists of
+
+  - a unique CAN Identifier (CAN ID)
+  - the CAN bus this CAN ID is transmitted on (e.g. can0)
+
+  so in common use cases more than one virtual CAN interface is needed.
+
+  The virtual CAN interfaces allow the transmission and reception of CAN
+  frames without real CAN controller hardware. Virtual CAN network
+  devices are usually named 'vcanX', like vcan0 vcan1 vcan2 ...
+  When compiled as a module the virtual CAN driver module is called vcan.ko
+
+  Since Linux Kernel version 2.6.24 the vcan driver supports the Kernel
+  netlink interface to create vcan network devices. The creation and
+  removal of vcan network devices can be managed with the ip(8) tool:
+
+  - Create a virtual CAN network interface:
+       ip link add type vcan
+
+  - Create a virtual CAN network interface with a specific name 'vcan42':
+       ip link add dev vcan42 type vcan
+
+  - Remove a (virtual CAN) network interface 'vcan42':
+       ip link del vcan42
+
+  The tool 'vcan' from the SocketCAN SVN repository on BerliOS is obsolete.
+
+  Virtual CAN network device creation in older Kernels:
+  In Linux Kernel versions &lt; 2.6.24 the vcan driver creates 4 vcan
+  netdevices at module load time by default. This value can be changed
+  with the module parameter 'numdev'. E.g. 'modprobe vcan numdev=8'
+
+
+-----8&lt;----- snip!
+
+Section 3.2 &quot;local loopback of sent frames&quot; might be also interesting 
+for you.
+
+All the CAN applications can run on 'real' CAN hardware (e.g. can0, 
+can1, can2, ...) or on virtual CAN entities (e.g. vcan0, vcan1, vcan2, ...)
+
+E.g. the stuff in 
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/</A> accepts 
+the CAN network device name as a commandline parameter.
+
+
+
+&gt;<i> What I'm thinking of is :
+</I>&gt;<i> 1. a Linux Based PC with Socket can
+</I>&gt;<i>   
+</I>
+Good approach ;-)
+
+&gt;<i> 2. This PC will have 2 or more VCAN interface
+</I>&gt;<i>   
+</I>
+Or more, if you like.
+
+&gt;<i> 3. All the VCAN is &quot;connected&quot;
+</I>&gt;<i>   
+</I>
+ip link add dev vcan0 type vcan
+ifconfig vcan0
+
+
+Here is an example for your /etc/int.d directory that creates vcans at system startup and sets them active:
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/etc/can_if">http://svn.berlios.de/svnroot/repos/socketcan/trunk/etc/can_if</A>
+
+
+
+&gt;<i> 4. an application keep sending CAN data via ... i.e : vcan0
+</I>&gt;<i>   
+</I>
+e.g. cansend vcan0 123#11223344
+
+&gt;<i> 5. I'll try to &quot;listen&quot; via vcan1 ... dump all the data to stdout
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+candump vcan0
+
+NOT 'vcan1' as you suggested !! There's no connection betwenn these 
+virtual CAN busses.
+
+If you like to write your own application, also take a look into Chapter 
+4 of:
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+
+And you can take ideas from test applications in
+
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/test/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/test/</A>
+
+as most of the stuff inside can-utils became to complex to be a simple 
+example.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000731.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+	<LI>Next message: <A HREF="000734.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#733">[ date ]</a>
+              <a href="thread.html#733">[ thread ]</a>
+              <a href="subject.html#733">[ subject ]</a>
+              <a href="author.html#733">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

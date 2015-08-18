@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending%20%28was%3A%0A%20Re%3A%20mcp2515%20frames%20with%20ID%20004%20and%20000%29&In-Reply-To=%3CAANLkTin1QgH3jkTHgbSictxFPPajeKN_ZZdgD3H_beMz%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001596.html">
+   <LINK REL="Next"  HREF="001599.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)</H1>
+    <B>Jargalan Nermunkh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending%20%28was%3A%0A%20Re%3A%20mcp2515%20frames%20with%20ID%20004%20and%20000%29&In-Reply-To=%3CAANLkTin1QgH3jkTHgbSictxFPPajeKN_ZZdgD3H_beMz%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)">jargalan.nermunkh at criticallink.com
+       </A><BR>
+    <I>Tue Oct 19 22:41:02 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001596.html">[Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)
+</A></li>
+        <LI>Next message: <A HREF="001599.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1598">[ date ]</a>
+              <a href="thread.html#1598">[ thread ]</a>
+              <a href="subject.html#1598">[ subject ]</a>
+              <a href="author.html#1598">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Oct 19, 2010 at 3:45 PM, Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;wrote:
+
+&gt;<i> On 10/19/2010 08:25 PM, Jargalan Nermunkh wrote:
+</I>&gt;<i> &gt;&gt;&gt; I connected a board to a lawicel CAN dongle and receiving on the board
+</I>&gt;<i> &gt;&gt;&gt; (sending from dongle) is fine but sending (with cangen) from the board
+</I>&gt;<i> to
+</I>&gt;<i> &gt;&gt;&gt; the dongle produces repeated frames.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; We're talking about sending on the mc251x? This is even a different
+</I>&gt;<i> &gt;&gt; problem.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Yes this is a different problem.
+</I>&gt;<i>
+</I>&gt;<i> Can you explain this problem a bit more?
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt; What do you mean? Are you using net-next-2.6/master with my series
+</I>&gt;<i> &gt;&gt; applied or 2.6.35.x?
+</I>&gt;<i>
+</I>&gt;<i> &gt; I am a bit new to this sorry about the confusion. I am using 2.6.36-rc4
+</I>&gt;<i> &gt; found here:
+</I>&gt;<i> &gt;
+</I>&gt;<i> <A HREF="http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite">http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite</A>
+</I>&gt;<i>
+</I>&gt;<i> Okay...got it, you're using the &quot;spi-rewrite&quot; driver from this branch.
+</I>&gt;<i> But which mcp251x driver are you using? The one in that tree is the
+</I>&gt;<i> 2.6.35 driver. Or have you applied my patches, merged my tree or even
+</I>&gt;<i> merged net-next-2.6?
+</I>&gt;<i>
+</I>&gt;<i> So describe your setup for the repeated frames while sending on the
+</I>&gt;<i> mcp251x as good as possible (used hardware, kernel+patches, driver,
+</I>&gt;<i> tools, command line to reproduce, etc...)
+</I>&gt;<i>
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Pengutronix e.K.                  | Marc Kleine-Budde           |
+</I>&gt;<i> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+</I>&gt;<i> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+</I>&gt;<i> Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+</I>&gt;<i>
+</I>&gt;<i>
+</I>I am using the 2.6.35 driver for the mcp251x (using the one in the
+&quot;spi-rewrite&quot; tree) with the 8 patches found here:
+<A HREF="http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.htmland">http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.htmland</A>
+fix for the 000 or 004 IDs.
+
+Kernel is from the &quot;spi-rewrite&quot; tree and the only change is to bring up the
+spi bus and running on an OMAP-L138 (
+<A HREF="http://www.mitydsp.com/products-services/cpu-engines/mitydsp-l138F/">http://www.mitydsp.com/products-services/cpu-engines/mitydsp-l138F/</A>).
+
+I am bringing up can0 with &quot;ip link set can0 up txqueuelen 1000 type can
+bitrate 1000000). I have recompiled the can-utils found in the Socket can
+SVN repo for the OMAP-L138. The repeated frames are produced when &quot;cangen
+-vv -g 0 -I 255 -L 1 -D i can0&quot;. The repeated frames can be seen on another
+board and when it is sent to a Lawicel CAN dongle.
+
+
+Thank You
+
+-- 
+Jargalan Nermunkh
+Critical Link, LLC
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/17c911b4/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/17c911b4/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001596.html">[Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)
+</A></li>
+	<LI>Next message: <A HREF="001599.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1598">[ date ]</a>
+              <a href="thread.html#1598">[ thread ]</a>
+              <a href="subject.html#1598">[ subject ]</a>
+              <a href="author.html#1598">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

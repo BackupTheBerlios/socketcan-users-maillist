@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%0A%20Dual%09Channel%20CAN%20PC104%20Module.&In-Reply-To=%3C4A37BE0F.3050802%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000939.html">
+   <LINK REL="Next"  HREF="000942.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Support%20needed%20for%20Eurotech%20COM1273%0A%20Dual%09Channel%20CAN%20PC104%20Module.&In-Reply-To=%3C4A37BE0F.3050802%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Jun 16 17:45:19 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000939.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+</A></li>
+        <LI>Next message: <A HREF="000942.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#941">[ date ]</a>
+              <a href="thread.html#941">[ thread ]</a>
+              <a href="subject.html#941">[ subject ]</a>
+              <a href="author.html#941">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>OT: Sorry for double posting. My UMTS mobile ran out of energy ...
+
+Please try sja1000-iomux with the given parameters.
+
+The 3rd register looks like a reset-register that is probably not needed for a
+first test.
+
+Regards,
+Oliver
+
+Oliver Hartkopp wrote:
+&gt;<i> khurram gulzar wrote:
+</I>&gt;&gt;<i> It probe but only the first can at adress 0x300 but says no module found
+</I>&gt;&gt;<i> on 0x304 i double check the address but it is set to 0x304 and in ioport
+</I>&gt;&gt;<i> its not accessed via any other hardware.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> insmod sja1000-io.ko base=0x300,0x304 irq=10,11
+</I>&gt;<i> 
+</I>&gt;<i> The SJA1000 needs a memory register space of 0x20 or 0x100 bytes.
+</I>&gt;<i> 
+</I>&gt;<i> So 0x04 or 0x08 bytes are definitely too small for that.
+</I>&gt;<i> 
+</I>&gt;<i> There are hardware designs that use multiplexed register access to reduce the
+</I>&gt;<i> needed address space to 2 or 4 bytes per chip.
+</I>&gt;<i> 
+</I>&gt;<i> As you can see on page 19 of the given documentation in
+</I>&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="http://www.eurotech.fi/products/manuals/COM-1273_manual_10.pdf">http://www.eurotech.fi/products/manuals/COM-1273_manual_10.pdf</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> the register access to the controllers are handled via 3 registers!
+</I>&gt;<i> 
+</I>&gt;<i> You would need a modified version of sja1000-iomux.ko then that can cope with
+</I>&gt;<i> the multiplexed register access given in the Eurotech spec.
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000939.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+</A></li>
+	<LI>Next message: <A HREF="000942.html">[Socketcan-users] Support needed for Eurotech COM1273 Dual	Channel CAN PC104 Module.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#941">[ date ]</a>
+              <a href="thread.html#941">[ thread ]</a>
+              <a href="subject.html#941">[ subject ]</a>
+              <a href="author.html#941">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

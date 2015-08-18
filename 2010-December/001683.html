@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 1/2] can/gw: Routed messages need valid	skb-&gt;sk
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%201/2%5D%20can/gw%3A%20Routed%20messages%20need%20valid%0A%09skb-%3Esk&In-Reply-To=%3C1291640761-14374-1-git-send-email-sojkam1%40fel.cvut.cz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001682.html">
+   <LINK REL="Next"  HREF="001685.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 1/2] can/gw: Routed messages need valid	skb-&gt;sk</H1>
+    <B>Michal Sojka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%201/2%5D%20can/gw%3A%20Routed%20messages%20need%20valid%0A%09skb-%3Esk&In-Reply-To=%3C1291640761-14374-1-git-send-email-sojkam1%40fel.cvut.cz%3E"
+       TITLE="[Socketcan-users] [PATCH 1/2] can/gw: Routed messages need valid	skb-&gt;sk">sojkam1 at fel.cvut.cz
+       </A><BR>
+    <I>Mon Dec  6 14:06:00 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001682.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+        <LI>Next message: <A HREF="001685.html">[Socketcan-users] [PATCH 1/2] can/gw: Routed messages need	valid skb-&gt;sk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1683">[ date ]</a>
+              <a href="thread.html#1683">[ thread ]</a>
+              <a href="subject.html#1683">[ subject ]</a>
+              <a href="author.html#1683">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>skb-&gt;sk is used in dev_pick_tx() which is called from dev_queue_xmit(). If
+sk points to an arbitrary magic value, dev_pick_tx() returns a wrong value,
+which can lead to various memory corruption bugs.
+
+In commit a4ee3ce3293dc931fab19beb472a8bde1295aebe dev_pick_tx() was
+changed  to look the new field in socket called sk_tx_queue_mapping.
+---
+ net/can/gw.c |   11 ++++++++---
+ 1 files changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/net/can/gw.c b/net/can/gw.c
+index 3e9fd3e..d21b678 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -58,6 +58,7 @@
+ #include &lt;socketcan/can/gw.h&gt;
+ #include &lt;net/rtnetlink.h&gt;
+ #include &lt;net/net_namespace.h&gt;
++#include &lt;net/sock.h&gt;
+ 
+ #define CAN_GW_VERSION &quot;20101205&quot;
+ static __initdata const char banner[] =
+@@ -73,7 +74,11 @@ static struct notifier_block notifier;
+ 
+ static struct kmem_cache *cgw_cache __read_mostly;
+ 
+-#define CGW_SK_MAGIC ((void *)(&amp;notifier))
++static struct sock gw_dummy_sk = {
++#if LINUX_VERSION_CODE &gt;= KERNEL_VERSION(2,6,33)
++	.sk_tx_queue_mapping = -1,
++#endif
++};
+ 
+ /* structure that contains the (on-the-fly) CAN frame modifications */
+ struct cf_mod {
+@@ -343,7 +348,7 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 	int modidx = 0;
+ 
+ 	/* do not handle already routed frames */
+-	if (skb-&gt;sk == CGW_SK_MAGIC)
++	if (skb-&gt;sk == &amp;gw_dummy_sk)
+ 		return;
+ 
+ 	if (!(gwj-&gt;dst.dev-&gt;flags &amp; IFF_UP)) {
+@@ -368,7 +373,7 @@ static void can_can_gw_rcv(struct sk_buff *skb, void *data)
+ 	}
+ 
+ 	/* mark routed frames with a 'special' sk value */
+-	nskb-&gt;sk = CGW_SK_MAGIC;
++	nskb-&gt;sk = &amp;gw_dummy_sk;
+ 	nskb-&gt;dev = gwj-&gt;dst.dev;
+ 
+ 	/* pointer to modifiable CAN frame */
+-- 
+1.7.2.3
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001682.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+	<LI>Next message: <A HREF="001685.html">[Socketcan-users] [PATCH 1/2] can/gw: Routed messages need	valid skb-&gt;sk
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1683">[ date ]</a>
+              <a href="thread.html#1683">[ thread ]</a>
+              <a href="subject.html#1683">[ subject ]</a>
+              <a href="author.html#1683">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

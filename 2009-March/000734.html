@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] question : Simulator that work with VCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20question%20%3A%20Simulator%20that%20work%20with%20VCAN&In-Reply-To=%3C49D08307.8080009%40indoakses-online.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000733.html">
+   <LINK REL="Next"  HREF="000735.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] question : Simulator that work with VCAN</H1>
+    <B>Bino Oetomo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20question%20%3A%20Simulator%20that%20work%20with%20VCAN&In-Reply-To=%3C49D08307.8080009%40indoakses-online.com%3E"
+       TITLE="[Socketcan-users] question : Simulator that work with VCAN">bino at indoakses-online.com
+       </A><BR>
+    <I>Mon Mar 30 10:29:59 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000733.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+        <LI>Next message: <A HREF="000735.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#734">[ date ]</a>
+              <a href="thread.html#734">[ thread ]</a>
+              <a href="subject.html#734">[ subject ]</a>
+              <a href="author.html#734">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear All
+
+c/q Oliver ..
+
+Thankyou for your enlightment
+
+Oliver Hartkopp wrote:
+&gt;<i>
+</I>&gt;<i> e.g. from the SVN repo:
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A> 
+</I>&gt;<i>
+</I>&gt;<i> Section 3.2 &quot;local loopback of sent frames&quot; might be also interesting 
+</I>&gt;<i> for you.
+</I>&gt;<i>
+</I>&gt;<i> All the CAN applications can run on 'real' CAN hardware (e.g. can0, 
+</I>&gt;<i> can1, can2, ...) or on virtual CAN entities (e.g. vcan0, vcan1, vcan2, 
+</I>&gt;<i> ...)
+</I>&gt;<i>
+</I>&gt;<i> E.g. the stuff in 
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/</A> accepts 
+</I>&gt;<i> the CAN network device name as a commandline parameter.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+&gt;<i> ip link add dev vcan0 type vcan
+</I>&gt;<i> ifconfig vcan0
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Yes .. it's 100% work ..
+Just I need to update my iproute2, since default iproute2 of ubuntu is 
+not newest
+
+
+
+&gt;<i>
+</I>&gt;<i> e.g. cansend vcan0 123#11223344
+</I>&gt;<i>
+</I>&gt;&gt;<i> 5. I'll try to &quot;listen&quot; via vcan1 ... dump all the data to stdout
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i>
+</I>&gt;<i> candump vcan0
+</I>I just found .. that using cangen will give me what I need to &quot;first 
+love contact&quot; ..
+
+---snip----
+#cangen -evv vcan0
+
+
+  vcan0  10A42016  [3] C8 08 E9
+  vcan0  18B59EFF  [8] 4D 02 E2 52 B5 44 E3 0C
+  vcan0   9B0E9A8  [8] 07 D9 C5 4D 5E 94 55 0D
+  vcan0   72417E1  [8] 33 13 0B 33 A6 2E F3 2E
+  vcan0  12766A55  [7] 3B 26 C1 4C 1D EB BB
+
+---snip---
+
+and with &quot;candump vcan0&quot; ... I got exactly the same output on stdout.
+hmm nice ...
+
+So ... my next question as a dumb ...
+1. Will I got the same candump output format when I replace vcan with 
+&quot;real&quot; CAN device like SJA100 based device or Lawicel's canusb?
+Note : Currently I have no real CAN device onhand.
+
+2. Is there any document that explain how to make interpertation of this 
+output, i.e :
+- how to got PGN/SPN id from that output ?
+- how to got PGN/SPN data value(s) from that output ?
+
+Sincerely
+-bino-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000733.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+	<LI>Next message: <A HREF="000735.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#734">[ date ]</a>
+              <a href="thread.html#734">[ thread ]</a>
+              <a href="subject.html#734">[ subject ]</a>
+              <a href="author.html#734">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

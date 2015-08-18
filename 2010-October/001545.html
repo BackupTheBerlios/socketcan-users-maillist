@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Loosing frames on MPC5200B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3C878w2233mh.fsf%40steelpick.2x.cz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001541.html">
+   <LINK REL="Next"  HREF="001549.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Loosing frames on MPC5200B</H1>
+    <B>Michal Sojka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Loosing%20frames%20on%20MPC5200B&In-Reply-To=%3C878w2233mh.fsf%40steelpick.2x.cz%3E"
+       TITLE="[Socketcan-users] Loosing frames on MPC5200B">sojkam1 at fel.cvut.cz
+       </A><BR>
+    <I>Wed Oct 13 10:20:54 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001541.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+        <LI>Next message: <A HREF="001549.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1545">[ date ]</a>
+              <a href="thread.html#1545">[ thread ]</a>
+              <a href="subject.html#1545">[ subject ]</a>
+              <a href="author.html#1545">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, 12 Oct 2010, Wolfgang Grandegger wrote:
+&gt;<i> Yes, packet losses can also happen, when the message buffers are not
+</I>&gt;<i> read out fast enough. But then you should see overrun errors, which you
+</I>&gt;<i> should see with &quot;candump any,0:0,#FFFFFFFF&quot;. See also:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.35.7/drivers/net/can/mscan/mscan.c#L353">http://lxr.linux.no/#linux+v2.6.35.7/drivers/net/can/mscan/mscan.c#L353</A>
+</I>
+Right.
+
+&gt;<i> Also &quot;# ip -d -s link show can0&quot; should list them.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; We were able to avoid losing messages by reading them in hard-irq
+</I>&gt;<i> &gt; context (with lincan driver), but I'm not sure whether this will help if
+</I>&gt;<i> &gt; you use CF (we do not use it).
+</I>&gt;<i> 
+</I>&gt;<i> Well, if the CF card driver is causing huge latencies, it should be
+</I>&gt;<i> fixed. It should not be too difficult to spot the latency evil with ftrace.
+</I>
+I've heard that one company that experienced these problems tried to
+solve it with Thomas Gleixner and he said that it is impossible to fix.
+But that's only what I've heard, I do not know any details.
+
+-Michal
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001541.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+	<LI>Next message: <A HREF="001549.html">[Socketcan-users] Loosing frames on MPC5200B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1545">[ date ]</a>
+              <a href="thread.html#1545">[ thread ]</a>
+              <a href="subject.html#1545">[ subject ]</a>
+              <a href="author.html#1545">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

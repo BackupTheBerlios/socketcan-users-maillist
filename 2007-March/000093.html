@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Memory leak with raw socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F45C0E.3020904%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000091.html">
+   <LINK REL="Next"  HREF="000094.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Memory leak with raw socket</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F45C0E.3020904%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Memory leak with raw socket">wg at grandegger.com
+       </A><BR>
+    <I>Sun Mar 11 20:44:14 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000091.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+        <LI>Next message: <A HREF="000094.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#93">[ date ]</a>
+              <a href="thread.html#93">[ thread ]</a>
+              <a href="subject.html#93">[ subject ]</a>
+              <a href="author.html#93">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Oliver,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;<i> Regarding Roberts comment, that Kernel 2.4 is dead: As we are using 
+</I>&gt;&gt;&gt;<i> an old PPC405 with 4 SJA1000-CAN-busses (at 2.4.20) for us it's still 
+</I>&gt;&gt;&gt;<i> important to maintain the Kernel 2.4 path. Currently i'm very happy 
+</I>&gt;&gt;&gt;<i> that both Kernel implementations are on the same level, so that you 
+</I>&gt;&gt;&gt;<i> can use the socketcan application either on Kernel 2.4 and Kernel 2.6.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hm, but the API is different, isn't it?
+</I>&gt;<i> 
+</I>&gt;<i> No, it's completely the same API in the trunk/kernel/2.4 .
+</I>&gt;<i> 
+</I>&gt;<i> As we're still using the Kernel 2.4 in our PPC405 box at Volkswagen, we 
+</I>&gt;<i> backported all the current changes and developments from the Kernel 2.6 
+</I>&gt;<i> path. This is also important, if you'd like to use the test-apps in 
+</I>&gt;<i> trunk/test and the stuff under trunk/can-utils. These tools are using 
+</I>&gt;<i> the Kernel 2.6 includes - but the content of the includes is just the 
+</I>&gt;<i> same as for the Kernel 2.4 path. The binaries you compile in 
+</I>&gt;<i> trunk/can-utils work on kernel 2.4 &amp; 2.6 either. :-)
+</I>
+Ah, that's great. I looked for the implementation of the SIOC* IOCTL 
+requests, but they are not yet implemented for 2.6 either.
+
+BTW, what is SIOCGCANERRORCONFIG intended for? Did we already discuss 
+it? Likely I have missed something.
+
+Thanks,
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000091.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+	<LI>Next message: <A HREF="000094.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#93">[ date ]</a>
+              <a href="thread.html#93">[ thread ]</a>
+              <a href="subject.html#93">[ subject ]</a>
+              <a href="author.html#93">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Usage of Kvaser Leaf Light HS USB
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Usage%20of%20Kvaser%20Leaf%20Light%20HS%20USB&In-Reply-To=%3C5468b7f30804021018g7e7433a7ka8fee4e3362c17fd%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000311.html">
+   <LINK REL="Next"  HREF="000313.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Usage of Kvaser Leaf Light HS USB</H1>
+    <B>Paolo Doz</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Usage%20of%20Kvaser%20Leaf%20Light%20HS%20USB&In-Reply-To=%3C5468b7f30804021018g7e7433a7ka8fee4e3362c17fd%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Usage of Kvaser Leaf Light HS USB">paolo.doz at gmail.com
+       </A><BR>
+    <I>Wed Apr  2 19:18:48 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000311.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+        <LI>Next message: <A HREF="000313.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#312">[ date ]</a>
+              <a href="thread.html#312">[ thread ]</a>
+              <a href="subject.html#312">[ subject ]</a>
+              <a href="author.html#312">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok, you confirmed my ideas, there is a lot of work to do.
+If I want to modify the existing driver, which files into the
+socketcan project can I take as reference?
+
+Thanks for the help
+Paolo
+
+On Wed, Apr 2, 2008 at 5:42 PM, Oliver Hartkopp
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oliver.hartkopp at volkswagen.de</A>&gt; wrote:
+&gt;<i> Paolo Doz wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; I'm trying to use the Kvaser Leaf Light HS USB with socketcan.
+</I>&gt;<i> &gt; I've downloaded the linux driver 4.72Beta from Kvaser website, and
+</I>&gt;<i> &gt; installed it. Pluging the device and typing the following command ls
+</I>&gt;<i> &gt; -l /dev/leaf* I see that there is the corresponding node in the /dev
+</I>&gt;<i> &gt; directory (leaf0).
+</I>&gt;<i> &gt; Also in /proc dir there is the leaf file with this content :
+</I>&gt;<i> &gt;       total channels 1
+</I>&gt;<i> &gt;       minor numbers 0
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; So I guess that the device has been correctly recognized.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>  Yes, that's right.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt; Now my question: is the previous driver compatible with socketcan, or
+</I>&gt;<i> &gt; are some modifications needed?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>  The SocketCAN approach uses the Linux networking subsystem to work with CAN
+</I>&gt;<i> as any other networking does. Therefore the device driver model is a network
+</I>&gt;<i> device driver (like your ethernet card) and NOT a character device (like e.g
+</I>&gt;<i> a serial adaptor or unfortunately the current Kvaser driver).
+</I>&gt;<i>
+</I>&gt;<i>  Due to the netdevice driver model the CAN interface is always similar to
+</I>&gt;<i> the application, which allows to run the same application on different CAN
+</I>&gt;<i> hardware. Of course you also won't be happy to reprogramm your web-browser
+</I>&gt;<i> when you change your Ethernet card in your system ;-)
+</I>&gt;<i>
+</I>&gt;<i>  Programming a netdevice driver is in most cases easier than handling all
+</I>&gt;<i> the FIFO stuff and different APIs yourself when programming a character
+</I>&gt;<i> device. Although we need to wait for the Kvaser driver supporting the
+</I>&gt;<i> netdevice driver modell ... as it is open source you are heavily invited to
+</I>&gt;<i> modify it :-)
+</I>&gt;<i>  Or just give the developers a hint about the coming CAN subsystem in the
+</I>&gt;<i> Linux 2.6.25 kernel.
+</I>&gt;<i>
+</I>&gt;<i>  Best regards,
+</I>&gt;<i>  Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000311.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+	<LI>Next message: <A HREF="000313.html">[Socketcan-users] Usage of Kvaser Leaf Light HS USB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#312">[ date ]</a>
+              <a href="thread.html#312">[ thread ]</a>
+              <a href="subject.html#312">[ subject ]</a>
+              <a href="author.html#312">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

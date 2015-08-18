@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] No can0 interface
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20No%20can0%20interface&In-Reply-To=%3C4D3B3651.9050906%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001746.html">
+   <LINK REL="Next"  HREF="001751.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] No can0 interface</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20No%20can0%20interface&In-Reply-To=%3C4D3B3651.9050906%40grandegger.com%3E"
+       TITLE="[Socketcan-users] No can0 interface">wg at grandegger.com
+       </A><BR>
+    <I>Sat Jan 22 20:56:01 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001746.html">[Socketcan-users] No can0 interface
+</A></li>
+        <LI>Next message: <A HREF="001751.html">[Socketcan-users] problem with mcp2515 on Kontron nanoETXexpress	board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1747">[ date ]</a>
+              <a href="thread.html#1747">[ thread ]</a>
+              <a href="subject.html#1747">[ subject ]</a>
+              <a href="author.html#1747">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 01/22/2011 08:34 PM, vislavie wrote:
+&gt;<i> Hi All!
+</I>&gt;<i> 
+</I>&gt;<i> My first time that I work with CAN. The corresponding modules are
+</I>&gt;<i> enabled in the kernel.
+</I>&gt;<i> CAN0 device is not created. I find no indication in the log.
+</I>&gt;<i> 
+</I>&gt;<i> Does anyone have an idea.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks in advance
+</I>&gt;<i> Jochen
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> system arm kirkwood ubuntu 9.04
+</I>&gt;<i> kernel 2.6.35.7
+</I>&gt;<i> 
+</I>&gt;<i> # modprobe can
+</I>&gt;<i> # modprobe can_dev
+</I>&gt;<i> # modprobe can_raw
+</I>&gt;<i> # modprobe mcp251x
+</I>&gt;<i> # lsmod
+</I>&gt;<i> Module                  Size  Used by
+</I>&gt;<i> mcp251x                 8936  0
+</I>&gt;<i> can_raw                 5631  0
+</I>&gt;<i> can_dev                 7512  1 mcp251x
+</I>&gt;<i> can                    21670  1 can_raw
+</I>&gt;<i> ipv6                  269969  16
+</I>&gt;<i> lm75                    3494  0
+</I>&gt;<i> hwmon                   1547  1 lm75
+</I>&gt;<i> sg                     17106  0
+</I>&gt;<i> hmac                    2559  0
+</I>&gt;<i> sha1_generic            1861  0
+</I>&gt;<i> mv_cesa                 9494  0
+</I>&gt;<i> 
+</I>&gt;<i> #dmesg | fgrep -i spi
+</I>&gt;<i> [    0.243226] bus: 'spi': registered
+</I>&gt;<i> [    0.243236] device class 'spi_master': registering
+</I>&gt;<i> [    0.245452] Registering platform device 'orion_spi.0'. Parent at platform
+</I>&gt;<i> [    0.245464] device: 'orion_spi.0': device_add
+</I>&gt;<i> [    0.245482] bus: 'platform': add device orion_spi.0
+</I>&gt;<i> [    0.641819] bus: 'platform': add driver spi_gpio
+</I>&gt;<i> [    0.641949] bus: 'platform': remove driver spi_gpio
+</I>&gt;<i> [    0.642059] driver: 'spi_gpio': driver_release
+</I>&gt;<i> [    0.642143] bus: 'platform': add driver orion_spi
+</I>&gt;<i> [    0.642171] bus: 'platform': driver_probe_device: matched device
+</I>&gt;<i> orion_spi.0 with driver orion_spi
+</I>&gt;<i> [    0.642186] bus: 'platform': really_probe: probing driver orion_spi
+</I>&gt;<i> with device orion_spi.0
+</I>&gt;<i> [    0.642216] device: 'spi0': device_add
+</I>&gt;<i> [    0.642353] orion_spi orion_spi.0: registered master spi0
+</I>&gt;<i> [    0.642369] orion_spi orion_spi.0: cs7 &gt;= max 1
+</I>&gt;<i> [    0.646922] driver: 'orion_spi.0': driver_bound: bound to device
+</I>&gt;<i> 'orion_spi'
+</I>&gt;<i> [    0.646934] bus: 'platform': really_probe: bound device orion_spi.0
+</I>&gt;<i> to driver orion_spi
+</I>&gt;<i> [    0.647063] device class 'spidev': registering
+</I>&gt;<i> [    0.647185] bus: 'spi': add driver spidev
+</I>&gt;<i> [   60.261929] bus: 'spi': add driver mcp251x
+</I>&gt;<i> 
+</I>&gt;<i> #dmesg | fgrep -i can
+</I>&gt;<i> [   44.168787] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;<i> [   46.963810] CAN device driver interface
+</I>&gt;<i> [   51.985386] can: raw protocol (rev 20090105)
+</I>
+Maybe the platform code for the MCP251x for your board is missing. Here
+is an example for the cpuimx51sd board:
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.37/arch/arm/mach-mx5/board-cpuimx51sd.c#L234">http://lxr.linux.no/#linux+v2.6.37/arch/arm/mach-mx5/board-cpuimx51sd.c#L234</A>
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001746.html">[Socketcan-users] No can0 interface
+</A></li>
+	<LI>Next message: <A HREF="001751.html">[Socketcan-users] problem with mcp2515 on Kontron nanoETXexpress	board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1747">[ date ]</a>
+              <a href="thread.html#1747">[ thread ]</a>
+              <a href="subject.html#1747">[ subject ]</a>
+              <a href="author.html#1747">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

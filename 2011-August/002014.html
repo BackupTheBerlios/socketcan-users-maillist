@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C32185620.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002013.html">
+   <LINK REL="Next"  HREF="002015.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>uprinz</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C32185620.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">uprinz2 at netscape.net
+       </A><BR>
+    <I>Wed Aug  3 13:56:33 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002013.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="002015.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2014">[ date ]</a>
+              <a href="thread.html#2014">[ thread ]</a>
+              <a href="subject.html#2014">[ subject ]</a>
+              <a href="author.html#2014">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi Wolfgang,
+
+I know that the behavior is normal and under normal conditions everything is
+working well.
+
+But I need to have the virtual slave accepted by the bus even the bus is
+passive. Or even the physical bus is passive the master should see it active
+if the slave is online.
+
+The thing is, that the master has some internal sensors that should be
+treated like an external slave.
+But reading all this, I believe that it would be fare more easy to rewrite
+master to be master+slave and give the sensors to him....
+
+Nevertheless I thought about setting master and slave to vcan0 and establish
+sort of routing vcan0&lt;-&gt;can0
+
+Is that an option, and if, how to do that? I googled for something like ip
+route add vcan...
+No usable hits though.
+
+-----
+Best regards
+Ulrich
+-- 
+View this message in context: <A HREF="http://old.nabble.com/On-Linux-two-applications-use-the-same-bus--tp30728796p32185620.html">http://old.nabble.com/On-Linux-two-applications-use-the-same-bus--tp30728796p32185620.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002013.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="002015.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2014">[ date ]</a>
+              <a href="thread.html#2014">[ thread ]</a>
+              <a href="subject.html#2014">[ subject ]</a>
+              <a href="author.html#2014">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

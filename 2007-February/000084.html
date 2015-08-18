@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mainline inclusion?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mainline%20inclusion%3F&In-Reply-To=%3C45D9F48B.2080401%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000083.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mainline inclusion?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mainline%20inclusion%3F&In-Reply-To=%3C45D9F48B.2080401%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] mainline inclusion?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Feb 19 20:03:39 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000083.html">[Socketcan-users] mainline inclusion?
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#84">[ date ]</a>
+              <a href="thread.html#84">[ thread ]</a>
+              <a href="subject.html#84">[ subject ]</a>
+              <a href="author.html#84">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Teemu Ikonen wrote:
+&gt;<i> On 2/18/07, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> I hope, this information has helped you so far. If it's very urgent for
+</I>&gt;&gt;<i> your project, i can sent you the my last netdevice patch for the vanilla
+</I>&gt;&gt;<i> PEAK-driver v5.5. Have you already looked at the CANOpen Implementation
+</I>&gt;&gt;<i> from Edouard Tisserant at <A HREF="http://canfestival.sf.net">http://canfestival.sf.net</A> ? Edouard knows the
+</I>&gt;&gt;<i> socketcan project from our meeting at PEAK-systems. Maybe you can
+</I>&gt;&gt;<i> contact him to share/synchronize the work that needs to be done to make
+</I>&gt;&gt;<i> CANOpen work with socketcan.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Thanks for your very informative mail.
+</I>&gt;<i>
+</I>&gt;<i> I would gladly receive the socketcan patch for the PEAK driver, as I'm
+</I>&gt;<i> finishing my CANopen library, and would like to make it compatible
+</I>&gt;<i> with the api.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>I'll send the patched PEAK-driver in a separate mail. To compile the 
+patched driver:
+
+1. tar xvzf peak-linux-driver-5.5-netdev-2007-01-09-0915.tar.gz
+2. cd peak-linux-driver-5.5-netdev/driver
+3. make NET=NETDEV_SUPPORT (*1)
+4. insmod ./pcan.ko
+5. ./pcan_make_devices 4 (*2)
+
+Please look into /var/log/messages for the PEAK-drivers messages. In 
+/proc/pcan you can see your different char-devices and the associated 
+netdevice names like 'can0'. In /proc/pcan you can also see the bitrate 
+register values now.
+
+*1 = if you're working on a notebook you may add things like ISA=NO 
+PCI=NO to omit the compilation of unused HW-types ...
+
+*2 = This creates the chardevice inodes under /dev/pcanXX (if you did 
+not do this so far). If you want to change the bitrates, you can do this 
+via the described technique from the PEAK documentation, e.g.:
+
+echo &quot;i 0x4914 e&quot; &gt; /dev/pcan32
+
+With &quot; ifconfig can0 up&quot; the interface get's online. If you have a CAN 
+source attached you may see the incrementing packet-counters in /proc/pcan .
+
+Assuming you have already compiled the socketcan kernel modules and 
+loaded at least can.ko and can-raw.ko you may say  things like &quot;candump 
+can0&quot; or &quot;candump -ta any&quot; to see the incoming frames. In /proc/net/can/ 
+you may also view the 'stats' file for statistic purposes.
+
+Especially for development i can recommend to use the virtual CAN bus 
+driver (vcan.ko). As you can use different applications, candumps, etc. 
+at the same time on one (virtual) CAN bus you have an excellent 
+development environment here.
+
+&gt;<i> I know about canfestival, but I wanted something simpler, non-threaded
+</I>&gt;<i> and non-realtime. What I have right now does most of what a master in
+</I>&gt;<i> a small instrumentation network on a Linux desktop / laptop PC needs.
+</I>&gt;<i>   
+</I>
+Hm - this sounds interesting. I'm not very familiar with CANopen but 
+what i learned from Edouard is, that it may be an interesting approach 
+to realize a CANopen protocol inside the kernel inside the protocol 
+family CAN. The sockaddr_can address union had to be extended by the 
+logical CANopen DeviceID. The addressing tables could be set via 
+sockopts then ... just an idea.
+
+&gt;<i> I will also try to clean up the code and make it public soon. Any good
+</I>&gt;<i> ideas for free project hosting?
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>Using the berlios server for the socketcan project was an idea of Jan 
+Kizka (i think). I don't have any additional experiences. Berlios just 
+works fine for me, but the OpenFacts Wiki is not that fancy thing in my 
+opinion.
+
+Best regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000083.html">[Socketcan-users] mainline inclusion?
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#84">[ date ]</a>
+              <a href="thread.html#84">[ thread ]</a>
+              <a href="subject.html#84">[ subject ]</a>
+              <a href="author.html#84">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

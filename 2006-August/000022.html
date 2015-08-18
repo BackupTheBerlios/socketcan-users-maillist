@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EC939E.6070405%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000021.html">
+   <LINK REL="Next"  HREF="000027.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EC939E.6070405%40web.de%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">jan.kiszka at web.de
+       </A><BR>
+    <I>Wed Aug 23 19:42:54 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000021.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000027.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Jan Kiszka wrote:
+</I>&gt;&gt;<i> Hartkopp, Oliver (K-GEFE/E) wrote:
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at denx.de</A> wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> while playing with RAW CAN sockets of LLCF (socketcan for Linux 2.4) I
+</I>&gt;&gt;&gt;&gt;<i> realized, that TX messages are automatically looped back to the local
+</I>&gt;&gt;&gt;&gt;<i> interface. What is the intention of this feature? Can this feature be
+</I>&gt;&gt;&gt;&gt;<i> switched off?
+</I>&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> this is indeed a wanted feature, as you may have more than one
+</I>&gt;&gt;&gt;<i> application
+</I>&gt;&gt;&gt;<i> working on the same CAN-netdevice. Netdevices only send or receive
+</I>&gt;&gt;&gt;<i> frames -
+</I>&gt;&gt;&gt;<i> they do not implement any loopback funktionality.
+</I>&gt;&gt;&gt;<i> But this functionality is important implementing a broadcast bus like
+</I>&gt;&gt;&gt;<i> the
+</I>&gt;&gt;&gt;<i> CAN-bus.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Mmh, that's not that obvious to me (did I miss the related discussion on
+</I>&gt;&gt;<i> this?). We are not designing a new IPC mechanism here, but a networking
+</I>&gt;&gt;<i> API.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm not disputing that this can be a useful feature for certain
+</I>&gt;&gt;<i> applications, but I'm convinced it should be only optional and off by
+</I>&gt;&gt;<i> default. That would follow the rule of least surprise when comparing CAN
+</I>&gt;&gt;<i> with other networking devices. The overhead when it's unused is another
+</I>&gt;&gt;<i> counterargument.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This feature is not included in the RT-variant so far, and I can only
+</I>&gt;&gt;<i> imagine that it would make sense to add it if
+</I>&gt;&gt;<i>  A) people ask for it and
+</I>&gt;&gt;<i>  B) it's user-controllable.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, I already put it on my TODO list. I would made it an option
+</I>&gt;<i> configurable via kernel configuration parameter. I also don't like to
+</I>&gt;<i> have it build in by default.
+</I>&gt;<i> 
+</I>
+My feeling is that the involved code size increment can be fairly small,
+rather the lengthened code path on transmission (+it's locking
+dependencies) worries me when it's not at least runtime-configurable.
+
+However, point A) still stands. Or could someone explain the broad
+usefulness to me? Which high-level CAN protocols would benefit?
+
+Jan
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20060823/8e1c1dd7/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20060823/8e1c1dd7/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000021.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000027.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

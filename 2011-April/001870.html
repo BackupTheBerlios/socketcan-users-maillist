@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem with the kernelmodule can-isotp
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%20the%20kernelmodule%20can-isotp&In-Reply-To=%3C4DBBFBEA.8000303%40extendedmind.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001869.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem with the kernelmodule can-isotp</H1>
+    <B>AD</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%20the%20kernelmodule%20can-isotp&In-Reply-To=%3C4DBBFBEA.8000303%40extendedmind.de%3E"
+       TITLE="[Socketcan-users] problem with the kernelmodule can-isotp">uni at extendedmind.de
+       </A><BR>
+    <I>Sat Apr 30 14:09:14 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001869.html">[Socketcan-users] Interrupts for canX interface don't want to increase... again
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1870">[ date ]</a>
+              <a href="thread.html#1870">[ thread ]</a>
+              <a href="subject.html#1870">[ subject ]</a>
+              <a href="author.html#1870">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I hope that someone can give me a hint for the following problem.
+
+That's what I did:
+
+checkout socketcan from svn (revision 1240)
+
+in the folder socketcan/kernel/2.6:
+
+make
+make modules_install
+
+modprobe can-isotp
+
+This results in the following error:
+FATAL: Error inserting can_isotp 
+/lib/modules/2.6.32-bpo.5-686/extra/can-isotp.ko): Unknown symbol in 
+module, or unknown parameter (see dmesg)
+
+dmesg | tail output:
+
+[41334.983203] can: controller area network core (rev 20090105 abi 8)
+[41334.984140] NET: Registered protocol family 29
+[41334.985885] can_isotp: disagrees about version of symbol 
+can_proto_register
+[41334.985891] can_isotp: Unknown symbol can_proto_register
+[41334.986323] can_isotp: Unknown symbol can_ioctl
+[41334.987262] can_isotp: disagrees about version of symbol 
+can_proto_unregister
+[41334.987265] can_isotp: Unknown symbol can_proto_unregister
+
+lsmod | grep can results in this output
+can                    17795  0
+
+this does also work:
+modprobe can-raw
+modprobe can-bcm
+
+lsmod | grep can results in this output
+
+can_bcm                 9527  0
+can_raw                 4235  0
+can                    17795  2 can_bcm,can_raw
+
+So any ideas how the problem can be fixed?
+
+Thanks.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110430/80fee41e/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110430/80fee41e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001869.html">[Socketcan-users] Interrupts for canX interface don't want to increase... again
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1870">[ date ]</a>
+              <a href="thread.html#1870">[ thread ]</a>
+              <a href="subject.html#1870">[ subject ]</a>
+              <a href="author.html#1870">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

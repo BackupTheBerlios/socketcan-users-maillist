@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Interrupts for canX interface don't want to increase... again
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Interrupts%20for%20canX%20interface%20don%27t%20want%20to%0A%20increase...%20again&In-Reply-To=%3CBANLkTi%3DZ6i0ZPMNBXe5EokTHtdt8_w1DRQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001866.html">
+   <LINK REL="Next"  HREF="001868.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Interrupts for canX interface don't want to increase... again</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Interrupts%20for%20canX%20interface%20don%27t%20want%20to%0A%20increase...%20again&In-Reply-To=%3CBANLkTi%3DZ6i0ZPMNBXe5EokTHtdt8_w1DRQ%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Interrupts for canX interface don't want to increase... again">lambert.willy at gmail.com
+       </A><BR>
+    <I>Thu Apr 28 10:38:40 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001866.html">[Socketcan-users] Interrupts for canX interface don't want to increase... again
+</A></li>
+        <LI>Next message: <A HREF="001868.html">[Socketcan-users] Interrupts for canX interface don't want to	increase... again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1867">[ date ]</a>
+              <a href="thread.html#1867">[ thread ]</a>
+              <a href="subject.html#1867">[ subject ]</a>
+              <a href="author.html#1867">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/4/27 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2011/4/27 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i>
+</I>&gt;&gt;<i> On 04/27/2011 05:08 PM, Willy Lambert wrote:
+</I>&gt;&gt;<i> &gt; 2011/4/27 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt;&gt; On 04/27/2011 04:44 PM, Willy Lambert wrote:
+</I>&gt;&gt;<i> &gt;&gt;&gt; 2011/4/27 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; Hi Willy,
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; On 04/27/2011 03:11 PM, Willy Lambert wrote:
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt; 2011/4/27 Heinz-J&#252;rgen Oertel &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oe at port.de</A>&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Am Mittwoch, 27. April 2011, 13:56:10 schrieb Willy Lambert:
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt; 2011/4/27 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&lt;mailto:
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt; Hi all,
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Hi,
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; you did not mention that you have checked the
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; IRQ jumpers on the PC104 board, but I'm sure you did. When you say
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt; _ one PC104 CAN board with configured jumpers.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; I assume you are using this board  first on the &quot;old CPU board&quot;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; next on the new CPU board without changing the jumpers.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; In this case, no idea.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt; that's it, I did not touch anything on the PC104 stack. So the
+</I>&gt;&gt;<i> jumpers
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; are
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt; well configured in both cases. And I did the tests several times,
+</I>&gt;&gt;<i> they
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; could
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt; not have been disconnected by error.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt; I recheck my linux 2.6.35.7 .config files, and they are identicall
+</I>&gt;&gt;<i> on
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; both
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;&gt; CPU boards.
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; You said, the hardware is identical, same cpu, motherboard, etc.,
+</I>&gt;&gt;<i> right?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt; everything is equal in term of reference (the 2 CPU board are the same
+</I>&gt;&gt;<i> &gt;&gt;&gt; product with the same BIOS version,...). The only notable hardware
+</I>&gt;&gt;<i> &gt;&gt;&gt; difference is the alimentation, but they both seems to be powered
+</I>&gt;&gt;<i> &gt;&gt; properly
+</I>&gt;&gt;<i> &gt;&gt;&gt; (and the BIOS voltage values are correct, they are even better on the
+</I>&gt;&gt;<i> can
+</I>&gt;&gt;<i> &gt;&gt;&gt; reticent board) and I have pluged a VGA cable on the working board (I
+</I>&gt;&gt;<i> &gt;&gt; don't
+</I>&gt;&gt;<i> &gt;&gt;&gt; see why this could change anything on the can side)
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt; Do you see any diffenrence in the bootlog if you boot the same
+</I>&gt;&gt;<i> kernel?
+</I>&gt;&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt; what do you mean by bootlog ? /var/log/dmesg ? they are very similar,
+</I>&gt;&gt;<i> see
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt; Yes, the output of &quot;dmesg&quot;.
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt;&gt; the logs (the good CPU is alpha).
+</I>&gt;&gt;<i> &gt;&gt;&gt; it is the same .config but compiled on 2 different machines as you can
+</I>&gt;&gt;<i> &gt;&gt; see.
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;&gt; Hm, they are identical. I do not see any difference!?
+</I>&gt;&gt;<i> &gt;&gt;
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; Aaaarg miss-copied ! Very sorry for this. See the good ones
+</I>&gt;&gt;<i> &gt; There are few differences, but I don't see anything bad
+</I>&gt;&gt;<i> &gt;
+</I>&gt;&gt;<i> &gt; The working board alpha is out of any compartment, the faulty one beta
+</I>&gt;&gt;<i> is in
+</I>&gt;&gt;<i> &gt; a &quot;PC-Box&quot;. I may try to put alpha in the PC-Box at the place of beta
+</I>&gt;&gt;<i> but I
+</I>&gt;&gt;<i> &gt; have 2 hours of dangerous mecanics I'd like to avoid. Nothing is
+</I>&gt;&gt;<i> connected
+</I>&gt;&gt;<i> &gt; to the PC_box exept CAN, and all the connected wires where before on
+</I>&gt;&gt;<i> alpha
+</I>&gt;&gt;<i> &gt; (and it used to work)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On both I realized:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> pnp 00:0d: IRQ 11 override to edge, high
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Not sure if IRQ11 is a good choise. But don't aks me why it's working on
+</I>&gt;&gt;<i> one board.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> arg, here is the dmesg on IRQ 10 but it still doesn't want to speack on CAN
+</I>&gt;<i> :
+</I>&gt;<i> [...]
+</I>&gt;<i>
+</I>
+
+Hi,
+
+I change my 2 board to put the working alpha in the pc-box and the
+non-working beta out ... guess what ...  alpha is no more working, and beta
+works...
+The good news is that my software is good in some situations. The bad one is
+that I unconnected all the stuff that could make a difference
+
+The only difference in dmesg and interrupts where due to the PS2 keyboard
+that I  have now connected.
+
+The last difference may be due to power supply (or electro-mag environnment
+? just a close fan and wifi board ), but I overpowered it a bit...
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110428/d4693daa/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110428/d4693daa/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001866.html">[Socketcan-users] Interrupts for canX interface don't want to increase... again
+</A></li>
+	<LI>Next message: <A HREF="001868.html">[Socketcan-users] Interrupts for canX interface don't want to	increase... again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1867">[ date ]</a>
+              <a href="thread.html#1867">[ thread ]</a>
+              <a href="subject.html#1867">[ subject ]</a>
+              <a href="author.html#1867">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

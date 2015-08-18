@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ask : CAN Frames Interpertation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C49D1D76F.1010601%40indoakses-online.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000738.html">
+   <LINK REL="Next"  HREF="000739.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ask : CAN Frames Interpertation</H1>
+    <B>Bino Oetomo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C49D1D76F.1010601%40indoakses-online.com%3E"
+       TITLE="[Socketcan-users] ask : CAN Frames Interpertation">bino at indoakses-online.com
+       </A><BR>
+    <I>Tue Mar 31 10:42:23 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000738.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+        <LI>Next message: <A HREF="000739.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#740">[ date ]</a>
+              <a href="thread.html#740">[ thread ]</a>
+              <a href="subject.html#740">[ subject ]</a>
+              <a href="author.html#740">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear All ...
+
+c/q Oliver ... Thankyou for your enlightmen
+
+Oliver Hartkopp wrote:
+&gt;<i> Bino Oetomo wrote:
+</I>&gt;<i>
+</I>&gt;<i> Hi Bino,
+</I>&gt;<i>
+</I>&gt;<i> i just tried
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.google.de/search?hl=de&amp;q=PGN+65132&amp;btnG=Suche&amp;meta=">http://www.google.de/search?hl=de&amp;q=PGN+65132&amp;btnG=Suche&amp;meta=</A>
+</I>&gt;<i>
+</I>&gt;<i> to figure out that PGN is related to the FMS Standard - sorry.
+</I>&gt;<i>
+</I>
+&gt;<i> The first four hits of the above google search made some things 
+</I>&gt;<i> clearer to me. The second hit *is* a PDF file of the FMS Standard 
+</I>&gt;<i> v1.00, when downloaded and renamed to fms.pdf ... which was very 
+</I>&gt;<i> informative to me.
+</I>&gt;<i>
+</I>I download the files ..
+And I'm trying to &quot;read&quot; it ... based on my zero knowledge of CAN
+
+&gt;<i> But regarding the Excel sheet (4th hit) it looks like the PGN 
+</I>&gt;<i> identifier is encoded into the CAN identifier but you can not take the 
+</I>&gt;<i> PGN number as a CAN Identifier directly. I assume this CAN Id building 
+</I>&gt;<i> pattern to be specified somewhere in SAE J1939. But i'm unfortunately 
+</I>&gt;<i> not a FMS nor J1939 specialist. Anyone else out there?
+</I>&gt;<i>
+</I>&gt;<i> I think, you'll need some more investigation here.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i> ps. Just one hint, if you try to build your own C-application for 
+</I>&gt;<i> extended CAN frames: 'cansend' detects the extended frame format 
+</I>&gt;<i> identifier due to the 8 digit length if the Id. When you set a EFF Id 
+</I>&gt;<i> value in your frame.can_id you need to set the CAN_EFF_FLAG in 
+</I>&gt;<i> frame.can_id, so that it is handled as a EFF CAN Id.
+</I>&gt;<i>
+</I>Well ...
+Basically ... I'm playing with cangen and candump ..
+
+cangen can generate EFF data.  --&gt; cangen -ev vcan0
+while cangen rolling ... in another terminal I just run --&gt; candump -L any
+
+when cangen say : 04E4C3CD#30.67.9F.29.6A.07.C1.2A
+candump say :  04E4C3CD#30679F296A07C12A
+
+I think ... the 1st part (before the &quot;#&quot; sign) is the Can-ID part. Is 
+that right ?
+but in J1939 CMIIW, Can-id alone is consist of 4 part :
+- Byte#1 --&gt; priority 3-bit,  reserved 1-bit,  datapage 1-bit
+- Byte#2 --&gt; PDU_Format 8-bit
+- Byte#3 --&gt; PDU_Specific 8-bit
+- Byte#4 --&gt; Source_address 8-bit
+
+
+ From that ,  04E4C3CD breaked out to :
+- 04
+- E4
+- C3
+- CD
+
+and CMIIW again , PGN is composed by PDU_Format + PDU_Specific, so the 
+PGN in Hex is E4C3,
+And in decimal is 58563 , despite whether it's a &quot;legal&quot; J1939 or not.
+
+Is it right to make interpertation of candump output this way (specialy 
+to got PGN value) ?
+
+Sincerely
+-bino-
+
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000738.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+	<LI>Next message: <A HREF="000739.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#740">[ date ]</a>
+              <a href="thread.html#740">[ thread ]</a>
+              <a href="subject.html#740">[ subject ]</a>
+              <a href="author.html#740">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

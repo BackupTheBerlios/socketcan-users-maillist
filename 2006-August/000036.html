@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EEABFA.90506%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000034.html">
+   <LINK REL="Next"  HREF="000039.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EEABFA.90506%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Aug 25 09:51:22 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000034.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000039.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#36">[ date ]</a>
+              <a href="thread.html#36">[ thread ]</a>
+              <a href="subject.html#36">[ subject ]</a>
+              <a href="author.html#36">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jan Kiszka schrieb:
+
+(..)
+
+&gt;<i>  Oliver Hartkopp wrote:
+</I>&gt;<i> &gt; Hi Jan,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; thanks for these clarifying words! The differentiation is hitting
+</I>&gt;<i> &gt; the point! I was also active this afternoon and found out, that the
+</I>&gt;<i> &gt; guys working on AppleTalk (that allows the sending of broadcasts)
+</I>&gt;<i> &gt; and the PACKET-socket have the same problems of how to loop back
+</I>&gt;<i> &gt; their own sent stuff.
+</I>&gt;<i>
+</I>&gt;<i>  I may miss some path, but packet sockets really don't appear to me
+</I>&gt;<i>  like they are looping anything back (only to taps - like any
+</I>&gt;<i>  networking device). And what AppleTalk protocol precisely is looped
+</I>&gt;<i>  back? I bet DDD, as it's comparable to IP. In contrast, IPX doesn't
+</I>&gt;<i>  loop back (IIRC my &gt; 10 years old experiences) while it's also layer
+</I>&gt;<i>  3. No perfect world.
+</I>&gt;<i>
+</I>Hm - i just asked google for packet / socket / loopback ...
+
+<A HREF="http://www.google.de/search?q=packet+socket+loopback&amp;hl=de&amp;lr=&amp;start=10&amp;sa=N">http://www.google.de/search?q=packet+socket+loopback&amp;hl=de&amp;lr=&amp;start=10&amp;sa=N</A>
+
+At this link you may get an insight in the AppleTalk problem that was 
+figured out on sending AppleTalk-broadcasts:
+<A HREF="http://lists.suse.com/archive/suse-amd64/2005-Sep/0100.html">http://lists.suse.com/archive/suse-amd64/2005-Sep/0100.html</A>
+
+And at this link there was a discussion from 2000 about the 
+loopback-device in promiscuous mode:
+<A HREF="http://www.ethereal.com/lists/ethereal-dev/200009/msg00095.html">http://www.ethereal.com/lists/ethereal-dev/200009/msg00095.html</A>
+
+There's a comment in the top-of-CVS-tree &quot;pcap-linux.c&quot; at tcpdump.org
+that says
+
+ * Known bugs:
+ *   - setting promiscuous on loopback gives every packet twice
+
+
+So all this went into linux/net/core/dev.c in dev_queue_xmin_nit()
+
+Btw. as you stated above we consider the CAN to be something like 
+multicast (better broadcast!), local delivery is reasonable we just have 
+to check for other implementations and how this can be transfered to 
+what we need regarding a proper CAN integration ...
+
+&gt;<i> &gt; The common behaviour i have recognized is: Loop back to everyone,
+</I>&gt;<i> &gt; except the originating socket. Aha! This sounds definitely like
+</I>&gt;<i> &gt; what we were searching here and what the users would probably
+</I>&gt;<i> &gt; expect most.
+</I>
+Yep!
+
+&gt;<i>
+</I>&gt;<i>  At least for IP multicast, there is no such filtering, only the
+</I>&gt;<i>  socket option IP_MULTICAST_LOOP which works per host. I would
+</I>&gt;<i>  therefore avoid such complications.
+</I>
+See references above. IMO you can not map straight to IP in this case.
+
+&gt;<i>
+</I>&gt;<i> &gt; I have been checking the skbuff-structure for appropriate space to
+</I>&gt;<i> &gt; save the pointer to the sock-structure as reference so that the
+</I>&gt;<i> &gt; receiving socket can identify his self created stuff. So you can
+</I>&gt;<i> &gt; discard the CAN-frames you have been sending before (as default).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; And if there is any really need(?) to receive what you've been
+</I>&gt;<i> &gt; sending before, there could be some socket-option to disable the
+</I>&gt;<i> &gt; discarding. But this should be considered to be implemented only on
+</I>&gt;<i> &gt; request ...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; That looks as a quite good idea to me (and i'm already thinking on
+</I>&gt;<i> &gt; a tiny patch).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; What you you all think on this solution?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Additionally this idea can offer the possibility to decide for each
+</I>&gt;<i> &gt;  socket, if the sent data should be looped back to other local
+</I>&gt;<i> &gt; users (by default) or not (by sockopt or protocol as you suggested
+</I>&gt;<i> &gt; above). E.g. if the pointer in the sent skbuff holding the sk is
+</I>&gt;<i> &gt; set to NULL the loopback for this CAN-frame is disabled. So you
+</I>&gt;<i> &gt; also have an runtime-configurable performance tuning - this meets
+</I>&gt;<i> &gt; your desires,
+</I>&gt;<i>
+</I>&gt;<i>  Don't forget: for hard RT, s/performance/WCET/. But low-end users
+</I>&gt;<i>  without hard constraints will certainly also worry about the former.
+</I>&gt;<i>
+</I>&gt;<i> &gt; right? ;-)
+</I>&gt;<i>
+</I>&gt;<i>  Protocols look more handy too me (from a user POV) and are easier
+</I>&gt;<i>  acceptable if we really go for default on. Socket options are not
+</I>&gt;<i>  that well visible, and we should better reduce the level of surprise.
+</I>&gt;<i>
+</I>
+No principal concerns from my side for an additional protocol for RAW 
+PF_CAN sockets with a default for 'local CAN broadcast routing' which 
+meets the real CAN behaviour. But it looks like an expert-tuning-option 
+to me, as it doesn't change a remarkable behaviour from the users POV 
+using *his* socket. It has only an impact on other CAN-users on the same 
+machine that are probably not there in your testbed.
+
+General: IMO the 'loopback' expression stands for an other technical 
+idea and we should not mix it with the 'broadcast' concept, we need to 
+have for a CAN integration.
+
+Summarizing the facts:
+
+1. 'local CAN broadcast routing' is in principle a correct and wanted 
+behaviour for a CAN integration in socket-can. Therefore this behaviour 
+defines the default.
+
+2. getting sent CAN-frames back to the originating socket is typically 
+an unwanted and unexpected behaviour
+
+3. due to performance or application needs it must be possible to send 
+CAN-frames via RAW-sockets to netdevices that not locally re-routed 
+(like item 1)
+
+Getting Wolfgangs poll (modified):
+
+  POLL 1: How to control TX re-route behaviour for CAN_RAW-sockets?
+  	[X] socket option
+  	[ ] two protocols
+  	[ ] .................
+  	    (please describe)
+
+        Note: Controlling with socket options allows to change
+        the behaviour during run-time.
+
+        (Remark from Oliver: IMO a real expert-option - see fact 3)
+  
+  POLL 2: What should be the default behaviour on TX?
+  	[X] re-route sent frames to other applications on the local machine
+  	[ ] only write to CAN-bus
+
+        (Remark from Oliver: It's CAN *broadcasting* - see fact 1)
+
+  POLL 3: Should the message be looped back to the
+          sending socket as well? 
+
+  	[X] no 
+  	[ ] yes 
+  	[X] the option should be configurable (via setsockopt) 
+
+        (Remark from Oliver: see fact 2)
+
+//        Note: looping back to all sockets can be easily implemented
+//              while the other choices are more complex/tricky.
+
+No! I found a quite easy sollution to implement this (about 6 LOC).
+
+
+So for me it looks like two action items right now:
+
+1. Ensure that sent CAN-frames are not received by the originating 
+RAW-socket
+2. create two new sockopts for CAN_RAW sockets, something like ...
+   a) DISABLE_TX_RE_ROUTING
+   b) RECEIVE_SENT_FRAMES
+
+OK for you all?
+
+Regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000034.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000039.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#36">[ date ]</a>
+              <a href="thread.html#36">[ thread ]</a>
+              <a href="subject.html#36">[ subject ]</a>
+              <a href="author.html#36">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

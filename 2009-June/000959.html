@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] atomic operations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3Ccabda6420906200137x3b93f629ndb7df72d4974078c%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000958.html">
+   <LINK REL="Next"  HREF="000961.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] atomic operations</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3Ccabda6420906200137x3b93f629ndb7df72d4974078c%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] atomic operations">chripell at gmail.com
+       </A><BR>
+    <I>Sat Jun 20 10:37:56 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000958.html">[Socketcan-users] atomic operations
+</A></li>
+        <LI>Next message: <A HREF="000961.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#959">[ date ]</a>
+              <a href="thread.html#959">[ thread ]</a>
+              <a href="subject.html#959">[ subject ]</a>
+              <a href="author.html#959">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sat, Jun 20, 2009 at 9:57 AM, christian pellegrin&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt; wrote:
+
+&gt;&gt;<i> I had a look into the new code. Acquiring state is now called by netlink. The
+</I>&gt;&gt;<i> locking path problem could indeed be solved by this. I'll test it as soon as I
+</I>&gt;&gt;<i> get some time.
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Should be fixed in netlink. I'm cleaning up the &quot;final&quot; patch from the
+</I>&gt;<i> suggestions I got in the ml and I hope to resend soon after testing.
+</I>&gt;<i>
+</I>
+
+Just my 2 eurocents on this point from a more general view. This
+problem is quite common in Linux driver programming, since there are
+some context when you just cannot sleep. And there are many subtle
+ways how you can find yourself calling some code that does without
+knowing it. Unfortunately I had to do some work on other OSes like
+windoze ce for a living: there quite everything (only a tiny bit of
+code called HAL is different)  is a thread with the same API like
+userspace that can block: it's easier to write code but all the
+locking issues are on your shoulders. The result is that code quality
+(even that released by big companies, I can prove it!) is awful
+compared to that of Linux with tons of problems facing now and then
+and very difficult to debug. So I think this is good for cell phones
+or mp3 players ... who cares if you have to reset them sometimes. But
+it's crap for serious use (even if I saw crazy people using windows ce
+in military applications, God help final users!).
+
+I would like to see mcp251x driver in mainstream because it can
+trigger many interesting situations that perhaps should be discussed
+by people that knows much more than me about Linux. For example the PM
+code is inelegant (the work queue must look after freezing condition
+itself) but I really don't know how to improve it. With threaded
+interrupts coming and tasklets being phased out for worqueues and
+kernel threads kernel programming could be easier but we risk to get
+all the locking burden on the driver writer. So having code reviewed
+by good kernel hackers will be even more important!
+
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000958.html">[Socketcan-users] atomic operations
+</A></li>
+	<LI>Next message: <A HREF="000961.html">[Socketcan-users] atomic operations
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#959">[ date ]</a>
+              <a href="thread.html#959">[ thread ]</a>
+              <a href="subject.html#959">[ subject ]</a>
+              <a href="author.html#959">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,317 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP 2515 RX problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3CAANLkTimvEMwsGMZX3ekBmDwuO-h5Op2B4FRX%3D0kZa19h%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001471.html">
+   <LINK REL="Next"  HREF="001497.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP 2515 RX problems</H1>
+    <B>Benny B. Simonsen</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3CAANLkTimvEMwsGMZX3ekBmDwuO-h5Op2B4FRX%3D0kZa19h%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] MCP 2515 RX problems">bbs at serenergy.com
+       </A><BR>
+    <I>Sun Aug  8 20:10:14 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001471.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+        <LI>Next message: <A HREF="001497.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1472">[ date ]</a>
+              <a href="thread.html#1472">[ thread ]</a>
+              <a href="subject.html#1472">[ subject ]</a>
+              <a href="author.html#1472">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian,
+
+I have made a patch to the mcp251x.c (the mcp251x.c from kernel 2.6.35)
+Briefly what I have done.
+
+The MCP2515 will automatically reset the CANINTF.RXnIF interrupt flag (see
+12.4 in the datasheet) so resetting it twice will give a lot of missing
+frames. Manual reset removed if a 2515 is used.
+
+EFLG is only read/written when its necessary (CANINTF_ERRIF active).
+
+Check if RXB1 contains data after reading RXB0 to avoid possible wrong
+sequence.
+
+Drop RX frames in the controller if we have an error (unconditional reset
+RXnIF Interrupt flags). It would be nice if we could save a frame or 2, but
+haven't found a way that ensures we get an overflow warning at the right
+place and no out of order frames if we do that.
+
+I have not done real extensive testing, but it seems to be better. Candump
+from 100 frames can be seen below without / with the attached patch.
+
+
+/Benny
+
+
+candump -l any with mcp251x.c from kernel 2.6.35
+****************************************************************************
+(1281285077.327423) can0 00001000#00
+(1281285077.328064) can0 00001000#02 &lt; missing frame without warning
+(1281285077.328461) can0 00001000#03
+(1281285077.329010) can0 00001000#05 &lt;
+(1281285077.329407) can0 00001000#06
+(1281285077.330078) can0 00001000#08 &lt;
+(1281285077.330627) can0 00001000#0A &lt;
+(1281285077.331024) can0 00001000#0B
+(1281285077.331451) can0 00001000#0C
+(1281285077.332062) can0 00001000#0E &lt;
+(1281285077.332580) can0 00001000#10 &lt;
+(1281285077.333038) can0 00001000#11
+(1281285077.333557) can0 00001000#13 &lt;
+(1281285077.334015) can0 00001000#14
+(1281285077.334503) can0 00001000#16 &lt;
+(1281285077.334991) can0 00001000#17
+(1281285077.335480) can0 00001000#19 &lt;
+(1281285077.335968) can0 00001000#1A
+(1281285077.336456) can0 00001000#1C &lt;
+(1281285077.336914) can0 00001000#1D
+(1281285077.337463) can0 00001000#1F &lt;
+(1281285077.337952) can0 00001000#20
+(1281285077.338592) can0 00001000#22 &lt;
+(1281285077.339722) can0 00001000#24 &lt;
+(1281285077.341522) can0 00001000#25
+(1281285077.341644) can0 004#0001000000000000
+(1281285077.342438) can0 00001000#27
+(1281285077.342804) can0 00001000#2F &lt;&lt; sequence
+(1281285077.343017) can0 00001000#2D &lt;&lt;
+(1281285077.343140) can0 000#0000000000000000 &lt;&lt;&lt; id 0
+(1281285077.343536) can0 00001000#31
+(1281285077.343841) can0 00001000#32
+(1281285077.344147) can0 00001000#33
+(1281285077.344757) can0 00001000#35 &lt;
+(1281285077.345245) can0 00001000#37 &lt;
+(1281285077.345734) can0 00001000#38
+(1281285077.346222) can0 00001000#3A &lt;
+(1281285077.346710) can0 00001000#3B
+(1281285077.347290) can0 00001000#3D &lt;
+(1281285077.347626) can0 00001000#3E
+(1281285077.347961) can0 00001000#3F
+(1281285077.348297) can0 00001000#40
+(1281285077.348663) can0 00001000#41
+(1281285077.348999) can0 00001000#42
+(1281285077.349335) can0 00001000#43
+(1281285077.349823) can0 00001000#45 &lt;
+(1281285077.350311) can0 00001000#46
+(1281285077.350799) can0 00001000#48 &lt;
+(1281285077.351288) can0 00001000#49
+(1281285077.351776) can0 00001000#4B &lt;
+(1281285077.352264) can0 00001000#4C
+(1281285077.352753) can0 00001000#4E &lt;
+(1281285077.353241) can0 00001000#4F
+(1281285077.353729) can0 00001000#51 &lt;
+(1281285077.354217) can0 00001000#52
+(1281285077.354706) can0 00001000#54 &lt;
+(1281285077.355133) can0 00001000#55
+(1281285077.355530) can0 00001000#56
+(1281285077.356079) can0 00001000#58 &lt;
+(1281285077.356476) can0 00001000#59
+(1281285077.356872) can0 00001000#5A
+(1281285077.357544) can0 00001000#5C &lt;
+(1281285077.357880) can0 00001000#5D
+(1281285077.358154) can0 00001000#5E
+(1281285077.358703) can0 00001000#60 &lt;
+(1281285077.359100) can0 00001000#61
+(1281285077.359772) can0 00001000#63 &lt;
+****************************************************************************
+
+candump -l any with the attached patch applied to mcp251x.c
+****************************************************************************
+(1281285338.491058) can0 00001000#00
+(1281285338.491333) can0 00001000#01
+(1281285338.491546) can0 00001000#02
+(1281285338.492004) can0 00001000#03
+(1281285338.492187) can0 00001000#04
+(1281285338.492614) can0 00001000#05
+(1281285338.492828) can0 00001000#06
+(1281285338.493347) can0 00001000#07
+(1281285338.493530) can0 00001000#08
+(1281285338.493957) can0 00001000#09
+(1281285338.494140) can0 00001000#0A
+(1281285338.494628) can0 00001000#0B
+(1281285338.494812) can0 00001000#0C
+(1281285338.495269) can0 00001000#0D
+(1281285338.495452) can0 00001000#0E
+(1281285338.495941) can0 00001000#0F
+(1281285338.496124) can0 00001000#10
+(1281285338.496582) can0 00001000#11
+(1281285338.496765) can0 00001000#12
+(1281285338.497222) can0 00001000#13
+(1281285338.497406) can0 00001000#14
+(1281285338.497894) can0 00001000#15
+(1281285338.498077) can0 00001000#16
+(1281285338.498535) can0 00001000#17
+(1281285338.498718) can0 00001000#18
+(1281285338.499176) can0 00001000#19
+(1281285338.499359) can0 00001000#1A
+(1281285338.499664) can0 00001000#1B
+(1281285338.500000) can0 00001000#1C
+(1281285338.500305) can0 00001000#1D
+(1281285338.500640) can0 00001000#1E
+(1281285338.501647) can0 00001000#1F
+(1281285338.503265) can0 00001000#20
+(1281285338.503417) can0 004#0001000000000000
+(1281285338.504333) can0 00001000#28
+(1281285338.504577) can0 00001000#29
+(1281285338.504791) can0 00001000#2A
+(1281285338.504974) can0 00001000#2B
+(1281285338.505187) can0 00001000#2C
+(1281285338.505523) can0 00001000#2D
+(1281285338.505859) can0 00001000#2E
+(1281285338.506164) can0 00001000#2F
+(1281285338.506500) can0 00001000#30
+(1281285338.506835) can0 00001000#31
+(1281285338.507141) can0 00001000#32
+(1281285338.507476) can0 00001000#33
+(1281285338.507812) can0 00001000#34
+(1281285338.508117) can0 00001000#35
+(1281285338.508453) can0 00001000#36
+(1281285338.508880) can0 00001000#37
+(1281285338.509094) can0 00001000#38
+(1281285338.509460) can0 00001000#39
+(1281285338.509765) can0 00001000#3A
+(1281285338.510253) can0 00001000#3B
+(1281285338.510437) can0 00001000#3C
+(1281285338.510742) can0 00001000#3D
+(1281285338.511077) can0 00001000#3E
+(1281285338.511413) can0 00001000#3F
+(1281285338.511749) can0 00001000#40
+(1281285338.512084) can0 00001000#41
+(1281285338.512390) can0 00001000#42
+(1281285338.512725) can0 00001000#43
+(1281285338.513061) can0 00001000#44
+(1281285338.513366) can0 00001000#45
+(1281285338.513702) can0 00001000#46
+(1281285338.514038) can0 00001000#47
+(1281285338.514343) can0 00001000#48
+(1281285338.514678) can0 00001000#49
+(1281285338.515014) can0 00001000#4A
+(1281285338.515319) can0 00001000#4B
+(1281285338.515655) can0 00001000#4C
+(1281285338.515960) can0 00001000#4D
+(1281285338.516296) can0 00001000#4E
+(1281285338.516876) can0 00001000#4F
+(1281285338.517059) can0 00001000#50
+(1281285338.517456) can0 00001000#51
+(1281285338.517639) can0 00001000#52
+(1281285338.518096) can0 00001000#53
+(1281285338.518280) can0 00001000#54
+(1281285338.518768) can0 00001000#55
+(1281285338.518951) can0 00001000#56
+(1281285338.519409) can0 00001000#57
+(1281285338.519592) can0 00001000#58
+(1281285338.520050) can0 00001000#59
+(1281285338.520233) can0 00001000#5A
+(1281285338.520721) can0 00001000#5B
+(1281285338.520904) can0 00001000#5C
+(1281285338.521362) can0 00001000#5D
+(1281285338.521545) can0 00001000#5E
+(1281285338.522003) can0 00001000#5F
+(1281285338.522186) can0 00001000#60
+(1281285338.522674) can0 00001000#61
+(1281285338.522857) can0 00001000#62
+(1281285338.523315) can0 00001000#63
+****************************************************************************
+
+2010/8/6 christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt;
+
+&gt;<i> On Fri, Aug 6, 2010 at 3:56 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> wrote:
+</I>&gt;<i> &gt; To be clear, out-of-order messages are also not OK.
+</I>&gt;<i>
+</I>&gt;<i> Yes I was looking at this with some interleave analysis. I think the
+</I>&gt;<i> problem lies in the following race:
+</I>&gt;<i>
+</I>&gt;<i> // suppose we come here with RXB0 filled with packet X
+</I>&gt;<i>                u8 intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;<i>                u8 eflag;
+</I>&gt;<i>                int can_id = 0, data1 = 0;
+</I>&gt;<i>
+</I>&gt;<i> // packet X+1 arrives and lands in RXB1
+</I>&gt;<i>
+</I>&gt;<i>                if (intf &amp; CANINTF_RX0IF) {
+</I>&gt;<i>                        mcp251x_hw_rx(spi, 0);
+</I>&gt;<i>                        /* Free one buffer ASAP */
+</I>&gt;<i>                        mcp251x_write_bits(spi, CANINTF, intf &amp;
+</I>&gt;<i> CANINTF_RX0IF,
+</I>&gt;<i>                                           0x00);
+</I>&gt;<i>                }
+</I>&gt;<i>
+</I>&gt;<i> // packet X+2 arrives and lands in RXB0
+</I>&gt;<i> // unfortunately variable intf is old and doesn't show that we have
+</I>&gt;<i> something in RXB1
+</I>&gt;<i> // (*1)
+</I>&gt;<i>                if (intf &amp; CANINTF_RX1IF)
+</I>&gt;<i>                        mcp251x_hw_rx(spi, 1);
+</I>&gt;<i>
+</I>&gt;<i> now on the next turn we will have packet X+2 in RXB0 and X+1 in RXB1
+</I>&gt;<i> so we read them out-of-order. The easiest way to solve the problem is
+</I>&gt;<i> to take out the line:
+</I>&gt;<i>
+</I>&gt;<i>                        /* Free one buffer ASAP */
+</I>&gt;<i>                        mcp251x_write_bits(spi, CANINTF, intf &amp;
+</I>&gt;<i> CANINTF_RX0IF,
+</I>&gt;<i>                                           0x00);
+</I>&gt;<i>
+</I>&gt;<i> but we risk to lose more packets. Perhaps also rereading intf in (*1)
+</I>&gt;<i> could work but we must be careful when we reset CANINTF register to
+</I>&gt;<i> not lose an interrupt for RXB0. I will do some tests but after next
+</I>&gt;<i> week because I don't have the access to the hardware until then.
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+</I>&gt;<i> &quot;Real Programmers don't play tennis, or any other sport which requires
+</I>&gt;<i> you to change clothes. Mountain climbing is OK, and Real Programmers
+</I>&gt;<i> wear their climbing boots to work in case a mountain should suddenly
+</I>&gt;<i> spring up in the middle of the computer room.&quot;
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100808/525c992c/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100808/525c992c/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: mcp251x.c.patch
+Type: text/x-patch
+Size: 2242 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100808/525c992c/attachment.bin">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100808/525c992c/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001471.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+	<LI>Next message: <A HREF="001497.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1472">[ date ]</a>
+              <a href="thread.html#1472">[ thread ]</a>
+              <a href="subject.html#1472">[ subject ]</a>
+              <a href="author.html#1472">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

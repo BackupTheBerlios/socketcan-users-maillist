@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] filter: retrieve matched filter index on message reception?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20filter%3A%20retrieve%20matched%20filter%20index%20on%0A%20message%20reception%3F&In-Reply-To=%3C1287676374.22952.21.camel%40osblap120.dev.osb-ag.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001607.html">
+   <LINK REL="Next"  HREF="001615.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] filter: retrieve matched filter index on message reception?</H1>
+    <B>Felix Obenhuber</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20filter%3A%20retrieve%20matched%20filter%20index%20on%0A%20message%20reception%3F&In-Reply-To=%3C1287676374.22952.21.camel%40osblap120.dev.osb-ag.de%3E"
+       TITLE="[Socketcan-users] filter: retrieve matched filter index on message reception?">f.obenhuber at osb-ag.de
+       </A><BR>
+    <I>Thu Oct 21 17:52:54 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001607.html">[Socketcan-users] filter: retrieve matched filter index on message reception?
+</A></li>
+        <LI>Next message: <A HREF="001615.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1608">[ date ]</a>
+              <a href="thread.html#1608">[ thread ]</a>
+              <a href="subject.html#1608">[ subject ]</a>
+              <a href="author.html#1608">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, 2010-10-21 at 17:15 +0200, Oliver Hartkopp wrote:
+&gt;<i> &gt;&gt; During message reception, I'd like to retrieve the indexes of the filters 
+</I>&gt;<i> &gt;&gt; that match the received frame. Is that possible?
+</I>&gt;<i> &gt;&gt; Otherwise I've got to check in userspace...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I don't think that's possible, but you can open a second socket and
+</I>&gt;<i> &gt; apply a different filter on each socket.
+</I>&gt;<i> 
+</I>&gt;<i> ACK.
+</I>&gt;<i> 
+</I>&gt;<i> The filters are completely independent. You can specify four identical filters
+</I>&gt;<i> and will get the CAN frame four times when it matches.
+</I>&gt;<i> 
+</I>&gt;<i> Using a switch statement is the usual approach to catch single CAN-IDs.
+</I>&gt;<i> And - as Marc suggested - using different sockets and select() can be used too.
+</I>
+Ok. Thanks. Due we've go 50+ filters to set I'm going to filter myself.
+
+cheers,
+
+Felix
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001607.html">[Socketcan-users] filter: retrieve matched filter index on message reception?
+</A></li>
+	<LI>Next message: <A HREF="001615.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1608">[ date ]</a>
+              <a href="thread.html#1608">[ thread ]</a>
+              <a href="subject.html#1608">[ subject ]</a>
+              <a href="author.html#1608">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

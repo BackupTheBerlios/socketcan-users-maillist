@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problem%20in%20adding%20mcp251x_info%20into%20platform%0A%09definition%20file&In-Reply-To=%3Co2k7401a78a1004081735o6786519crb1cf0298813063ed%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001363.html">
+   <LINK REL="Next"  HREF="001373.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problem in adding mcp251x_info into platform	definition file</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problem%20in%20adding%20mcp251x_info%20into%20platform%0A%09definition%20file&In-Reply-To=%3Co2k7401a78a1004081735o6786519crb1cf0298813063ed%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Problem in adding mcp251x_info into platform	definition file">nudtrobert at gmail.com
+       </A><BR>
+    <I>Fri Apr  9 02:35:41 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001363.html">[Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+</A></li>
+        <LI>Next message: <A HREF="001373.html">[Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1364">[ date ]</a>
+              <a href="thread.html#1364">[ thread ]</a>
+              <a href="subject.html#1364">[ subject ]</a>
+              <a href="author.html#1364">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2010/4/8 christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at evolware.org</A>&gt;
+
+&gt;<i> On Thu, Apr 8, 2010 at 4:58 PM, Lei Luo &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nudtrobert at gmail.com</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; I added can definitions into board-dk.c. When I &quot;modprobe mcp251x&quot;, it
+</I>&gt;<i> shows
+</I>&gt;<i> &gt; &quot;CAN device driver interface&quot; in console, mcp251x modules is loaded as
+</I>&gt;<i> can
+</I>&gt;<i> &gt; be seen from &quot;lsmod&quot;. But I can't find can device files such as &quot;can0,
+</I>&gt;<i> can1,
+</I>&gt;<i> &gt; ...&quot; and there is no can infomation in &quot;ip link show&quot;.
+</I>&gt;<i> &gt; Is something I did wrong? Or the device files of can should not created
+</I>&gt;<i> &gt; automaticly as they are connected with spi?
+</I>&gt;<i>
+</I>&gt;<i> If you don't see &quot;probed&quot; or &quot;not probed&quot; the mcp251x probe code is
+</I>&gt;<i> not called. So, have you done an at91_add_device_spi of the
+</I>&gt;<i> dk_spi_devices you defined? Do you have a working SPI master driver?
+</I>&gt;<i>
+</I>&gt;<i>
+</I>Yes, I just call
+at91_add_device_spi(dk_spi_device,ARRAY_SZIE(dk_spi_device)) without
+at91_set_gpio_output; spi is registed in kernel and &quot;153 spi&quot; can be seen
+when &quot;cat /proc/devices&quot;.However, it does not show &quot;probed&quot; too when
+modprobe vcan.
+
+Thanks very much
+Regards,
+Luo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100409/650e18b6/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100409/650e18b6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001363.html">[Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+</A></li>
+	<LI>Next message: <A HREF="001373.html">[Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1364">[ date ]</a>
+              <a href="thread.html#1364">[ thread ]</a>
+              <a href="subject.html#1364">[ subject ]</a>
+              <a href="author.html#1364">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket can h/w filter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20can%20h/w%20filter&In-Reply-To=%3C852119.18030.qm%40web94806.mail.in2.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001403.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket can h/w filter</H1>
+    <B>Subhasish Ghosh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20can%20h/w%20filter&In-Reply-To=%3C852119.18030.qm%40web94806.mail.in2.yahoo.com%3E"
+       TITLE="[Socketcan-users] Socket can h/w filter">subhasish82 at yahoo.com
+       </A><BR>
+    <I>Mon May 10 08:57:13 CEST 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001403.html">[Socketcan-users] Socket can h/w filter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1402">[ date ]</a>
+              <a href="thread.html#1402">[ thread ]</a>
+              <a href="subject.html#1402">[ subject ]</a>
+              <a href="author.html#1402">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi!,
+
+I have one more concern regarding not using any hw ID filter for individual mailboxes.
+
+If I understand correctly, when a CAN receiver receives data, it sends an ACK to the transmitter. 
+Now, if hw filtering is not supported, when a transmitter sends something and many receivers read the data, then all of them would send an ACK.
+ 
+How will the transmitter ever know if the intended receiver actually received the data.
+
+Best Regards,
+Subhasish Ghosh
+
+
+
+
+________________________________
+From: Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt;
+To: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+Cc: Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;; Subhasish Ghosh &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">subhasish82 at yahoo.com</A>&gt;; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Sent: Tue, 27 April, 2010 2:50:59 PM
+Subject: Re: [Socketcan-users] Socket can h/w filter
+
+On Tue, Apr 27, 2010 at 09:48:23AM +0200, Wolfgang Grandegger wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;<i> &gt; Subhasish Ghosh wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; The CAN controller that I am using allows configuring per-mailbox IDs.
+</I>&gt;<i> &gt;&gt; CAN being a broadcast network, this feature reduces the interrupts to
+</I>&gt;<i> &gt;&gt; the processor.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; From Documentation/can.txt, what I understand is that the socketcan
+</I>&gt;<i> &gt;&gt; interface does not provide any mechanism to configure the h/w for this
+</I>&gt;<i> &gt;&gt; purpose (chapter 6.3).
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Instead, the h/w is configured to receive all identifiers and the
+</I>&gt;<i> &gt;&gt; filtering is done on the stack (like ti_hecc.c) and to avoid hogging the
+</I>&gt;<i> &gt;&gt; processor some interrupt mitigation techniques like NAPI is implemented.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Isn't this a work around?
+</I>I think the mailbox infrastructure is a workaround to sell CAN chips
+without the requirement for a decent software infrastructure :-)
+
+Can your CAN chip receive RTR frames and put them to software without the
+hardware transmitting something?
+&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; No it's not.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Remember that you're working in a multi-user system now, and therefore it's
+</I>&gt;<i> &gt; not defined what all of your user-apps need from the specific CAN bus.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; For that reason the implementation of efficient filters is done in the
+</I>&gt;<i> &gt; soft-IRQ that's called right after the (hard-) interrupt routine of the CAN
+</I>&gt;<i> &gt; driver.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Having a generic CAN driver interface is one of the major motivations for
+</I>&gt;<i> &gt; SocketCAN. You really don't want to have hardware-specific (&quot;N mailboxes&quot;)
+</I>&gt;<i> &gt; configuration interfaces which leads into a maintenance hell.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, I also do not see a generic way yet to support per mailbox (or
+</I>&gt;<i> message object) filtering.
+</I>Ack.
+
+I've had some experience with the CAN chip within the c167 infineon cpu, which I
+believe is similar to the bosch cc770 can chip.
+Such setup with different 'mailboxes' only worked when there is a system-wide
+policy defined which CAN id go via which mailbox.
+
+a small piece of history:
+Before I found that such policy is _really_ required (although I found this nowhere
+in the datasheets), I ran into a race condition of the hardware (!).
+If you put (in that specific CAN chip) 2 different CANids in TX mailboxes, but whose
+CANids do match within the global receive mask, and the lowest CAN id is put in a 
+mailbox after the higher(=lower priority on CAN) CANid, then the CAN chip would send
+the higher priority CAN id first (=good), but fails to find the correct TX mailbox
+in the CAN chip. Instead, it marks the first matched mailbox(= higher CAN id, which
+was not sent!) as transmitted. Subsequently, it finds the second mailbox (with the 
+CANid that was just sent) as wanting transmission ......
+
+I'm not sure on the precise relationship between CAN id's, or how to configure
+the mailboxes (its about 8years ago).
+Anyway, I ended up in a CAN frame sent back to back because I used &gt;1 TX mailbox.
+
+=&gt; rule 1: only use 1 tx mailbox.
+
+As oliver mentioned, different applications may need different filters on the mailbox.
+If 2 applications use different filters, you cannot tell if a frame that matched the
+first filter would not match the second. So, software filtering is still required.
+
+The existing software filters are, IMO, way more powerfull that what I have seen from
+hardware filters.
+
+=&gt; rule 2: use software filtering.
+&gt;<i> 
+</I>&gt;<i> &gt;&gt; My question is, did I miss something, is there any way to configure the
+</I>&gt;<i> &gt;&gt; h/w for this purpose. Is it a good idea if I cook up a sysfs interface
+</I>&gt;<i> &gt;&gt; for my driver for this.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The problem is, that a filtering on driver level affects *every* user in the
+</I>&gt;<i> &gt; system.
+</I>&gt;<i> 
+</I>&gt;<i> Yes, messages rejected by hardware filters are lost.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; So far no one discovered a problem with the irq-load of CAN drivers in his
+</I>&gt;<i> &gt; system. We've been running a 133MHz PowerPC with four SJA1000 controllers for
+</I>&gt;<i> &gt; years ...
+</I>&gt;<i> 
+</I>&gt;<i> Interrupt load might be an issue, especially on load end systems.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; If you really(!) get into problems, we should discuss a netlink configuration
+</I>&gt;<i> &gt; option for driver-level CAN-ID filtering (also abstracted from &quot;mailboxes&quot;).
+</I>&gt;<i> 
+</I>&gt;<i> Yes.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; But please check if it's really needed and if you probably have a different
+</I>&gt;<i> &gt; view on the general approach of SocketCAN now.
+</I>&gt;<i> 
+</I>&gt;<i> Some kind of generic hardware filter support might be useful for some
+</I>&gt;<i> corner cases, I think. Does anyone else find it useful?
+</I>I have long stopped using hardware filters.
+Please note this is only my experience.
+If a decent netlink based mechanism would emerge, not affecting
+the software filters, and not trying to be intelligent, but just relaying
+a system wide policy into a CAN chip, then it would not hurt?
+And chips implementing it, could then at least measure their performance gain (and
+see if it was worth the effort). (This last issue could be measured with some
+quick sysfs properties too)
+&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>Kurt
+&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100510/0eb33c2e/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100510/0eb33c2e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001403.html">[Socketcan-users] Socket can h/w filter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1402">[ date ]</a>
+              <a href="thread.html#1402">[ thread ]</a>
+              <a href="subject.html#1402">[ subject ]</a>
+              <a href="author.html#1402">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to receive data from can bus via	SJA1000-iomem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20data%20from%20can%20bus%20via%0A%09SJA1000-iomem&In-Reply-To=%3C2DA9A7329E188D4EAA449E2E9BAD30A504EAC543%40DEIMEXCH1.ndsatcom.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000130.html">
+   <LINK REL="Next"  HREF="000132.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to receive data from can bus via	SJA1000-iomem</H1>
+    <B>Riedmann, Kai</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20data%20from%20can%20bus%20via%0A%09SJA1000-iomem&In-Reply-To=%3C2DA9A7329E188D4EAA449E2E9BAD30A504EAC543%40DEIMEXCH1.ndsatcom.com%3E"
+       TITLE="[Socketcan-users] Unable to receive data from can bus via	SJA1000-iomem">Kai.Riedmann at NDSatcom.com
+       </A><BR>
+    <I>Fri Jun 29 17:00:02 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000130.html">[Socketcan-users] kernel inclusion
+</A></li>
+        <LI>Next message: <A HREF="000132.html">[Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#131">[ date ]</a>
+              <a href="thread.html#131">[ thread ]</a>
+              <a href="subject.html#131">[ subject ]</a>
+              <a href="author.html#131">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+we are introducing the can bus in one of our appliances and so we used
+an Philips SJA1000 on our BSP. 
+For some reasons the hardware division had to use the adress lanes from
+A1 to A8 which connect A0 to A7 on the SJA1000 so I had to change the
+hw_writereg and hw_readreg and the changes were successful on SVN
+revision 300. 
+
+There is no problem for me sending data from our appliance over sja1000
+and can-raw via cansend but when  i try to receive can frames the frames
+are stored on the chips recevice registers, the SR.0 and the IR.0 are 1
+but the driver won't read the message. Even a candump from your
+can-utils-directory isn't able to read some data. Does anyone know a
+solution for my problem. Were have I got to change the sources for
+receiving can frames.
+
+Here some details on our system:
+CPU: Intel Xscale PXA270
+Linux Kernel 2.6.18.8 with 8d-Patches (for JFFS2) and YAFFS2 Patches
+
+CAN devices which are connected on CAN bus:
+- PEAK USB can adaptor (for testing purposes)
+- Slope Sensor
+- 3 motor drives
+
+Thanks for your help in advance.
+
+Greets
+
+Kai Riedmann
+
+
+_____
+Kai Riedmann
+
+Technology - Embedded Software 
+----------------------------------------
+ND SatCom GmbH
+P.O. Box
+88039 Friedrichshafen
+Germany
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000130.html">[Socketcan-users] kernel inclusion
+</A></li>
+	<LI>Next message: <A HREF="000132.html">[Socketcan-users] Unable to receive data from can bus	via	SJA1000-iomem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#131">[ date ]</a>
+              <a href="thread.html#131">[ thread ]</a>
+              <a href="subject.html#131">[ subject ]</a>
+              <a href="author.html#131">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

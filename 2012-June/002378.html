@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Flexcan on i.mx536 Infotainment Platform
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Flexcan%20on%20i.mx536%20Infotainment%20Platform&In-Reply-To=%3C1338845698.76889.YahooMailNeo%40web140802.mail.bf1.yahoo.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002379.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Flexcan on i.mx536 Infotainment Platform</H1>
+    <B>Keith Jones</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Flexcan%20on%20i.mx536%20Infotainment%20Platform&In-Reply-To=%3C1338845698.76889.YahooMailNeo%40web140802.mail.bf1.yahoo.com%3E"
+       TITLE="[Socketcan-users] Flexcan on i.mx536 Infotainment Platform">keith.rjones at yahoo.com
+       </A><BR>
+    <I>Mon Jun  4 23:34:58 CEST 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002379.html">[Socketcan-users] Flexcan on i.mx536 Infotainment Platform
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2378">[ date ]</a>
+              <a href="thread.html#2378">[ thread ]</a>
+              <a href="subject.html#2378">[ subject ]</a>
+              <a href="author.html#2378">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+I booted up my new Infotainment demo board after ported 2.6.39 flexcan (flexcan.h flexcan.c) support into my 2.6.35 linux distro. 
+
+After seeing flexcan driver register and performing the following commands, I get constant interrupts and error packets visualized using my Canoe CANbus sniffer. I am using 250K baud. Did not check termination. No oscilloscope was used as yet. Can not receive any packets. can state goes from ERROR-ACTIVE to ERROR-PASSIVE.
+
+
+Any clues?
+
+
+--------------------------------------------------
+
+.
+.
+
+vcan: Virtual CAN interface driver
+CAN device driver interface
+flexcan netdevice driver
+flexcan flexcan.0: device registered (reg_base=e09f0000, irq=82)
+flexcan flexcan.1: device registered (reg_base=e09f8000, irq=83)
+.
+.
+.
+----------------------------------------------------------------
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> ~$&#160; ip link set can0 up type can bitrate 250000
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$ ip -d -s link show can0
+2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+&#160;&#160;&#160; link/can
+&#160;&#160;&#160; can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+&#160;&#160;&#160; bitrate 250000 sample-point 0.875
+&#160;&#160;&#160; tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+&#160;&#160;&#160; flexcan: tseg1 4..16 tseg2 2..8 sjw 1..4 brp 1..256 brp-inc 1
+&#160;&#160;&#160; clock 24000000
+&#160;&#160;&#160; re-started bus-errors arbit-lost error-warn error-pass bus-off
+&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 4&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 4&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0
+&#160;&#160;&#160; RX: bytes&#160; packets&#160; errors&#160; dropped overrun mcast
+&#160;&#160;&#160; 64&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 8&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0
+&#160;&#160;&#160; TX: bytes&#160; packets&#160; errors&#160; dropped carrier collsns
+&#160;&#160;&#160; 4&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> ~$ cansend can0 123#1122334455
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$ ip -d -s link show can0
+2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+&#160;&#160;&#160; link/can
+&#160;&#160;&#160; can state ERROR-PASSIVE (berr-counter tx 128 rx 0) restart-ms 0
+&#160;&#160;&#160; bitrate 250000 sample-point 0.875
+&#160;&#160;&#160; tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+&#160;&#160;&#160; flexcan: tseg1 4..16 tseg2 2..8 sjw 1..4 brp 1..256 brp-inc 1
+&#160;&#160;&#160; clock 24000000
+&#160;&#160;&#160; re-started bus-errors arbit-lost error-warn error-pass bus-off
+&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 5&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 5&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0
+&#160;&#160;&#160; RX: bytes&#160; packets&#160; errors&#160; dropped overrun mcast
+&#160;&#160;&#160; 80&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 10&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0
+&#160;&#160;&#160; TX: bytes&#160; packets&#160; errors&#160; dropped carrier collsns
+&#160;&#160;&#160; 5&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160; 0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$ cat /proc/interrupts
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; CPU0
+&#160; 1:&#160;&#160;&#160;&#160;&#160;&#160; 1491&#160;&#160;&#160; MXC_TZIC&#160; mxsdhci
+&#160; 2:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; mxsdhci
+&#160; 6:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 1&#160;&#160;&#160; MXC_TZIC&#160; mxc_sdma
+&#160; 8:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 2&#160;&#160;&#160; MXC_TZIC&#160; mxc_nd
+&#160; 9:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; VPU_CODEC_IRQ
+&#160;10:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; mxc_ipu
+&#160;11:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 2&#160;&#160;&#160; MXC_TZIC&#160; mxc_ipu
+&#160;12:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; ydx
+&#160;14:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; usb_wakeup, ehci_hcd:usb2
+&#160;16:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; usb_wakeup, ehci_hcd:usb3
+&#160;18:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; usb_wakeup, fsl-usb2-otg, ehci_hcd:usb1, fsl-usb2-udc
+&#160;24:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; mxc_rtc
+&#160;28:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; ahci
+&#160;31:&#160;&#160;&#160;&#160;&#160;&#160; 4093&#160;&#160;&#160; MXC_TZIC&#160; mxcintuart
+&#160;36:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 1&#160;&#160;&#160; MXC_TZIC&#160; CSPI_IRQ
+&#160;39:&#160;&#160;&#160;&#160;&#160; 69290&#160;&#160;&#160; MXC_TZIC&#160; i.MX Timer Tick
+&#160;63:&#160;&#160;&#160;&#160;&#160;&#160;&#160; 198&#160;&#160;&#160; MXC_TZIC&#160; imx-i2c
+&#160;64:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 60&#160;&#160;&#160; MXC_TZIC&#160; imx-i2c
+&#160;66:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; asrc
+&#160;69:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; mxc_iim
+&#160;73:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; dvfs
+&#160;82:&#160;&#160;&#160; 1283596&#160;&#160;&#160; MXC_TZIC&#160; can0
+&#160;84:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160; MXC_TZIC&#160; g12
+129:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; -&#160; mxsdhci
+132:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; -&#160; mxsdhci
+191:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; -&#160; eth0
+Err:&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; 0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20120604/a584a3e3/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20120604/a584a3e3/attachment.html</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002379.html">[Socketcan-users] Flexcan on i.mx536 Infotainment Platform
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2378">[ date ]</a>
+              <a href="thread.html#2378">[ thread ]</a>
+              <a href="subject.html#2378">[ subject ]</a>
+              <a href="author.html#2378">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

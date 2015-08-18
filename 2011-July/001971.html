@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20flexcan%3A%20Re%3A%20%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E25FEF9.9060400%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001990.html">
+   <LINK REL="Next"  HREF="001973.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20flexcan%3A%20Re%3A%20%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E25FEF9.9060400%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Jul 20 00:02:33 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001990.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+        <LI>Next message: <A HREF="001973.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1971">[ date ]</a>
+              <a href="thread.html#1971">[ thread ]</a>
+              <a href="subject.html#1971">[ subject ]</a>
+              <a href="author.html#1971">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 07/19/2011 11:08 PM, Oliver Hartkopp wrote:
+
+[...]
+
+&gt;&gt;&gt;<i> IIRC, loopback is really done in hardware and the driver is
+</I>&gt;&gt;&gt;<i> working properly on ARM processors.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> See:
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2010-June/004432.html">https://lists.berlios.de/pipermail/socketcan-core/2010-June/004432.html</A>
+</I>&gt;<i>
+</I>&gt;&gt;<i> 
+</I>&gt;<i> Yes, but i'm pretty sure Marc mixed up the hardware loopback of the
+</I>&gt;<i> FlexCAN controller with the IFF_ECHO requirement. The FlexCAN spec
+</I>&gt;<i> says:
+</I>
+No - the datasheet distinguishes between:
+
+1) loopback, as you quoted the datasheet:
+
+&gt;<i> &quot;Loopback mode &#8212; The module enters this mode when the LPB bit in the
+</I>&gt;<i> control register is set to 1. In this mode, FlexCAN performs an
+</I>&gt;<i> internal loopback that can be used for self test operation. The bit
+</I>&gt;<i> stream output of the transmitter is internally fed back to the
+</I>&gt;<i> receiver input. The Rx CAN input signal is ignored and the Tx CAN
+</I>&gt;<i> output goes to the recessive state (logic &#8216;1&#8217;). FlexCAN behaves as it
+</I>&gt;<i> normally does when transmitting and treats its own transmitted
+</I>&gt;<i> message as a message received from a remote node. In this mode, 
+</I>&gt;<i> FlexCAN ignores the bit sent during the ACK slot in the CAN frame
+</I>&gt;<i> acknowledge field to ensure proper reception of its own message. Both
+</I>&gt;<i> transmit and receive interrupts are generated.&quot;
+</I>&gt;<i> 
+</I>&gt;<i> This means the &quot;Rx CAN input signal is ignored&quot; =&gt; only self test.
+</I>
+ACK - the relevant lines from the driver:
+        if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_LOOPBACK)
+                reg |= FLEXCAN_CTRL_LPB;
+
+
+2) and self reception - which is used to implement the IFF_ECHO:
+
+&gt;<i> bit 17 of MCD - SRX_DIS:
+</I>&gt;<i> 
+</I>&gt;<i> This bit defines whether FlexCAN is allowed to receive frames
+</I>&gt;<i> transmitted by itself. If this bit is set to 1, frames transmitted by
+</I>&gt;<i> the module are not stored in any message buffer, regardless if the
+</I>&gt;<i> message buffer is programmed with an ID that matches the transmitted
+</I>&gt;<i> frame, and no interrupt flag or interrupt signal is generated due to the
+</I>&gt;<i> frame reception.
+</I>&gt;<i> 
+</I>&gt;<i> 0 Self reception enabled
+</I>&gt;<i> 1 Self reception disabled
+</I>
+The funny thing is you have to disable self reception, it's enabled by
+default.
+
+
+However - it turned out in a discussion here (or on -developers) some
+time ago that the IFF_ECHO via self reception has a drawback. The
+information that the rx'ed packet is a IFF_ECHO'ed one gets lost.
+
+Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110720/9908a129/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110720/9908a129/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001990.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+	<LI>Next message: <A HREF="001973.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1971">[ date ]</a>
+              <a href="thread.html#1971">[ thread ]</a>
+              <a href="subject.html#1971">[ subject ]</a>
+              <a href="author.html#1971">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,450 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v5 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v5%203/4%5D%20can%3A%20cc770%3A%20add%20platform%0A%09bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C1322655035-18809-4-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002295.html">
+   <LINK REL="Next"  HREF="002297.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v5 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v5%203/4%5D%20can%3A%20cc770%3A%20add%20platform%0A%09bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C1322655035-18809-4-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v5 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov 30 13:10:34 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002295.html">[Socketcan-users] [PATCH net-next v5 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002297.html">[Socketcan-users] [PATCH net-next v5 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2296">[ date ]</a>
+              <a href="thread.html#2296">[ thread ]</a>
+              <a href="subject.html#2296">[ subject ]</a>
+              <a href="author.html#2296">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This driver works with both, static platform data and device tree
+bindings. It has been tested on a TQM855L board with two AN82527
+CAN controllers on the local bus.
+
+CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Devicetree-discuss at lists.ozlabs.org</A>
+CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linuxppc-dev at ozlabs.org</A>
+CC: Kumar Gala &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">galak at kernel.crashing.org</A>&gt;
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+Acked-by: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+---
+ .../devicetree/bindings/net/can/cc770.txt          |   56 ++++
+ drivers/net/can/cc770/Kconfig                      |    7 +
+ drivers/net/can/cc770/Makefile                     |    1 +
+ drivers/net/can/cc770/cc770_platform.c             |  273 ++++++++++++++++++++
+ 4 files changed, 337 insertions(+), 0 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/cc770.txt
+ create mode 100644 drivers/net/can/cc770/cc770_platform.c
+
+diff --git a/Documentation/devicetree/bindings/net/can/cc770.txt b/Documentation/devicetree/bindings/net/can/cc770.txt
+new file mode 100644
+index 0000000..01e282d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/can/cc770.txt
+@@ -0,0 +1,56 @@
++Memory mapped Bosch CC770 and Intel AN82527 CAN controller
++
++Note: The CC770 is a CAN controller from Bosch, which is 100%
++compatible with the old AN82527 from Intel, but with &quot;bugs&quot; being fixed.
++
++Required properties:
++
++- compatible : should be &quot;bosch,cc770&quot; for the CC770 and &quot;intc,82527&quot;
++	for the AN82527.
++
++- reg : should specify the chip select, address offset and size required
++	to map the registers of the controller. The size is usually 0x80.
++
++- interrupts : property with a value describing the interrupt source
++	(number and sensitivity) required for the controller.
++
++Optional properties:
++
++- bosch,external-clock-frequency : frequency of the external oscillator
++	clock in Hz. Note that the internal clock frequency used by the
++	controller is half of that value. If not specified, a default
++	value of 16000000 (16 MHz) is used.
++
++- bosch,clock-out-frequency : slock frequency in Hz on the CLKOUT pin.
++	If not specified or if the specified value is 0, the CLKOUT pin
++	will be disabled.
++
++- bosch,slew-rate : slew rate of the CLKOUT signal. If not specified,
++	a resonable value will be calculated.
++
++- bosch,disconnect-rx0-input : see data sheet.
++
++- bosch,disconnect-rx1-input : see data sheet.
++
++- bosch,disconnect-tx1-output : see data sheet.
++
++- bosch,polarity-dominant : see data sheet.
++
++- bosch,divide-memory-clock : see data sheet.
++
++- bosch,iso-low-speed-mux : see data sheet.
++
++For further information, please have a look to the CC770 or AN82527.
++
++Examples:
++
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">+can at 3</A>,100 {
++	compatible = &quot;bosch,cc770&quot;;
++	reg = &lt;3 0x100 0x80&gt;;
++	interrupts = &lt;2 0&gt;;
++	interrupt-parent = &lt;&amp;mpic&gt;;
++	bosch,external-clock-frequency = &lt;16000000&gt;;
++};
++
++
++
+diff --git a/drivers/net/can/cc770/Kconfig b/drivers/net/can/cc770/Kconfig
+index 28e4d48..22c07a8 100644
+--- a/drivers/net/can/cc770/Kconfig
++++ b/drivers/net/can/cc770/Kconfig
+@@ -11,4 +11,11 @@ config CAN_CC770_ISA
+ 	  connected to the ISA bus using I/O port, memory mapped or
+ 	  indirect access.
+ 
++config CAN_CC770_PLATFORM
++	tristate &quot;Generic Platform Bus based CC770 driver&quot;
++	---help---
++	  This driver adds support for the CC770 and AN82527 chips
++	  connected to the &quot;platform bus&quot; (Linux abstraction for directly
++	  to the processor attached devices).
++
+ endif
+diff --git a/drivers/net/can/cc770/Makefile b/drivers/net/can/cc770/Makefile
+index 872ecff..9fb8321 100644
+--- a/drivers/net/can/cc770/Makefile
++++ b/drivers/net/can/cc770/Makefile
+@@ -4,5 +4,6 @@
+ 
+ obj-$(CONFIG_CAN_CC770) += cc770.o
+ obj-$(CONFIG_CAN_CC770_ISA) += cc770_isa.o
++obj-$(CONFIG_CAN_CC770_PLATFORM) += cc770_platform.o
+ 
+ ccflags-$(CONFIG_CAN_DEBUG_DEVICES) := -DDEBUG
+diff --git a/drivers/net/can/cc770/cc770_platform.c b/drivers/net/can/cc770/cc770_platform.c
+new file mode 100644
+index 0000000..fb87b22
+--- /dev/null
++++ b/drivers/net/can/cc770/cc770_platform.c
+@@ -0,0 +1,273 @@
++/*
++ * Driver for CC770 and AN82527 CAN controllers on the platform bus
++ *
++ * Copyright (C) 2009, 2011 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the version 2 of the GNU General Public License
++ * as published by the Free Software Foundation
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ */
++
++/*
++ * If platform data are used you should have similar definitions
++ * in your board-specific code:
++ *
++ *   static struct cc770_platform_data myboard_cc770_pdata = {
++ *           .osc_freq = 16000000,
++ *           .cir = 0x41,
++ *           .cor = 0x20,
++ *           .bcr = 0x40,
++ *   };
++ *
++ * Please see include/linux/can/platform/cc770.h for description of
++ * above fields.
++ *
++ * If the device tree is used, you need a CAN node definition in your
++ * DTS file similar to:
++ *
++ *   <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 3</A>,100 {
++ *           compatible = &quot;bosch,cc770&quot;;
++ *           reg = &lt;3 0x100 0x80&gt;;
++ *           interrupts = &lt;2 0&gt;;
++ *           interrupt-parent = &lt;&amp;mpic&gt;;
++ *           bosch,external-clock-frequency = &lt;16000000&gt;;
++ *   };
++ *
++ * See &quot;Documentation/devicetree/bindings/net/can/cc770.txt&quot; for further
++ * information.
++ */
++
++#include &lt;linux/kernel.h&gt;
++#include &lt;linux/module.h&gt;
++#include &lt;linux/interrupt.h&gt;
++#include &lt;linux/netdevice.h&gt;
++#include &lt;linux/delay.h&gt;
++#include &lt;linux/can.h&gt;
++#include &lt;linux/can/dev.h&gt;
++#include &lt;linux/can/platform/cc770.h&gt;
++
++#include &lt;linux/of_platform.h&gt;
++
++#include &quot;cc770.h&quot;
++
++#define DRV_NAME &quot;cc770_platform&quot;
++
++MODULE_AUTHOR(&quot;Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;&quot;);
++MODULE_DESCRIPTION(&quot;Socket-CAN driver for CC770 on the platform bus&quot;);
++MODULE_LICENSE(&quot;GPL v2&quot;);
++
++#define CC770_PLATFORM_CAN_CLOCK  16000000
++
++static u8 cc770_platform_read_reg(const struct cc770_priv *priv, int reg)
++{
++	return in_8(priv-&gt;reg_base + reg);
++}
++
++static void cc770_platform_write_reg(const struct cc770_priv *priv, int reg,
++				     u8 val)
++{
++	out_8(priv-&gt;reg_base + reg, val);
++}
++
++static int __devinit cc770_get_of_node_data(struct platform_device *pdev,
++					    struct cc770_priv *priv)
++{
++	struct device_node *np = pdev-&gt;dev.of_node;
++	const u32 *prop;
++	int prop_size;
++	u32 clkext;
++
++	prop = of_get_property(np, &quot;bosch,external-clock-frequency&quot;,
++			       &amp;prop_size);
++	if (prop &amp;&amp; (prop_size ==  sizeof(u32)))
++		clkext = *prop;
++	else
++		clkext = CC770_PLATFORM_CAN_CLOCK; /* default */
++	priv-&gt;can.clock.freq = clkext;
++
++	/* The system clock may not exceed 10 MHz */
++	if (priv-&gt;can.clock.freq &gt; 10000000) {
++		priv-&gt;cpu_interface |= CPUIF_DSC;
++		priv-&gt;can.clock.freq /= 2;
++	}
++
++	/* The memory clock may not exceed 8 MHz */
++	if (priv-&gt;can.clock.freq &gt; 8000000)
++		priv-&gt;cpu_interface |= CPUIF_DMC;
++
++	if (of_get_property(np, &quot;bosch,divide-memory-clock&quot;, NULL))
++		priv-&gt;cpu_interface |= CPUIF_DMC;
++	if (of_get_property(np, &quot;bosch,iso-low-speed-mux&quot;, NULL))
++		priv-&gt;cpu_interface |= CPUIF_MUX;
++
++	if (!of_get_property(np, &quot;bosch,no-comperator-bypass&quot;, NULL))
++		priv-&gt;bus_config |= BUSCFG_CBY;
++	if (of_get_property(np, &quot;bosch,disconnect-rx0-input&quot;, NULL))
++		priv-&gt;bus_config |= BUSCFG_DR0;
++	if (of_get_property(np, &quot;bosch,disconnect-rx1-input&quot;, NULL))
++		priv-&gt;bus_config |= BUSCFG_DR1;
++	if (of_get_property(np, &quot;bosch,disconnect-tx1-output&quot;, NULL))
++		priv-&gt;bus_config |= BUSCFG_DT1;
++	if (of_get_property(np, &quot;bosch,polarity-dominant&quot;, NULL))
++		priv-&gt;bus_config |= BUSCFG_POL;
++
++	prop = of_get_property(np, &quot;bosch,clock-out-frequency&quot;, &amp;prop_size);
++	if (prop &amp;&amp; (prop_size == sizeof(u32)) &amp;&amp; *prop &gt; 0) {
++		u32 cdv = clkext / *prop;
++		int slew;
++
++		if (cdv &gt; 0 &amp;&amp; cdv &lt; 16) {
++			priv-&gt;cpu_interface |= CPUIF_CEN;
++			priv-&gt;clkout |= (cdv - 1) &amp; CLKOUT_CD_MASK;
++
++			prop = of_get_property(np, &quot;bosch,slew-rate&quot;,
++					       &amp;prop_size);
++			if (prop &amp;&amp; (prop_size == sizeof(u32))) {
++				slew = *prop;
++			} else {
++				/* Determine default slew rate */
++				slew = (CLKOUT_SL_MASK &gt;&gt;
++					CLKOUT_SL_SHIFT) -
++					((cdv * clkext - 1) / 8000000);
++				if (slew &lt; 0)
++					slew = 0;
++			}
++			priv-&gt;clkout |= (slew &lt;&lt; CLKOUT_SL_SHIFT) &amp;
++				CLKOUT_SL_MASK;
++		} else {
++			dev_dbg(&amp;pdev-&gt;dev, &quot;invalid clock-out-frequency\n&quot;);
++		}
++	}
++
++	return 0;
++}
++
++static int __devinit cc770_get_platform_data(struct platform_device *pdev,
++					     struct cc770_priv *priv)
++{
++
++	struct cc770_platform_data *pdata = pdev-&gt;dev.platform_data;
++
++	priv-&gt;can.clock.freq = pdata-&gt;osc_freq;
++	if (priv-&gt;cpu_interface | CPUIF_DSC)
++		priv-&gt;can.clock.freq /= 2;
++	priv-&gt;clkout = pdata-&gt;cor;
++	priv-&gt;bus_config = pdata-&gt;bcr;
++	priv-&gt;cpu_interface = pdata-&gt;cir;
++
++	return 0;
++}
++
++static int __devinit cc770_platform_probe(struct platform_device *pdev)
++{
++	struct net_device *dev;
++	struct cc770_priv *priv;
++	struct resource *mem;
++	resource_size_t mem_size;
++	void __iomem *base;
++	int err, irq;
++
++	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	irq = platform_get_irq(pdev, 0);
++	if (!mem || irq &lt;= 0)
++		return -ENODEV;
++
++	mem_size = resource_size(mem);
++	if (!request_mem_region(mem-&gt;start, mem_size, pdev-&gt;name))
++		return -EBUSY;
++
++	base = ioremap(mem-&gt;start, mem_size);
++	if (!base) {
++		err = -ENOMEM;
++		goto exit_release_mem;
++	}
++
++	dev = alloc_cc770dev(0);
++	if (!dev) {
++		err = -ENOMEM;
++		goto exit_unmap_mem;
++	}
++
++	dev-&gt;irq = irq;
++	priv = netdev_priv(dev);
++	priv-&gt;read_reg = cc770_platform_read_reg;
++	priv-&gt;write_reg = cc770_platform_write_reg;
++	priv-&gt;irq_flags = IRQF_SHARED;
++	priv-&gt;reg_base = base;
++
++	if (pdev-&gt;dev.of_node)
++		err = cc770_get_of_node_data(pdev, priv);
++	else if (pdev-&gt;dev.platform_data)
++		err = cc770_get_platform_data(pdev, priv);
++	else
++		err = -ENODEV;
++	if (err)
++		goto exit_free_cc770;
++
++	dev_dbg(&amp;pdev-&gt;dev,
++		 &quot;reg_base=0x%p irq=%d clock=%d cpu_interface=0x%02x &quot;
++		 &quot;bus_config=0x%02x clkout=0x%02x\n&quot;,
++		 priv-&gt;reg_base, dev-&gt;irq, priv-&gt;can.clock.freq,
++		 priv-&gt;cpu_interface, priv-&gt;bus_config, priv-&gt;clkout);
++
++	dev_set_drvdata(&amp;pdev-&gt;dev, dev);
++	SET_NETDEV_DEV(dev, &amp;pdev-&gt;dev);
++
++	err = register_cc770dev(dev);
++	if (err) {
++		dev_err(&amp;pdev-&gt;dev,
++			&quot;couldn't register CC700 device (err=%d)\n&quot;, err);
++		goto exit_free_cc770;
++	}
++
++	return 0;
++
++exit_free_cc770:
++	free_cc770dev(dev);
++exit_unmap_mem:
++	iounmap(base);
++exit_release_mem:
++	release_mem_region(mem-&gt;start, mem_size);
++
++	return err;
++}
++
++static int __devexit cc770_platform_remove(struct platform_device *pdev)
++{
++	struct net_device *dev = dev_get_drvdata(&amp;pdev-&gt;dev);
++	struct cc770_priv *priv = netdev_priv(dev);
++	struct resource *mem;
++
++	unregister_cc770dev(dev);
++	iounmap(priv-&gt;reg_base);
++	free_cc770dev(dev);
++
++	mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	release_mem_region(mem-&gt;start, resource_size(mem));
++
++	return 0;
++}
++
++static struct of_device_id __devinitdata cc770_platform_table[] = {
++	{.compatible = &quot;bosch,cc770&quot;}, /* CC770 from Bosch */
++	{.compatible = &quot;intc,82527&quot;},  /* AN82527 from Intel CP */
++	{},
++};
++
++static struct platform_driver cc770_platform_driver = {
++	.driver = {
++		.name = DRV_NAME,
++		.owner = THIS_MODULE,
++		.of_match_table = cc770_platform_table,
++	},
++	.probe = cc770_platform_probe,
++	.remove = __devexit_p(cc770_platform_remove),
++};
++
++module_platform_driver(cc770_platform_driver);
++
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002295.html">[Socketcan-users] [PATCH net-next v5 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002297.html">[Socketcan-users] [PATCH net-next v5 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2296">[ date ]</a>
+              <a href="thread.html#2296">[ thread ]</a>
+              <a href="subject.html#2296">[ subject ]</a>
+              <a href="author.html#2296">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

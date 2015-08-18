@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBECBD.5070209%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001679.html">
+   <LINK REL="Next"  HREF="001681.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kenrel panic with CAN gateway on MPC5200</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBECBD.5070209%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Kenrel panic with CAN gateway on MPC5200">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Dec  5 20:49:17 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001679.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+        <LI>Next message: <A HREF="001681.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1680">[ date ]</a>
+              <a href="thread.html#1680">[ thread ]</a>
+              <a href="subject.html#1680">[ subject ]</a>
+              <a href="author.html#1680">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05.12.2010 19:05, Oliver Hartkopp wrote:
+&gt;<i> On 05.12.2010 18:27, Marc Kleine-Budde wrote:
+</I>
+&gt;&gt;&gt;<i> That was the reason, why it put this together in the locked region.
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i> then we must use the 2nd fix
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> diff --git a/net/can/af_can.c b/net/can/af_can.c index 702be5a..b046ff0
+</I>&gt;&gt;&gt;<i> 100644 --- a/net/can/af_can.c +++ b/net/can/af_can.c @@ -418,7 +418,7
+</I>&gt;&gt;&gt;<i> @@ int can_rx_register(struct net_device *dev, canid_t can_id, canid_t
+</I>&gt;&gt;&gt;<i> mask, if (dev &amp;&amp; dev-&gt;type != ARPHRD_CAN) return -ENODEV;
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;&gt;<i> -       r = kmem_cache_alloc(rcv_cache, GFP_KERNEL); +       r =
+</I>&gt;&gt;&gt;<i> kmem_cache_alloc(rcv_cache, GFP_ATOMIC); if (!r) return -ENOMEM;
+</I>&gt;&gt;&gt;<i> 
+</I>&gt;&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hm - in general there's no reason to have this kmem_cache_alloc() running
+</I>&gt;<i> with GFP_ATOMIC as can_rx_register() is always triggered from userspace- or
+</I>&gt;<i> from softirq-context (notifier).
+</I>&gt;<i> 
+</I>&gt;<i> I expect the problem somewhere in the netlink/locking stuff ...
+</I>
+Michal,
+
+please check out the latest revision 1222 of the SocketCAN SVN to update gw.c.
+
+I removed the private locking via cgw_list_lock as i discovered that the
+rtnl_lock is always set at all changes to network configuration.
+
+I tested the changed can-gw.ko by removing the module or by removing
+configured netdevices to trigger the notifier - and everything looked good.
+
+Let's see if the new can-gw version 20101205 makes it :-)
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001679.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+	<LI>Next message: <A HREF="001681.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1680">[ date ]</a>
+              <a href="thread.html#1680">[ thread ]</a>
+              <a href="subject.html#1680">[ subject ]</a>
+              <a href="author.html#1680">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

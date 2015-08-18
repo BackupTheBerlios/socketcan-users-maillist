@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Userspace%20Lawicel%20%22CANUSB%22%20device%20via%20libftdi&In-Reply-To=%3C20081217163837.t46kpe5jio844sw4%40horde.longlandclan.yi.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000604.html">
+   <LINK REL="Next"  HREF="000606.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi</H1>
+    <B>Stuart Longland</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Userspace%20Lawicel%20%22CANUSB%22%20device%20via%20libftdi&In-Reply-To=%3C20081217163837.t46kpe5jio844sw4%40horde.longlandclan.yi.org%3E"
+       TITLE="[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi">redhatter at gentoo.org
+       </A><BR>
+    <I>Wed Dec 17 06:38:37 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000604.html">[Socketcan-users] CAN USB
+</A></li>
+        <LI>Next message: <A HREF="000606.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#605">[ date ]</a>
+              <a href="thread.html#605">[ thread ]</a>
+              <a href="subject.html#605">[ subject ]</a>
+              <a href="author.html#605">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+    I'm fairly new to SocketCAN, having gotten familiar with using CAN  
+via Lawicel's Win32 drivers, and in hardware on some small  
+MSP430-based MCUs.
+
+    I'm currently trying to get an application working on top of  
+SocketCAN, as I figure it'll give us a reasonable amount of  
+portability... however I'm finding that using the Lawicel USB CAN  
+devices, one must be particularly careful when attaching and  
+detaching, and this is becoming a major problem.
+
+    At the moment, I'm driving the CAN devices using the slcan driver,  
+which, when it works, works quite well.  I understand reading the  
+documentation for these devices, that using them in the pseudo RS232  
+mode has some inefficiencies due to the slowness of the serial link  
+(max 115200bps).  The biggest problem however has been stability.
+
+   slcan_attach appears at first to provide a means to automatically  
+set the speed (1Mbps; S8 in our case) and open the CAN channel before  
+attaching it to slc0.  However, this doesn't appear to work very  
+well... maybe I'm doing it wrong, but more frequently than not, a  
+kernel bug is triggered, and the machine has to be rebooted before I  
+can do any work.  (root logins seize up...etc.)
+
+   The procedure seems to work most times is:
+
+# screen /dev/ttyUSB0 115200
+S8
+O
+
+(then get out of screen with ^A,K,y)
+# slcan_attach /dev/ttyUSB0
+# ifconfig slc0 up
+
+   Although not every time -- sometimes I get told there's &quot;no such  
+device&quot; when I try to bring the interface up (slc0 exists though)...  
+nothing shows up in dmesg other than the fact that slcan was loaded.
+
+   Given the FTDI chip in these CAN devices, has a faster mode, I was  
+wondering if there was some means of writing a userspace CAN driver  
+(using libftdi; which I can get working trivially, and works  
+reliably[1]) and then getting that to hook into the SocketCAN  
+framework using a TUN/TAP-like device.
+
+   Alternatively, would it be better to look at libftdi, and write a  
+kernel-side equivalent that'll allow better control of these devices?   
+What are peoples' thoughts here?
+-- 
+Stuart Longland (aka Redhatter)              .'''.
+Gentoo Linux/MIPS Cobalt and Docs Developer  '.'` :
+. . . . . . . . . . . . . . . . . . . . . .   .'.'
+<A HREF="http://dev.gentoo.org/~redhatter">http://dev.gentoo.org/~redhatter</A>             :.'
+
+I haven't lost my mind...
+   ...it's backed up on a tape somewhere.
+
+1. On the Lawicel site, they give an example driver for Linux using  
+some proprietary lib... but using that example, and libftdi, you can  
+write your own driver.  Evidently, the protocol used via this other  
+means is identical to that used over RS232.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000604.html">[Socketcan-users] CAN USB
+</A></li>
+	<LI>Next message: <A HREF="000606.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#605">[ date ]</a>
+              <a href="thread.html#605">[ thread ]</a>
+              <a href="subject.html#605">[ subject ]</a>
+              <a href="author.html#605">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Bus-simulation with SocketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bus-simulation%20with%20SocketCAN&In-Reply-To=%3C4F0C1304.4060309%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002341.html">
+   <LINK REL="Next"  HREF="002343.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Bus-simulation with SocketCAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bus-simulation%20with%20SocketCAN&In-Reply-To=%3C4F0C1304.4060309%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Bus-simulation with SocketCAN">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Jan 10 11:29:24 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002341.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+        <LI>Next message: <A HREF="002343.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2342">[ date ]</a>
+              <a href="thread.html#2342">[ thread ]</a>
+              <a href="subject.html#2342">[ subject ]</a>
+              <a href="author.html#2342">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Sebastian,
+
+On 09.01.2012 23:33, Sebastian Haas wrote:
+
+&gt;<i> just in case someone is interested in an easy to way to simulate CAN nodes or
+</I>&gt;<i> to test ECUs via CAN. I want to inform you that my recently started project
+</I>&gt;<i> restcan [3] reached a first milestone. Look at [1] to know what restcan is.
+</I>&gt;<i> 
+</I>&gt;<i> The milestone includes the following features:
+</I>&gt;<i> - support of SocketCANs' RAW channels incl. Rx filters
+</I>&gt;<i> - support of a rudimentary JSON-based message database format
+</I>
+
+Do you know the Kayak project from Jan-Niklas Meier?
+
+Kajak is a JAVA based frontend and library, see:
+
+<A HREF="http://kayak.2codeornot2code.org/">http://kayak.2codeornot2code.org/</A>
+
+<A HREF="http://kayak.2codeornot2code.org/tutorial.html">http://kayak.2codeornot2code.org/tutorial.html</A>
+
+And on github: <A HREF="https://github.com/dschanoeh/Kayak">https://github.com/dschanoeh/Kayak</A>
+
+Implementing a restbus functionality in JAVA based on the Kajak library is
+very easy - when  you are a JAVA developer ;-)
+
+I like your approach to get a restbus simulation in C.
+
+But checking your JSON description for CAN signals i stumbled about the
+'intel' and 'motorola' tags which stand for 'little' and 'big' endian.
+
+I wonder, if it makes sense for your project to adopt the XML-based KCD
+format for CAN signal descriptions:
+
+<A HREF="https://github.com/dschanoeh/Kayak/blob/ee6b459bddd1831ae99c1afcde01f315e4b454b4/Kayak-kcd/src/test/resources/can_definition_sample.kcd">https://github.com/dschanoeh/Kayak/blob/ee6b459bddd1831ae99c1afcde01f315e4b454b4/Kayak-kcd/src/test/resources/can_definition_sample.kcd</A>
+
+Here is the XML schema definition:
+
+<A HREF="https://github.com/dschanoeh/Kayak/blob/master/Kayak-kcd/src/main/resources/com/github/kayak/canio/kcd/schema/Definition.xsd">https://github.com/dschanoeh/Kayak/blob/master/Kayak-kcd/src/main/resources/com/github/kayak/canio/kcd/schema/Definition.xsd</A>
+
+Maybe you can build your JSON description with an XSLT process from the well
+defined KCD description.
+
+There's also a dbc input converter on the run to create KCDs:
+<A HREF="https://github.com/dschanoeh/CANBabel">https://github.com/dschanoeh/CANBabel</A>
+
+
+&gt;<i> - support of receiving and decoding measurement values encoded in CAN
+</I>&gt;<i> messages, sending of such messages is also possible
+</I>&gt;<i> 
+</I>&gt;<i> See the examples in [5] to get an impression of using restcan.
+</I>&gt;<i> 
+</I>&gt;<i> Since my plans are big and I'm just one person with limited sparetime I ask
+</I>&gt;<i> everyone here to support this project with its mission to provide any easy to
+</I>&gt;<i> use way of accessing SocketCAN. See [4] for things I want to implement in the
+</I>&gt;<i> near future.
+</I>&gt;<i> 
+</I>&gt;<i> I hope Oliver is fine with &quot;mis-&quot;using the socketcan mailing list to announce
+</I>&gt;<i> this milestone of this very socketcan-related project. :-)
+</I>
+
+:<i>-) This is not in my responsibility what is posted on SocketCAN-Users.
+</I>Btw. i put it onto the linux-can ML to continue the discussion there.
+
+It's a good question, if we just do announcements on linux-can ML as i don't
+know if the SocketCAN-Users ML will continue in the future.
+
+
+&gt;<i> 
+</I>&gt;<i> [1] <A HREF="https://github.com/sebi2k1/restcan/wiki">https://github.com/sebi2k1/restcan/wiki</A>
+</I>&gt;<i> [2] <A HREF="http://sebi2k1.wordpress.com/2012/01/09/transmitting-and-receiving-physical-values-via-can/">http://sebi2k1.wordpress.com/2012/01/09/transmitting-and-receiving-physical-values-via-can/</A>
+</I>&gt;<i> [3] <A HREF="https://github.com/sebi2k1/restcan">https://github.com/sebi2k1/restcan</A>
+</I>&gt;<i> [4] <A HREF="https://github.com/sebi2k1/restcan/blob/master/TODO.md">https://github.com/sebi2k1/restcan/blob/master/TODO.md</A>
+</I>&gt;<i> [5] <A HREF="https://github.com/sebi2k1/restcan/tree/master/sample_scripts">https://github.com/sebi2k1/restcan/tree/master/sample_scripts</A>
+</I>
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002341.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+	<LI>Next message: <A HREF="002343.html">[Socketcan-users] Bus-simulation with SocketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2342">[ date ]</a>
+              <a href="thread.html#2342">[ thread ]</a>
+              <a href="subject.html#2342">[ subject ]</a>
+              <a href="author.html#2342">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

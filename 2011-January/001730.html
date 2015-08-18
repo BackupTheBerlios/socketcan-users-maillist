@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3C4D30562D.10805%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001729.html">
+   <LINK REL="Next"  HREF="001731.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3C4D30562D.10805%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104">wg at grandegger.com
+       </A><BR>
+    <I>Fri Jan 14 14:57:01 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001729.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+        <LI>Next message: <A HREF="001731.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1730">[ date ]</a>
+              <a href="thread.html#1730">[ thread ]</a>
+              <a href="subject.html#1730">[ subject ]</a>
+              <a href="author.html#1730">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 01/14/2011 01:53 PM, Willy Lambert wrote:
+&gt;<i> 2011/1/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> 
+</I>&gt;&gt;<i> On 01/14/2011 10:37 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;<i> 2011/1/14 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 01/14/2011 12:57 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> 2011/1/13 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;<i> I am stuck with the test case setup, candump shows error messages when
+</I>&gt;&gt;<i> I
+</I>&gt;&gt;&gt;&gt;<i> try
+</I>&gt;&gt;&gt;&gt;&gt;<i> a cansend. I already have tricks with extended or standard data frame
+</I>&gt;&gt;&gt;&gt;&gt;<i> formats with Ixxat drivers. My motors seems to only accept standard
+</I>&gt;&gt;&gt;&gt;<i> frames.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Is there a way to configure this ?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I booted my target with Ixxat driver and run my test cases to validate
+</I>&gt;&gt;&gt;&gt;&gt;<i> everything is in order. (BIOS options, jumpers, IRQ, wiring). I only
+</I>&gt;&gt;<i> use
+</I>&gt;&gt;&gt;&gt;<i> one
+</I>&gt;&gt;&gt;&gt;&gt;<i> controller on IRQ11 (as it is said as &quot;reserved&quot; in my CPU board IRQ
+</I>&gt;&gt;&gt;&gt;&gt;<i> mapping)
+</I>&gt;&gt;&gt;&gt;&gt;<i> I may run my motor and receive SDO from him, everything seems to be OK.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> The hardware seem to work. That's a good starting point.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Without changing anything except my init script which load can drivers
+</I>&gt;&gt;&gt;&gt;<i> (in
+</I>&gt;&gt;&gt;&gt;&gt;<i> order to load socket can drivers instead of Ixxat ones), I rebooted my
+</I>&gt;&gt;&gt;&gt;<i> CPU.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Here is the load script :
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> modprobe sja1000_isa irq=11 mem=0xD0000
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ip link set can0 type can bitrate 250000 restart-ms 1000
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ifconfig can0 up
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Here is dmesg answer (which seems correc) :
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> [    3.928467] sja1000_isa sja1000_isa.0: sja1000_isa device
+</I>&gt;&gt;<i> registered
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> (reg_base=0xc00d0000, irq=11)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> [    3.928646] Legacy sja1000_isa driver for max. 8 devices registered
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> [    3.938877] sja1000_isa sja1000_isa.0: setting BTR0=0x01 BTR1=0x1c
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Here is ifconfig result :
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> can0      Link encap:UNSPEC  HWaddr
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>           RX packets:2 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>           collisions:0 lg file transmission:10
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>           RX bytes:16 (16.0 B)  TX bytes:0 (0.0 B)
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>           Interruption:11
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Here is /proc/iomem
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 00000000-00000fff : reserved
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 00001000-0009fbff : System RAM
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 0009fc00-0009ffff : reserved
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 000a0000-000bffff : Video RAM area
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 000c0000-000c7fff : Video ROM
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> 000d0000-000d001f : sja1000_isa
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Here is /proc/interrupts
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>            CPU0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   0:        215   IO-APIC-edge      timer
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   1:          8   IO-APIC-edge      i8042
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   2:          0    XT-PIC-XT        cascade
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   8:         97   IO-APIC-edge      rtc0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  11:          1   IO-APIC-edge      can0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  12:          7   IO-APIC-edge      i8042
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  14:          0   IO-APIC-edge      ata_piix
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  15:       1017   IO-APIC-edge      ata_piix
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  19:          0   IO-APIC-fasteoi   uhci_hcd:usb3
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  23:         14   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  40:        411   PCI-MSI-edge      eth0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> NMI:          0   Non-maskable interrupts
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> LOC:     293000   Local timer interrupts
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> SPU:          0   Spurious interrupts
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> PMI:          0   Performance monitoring interrupts
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> PND:          0   Performance pending work
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> TRM:          0   Thermal event interrupts
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> THR:          0   Threshold APIC interrupts
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> MCE:          0   Machine check exceptions
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> MCP:          1   Machine check polls
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ERR:          0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> MIS:          0
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I write this command to wake up everybody :
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ./cansend can0 000#0100
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> And at the same time, in another terminal, I run candump with theses
+</I>&gt;&gt;&gt;&gt;<i> results
+</I>&gt;&gt;&gt;&gt;&gt;<i> :
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  ./candump any,0:0,#FFFFFFFF
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   can0  20000040  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   can0  20000100  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   can0  20000004  [8] 00 04 00 00 00 00 00 71   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>   can0  20000004  [8] 00 10 00 00 00 00 00 81   ERRORFRAME
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> The controller goes bus-off.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> May I ask you how you decode the candump ERRORFRAME ? does the
+</I>&gt;&gt;&gt;<i> 20000040/20000100/20000004 makes sens ? What the date behind ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> See <A HREF="http://lxr.linux.no/#linux/include/linux/can/error.h">http://lxr.linux.no/#linux/include/linux/can/error.h</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> thanks a lot for this it will help. What is the meaning of &quot;2&quot; in the error
+</I>&gt;<i> class 20000040 ? the mask says it's a bus off, but does the 2 means anything
+</I>
+CAN_ERR_FLAG, see:
+<A HREF="http://lxr.linux.no/#linux+v2.6.37/include/linux/can.h#L23">http://lxr.linux.no/#linux+v2.6.37/include/linux/can.h#L23</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001729.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+	<LI>Next message: <A HREF="001731.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1730">[ date ]</a>
+              <a href="thread.html#1730">[ thread ]</a>
+              <a href="subject.html#1730">[ subject ]</a>
+              <a href="author.html#1730">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

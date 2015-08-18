@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] (no subject)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%28no%20subject%29&In-Reply-To=%3C4EC621B9.2050400%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002238.html">
+   <LINK REL="Next"  HREF="002241.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] (no subject)</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%28no%20subject%29&In-Reply-To=%3C4EC621B9.2050400%40grandegger.com%3E"
+       TITLE="[Socketcan-users] (no subject)">wg at grandegger.com
+       </A><BR>
+    <I>Fri Nov 18 10:13:29 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002238.html">[Socketcan-users] (no subject)
+</A></li>
+        <LI>Next message: <A HREF="002241.html">[Socketcan-users]  10 CAN interfaces on ECAN-527d
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2239">[ date ]</a>
+              <a href="thread.html#2239">[ thread ]</a>
+              <a href="subject.html#2239">[ subject ]</a>
+              <a href="author.html#2239">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 11/18/2011 09:04 AM, G.H.Lee wrote:
+&gt;<i> Hello, all
+</I>&gt;<i> 
+</I>&gt;<i> I am one of the socketcan users. The kernel I am using is 2.6.29.1. So I can only change the baud rate of the can bus using the ioctl() function. I find this usage from the cantest project. If I want to set the baud rate as 1Mbps, I should write the code as follows:
+</I>&gt;<i> 
+</I>&gt;<i> struct ifreq ifr;
+</I>&gt;<i> int s;
+</I>&gt;<i> .......
+</I>&gt;<i> s = socket(PF_CAN, SOCK_RAW, CAN_RAW);
+</I>&gt;<i> ifr.ifr_ifru.ifru_ivalue = 1000000;
+</I>&gt;<i> ret = ioctl(s, SIOCSCANBAUDRATE, &amp;ifr);
+</I>
+What kernel and MSCAN driver are you using? With a recent version of the
+mainline kernel, the bit-rate is set via netlink interface as described
+here:
+
+<A HREF="http://lxr.linux.no/#linux+v3.1.1/Documentation/networking/can.txt#L635">http://lxr.linux.no/#linux+v3.1.1/Documentation/networking/can.txt#L635</A>
+
+Looks like you are using the old and deprecated SysFS interface.
+
+&gt;<i> But I find that the actual baud rate is 666.7Kbps, which is 2/3 of 1000Kbps. Then I try some other values. I find that all of the actual baud rate is 2/3 of the setting value. It is very strange. I find that that is a function in the file ./net/can/dev.c, named can_calc_bit_time. This function change the baud rate to bit rate. So does this function correct ?
+</I>
+The frequency of the CAN clock source seems to be incorrect.
+
+&gt;<i> Plus, the board I am using is TWR-MPC5125 provided by freescale.
+</I>
+Are you using a kernel from Freescale? If yes, please contact Freescale.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002238.html">[Socketcan-users] (no subject)
+</A></li>
+	<LI>Next message: <A HREF="002241.html">[Socketcan-users]  10 CAN interfaces on ECAN-527d
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2239">[ date ]</a>
+              <a href="thread.html#2239">[ thread ]</a>
+              <a href="subject.html#2239">[ subject ]</a>
+              <a href="author.html#2239">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

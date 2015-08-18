@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mixing RAW and BCM sockets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mixing%20RAW%20and%20BCM%20sockets&In-Reply-To=%3C20110124210656.GA28026%40milesteg.arr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001751.html">
+   <LINK REL="Next"  HREF="001761.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mixing RAW and BCM sockets</H1>
+    <B>Daniele Venzano</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mixing%20RAW%20and%20BCM%20sockets&In-Reply-To=%3C20110124210656.GA28026%40milesteg.arr%3E"
+       TITLE="[Socketcan-users] Mixing RAW and BCM sockets">linux at brownhat.org
+       </A><BR>
+    <I>Mon Jan 24 22:06:56 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001751.html">[Socketcan-users] problem with mcp2515 on Kontron nanoETXexpress	board
+</A></li>
+        <LI>Next message: <A HREF="001761.html">[Socketcan-users] Mixing RAW and BCM sockets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1752">[ date ]</a>
+              <a href="thread.html#1752">[ thread ]</a>
+              <a href="subject.html#1752">[ subject ]</a>
+              <a href="author.html#1752">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Let's say I have several sockets, one BCM and many RAW.
+I'm using the BCM one exclusively for the &quot;timed send&quot; feature, no RX
+configured or done.
+On the RAW sockets I listen for incoming messages, with some filters,
+different from socket to socket and changing over time. I configure the
+sockets with the &quot;do not loopback&quot; option, according to can.txt.
+
+I have the loopback problem. What I send from the BCM socket, I receive
+on the RAW sockets. I do not want loopback (legacy application, several
+threads do different selects on different sockets and expect different
+messages).
+
+First, is this the expected behaviour? What I send from BCM is read on
+RAW regardless of the loopback socket option?
+
+Second, it seems to me that in the bcm.c code there are some occurences of
+can_send(skb, 1). If I put there can_send(skb, 0), do I get the
+behaviour I want (no loopback on the RAW sockets)?
+
+Thanks,
+Daniele
+
+-- 
+Daniele Venzano
+<A HREF="http://www.brownhat.org">http://www.brownhat.org</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001751.html">[Socketcan-users] problem with mcp2515 on Kontron nanoETXexpress	board
+</A></li>
+	<LI>Next message: <A HREF="001761.html">[Socketcan-users] Mixing RAW and BCM sockets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1752">[ date ]</a>
+              <a href="thread.html#1752">[ thread ]</a>
+              <a href="subject.html#1752">[ subject ]</a>
+              <a href="author.html#1752">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] FW: CAN Id is trucated
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C4B163B4A.7000707%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001182.html">
+   <LINK REL="Next"  HREF="001183.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] FW: CAN Id is trucated</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20FW%3A%20CAN%20Id%20is%20trucated&In-Reply-To=%3C4B163B4A.7000707%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] FW: CAN Id is trucated">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Dec  2 11:02:50 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001182.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+        <LI>Next message: <A HREF="001183.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1186">[ date ]</a>
+              <a href="thread.html#1186">[ thread ]</a>
+              <a href="subject.html#1186">[ subject ]</a>
+              <a href="author.html#1186">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Chris Verges wrote:
+&gt;<i> Hi Ravi,
+</I>&gt;<i> 
+</I>&gt;<i> Also, have you tried adding CAN_EFF_FLAG to the can_id in a logical OR?
+</I>
+This is indeed the problem here:
+
+(..)
+
+&gt;<i>  
+</I>&gt;<i>    /* Send a message to the CAN bus */
+</I>&gt;<i>    struct can_frame frame;
+</I>&gt;<i>    frame.can_id = 0x123;
+</I>
+This has to be:
+
+    frame.can_id = 0x123 | CAN_EFF_FLAG;
+
+
+... to create a valid EFF CAN Frame.
+
+Btw. that you see a truncated CAN-ID with your above code comes from a
+recently fixed bug in the PCAN_USB driver for netdevices:
+
+There was a problem sending correct SFF(!) CAN-IDs (which you've done in your
+code).
+
+Please update to the latest PEAK driver 6.13 or 6.11 that contains the fix for
+that or apply the attached patch, if you can't update your PEAK driver for any
+reason.
+
+Regards,
+Oliver
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: peakusb_endian_sffsend.patch
+Type: text/x-patch
+Size: 576 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091202/5dafabb6/attachment.bin">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091202/5dafabb6/attachment.bin</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001182.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+	<LI>Next message: <A HREF="001183.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1186">[ date ]</a>
+              <a href="thread.html#1186">[ thread ]</a>
+              <a href="subject.html#1186">[ subject ]</a>
+              <a href="author.html#1186">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

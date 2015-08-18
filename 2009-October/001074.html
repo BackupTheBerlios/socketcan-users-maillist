@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socket: Address family not supported by protocol
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%3A%20Address%20family%20not%20supported%20by%20protocol&In-Reply-To=%3C200910151602.06103.martin.henne%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001072.html">
+   <LINK REL="Next"  HREF="001075.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socket: Address family not supported by protocol</H1>
+    <B>Martin Henne</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%3A%20Address%20family%20not%20supported%20by%20protocol&In-Reply-To=%3C200910151602.06103.martin.henne%40web.de%3E"
+       TITLE="[Socketcan-users] socket: Address family not supported by protocol">martin.henne at web.de
+       </A><BR>
+    <I>Thu Oct 15 16:02:06 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001072.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+        <LI>Next message: <A HREF="001075.html">[Socketcan-users] socket: Address family not supported by	protocol
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1074">[ date ]</a>
+              <a href="thread.html#1074">[ thread ]</a>
+              <a href="subject.html#1074">[ subject ]</a>
+              <a href="author.html#1074">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi all,
+
+I have a weird problem with my CAN-Software that worked a while ago. 
+I have two machines, a desktop PC and a laptop, both have Ubuntu 9.04
+with kernel 2.6.28-15 installes, both compiled and installed the peak-
+linux-drivers 6.11 correctly. (make &amp;&amp; sudo make install).
+
+I also installed today's version of socketcan (svn) on both machines.
+
+On both machines I can do 'ifconfig can0 up' without any problems. On the 
+labtop, I can then do e. g.
+
+$ candump can0
+or
+$ cansend can0 201#11.22.33.44.55.66.77.88
+
+and things like that. It works. I checked that by connecting another PC 
+(sorry, it was Windows XP) using PCan-View. 
+
+When I try the same thing on the desktop PC, I get:
+
+$ cansend can0 201#11.22.33.44.55.66.77.88
+socket: Address family not supported by protocol
+
+I installed the driver the same way as I did on the laptop and I have no other 
+signs that anything fails. On the non-working desktop pc, 'cat /proc/pcan' 
+gives this:
+
+
+*------------ PEAK-Systems CAN interfaces (www.peak-system.com) -------------
+*--------------------------  Release_20090626_n  ----------------------------
+*------------- [mod] [isa] [pci] [dng] [par] [usb] [pcc] [net] --------------
+*--------------------- 1 interfaces @ major 249 found -----------------------
+*n -type- ndev --base-- irq --btr- --read-- --write- --irqs-- -errors- status
+32    usb can0 ffffffff 255 0x001c 00000001 00000000 0000019f 00000000 0x0000
+
+On the (working) laptop, it gives:
+
+
+*------------ PEAK-Systems CAN interfaces (www.peak-system.com) -------------
+*--------------------------  Release_20090626_n  ----------------------------
+*------------- [mod] [isa] [pci] [dng] [par] [usb] [pcc] [net] --------------
+*--------------------- 1 interfaces @ major 249 found -----------------------
+*n -type- ndev --base-- irq --btr- --read-- --write- --irqs-- -errors- status
+32    usb can0 ffffffff 255 0x001c 00000000 00000001 000001c0 00000000 0x0000
+
+What can i do to investigate the problem in detail?
+
+I use two PCAN USB-Adapters (/dev/pcan32), one has firmware 0.7, the other uses
+a newer (2.?) firmware. exchanging them makes no difference.
+
+I appreciate any help.
+
+Thanx in advance.
+
+
+
+Martin
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001072.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+	<LI>Next message: <A HREF="001075.html">[Socketcan-users] socket: Address family not supported by	protocol
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1074">[ date ]</a>
+              <a href="thread.html#1074">[ thread ]</a>
+              <a href="subject.html#1074">[ subject ]</a>
+              <a href="author.html#1074">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

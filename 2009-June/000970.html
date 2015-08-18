@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] atomic operations
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3Ccabda6420906240208p4bb838daqc3a88e6f3c0220b2%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000961.html">
+   <LINK REL="Next"  HREF="000955.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] atomic operations</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20atomic%20operations&In-Reply-To=%3Ccabda6420906240208p4bb838daqc3a88e6f3c0220b2%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] atomic operations">chripell at gmail.com
+       </A><BR>
+    <I>Wed Jun 24 11:08:25 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000961.html">[Socketcan-users] atomic operations
+</A></li>
+        <LI>Next message: <A HREF="000955.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#970">[ date ]</a>
+              <a href="thread.html#970">[ thread ]</a>
+              <a href="subject.html#970">[ subject ]</a>
+              <a href="author.html#970">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi
+
+&gt;<i> After fixing the remaining issues, please feel free to prepare a kernel
+</I>&gt;<i> patch against Dave Miller's &quot;net-net-2.6&quot; tree and post it to the netdev
+</I>&gt;<i> mailing list with CC to this and the Linux SPI mailing list. If you are
+</I>&gt;<i> lucky (or unlucky depending on your free time and mood to deal with
+</I>&gt;<i> bigger changes ;-) you will get constructive feedback. I'm wondering if
+</I>&gt;<i> the NAPI interface could be used for deferred interrupt handling instead
+</I>&gt;<i> of the work-queues.
+</I>
+I had a look but I don't think that NAPI will solve this kind of
+problems. The main problem is that vast portions of Linux net stack
+may run in an interrupt context so those just cannot access registers
+via the SPI bus (or similar). I think I cleared all the possible such
+situations. I would like to add NAPI and the use of spi_async to the
+driver but I think this is a performance enhancement. The point here
+is that we are limited by the underlying implementation of SPI. For
+example the one I'm using on s3c2440 is not that good (could use DMA
+(for the MCP2515 when you can do just one transfer for each tx/rx-ed
+packet it could really pay for the overhead of setting up DMA) and
+avoid using a worqueue itself), so I think I should look at that
+first.
+
+Anyway before trying my luck in netdev ml I'm going to repost the
+fixes here so we have a fully working implementation.
+
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000961.html">[Socketcan-users] atomic operations
+</A></li>
+	<LI>Next message: <A HREF="000955.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#970">[ date ]</a>
+              <a href="thread.html#970">[ thread ]</a>
+              <a href="subject.html#970">[ subject ]</a>
+              <a href="author.html#970">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Limiting the send rate
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Limiting%20the%20send%20rate&In-Reply-To=%3C20090408124023.GC31068%40serio%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000758.html">
+   <LINK REL="Next"  HREF="000760.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Limiting the send rate</H1>
+    <B>Ayo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Limiting%20the%20send%20rate&In-Reply-To=%3C20090408124023.GC31068%40serio%3E"
+       TITLE="[Socketcan-users] Limiting the send rate">ayo at blicky.net
+       </A><BR>
+    <I>Wed Apr  8 14:40:23 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000758.html">[Socketcan-users] Limiting the send rate
+</A></li>
+        <LI>Next message: <A HREF="000760.html">[Socketcan-users] Missing error counters?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#759">[ date ]</a>
+              <a href="thread.html#759">[ thread ]</a>
+              <a href="subject.html#759">[ subject ]</a>
+              <a href="author.html#759">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Apr 08, 2009 at 02:20:32PM +0200, Wolfgang Grandegger wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> please keep the CC to the Socketcan-help ML.
+</I>
+Thought I configured my client to do so automatically - my bad.
+
+&gt;<i> Ayo wrote:
+</I>&gt;<i> &gt; On Wed, Apr 08, 2009 at 01:22:41PM +0200, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt; Ayo wrote:
+</I>&gt;<i> &gt;&gt;&gt; Hi,
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; ..
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; I've tried to play around with the tc utility provided by iproute2, which
+</I>&gt;<i> &gt;&gt;&gt; does look like it can do what I want, but I'm clueless as how to configure it
+</I>&gt;<i> &gt;&gt;&gt; to do what I want.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Does anyone have experience with this, or could give me some directions?
+</I>&gt;<i> &gt;&gt; Using the Linux network scheduler [1] for that purpose seems the right
+</I>&gt;<i> &gt;&gt; choice to me. What scheduler did you use? I have not yet tried using it
+</I>&gt;<i> &gt;&gt; but maybe it needs some adaption for the CAN protocol.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Your [1] isn't pointing to anything, I'd guess you wanted to provide a link. :-)
+</I>&gt;<i> 
+</I>&gt;<i> Sorry, here it comes:
+</I>&gt;<i> 
+</I>&gt;<i>   <A HREF="http://lxr.linux.no/linux+v2.6.29/net/sched/Kconfig">http://lxr.linux.no/linux+v2.6.29/net/sched/Kconfig</A>
+</I>&gt;<i> 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Anyway, I've tried using the TBF queuing discipline:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;   tc qdisc add dev can0 root tbf rate 100kbit limit 100kbit burst 100kbit
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; With various rates for the options. I've found that with that setting, send()
+</I>&gt;<i> &gt; would return with an ENOBUF error when trying to send too fast, which would
+</I>&gt;<i> &gt; indicate that the txqueuelen isn't used. This is solved by specifying a
+</I>&gt;<i> &gt; higher option for burst, but that doesn't seem to limit the send rate at
+</I>&gt;<i> &gt; all... This is pretty much where I got lost.
+</I>&gt;<i> 
+</I>&gt;<i> Does it work at a much lower rate, e.g. 1kbit?
+</I>&gt;<i>
+</I>
+Same results - it does look like it's limiting, but it doesn't seem to use the
+buffer I configured with txqueuelen. So write()ing a few packets to the network
+within a short time quickly returns with a &quot;No buffer space available&quot; error.
+
+- Ayo
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000758.html">[Socketcan-users] Limiting the send rate
+</A></li>
+	<LI>Next message: <A HREF="000760.html">[Socketcan-users] Missing error counters?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#759">[ date ]</a>
+              <a href="thread.html#759">[ thread ]</a>
+              <a href="subject.html#759">[ subject ]</a>
+              <a href="author.html#759">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

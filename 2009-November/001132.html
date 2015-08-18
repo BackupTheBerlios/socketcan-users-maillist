@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%0A%20slprq%09timeout&In-Reply-To=%3C4AF2E753.2000303%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001131.html">
+   <LINK REL="Next"  HREF="001133.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%0A%20slprq%09timeout&In-Reply-To=%3C4AF2E753.2000303%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov  5 15:55:15 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001131.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+        <LI>Next message: <A HREF="001133.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1132">[ date ]</a>
+              <a href="thread.html#1132">[ thread ]</a>
+              <a href="subject.html#1132">[ subject ]</a>
+              <a href="author.html#1132">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> On Thu, Nov 05, 2009 at 08:55:20AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> ....
+</I>&gt;&gt;&gt;&gt;&gt;<i> Here are the values of the canctrl0/1 registers after the sleep and init loop:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>  mpc52xx_can f0000980.can: setting BTR0=0x2f BTR1=0x4f
+</I>&gt;&gt;&gt;&gt;&gt;<i>  Sleep: ctrl0=0x12 ctrl1=0xc0
+</I>&gt;&gt;&gt;&gt;&gt;<i>  mpc52xx_can f0000900.can: SLPRQ timeout reached, failed to enter 
+</I>&gt;&gt;&gt;&gt;&gt;<i>  Init: ctrl0=0x03 ctrl1=0xc3
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> So the slprq is kept set, interesting, Could you please try instrument
+</I>&gt;&gt;&gt;&gt;<i> the canctl0 and canctl1 value withouth my pathc? The code would not set
+</I>&gt;&gt;&gt;&gt;<i> initrq because the ret value will be set to error after failing waiting
+</I>&gt;&gt;&gt;&gt;<i> for slpack and the slprq will be kept set. According to the datasheet:
+</I>&gt;&gt;&gt;&gt;<i> SLPRQ:
+</I>&gt;&gt;&gt;&gt;<i> 0 Running MSCAN functions normally
+</I>&gt;&gt;&gt;&gt;<i> 1 Sleep Mode Request???MSCAN locks in idle state
+</I>&gt;&gt;&gt;<i> Yes, I realized as well that the MSCAN did not enter init mode properly.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I'm wondering heavily how this could work at all, if the datasheet is
+</I>&gt;&gt;&gt;&gt;<i> right.
+</I>&gt;&gt;&gt;<i> ... and after a &quot;ifconfig up&quot; it continues working as usual. But I
+</I>&gt;&gt;&gt;<i> remember wired problems with the error state not being reset to &quot;error
+</I>&gt;&gt;&gt;<i> active&quot; after the restart.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> hmm, this means that normal_mode get through somehow. This is not the
+</I>&gt;<i> case on the mpc5200b here.
+</I>
+Yes.
+
+&gt;&gt;&gt;&gt;<i> Hmm, something like this?
+</I>&gt;&gt;&gt;&gt;<i> &quot;Sleep request failed, device could not enter sleep mode. We force to
+</I>&gt;&gt;&gt;&gt;<i> proceed any how to avoid freeze. All active transmit actions, if still
+</I>&gt;&gt;&gt;&gt;<i> any, will be aborted.&quot;
+</I>&gt;&gt;<i> I'm thinking about some words avoiding the user to panic (taking the
+</I>&gt;&gt;<i> message too serious).
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I now reduced the message and put some of the text into the comment.
+</I>&gt;<i> Since it's now dev_dbg, the message won't appear in normal case. This
+</I>&gt;<i> way I think it's now &quot;mild&quot; enough.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> Since we are experiencing funny behaviours on mpc5200a too. I agree you
+</I>&gt;&gt;&gt;&gt;<i> with the point on dev_err vs. dev_debug. I'll change it in dev_dbg then.
+</I>&gt;&gt;<i> Yes, that would be nice.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> V2 Patch is attached.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> Just for curiosity. Could you try the patch below waiting to
+</I>&gt;&gt;&gt;&gt;&gt;<i> the TX messages to get aborted. Does that help? 
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> In my testscenarios the tx_active is mostly not set. So I don't
+</I>&gt;&gt;&gt;&gt;<i> think this will change the behaviour. Nevertheless I'll try this out
+</I>&gt;&gt;&gt;&gt;<i> tommorow.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Right, the problem shows up when the controller receives messages. Just
+</I>&gt;&gt;<i> forget it.
+</I>&gt;<i> 
+</I>&gt;<i> All right.
+</I>
+If you agree, I will apply it with some minor nitpicking:
+
+- Remove &quot;XXX:&quot; and spelling:
+			/*
+			 * The mscan controller will fail to enter sleep
+			 * mode, while there are irregular activities on bus,
+			 * like somebody keeps retransmitting. This behavior
+			 ...
+- Improve printout:
+
+  dev_dbg(dev-&gt;dev.parent,
+          &quot;device failed to enter sleep mode. 
+	  &quot;We proceed to enter init mode anyhow.\n&quot;);
+
+Thanks,
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001131.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+	<LI>Next message: <A HREF="001133.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1132">[ date ]</a>
+              <a href="thread.html#1132">[ thread ]</a>
+              <a href="subject.html#1132">[ subject ]</a>
+              <a href="author.html#1132">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

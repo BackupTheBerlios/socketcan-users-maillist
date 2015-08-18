@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Getting started with socketcan and VAG-COM usb
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20started%20with%20socketcan%20and%20VAG-COM%20usb&In-Reply-To=%3C4D225BB0.8020803%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001693.html">
+   <LINK REL="Next"  HREF="001695.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Getting started with socketcan and VAG-COM usb</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20started%20with%20socketcan%20and%20VAG-COM%20usb&In-Reply-To=%3C4D225BB0.8020803%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Getting started with socketcan and VAG-COM usb">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Jan  4 00:28:48 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001693.html">[Socketcan-users] Getting started with socketcan and VAG-COM usb
+</A></li>
+        <LI>Next message: <A HREF="001695.html">[Socketcan-users] can/old and SJA1000 Hal
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1694">[ date ]</a>
+              <a href="thread.html#1694">[ thread ]</a>
+              <a href="subject.html#1694">[ subject ]</a>
+              <a href="author.html#1694">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 03.01.2011 20:45, bruce bushby wrote:
+&gt;<i> Hi
+</I>
+Hi Bruce,
+
+&gt;<i> 
+</I>&gt;<i> Today I found socketcan and started jumping about the house celebrating
+</I>&gt;<i> :) I've been playing with the &quot;arm cortex m3&quot; cpu  using this board:
+</I>&gt;<i> <A HREF="http://mbed.org/forum/news-announcements/topic/900/">http://mbed.org/forum/news-announcements/topic/900/</A>     
+</I>&gt;<i> ...but when I connect it to my Audi A4 I can't read anything.....hence
+</I>&gt;<i> the joy of finding socketcan and the hope of being able to work from my
+</I>&gt;<i> laptop.
+</I>&gt;<i> 
+</I>&gt;<i> I'm hoping the list can offer me some quick start pointers
+</I>&gt;<i> 
+</I>&gt;<i> I'm using Fedora 13, ran some modprobes and have the following modules
+</I>&gt;<i> loaded:
+</I>&gt;<i> can_bcm                11446  0
+</I>&gt;<i> can_raw                 5705  0
+</I>&gt;<i> can_dev                 7212  0
+</I>&gt;<i> can                    30238  2 can_bcm,can_raw
+</I>
+That's pretty fine.
+
+&gt;<i> 
+</I>&gt;<i> I then used svn:
+</I>&gt;<i> svn checkout <A HREF="svn://svn.berlios.de/socketcan/trunk">svn://svn.berlios.de/socketcan/trunk</A>
+</I>&gt;<i> &lt;<A HREF="http://svn.berlios.de/socketcan/trunk">http://svn.berlios.de/socketcan/trunk</A>&gt;
+</I>&gt;<i> 
+</I>
+You don't need to compile the kernel modules in your case as they already come
+with your Fedora (as you've shown above).
+
+&gt;<i> I compiled the modules and then I compiled the can-utils as I want to
+</I>&gt;<i> use &quot;candump&quot;, this brings me to my first question:
+</I>&gt;<i> 
+</I>&gt;<i> 1. Can I use the berlios can-utils with the existing Fedora kernel
+</I>&gt;<i> modules listed above?
+</I>
+Yes.
+
+&gt;<i> I then ran the &quot;ip&quot; commands to bring up the interfaces (Using the
+</I>&gt;<i> standard Fedora can modules listed above):
+</I>&gt;<i> 
+</I>&gt;<i> ip link add type vcan
+</I>&gt;<i> ip link add dev can0 type vcan
+</I>&gt;<i> ifconfig can0 up
+</I>
+Funny idea - but you only created a virtual CAN interface named 'can0' ;-)
+
+&gt;<i> 
+</I>&gt;<i> and I now have:
+</I>&gt;<i> can0      Link encap:UNSPEC  HWaddr
+</I>&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i>           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:0
+</I>&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;<i> 
+</I>&gt;<i> vcan0     Link encap:UNSPEC  HWaddr
+</I>&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i>           NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:0
+</I>&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> but the next question is:
+</I>&gt;<i> 2. How do I associate a usb port with can0? .. I think my above
+</I>&gt;<i> interfaces are only virtual.
+</I>
+Yes, you are right with your assumption.
+
+You need to have a 'real' CAN driver that creates a CAN netdevice for your
+hardware adapter. E.g. there are currently two USB adapters in the Mainline
+kernel that create CAN netdevices for their specific CAN-USB-hardware.
+
+&gt;<i> My goal is to connect a VAG-COM cable (obd2 -&gt; usb) to my laptop, bring
+</I>&gt;<i> up can0 associating the interface with the usb port and then use
+</I>&gt;<i> &quot;candump&quot; to sniff my cars canbus......
+</I>
+When you connect the OBD2 connector, you would also need some kind of OBD2
+application for Linux/SocketCAN that knows how to perform the OBD2 protocol.
+
+OBD2 is not only 'CAN' ... it is a protocol.
+
+I don't know whether the VAG-COM adapter cable is able to be a transparent CAN
+interface or if there is a special abstract protocol on the USB to trigger
+predefined OBD2 commands with the CAN-CPU inside the VAG-COM adapter.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001693.html">[Socketcan-users] Getting started with socketcan and VAG-COM usb
+</A></li>
+	<LI>Next message: <A HREF="001695.html">[Socketcan-users] can/old and SJA1000 Hal
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1694">[ date ]</a>
+              <a href="thread.html#1694">[ thread ]</a>
+              <a href="subject.html#1694">[ subject ]</a>
+              <a href="author.html#1694">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

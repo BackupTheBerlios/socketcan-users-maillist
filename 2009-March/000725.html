@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x driver for linux-2.6.22
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20driver%20for%20linux-2.6.22&In-Reply-To=%3Cfcd93b000903260149i61de9586n819263962795a221%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000723.html">
+   <LINK REL="Next"  HREF="000726.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x driver for linux-2.6.22</H1>
+    <B>Yonghui Shen</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%20driver%20for%20linux-2.6.22&In-Reply-To=%3Cfcd93b000903260149i61de9586n819263962795a221%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp251x driver for linux-2.6.22">shenyonghui at gmail.com
+       </A><BR>
+    <I>Thu Mar 26 09:49:18 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000723.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+        <LI>Next message: <A HREF="000726.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#725">[ date ]</a>
+              <a href="thread.html#725">[ thread ]</a>
+              <a href="subject.html#725">[ subject ]</a>
+              <a href="author.html#725">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The MCP251x platform data is defined in my case as follows:
+
+static int mcp251x_setup(struct spi_device *spi)
+{
+&#160;&#160;&#160;&#160;&#160; return 0;
+}
+static struct mcp251x_platform_data mcp251x_info = {
+&#160;&#160;&#160;&#160;&#160; .oscillator_frequency = 8000000,
+&#160;&#160;&#160;&#160;&#160; .board_specific_setup = &amp;mcp251x_setup,
+&#160;&#160;&#160;&#160;&#160; .model = CAN_MCP251X_MCP2515,
+&#160;&#160;&#160;&#160;&#160; .power_enable = NULL,
+&#160;&#160;&#160;&#160;&#160; .transceiver_enable = NULL,
+
+};
+static struct pxa2xx_spi_chip can_controller_1_chip_info = {
+&#160;&#160;&#160;&#160;&#160;&#160; .tx_threshold = 4,
+&#160;&#160;&#160;&#160;&#160;&#160; .rx_threshold = 12,
+&#160;&#160;&#160;&#160;&#160;&#160; .dma_burst_size = 0,
+&#160;&#160;&#160;&#160;&#160;&#160; .timeout = 235,
+&#160;&#160;&#160; &#160;&#160;&#160;.cs_control = can_controller_1_cs_control,
+};
+static struct spi_board_info colibri_spi_board_info[] __initdata = {
+{
+&#160;&#160;&#160;&#160;&#160;&#160; .modalias = &quot;mcp251x&quot;,
+&#160;&#160;&#160;&#160;&#160;&#160; .max_speed_hz = 8000000,
+&#160;&#160;&#160;&#160;&#160;&#160; .bus_num = 1,
+&#160;&#160;&#160;&#160;&#160;&#160; .chip_select = 1,
+&#160;&#160;&#160;&#160;&#160;&#160; .platform_data = &amp;mcp251x_info,
+&#160;&#160;&#160;&#160;&#160;&#160; .controller_data = &amp;can_controller_1_chip_info,
+&#160;&#160;&#160;&#160;&#160;&#160; .irq = IRQ_GPIO(52),
+},
+};
+
+The chip select part I have already tested using spidev and the logic
+analyzer shows that it works. So I assume it is also working with
+socketcan.
+static void can_controller_1_cs_control (u32 command)
+{
+if (command &amp; PXA2XX_CS_ASSERT)
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; GPCR(12) = GPIO_bit(12);
+else
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; GPSR(12) = GPIO_bit(12);
+}
+
+Now I really want to see the debug infos you are talking about. I
+already chose &quot;CAN devices debugging messages&quot; when doing make
+menuconfig and double checked the colibri_defconfig file to make sure
+CONFIG_CAN_DEBUG_DEVICES=y.
+
+So I do not think i know how to &quot;correctly&quot; enable debug so far. Any ideas?
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000723.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+	<LI>Next message: <A HREF="000726.html">[Socketcan-users] mcp251x driver for linux-2.6.22
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#725">[ date ]</a>
+              <a href="thread.html#725">[ thread ]</a>
+              <a href="subject.html#725">[ subject ]</a>
+              <a href="author.html#725">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

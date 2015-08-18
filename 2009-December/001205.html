@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kernel Oops and update for MPC5200B CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20Oops%20and%20update%20for%20MPC5200B%20CAN&In-Reply-To=%3C4B2116F2.1030905%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001204.html">
+   <LINK REL="Next"  HREF="001206.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kernel Oops and update for MPC5200B CAN</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20Oops%20and%20update%20for%20MPC5200B%20CAN&In-Reply-To=%3C4B2116F2.1030905%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Kernel Oops and update for MPC5200B CAN">wg at grandegger.com
+       </A><BR>
+    <I>Thu Dec 10 16:42:42 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001204.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+        <LI>Next message: <A HREF="001206.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1205">[ date ]</a>
+              <a href="thread.html#1205">[ thread ]</a>
+              <a href="subject.html#1205">[ subject ]</a>
+              <a href="author.html#1205">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Sylvain Lamontagne wrote:
+&gt;<i> Hi
+</I>&gt;<i> I am working with a custom MPC5200B based board and the CAN is mostly
+</I>&gt;<i> working on it, using the revision 958 on the berlios svn. I know it's
+</I>&gt;<i> quite old, this is why this email have two part. The kernel is version
+</I>&gt;<i> 2.6.29.2 with some patches for our internal needs.
+</I>&gt;<i> 
+</I>&gt;<i> First: 
+</I>&gt;<i> I have been trying to figure out why sometime I'm getting a kernel Oops
+</I>&gt;<i> when the command &quot;ifconfig canX down&quot; is used. The Oops is pretty random
+</I>&gt;<i> so there is no easy way (that I found) to reproduce it, therefor it is
+</I>&gt;<i> hard to debug. I've attached the Oops to this email. (I have plenty of
+</I>&gt;<i> similar)
+</I>&gt;<i> 
+</I>&gt;<i> My question regarding this first issue is: Is it known that this version
+</I>&gt;<i> (958) of the driver can cause a kernel Oops ?
+</I>&gt;<i> Regarding this email it seems that I'm not alone.
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-users/2009-February/000646.html">https://lists.berlios.de/pipermail/socketcan-users/2009-February/000646.html</A>
+</I>
+OK, I have no quick solution for that problem and as the version is
+already quite old... let's try with up-to-date software.
+
+&gt;<i> I though that updating the driver would be a good thing, so I tried and
+</I>&gt;<i> this is why I have a second part to this email.
+</I>&gt;<i> 
+</I>&gt;<i> Second:
+</I>&gt;<i> By reading the various source of information on the internet I have
+</I>&gt;<i> discovered that SocketCAN source code seems now in two different places.
+</I>&gt;<i> The berlios SVN and this git
+</I>&gt;<i> <A HREF="git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6">git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6</A>
+</I>
+There is MSCAN-Support in the mainline kernel since 2.6.32. The code at
+BerliOS is (usually) in sync with the official version and it still
+supports older versions of the kernel.
+
+&gt;<i> So I'm a bit confused about which I should use, but I tried with the
+</I>&gt;<i> berlios svn r1095 but it seems that the way I was compiling before
+</I>&gt;<i> doesn't work anymore ... it seems to compile but the mscan driver is not
+</I>&gt;<i> compiled. I get some .ko but no mscan-mpc52xx.ko mscan.ko or
+</I>&gt;<i> mscan_5xxx.ko anywhere... previously I was getting mscan-mpc52xx.ko
+</I>
+$ cd trunk/kernel/2.6
+$ make ARCH=powerpc \
+    KERNELDIR=$KSRC CONFIG_CAN_DEBUG_DEVICES=y \
+    CONFIG_CAN_DEV=m \
+    CONFIG_CAN_MSCAN=m CONFIG_CAN_MPC52XX=m CONFIG_CAN_MPC5XXX=m \
+
+should do the job. For 2.6.29 CONFIG_CAN_MPC5XXX=m should just be fine.
+
+&gt;<i> I probably do something wrong, but to verify that I would need the
+</I>&gt;<i> procedure to compiled the drivers correctly or even better to include
+</I>&gt;<i> them in the kernel as a simple patch.
+</I>&gt;<i> 
+</I>&gt;<i> And also before someone suggest it ... I can't upgrade the kernel to a
+</I>&gt;<i> new version on this unit without having really good reason.
+</I>&gt;<i> 
+</I>&gt;<i> So, what is the way to get a newer version of the SocketCAN driver to
+</I>&gt;<i> work on a linux kernel 2.6.29.2 ?
+</I>
+See above. Note that the official kernel version now uses the netlink
+interface to configure the device, instead of the deprecated sysfs.
+
+Wolfgang.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> ------------------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001204.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+	<LI>Next message: <A HREF="001206.html">[Socketcan-users] Kernel Oops and update for MPC5200B CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1205">[ date ]</a>
+              <a href="thread.html#1205">[ thread ]</a>
+              <a href="subject.html#1205">[ subject ]</a>
+              <a href="author.html#1205">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

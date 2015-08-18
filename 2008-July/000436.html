@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080701195819.GI4319%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000435.html">
+   <LINK REL="Next"  HREF="000437.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Robert Schwebel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080701195819.GI4319%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">r.schwebel at pengutronix.de
+       </A><BR>
+    <I>Tue Jul  1 21:58:19 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000435.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000437.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#436">[ date ]</a>
+              <a href="thread.html#436">[ thread ]</a>
+              <a href="subject.html#436">[ subject ]</a>
+              <a href="author.html#436">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Jul 01, 2008 at 09:34:58PM +0200, Wolfgang Grandegger wrote:
+&gt;<i> &gt;    [ ] Hardware-independent mode: the bit-timing parameters are defined
+</I>&gt;<i> &gt;        in an hardware independent way:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;          $ echo 125 &gt; /sys/class/net/can0/can_tq
+</I>&gt;<i> &gt;          $ echo 1 &gt; /sys/class/net/can0/can_prop_seg
+</I>&gt;<i> &gt;          $ echo 2 &gt; /sys/class/net/can0/can_phase_seg1
+</I>&gt;<i> &gt;          $ echo 5 &gt; /sys/class/net/can0/can_phase_seg2
+</I>&gt;<i> &gt;          $ echo 1 &gt; /sys/class/net/can0/can_sjw
+</I>&gt;<i> &gt;          $ echo 0 &gt; /sys/class/net/can0/can_sam
+</I>&gt;<i>
+</I>&gt;<i> BTW: most people seem to prefer the hardware independent setting. What
+</I>&gt;<i> about packing the above parameters into one long word:
+</I>&gt;<i>
+</I>&gt;<i>             $ echo 0x007d1251 &gt; /sys/class/net/can0/can_bittiming
+</I>&gt;<i>
+</I>&gt;<i> That's completely legal and would be more straight-forward for the users
+</I>&gt;<i> and developers. A config tool could provide a more human readable interface.
+</I>
+It's not intuitive, this is not the idea behind the one-value-per-file
+paradigm. It was invented to get &quot;speaking&quot; key/value pairs, and the
+above is not really speaking ...
+
+&gt;<i> The second method would be nice if the setting would be hardware
+</I>&gt;<i> independent. Unfortunately, that's not the case and therefore I see no
+</I>&gt;<i> real benefit using a hardware independent format.
+</I>
+Hmm? I don't understand what you mean.
+
+&gt;<i> I'm going the summarize on the poll tomorrow.
+</I>
+Note, however, that Linux is no democracy. We want the *best* solution,
+not the one most people vote for.
+
+rsc
+-- 
+ Dipl.-Ing. Robert Schwebel | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+ Pengutronix - Linux Solutions for Science and Industry
+   Handelsregister:  Amtsgericht Hildesheim, HRA 2686
+     Hannoversche Str. 2, 31134 Hildesheim, Germany
+   Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000435.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000437.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#436">[ date ]</a>
+              <a href="thread.html#436">[ thread ]</a>
+              <a href="subject.html#436">[ subject ]</a>
+              <a href="author.html#436">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

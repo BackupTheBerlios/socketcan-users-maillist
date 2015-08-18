@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] write: No buffer space available
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20write%3A%20No%20buffer%20space%20available&In-Reply-To=%3CCBD3E33FD996A94B9BF13F028D8D86C80FF7FFFFC7%40CNX-SBS.connexionz.co.nz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001463.html">
+   <LINK REL="Next"  HREF="001460.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] write: No buffer space available</H1>
+    <B>Michael Stocks</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20write%3A%20No%20buffer%20space%20available&In-Reply-To=%3CCBD3E33FD996A94B9BF13F028D8D86C80FF7FFFFC7%40CNX-SBS.connexionz.co.nz%3E"
+       TITLE="[Socketcan-users] write: No buffer space available">Michael.Stocks at connexionz.co.nz
+       </A><BR>
+    <I>Thu Aug  5 23:24:50 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001463.html">[Socketcan-users] write: No buffer space available
+</A></li>
+        <LI>Next message: <A HREF="001460.html">[Socketcan-users] Operation not supported with vcan and pcan usb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1464">[ date ]</a>
+              <a href="thread.html#1464">[ thread ]</a>
+              <a href="subject.html#1464">[ subject ]</a>
+              <a href="author.html#1464">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Hello,
+</I>
+&gt;<i> On 08/02/2010 10:26 PM, Michael Stocks wrote:
+</I>&gt;&gt;<i> Goodday All,
+</I>&gt;&gt;<i> Could anyone help with this problem.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have socketcan built as part of my kernel 2.6.34 configuration using MCP251x driver (mainline).
+</I>&gt;&gt;<i> The receive works perfectly using my own application and candump.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When transmitting both my own application and cansend fail with 'no buffer space' errors.
+</I>&gt;&gt;<i> Using a CAN bus monitor I never see any activity when I transmit.
+</I>&gt;<i>
+</I>&gt;<i> Does &quot;candump any,0:0,#FFFFFFFF&quot; report any problems?
+</I>
+No, the above works fine.
+
+&gt;&gt;<i> So I guess something is stopping the transmitted frame getting beyond the socket buffer, hence the error.
+</I>
+&gt;<i> Yes, 'no buffer space' means that the TX queue is full. This may happen
+</I>&gt;<i> and you should therefore check the return value of the send() call and
+</I>&gt;<i> retry if &quot;errno==ENOBUFS&quot;. Nevertheless, messages should still go out to
+</I>&gt;<i> the bus.
+</I>
+I've found that after one or more sends (which don't get to the bus) an 'ifconfig can0 down' will flush the first unsent message onto the bus, all other unsent messages are lost.
+
+&gt;&gt;<i> Using the same hardware with my previous image, kernel 2.6.30 using out of kernel (svn) socketcan everything works.
+</I>&gt;&gt;<i> Using vcan instead of real hardware everything thing works OK.
+</I>
+&gt;<i> Unfortunately, the mainline driver is different to the one in the SVN
+</I>&gt;<i> repository, e.g. it uses an irq thread instead of a work queue and
+</I>&gt;<i> further optimizations.
+</I>&gt;<i>
+</I>
+I'll try the SVN driver to see if I get different behaviour.
+
+&gt;&gt;<i> I did a trawl of the net before posting and found a similar thread in the socketcan-core forum but there was no conclusion.
+</I>
+&gt;<i> Yes, related problems with that driver have been reported recently and a
+</I>&gt;<i> patch was posted to fix them, IIRC. Unfortunately, I don't have a
+</I>&gt;<i> MPC251x hardware at hand for testing.
+</I>
+I'll see if I can find the patch and give that a go as well.
+I need to solve this problem so any other hints or ideas would be welcome.
+
+&gt;<i> Wolfgang.
+</I>
+Cheers Mike.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001463.html">[Socketcan-users] write: No buffer space available
+</A></li>
+	<LI>Next message: <A HREF="001460.html">[Socketcan-users] Operation not supported with vcan and pcan usb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1464">[ date ]</a>
+              <a href="thread.html#1464">[ thread ]</a>
+              <a href="subject.html#1464">[ subject ]</a>
+              <a href="author.html#1464">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

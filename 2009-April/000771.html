@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN with switchable power
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20with%20switchable%20power&In-Reply-To=%3C49E5C122.5080101%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000770.html">
+   <LINK REL="Next"  HREF="000776.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN with switchable power</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20with%20switchable%20power&In-Reply-To=%3C49E5C122.5080101%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] CAN with switchable power">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed Apr 15 13:12:34 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000770.html">[Socketcan-users] CAN with switchable power
+</A></li>
+        <LI>Next message: <A HREF="000776.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#771">[ date ]</a>
+              <a href="thread.html#771">[ thread ]</a>
+              <a href="subject.html#771">[ subject ]</a>
+              <a href="author.html#771">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> I'm using SocketCAN with a SJA1000-like device (FPGA based,
+</I>&gt;<i> using the OpenCores implementation).  My CAN buses have
+</I>&gt;<i> switchable power supplies (PSU) (i.e. the power on the bus
+</I>&gt;<i> can be programmatically switched on/off).
+</I>&gt;<i>
+</I>&gt;<i> I've found that I have to have the PSU on when I install
+</I>&gt;<i> the driver (probe).  In this case, the device initializes
+</I>&gt;<i> normally and I can talk to devices on the CAN bus.  It
+</I>&gt;<i> even still works if I power down the PSU and then bring
+</I>&gt;<i> it back up.
+</I>&gt;<i>   
+</I>
+Hello Garry,
+
+what parts of you CAN busses are switched off, when your PSU is down? 
+Only the CAN Transceivers?
+
+Is it possible, that your CAN transceivers are switched off, when you 
+try to initialize the FPGA CAN controller??
+
+Probably your CAN core can not cope with RX/TX lines from/to the CAN 
+transceiver are permanently set to 0V at startup time ...
+
+I'm not sure, but i would assume some kind of hardware issue around the 
+CAN transceiver wiring (TX/TX/ERR/STNDBY/etc) when the PSU is switched off.
+
+Regards,
+Oliver
+ 
+
+&gt;<i> It all falls apart if the PSU is not on when I install
+</I>&gt;<i> the driver.  Even after I power up the bus, all I get is
+</I>&gt;<i> noise and errors.
+</I>&gt;<i>
+</I>&gt;<i> Any ideas?  Where can I look to figure out why this is
+</I>&gt;<i> behaving this way?
+</I>&gt;<i>
+</I>&gt;<i> Thanks
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000770.html">[Socketcan-users] CAN with switchable power
+</A></li>
+	<LI>Next message: <A HREF="000776.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#771">[ date ]</a>
+              <a href="thread.html#771">[ thread ]</a>
+              <a href="subject.html#771">[ subject ]</a>
+              <a href="author.html#771">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

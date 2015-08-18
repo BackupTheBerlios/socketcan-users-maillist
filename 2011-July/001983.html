@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20flexcan%3A%20Re%3A%20%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E28333A.3020904%40sgi.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001981.html">
+   <LINK REL="Next"  HREF="001984.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK</H1>
+    <B>Mike Brown</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20flexcan%3A%20Re%3A%20%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E28333A.3020904%40sgi.com%3E"
+       TITLE="[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK">mtb at sgi.com
+       </A><BR>
+    <I>Thu Jul 21 16:10:02 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001981.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+        <LI>Next message: <A HREF="001984.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1983">[ date ]</a>
+              <a href="thread.html#1983">[ thread ]</a>
+              <a href="subject.html#1983">[ subject ]</a>
+              <a href="author.html#1983">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;<i>
+</I>&gt;<i> Yes, the source is in fexcan.c, but I'm looking for the function/file
+</I>&gt;<i> calling &quot;flexcan_core()&quot;. It must be somewhere under arch/powerpc. Sorry
+</I>&gt;<i> for confusion.
+</I>&gt;<i>
+</I>
+&gt;<i> Thanks.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>/*
+  * flexcan_iface.c
+  *
+  * Author: Bhaskar upadhaya &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bhaskar.upadhaya at freescale.com</A>&gt;
+  * Copyright 2011 Freescale Semiconductor, Inc.
+  *
+  * Based on code originally by Andrey Volkov &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">avolkov at varma-el.com</A>&gt;
+  *
+  * LICENCE:
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU General Public License as
+  * published by the Free Software Foundation version 2.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  */
+
+#include &lt;linux/can/platform/flexcan.h&gt;
+
+struct flexcan_interface flexcan_cb;
+
+#ifdef CONFIG_FLEXCAN_OF
+static unsigned long flexcan_get_clk_rate(struct clk *clock)
+{
+     return clock-&gt;rate;
+}
+
+static void flexcan_clk_put(struct clk *clk)
+{
+     kfree(clk);
+}
+
+static struct clk *flexcan_clk_get(struct device *dev, const char *id)
+{
+     struct clk *clock;
+     u32 *clock_freq = NULL;
+     u32 *clock_divider = NULL;
+     int err;
+
+     clock = kmalloc(sizeof(struct clk), GFP_KERNEL);
+     if (!clock) {
+         dev_err(dev, &quot;Cannot allocate memory\n&quot;);
+         err = -ENOMEM;
+         goto failed_clock;
+     }
+     clock_freq = (u32 *) of_get_property(dev-&gt;of_node, &quot;clock_freq&quot;, NULL);
+     if (clock_freq == NULL) {
+         dev_err(dev, &quot;Cannot find clock_freq property\n&quot;);
+         err = -EINVAL;
+         kfree(clock);
+         goto failed_clock;
+     }
+
+     clock_divider = (u32 *) of_get_property(dev-&gt;of_node, \
+                     &quot;fsl,flexcan-clock-divider&quot;, NULL);
+     if (clock_divider == NULL) {
+         dev_err(dev, &quot;Cannot find fsl,flexcan-clock-divider \
+                         property\n&quot;);
+         err = -EINVAL;
+         kfree(clock);
+         goto failed_clock;
+     }
+
+     clock-&gt;rate = DIV_ROUND(*clock_freq / *clock_divider, 1000) * 1000;
+     DBG(KERN_INFO &quot;clock-frequency is  %lu in line %d in function %s \r\n&quot;,
+             clock-&gt;rate, __LINE__, __func__);
+     return clock;
+
+  failed_clock:
+     return ERR_PTR(err);
+}
+
+static void flexcan_of_resource_init(struct flexcan_interface *flexcan_cb)
+{
+     flexcan_cb-&gt;read = flexcan_read;
+     flexcan_cb-&gt;write = flexcan_write;
+     flexcan_cb-&gt;clk_enable = NULL;
+     flexcan_cb-&gt;clk_disable = NULL;
+     flexcan_cb-&gt;clk_get_rate = flexcan_get_clk_rate;
+     flexcan_cb-&gt;clk_get = flexcan_clk_get;
+     flexcan_cb-&gt;clk_put = flexcan_clk_put;
+}
+
+static int flexcan_of_probe(struct of_device *ofdev,
+                 const struct of_device_id *match)
+{
+     u64 addr, size;
+     int err, irq;
+     struct flexcan_resource flexcan_res;
+
+     addr = of_translate_address(ofdev-&gt;dev.of_node,
+             of_get_address(ofdev-&gt;dev.of_node, 0, &amp;size, NULL));
+     flexcan_res.addr = addr;
+     flexcan_res.size = size;
+     flexcan_res.drv_name = ofdev-&gt;dev.driver-&gt;name;
+     irq = irq_of_parse_and_map(ofdev-&gt;dev.of_node, 0);
+     if (irq == NO_IRQ) {
+         dev_err(&amp;ofdev-&gt;dev, &quot;cannot map to irq\n&quot;);
+         err = -EINVAL;
+         goto failed_req;
+     }
+
+     flexcan_res.irq = irq;
+     flexcan_of_resource_init(&amp;flexcan_cb);
+     err = flexcan_core(&amp;ofdev-&gt;dev, flexcan_res, &amp;flexcan_cb);
+     if (err) {
+         dev_err(&amp;ofdev-&gt;dev, &quot;Flexcan Initialization failed with err \
+                 %d\n&quot;, err);
+         err = -EINVAL;
+         goto failed_req;
+     }
+     return 0;
+  failed_req:
+     return err;
+}
+
+static int flexcan_of_remove(struct of_device *ofdev)
+{
+     struct net_device *dev = dev_get_drvdata(&amp;ofdev-&gt;dev);
+     struct flexcan_priv *priv = netdev_priv(dev);
+     u64 addr, size;
+
+     unregister_flexcandev(dev);
+     dev_set_drvdata(&amp;ofdev-&gt;dev, NULL);
+     iounmap(priv-&gt;base);
+
+     addr = of_translate_address(ofdev-&gt;dev.of_node,
+             of_get_address(ofdev-&gt;dev.of_node, 0, &amp;size, NULL));
+
+     release_mem_region(addr, size);
+
+     free_candev(dev);
+
+     return 0;
+}
+
+static struct of_device_id flexcan_match[] = {
+     {
+      .compatible = &quot;fsl,flexcan-v1.0&quot;,
+      },
+     {},
+};
+
+MODULE_DEVICE_TABLE(of, flexcan_match);
+static struct of_platform_driver flexcan_of_driver = {
+     .driver = {
+            .name = DRV_NAME,
+            .owner = THIS_MODULE,
+            .of_match_table = flexcan_match,
+            },
+     .probe = flexcan_of_probe,
+     .remove = flexcan_of_remove,
+};
+
+#else
+void flexcan_plt_resource_init(struct flexcan_interface *flexcan_cb)
+{
+     flexcan_cb-&gt;read = readl;
+     flexcan_cb-&gt;write = writel;
+     flexcan_cb-&gt;clk_enable = clk_enable;
+     flexcan_cb-&gt;clk_disable = clk_disable;
+     flexcan_cb-&gt;clk_get_rate = clk_get_rate;
+     flexcan_cb-&gt;clk_get = clk_get;
+     flexcan_cb-&gt;clk_put = clk_put;
+}
+
+static int __devinit flexcan_plt_probe(struct platform_device *pdev)
+{
+     int err, irq;
+     struct flexcan_resource flexcan_res;
+     resource_size_t mem_size;
+     struct resource *mem;
+
+     mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+     irq = platform_get_irq(pdev, 0);
+     if (!mem || irq &lt;= 0) {
+         dev_err(&amp;pdev-&gt;dev, &quot;Cannot map to irq\n&quot;);
+         err = -ENODEV;
+         goto failed_get;
+     }
+
+     mem_size = resource_size(mem);
+     flexcan_res.addr = mem-&gt;start;
+     flexcan_res.size = mem_size;
+     flexcan_res.drv_name = pdev-&gt;name;
+
+     flexcan_plt_resource_init(&amp;flexcan_cb);
+     err = flexcan_core(&amp;pdev-&gt;dev, flexcan_res, &amp;flexcan_cb);
+     if (err) {
+         dev_err(&amp;pdev-&gt;dev, &quot;Flexcan Initialization failed with err \
+                 (%d) \n&quot;, err);
+         err = -EINVAL;
+         goto failed_req;
+     }
+
+     return 0;
+  failed_req:
+     return err;
+}
+
+static int __devexit flexcan_plt_remove(struct platform_device *pdev)
+{
+     struct net_device *dev = platform_get_drvdata(pdev);
+     struct flexcan_priv *priv = netdev_priv(dev);
+     struct resource *mem;
+
+     unregister_flexcandev(dev);
+     platform_set_drvdata(pdev, NULL);
+     iounmap(priv-&gt;base);
+
+     mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+     release_mem_region(mem-&gt;start, resource_size(mem));
+
+     clk_put(priv-&gt;clk);
+
+     free_candev(dev);
+
+     return 0;
+}
+
+static struct platform_driver flexcan_plt_driver = {
+     .driver.name = DRV_NAME,
+     .probe = flexcan_plt_probe,
+     .remove = __devexit_p(flexcan_plt_remove),
+};
+
+#endif
+
+static int __init flexcan_init(void)
+{
+     pr_info(&quot;%s netdevice driver\n&quot;, DRV_NAME);
+#ifdef CONFIG_FLEXCAN_OF
+     return of_register_platform_driver(&amp;flexcan_of_driver);
+#else
+     return platform_driver_register(&amp;flexcan_plt_driver);
+#endif
+}
+
+static void __exit flexcan_exit(void)
+{
+#ifdef CONFIG_FLEXCAN_OF
+     of_unregister_platform_driver(&amp;flexcan_of_driver);
+#else
+     platform_driver_unregister(&amp;flexcan_plt_driver);
+#endif
+     pr_info(&quot;%s: driver removed\n&quot;, DRV_NAME);
+}
+
+module_init(flexcan_init);
+module_exit(flexcan_exit);
+
+MODULE_AUTHOR(&quot;Bhaskar Upadhaya &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bhaskar.upadhaya at freescale.com</A>&gt;&quot;);
+MODULE_LICENSE(&quot;GPL v2&quot;);
+MODULE_DESCRIPTION(&quot;CAN port driver for flexcan based chip&quot;);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001981.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+	<LI>Next message: <A HREF="001984.html">[Socketcan-users] flexcan: Re:  Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1983">[ date ]</a>
+              <a href="thread.html#1983">[ thread ]</a>
+              <a href="subject.html#1983">[ subject ]</a>
+              <a href="author.html#1983">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

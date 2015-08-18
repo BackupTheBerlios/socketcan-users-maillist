@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0D5A58.3050807%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001152.html">
+   <LINK REL="Next"  HREF="001155.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B0D5A58.3050807%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Nov 25 17:24:56 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001152.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001155.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1153">[ date ]</a>
+              <a href="thread.html#1153">[ thread ]</a>
+              <a href="subject.html#1153">[ subject ]</a>
+              <a href="author.html#1153">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi Oliver,
+</I>
+&gt;&gt;<i> Nice idea! Especially for some kind of *integrated* (GUI-based) applications.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> That's what I had in mind as I started this.
+</I>
+
+8-)
+
+
+&gt;&gt;&gt;&gt;&gt;&gt;<i> int canhw_get_ctrlmode(const char *name, struct can_ctrlmode *cm);
+</I>&gt;&gt;<i> This leads also to 'libcanhw' as library name.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> &quot;SocketCAN&quot; and &quot;Netlink&quot; is just state-of-the-art for CAN hardware in Linux.
+</I>&gt;&gt;<i> No need to put it into the library name ...
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> interesting idea. I'll think about this.
+</I>
+
+Fine.
+
+
+&gt;&gt;<i> IMHO there's also no real benefit to put this lib together with the helpers in
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    trunk/can-utils/lib.[ch]
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> These are addressing different topics.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I personally don't have opinions on this. The canconfig tool is partly
+</I>&gt;<i> supposed to demonstrate the usage of the library too. Intergrate the lib
+</I>&gt;<i> into the canutils package would work the same, as long as the library is
+</I>&gt;<i> build as dyn. so and can be loaded separatedly.
+</I>
+
+Yep. That's right.
+
+
+&gt;&gt;&gt;<i> Also, keep it simple having in mind that it's especially useful on
+</I>&gt;&gt;&gt;<i> embedded system (the busybox's &quot;ip&quot; utility does not yet support CAN).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Which should be fixed inside busybox :-)
+</I>&gt;&gt;<i> Fortunately ptxdist allows the iproute2 package to be build instead of using
+</I>&gt;&gt;<i> the built-in 'ip' from busybox.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Oliver
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ps. Did you recognize the updated can_if script in
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/etc/can_if">http://svn.berlios.de/svnroot/repos/socketcan/trunk/etc/can_if</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> that can deal with the new 'ip' tool also?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # The syntax for the CAN devices is: devname[@bitrate][,restart-ms]
+</I>&gt;&gt;<i> # example CAN_IF=&quot;can0 <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can1 at 500000</A> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can2 at 500000</A>,200 can3,500&quot;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Just another idea.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Yeah I know the script. Indeed I looked into it every time I was
+</I>&gt;<i> wondering for how the ip parameter should look like. ;-) The script is
+</I>&gt;<i> nice to bring up/turn down or reload the interfaces, but the
+</I>&gt;<i> possibilities are limited,Besides there're some natural limitations in
+</I>&gt;<i> the iproute tool, as I mentioned in the last mail, and not at least the
+</I>&gt;<i> big footprint and complex infrastructure. So I think canconfig comes in
+</I>&gt;<i> quite some occassions more handy than iproute + script.
+</I>
+
+To be more handy is indeed a good point. Having canconfig in the embedded
+environment and to have a expressive example for the lib is a good idea.
+
+But having a nice handy canconfig probably makes it harder to maintain the
+iproute2 tool for Wolfgang ;-))
+
+Thanks,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001152.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001155.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1153">[ date ]</a>
+              <a href="thread.html#1153">[ thread ]</a>
+              <a href="subject.html#1153">[ subject ]</a>
+              <a href="author.html#1153">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

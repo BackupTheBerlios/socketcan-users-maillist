@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Compile Fails On 2.6.39-2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Compile%20Fails%20On%202.6.39-2&In-Reply-To=%3C4E0C2C64.3070704%40wirelessglue.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001933.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Compile Fails On 2.6.39-2</H1>
+    <B>Stu Statman</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Compile%20Fails%20On%202.6.39-2&In-Reply-To=%3C4E0C2C64.3070704%40wirelessglue.com%3E"
+       TITLE="[Socketcan-users] Compile Fails On 2.6.39-2">sstatman at wirelessglue.com
+       </A><BR>
+    <I>Thu Jun 30 09:57:24 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001933.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1934">[ date ]</a>
+              <a href="thread.html#1934">[ thread ]</a>
+              <a href="subject.html#1934">[ subject ]</a>
+              <a href="author.html#1934">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>So here's some good news!
+
+I realized, about 10 minutes after I sent that anguished email, that (as 
+was pointed out in another email) my kernel already had SocketCAN in it. 
+And it worked, as far as the modprobe steps were concerned.
+
+The news then turned a little bad. The version of iproute2 that's in the 
+2.6.39 kernel didn't support the &quot;type can&quot; parameters for the ip link 
+set command :
+
+/usr/sbin/ip link set can0 up type can bitrate 250000
+
+I grabbed the rpm for the latest version of iproute2, and tried to 
+install it. And then things got weird. It *conflicts* with the version 
+of iproute2 that's already installed, but isn't an upgrade or update of 
+it, according to yum.
+
+Fortunately (I hope), I could do a --force install of it and it ended up 
+putting the ip binary in /usr/sbin/ (which is not where the earlier 
+version of ip ended up). When I run that new ip from that directory, it 
+looks like it works. I have no clear idea what harm will happen now that 
+I have two different versions of iproute2 installed, or if I should 
+overwrite the older with the newer.
+
+I did compile can-utils, but as I don't have an actual CAN network set 
+up (but just the ESD dongle), I can't really tell if it's working.
+
+I'm going to give the box back to Jesse tomorrow, and he's going to take 
+over from here.
+
+
+Also, as far as the distro shift is concerned, our target has actually 
+been CentOS. Jesse just started with Ubuntu because it's what was on the 
+box already. Also (and I know that this is going to sound a little *too* 
+pragmatic), one of the primary roles of this box is to do CanBUS. I'd 
+switch to whatever distro got me to that goal 30 seconds faster.
+
+Thanks for the help and encouragement!
+
+On 6/30/11 12:05 AM, Wolfgang Grandegger wrote:
+&gt;<i> On 06/30/2011 01:51 AM, Stu Statman wrote:
+</I>&gt;&gt;<i> After the repeated failures on Ubuntu, we decided to try to get
+</I>&gt;<i> What did fail with Ubuntu? Likely not a kernel issue!? I think it's not
+</I>&gt;<i> a good idea to switch distro just because you did not get it working
+</I>&gt;<i> quickly enough. What kernel are you using under Ubuntu?
+</I>&gt;<i>
+</I>&gt;<i>    ~$ uname -r
+</I>&gt;<i>    2.6.38-8-generic
+</I>&gt;<i>
+</I>&gt;<i> That's what I have and I will try to get the problem fixed. Will try to
+</I>&gt;<i> find a time slot this week.
+</I>&gt;<i>
+</I>&gt;&gt;<i> SocketCAN to work on CentOS, using kernel-ml to get the latest kernel
+</I>&gt;&gt;<i> (2.6.39-2.el5.elrepo-i686). That failed too :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A> 2.6]# pwd
+</I>&gt;&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A> 2.6]# make
+</I>&gt;&gt;<i> KERNELDIR=/usr/src/kernels/2.6.39-2.el5.elrepo-i686
+</I>&gt;&gt;<i> make -C /usr/src/kernels/2.6.39-2.el5.elrepo-i686
+</I>&gt;&gt;<i> M=/home/wgn/socketcan/trunk/kernel/2.6 modules
+</I>&gt;&gt;<i> TOPDIR=/home/wgn/socketcan/trunk/kernel/2.6
+</I>&gt;&gt;<i> make[1]: Entering directory `/usr/src/kernels/2.6.39-2.el5.elrepo-i686'
+</I>&gt;&gt;<i> CC [M] /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.o
+</I>&gt;&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.c: In
+</I>&gt;&gt;<i> function &#8216;mcp251x_can_probe&#8217;:
+</I>&gt;&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.c:1009:
+</I>&gt;&gt;<i> error: implicit declaration of function &#8216;create_freezeable_workqueue&#8217;
+</I>&gt;&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.c:1009:
+</I>&gt;&gt;<i> warning: assignment makes pointer from integer without a cast
+</I>&gt;&gt;<i> make[3]: ***
+</I>&gt;&gt;<i> [/home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.o] Error 1
+</I>&gt;&gt;<i> make[2]: *** [/home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can] Error 2
+</I>&gt;&gt;<i> make[1]: *** [_module_/home/wgn/socketcan/trunk/kernel/2.6] Error 2
+</I>&gt;&gt;<i> make[1]: Leaving directory `/usr/src/kernels/2.6.39-2.el5.elrepo-i686'
+</I>&gt;&gt;<i> make: *** [modules] Error 2
+</I>&gt;<i> You should not use the Socket-CAN repos as it is out-dated or not
+</I>&gt;<i> up-to-date to some extend. The 2.6.39 kernel coming with CentOS is just
+</I>&gt;<i> fine. Have you checked if CONFIG_CAN_CALC_BITTIMING is set on the Linux
+</I>&gt;<i> kernel coming CentOS?
+</I>&gt;<i>
+</I>&gt;&gt;<i> Any suggestions? Or should we give up on SocketCAN?
+</I>&gt;<i> Be more patient.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001933.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1934">[ date ]</a>
+              <a href="thread.html#1934">[ thread ]</a>
+              <a href="subject.html#1934">[ subject ]</a>
+              <a href="author.html#1934">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

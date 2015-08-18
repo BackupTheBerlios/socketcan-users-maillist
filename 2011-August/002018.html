@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Where%20can%20I%20find%20a%20linux%203.0%20%28or%20later%29%0A%20flexcan%20driver%20for%20a%20Freescale%20P1010RDB%20board%3F&In-Reply-To=%3C4E39B715.7070805%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002017.html">
+   <LINK REL="Next"  HREF="002019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Where%20can%20I%20find%20a%20linux%203.0%20%28or%20later%29%0A%20flexcan%20driver%20for%20a%20Freescale%20P1010RDB%20board%3F&In-Reply-To=%3C4E39B715.7070805%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Aug  3 23:01:09 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002017.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+        <LI>Next message: <A HREF="002019.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2018">[ date ]</a>
+              <a href="thread.html#2018">[ thread ]</a>
+              <a href="subject.html#2018">[ subject ]</a>
+              <a href="author.html#2018">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey Robin,
+
+do you know &quot;Mike Brown &lt;mtb at sgi dot com&gt;&quot;, he's working with the
+powerpc flexcan, too.
+
+On 08/03/2011 09:44 PM, Robin Holt wrote:
+&gt;<i> I am trying to get the current kernel working with either Greg KH's
+</I>&gt;<i> linux-3.0.y stable release tree or Linus' current tree.  I have it
+</I>&gt;<i> compiling and booting, but the flexcan driver's flexcan_probe() function
+</I>&gt;<i> never gets called.
+</I>&gt;<i> 
+</I>&gt;<i> I have made minor changes to the source to get it to compile.  The BSP
+</I>&gt;<i> from freescale based upon the 2.6.35 kernel has a flexcan driver which is
+</I>&gt;<i> significantly different from the current driver.  Some of the differences
+</I>&gt;<i> are to handle the of_platform changes they have in that version of
+</I>&gt;<i> their kernel.
+</I>
+Freescale decided not to mainline their flexcan changes, moreover they
+introduces some bugs into the driver. I send some bugfixes but they
+didn't react.
+
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2011-July/001989.html">https://lists.berlios.de/pipermail/socketcan-users/2011-July/001989.html</A>
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2011-July/001990.html">https://lists.berlios.de/pipermail/socketcan-users/2011-July/001990.html</A>
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2011-July/001986.html">https://lists.berlios.de/pipermail/socketcan-users/2011-July/001986.html</A>
+
+&gt;<i> Does anybody know what needs to be done to get the flexcan driver working
+</I>&gt;<i> for the P1010 processor?  Any suggestions on things I may need to do to
+</I>&gt;<i> get it working?  Any guidance at all will be very welcome.
+</I>
+I started hacking a bit on the driver, but as I don't have any hardware,
+not clients willing to sponsor (hint, hint!) the work, it's not
+bit-rotting in my git. Maybe it helps you (thee uppermost patches):
+
+<A HREF="http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/flexcan-dt/net-next">http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/flexcan-dt/net-next</A>
+
+cheers, Marc
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110803/521068b4/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110803/521068b4/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002017.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+	<LI>Next message: <A HREF="002019.html">[Socketcan-users] Where can I find a linux 3.0 (or later) flexcan driver for a Freescale P1010RDB board?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2018">[ date ]</a>
+              <a href="thread.html#2018">[ thread ]</a>
+              <a href="subject.html#2018">[ subject ]</a>
+              <a href="author.html#2018">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

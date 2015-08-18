@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C4651DE00.1020103%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000118.html">
+   <LINK REL="Next"  HREF="000120.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can driver</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20driver&In-Reply-To=%3C4651DE00.1020103%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] socketcan c_can driver">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon May 21 19:59:28 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000118.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+        <LI>Next message: <A HREF="000120.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#119">[ date ]</a>
+              <a href="thread.html#119">[ thread ]</a>
+              <a href="subject.html#119">[ subject ]</a>
+              <a href="author.html#119">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">freak at weirdsoft.ch</A> schrieb:
+&gt;<i> Hi there
+</I>&gt;<i>
+</I>&gt;<i> Oliver, sorry for not having responded to your comments about 2.6.13 
+</I>&gt;<i> compatibility. I got distracted by a different project. In the meantime 
+</I>&gt;<i> though, I have updated our toolchain (OSELAS) and kernel (2.6.21) so I'm 
+</I>&gt;<i> having a shiny new environment. I still got some issues with the new 
+</I>&gt;<i> kernel, but mostly it all seems to work.
+</I>&gt;<i>
+</I>&gt;<i> So last week, I tried to implement a socketcan driver for the c_can 
+</I>&gt;<i> module on the hynix cpu. Until know, I haven't had much luck. Bosch's 
+</I>&gt;<i> c_can documentation really seems to confuse myself more than it helps. 
+</I>&gt;<i> Robert, you told me that you had some &quot;working&quot; socketcan driver for the 
+</I>&gt;<i> hynix cpu. May I get my hands on it and to make it work with the current 
+</I>&gt;<i> socketcan version, so it could get commited to the repository? I have 
+</I>&gt;<i> the feeling that my current driver does not work because of some stupid 
+</I>&gt;<i> little detail, so it really helped me to have some other code to look at.
+</I>&gt;<i>
+</I>&gt;<i> Thanks a lot and best regards,
+</I>&gt;<i>
+</I>&gt;<i> Simon
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i>   
+</I>
+Hi Simon,
+
+indeed the socketcan stuff provided in the OSELAS toolchain is derived 
+from a very old SocketCAN version.
+There is no local loopback functionality and e.g. the basic struct 
+can_frame differs a lot.
+We had many discussions on the socket-API, on filters of RAW-sockets and 
+on these structs which lead to the current SocketCAN which is here on 
+BerliOS.
+We also have a MPC5200 board here with the OSELAS toolchain and the 
+first thing for me was an upgrade from the outdated OSELAS version to 
+the current SocketCAN trunk. In the next step, i wanted to use the 
+MPC5200 MSCAN driver but in the first step i kicked the ptxdist MSCAN 
+driver to work with the current SocketCAN source. Attached you will find 
+a diff of this (hacked) OSELAS CAN Driver, which may give you a hint to 
+the differences between the two driver smells. As i would like to use 
+the BerliOS driver, this driver does not go onto the SVN for a good reason.
+
+Feel free to create a 'real' SocketCAN driver on the basis of the OSELAS 
+driver regarding the basic differences addressed in this patch (struct 
+can_frame, etc.).
+
+Best regards,
+Oliver
+
+(Info: The attached file was too big for posting ...) 
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000118.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+	<LI>Next message: <A HREF="000120.html">[Socketcan-users] socketcan c_can driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#119">[ date ]</a>
+              <a href="thread.html#119">[ thread ]</a>
+              <a href="subject.html#119">[ subject ]</a>
+              <a href="author.html#119">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

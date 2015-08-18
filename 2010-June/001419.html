@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%20receive%20own%20messages%20problem&In-Reply-To=%3COF61D8CB97.F83A23E3-ON65257737.00583E99-65257737.005991F6%40lntemsys.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001418.html">
+   <LINK REL="Next"  HREF="001420.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem</H1>
+    <B>Navaneethan P</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%20receive%20own%20messages%20problem&In-Reply-To=%3COF61D8CB97.F83A23E3-ON65257737.00583E99-65257737.005991F6%40lntemsys.com%3E"
+       TITLE="[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem">Navaneethan.P at Lntemsys.com
+       </A><BR>
+    <I>Thu Jun  3 18:19:36 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001418.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+        <LI>Next message: <A HREF="001420.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1419">[ date ]</a>
+              <a href="thread.html#1419">[ thread ]</a>
+              <a href="subject.html#1419">[ subject ]</a>
+              <a href="author.html#1419">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Finally I got the answer. It was an understanding problem.
+
+&gt;<i>CAN_RAW_RECV_OWN_MSG will *not* work, if CAN_RAW_LOOPBACK is disabled.,
+</I>&gt;<i>which is the case in your test program.
+</I>Yes. You are correct.
+
+test case 1
+-----------
+If CAN_RAW_LOOPBACK (by default, it is set) is set, then sent data will be 
+received on all sockets other than the sending socket.
+I wrote a program to write the data to the socket and reads data from the 
+same socket. lets call it as cantest (No socketoptions are set in creating 
+the cantest).
+I run candump in one terminal. (#candump can0)
+I run the cantest in another terminal. (#./cantest)
+Now, data is received on the candump terminal but cantest is not returning 
+to the console (expected behaviour). Means, cantest is blocked at the read 
+system call.
+CAN_RAW_LOOPBACK will make the data to be received on all sockets other 
+than the sending socket.
+
+test case 2
+-----------
+I enabled CAN_RAW_RECV_OWN_MSGS option using setsockoptions call and 
+compiled the code &amp; created cantest.
+Now, I run candump in one terminal.(#candump can0)
+I run the cantest in another terminal. (#./cantest)
+Now, data is received on the candump terminal. Also cantest is returning 
+to the console (expected behaviour). It also receives the data.
+
+It is perfectly working in the above said behaviour. Thanks to my customer 
+who has given this info.
+
+Thanks to all for your respectable time &amp; Wolfgang for wonderful replies.
+
+
+Thanks &amp; Regards,
+Navaneethan P 
+
+
+
+
+Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; 
+06/02/2010 10:44 PM
+
+To
+Navaneethan P &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Navaneethan.P at Lntemsys.com</A>&gt;
+cc
+Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;, 
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>, Hemanth KumarBS 
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Hemanth.KumarBS at Lntemsys.com</A>&gt;
+Subject
+Re: [Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - 
+receive own messages problem
+
+
+
+
+
+
+On 06/02/2010 05:35 PM, Navaneethan P wrote:
+&gt;&gt;&gt;<i> I commented IFF_ECHO and also commented the can_get/put_echo_skb, now, 
+</I>
+&gt;&gt;&gt;<i> without enabling the loopback itself, the data is looped back.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> OK, enabling the hardware loopback does not make sense anyway. See 
+</I>&gt;<i> below.
+</I>&gt;<i> 
+</I>&gt;<i>  I understood this behaviour. Loopback is enabled by default in 
+</I>&gt;<i> net/can/raw.c:raw_init function.
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.34/net/can/raw.c#L270">http://lxr.linux.no/#linux+v2.6.34/net/can/raw.c#L270</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> If you set IFF_ECHO, your driver *must* support local loopback by using
+</I>&gt;&gt;<i> can_get/put_echo_skb. It will not work otherwise. And again, forget the
+</I>&gt;&gt;<i> hardware loopback.
+</I>&gt;<i> Thanks.  I understood this behaviour also . I saw the source code 
+</I>&gt;<i> drivers/net/can/dev.c:can_put_echo_skb()
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.34/drivers/net/can/dev.c#L266">http://lxr.linux.no/#linux+v2.6.34/drivers/net/can/dev.c#L266</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> How do you test if CAN_RAW_RECV_OWN_MSGS is working?
+</I>&gt;<i> I am using the attached code.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> #ip link set can0 up type can bitrate 125000
+</I>&gt;<i> #candump can0 -&gt; in one terminal 
+</I>&gt;<i> #./can_rcvownmsg  -&gt;in another terminal . This is the compiled output of 
+</I>
+&gt;<i> sockcan.c.
+</I>&gt;<i> socket s:3
+</I>&gt;<i> ifindex: 3
+</I>&gt;<i> bind successful
+</I>&gt;<i> (not returning to console. Means it is struck at the recvfrom.)
+</I>&gt;<i> 
+</I>&gt;<i> Also, I expect the data to be received at can0 (&quot;candump can0&quot; 
+</I>terminal). 
+&gt;<i> But that is also not happening.
+</I>&gt;<i> 
+</I>&gt;<i> I can see from the net/can/raw.c,  recv_own_msgs, member of the struct 
+</I>&gt;<i> raw_sock is set when setsockoptions(CAN_RAW_RECV_OWN_MSGS) is called.
+</I>&gt;<i> But I think, it is not used to make the recv own msgs functionality. (I 
+</I>&gt;<i> may be wrong. It may be done at a different place also.)
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.34/net/can/raw.c">http://lxr.linux.no/#linux+v2.6.34/net/can/raw.c</A>
+</I>
+CAN_RAW_RECV_OWN_MSG will *not* work, if CAN_RAW_LOOPBACK is disabled.,
+which is the case in your test program.
+
+&gt;<i> Has anybody tested the recv own msgs functionality in linux-2.6.31? 
+</I>(Just 
+&gt;<i> for confirmation).
+</I>
+I will do some testing later thihs week.
+
+Wolfgang.
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100603/94abb1fb/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100603/94abb1fb/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001418.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+	<LI>Next message: <A HREF="001420.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1419">[ date ]</a>
+              <a href="thread.html#1419">[ thread ]</a>
+              <a href="subject.html#1419">[ subject ]</a>
+              <a href="author.html#1419">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

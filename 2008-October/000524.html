@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C1225186610.7958.64.camel%40marel2674%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000523.html">
+   <LINK REL="Next"  HREF="000525.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Daniel Schnell</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C1225186610.7958.64.camel%40marel2674%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">daniel.schnell at marel.com
+       </A><BR>
+    <I>Tue Oct 28 10:36:50 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000523.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000525.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#524">[ date ]</a>
+              <a href="thread.html#524">[ thread ]</a>
+              <a href="subject.html#524">[ subject ]</a>
+              <a href="author.html#524">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, 2008-10-27 at 23:25 +0100, Oliver Hartkopp wrote:
+
+&gt;<i> Hm - i took a look into these tools and i wonder, if we should move 
+</I>&gt;<i> canconfig and cansequence to the SocketCAN SVN to have it in one place 
+</I>&gt;<i> and forget the rest ...
+</I>&gt;<i> 
+</I>&gt;<i> candump and cansend (what a bunch of options ... 8-) are just double 
+</I>&gt;<i> work and canecho is made obsolete by the (bridge) '-b' option of BerliOS 
+</I>&gt;<i> candump. Feel free to use the BerliOS stuff in your OSELAS BSPs also. 
+</I>&gt;<i> New ideas and extensions are always welcome.
+</I>
+Yes I used the Pengutronix canconfig utility and blindly supposed that
+canconfig is a standard socketcan utility ...
+I think it does make sense to unify the tools which present a certain
+&quot;uniqueness&quot;.
+
+Concerning ABI compatibility. You said, that ioctls are not supported
+anymore, so is that the reason why starting/stopping the interface with
+ioctl(can_fd, SIOCSCANMODE, &amp;ifr) now returns error (errno -EPERM) ?
+
+Is there any readme where the /proc or /sys interface is described ?
+
+Best regards,
+
+Daniel.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000523.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000525.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#524">[ date ]</a>
+              <a href="thread.html#524">[ thread ]</a>
+              <a href="subject.html#524">[ subject ]</a>
+              <a href="author.html#524">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

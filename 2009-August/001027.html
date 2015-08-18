@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C209DF69354E1D4469C564CF6FFF4E809A69A37%40MCHP7I5A.ww902.siemens.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001026.html">
+   <LINK REL="Next"  HREF="001028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B</H1>
+    <B>Lipkowski, Merten</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C209DF69354E1D4469C564CF6FFF4E809A69A37%40MCHP7I5A.ww902.siemens.net%3E"
+       TITLE="[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B">merten.lipkowski at siemens.com
+       </A><BR>
+    <I>Mon Aug 24 17:31:40 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001026.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+        <LI>Next message: <A HREF="001028.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1027">[ date ]</a>
+              <a href="thread.html#1027">[ thread ]</a>
+              <a href="subject.html#1027">[ subject ]</a>
+              <a href="author.html#1027">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE> 
+I tried each module that I found in 
+/lib/modules/2.6.29.6-rt23/extra/drivers/net/can/sja1000
+
+except pipcan, pipcan says allways &quot;invalid base address&quot; I know the
+base adress, because I configured it within the BIOS, but I don't know
+how to tell pipcan the base adress. I tried &quot;base=&quot;, &quot;baseaddress&quot; and
+&quot;port=&quot;...
+
+I also tried the SJA100 ISA driver, at first I had to compile my Kernel
+again, because ISA support isn't enabled by default...
+But which IRQ should I use?
+
+
+less /proc/interrupts
+           CPU0
+  0:        216    XT-PIC-XT        timer
+  1:          2    XT-PIC-XT        i8042
+  2:          0    XT-PIC-XT        cascade
+  8:          2    XT-PIC-XT        rtc0
+ 11:        575    XT-PIC-XT        uhci_hcd:usb1, uhci_hcd:usb2,
+uhci_hcd:usb3, uhci_hcd:usb4, uhci_hcd:usb5, uhci_hcd:usb6,
+ehci_hcd:usb7, ehci_hcd:usb8, ata_piix
+ 12:          4    XT-PIC-XT        i8042
+ 14:          0    XT-PIC-XT        ata_piix
+ 15:       1271    XT-PIC-XT        ata_piix
+ 19:        859   PCI-MSI-edge      eth0-rx-0
+ 20:        966   PCI-MSI-edge      eth0-tx-0
+ 21:          3   PCI-MSI-edge      eth0
+NMI:          0   Non-maskable interrupts
+LOC:     274073   Local timer interrupts
+SPU:          0   Spurious interrupts
+CNT:          0   Performance counter interrupts
+RES:          0   Rescheduling interrupts
+CAL:          0   Function call interrupts
+TLB:          0   TLB shootdowns
+TRM:          0   Thermal event interrupts
+ERR:          0
+MIS:          0
+
+
+
+After each modprobe, I checked with 
+dmesg
+and
+ifconfig can0 up
+if there is something like &quot;found device can0&quot;
+
+Wolfgang Grandegger wrote:
+&gt;<i>Well, It's easy if you know the bus, base address and irq number used
+</I>by
+&gt;<i>the SJA1000 controller ;-).
+</I>
+Any hints, how to figure out, which Bus is used?
+lspci doesn't show anything thats looks like a CAN Controller...
+
+00:00.0 Host bridge: Intel Corporation Mobile 4 Series Chipset Memory
+Controller Hub (rev 07)
+00:02.0 VGA compatible controller: Intel Corporation Mobile 4 Series
+Chipset Integrated Graphics Controller (rev 07)
+00:02.1 Display controller: Intel Corporation Mobile 4 Series Chipset
+Integrated Graphics Controller (rev 07)
+00:1a.0 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+Controller #4 (rev 03)
+00:1a.1 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+Controller #5 (rev 03)
+00:1a.2 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+Controller #6 (rev 03)
+00:1a.7 USB Controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI
+Controller #2 (rev 03)
+00:1c.0 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express
+Port 1 (rev 03)
+00:1c.4 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express
+Port 5 (rev 03)
+00:1c.5 PCI bridge: Intel Corporation 82801I (ICH9 Family) PCI Express
+Port 6 (rev 03)
+00:1d.0 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+Controller #1 (rev 03)
+00:1d.1 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+Controller #2 (rev 03)
+00:1d.2 USB Controller: Intel Corporation 82801I (ICH9 Family) USB UHCI
+Controller #3 (rev 03)
+00:1d.7 USB Controller: Intel Corporation 82801I (ICH9 Family) USB2 EHCI
+Controller #1 (rev 03)
+00:1e.0 PCI bridge: Intel Corporation 82801 Mobile PCI Bridge (rev 93)
+00:1f.0 ISA bridge: Intel Corporation ICH9M LPC Interface Controller
+(rev 03)
+00:1f.2 IDE interface: Intel Corporation ICH9M/M-E 2 port SATA IDE
+Controller (rev 03)
+00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus Controller
+(rev 03)
+00:1f.5 IDE interface: Intel Corporation ICH9M/M-E 2 port SATA IDE
+Controller (rev 03)
+02:00.0 Ethernet controller: Intel Corporation 82574L Gigabit Network
+Connection
+03:00.0 Ethernet controller: Intel Corporation 82574L Gigabit Network
+Connection
+10:04.0 RAM memory: Siemens Nixdorf AG Device 4040 (rev 14)
+
+
+Do I have to understand and configure &quot;udev&quot; ??
+
+regards Merten 
+
+
+
+-----Original Message-----
+From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>] 
+Sent: Montag, 24. August 2009 07:12
+To: Wolfgang Grandegger
+Cc: Lipkowski, Merten; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] Phillips SJA1000 on a Siemens Microbox
+PC427B
+
+Wolfgang Grandegger wrote:
+&gt;<i> Lipkowski, Merten wrote:
+</I>
+
+&gt;<i> 
+</I>&gt;&gt;<i> I've checked out this:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan">http://svn.berlios.de/svnroot/repos/socketcan</A>
+</I>&gt;<i> 
+</I>&gt;<i> Please use the netlink branch:
+</I>&gt;<i> 
+</I>&gt;<i>   <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/branches/netlink">http://svn.berlios.de/svnroot/repos/socketcan/branches/netlink</A>
+</I>&gt;<i> 
+</I>
+Not needed.
+
+The branch has been merged on Friday, so 'svn update' on the trunk
+should make it.
+
+&gt;&gt;<i> and I've successfully compiled the drivers in
+</I>kernel/2.6/drivers/net/can
+
+Currently CONFIG_CAN_SJA1000_ISA is not a default target.
+
+Please use
+
+'make CONFIG_CAN_SJA1000_ISA=m'
+
+(or edit the Makefile if you like)
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> I installed the modules as described in the README.
+</I>
+To install the modules you might also use
+
+'make CONFIG_CAN_SJA1000_ISA=m modules_install'
+
+in your 2.6.29.x environment next time.
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> I could load the modules with modprobe, but there is no &quot;can0&quot; device
+</I>&gt;&gt;<i> anywhere?
+</I>&gt;<i> 
+</I>&gt;<i> What module did you load?
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Where is my mistake? 
+</I>&gt;<i> 
+</I>&gt;<i> I think the sja1000_isa driver may work for your device.
+</I>
+Yes, i would assume this also.
+
+
+&gt;<i> 
+</I>&gt;<i> If you can preset the base address. e.g. 0x4000,  with the BIOS, you
+</I>can
+&gt;<i> use sja1000_isa:
+</I>&gt;<i> 
+</I>&gt;<i>   insmod sja1000_isa port=0x4000 irq=?
+</I>&gt;<i> 
+</I>
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001026.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+	<LI>Next message: <A HREF="001028.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1027">[ date ]</a>
+              <a href="thread.html#1027">[ thread ]</a>
+              <a href="subject.html#1027">[ subject ]</a>
+              <a href="author.html#1027">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

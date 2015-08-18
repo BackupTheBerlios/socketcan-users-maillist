@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C4900D108.5010607%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000513.html">
+   <LINK REL="Next"  HREF="000515.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ixxat-pci (with sja1000) doesn't receive</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C4900D108.5010607%40grandegger.com%3E"
+       TITLE="[Socketcan-users] ixxat-pci (with sja1000) doesn't receive">wg at grandegger.com
+       </A><BR>
+    <I>Thu Oct 23 21:31:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000513.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+        <LI>Next message: <A HREF="000515.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#514">[ date ]</a>
+              <a href="thread.html#514">[ thread ]</a>
+              <a href="subject.html#514">[ subject ]</a>
+              <a href="author.html#514">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>g a wrote:
+&gt;<i> On Wed, Oct 22, 2008 at 7:41 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;<i> g a wrote:
+</I>&gt;&gt;&gt;<i> finally, it works! the module creates can0 device. By the way, is
+</I>&gt;&gt;&gt;<i> there any reason ixxat-pci not included in kernel/2.6/Makefile to be
+</I>&gt;&gt;&gt;<i> compiled as module?
+</I>&gt;&gt;<i> The card has two can ports. Get both registered? What do you find in the
+</I>&gt;&gt;<i> kernel log buffer ($ dmesg).I understand that you can send messages
+</I>&gt;&gt;<i> successfully, at least, right?
+</I>&gt;<i> 
+</I>&gt;<i> on dmesg i get information about sja1000 driver and about can-ixxat-pci i get:
+</I>&gt;<i> can-ixxat-pci 0000:00:09.0: bitrate error 2854069.8%
+</I>
+Wow !?#@
+
+&gt;<i> can-ixxat-pci 0000:00:09.0: BTR0=0x3f BTR1=0x7F
+</I>&gt;<i> 
+</I>&gt;<i> i set bitrate at 125 (@ 8Mhz hw_clock)
+</I>
+What exactly did you write to /sys/net/class/can0/bit_rate?
+125000 for 125kB/s?
+
+&gt;<i> The hw_clock (i saw it's read-only) get it value from the chipset?
+</I>&gt;<i> Because the clock on the board is 16Mhz (16.0F)
+</I>
+Then 8MHz is OK.
+
+&gt;<i> BTW: when i load the module to use can-utils (candump) i get
+</I>&gt;<i> NET: Registered protocol family 29
+</I>&gt;<i> can: request_module (can-proto-1) failed.
+</I>&gt;<i> can: raw protocol (rev 20071116)
+</I>
+Can you be more precise, please? What did you load?
+
+&gt;&gt;&gt;<i> I set can0's bitrate at /sys directory, and the i up it with ifconfig,
+</I>&gt;&gt;&gt;<i> but i still don't receive message from another CAN device.
+</I>&gt;&gt;<i> What does &quot;$ candump any,0:0,#FFFFFFFF&quot; report. Do you see interrupts
+</I>&gt;&gt;<i> counting up by looking to /proc/interrupts.
+</I>&gt;<i> 
+</I>&gt;<i> candump just receive frames (ERRORFRAME) when i plug-in the cable, and
+</I>&gt;<i> /proc/interrupts report as much as i can see in the candump. In
+</I>&gt;<i> another monitor PC i could see  receiving standard format ID 182 and
+</I>&gt;<i> data 03
+</I>
+Show us the output please. But likely your bitrate setting is bogus.
+
+&gt;&gt;<i> I do not understand what you mean. What kind of device do you plug to
+</I>&gt;&gt;<i> the CAN bus and why does it send messages automatically.
+</I>&gt;<i> 
+</I>&gt;<i> i plug-in a CAN generator, that i also monitoring with an IXXAT
+</I>&gt;<i> USB-to-CAN compact (from another PC) that indeed i'm sending messages.
+</I>&gt;<i> it looks like this below picture
+</I>&gt;<i> 
+</I>&gt;<i> [CAN <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gen. at 125bps</A>]-----------------------can0-&gt;[PCI/104]
+</I>&gt;<i> 
+</I>&gt;<i> \------------&gt;[USB-to-CAN]-------&gt;[PC monitor]
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Oliver and Wolfgang i really appreciate your help!
+</I>
+You are welcome.
+
+Wolfgang.
+
+&gt;<i> 
+</I>&gt;<i> --
+</I>&gt;<i> Gonzalo Aguirre
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000513.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+	<LI>Next message: <A HREF="000515.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#514">[ date ]</a>
+              <a href="thread.html#514">[ thread ]</a>
+              <a href="subject.html#514">[ subject ]</a>
+              <a href="author.html#514">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

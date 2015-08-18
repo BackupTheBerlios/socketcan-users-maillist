@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%0A%20tell%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C4BC74F7F.40405%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001378.html">
+   <LINK REL="Next"  HREF="001380.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%0A%20tell%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C4BC74F7F.40405%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Apr 15 19:40:15 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001378.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+        <LI>Next message: <A HREF="001380.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1379">[ date ]</a>
+              <a href="thread.html#1379">[ thread ]</a>
+              <a href="subject.html#1379">[ subject ]</a>
+              <a href="author.html#1379">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Stephen Hellriegel wrote:
+
+&gt;<i> This patch uses the device prefix &quot;can&quot; instead of &quot;slc&quot;.  A binary library we paid for has &quot;can&quot; hardcoded as the prefix of the CAN devicename; &quot;slc&quot; breaks it.
+</I>&gt;<i> Just search for the edit at slcan.c line 753 in the patch and you will see where you can change can back to slc if you are really fond of the slc prefix for any reason.
+</I>&gt;<i> 
+</I>&gt;<i> If not, I would love for the default to be can instead of slc, to be compatible with other interfaces!
+</I>
+Hello Stephen,
+
+you are right! I also thought about creating canX instead of slcX ... will
+change that. But first read the stuff below, if it makes sense to stay on this
+naming scheme.
+
+&gt;<i> +/*
+</I>&gt;<i> + * By default, do not turn on SLC_CHECK_TRANSMIT
+</I>&gt;<i> + * when a slcan device transmits into an unconnected network,
+</I>&gt;<i> + * the transmit timeout causes a kernel panic, this behaviour
+</I>&gt;<i> + * should be at the choice of the user.
+</I>&gt;<i> + */
+</I>&gt;<i> +
+</I>&gt;<i> +#if 0
+</I>&gt;<i>  #define SLC_CHECK_TRANSMIT
+</I>&gt;<i> +#endif
+</I>&gt;<i> +
+</I>
+
+You mean, that the slcan device does not send any reply when it's CAN
+controller doesn't get the CAN frame onto the bus, right?
+
+If so, it would be ok for me also.
+
+The slcan stuff *is* low-cost hardware, and running any kind of acknowledges
+seems always to lead into problems.
+
+---
+
+Coming to stty swtch ...
+
+&gt;<i> The following patch file enables a user to perform the following:
+</I>&gt;<i> Choose which device instance number you are going to get for a slcan port.
+</I>&gt;<i> This is really handy if you have 4 or more 1mbit slcan interfaces that come
+</I>and go asynchronously in a Linux system...
+&gt;<i>
+</I>&gt;<i> #Say you want to kick the CAN on /dev/TTYUSB9 as device can4
+</I>&gt;<i> stty swtch 4 -F /dev/TTYUSB9
+</I>&gt;<i> #now call slcand as normal
+</I>&gt;<i> ifconfig can4 up
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Presto, no hunting around to figure out which &quot;slc&quot; or &quot;can&quot; number the call
+</I>to slcand came up on.
+&gt;<i>
+</I>
+AFAICS this approach does not solve the problem at it's root.
+And i doubt this to become a functionality for mainline Linux as it 'reuses'
+potentially 'dead' options in a different manner ...
+
+I would propose to have a table of assignments, e.g. in /etc/slcan-devs
+
+/dev/ttyS0 can0
+/dev/ttyUSB0 can3
+
+1. The slcand may create a file in /var/whatever containing the serial device
+name &quot;/dev/ttyUSB0&quot; at netdev creation time.
+
+2. Let's say the slcand still creates a 'slc0' netdevice with the ioctl()
+
+3. Write a udev-rule that's invoked when the 'slc*' is created and announced
+to the system. This udev-rule can look through /etc/slcan-devs and then
+renames slc0 -&gt; can3 with the ip-tool:
+
+    ip link set slc0 name can3
+
+4. Remove /var/whatever to be ready for the next slcan device creation
+
+
+That's IMHO the way this slcan 'naming problem' should be handled in the
+user-space. Setting &quot;stty swtch 4 -F /dev/TTYUSB9&quot; makes the problem a kernel
+problem but it does not solved the original issue.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001378.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+	<LI>Next message: <A HREF="001380.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1379">[ date ]</a>
+              <a href="thread.html#1379">[ thread ]</a>
+              <a href="subject.html#1379">[ subject ]</a>
+              <a href="author.html#1379">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

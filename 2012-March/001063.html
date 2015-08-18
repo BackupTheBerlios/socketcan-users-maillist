@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.11.1331738231.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001032.html">
+   <LINK REL="Next"  HREF="001096.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.11.1331738231.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 16:17:01 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001032.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="001096.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1063">[ date ]</a>
+              <a href="thread.html#1063">[ thread ]</a>
+              <a href="subject.html#1063">[ subject ]</a>
+              <a href="author.html#1063">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>entering configuration mode and therefor isn't setting the right
+bitrate etc. When looking at the CAN data on a oscilloscope it appears
+to be at 1Mbit instead of 250kbit as requested and as the other units.
+
+
+Hope the extra info can bring some more light into my problems and
+further assist me in finding the solution.
+
+
+Kindest regards,
+
+//Erik
+
+On Wed, Sep 30, 2009 at 10:09 AM, christian pellegrin
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt; wrote:
+&gt;<i> On Sat, Sep 26, 2009 at 10:00 PM, Erik Calissendorff
+</I>&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gumstix at tansaki.com</A>&gt; wrote:
+</I>&gt;&gt;<i> Hi I have tried to get the mcp251x driver to work with the Overo
+</I>&gt;&gt;<i> Gumstix for sometime now.
+</I>&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;&gt;<i> ------------[ cut here ]------------
+</I>&gt;&gt;<i> WARNING: at /home/plejd/overo-oe/tmp/work/overo-angstrom-linux-gnueabi/s=
+</I>ocketcan-modules-0.0+svnr1064-r45/trunk/kernel/2.6/drivers/net/can/mcp251x.=
+c:840
+&gt;&gt;<i> mcp251x_irq_work_handler+0x24c/0x5d0 [mcp251x]()
+</I>&gt;<i>
+</I>&gt;<i> huh you added debugging lines so I don't know to which line in SVN
+</I>&gt;<i> does 840 refer. Anyway the WARN_ON in that function can be triggered
+</I>&gt;<i> only if the read from registers is not meaningful (for example tx done
+</I>&gt;<i> when there is not tx pending). Or the cause may be a bug in the driver
+</I>&gt;<i> of course.
+</I>&gt;<i>
+</I>&gt;<i> BTW if you need to have entry and exit function information you should
+</I>&gt;<i> definitely check ftrace.
+</I>&gt;<i>
+</I>&gt;<i> Can you please just use SVN version with just the following patch:
+</I>&gt;<i>
+</I>&gt;<i> Index: drivers/net/can/mcp251x.c
+</I>&gt;<i> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+</I>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+&gt;<i> --- drivers/net/can/mcp251x.c =A0 (revision 1064)
+</I>&gt;<i> +++ drivers/net/can/mcp251x.c =A0 (working copy)
+</I>&gt;<i> @@ -243,6 +243,19 @@
+</I>&gt;<i> =A0 =A0 =A0 =A0ret =3D spi_sync(spi, &amp;m);
+</I>&gt;<i> =A0 =A0 =A0 =A0if (ret &lt; 0)
+</I>&gt;<i> =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0dev_err(&amp;spi-&gt;dev, &quot;%s: failed: ret =3D %d=
+</I>\n&quot;, __func__, ret);
+&gt;<i> +#if 1
+</I>&gt;<i> + =A0 =A0 =A0 {
+</I>&gt;<i> + =A0 =A0 =A0 =A0 int i;
+</I>&gt;<i> +
+</I>&gt;<i> + =A0 =A0 =A0 =A0 printk(&quot;tx:&quot;);
+</I>&gt;<i> + =A0 =A0 =A0 =A0 for(i =3D 0; i &lt; len; i++)
+</I>&gt;<i> + =A0 =A0 =A0 =A0 =A0 printk(&quot; %02x&quot;, priv-&gt;spi_tx_buf[i]);
+</I>&gt;<i> + =A0 =A0 =A0 =A0 printk(&quot;rx:&quot;);
+</I>&gt;<i> + =A0 =A0 =A0 =A0 for(i =3D 0; i &lt; len; i++)
+</I>&gt;<i> + =A0 =A0 =A0 =A0 =A0 printk(&quot; %02x&quot;, priv-&gt;spi_rx_buf[i]);
+</I>&gt;<i> + =A0 =A0 =A0 =A0 printk(&quot;\n&quot;);
+</I>&gt;<i> + =A0 =A0 =A0 }
+</I>&gt;<i> +#endif
+</I>&gt;<i> =A0 =A0 =A0 =A0return ret;
+</I>&gt;<i> =A0}
+</I>&gt;<i>
+</I>&gt;<i> so I could be able to quickly tell you if SPI communications looks meanin=
+</I>gful?
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+</I>&gt;<i> &quot;Real Programmers don't play tennis, or any other sport which requires
+</I>&gt;<i> you to change clothes. Mountain climbing is OK, and Real Programmers
+</I>&gt;<i> wear their climbing boots to work in case a mountain should suddenly
+</I>&gt;<i> spring up in the middle of the computer room.&quot;
+</I>&gt;<i>
+</I>
+
+
+--=20
+Erik Calissendorff
+Cell: +33 (0)647 175 822 (France)
+Cell: +46 (0)703 972 779 (Sweden)
+E-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">erik.calissendorff at tansaki.com</A>
+Homepage: <A HREF="http://www.tansaki.com">http://www.tansaki.com</A>
+--
+CONFIDENTIALITY NOTICE
+This e-mail or the documents accompanying this e-mail contain information w=
+hich
+may be confidential or privileged and exempt from disclosure under
+applicable law.
+If you have received this e-mail in error, please notify immediately
+and delete this message.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001032.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="001096.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1063">[ date ]</a>
+              <a href="thread.html#1063">[ thread ]</a>
+              <a href="subject.html#1063">[ subject ]</a>
+              <a href="author.html#1063">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

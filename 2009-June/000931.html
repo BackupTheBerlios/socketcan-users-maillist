@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 2/5]: softing CAN card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090616152011.GH2830%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000933.html">
+   <LINK REL="Next"  HREF="000940.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 2/5]: softing CAN card</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%202/5%5D%3A%20softing%20CAN%20card&In-Reply-To=%3C20090616152011.GH2830%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] [PATCH 2/5]: softing CAN card">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Tue Jun 16 17:20:11 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000933.html">[Socketcan-users] [PATCH 1/5]: softing CAN card
+</A></li>
+        <LI>Next message: <A HREF="000940.html">[Socketcan-users] [PATCH 2/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#931">[ date ]</a>
+              <a href="thread.html#931">[ thread ]</a>
+              <a href="subject.html#931">[ subject ]</a>
+              <a href="author.html#931">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This patch fixes the functional behaviour of softing CAN driver:
+* netif_wake_queue is called after succesfull start of the firmware.
+* softing_flush_echo_skb() was meant for clearing the echo cache.
+* no free of skb in start_xmit(). It's not supposed to free in case
+  of failures.
+
+As such, my system won't go down under heavy transmission load.
+
+Signed-off-by: Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt;
+---
+ kernel/2.6/drivers/net/can/softing/softing_fw.c   |   12 ++++-
+ kernel/2.6/drivers/net/can/softing/softing_main.c |   45 ++++++----------------
+ 2 files changed, 23 insertions(+), 34 deletions(-)
+
+Index: netlink-up/kernel/2.6/drivers/net/can/softing/softing_fw.c
+===================================================================
+--- netlink-up.orig/kernel/2.6/drivers/net/can/softing/softing_fw.c	2009-06-16 15:04:13.000000000 +0200
++++ netlink-up/kernel/2.6/drivers/net/can/softing/softing_fw.c	2009-06-16 15:06:24.000000000 +0200
+@@ -634,19 +634,27 @@
+ 	if (card-&gt;bus[0] &amp;&amp; bus0) {
+ 		card-&gt;bus[0]-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+ 		netif_carrier_on(card-&gt;bus[0]-&gt;netdev);
++		if (netif_queue_stopped(card-&gt;bus[0]-&gt;netdev))
++			netif_wake_queue(card-&gt;bus[0]-&gt;netdev);
+ 	}
+ 	if (card-&gt;bus[1] &amp;&amp; bus1) {
+ 		card-&gt;bus[1]-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+ 		netif_carrier_on(card-&gt;bus[1]-&gt;netdev);
++		if (netif_queue_stopped(card-&gt;bus[1]-&gt;netdev))
++			netif_wake_queue(card-&gt;bus[1]-&gt;netdev);
+ 	}
+ 	return 0;
+ failed:
+ 	softing_card_irq(card, 0);
+ 	softing_reset_chip(card);
+-	if (card-&gt;bus[0])
++	if (card-&gt;bus[0]) {
+ 		netif_carrier_off(card-&gt;bus[0]-&gt;netdev);
+-	if (card-&gt;bus[1])
++		netif_stop_queue(card-&gt;bus[0]-&gt;netdev);
++	}
++	if (card-&gt;bus[1]) {
+ 		netif_carrier_off(card-&gt;bus[1]-&gt;netdev);
++		netif_stop_queue(card-&gt;bus[1]-&gt;netdev);
++	}
+ 	return -EIO;
+ }
+ 
+Index: netlink-up/kernel/2.6/drivers/net/can/softing/softing_main.c
+===================================================================
+--- netlink-up.orig/kernel/2.6/drivers/net/can/softing/softing_main.c	2009-06-16 15:04:08.000000000 +0200
++++ netlink-up/kernel/2.6/drivers/net/can/softing/softing_main.c	2009-06-16 15:04:39.000000000 +0200
+@@ -42,7 +42,7 @@
+  */
+ void softing_flush_echo_skb(struct softing_priv *priv)
+ {
+-	close_candev(priv-&gt;netdev);
++	can_flush_echo_skb(priv-&gt;netdev);
+ 	priv-&gt;tx.pending = 0;
+ 	priv-&gt;tx.echo_put = 0;
+ 	priv-&gt;tx.echo_get = 0;
+@@ -50,7 +50,6 @@
+ 
+ /*softing_unlocked_tx_run:*/
+ /*trigger the tx queue-ing*/
+-/*no locks are grabbed, so be sure to have the spin spinlock*/
+ static int netdev_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct softing_priv *priv = (struct softing_priv *)netdev_priv(dev);
+@@ -126,8 +125,6 @@
+ 	++priv-&gt;tx.echo_put;
+ 	if (priv-&gt;tx.echo_put &gt;= CAN_ECHO_SKB_MAX)
+ 		priv-&gt;tx.echo_put = 0;
+-	/* clear pointer, so don't erase later */
+-	skb = 0;
+ xmit_done:
+ 	if (bhlock)
+ 		spin_unlock_bh(&amp;card-&gt;spin);
+@@ -143,10 +140,9 @@
+ 			netif_stop_queue(bus-&gt;netdev);
+ 		}
+ 	}
++	if (ret &lt; 0)
++		netif_stop_queue(dev);
+ 
+-	/* free skb, if not handled by the driver */
+-	if (skb)
+-		dev_kfree_skb(skb);
+ 	return ret;
+ }
+ 
+@@ -260,23 +256,24 @@
+ 			/*trigger dual port RAM */
+ 			mb();
+ 			card-&gt;dpram.rx-&gt;rd = fifo_rd;
++
+ 			/*update internal status */
+ 			if (can_state != bus-&gt;can.state) {
+ 				bus-&gt;can.state = can_state;
+-				if (can_state == 1)
++				if (can_state == CAN_STATE_ERROR_PASSIVE)
+ 					bus-&gt;can.can_stats.error_passive += 1;
++				if (can_state == CAN_STATE_BUS_OFF) {
++					/* this calls can_close_cleanup() */
++					softing_flush_echo_skb(bus);
++					can_bus_off(bus-&gt;netdev);
++					netif_stop_queue(bus-&gt;netdev);
++				}
+ 			}
+ 			bus-&gt;can.can_stats.bus_error += 1;
+ 
+ 			/*trigger socketcan */
+-			if (state == 2) {
+-				/* this calls can_close_cleanup() */
+-				softing_flush_echo_skb(bus);
+-				can_bus_off(bus-&gt;netdev);
+-				netif_stop_queue(bus-&gt;netdev);
+-			}
+-			if ((state == CAN_STATE_BUS_OFF)
+-				 || (state == CAN_STATE_ERROR_PASSIVE)) {
++			if ((can_state == CAN_STATE_BUS_OFF)
++				 || (can_state == CAN_STATE_ERROR_PASSIVE)) {
+ 				skb = dev_alloc_skb(sizeof(msg));
+ 				if (!skb)
+ 					return -ENOMEM;
+@@ -457,7 +454,6 @@
+ 		ret = -EIO;
+ 		goto out_close;
+ 	}
+-	netif_start_queue(ndev);
+ 	return 0;
+ 
+ out_close:
+@@ -489,20 +485,6 @@
+ 	return 0;
+ }
+ 
+-static int candev_get_state(const struct net_device *ndev,
+-			    enum can_state *state)
+-{
+-	struct softing_priv *priv = netdev_priv(ndev);
+-	mod_trace(&quot;%s&quot;, ndev-&gt;name);
+-	if (priv-&gt;netdev-&gt;flags &amp; IFF_UP)
+-		*state = CAN_STATE_STOPPED;
+-	else if (priv-&gt;can.state == CAN_STATE_STOPPED)
+-		*state = CAN_STATE_STOPPED;
+-	else
+-		*state = CAN_STATE_ERROR_ACTIVE;
+-	return 0;
+-}
+-
+ static int candev_set_mode(struct net_device *ndev, enum can_mode mode)
+ {
+ 	struct softing_priv *priv = netdev_priv(ndev);
+@@ -916,7 +898,6 @@
+ 	ndev-&gt;stop		= netdev_stop;
+ 	ndev-&gt;hard_start_xmit	= netdev_start_xmit;
+ #endif
+-	priv-&gt;can.do_get_state	= candev_get_state;
+ 	priv-&gt;can.do_set_mode	= candev_set_mode;
+ 
+ 	return priv;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000933.html">[Socketcan-users] [PATCH 1/5]: softing CAN card
+</A></li>
+	<LI>Next message: <A HREF="000940.html">[Socketcan-users] [PATCH 2/5]: softing CAN card
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#931">[ date ]</a>
+              <a href="thread.html#931">[ thread ]</a>
+              <a href="subject.html#931">[ subject ]</a>
+              <a href="author.html#931">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

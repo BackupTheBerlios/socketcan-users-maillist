@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Some explainations about the file vcan.c
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20explainations%20about%20the%20file%20vcan.c&In-Reply-To=%3C46CEADD6.5060400%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000189.html">
+   <LINK REL="Next"  HREF="000190.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Some explainations about the file vcan.c</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20explainations%20about%20the%20file%20vcan.c&In-Reply-To=%3C46CEADD6.5060400%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Some explainations about the file vcan.c">wg at grandegger.com
+       </A><BR>
+    <I>Fri Aug 24 12:07:18 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000189.html">[Socketcan-users] Some explainations about the file vcan.c
+</A></li>
+        <LI>Next message: <A HREF="000190.html">[Socketcan-users] socket-can-core spam
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#191">[ date ]</a>
+              <a href="thread.html#191">[ thread ]</a>
+              <a href="subject.html#191">[ subject ]</a>
+              <a href="author.html#191">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">l.montrucchio at libero.it</A> wrote:
+&gt;<i> Hi,
+</I>&gt;<i> First of all thanks a lot to Marc because he helped me a lot.
+</I>&gt;<i> I had some other silly questions (please be always very patient because I'm really a beginner on the topic!).
+</I>
+You are welcome.
+
+&gt;<i> _ I read that the file Kconfig  defines all the configuration parameters, their dependencies and the detailed description of their meaning.Is it right and does it fit also for the Kconfig file related to vcan.c?
+</I>
+Two times yes.
+
+&gt;<i> _ I have no idea of the purpose of the file Kconfig.kernel? Can some one tell me what is it for and what is the difference with Kconfig? (I searched the web for the whole day but I didn't find anything useful!).
+</I>
+Kconfig.kernel is the version of Kconfig used for kernel inclusion. 
+Currently, not all features and drivers are supported in the Socket-CAN 
+kernel patch posted to the linux-netdev ML, e.g.:
+
+<A HREF="http://marc.info/?l=linux-netdev&amp;m=118619408431318&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118619408431318&amp;w=2</A>
+
+&gt;<i> _What is the purpose of the file Makefile.kernel?
+</I>
+See above.
+
+&gt;<i> _What is the purpose of the file vcan.mod.c?
+</I>
+It's a temporary file created by the build system.
+
+&gt;<i> I know that those questions may seem very very silly and that such things are very well known by advanced users, but I'm a beginner and I'll be glad if someone can post me the answers or links to books or web sites that may help.
+</I>&gt;<i> Thanks again in advance.
+</I>
+There's no need to excuse yourself. Well all started somehow.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000189.html">[Socketcan-users] Some explainations about the file vcan.c
+</A></li>
+	<LI>Next message: <A HREF="000190.html">[Socketcan-users] socket-can-core spam
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#191">[ date ]</a>
+              <a href="thread.html#191">[ thread ]</a>
+              <a href="subject.html#191">[ subject ]</a>
+              <a href="author.html#191">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

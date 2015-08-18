@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan utilities download?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20utilities%20download%3F&In-Reply-To=%3C4E3C08D0.5030404%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002082.html">
+   <LINK REL="Next"  HREF="002084.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan utilities download?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20utilities%20download%3F&In-Reply-To=%3C4E3C08D0.5030404%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] socketcan utilities download?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Aug  5 17:14:24 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002082.html">[Socketcan-users] socketcan utilities download?
+</A></li>
+        <LI>Next message: <A HREF="002084.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2083">[ date ]</a>
+              <a href="thread.html#2083">[ thread ]</a>
+              <a href="subject.html#2083">[ subject ]</a>
+              <a href="author.html#2083">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 05.08.2011 16:07, Padma Chavala wrote:
+&gt;<i> Hi
+</I>&gt;<i> I  want ot test whether CAN is working or not on my board.
+</I>&gt;<i> I enabled the driver and I'm able to check till
+</I>&gt;<i> ifconfig can0 up
+</I>&gt;<i> after that I want to use can utilities like cansend,candump,canecho .. and
+</I>&gt;<i> check the data transfer..
+</I>&gt;<i> I want to download socket CAN utilities and integrate in my code.
+</I>&gt;<i> Can anyone tell me where to download from.
+</I>
+Hi,
+
+just check out the latest SocketCAN SVN tree:
+
+<A HREF="http://developer.berlios.de/svn/?group_id=6475">http://developer.berlios.de/svn/?group_id=6475</A>
+
+in socketcan/trunk/can-utils is all you need.
+
+With 'make' the tools compile and with 'make install' (as root) they are
+simply copied to /usr/local/bin
+
+&gt;<i> 2)
+</I>&gt;<i> I wrote an application to test loopback on CAN
+</I>&gt;<i> I'm creating a socket using socketcan information but when execute I get
+</I>&gt;<i> &quot;Protocol not Supported&quot;
+</I>&gt;<i> 
+</I>&gt;<i> socket(PF_CAN, SOCK_RAW, CAN_BCM);
+</I>&gt;<i> is failing to create socket descriptor.
+</I>
+As expected :-)
+
+CAN_BCM is not a SOCK_RAW socket type.
+
+See <A HREF="http://lxr.linux.no/#linux+v3.0.1/Documentation/networking/can.txt#L245">http://lxr.linux.no/#linux+v3.0.1/Documentation/networking/can.txt#L245</A>
+
+Additional to that read-worthy doscumentation you can also get some ideas when
+looking at the files in socketcan/trunk/test or socketcan/trunk/can-utils
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002082.html">[Socketcan-users] socketcan utilities download?
+</A></li>
+	<LI>Next message: <A HREF="002084.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2083">[ date ]</a>
+              <a href="thread.html#2083">[ thread ]</a>
+              <a href="subject.html#2083">[ subject ]</a>
+              <a href="author.html#2083">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

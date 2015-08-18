@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486C78A8.6010600%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000460.html">
+   <LINK REL="Next"  HREF="000464.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486C78A8.6010600%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jul  3 08:58:48 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000460.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000464.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#455">[ date ]</a>
+              <a href="thread.html#455">[ thread ]</a>
+              <a href="subject.html#455">[ subject ]</a>
+              <a href="author.html#455">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Wed, Jul 02, 2008 at 10:16:22PM +0200, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> what is the special advantage to have this updatable table inside the
+</I>&gt;&gt;<i> driver?
+</I>&gt;<i> 
+</I>&gt;<i> Not necessarily inside the driver, but in the kernel.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> When i would like to change the settings of the speed, what would be the
+</I>&gt;&gt;<i> difference, if i select a formerly(!) uploaded table entry OR if i would
+</I>&gt;&gt;<i> write a *set* of values directly into the hw-independent can_sjw, ...
+</I>&gt;&gt;<i> values?
+</I>&gt;<i> 
+</I>&gt;<i> Letting the user select the bitrate on the commandline with
+</I>&gt;<i> 
+</I>&gt;<i> 	canconfig can0 125000
+</I>&gt;<i> 
+</I>&gt;<i> is easy to remember. He may have invented what 125000 means before and
+</I>&gt;<i> has configured his /etc/network/interfaces correctly, but in the moment
+</I>&gt;<i> of changing he just has to use this line.
+</I>&gt;<i> 
+</I>&gt;<i> You surely can also do
+</I>&gt;<i> 
+</I>&gt;<i> 	echo $phase_seg1 &gt; /sys/bla/blub
+</I>&gt;<i> 
+</I>&gt;<i> for all the values in this moment, but it is error prone, many steps and
+</I>&gt;<i> counter intuitive. Such a table in the kernel is cheap and we should
+</I>&gt;<i> make it easy for the user to express simple things like &quot;use 125000
+</I>&gt;<i> kbit&quot; in an easy and intuitive way.
+</I>&gt;<i> 
+</I>&gt;<i> Imagine you would be sitting in front of some random hardware *now*:
+</I>&gt;<i> would you have the CiA values in your mind? I don't. I'm a lazy bastard.
+</I>&gt;<i> I just want to say &quot;canconfig can0 125000&quot;.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I need to have the tables in the userspace anyway (for the setup). And
+</I>&gt;&gt;<i> it's no magic to create some scripts, that push the new value-set in one
+</I>&gt;&gt;<i> go into the sysfs, or am i wrong here?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This can all be hidden easily behind some &quot;canconfig can0 bitrate
+</I>&gt;&gt;<i> 125000&quot; script.
+</I>&gt;<i> 
+</I>&gt;<i> It's all a matter of convenience. And I think *this* little bit of
+</I>&gt;<i> convenience can be expected from a world domination kernel :-)
+</I>&gt;<i> 
+</I>&gt;<i> It's also easier for C applications. They don't have to care about
+</I>&gt;<i> calling canconfig with system() or have to deal with all that values;
+</I>&gt;<i> usually, an application wants to be independend from the bit time
+</I>&gt;<i> details. Most of our customers just know that their app runs at 250 kBit
+</I>&gt;<i> or 125 kBit, and that can easily be coded into the application. With the
+</I>&gt;<i> table, bit timing details are *config time issues*, and that's exactly
+</I>&gt;<i> what they are.
+</I>&gt;<i> 
+</I>&gt;<i> You can surely make a convenience library, but that sounds very
+</I>&gt;<i> arbitrary to me, and setting the bit time would be it's only task.
+</I>
+Robert, you do not need to convince me, but the others ;-). As I said, 
+I'm not against the indirect setting in general but all the suggested 
+solutions did not attract me so far, to say the least.
+
+And we speak about the expert mode, which will be used rarely anyhow.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000460.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000464.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#455">[ date ]</a>
+              <a href="thread.html#455">[ thread ]</a>
+              <a href="subject.html#455">[ subject ]</a>
+              <a href="author.html#455">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

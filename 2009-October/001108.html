@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] mscan: do not set err value on slprq	timeout
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%20slprq%0A%09timeout&In-Reply-To=%3C1256808653-25568-2-git-send-email-l.fu%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001107.html">
+   <LINK REL="Next"  HREF="001109.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] mscan: do not set err value on slprq	timeout</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%20slprq%0A%09timeout&In-Reply-To=%3C1256808653-25568-2-git-send-email-l.fu%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] mscan: do not set err value on slprq	timeout">l.fu at pengutronix.de
+       </A><BR>
+    <I>Thu Oct 29 10:30:53 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001107.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001109.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1108">[ date ]</a>
+              <a href="thread.html#1108">[ thread ]</a>
+              <a href="subject.html#1108">[ subject ]</a>
+              <a href="author.html#1108">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>If the RXACT flag is not cleared on the mscan, the slprq will eventually
+fail. This could be the situation when some opposite is keeping resending
+frames because of some communication errors. This way we will the initrq or
+cswai will also not be set and the mscan controller will got stuck till
+the bus is restarted. To avoid this we kick out setting the err value beyong a
+slprq failure to let the controller proceed. This is hacky since calling e.g.
+initrq while the mscan is really doing stuffs might disturb the bus
+communication. For now we however don't have other possiblities to work around
+the behaviour of mscan mentioned above.
+
+Signed-off-by: Luotao Fu &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">l.fu at pengutronix.de</A>&gt;
+---
+ drivers/net/can/mscan/mscan.c |   20 ++++++++++++++------
+ 1 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/mscan.c
+index ad09c63..b38a920 100644
+--- a/drivers/net/can/mscan/mscan.c
++++ b/drivers/net/can/mscan/mscan.c
+@@ -137,13 +137,21 @@ static int mscan_set_mode(struct net_device *dev, u8 mode)
+ 				udelay(100);
+ 			}
+ 			if (i &gt;= MSCAN_SET_MODE_RETRIES)
+-				ret = -ENODEV;
++			/* XXX: sometimes while there are irregular activities
++			 * on bus, like somebody keeps retransmitting. The mscan
++			 * will fail to enter sleep mode. We proceed to init or
++			 * wait mode in this case any how, since otherwise the
++			 * controller will get stuck. The sleep mode is for now
++			 * never set alone, so there should be no further
++			 * impact caused by not catching this error */
++				dev_warn(dev-&gt;dev.parent,
++					&quot;SLPRQ timeout reached, &quot;
++					&quot;failed to enter sleep mode!\n&quot;);
++			else
++				priv-&gt;can.state = CAN_STATE_SLEEPING;
+ 		}
+-		if (!ret)
+-			priv-&gt;can.state = CAN_STATE_SLEEPING;
+ 
+-		if (!ret &amp;&amp; (mode &amp; MSCAN_INITRQ)
+-		    &amp;&amp; (canctl1 &amp; MSCAN_INITAK) == 0) {
++		if ((mode &amp; MSCAN_INITRQ) &amp;&amp; (canctl1 &amp; MSCAN_INITAK) == 0) {
+ 			out_8(&amp;regs-&gt;canctl0,
+ 			      in_8(&amp;regs-&gt;canctl0) | MSCAN_INITRQ);
+ 			for (i = 0; i &lt; MSCAN_SET_MODE_RETRIES; i++) {
+@@ -156,7 +164,7 @@ static int mscan_set_mode(struct net_device *dev, u8 mode)
+ 		if (!ret)
+ 			priv-&gt;can.state = CAN_STATE_STOPPED;
+ 
+-		if (!ret &amp;&amp; (mode &amp; MSCAN_CSWAI))
++		if (mode &amp; MSCAN_CSWAI)
+ 			out_8(&amp;regs-&gt;canctl0,
+ 			      in_8(&amp;regs-&gt;canctl0) | MSCAN_CSWAI);
+ 
+-- 
+1.6.5
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001107.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001109.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1108">[ date ]</a>
+              <a href="thread.html#1108">[ thread ]</a>
+              <a href="subject.html#1108">[ subject ]</a>
+              <a href="author.html#1108">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

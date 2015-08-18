@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN with switchable power
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20with%20switchable%20power&In-Reply-To=%3C49E5FF0D.9000704%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000776.html">
+   <LINK REL="Next"  HREF="000781.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN with switchable power</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20with%20switchable%20power&In-Reply-To=%3C49E5FF0D.9000704%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] CAN with switchable power">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Apr 15 17:36:45 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000776.html">[Socketcan-users] CAN with switchable power
+</A></li>
+        <LI>Next message: <A HREF="000781.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#777">[ date ]</a>
+              <a href="thread.html#777">[ thread ]</a>
+              <a href="subject.html#777">[ subject ]</a>
+              <a href="author.html#777">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is it possible, that your CAN transceivers are switched off, when you
+</I>&gt;&gt;<i> try to initialize the FPGA CAN controller??
+</I>&gt;<i> 
+</I>&gt;<i> No, the CAN transceivers are always powered.  The PSU only controls
+</I>&gt;<i> the auxiliary power sent to devices on the bus.  When it's off, they
+</I>&gt;<i> will behave like nothing is attached.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Probably your CAN core can not cope with RX/TX lines from/to the CAN
+</I>&gt;&gt;<i> transceiver are permanently set to 0V at startup time ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm not sure, but i would assume some kind of hardware issue around the
+</I>&gt;&gt;<i> CAN transceiver wiring (TX/TX/ERR/STNDBY/etc) when the PSU is switched off.
+</I>&gt;<i> 
+</I>&gt;<i> We've tried this with a Peak PCI card as well and get pretty much the
+</I>&gt;<i> same behaviour.  If I bring up the interface with nothing plugged in
+</I>&gt;<i> and then plug in a device, I see nothing on the bus.  This is equivalent
+</I>&gt;<i> to what our PSU does to the CAN bus on the actual target system.
+</I>&gt;<i> 
+</I>&gt;<i> Shutting down the interface &amp; bringing it back up doesn't help.
+</I>&gt;<i>   (ifconfig can0 down; ifconfig can0 up)
+</I>&gt;<i> 
+</I>&gt;<i> Ideas on what I could look at to figure out what's going on?
+</I>
+Have you checked the error pin of the CAN transceiver?
+
+What kind of CAN transceiver do you use and how are the status and enable pins
+wired?
+
+When you are shutting down the interface and bringing it up again, i would
+assume it's somewhere 'behind' the controller - and there is only the
+transceiver ...
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000776.html">[Socketcan-users] CAN with switchable power
+</A></li>
+	<LI>Next message: <A HREF="000781.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#777">[ date ]</a>
+              <a href="thread.html#777">[ thread ]</a>
+              <a href="subject.html#777">[ subject ]</a>
+              <a href="author.html#777">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

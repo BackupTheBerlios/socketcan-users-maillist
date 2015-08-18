@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Getting an ERRORFRAME after every normal receive frame
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20an%20ERRORFRAME%20after%20every%20normal%0A%20receive%20frame&In-Reply-To=%3C4D5EE9B8.3070105%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001795.html">
+   <LINK REL="Next"  HREF="001797.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Getting an ERRORFRAME after every normal receive frame</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20an%20ERRORFRAME%20after%20every%20normal%0A%20receive%20frame&In-Reply-To=%3C4D5EE9B8.3070105%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Getting an ERRORFRAME after every normal receive frame">wg at grandegger.com
+       </A><BR>
+    <I>Fri Feb 18 22:50:48 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001795.html">[Socketcan-users] Getting an ERRORFRAME after every normal receive	frame
+</A></li>
+        <LI>Next message: <A HREF="001797.html">[Socketcan-users] Getting an ERRORFRAME after every normal receive frame
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1796">[ date ]</a>
+              <a href="thread.html#1796">[ thread ]</a>
+              <a href="subject.html#1796">[ subject ]</a>
+              <a href="author.html#1796">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 02/18/2011 07:58 PM, Joseph Kubicky wrote:
+&gt;<i> I'm using socketcan on a custom Analog Devices BF537 board running uClinux.
+</I>&gt;<i> I'm using ADI's 2010R1 uClinux (2.6.34.7-ADI-2010R1-pre-svn9156), but I
+</I>&gt;<i> don't know how to find out what version of the socketcan driver is in there
+</I>
+The bfin_can Socket-CAN driver is mainline since 2.6.33 but I can't tell
+if it uses it.
+
+&gt;<i> (if someone could tell me I'd appreciate it).  I'm using the BF537's
+</I>&gt;<i> built-in CAN controller.  My application is receiving all the CAN frames I
+</I>&gt;<i> expect, but ifconfig is telling me that fully 1/2 of the packets being
+</I>&gt;<i> received are error frames.  I also have a Kvaser CAN analyzer on my bus and
+</I>&gt;<i> it isn't reporting any errors at all.  My packet rate is pretty low - around
+</I>&gt;<i> 25 frames/s on a 500Kbit bus.
+</I>&gt;<i> 
+</I>&gt;<i> Exploring a little more, if I look at the bus transcript from my CAN
+</I>&gt;<i> analyzer I see something like:
+</I>&gt;<i> 
+</I>&gt;<i>  0    00000020         8  1B  00  07  98  80  09  88  80     515.903420 R
+</I>&gt;<i>  0    00000020         8  1B  08  0B  78  80  09  78  80     515.903610 R
+</I>&gt;<i>  0    00000020         8  1B  10  07  88  80  08  78  80     515.903870 R
+</I>&gt;<i>  0    00000020         8  1B  14  07  C8  81  07  58  80     515.904120 R
+</I>&gt;<i>  0    00000020         8  1B  04  0B  98  80  08  88  80     515.904380 R
+</I>&gt;<i>  0    00000020         8  1B  0C  07  98  80  09  58  80     515.904570 R
+</I>&gt;<i>  0    00000060         6  6B  2B  00  00  00  00             515.911100 R
+</I>&gt;<i>  0    00000020         8  1F  00  08  98  80  09  88  80     516.153400 R
+</I>&gt;<i>  0    00000020         8  1F  08  0B  78  80  09  78  80     516.153660 R
+</I>&gt;<i>  0    00000020         8  1F  10  07  78  80  08  78  80     516.153910 R
+</I>&gt;<i>  0    00000020         8  1F  14  07  D8  81  07  58  80     516.154170 R
+</I>&gt;<i>  0    00000020         8  1F  04  0A  98  80  07  88  80     516.154360 R
+</I>&gt;<i>  0    00000020         8  1F  0C  07  98  80  09  68  80     516.154620 R
+</I>
+Are you sending the messages at a very high rate?
+
+&gt;<i> But if I run candump can0 -m 0 -e 0xffffffff on my host I get:
+</I>
+This seems to be a very old version of the can-utils. Anyway, that's not
+the problem. I think.
+
+&gt;<i>      can0   20  [8] 1B 00 07 98 80 09 88 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>
+This is an CAN_ERR_CRTL_RX_OVERFLOW error (from Receive Message Lost
+Interrupt Status).
+
+&gt;<i>   can0   20  [8] 1B 08 0B 78 80 09 78 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1B 10 07 88 80 08 78 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1B 14 07 C8 81 07 58 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1B 04 0B 98 80 08 88 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1B 0C 07 98 80 09 58 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   60  [6] 6B 2B 00 00 00 00
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1F 00 08 98 80 09 88 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1F 08 0B 78 80 09 78 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1F 10 07 78 80 08 78 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1F 14 07 D8 81 07 58 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1F 04 0A 98 80 07 88 80
+</I>&gt;<i>   can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+</I>&gt;<i>   can0   20  [8] 1F 0C 07 98 80 09 68 80
+</I>
+But the received data seem to be correct. What does the following
+command tell you:
+
+  # ip -d -s link show can0
+
+&gt;<i> These frames are being generated by some custom boards of mine, but I get
+</I>&gt;<i> exactly the same error frame even if I generate a frame from the Kvaser.  My
+</I>&gt;<i> bus is properly terminated (at both ends) and is very short for this test
+</I>&gt;<i> setup - just three nodes (+ the analyzer), separated from one another by
+</I>&gt;<i> ~1ft of twisted-pair.  The only configuration I do is when I start the
+</I>&gt;<i> interface in /etc/rc:
+</I>&gt;<i> 
+</I>&gt;<i> ip link set can0 type can bitrate 500000
+</I>&gt;<i> ifconfig can0 up
+</I>&gt;<i> 
+</I>&gt;<i> I assume the detailed bit timing is being set to some default values by the
+</I>&gt;<i> driver... I wonder if that could be my problem.
+</I>
+The errors seems not due to electrical problems.
+
+&gt;<i> Has anyone else seen this type of problem?  Any ideas how to troubleshoot
+</I>&gt;<i> it?
+</I>
+Looks wired. Maybe the maintainer of the driver does have an idea (added
+to CC)
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001795.html">[Socketcan-users] Getting an ERRORFRAME after every normal receive	frame
+</A></li>
+	<LI>Next message: <A HREF="001797.html">[Socketcan-users] Getting an ERRORFRAME after every normal receive frame
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1796">[ date ]</a>
+              <a href="thread.html#1796">[ thread ]</a>
+              <a href="subject.html#1796">[ subject ]</a>
+              <a href="author.html#1796">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

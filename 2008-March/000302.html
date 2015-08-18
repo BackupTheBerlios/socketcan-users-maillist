@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%20cross-compilation%20using%0A%09%22powerpc-linux-gnu-gcc%22&In-Reply-To=%3Ced84ed090803160851l39f08d2dwb4ab81ecb7b32984%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000301.html">
+   <LINK REL="Next"  HREF="000303.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;</H1>
+    <B>Fabrizio Garetto</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%20cross-compilation%20using%0A%09%22powerpc-linux-gnu-gcc%22&In-Reply-To=%3Ced84ed090803160851l39f08d2dwb4ab81ecb7b32984%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;">fabrizio.garetto at gmail.com
+       </A><BR>
+    <I>Sun Mar 16 16:51:00 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000301.html">[Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+        <LI>Next message: <A HREF="000303.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#302">[ date ]</a>
+              <a href="thread.html#302">[ thread ]</a>
+              <a href="subject.html#302">[ subject ]</a>
+              <a href="author.html#302">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Mar 16, 2008 at 4:16 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>  &gt; I've tried with your command and the result now is a little bit different:
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;  WARNING: Symbol version dump
+</I>&gt;<i>  &gt; /home/user/trunk/kernel/linux-2.6.22.1-lite5200B/Module.symvers
+</I>&gt;<i>  &gt;            is missing; modules will have no dependencies and modversions.
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt;   CC [M]  /home/user/socketcan_last/kernel/2.6/drivers/net/can/vcan.o
+</I>&gt;<i>  &gt;   cc1: error: unrecognized command line option &quot;-mmultiple&quot;
+</I>&gt;<i>  &gt;   cc1: error: unrecognized command line option &quot;-mstring&quot;
+</I>&gt;<i>  &gt;   cc1: warning: unknown register name: r2
+</I>&gt;<i>  &gt;   make[3]: ***
+</I>&gt;<i>  [/home/user/socketcan/kernel/2.6/drivers/net/can/vcan.o] Error 1
+</I>&gt;<i>  &gt;   make[2]: *** [/home/user/socketcan/kernel/2.6/drivers/net/can] Error 2
+</I>&gt;<i>  &gt;   make[1]: *** [_module_/home/user/socketcan/kernel/2.6] Error 2
+</I>&gt;<i>  &gt;   make[1]: Leaving directory
+</I>&gt;<i>  `/home/user/trunk/kernel/linux-2.6.22.1-lite5200B'
+</I>&gt;<i>  &gt;   make: *** [modules] Error 2
+</I>&gt;<i>
+</I>&gt;<i>  Could you add &quot;V=1&quot; to the make command and send the output, please.
+</I>&gt;<i>  Be aware that the kernel in KERNELDIR must be configuired and made.
+</I>&gt;<i>
+</I>&gt;<i>  Wolfgang.
+</I>&gt;<i>
+</I>
+It should be!
+I've tried both specifying the 'custom' kernel and omitting that
+option (so that the standard Ubuntu one has been used).
+
+Here's the first output:
+
+==================================
+make ARCH=ppc KERNELDIR=/home/fgaretto/OSSTBOX/trunk/kernel/linux-2.6.22.1-lite5200B
+CROCC_COMPILE=powerpc-linux-gnu CONFIG_CAN_MSCAN=m
+CONFIG_CAN_MPC52XX=m V=1
+==================================
+
+make -C /home/fgaretto/OSSTBOX/trunk/kernel/linux-2.6.22.1-lite5200B
+M=/home/fgaretto/socketcan_last/kernel/2.6 modules
+TOPDIR=/home/fgaretto/socketcan_last/kernel/2.6
+make[1]: Entering directory
+`/home/fgaretto/OSSTBOX/trunk/kernel/linux-2.6.22.1-lite5200B'
+test -e include/linux/autoconf.h -a -e include/config/auto.conf || (		\
+	echo;								\
+	echo &quot;  ERROR: Kernel configuration is invalid.&quot;;		\
+	echo &quot;         include/linux/autoconf.h or include/config/auto.conf
+are missing.&quot;;	\
+	echo &quot;         Run 'make oldconfig &amp;&amp; make prepare' on kernel src to
+fix it.&quot;;	\
+	echo;								\
+	/bin/false)
+mkdir -p /home/fgaretto/socketcan_last/kernel/2.6/.tmp_versions
+rm -f /home/fgaretto/socketcan_last/kernel/2.6/.tmp_versions/*
+
+  WARNING: Symbol version dump
+/home/fgaretto/OSSTBOX/trunk/kernel/linux-2.6.22.1-lite5200B/Module.symvers
+           is missing; modules will have no dependencies and modversions.
+
+make -f scripts/Makefile.build obj=/home/fgaretto/socketcan_last/kernel/2.6
+make -f scripts/Makefile.build
+obj=/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can
+  gcc -m32 -Wp,-MD,/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/.vcan.o.d
+ -nostdinc -isystem /usr/lib/gcc/i486-linux-gnu/4.2.3/include
+-D__KERNEL__ -Iinclude  -include include/linux/autoconf.h -Iarch/ppc
+-Iarch/ppc/include -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs
+-fno-strict-aliasing -fno-common -O2 -Iarch/ppc -msoft-float -pipe
+-ffixed-r2 -mmultiple  -mstring  -fomit-frame-pointer -g
+-I/home/fgaretto/socketcan_last/kernel/2.6/include
+-I/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/hal
+-DETH_P_CAN=0x000C -DARPHRD_CAN=280  -DMODULE -D&quot;KBUILD_STR(s)=#s&quot;
+-D&quot;KBUILD_BASENAME=KBUILD_STR(vcan)&quot;
+-D&quot;KBUILD_MODNAME=KBUILD_STR(vcan)&quot; -c -o
+/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/.tmp_vcan.o
+/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/vcan.c
+cc1: error: unrecognized command line option &quot;-mmultiple&quot;
+cc1: error: unrecognized command line option &quot;-mstring&quot;
+cc1: warning: unknown register name: r2
+make[3]: *** [/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/vcan.o]
+Error 1
+make[2]: *** [/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can] Error 2
+make[1]: *** [_module_/home/fgaretto/socketcan_last/kernel/2.6] Error 2
+make[1]: Leaving directory
+`/home/fgaretto/OSSTBOX/trunk/kernel/linux-2.6.22.1-lite5200B'
+make: *** [modules] Error 2
+
+------------------------------------------------------------------------------------------
+
+while this is the second:
+
+==================================
+ make ARCH=ppc CROCC_COMPILE=powerpc-linux-gnu CONFIG_CAN_MSCAN=m
+CONFIG_CAN_MPC52XX=m V=1
+==================================
+make -C /lib/modules/2.6.24-12-generic/build
+M=/home/fgaretto/socketcan_last/kernel/2.6 modules
+TOPDIR=/home/fgaretto/socketcan_last/kernel/2.6
+make[1]: Entering directory `/usr/src/linux-headers-2.6.24-12-generic'
+test -e include/linux/autoconf.h -a -e include/config/auto.conf || (		\
+	echo;								\
+	echo &quot;  ERROR: Kernel configuration is invalid.&quot;;		\
+	echo &quot;         include/linux/autoconf.h or include/config/auto.conf
+are missing.&quot;;	\
+	echo &quot;         Run 'make oldconfig &amp;&amp; make prepare' on kernel src to
+fix it.&quot;;	\
+	echo;								\
+	/bin/false)
+mkdir -p /home/fgaretto/socketcan_last/kernel/2.6/.tmp_versions ; rm
+-f /home/fgaretto/socketcan_last/kernel/2.6/.tmp_versions/*
+make -f scripts/Makefile.build obj=/home/fgaretto/socketcan_last/kernel/2.6
+make -f scripts/Makefile.build
+obj=/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can
+  gcc -m32 -Wp,-MD,/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/.vcan.o.d
+ -nostdinc -isystem /usr/lib/gcc/i486-linux-gnu/4.2.3/include
+-D__KERNEL__  -Iinclude  -include include/linux/autoconf.h -Iarch/ppc
+-Iarch/ppc/include -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs
+-fno-strict-aliasing -fno-common -Werror-implicit-function-declaration
+-O2 -Iarch/ppc -msoft-float -pipe -ffixed-r2 -mmultiple  -mstring
+-fomit-frame-pointer -g
+-I/home/fgaretto/socketcan_last/kernel/2.6/include
+-I/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/hal
+-DETH_P_CAN=0x000C -DARPHRD_CAN=280  -DMODULE -D&quot;KBUILD_STR(s)=#s&quot;
+-D&quot;KBUILD_BASENAME=KBUILD_STR(vcan)&quot;
+-D&quot;KBUILD_MODNAME=KBUILD_STR(vcan)&quot; -c -o
+/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/.tmp_vcan.o
+/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/vcan.c
+cc1: error: unrecognized command line option &quot;-mmultiple&quot;
+cc1: error: unrecognized command line option &quot;-mstring&quot;
+cc1: warning: unknown register name: r2
+make[3]: *** [/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can/vcan.o]
+Error 1
+make[2]: *** [/home/fgaretto/socketcan_last/kernel/2.6/drivers/net/can] Error 2
+make[1]: *** [_module_/home/fgaretto/socketcan_last/kernel/2.6] Error 2
+make[1]: Leaving directory `/usr/src/linux-headers-2.6.24-12-generic'
+make: *** [modules] Error 2
+
+
+thanks again
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000301.html">[Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+	<LI>Next message: <A HREF="000303.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#302">[ date ]</a>
+              <a href="thread.html#302">[ thread ]</a>
+              <a href="subject.html#302">[ subject ]</a>
+              <a href="author.html#302">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

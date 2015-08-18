@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x: repeated frames while sending
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CBEF345.1020602%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001600.html">
+   <LINK REL="Next"  HREF="001602.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x: repeated frames while sending</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CBEF345.1020602%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mcp251x: repeated frames while sending">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 20 15:48:53 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001600.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+        <LI>Next message: <A HREF="001602.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1601">[ date ]</a>
+              <a href="thread.html#1601">[ thread ]</a>
+              <a href="subject.html#1601">[ subject ]</a>
+              <a href="author.html#1601">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/20/2010 03:43 PM, Jargalan Nermunkh wrote:
+
+&gt;&gt;<i> Can you make a candump log (on a 3rd system) or have some output from
+</I>&gt;&gt;<i> the dongle? How often does this happen? Do you see messages from the
+</I>&gt;&gt;<i> mcp251x driver in dmesg on the sending system?
+</I>
+Wow....there are quite a lot of duplicated messages. What's the
+resolution of the timestamp? Do you have any load on the sending system
+besides the cangen?
+
+&gt;<i> The following is the output from the receiving dongle when sending messages
+</I>&gt;<i> with &quot;cangen -vv -g 0 -I 255 -L 1 -D i can0&quot;
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC6 len = 1 data =63
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC5 len = 1 data =62 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC5 len = 1 data =62 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC5 len = 1 data =62
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC4 len = 1 data =61
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC3 len = 1 data =60
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC1 len = 1 data =5f
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CC0 len = 1 data =5e
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBF len = 1 data =5d
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBE len = 1 data =5c
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBD len = 1 data =5b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBD len = 1 data =5b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBD len = 1 data =5b
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBB len = 1 data =5a
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBB len = 1 data =59 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBA len = 1 data =59 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBA len = 1 data =59 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBA len = 1 data =59 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBA len = 1 data =59 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBA len = 1 data =59 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CBA len = 1 data =59
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB9 len = 1 data =58 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB9 len = 1 data =58 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB9 len = 1 data =58 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB9 len = 1 data =58
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB8 len = 1 data =57 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB8 len = 1 data =57 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB8 len = 1 data =57 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB8 len = 1 data =57
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB7 len = 1 data =56 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB7 len = 1 data =56 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB7 len = 1 data =56 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB7 len = 1 data =56
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB6 len = 1 data =55 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB6 len = 1 data =55 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB6 len = 1 data =55 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB6 len = 1 data =55
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB5 len = 1 data =54 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB5 len = 1 data =54 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB5 len = 1 data =54 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB5 len = 1 data =54
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB4 len = 1 data =53 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB4 len = 1 data =53 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB4 len = 1 data =53 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB4 len = 1 data =53
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB3 len = 1 data =52 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB3 len = 1 data =52 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB3 len = 1 data =52 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB3 len = 1 data =52
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB2 len = 1 data =51 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB2 len = 1 data =51 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB2 len = 1 data =51 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB2 len = 1 data =51
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB1 len = 1 data =50 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB1 len = 1 data =50 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB1 len = 1 data =50 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB1 len = 1 data =50
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB0 len = 1 data =4f &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB0 len = 1 data =4f &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CB0 len = 1 data =4f
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAF len = 1 data =4e &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAF len = 1 data =4e &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAF len = 1 data =4e &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAF len = 1 data =4e
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAE len = 1 data =4d &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAE len = 1 data =4d &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAE len = 1 data =4d &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAE len = 1 data =4d
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAD len = 1 data =4c &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAD len = 1 data =4c &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAD len = 1 data =4c &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAD len = 1 data =4c
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAC len = 1 data =4b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAC len = 1 data =4b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAC len = 1 data =4b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAC len = 1 data =4b
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAB len = 1 data =4a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAB len = 1 data =4a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAB len = 1 data =4a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAB len = 1 data =4a
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAA len = 1 data =49 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAA len = 1 data =49 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAA len = 1 data =49 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CAA len = 1 data =49
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA9 len = 1 data =48 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA9 len = 1 data =48 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA9 len = 1 data =48 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA9 len = 1 data =48
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA8 len = 1 data =47 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA8 len = 1 data =47 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA8 len = 1 data =47 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA8 len = 1 data =47
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA7 len = 1 data =46 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA7 len = 1 data =46 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA7 len = 1 data =46 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA7 len = 1 data =46
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA6 len = 1 data =45 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA6 len = 1 data =45 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA6 len = 1 data =45 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA6 len = 1 data =45
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA4 len = 1 data =44
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA3 len = 1 data =43
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008CA2 len = 1 data =42
+</I>&gt;<i> ...
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C49 len = 1 data =0d
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C48 len = 1 data =0c
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C47 len = 1 data =0b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C46 len = 1 data =0b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C46 len = 1 data =0b &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C46 len = 1 data =0b
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C46 len = 1 data =0a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C45 len = 1 data =0a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C45 len = 1 data =0a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C45 len = 1 data =0a &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C45 len = 1 data =0a
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C44 len = 1 data =09 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C44 len = 1 data =09 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C44 len = 1 data =09 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C44 len = 1 data =09
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C43 len = 1 data =08
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C42 len = 1 data =07
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C40 len = 1 data =06
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C3F len = 1 data =05
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C3E len = 1 data =04
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C3D len = 1 data =03
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C3C len = 1 data =02
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C3A len = 1 data =01
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C39 len = 1 data =00 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C39 len = 1 data =00 &lt;--
+</I>&gt;<i> &lt;- S  id = 00000255 timestamp = 00008C39 len = 1 data =00
+</I>
+&gt;<i> dmesg on the sending system shows the following:
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at mityomapl138</A>:~# dmesg | grep mcp
+</I>&gt;<i> [    2.630000] mcp251x spi1.1: CANSTAT 0x80 CANCTRL 0x07
+</I>&gt;<i> [    2.630000] mcp251x spi1.1: probed
+</I>&gt;<i> [  202.010000] mcp251x spi1.1: CNF: 0x00 0x92 0x02
+</I>
+Can you check with different bitrates?
+
+I haven't checked the bitrate registers, but otherwise it look good.
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101020/c6971379/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101020/c6971379/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001600.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+	<LI>Next message: <A HREF="001602.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1601">[ date ]</a>
+              <a href="thread.html#1601">[ thread ]</a>
+              <a href="subject.html#1601">[ subject ]</a>
+              <a href="author.html#1601">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

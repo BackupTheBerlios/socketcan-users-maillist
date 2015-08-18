@@ -1,0 +1,379 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan with Python
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20with%20Python&In-Reply-To=%3C201007281509.22307.matthias.fuchs%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001457.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan with Python</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20with%20Python&In-Reply-To=%3C201007281509.22307.matthias.fuchs%40esd.eu%3E"
+       TITLE="[Socketcan-users] Socketcan with Python">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Wed Jul 28 15:09:22 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001457.html">[Socketcan-users] Do i need xenomai for RT-SocketCAN
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1458">[ date ]</a>
+              <a href="thread.html#1458">[ thread ]</a>
+              <a href="subject.html#1458">[ subject ]</a>
+              <a href="author.html#1458">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I while a ago I was looking for a way to use Socketcan with Python.
+The main problem is that Python's socketmodule lacks PF_CAN support.
+
+After my initial posting about Python and Socketcan I got several
+requests from others that would like to use Socketcan under Python.
+So here comes a patch against the Python 2.6.5 sources and a little 
+sample script that demonstrates sending/receiving and some sockopt settings.
+
+To build Python with this patch follow these steps:
+
+1) Get and patch python 2.6.5 sources.
+2) Call autoconf and autoheader
+3) configure &amp;&amp; make &amp;&amp; make install
+
+Have fun.
+Matthias
+
+socketcan_exmaple.py:
+
+import struct
+import socket
+import string
+
+def dump(s):
+    return ' '.join([&quot;%02X&quot; % ord(x) for x in s])
+
+# return tuple (id, dlc, data)
+def unpack_can_frame(can_frame):
+    # attention: 'data' is 8-byte-aligned
+    id, dlca, data = struct.unpack(&quot;I4s8s&quot;, can_frame)
+    dlc = ord(dlca[0])
+    return id, dlc, data[:dlc]
+
+# pretty print can_frame struct
+def dump_can_frame(can_frame):
+    id, dlc, data = unpack_can_frame(can_frame)
+    print &quot;id:%08x, dlc:%d, data:%s&quot; % (id, dlc, dump(data))
+
+# pretty print can_frame struct in the socketcan way
+def dump_can_frame_sc(can_frame):
+    id, dlc, data = unpack_can_frame(can_frame)
+
+    s_data = ''.join([&quot;%02X&quot; % ord(x) for x in data])
+    if (id &amp; socket.CAN_RTR_FLAG):
+        s_data = &quot;R&quot;
+        id = id &amp; ~socket.CAN_RTR_FLAG
+
+    if (id &amp; socket.CAN_EFF_FLAG):
+        id = id &amp; ~socket.CAN_EFF_FLAG
+        print &quot;%08x#%s&quot; % (id, s_data)
+    else:
+        print &quot;%03x#%s&quot; % (id, s_data)
+
+# build packed can_frame struct from id, dlc and data
+def build_can_frame(id, dlc, data):
+    fill = &quot;\0\0\0\0\0\0\0\0&quot;
+    dlca = chr(dlc) + &quot;\0\0\0&quot;
+    x = struct.pack(&quot;i4s%ds%ds&quot; % (dlc, 8 - dlc),
+                    id, dlca, data[:dlc], fill[:8-dlc])
+    return x
+
+# build packed can_frame struct from socketcan text representation
+def build_can_frame_sc(text):
+    s_id, s_data = string.split(text, '#')
+    id = int(s_id, 16)
+
+    if (len(s_data) == 1) and (s_data[0] == &quot;R&quot;):
+        id |= socket.CAN_RTR_FLAG;
+    if len(s_id) == 8:
+        id |= socket.CAN_EFF_FLAG;
+    dlc = len(s_data) &gt;&gt; 1
+    data = ''.join([&quot;%c&quot; % int(s_data[x*2:(x+1)*2],16) for x in range(dlc)])
+    return build_can_frame(id, dlc, data)
+
+
+if __name__=='__main__':
+    # create CAN socket
+    s = socket.socket(socket.PF_CAN, socket.SOCK_RAW, socket.CAN_RAW)
+
+    # setup id filter
+    id = 0
+    mask = 0
+    s.setsockopt(socket.SOL_CAN_RAW, socket.CAN_RAW_FILTER,
+                 struct.pack(&quot;II&quot;, id, mask))
+
+    # enable/disable loopback
+    loopback = 0
+    s.setsockopt(socket.SOL_CAN_RAW, socket.CAN_RAW_LOOPBACK,
+                 struct.pack(&quot;I&quot;, loopback))
+
+    # bind to interface &quot;canX&quot; or &quot;any&quot;)
+    # tuple is (interface, reserved(can_addr))
+    s.bind((&quot;can0&quot;,))
+
+    while 1:
+	cf, addr = s.recvfrom(16)
+	print addr
+        dump_can_frame(cf)
+        dump_can_frame_sc(cf)
+
+        # send echo
+        try:
+            s.send(cf)
+        except socket.error:
+            print &quot;Error sending CAN frame&quot;
+
+        # test 1
+        try:
+            cf = build_can_frame(0, 8, &quot;\x11\x22\x33\x44\x55\x66\x77\x88&quot;)
+            dump_can_frame(cf)
+            dump_can_frame_sc(cf)
+            s.send(cf)
+        except socket.error:
+            print &quot;Error sending CAN frame&quot;
+
+        # test 2
+        try:
+            cf = build_can_frame_sc(&quot;12345678#11223344556677&quot;)
+            dump_can_frame(cf)
+            dump_can_frame_sc(cf)
+            s.send(cf)
+        except socket.error:
+            print &quot;Error sending CAN frame&quot;
+
+        # test 2
+        try:
+            cf = build_can_frame_sc(&quot;123#12345678&quot;)
+            dump_can_frame(cf)
+            dump_can_frame_sc(cf)
+            s.send(cf)
+        except socket.error:
+            print &quot;Error sending CAN frame&quot;
+
+
+diff -Nwru Python-2.6.5-orig/configure.in Python-2.6.5-socketcan/configure.in
+--- Python-2.6.5-orig/configure.in	2010-03-09 22:47:28.000000000 +0100
++++ Python-2.6.5-socketcan/configure.in	2010-07-28 14:20:20.000000000 +0200
+@@ -1341,6 +1341,13 @@
+ #endif
+ ])
+ 
++# On Linux, can.h and can/raw.h require sys/socket.h
++AC_CHECK_HEADERS(linux/can.h linux/can/raw.h,,,[
++#ifdef HAVE_SYS_SOCKET_H
++#include &lt;sys/socket.h&gt;
++#endif
++])
++
+ # checks for typedefs
+ was_it_defined=no
+ AC_MSG_CHECKING(for clock_t in time.h)
+diff -Nwru Python-2.6.5-orig/Modules/socketmodule.c Python-2.6.5-socketcan/Modules/socketmodule.c
+--- Python-2.6.5-orig/Modules/socketmodule.c	2010-02-04 21:26:34.000000000 +0100
++++ Python-2.6.5-socketcan/Modules/socketmodule.c	2010-07-28 14:20:30.000000000 +0200
+@@ -1151,6 +1151,25 @@
+ 	}
+ #endif
+ 
++#ifdef HAVE_LINUX_CAN_H
++	case AF_CAN:
++	{
++		struct sockaddr_can *a = (struct sockaddr_can *)addr;
++		char *ifname = &quot;&quot;;
++		struct ifreq ifr;
++		/* need to look up interface name give index */
++		if (a-&gt;can_ifindex) {
++			ifr.ifr_ifindex = a-&gt;can_ifindex;
++			if (ioctl(sockfd, SIOCGIFNAME, &amp;ifr) == 0)
++				ifname = ifr.ifr_name;
++		}
++
++		return Py_BuildValue(&quot;sh&quot;,
++				     ifname,
++				     a-&gt;can_family);
++	}
++#endif
++
+ 	/* More cases here... */
+ 
+ 	default:
+@@ -1486,6 +1505,43 @@
+ 	}
+ #endif
+ 
++#ifdef HAVE_LINUX_CAN_H
++        case AF_CAN:
++		switch (s-&gt;sock_proto) {
++		case CAN_RAW:
++		{
++			struct sockaddr_can* addr;
++			char *interfaceName;
++			struct ifreq ifr;
++			addr = (struct sockaddr_can *)addr_ret;
++
++			if (!PyArg_ParseTuple(args, &quot;s&quot;, &amp;interfaceName))
++				return 0;
++
++			if (!strcmp(interfaceName, &quot;any&quot;)) {
++				ifr.ifr_ifindex = 0;
++			} else {
++				strncpy(ifr.ifr_name, interfaceName,
++					sizeof(ifr.ifr_name));
++				ifr.ifr_name[(sizeof(ifr.ifr_name))-1] = '\0';
++				if (ioctl(s-&gt;sock_fd, SIOCGIFINDEX, &amp;ifr) &lt; 0) {
++					s-&gt;errorhandler();
++					return 0;
++				}
++			}
++
++			addr-&gt;can_family = AF_CAN;
++			addr-&gt;can_ifindex = ifr.ifr_ifindex;
++
++			*len_ret = sizeof(*addr);
++			return 1;
++		}
++		default:
++			PyErr_SetString(socket_error, &quot;getsockaddrarg: unsupported CAN protocol&quot;);
++			return 0;
++        }
++#endif
++
+ 	/* More cases here... */
+ 
+ 	default:
+@@ -1579,6 +1635,14 @@
+ 	}
+ #endif
+ 
++#ifdef HAVE_LINUX_CAN_H
++       case AF_CAN:
++       {
++               *len_ret = sizeof (struct sockaddr_can);
++               return 1;
++       }
++#endif
++
+ 	/* More cases here... */
+ 
+ 	default:
+@@ -4584,6 +4648,14 @@
+ 	PyModule_AddStringConstant(m, &quot;BDADDR_ANY&quot;, &quot;00:00:00:00:00:00&quot;);
+ 	PyModule_AddStringConstant(m, &quot;BDADDR_LOCAL&quot;, &quot;00:00:00:FF:FF:FF&quot;);
+ #endif
++#ifdef AF_CAN
++	/* Controller Area Network */
++	PyModule_AddIntConstant(m, &quot;AF_CAN&quot;, AF_CAN);
++#endif
++#ifdef PF_CAN
++	/* Controller Area Network */
++	PyModule_AddIntConstant(m, &quot;PF_CAN&quot;, PF_CAN);
++#endif
+ 
+ #ifdef HAVE_NETPACKET_PACKET_H
+ 	PyModule_AddIntConstant(m, &quot;AF_PACKET&quot;, AF_PACKET);
+@@ -4785,6 +4857,29 @@
+ #else
+ 	PyModule_AddIntConstant(m, &quot;SOL_UDP&quot;, 17);
+ #endif
++#ifdef	SOL_CAN_BASE
++	PyModule_AddIntConstant(m, &quot;SOL_CAN_BASE&quot;, SOL_CAN_BASE);
++#endif
++#ifdef	SOL_CAN_RAW
++	PyModule_AddIntConstant(m, &quot;SOL_CAN_RAW&quot;, SOL_CAN_RAW);
++	PyModule_AddIntConstant(m, &quot;CAN_RAW&quot;, CAN_RAW);
++#endif
++#ifdef HAVE_LINUX_CAN_H
++	PyModule_AddIntConstant(m, &quot;CAN_EFF_FLAG&quot;, CAN_EFF_FLAG);
++	PyModule_AddIntConstant(m, &quot;CAN_RTR_FLAG&quot;, CAN_RTR_FLAG);
++	PyModule_AddIntConstant(m, &quot;CAN_ERR_FLAG&quot;, CAN_ERR_FLAG);
++
++	PyModule_AddIntConstant(m, &quot;CAN_SFF_MASK&quot;, CAN_SFF_MASK);
++	PyModule_AddIntConstant(m, &quot;CAN_EFF_MASK&quot;, CAN_EFF_MASK);
++	PyModule_AddIntConstant(m, &quot;CAN_ERR_MASK&quot;, CAN_ERR_MASK);
++#endif
++#ifdef HAVE_LINUX_CAN_RAW_H
++	PyModule_AddIntConstant(m, &quot;CAN_RAW_FILTER&quot;, CAN_RAW_FILTER);
++	PyModule_AddIntConstant(m, &quot;CAN_RAW_ERR_FILTER&quot;, CAN_RAW_ERR_FILTER);
++	PyModule_AddIntConstant(m, &quot;CAN_RAW_LOOPBACK&quot;, CAN_RAW_LOOPBACK);
++	PyModule_AddIntConstant(m, &quot;CAN_RAW_RECV_OWN_MSGS&quot;, CAN_RAW_RECV_OWN_MSGS);
++#endif
++
+ #ifdef	IPPROTO_IP
+ 	PyModule_AddIntConstant(m, &quot;IPPROTO_IP&quot;, IPPROTO_IP);
+ #else
+diff -Nwru Python-2.6.5-orig/Modules/socketmodule.h Python-2.6.5-socketcan/Modules/socketmodule.h
+--- Python-2.6.5-orig/Modules/socketmodule.h	2008-06-14 10:36:07.000000000 +0200
++++ Python-2.6.5-socketcan/Modules/socketmodule.h	2010-07-28 14:20:30.000000000 +0200
+@@ -69,6 +69,20 @@
+ # include &lt;linux/tipc.h&gt;
+ #endif
+ 
++#ifdef HAVE_LINUX_CAN_H
++#include &lt;linux/can.h&gt;
++#ifndef PF_CAN
++# define PF_CAN 29
++#endif
++#ifndef AF_CAN
++# define AF_CAN PF_CAN
++#endif
++#endif
++
++#ifdef HAVE_LINUX_CAN_RAW_H
++#include &lt;linux/can/raw.h&gt;
++#endif
++
+ #ifndef Py__SOCKET_H
+ #define Py__SOCKET_H
+ #ifdef __cplusplus
+@@ -114,6 +128,9 @@
+ #ifdef HAVE_NETPACKET_PACKET_H
+ 	struct sockaddr_ll ll;
+ #endif
++#ifdef HAVE_LINUX_CAN_H
++	struct sockaddr_can* can;
++#endif
+ } sock_addr_t;
+ 
+ /* The object holding a socket.  It holds some extra information,
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001457.html">[Socketcan-users] Do i need xenomai for RT-SocketCAN
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1458">[ date ]</a>
+              <a href="thread.html#1458">[ thread ]</a>
+              <a href="subject.html#1458">[ subject ]</a>
+              <a href="author.html#1458">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

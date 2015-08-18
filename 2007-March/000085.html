@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Memory leak with raw socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F182A3.6000309%40berghof.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000086.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Memory leak with raw socket</H1>
+    <B>Eberhard Stoll</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F182A3.6000309%40berghof.com%3E"
+       TITLE="[Socketcan-users] Memory leak with raw socket">eberhard.stoll at berghof.com
+       </A><BR>
+    <I>Fri Mar  9 16:52:03 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000086.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#85">[ date ]</a>
+              <a href="thread.html#85">[ thread ]</a>
+              <a href="subject.html#85">[ subject ]</a>
+              <a href="author.html#85">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+i think i've discovered a memory leak problem when i want to send can 
+packages over a raw socket which has a full tx queue.
+I'm using a MPC5200 board with mscan interface on a 2.4.25 kernel of 
+denx. My socketcan version is commit 55 in subversion.
+
+The problem occurs in the following situation:
+I'm sending raw can packages via write() to the (raw)socket. Because i 
+didn't connect any device to the can bus, the can controller can't send 
+out its can data (missing acknowledge on the can bus).
+
+What i see in my syslog buffer is the following:
+(some debug messages are added to the original code)
+
+Mar  9 15:20:28 10 user.err kernel: cantflg = 0x07
+    ^-- in mscan_start_xmit: first message shall be sent out, all can Tx 
+buffers are free
+Mar  9 15:20:28 10 user.err kernel: skb = c3c81be0
+    ^-- in mscan_start_xmit: skb pointer of first can telegram
+Mar  9 15:20:28 10 user.info kernel: NETDEV WATCHDOG: can0: transmit 
+timed out
+Mar  9 15:20:28 10 user.err kernel: tx timeout: cantflg = 0x06
+    ^-- in mscan_tx_timeout: watchdog time expired, first tx buffer is full
+Mar  9 15:20:28 10 user.err kernel: cantflg = 0x06
+Mar  9 15:20:28 10 user.err kernel: skb = c3cb4ae0
+    ^-- in mscan_start_xmit: send request for second message, second tx 
+buffer of mscan is used
+Mar  9 15:20:28 10 user.info kernel: NETDEV WATCHDOG: can0: transmit 
+timed out
+Mar  9 15:20:28 10 user.err kernel: tx timeout: cantflg = 0x04
+Mar  9 15:20:28 10 user.err kernel: cantflg = 0x04
+Mar  9 15:20:28 10 user.err kernel: skb = c3c81be0
+    ^-- in mscan_start_xmit: send request for third message, third(last) 
+tx buffer of mscan is used
+Mar  9 15:20:28 10 user.info kernel: NETDEV WATCHDOG: can0: transmit 
+timed out
+Mar  9 15:20:28 10 user.err kernel: tx timeout: cantflg = 0x00
+Mar  9 15:20:28 10 user.err kernel: cantflg = 0x00
+Mar  9 15:20:28 10 user.err kernel: skb = c03992c0
+    ^-- in mscan_start_xmit: send request for fourth message, no tx 
+buffer is free anymore!
+Mar  9 15:20:28 10 user.err kernel: mscan: mscan_start_xmit: no buffer 
+is available
+Mar  9 15:20:28 10 user.err kernel: skb = c03992c0 denied
+    ^-- function mscan_start_xmit returns because no tx buffer is free, 
+but WITHOUT doing dev_kfree_skb(skb) !
+    ^-- This is the memory leak!
+
+Now, i could fix it, but i'm uncertain how to fix it the right way!
+I can figure out these three fixes:
+1) doing a dev_kfree_skb(skb) if no tx buffer is free anymore.
+2) return -EAGAIN (or something like that) if no tx buffer is free anymore.
+3) doing a reset of the mscan if some transmit timed out (like it is 
+done for SJA1000).
+
+Can someone give me a hint, which approach (or even a totally different 
+approch) is the best?
+
+Many thanks in advance
+Eberhard Stoll
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000086.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#85">[ date ]</a>
+              <a href="thread.html#85">[ thread ]</a>
+              <a href="subject.html#85">[ subject ]</a>
+              <a href="author.html#85">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

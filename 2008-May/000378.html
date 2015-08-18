@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RT - Socketcan filter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RT%20-%20Socketcan%20filter&In-Reply-To=%3C482DB6F1.8000309%40das.ufsc.br%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000384.html">
+   <LINK REL="Next"  HREF="000379.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RT - Socketcan filter</H1>
+    <B>Breno</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RT%20-%20Socketcan%20filter&In-Reply-To=%3C482DB6F1.8000309%40das.ufsc.br%3E"
+       TITLE="[Socketcan-users] RT - Socketcan filter">breno at das.ufsc.br
+       </A><BR>
+    <I>Fri May 16 18:31:45 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000384.html">[Socketcan-users] RT - Socketcan
+</A></li>
+        <LI>Next message: <A HREF="000379.html">[Socketcan-users] larum foundlings
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#378">[ date ]</a>
+              <a href="thread.html#378">[ thread ]</a>
+              <a href="subject.html#378">[ subject ]</a>
+              <a href="author.html#378">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all, am I using the the rtcanrecv with a set o mask correctly? See:
+
+sh-3.00# ./rtcanrecv rtcan1 -f 0x123:0x700 &amp;
+[1] 916
+sh-3.00# Filter #0: id=0x00000123 mask=0x00000700
+
+sh-3.00# ./rtcansend rtcan0 -i0x123 1 2 3 4 5 6 7 8
+sh-3.00#
+
+
+So, after execution of rtcansen I have no messages back.
+
+
+Beside that, if I don't set  any filter I have:
+
+*sh-3.00# ./rtcanrecv rtcan1 &amp; *
+*sh-3.00# ./rtcansend rtcan0 -v -i0x123 1 2 3 4 5 6 7 8 *
+interface rtcan0
+s=1, ifr_name=rtcan0
+&lt;0x123&gt; [8] 01 02 03 04 05 06 07 08
+Cleaning up...
+#4: (2) &lt;0x123&gt; [8] 00 00 00 04 05 06 07 08
+
+Thanks,
+
+Breno
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000384.html">[Socketcan-users] RT - Socketcan
+</A></li>
+	<LI>Next message: <A HREF="000379.html">[Socketcan-users] larum foundlings
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#378">[ date ]</a>
+              <a href="thread.html#378">[ thread ]</a>
+              <a href="subject.html#378">[ subject ]</a>
+              <a href="author.html#378">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

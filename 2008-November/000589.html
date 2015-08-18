@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Still%20newbie%3A%20Can%27t%20wait%20for%20TX%20buffers%0A%20available%20to%20avoid%20overrun&In-Reply-To=%3C49267541.7060500%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000588.html">
+   <LINK REL="Next"  HREF="000591.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Still%20newbie%3A%20Can%27t%20wait%20for%20TX%20buffers%0A%20available%20to%20avoid%20overrun&In-Reply-To=%3C49267541.7060500%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun">wg at grandegger.com
+       </A><BR>
+    <I>Fri Nov 21 09:45:53 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000588.html">[Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun
+</A></li>
+        <LI>Next message: <A HREF="000591.html">[Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#589">[ date ]</a>
+              <a href="thread.html#589">[ thread ]</a>
+              <a href="subject.html#589">[ subject ]</a>
+              <a href="author.html#589">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>chrislpnt wrote:
+&gt;<i> When I send out bursts of messages I start losing some very soon. I know I
+</I>&gt;<i> can increase the tx_queue_len but I need to handle this properly, no matter
+</I>&gt;<i> how it is configured. So here is what I tried (hhw is the socket handle):
+</I>&gt;<i> 
+</I>&gt;<i>   // wait for transmit to become free for a specific time
+</I>&gt;<i>   pollinfo.fd = hhw;
+</I>&gt;<i>   pollinfo.events = POLLOUT;
+</I>&gt;<i>   pollinfo.revents = 0;
+</I>&gt;<i>   if (poll(&amp;pollinfo, 1, TRANSMIT_TIMEOUT) &lt; 0)
+</I>&gt;<i>   {
+</I>&gt;<i>     // Failed to poll hardware
+</I>&gt;<i>     return FAIL_POLL;
+</I>&gt;<i>   }
+</I>&gt;<i>   if (!(pollinfo.revents &amp; POLLOUT))
+</I>&gt;<i>   {
+</I>&gt;<i>     // Transmit busy
+</I>&gt;<i>     return FAIL_TXBUSY;
+</I>&gt;<i>   }
+</I>&gt;<i> 
+</I>&gt;<i> No errors are generated, so the polling call succeeded and the POLLOUT event
+</I>&gt;<i> was set, but there are still messages being lost.
+</I>&gt;<i> 
+</I>&gt;<i> What is interesting is that the definition of POLLOUT in
+</I>&gt;<i> /usr/include/bits/poll.h says that &quot;POLLOUT&quot; means &quot;writing now will not
+</I>&gt;<i> block&quot;. This implies that writing should block until completed. This doesn't
+</I>&gt;<i> seem to be happening - instead the message is lost.
+</I>&gt;<i> 
+</I>&gt;<i> Some questions:
+</I>&gt;<i> 
+</I>&gt;<i>   - should the call to sendto() block until successful transmission?
+</I>&gt;<i> 
+</I>&gt;<i>   - can select() be used for polling? I tried it and it doesn't appear to
+</I>&gt;<i> work either (hhw never becomes available for writing)
+</I>&gt;<i> 
+</I>&gt;<i> Any hints/tip/code snippets are highly welcome as I am a little stuck.
+</I>
+The send functions do not block if there are no more TX buffers
+available. You should therefore check the return code and re-try after
+some delay (sched_yield, short sleep, etc.) if it returns errno=ENOBUFS.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000588.html">[Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun
+</A></li>
+	<LI>Next message: <A HREF="000591.html">[Socketcan-users] Still newbie: Can't wait for TX buffers available to avoid overrun
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#589">[ date ]</a>
+              <a href="thread.html#589">[ thread ]</a>
+              <a href="subject.html#589">[ subject ]</a>
+              <a href="author.html#589">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

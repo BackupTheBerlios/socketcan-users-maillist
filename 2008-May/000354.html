@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [ANNOUNCE] Rework of command line parameters in	cangen
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BANNOUNCE%5D%20Rework%20of%20command%20line%20parameters%20in%0A%09cangen&In-Reply-To=%3C4826E2B1.9080308%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000364.html">
+   <LINK REL="Next"  HREF="000355.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [ANNOUNCE] Rework of command line parameters in	cangen</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BANNOUNCE%5D%20Rework%20of%20command%20line%20parameters%20in%0A%09cangen&In-Reply-To=%3C4826E2B1.9080308%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [ANNOUNCE] Rework of command line parameters in	cangen">oliver at hartkopp.net
+       </A><BR>
+    <I>Sun May 11 14:12:33 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000364.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+        <LI>Next message: <A HREF="000355.html">[Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#354">[ date ]</a>
+              <a href="thread.html#354">[ thread ]</a>
+              <a href="subject.html#354">[ subject ]</a>
+              <a href="author.html#354">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+last week i checked-in new versions of the tools candump &amp; cangen in 
+socketcan/trunk/can-utils that should fix some usability issues before 
+they probably get spread into a bigger user group through commonly known 
+Linux Distros.
+
+
+Changes in cangen (the tool to generate CAN frames):
+
+Removed -i (increment) and -f (definition of different default frame) 
+options. These options had been really user-unfriendly, sorry :-/
+
+Each CAN frame component (can_id, can_dlc, data[]) can now be defined 
+separately if the values of this component should be random (default), 
+incremental or fixed.
+
+Additional the verbosity level can be increased by '-v' up to three 
+times to have a different display of the generated data on the shell.
+
+The option '-i' stands now for &quot;ignore -ENOBUFS return values on write() 
+syscalls&quot; which allows cangen to continue pushing CAN frames into the 
+socket even if the tx-queue of the given real CAN device has a temporary 
+overflow.
+
+'cangen' can now also be used as a CAN frame source for Pengutronix' 
+cansequence tool which detects CAN frame dropouts.
+
+For the complete list of command line options invoke cangen without any 
+options, which displays this help text:
+
+-------------------------
+
+cangen: generate CAN frames
+
+Usage: cangen [options] &lt;CAN interface&gt;
+Options: -g &lt;ms&gt;       (gap in milli seconds - default: 200 ms)
+         -e            (generate extended frame mode (EFF) CAN frames)
+         -I &lt;mode&gt;     (CAN ID generation mode - see below)
+         -L &lt;mode&gt;     (CAN data length code (dlc) generation mode - see 
+below)
+         -D &lt;mode&gt;     (CAN data (payload) generation mode - see below)
+         -i            (ignore -ENOBUFS return values on write() syscalls)
+         -x            (disable local loopback of generated CAN frames)
+         -v            (increment verbose level for printing sent CAN 
+frames)
+
+Generation modes:
+'r'        =&gt; random values (default)
+'i'        =&gt; increment values
+&lt;hexvalue&gt; =&gt; fix value using &lt;hexvalue&gt;
+
+When incrementing the CAN data the data length code minimum is set to 1.
+CAN IDs and data content are given and expected in hexadecimal values.
+
+Examples:
+cangen vcan0 -g 4 -I 42A -L 1 -D i -v -v   (fixed CAN ID and length, 
+inc. data)
+cangen vcan0 -e -L i -v -v -v              (generate EFF frames, incr. 
+length)
+cangen vcan0 -D 11223344DEADBEEF -L 8      (fixed CAN data payload and 
+length)
+cangen vcan0 -g 0 -i -x                    (full load test ignoring 
+-ENOBUFS)
+cangen vcan0                               (my favourite default :)
+
+-------------------------
+
+Have fun!
+
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000364.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+	<LI>Next message: <A HREF="000355.html">[Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#354">[ date ]</a>
+              <a href="thread.html#354">[ thread ]</a>
+              <a href="subject.html#354">[ subject ]</a>
+              <a href="author.html#354">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

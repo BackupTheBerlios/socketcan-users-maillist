@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Help: Transmitted Data is not to be received by other Application
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2013-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%3A%20Transmitted%20Data%20is%20not%20to%20be%20received%0A%20by%20other%20Application&In-Reply-To=%3C1364475568669-7637.post%40n3.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002395.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Help: Transmitted Data is not to be received by other Application</H1>
+    <B>sanders</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%3A%20Transmitted%20Data%20is%20not%20to%20be%20received%0A%20by%20other%20Application&In-Reply-To=%3C1364475568669-7637.post%40n3.nabble.com%3E"
+       TITLE="[Socketcan-users] Help: Transmitted Data is not to be received by other Application">sandro.anders at carmedialab.de
+       </A><BR>
+    <I>Thu Mar 28 13:59:28 CET 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002395.html">[Socketcan-users] Help: Transmitted Data is not to be received by other Application
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2394">[ date ]</a>
+              <a href="thread.html#2394">[ thread ]</a>
+              <a href="subject.html#2394">[ subject ]</a>
+              <a href="author.html#2394">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi, 
+
+you have to disable the internal loopback in your application which sends
+messages out. 
+
+int loopback = 0;
+setsockopt(s, SOL_CAN_RAW, CAN_RAW_LOOPBACK, &amp;loopback, sizeof(loopback));
+
+Cheers,
+Sandro
+
+
+
+--
+View this message in context: <A HREF="http://socket-can.996257.n3.nabble.com/Help-Transmitted-Data-is-not-to-be-received-by-other-Application-tp7635p7637.html">http://socket-can.996257.n3.nabble.com/Help-Transmitted-Data-is-not-to-be-received-by-other-Application-tp7635p7637.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002395.html">[Socketcan-users] Help: Transmitted Data is not to be received by other Application
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2394">[ date ]</a>
+              <a href="thread.html#2394">[ thread ]</a>
+              <a href="subject.html#2394">[ subject ]</a>
+              <a href="author.html#2394">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

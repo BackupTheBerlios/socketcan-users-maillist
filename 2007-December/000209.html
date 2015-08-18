@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Unable to receive error frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20error%20frames&In-Reply-To=%3C475842AD.5000109%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000208.html">
+   <LINK REL="Next"  HREF="000210.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Unable to receive error frames</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Unable%20to%20receive%20error%20frames&In-Reply-To=%3C475842AD.5000109%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Unable to receive error frames">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Dec  6 19:42:53 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000208.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+        <LI>Next message: <A HREF="000210.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#209">[ date ]</a>
+              <a href="thread.html#209">[ thread ]</a>
+              <a href="subject.html#209">[ subject ]</a>
+              <a href="author.html#209">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Bjorn_Roger.Lobersli at rolls-royce.com</A> wrote:
+&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i> I am currently testing socketcan and it looks very good except for one
+</I>&gt;<i> thing, I am not
+</I>&gt;<i> able to receive any error frames from socketcan. I unplug the CAN bus
+</I>&gt;<i> cable and expect
+</I>&gt;<i> to get a CAN_ERR_BUSOFF error, but I get no error frame at all.
+</I>
+Unplugging a CAN bus mostly leads to bus errors or bus offs when you are
+currently writing CAN frames. Therefore receiving no error frames could
+be a correct behaviour when unplugging CAN bus cables.
+
+&gt;<i>
+</I>&gt;<i> In my application I have enabled all errors like this:
+</I>&gt;<i> can_err_mask_t error_mask = CAN_ERR_MASK;
+</I>&gt;<i> setsockopt(m_Socket, SOL_CAN_RAW, CAN_RAW_ERR_FILTER, &amp;error_mask,
+</I>&gt;<i> sizeof(error_mask));
+</I>&gt;<i>
+</I>&gt;<i> My test hardware has an i/o mapped SJA1000 CAN controller.
+</I>
+Using which driver? Did you take the one from
+trunk/kernel/2.6/drivers/net/can/sja1000 ??
+
+This 'old' sja1000 driver does not throw any error frames when detecting
+error conditions :-/
+
+There was a posting from Wolfgang Grandegger that contains error frame
+support for some error conditions. And AFAIK the latest PEAK driver
+(<A HREF="http://www.peak-system.com/linux/index.htm">http://www.peak-system.com/linux/index.htm</A>) also supports error frames.
+
+Regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000208.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+	<LI>Next message: <A HREF="000210.html">[Socketcan-users] Unable to receive error frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#209">[ date ]</a>
+              <a href="thread.html#209">[ thread ]</a>
+              <a href="subject.html#209">[ subject ]</a>
+              <a href="author.html#209">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

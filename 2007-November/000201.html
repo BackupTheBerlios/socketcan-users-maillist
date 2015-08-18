@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [Fwd: Re: [PATCH 0/7] CAN: New PF_CAN protocol family for 2.6.25, update]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BFwd%3A%20Re%3A%20%5BPATCH%200/7%5D%20CAN%3A%20New%20PF_CAN%20protocol%0A%20family%20for%202.6.25%2C%20update%5D&In-Reply-To=%3C473F63D5.6070208%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000200.html">
+   <LINK REL="Next"  HREF="000202.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [Fwd: Re: [PATCH 0/7] CAN: New PF_CAN protocol family for 2.6.25, update]</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BFwd%3A%20Re%3A%20%5BPATCH%200/7%5D%20CAN%3A%20New%20PF_CAN%20protocol%0A%20family%20for%202.6.25%2C%20update%5D&In-Reply-To=%3C473F63D5.6070208%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [Fwd: Re: [PATCH 0/7] CAN: New PF_CAN protocol family for 2.6.25, update]">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sat Nov 17 22:57:41 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000200.html">[Socketcan-users] Error handling on Raw Can socket?
+</A></li>
+        <LI>Next message: <A HREF="000202.html">[Socketcan-users] rfilter implementation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#201">[ date ]</a>
+              <a href="thread.html#201">[ thread ]</a>
+              <a href="subject.html#201">[ subject ]</a>
+              <a href="author.html#201">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear SocketCAN users, friends &amp; contributors,
+
+the PF_CAN protocol family is scheduled for the next merge window for 
+new Kernel features in Kernel 2.6.25. It has been included in the 
+net-2.6.25 developer tree of David Miller (the Linux network maintainer) 
+last night.
+
+Thanks to all of you for the constructive feedback &amp; contributions that 
+made it possible to bring the SocketCAN concept into the Kernel. It took 
+six month to bring the code to a quality that finally had been accepted 
+by the networking guys - and it really has been improved in readability 
+&amp; stability in this time.
+
+Cheers,
+Oliver
+
+-------- Original Message --------
+Subject: 	Re: [PATCH 0/7] CAN: New PF_CAN protocol family for 2.6.25, 
+update
+Date: 	Fri, 16 Nov 2007 16:10:23 -0800 (PST)
+From: 	David Miller &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">davem at davemloft.net</A>&gt;
+To: 	<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">urs.thuermann at gmx.de</A>
+CC: 	<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">netdev at vger.kernel.org</A>, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kaber at trash.net</A>, 
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">shemminger at linux-foundation.org</A>, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">joe at perches.com</A>, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">sam at ravnborg.org</A>, 
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">tglx at linutronix.de</A>, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oliver at hartkopp.net</A>
+References: 	&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">20071116150245.28784.0 at janus.isnogud.escape.de</A>&gt;
+
+
+
+From: Urs Thuermann &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">urs.thuermann at gmx.de</A>&gt;
+Date: Fri, 16 Nov 2007 16:02:45 +0100
+
+&gt;<i> this patch series adds the PF_CAN protocol family for the
+</I>&gt;<i> Controller Area Network.  Since our last post we have changed:
+</I>&gt;<i> 
+</I>&gt;<i> * Remove vcan_open() and vcan_stop().
+</I>&gt;<i> * return NETDEV_TX_OK instead of 0.
+</I>&gt;<i> * Add can_ prefix to some global vars.
+</I>&gt;<i> * Remove all debug code completely.
+</I>&gt;<i> * Cleanup of timer code.
+</I>&gt;<i> 
+</I>&gt;<i> This patch series applies against net-2.6.25 and is derived from Subversion
+</I>&gt;<i> revision r560 of <A HREF="http://svn.berlios.de/svnroot/repos/socketcan.">http://svn.berlios.de/svnroot/repos/socketcan.</A>
+</I>&gt;<i> It can be found in the directory
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/patch-series/&lt;version">http://svn.berlios.de/svnroot/repos/socketcan/trunk/patch-series/&lt;version</A>&gt;.
+</I>
+I've applied all 7 patches to net-2.6.25, thanks a lot!
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000200.html">[Socketcan-users] Error handling on Raw Can socket?
+</A></li>
+	<LI>Next message: <A HREF="000202.html">[Socketcan-users] rfilter implementation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#201">[ date ]</a>
+              <a href="thread.html#201">[ thread ]</a>
+              <a href="subject.html#201">[ subject ]</a>
+              <a href="author.html#201">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

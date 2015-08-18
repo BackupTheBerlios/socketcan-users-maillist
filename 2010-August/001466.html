@@ -1,0 +1,265 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP 2515 RX problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3COF42EA7283.49924062-ON65257777.00391F95-65257777.0039707C%40lntemsys.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001465.html">
+   <LINK REL="Next"  HREF="001467.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP 2515 RX problems</H1>
+    <B>Navaneethan P</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3COF42EA7283.49924062-ON65257777.00391F95-65257777.0039707C%40lntemsys.com%3E"
+       TITLE="[Socketcan-users] MCP 2515 RX problems">Navaneethan.P at Lntemsys.com
+       </A><BR>
+    <I>Fri Aug  6 12:29:10 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001465.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+        <LI>Next message: <A HREF="001467.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1466">[ date ]</a>
+              <a href="thread.html#1466">[ thread ]</a>
+              <a href="subject.html#1466">[ subject ]</a>
+              <a href="author.html#1466">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have solved the &quot;NOHZ: local_softirq_pending 08&quot; problem by using the 
+following link.
+ 
+<A HREF="https://patchwork.kernel.org/patch/55508/">https://patchwork.kernel.org/patch/55508/</A>
+
+I donno what exactly causing the  Missing frames, out of order frames and 
+incorrect frames (wrong ID wrong payload).
+
+Regards,
+Navaneethan P 
+
+
+
+
+&quot;Benny B. Simonsen&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bbs at serenergy.com</A>&gt; 
+Sent by: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>
+08/06/2010 03:46 PM
+
+To
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+cc
+
+Subject
+[Socketcan-users] MCP 2515 RX problems
+
+
+
+
+
+
+Hi,
+
+I have 2 MCP2515 connected to an OMAP3 3503 (Gumstix Overo). I'm using 
+kernel 2.6.34 with the MCP251x which is included in the kernel.
+
+I can send and transmit on both interfaces, but when I send a burst of 
+frames from an embedded system with small / no gab between them I run into 
+problems. Missing frames, out of order frames and incorrect frames (wrong 
+ID wrong payload)
+
+When I load the module I get the following from dmesg. I'm not sure what 
+the &quot;NOHZ: local_softirq_pending 08&quot; is, but that message comes a few 
+times when I start to send CAN messages to the system.
+***************************************************
+CAN device driver interface                                               
+      
+mcp251x spi1.1: probed                                                     
+     
+mcp251x spi1.0: probed                                                     
+     
+mcp251x spi1.0: CNF: 0x01 0xbf 0x02                                       
+      
+mcp251x spi1.1: CNF: 0x01 0xbf 0x02                                       
+      
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+NOHZ: local_softirq_pending 08                                             
+     
+can: controller area network core (rev 20090105 abi 8)                     
+     
+NET: Registered protocol family 29                                         
+     
+can: raw protocol (rev 20090105) 
+***************************************************
+
+
+candump -l any 
+gives an output similarly to this when I send a burst of 50 frames from 
+the embedded system.
+EXT addr = 0x1000. DLC = 1 and payload incremented from 0x00 to 0x31 
+***************************************************
+(1281087025.330101) can0 00001000#00                                       
+     
+(1281087025.330620) can0 00001000#02                                       
+     
+(1281087025.330894) can0 00001000#01                                       
+     
+(1281087025.331444) can0 00001000#04                                       
+     
+(1281087025.331871) can0 00001000#06                                       
+     
+(1281087025.332329) can0 00001000#05                                       
+     
+(1281087025.333061) can0 00001000#09                                       
+     
+(1281087025.333488) can0 00001000#0A                                       
+     
+(1281087025.333885) can0 00001000#0B                                       
+     
+(1281087025.334160) can0 00001000#0C                                       
+     
+(1281087025.334679) can0 00001000#0E                                       
+     
+(1281087025.335106) can0 00001000#0F                                       
+     
+(1281087025.335503) can0 00001000#10                                       
+     
+(1281087025.335777) can0 00001000#11                                       
+     
+(1281087025.336296) can0 00001000#13                                       
+     
+(1281087025.336723) can0 00001000#14                                       
+     
+(1281087025.337120) can0 00001000#15                                       
+     
+(1281087025.337395) can0 00001000#16                                       
+     
+(1281087025.337944) can0 00001000#18                                       
+     
+(1281087025.338371) can0 00001000#19                                       
+     
+(1281087025.338768) can0 00001000#1A                                       
+     
+(1281087025.339043) can0 00001000#1B                                       
+     
+(1281087025.339562) can0 00001000#1D                                       
+     
+(1281087025.340172) can0 00001000#1F                                       
+     
+(1281087025.340416) can0 00001000#1E                                       
+     
+(1281087025.340966) can0 00001000#21                                       
+     
+(1281087025.341393) can0 00001000#23                                       
+     
+(1281087025.341667) can0 00001000#22                                       
+     
+(1281087025.342186) can0 00001000#25                                       
+     
+(1281087025.342614) can0 00001000#26                                       
+     
+(1281087025.343010) can0 00001000#27                                       
+     
+(1281087025.343285) can0 00001000#28                                       
+     
+(1281087025.343804) can0 00001000#2A                                       
+     
+(1281087025.344231) can0 00001000#2B                                       
+     
+(1281087025.344628) can0 00001000#2C                                       
+     
+(1281087025.345177) can0 00001000#2D                                       
+     
+(1281087025.345513) can0 000#0000000000000000                             
+      
+(1281087025.345849) can0 00001000#30                                       
+     
+(1281087025.346306) can0 00001000#31
+***************************************************
+
+Output from ifconfig don't report any errors
+***************************************************
+can0     
+ Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-0 
+          UP RUNNING NOARP  MTU:16  Metric:1                               
+     
+          RX packets:2912 errors:0 dropped:0 overruns:0 frame:0           
+      
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0             
+     
+          collisions:0 txqueuelen:1000                                     
+     
+          RX bytes:2912 (2.8 KiB)  TX bytes:0 (0.0 b)      
+***************************************************
+
+
+Any ideas to what could be wrong?
+I have tried to change SPI speed and I have also tried the SVN version of 
+the MCP251x driver (where some changes have been made) but I still get the 
+errors. Note: When I changed to the SVN version I only changed MCP251X.c 
+(don't know if that's ok)
+
+I have also tried to enable CAN debug and SPI debug, but don't get any 
+alarming messages.
+
+Hope someone can give me some ideas to what might be wrong or ideas to 
+further debug.
+
+Thanks
+Benny_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100806/d80297d3/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100806/d80297d3/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001465.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+	<LI>Next message: <A HREF="001467.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1466">[ date ]</a>
+              <a href="thread.html#1466">[ thread ]</a>
+              <a href="subject.html#1466">[ subject ]</a>
+              <a href="author.html#1466">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

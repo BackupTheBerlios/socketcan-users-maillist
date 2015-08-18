@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [CAN] kernel 2.6.28 integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A43642.6040107%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000680.html">
+   <LINK REL="Next"  HREF="000683.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [CAN] kernel 2.6.28 integration</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A43642.6040107%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [CAN] kernel 2.6.28 integration">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Feb 24 19:02:42 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000680.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+        <LI>Next message: <A HREF="000683.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#682">[ date ]</a>
+              <a href="thread.html#682">[ thread ]</a>
+              <a href="subject.html#682">[ subject ]</a>
+              <a href="author.html#682">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i>
+</I>&gt;<i> The idea is to create a patch that
+</I>&gt;<i>
+</I>&gt;<i> 1. removes the mainline vcan driver from your tree
+</I>&gt;<i> 2. Adds a patch that consists of the files that are contained in 
+</I>&gt;<i> FILES-2.6.25x-DRIVERS
+</I>&gt;<i>
+</I>&gt;<i> The patch to remove the original vcan driver (for point 1.) is placed in 
+</I>&gt;<i> socketcan/trunk/patches/2.6.28.diff which i would need to create there ;-)
+</I>&gt;<i> I have to look, if creating a symlink like for 2.6.27 is just enough there.
+</I>&gt;<i>
+</I>&gt;<i> The other thing is that i'm not aware if FILES-2.6.25x-DRIVERS is 
+</I>&gt;<i> up-to-date due to the latest driver developments. Maybe it needs some 
+</I>&gt;<i> update or you can take it as a basis for your own file list that's 
+</I>&gt;<i> passed to ./mkpatch ...
+</I>&gt;<i>   
+</I>
+I added a new symlink for 2.6.28 as the vcan driver did not change up to 
+2.6.28.
+Use 'svn up' to update this file.
+
+Also FILES-2.6.25x-DRIVERS looks good so far.
+
+So you can also go with this patch generation solution.
+
+&gt;<i> But please check first, if you still have compilation problems, when 
+</I>&gt;<i> compiling the external modules as suggested in (1). If so we are 
+</I>&gt;<i> probably having a different issue on your side.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+But this is still valid :-)
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000680.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+	<LI>Next message: <A HREF="000683.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#682">[ date ]</a>
+              <a href="thread.html#682">[ thread ]</a>
+              <a href="subject.html#682">[ subject ]</a>
+              <a href="author.html#682">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

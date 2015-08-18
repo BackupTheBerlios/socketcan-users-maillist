@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] At91_can transmitting error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3C4899CF94.70109%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000476.html">
+   <LINK REL="Next"  HREF="000478.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] At91_can transmitting error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3C4899CF94.70109%40grandegger.com%3E"
+       TITLE="[Socketcan-users] At91_can transmitting error">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug  6 18:21:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000476.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+        <LI>Next message: <A HREF="000478.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#477">[ date ]</a>
+              <a href="thread.html#477">[ thread ]</a>
+              <a href="subject.html#477">[ subject ]</a>
+              <a href="author.html#477">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">jorgefm at cirsa.com</A> wrote:
+&gt;<i> 
+</I>&gt;<i> Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote on 06/08/2008 14:04:46:
+</I>&gt;<i> 
+</I>&gt;<i>  &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">jorgefm at cirsa.com</A> wrote:
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote on 06/08/2008 13:46:41:
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">jorgefm at cirsa.com</A> wrote:
+</I>&gt;<i>  &gt; &gt; &gt; &gt; (..)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cat /proc/net/can/stats
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; &gt;        34 transmitted frames (TXF)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;       374 received frames (RXF)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         8 matched frames (RXMF)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         2 % total match ratio (RXMR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         0 frames/s total tx rate (TXR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         2 frames/s total rx rate (RXR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         0 % current match ratio (CRXMR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         0 frames/s current tx rate (CTXR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         2 frames/s current rx rate (CRXR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; &gt;       100 % max match ratio (MRXMR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         5 frames/s max tx rate (MTXR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         7 frames/s max rx rate (MRXR)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         0 current receive list entries (CRCV)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;         1 maximum receive list entries (MRCV)
+</I>&gt;<i>  &gt; &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; Hi Jorge,
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; unfortunately i'm not familiar with the at91_can driver but i can 
+</I>&gt;<i> tell
+</I>&gt;<i>  &gt; &gt; &gt; you that the statistic above only tells you something about how the
+</I>&gt;<i>  &gt; &gt; &gt; packets flow through the CAN networklayer.
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; If you need details (e.g. dropped frames, sent frames) from your
+</I>&gt;<i>  &gt; &gt; &gt; specific *driver* you should look into
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; cat /proc/net/dev
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; or type
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; /sbin/ifconfig can0
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; to get the latest state/statistic of your network interface.
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt; &gt; Regards,
+</I>&gt;<i>  &gt; &gt; &gt; Oliver
+</I>&gt;<i>  &gt; &gt; &gt;
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; Hi Oliver,
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; The outcome of these commands are:
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cat /proc/net/dev
+</I>&gt;<i>  &gt; &gt; Inter-|   Receive                                                |
+</I>&gt;<i>  &gt; &gt;  Transmit
+</I>&gt;<i>  &gt; &gt;  face |bytes    packets errs drop fifo frame compressed
+</I>&gt;<i>  &gt; &gt; multicast|bytes    packets errs drop fifo colls carrier compressed
+</I>&gt;<i>  &gt; &gt;     lo:       0       0    0    0    0     0          0         0    
+</I>&gt;<i>  &gt; &gt;    0       0    0    0    0     0       0          0
+</I>&gt;<i>  &gt; &gt;   eth0:30024787   34595    1    0    0     0          0         0
+</I>&gt;<i>  &gt; &gt;  2355450   15431    3    0    3     0       0          0
+</I>&gt;<i>  &gt; &gt;   can0:    5592    5592    0    0    0     0          0         0    
+</I>&gt;<i>  &gt; &gt;  206       1    4    0    0     0       0          0
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ /sbin/ifconfig can0
+</I>&gt;<i>  &gt; &gt; can0      Link encap:UNSPEC  HWaddr
+</I>&gt;<i>  &gt; &gt; 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+</I>&gt;<i>  &gt; &gt;           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i>  &gt; &gt;           RX packets:5720 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>  &gt; &gt;           TX packets:1 errors:4 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>  &gt; &gt;           collisions:0 txqueuelen:10
+</I>&gt;<i>  &gt; &gt;           RX bytes:5720 (5.5 KiB)  TX bytes:206 (206.0 B)
+</I>&gt;<i>  &gt; &gt;           Interrupt:12
+</I>&gt;<i>  &gt; &gt;
+</I>&gt;<i>  &gt; &gt; Basically in the Tx part are more errors than packets sent :)
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; Hm - really looks like that you have problems to put your frames onto
+</I>&gt;<i>  &gt; the wire.
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; Do you have a correct termination (at least 120 Ohms between CAN_L and
+</I>&gt;<i>  &gt; CAN_H?) in your CAN network?
+</I>&gt;<i>  &gt;
+</I>&gt;<i>  &gt; Regards,
+</I>&gt;<i>  &gt; Oliver
+</I>&gt;<i>  &gt;
+</I>&gt;<i> 
+</I>&gt;<i> I've checked the can network and I've change it, because the can node had
+</I>&gt;<i> the termination resistor soldered . Now one end is a pc with the 120 ohms
+</I>&gt;<i> termination (the can network master), there are two non-terminated can 
+</I>&gt;<i> nodes
+</I>&gt;<i> and the atmel board in the other end with the 'can bus term' jumper on.
+</I>&gt;<i> I think this topology is correct, isn't? two terminations in each end.
+</I>&gt;<i> 
+</I>&gt;<i> Now I've:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ./cangen can0
+</I>&gt;<i> net can0: TX start for mb #8
+</I>&gt;<i> net can0: BOFF irq
+</I>&gt;<i> net can0: can_restart_on (-13450)
+</I>&gt;<i> net can0: BOFF irq
+</I>&gt;<i> net can0: can_restart_on already active (-13450)
+</I>&gt;<i> net can0: can_restart_dev (-13440)
+</I>&gt;<i> net can0: set_baud, baud=1000000, clock=100000000
+</I>&gt;<i> net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+</I>&gt;<i> net can0: Setting CAN_BR to 0x00053543
+</I>&gt;<i> net can0: TX start for mb #8
+</I>&gt;<i> net can0: TX start for mb #8
+</I>&gt;<i> net can0: FERR irq
+</I>&gt;<i> net can0: BERR irq
+</I>&gt;<i> net can0: TX start for mb #9
+</I>&gt;<i> net can0: TX start for mb #10
+</I>&gt;<i> net can0: TX start for mb #11
+</I>&gt;<i> net can0: TX start for mb #12
+</I>&gt;<i> net can0: FERR irq
+</I>&gt;<i> net can0: BERR irq
+</I>&gt;<i> net can0: FERR irq
+</I>&gt;<i> net can0: BERR irq
+</I>&gt;<i> net can0: FERR irq
+</I>&gt;<i> net can0: BOFF irq
+</I>&gt;<i> net can0: can_restart_on (-13308)
+</I>&gt;<i> net can0: TX start for mb #13
+</I>&gt;<i> net can0: can_restart_dev (-13298)
+</I>&gt;<i> net can0: set_baud, baud=1000000, clock=100000000
+</I>&gt;<i> net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+</I>&gt;<i> net can0: Setting CAN_BR to 0x00053543
+</I>&gt;<i> net can0: TX start for mb #8
+</I>&gt;<i> net can0: TX start for mb #9
+</I>&gt;<i> net can0: TX start for mb #10
+</I>&gt;<i> net can0: TX start for mb #11
+</I>&gt;<i> net can0: FERR irq
+</I>&gt;<i> net can0: BOFF irq
+</I>&gt;<i> net can0: can_restart_on (-13217)
+</I>&gt;<i> net can0: can_restart_dev (-13207)
+</I>&gt;<i> net can0: set_baud, baud=1000000, clock=100000000
+</I>&gt;<i> net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+</I>
+Try brp=5 sjw=1 propag=6 phase1=8 phase2=5
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000476.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+	<LI>Next message: <A HREF="000478.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#477">[ date ]</a>
+              <a href="thread.html#477">[ thread ]</a>
+              <a href="subject.html#477">[ subject ]</a>
+              <a href="author.html#477">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

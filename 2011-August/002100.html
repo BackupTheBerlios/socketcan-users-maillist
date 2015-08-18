@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Need help starting socketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C561453779232B648829350EBCA189B2106EDAD5B%40EUREVS1.eur.ci.root%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002099.html">
+   <LINK REL="Next"  HREF="002104.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Need help starting socketCAN</H1>
+    <B>Ansell, John</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C561453779232B648829350EBCA189B2106EDAD5B%40EUREVS1.eur.ci.root%3E"
+       TITLE="[Socketcan-users] Need help starting socketCAN">John.Ansell at CooperIndustries.com
+       </A><BR>
+    <I>Mon Aug 22 20:18:46 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002099.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+        <LI>Next message: <A HREF="002104.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2100">[ date ]</a>
+              <a href="thread.html#2100">[ thread ]</a>
+              <a href="subject.html#2100">[ subject ]</a>
+              <a href="author.html#2100">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>]
+</I>&gt;<i> Sent: 22 August 2011 18:14
+</I>&gt;<i> To: Ansell, John
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Socketcan-users] Need help starting socketCAN
+</I>&gt;<i> 
+</I>&gt;<i> On 22.08.2011 14:22, Ansell, John wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hi guys,
+</I>&gt;<i> 
+</I>&gt;<i> Hi John,
+</I>&gt;<i> 
+</I>&gt;<i> i'll try to enhance the answer from Rene a bit ;-)
+</I>&gt;<i> 
+</I>&gt;<i> &gt; probes are successful and the CAN drivers are being loaded.
+</I>&gt;<i> 
+</I>&gt;<i> Then you should see the CAN netdevices also in /proc/net/dev
+</I>
+I have /sys/class/net/can0/ and .../can1/ but nothing in /proc/net/dev
+I also have /proc/net/can.
+Will there be a clue in the dmesg log?
+
+
+&gt;<i> There are no CAN files created in /dev/xxx as the CAN devices use the
+</I>&gt;<i> network driver model like ethernet cards.
+</I>
+OK, thanks.
+
+&gt;<i> 
+</I>&gt;<i> As Rene wrote, you need a 'recent' 'ip' from the iproute2 package:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://git.kernel.org/?p=network/iproute2/iproute2.git;a=summary">http://git.kernel.org/?p=network/iproute2/iproute2.git;a=summary</A>
+</I>
+Was really hoping you guys wouldn't say that, I was hoping I could do it all
+from userland :( 
+
+I've been trying to get a version of iproute2 to build but it fails to build the misc
+folder at the moment. :(  OK, will keep going!
+
+&gt;<i> 
+</I>&gt;<i> In our setup we disabled the 'ip' tool in busybox and compiled the 'ip'
+</I>&gt;<i> from iproute2 ...
+</I>
+Ah, but there's a difference - you know what you're doing :)
+
+&gt;<i> &gt;
+</I>&gt;<i> &gt; I don&#146;t see a CAN device in /dev &#150; should I?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> That's correct that you don't see things in /dev/xxx .-)
+</I>
+Cool, at least I don't have devices where they shouldn't be. Now to get them where they should be!
+
+&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002099.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+	<LI>Next message: <A HREF="002104.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2100">[ date ]</a>
+              <a href="thread.html#2100">[ thread ]</a>
+              <a href="subject.html#2100">[ subject ]</a>
+              <a href="author.html#2100">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

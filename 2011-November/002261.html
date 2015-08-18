@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4ED37885.8080909%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002256.html">
+   <LINK REL="Next"  HREF="002270.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4ED37885.8080909%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Mon Nov 28 13:03:17 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002256.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002270.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2261">[ date ]</a>
+              <a href="thread.html#2261">[ thread ]</a>
+              <a href="subject.html#2261">[ subject ]</a>
+              <a href="author.html#2261">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> On 11/28/2011 09:56 AM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> Hello Oliver,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> many thanks for posting this driver. Indeed this is the last from the
+</I>&gt;&gt;&gt;<i> missing
+</I>&gt;&gt;&gt;<i> drivers in the SVN ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> @Wolfgang
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The same her, thanks a lot.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I added Wolfgang Zarre to the list of recipients who tested your CC770
+</I>&gt;&gt;&gt;<i> driver
+</I>&gt;&gt;&gt;<i> recently:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://old.nabble.com/Compile-Fails-On-2.6.39-2-td32259346.html">http://old.nabble.com/Compile-Fails-On-2.6.39-2-td32259346.html</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Maybe he can check this latest version and can send a &quot;Tested-by:&quot;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> @Wolfgang Zarre: The entire patch set from Wolfgang Grandegger is here:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://patchwork.ozlabs.org/patch/127653/">http://patchwork.ozlabs.org/patch/127653/</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://patchwork.ozlabs.org/patch/127651/">http://patchwork.ozlabs.org/patch/127651/</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://patchwork.ozlabs.org/patch/127654/">http://patchwork.ozlabs.org/patch/127654/</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://patchwork.ozlabs.org/patch/127652/">http://patchwork.ozlabs.org/patch/127652/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In fact a month ago we discovered a problem with the previous isa driver
+</I>&gt;&gt;<i> but were not
+</I>&gt;&gt;<i> able to reproduce it.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Last Friday during a test run we got the same problem and with some
+</I>&gt;&gt;<i> further tests I
+</I>&gt;&gt;<i> was able to reproduce and started with some investigation.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So the patches came in quite handy and even not to waste time I was
+</I>&gt;&gt;<i> applying the
+</I>&gt;&gt;<i> patches to an updated svn tree but had to do some manual corrections to
+</I>&gt;&gt;<i> get it
+</I>&gt;&gt;<i> compiled.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So far the driver is functioning quite good and I was hoping that our
+</I>&gt;&gt;<i> problem would
+</I>&gt;&gt;<i> be solved as well.
+</I>&gt;<i>
+</I>&gt;<i> Well, I do not remember any fix... apart from
+</I>
+Of course not, was never reported because we couldn't reproduce.
+
+&gt;<i>
+</I>&gt;&gt;<i> But unfortunately that is not the case and it would be great if somebody
+</I>&gt;&gt;<i> would have
+</I>&gt;&gt;<i> an idea or similar experience and maybe a solution.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In use:
+</I>&gt;&gt;<i> ISA card: B&amp;R with CC770 (40007) Series Bosch CAN Controller - LQFP-44
+</I>&gt;&gt;<i> Kernel: 2.6.39.4
+</I>&gt;&gt;<i> Module: modprobe cc770_isa irq=0xa port=0x384 indirect=1
+</I>&gt;&gt;<i> Commands: ip link set can0 up type can bitrate 500000;ip link set can0
+</I>&gt;&gt;<i> txqueuelen 2000
+</I>&gt;<i>
+</I>&gt;<i> ... using a reasonable default for bcr of 0x40. But you may need to
+</I>&gt;<i> provide better values for cir, bcr and cor.
+</I>&gt;<i>
+</I>
+OMG, sorry that I was bothering You but You are absolutely right and with Your
+statement You brought be back on track and You made my day. Thank You !!!!!!
+
+I just took the values for cpu and bus I was using in my lincan driver and funny
+enough now it's working absolutely perfect.
+
+Module: modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+
+Was just sending 50000 telegrams, perfect and no problem at all.
+
+Thanks a lot again!!!!
+
+
+&gt;&gt;<i> dmesg:
+</I>&gt;&gt;<i> [190911.144337] CAN device driver interface
+</I>&gt;&gt;<i> [190911.153316] cc770 CAN netdevice driver
+</I>&gt;&gt;<i> [190911.159708] cc770_isa: platform device 0: port=0x384, mem=0x0, irq=10
+</I>&gt;&gt;<i> [190911.159740] cc770_isa cc770_isa.0: probing idx=0: port=0x384,
+</I>&gt;&gt;<i> mem=0x0, irq=10
+</I>&gt;&gt;<i> [190911.159799] cc770_isa cc770_isa.0: (unregistered net_device): i82527
+</I>&gt;&gt;<i> mode with additional functions
+</I>&gt;&gt;<i> [190911.161338] cc770_isa cc770_isa.0: cc770_isa device registered
+</I>&gt;&gt;<i> (reg_base=0x00000384, irq=10)
+</I>&gt;&gt;<i> [190911.161384] Legacy cc770_isa driver for max. 8 devices registered
+</I>&gt;&gt;<i> [190912.173762] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+</I>&gt;&gt;<i> [190912.173835] cc770_isa cc770_isa.0: can0: Message object 15 for RX
+</I>&gt;&gt;<i> data, RTR, SFF and EFF
+</I>&gt;&gt;<i> [190912.173852] cc770_isa cc770_isa.0: can0: Message object 11 for TX
+</I>&gt;&gt;<i> data, RTR, SFF and EFF
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Description of problem:
+</I>&gt;&gt;<i> After a while sending quite some telegrams the driver of a sudden stops
+</I>&gt;&gt;<i> transmitting
+</I>&gt;&gt;<i> and the queue is running full but still capable to receive telegrams.
+</I>&gt;&gt;<i> This issue is not depending on the amount of transmitted telegrams and
+</I>&gt;&gt;<i> also no logfile
+</I>&gt;&gt;<i> entries.
+</I>&gt;<i>
+</I>&gt;<i> What do you get with &quot;candump -t d any,0:0,#FFFFFFFF&quot;? What does &quot;ip -d
+</I>&gt;<i> -s link show&quot; show?
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>
+Wolfgang
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002256.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002270.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2261">[ date ]</a>
+              <a href="thread.html#2261">[ thread ]</a>
+              <a href="subject.html#2261">[ subject ]</a>
+              <a href="author.html#2261">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

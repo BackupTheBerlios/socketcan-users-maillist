@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A31212C.2080608%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000879.html">
+   <LINK REL="Next"  HREF="000881.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A31212C.2080608%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jun 11 17:22:20 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000879.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+        <LI>Next message: <A HREF="000881.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#880">[ date ]</a>
+              <a href="thread.html#880">[ thread ]</a>
+              <a href="subject.html#880">[ subject ]</a>
+              <a href="author.html#880">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> khurram gulzar wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> it doesnt work still
+</I>&gt;&gt;<i> here is the debug msgs from the kernel.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> [  383.989052] NETDEV WATCHDOG: can0 (): transmit timed out
+</I>&gt;<i> 
+</I>&gt;<i> This looks like you don't have a CAN node the controller can talk to.
+</I>&gt;<i> 
+</I>&gt;<i> Possible problems:
+</I>&gt;<i> 
+</I>&gt;<i> - wrong bitrate
+</I>&gt;<i> - missing CAN bus termination
+</I>&gt;<i> - missing second CAN node with correct bitrate ;-)
+</I>&gt;<i> 
+</I>&gt;<i> When the CAN frame is not acknowledged the NETDEV WATCHDOG occurs - and this
+</I>&gt;<i> make this ugly call trace in 2.6.29+ Kernels. The netdev watchdog is removed
+</I>&gt;<i> in newer drivers.
+</I>&gt;<i> 
+</I>&gt;<i> Please check the three points above. The best test is to receive CAN data from
+</I>&gt;<i> a well working CAN source first.
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> ps. The rest of the Kernel log looks good.
+</I>
+Well, I have the impression, that the bit-timing relevant parameters are
+not OK. At least the BTRs look bogus. Khurram, could you please retry with:
+
+  insmod i82527-iomem.ko base=0xD8000,0xD8100 irq=10,11 \
+                         btr=0x0014,0x0014
+
+and send the related dmesg output. Sometimes it's also necessary to
+adjust bcr or cdv. Do you have a working driver where you can look to
+the source code?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000879.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+	<LI>Next message: <A HREF="000881.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#880">[ date ]</a>
+              <a href="thread.html#880">[ thread ]</a>
+              <a href="subject.html#880">[ subject ]</a>
+              <a href="author.html#880">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

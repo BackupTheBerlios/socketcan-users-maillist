@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan_tx_timeout
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan_tx_timeout&In-Reply-To=%3C45129850.7050605%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000044.html">
+   <LINK REL="Next"  HREF="000046.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan_tx_timeout</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan_tx_timeout&In-Reply-To=%3C45129850.7050605%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mscan_tx_timeout">mkl at pengutronix.de
+       </A><BR>
+    <I>Thu Sep 21 15:49:04 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000044.html">[Socketcan-users] mscan_tx_timeout
+</A></li>
+        <LI>Next message: <A HREF="000046.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#45">[ date ]</a>
+              <a href="thread.html#45">[ thread ]</a>
+              <a href="subject.html#45">[ subject ]</a>
+              <a href="author.html#45">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Syed Amer Gilani wrote:
+&gt;<i> I have an MPC5200B an a board from Phytec. Running on it is a 2.6.17
+</I>&gt;<i> Linux with socket-can.
+</I>
+&gt;<i> To test CAN i connected it to a CAN Monitor from stzp. When i now send
+</I>&gt;<i> something with &quot;cansend can0 --identifier=0x20 0xAA&quot; the CAN Monitor
+</I>&gt;<i> doesn't receive anything at all.
+</I>&gt;<i> After some time my Console gets spammed with :
+</I>
+&gt;<i> NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> mscan_tx_timeout
+</I>
+&gt;<i> Does somebody has a hint what i could be doing wrong?
+</I>
+Is this your CAN-Net propperly terminated? Are the resistors set in the 
+right direction to support CAN?
+
+Do you have a valid receiver on this net? Your sender keeps sending a 
+packet till it get's ACKed by at least one station. If your CAN Monitor 
+is passive the first message never leaves the transmitter.
+
+BTW:
+The OSELAS.BSP() that comes with your board uses the old, stable 
+socket-can version. Here on berlios is the current development tree. 
+Please come to Oselas Mailinglist to discuss BSP related issues.
+
+<A HREF="http://www.pengutronix.de/oselas/community/index_en.html">http://www.pengutronix.de/oselas/community/index_en.html</A>
+
+Marc
+-- 
+  Dipl.-Ing. Marc Kleine-Budde | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+   Pengutronix - Linux Solutions for Science and Industry
+     Handelsregister: Amtsgericht Hildesheim, HRA 2686
+       Hannoversche Str. 2, 31134 Hildesheim, Germany
+     Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000044.html">[Socketcan-users] mscan_tx_timeout
+</A></li>
+	<LI>Next message: <A HREF="000046.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#45">[ date ]</a>
+              <a href="thread.html#45">[ thread ]</a>
+              <a href="subject.html#45">[ subject ]</a>
+              <a href="author.html#45">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

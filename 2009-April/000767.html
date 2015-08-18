@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] I want to implement CAN Protocol functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%20Protocol%0A%20functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%202.6.18-6-amd64%20%29&In-Reply-To=%3C49E1B0D5.9050403%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000764.html">
+   <LINK REL="Next"  HREF="000754.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] I want to implement CAN Protocol functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20I%20want%20to%20implement%20CAN%20Protocol%0A%20functionality%20in%20normal%20Linux%20machine%28%20Debian%20Linux%202.6.18-6-amd64%20%29&In-Reply-To=%3C49E1B0D5.9050403%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] I want to implement CAN Protocol functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Apr 12 11:13:57 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000764.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+        <LI>Next message: <A HREF="000754.html">[Socketcan-users] MCP251x driver: Probe failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#767">[ date ]</a>
+              <a href="thread.html#767">[ thread ]</a>
+              <a href="subject.html#767">[ subject ]</a>
+              <a href="author.html#767">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>lakshmi sreekanth wrote:
+&gt;<i> Thanks for your replay,
+</I>&gt;<i> 
+</I>&gt;<i> From the user application, the macros used in socket are not resolved
+</I>&gt;<i> ('*CAN_BCM*&#8217; undeclared).
+</I>&gt;<i> When i run simple user socket application: It showing the error ....
+</I>&gt;<i> 
+</I>&gt;<i> Error: /&#8216;CAN_BCM&#8217; undeclared (first use in this function)/
+</I>
+CAN_BCM is the protocol number inside the protocol family PF_CAN.
+
+It is defined in can.h - or more precisely in linux-2.6.25/include/linux/can.h
+
+On my new debian system the file can.h already exists in
+
+/usr/include/linux/can.h
+
+But when this is not available in your system, i would suggest to define the
+place of your CAN includes in your compiler flags, like in the
+
+socketcan/trunk/can-utils/Makefile:
+
+CFLAGS    = -O2 -Wall -Wno-parentheses -I../kernel/2.6/include \
+            -fno-strict-aliasing \
+            -DPF_CAN=29 \
+            -DAF_CAN=PF_CAN
+
+Instead of &quot;-I../kernel/2.6/include&quot; you might also use
+
+-I/home/&lt;user&gt;/socketcan/trunk/kernel/2.6/include
+
+or
+
+-I/home/&lt;user&gt;/&lt;my-linux-2.6.??-tree&gt;/include
+
+The definitions are always defined the same.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000764.html">[Socketcan-users] I want to implement CAN Protocol	functionality in normal Linux machine( Debian Linux 2.6.18-6-amd64 )
+</A></li>
+	<LI>Next message: <A HREF="000754.html">[Socketcan-users] MCP251x driver: Probe failed.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#767">[ date ]</a>
+              <a href="thread.html#767">[ thread ]</a>
+              <a href="subject.html#767">[ subject ]</a>
+              <a href="author.html#767">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

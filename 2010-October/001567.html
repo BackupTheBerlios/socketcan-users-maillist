@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CB6CF06.5030109%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001566.html">
+   <LINK REL="Next"  HREF="001568.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CB6CF06.5030109%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">wg at grandegger.com
+       </A><BR>
+    <I>Thu Oct 14 11:36:06 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001566.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001568.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1567">[ date ]</a>
+              <a href="thread.html#1567">[ thread ]</a>
+              <a href="subject.html#1567">[ subject ]</a>
+              <a href="author.html#1567">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/14/2010 11:26 AM, Alexander Stein wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> On Wednesday 13 October 2010, 11:02:33 Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> <A HREF="http://old.nabble.com/Self-reception-and-more-td29760073.html">http://old.nabble.com/Self-reception-and-more-td29760073.html</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://old.nabble.com/Self-reception-td29932236.html">http://old.nabble.com/Self-reception-td29932236.html</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm following the discussion and realized that it will not work for
+</I>&gt;&gt;<i> devices doing the local loopback in hardware, like the flexcan
+</I>&gt;&gt;<i> controller. Strictly speaking it will only work properly for drivers
+</I>&gt;&gt;<i> doing the local loopback in software when the TX done interrupt is
+</I>&gt;&gt;<i> handled. Also some USB devices are not able to do that properly.
+</I>&gt;<i> 
+</I>&gt;<i> Is it possible, that at91_can does also hardware loopback? If I use the 
+</I>
+No, currently only the flexcan controller can do it properly in hardware.
+
+&gt;<i> default socket options (CAN_RAW_LOOPBACK = 1, CAN_RAW_RECV_OWN_MSGS = 0), I 
+</I>&gt;<i> also receive my own frames on the same socket. setting CAN_RAW_RECV_OWN_MSGS 
+</I>&gt;<i> to 1 doesn't change anything. But if I set CAN_RAW_LOOPBACK to 0, I don't get 
+</I>&gt;<i> any frame I sent. I guess the latter is intended.
+</I>
+Yes, it's explained in section 3.2, 4.1.3 and 4.1.4 of:
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.35.7/Documentation/networking/can.txt">http://lxr.linux.no/#linux+v2.6.35.7/Documentation/networking/can.txt</A>
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001566.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001568.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1567">[ date ]</a>
+              <a href="thread.html#1567">[ thread ]</a>
+              <a href="subject.html#1567">[ subject ]</a>
+              <a href="author.html#1567">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

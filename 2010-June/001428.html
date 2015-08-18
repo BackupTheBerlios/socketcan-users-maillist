@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] error active (CAN_ERR_CRTL /	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20error%20active%20%28CAN_ERR_CRTL%20/%0A%09CAN_ERR_CRTL_UNSPEC%29%20not%20indicated%20in%09rev1181&In-Reply-To=%3C166589D0B9DD2547A1319599B9BADA1F3AC70B%40vsv-exchange.ixxat.intranet.priv%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001427.html">
+   <LINK REL="Next"  HREF="001429.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] error active (CAN_ERR_CRTL /	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181</H1>
+    <B>gribov at ixxat.de</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20error%20active%20%28CAN_ERR_CRTL%20/%0A%09CAN_ERR_CRTL_UNSPEC%29%20not%20indicated%20in%09rev1181&In-Reply-To=%3C166589D0B9DD2547A1319599B9BADA1F3AC70B%40vsv-exchange.ixxat.intranet.priv%3E"
+       TITLE="[Socketcan-users] error active (CAN_ERR_CRTL /	CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181">gribov at ixxat.de
+       </A><BR>
+    <I>Mon Jun 14 15:05:02 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001427.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+        <LI>Next message: <A HREF="001429.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1428">[ date ]</a>
+              <a href="thread.html#1428">[ thread ]</a>
+              <a href="subject.html#1428">[ subject ]</a>
+              <a href="author.html#1428">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Marc,
+
+well, I do not really like name CAN_ERR_CRTL_UNSPEC, but this 
+has done the job for both MSCAN and SJA1000 (ixxat_pci to 
+be more specific) drivers under rev 1033. The HW I use at the 
+moment (with rev 1181) is IXXAT HW (so the ixxat_pci driver).
+
+I of course may poll the interface state by the mean of 
+&quot;can_get_state&quot; from the netlink lib, but it will be nice to have
+a reliable event for that. CAN_ERR_PROT_ACTIVE however does not
+seems to be appropriate for me. According to the &quot;error.h&quot;, the
+CAN_ERR_PROT_ACTIVE is from the data[2], which is used for
+indication errors in CAN protocol. What I need in my case is
+to get an event, that CAN-controller has error-free status. And
+for the CAN-controller status the data[1] byte is used. Error 
+warning/passive events are indicated over corresponding bits of 
+that byte. And if all that errors are cleared, I actually expect 
+to get an event with no bits set for warning/passive bits. Rx/Tx 
+overflow bit may be still set. So you are right, instead of using
+
+(CanFrame.data[1] == CAN_ERR_CRTL_UNSPEC)
+
+The following construction shall be the proper signal of 
+CAN-controller became error active:
+
+((CanFrame.data[1] &amp; (CAN_ERR_CRTL_RX_WARNING|
+                      CAN_ERR_CRTL_TX_WARNING|
+                      CAN_ERR_CRTL_RX_PASSIVE|
+                      CAN_ERR_CRTL_TX_PASSIVE)) == 0)
+
+Thanks and regards,
+Vladislav
+
+-----Original Message-----
+From: Marc Kleine-Budde [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>] 
+Sent: Monday, June 14, 2010 1:55 PM
+To: Gribov, Vladislav
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-core at lists.berlios.de</A>
+Subject: Re: error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not
+indicated in rev1181
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gribov at ixxat.de</A> wrote:
+&gt;<i> Hello,
+</I>&gt;<i> I have got a question concerning receiving the can error control
+</I>messages.
+&gt;<i> 
+</I>&gt;<i> We have used SocketCAN SW (rev 1033) with sysfs control for our
+</I>CANopen SW. 
+&gt;<i> Everything was working just fine. We have received CAN error control 
+</I>&gt;<i> messages (can_id CAN_ERR_CRTL with flag CAN_ERR_FLAG set) to react on 
+</I>&gt;<i> the following events:
+</I>&gt;<i> - bus-off
+</I>&gt;<i> - CAN Rx overrun
+</I>&gt;<i> - error passive
+</I>&gt;<i> - error active (recovery from errors)
+</I>&gt;<i> 
+</I>&gt;<i> The &quot;error active&quot; was indicated by the error control message with the
+</I>
+&gt;<i> value CAN_ERR_CRTL_UNSPEC in the databyte 1.
+</I>
+hmmm...&quot;CAN_ERR_CRTL_UNSPEC&quot; meaning &quot;error active&quot; looks like an
+implementation defined detail, bad design or even a bug (YMMV) :).
+
+Which driver are you using?
+
+&gt;<i> Now I try to use more current version (rev 1181) of SocketCAN, because
+</I>
+&gt;<i> we need netlink CAN control API. Here I see one problem - no error 
+</I>&gt;<i> active is indicated. The CAN_ERR_CRTL_UNSPEC error control messages
+</I>are missed.
+&gt;<i> I observe this problem with both sysfs and netlink variants.
+</I>
+&gt;<i> Is it known and wanted behavior, to not indicate CAN_ERR_CRTL_UNSPEC
+</I>any more?
+
+My at91_can driver send an explicid CAN_ERR_PROT_ACTIVE
+(<A HREF="http://lxr.linux.no/linux+v2.6.34/drivers/net/can/at91_can.c#L833">http://lxr.linux.no/linux+v2.6.34/drivers/net/can/at91_can.c#L833</A>),
+which is
+(<A HREF="http://lxr.linux.no/linux+v2.6.34/include/linux/can/error.h#L53">http://lxr.linux.no/linux+v2.6.34/include/linux/can/error.h#L53</A>).
+
+There isn't any other mainline driver who uses this flag. Looks like a
+bug to me.
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001427.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+	<LI>Next message: <A HREF="001429.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1428">[ date ]</a>
+              <a href="thread.html#1428">[ thread ]</a>
+              <a href="subject.html#1428">[ subject ]</a>
+              <a href="author.html#1428">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

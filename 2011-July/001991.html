@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 1/2] RFC: can: flexcan: re-add	CAN_CTRLMODE_LOOPBACK handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%201/2%5D%20RFC%3A%20can%3A%20flexcan%3A%20re-add%0A%09CAN_CTRLMODE_LOOPBACK%20handling&In-Reply-To=%3C1311373478-585-1-git-send-email-mkl%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001988.html">
+   <LINK REL="Next"  HREF="001992.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 1/2] RFC: can: flexcan: re-add	CAN_CTRLMODE_LOOPBACK handling</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%201/2%5D%20RFC%3A%20can%3A%20flexcan%3A%20re-add%0A%09CAN_CTRLMODE_LOOPBACK%20handling&In-Reply-To=%3C1311373478-585-1-git-send-email-mkl%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH 1/2] RFC: can: flexcan: re-add	CAN_CTRLMODE_LOOPBACK handling">mkl at pengutronix.de
+       </A><BR>
+    <I>Sat Jul 23 00:24:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001988.html">[Socketcan-users] [PATCH] can: flexcan: fix IFF_ECHO problem,	remove FLEXCAN_MCR_SRX_DIS
+</A></li>
+        <LI>Next message: <A HREF="001992.html">[Socketcan-users] [PATCH 2/2] RFC: can: flexcan: disable chip and	clock in register_flexcandev
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1991">[ date ]</a>
+              <a href="thread.html#1991">[ thread ]</a>
+              <a href="subject.html#1991">[ subject ]</a>
+              <a href="author.html#1991">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The driver still advertises to support CAN_CTRLMODE_LOOPBACK, but the
+setting of the FLEXCAN_CTRL_LPB bit has been removed. This patch re-add
+the CAN_CTRLMODE_LOOPBACK handling.
+
+Signed-off-by: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+Cc: Bhaskar Upadhaya &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bhaskar.upadhaya at freescale.com</A>&gt;
+Cc: Scott Wood &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">scottwood at freescale.com</A>&gt;
+---
+Hello Bhaskar &amp; Scott,
+
+any particular reason to disable the loopback mode? Please test and apply
+to fsl's PPC tree.
+
+cheers, Marc
+
+ drivers/net/can/flexcan.c |    6 +++++-
+ 1 files changed, 5 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 0c5adae..05c53eb 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -475,7 +475,9 @@ static void flexcan_set_bittiming(struct net_device *dev)
+ 		 FLEXCAN_CTRL_PSEG1(0x7) |
+ 		 FLEXCAN_CTRL_PSEG2(0x7) |
+ 		 FLEXCAN_CTRL_PROPSEG(0x7) |
+-		 FLEXCAN_CTRL_SMP | FLEXCAN_CTRL_LOM);
++		 FLEXCAN_CTRL_LPB |
++		 FLEXCAN_CTRL_SMP |
++		 FLEXCAN_CTRL_LOM);
+ 
+ 	reg |= FLEXCAN_CTRL_PRESDIV(bt-&gt;brp - 1) |
+ 	    FLEXCAN_CTRL_PSEG1(bt-&gt;phase_seg1 - 1) |
+@@ -483,6 +485,8 @@ static void flexcan_set_bittiming(struct net_device *dev)
+ 	    FLEXCAN_CTRL_RJW(bt-&gt;sjw - 1) |
+ 	    FLEXCAN_CTRL_PROPSEG(bt-&gt;prop_seg - 1);
+ 
++	if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_LOOPBACK)
++		reg |= FLEXCAN_CTRL_LPB;
+ 	if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_LISTENONLY)
+ 		reg |= FLEXCAN_CTRL_LOM;
+ 	if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_3_SAMPLES)
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001988.html">[Socketcan-users] [PATCH] can: flexcan: fix IFF_ECHO problem,	remove FLEXCAN_MCR_SRX_DIS
+</A></li>
+	<LI>Next message: <A HREF="001992.html">[Socketcan-users] [PATCH 2/2] RFC: can: flexcan: disable chip and	clock in register_flexcandev
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1991">[ date ]</a>
+              <a href="thread.html#1991">[ thread ]</a>
+              <a href="subject.html#1991">[ subject ]</a>
+              <a href="author.html#1991">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

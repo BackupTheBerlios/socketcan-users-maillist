@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6EB37B.7080109%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001296.html">
+   <LINK REL="Next"  HREF="001297.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6EB37B.7080109%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Sun Feb  7 13:35:07 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001296.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001297.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1271">[ date ]</a>
+              <a href="thread.html#1271">[ thread ]</a>
+              <a href="subject.html#1271">[ subject ]</a>
+              <a href="author.html#1271">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Kurt Van Dijck wrote:
+</I>&gt;&gt;<i> On Fri, Feb 05, 2010 at 11:44:42AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;&gt;<i> christian pellegrin wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> On Fri, Feb 5, 2010 at 10:05 AM, Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I never enabled the bus-error interrupts anywhere embedded.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> To research odd behaviour, the error counters were helpfull,
+</I>&gt;&gt;&gt;&gt;&gt;<i> I like this idea much. I speak from a point of view of meanness ;-) :
+</I>&gt;&gt;&gt;&gt;&gt;<i> we have paid the chip manufacturer for the REC and TEC counters that
+</I>&gt;&gt;&gt;&gt;&gt;<i> are cleverly incremented and decremented (AFAIK it's more likely they
+</I>&gt;&gt;&gt;&gt;&gt;<i> are incremented that decremented, so there is always a window in which
+</I>&gt;&gt;&gt;&gt;&gt;<i> the user space application can catch an increase in them even if not
+</I>&gt;&gt;&gt;&gt;&gt;<i> polling at an excessive rate) by the controller itself so they could
+</I>&gt;&gt;&gt;&gt;&gt;<i> be easily exported to user space. Perhaps all we need is a function
+</I>&gt;&gt;&gt;&gt;&gt;<i> for this in can_priv such do_get_err_counters. Even better if these
+</I>&gt;&gt;&gt;&gt;&gt;<i> counters are exported via sysfs so the function above is guaranteed to
+</I>&gt;&gt;&gt;&gt;&gt;<i> be called in  non-atomic context.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Trying to summarize these points, what about this:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 1. We disable bus-error interrupts by default
+</I>&gt;&gt;&gt;<i> Fine for me, even if that changes the current behavior.
+</I>&gt;&gt;<i> Ack
+</I>&gt;&gt;&gt;&gt;<i> 2. They can be enabled via netlink
+</I>&gt;&gt;&gt;<i> Yep.
+</I>&gt;&gt;<i> Ack
+</I>&gt;&gt;&gt;&gt;<i> 3. Once they are enabled we send the (unified) rx/tx error counters inside the
+</I>&gt;&gt;&gt;&gt;<i> currently reserved bytes of the CAN error frame to the userspace.
+</I>&gt;&gt;&gt;<i> The problem is that some CAN controllers do not allow to read these
+</I>&gt;&gt;&gt;<i> counters while it's active. But in general we could add the rx/txerr to
+</I>&gt;&gt;&gt;<i> any error message, if possible. The information in the error message is
+</I>&gt;&gt;&gt;<i> hardware dependent anyway.
+</I>&gt;&gt;<i> Ack
+</I>&gt;&gt;&gt;&gt;<i> Would this meet the requirements in production-use and development-use ??
+</I>&gt;&gt;<i> Yes, for me, this would meet the requirements.
+</I>&gt;<i> 
+</I>&gt;<i> OK, the preliminary patch for SVN below implements this solution and shows
+</I>&gt;<i> what we are speaking about. As a nice side effect, it also allows to check
+</I>&gt;<i> if the device supports bus-error reporting. Marc, could you please check
+</I>&gt;<i> the at91_can modifications?
+</I>
+I had a closer look and they are not OK. There are sources for the various
+bus-errors, which can be enabled individually. See:
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.32/drivers/net/can/at91_can.c#L636">http://lxr.linux.no/#linux+v2.6.32/drivers/net/can/at91_can.c#L636</A>
+
+I realized some confusion between the following two errors:
+
+#define CAN_ERR_ACK          0x00000020U /* received no ACK on transmission */
+#define CAN_ERR_BUSERROR     0x00000080U /* bus error (may flood!) */
+
+Here, I think we speak about bus errors, which increment the TX and RX error
+counters. The at1_can treats currently the AT91_IRQ_AERR as CAN_ERR_ACK, which
+is a bus error as well. On the SJA1000 the error is signaled as:
+
+  can_id |= CAN_ERR_BUSERROR | CAN_ERR_PROT;
+  data[2] |= CAN_ERR_PROT_UNSPEC;
+  data[3] |= CAN_ERR_PROT_LOC_ACK; /* ACK slot */
+
+I cannot remember why we introduced CAN_ERR_ACK. For the AT91, I think
+we should add CAN_ERR_BUSERROR, and treat it as bus error, at least.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001296.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001297.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1271">[ date ]</a>
+              <a href="thread.html#1271">[ thread ]</a>
+              <a href="subject.html#1271">[ subject ]</a>
+              <a href="author.html#1271">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,608 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%201/4%5D%20can%3A%20cc770%3A%20add%0A%20driver%20core%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED3922A.50704%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002259.html">
+   <LINK REL="Next"  HREF="002265.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%201/4%5D%20can%3A%20cc770%3A%20add%0A%20driver%20core%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED3922A.50704%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 28 14:52:42 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002259.html">[Socketcan-users] [PATCH net-next v3 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002265.html">[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2263">[ date ]</a>
+              <a href="thread.html#2263">[ thread ]</a>
+              <a href="subject.html#2263">[ subject ]</a>
+              <a href="author.html#2263">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marc,
+
+thanks for reviewing...
+
+On 11/28/2011 12:28 PM, Marc Kleine-Budde wrote:
+&gt;<i> On 11/25/2011 10:43 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>  drivers/net/can/Kconfig            |    2 +
+</I>&gt;&gt;<i>  drivers/net/can/Makefile           |    1 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/Kconfig      |    3 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/Makefile     |    7 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/cc770.c      |  895 ++++++++++++++++++++++++++++++++++++
+</I>&gt;&gt;<i>  drivers/net/can/cc770/cc770.h      |  234 ++++++++++
+</I>&gt;&gt;<i>  include/linux/can/platform/cc770.h |   33 ++
+</I>&gt;&gt;<i>  7 files changed, 1175 insertions(+), 0 deletions(-)
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/Kconfig
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/Makefile
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/cc770.h
+</I>&gt;&gt;<i>  create mode 100644 include/linux/can/platform/cc770.h
+</I>&gt;<i> 
+</I>&gt;<i> I don't know the hardware, but the code looks good to me, some comments:
+</I>&gt;<i> - The driver doesn't use NAPI, can this be added
+</I>
+In principle yes but there is little benefit. This CAN controller does
+buffer not more than two messages (on msg object 15) and bus errors are
+not reported individually, therefore no irq flooding.
+
+&gt;<i> - The rx-handlers have a while(1) loop
+</I>
+Yes, they should be limited.
+
+&gt;<i>   For NAPI you have to add accounting, for the non NAPI case it would
+</I>&gt;<i>   be good, too.
+</I>&gt;<i> - I think you can move a large number of lines from the .h file into
+</I>&gt;<i>   the driver. Code that's not used in the different binding drivers.
+</I>
+Well, not sure if it's worth the effort.
+
+...
+
+&gt;&gt;<i> diff --git a/drivers/net/can/cc770/cc770.c b/drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i> new file mode 100644
+</I>&gt;&gt;<i> index 0000000..47a6965
+</I>&gt;&gt;<i> --- /dev/null
+</I>&gt;&gt;<i> +++ b/drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i> @@ -0,0 +1,895 @@
+</I>&gt;&gt;<i> +/*
+</I>&gt;&gt;<i> + * cc770.c - Bosch CC770 and Intel AN82527 network device driver
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Copyright (C) 2009, 2011 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Derived from the old Socket-CAN i82527 driver:
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Copyright (c) 2002-2007 Volkswagen Group Electronic Research
+</I>&gt;&gt;<i> + * All rights reserved.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Redistribution and use in source and binary forms, with or without
+</I>&gt;&gt;<i> + * modification, are permitted provided that the following conditions
+</I>&gt;&gt;<i> + * are met:
+</I>&gt;&gt;<i> + * 1. Redistributions of source code must retain the above copyright
+</I>&gt;&gt;<i> + *    notice, this list of conditions and the following disclaimer.
+</I>&gt;&gt;<i> + * 2. Redistributions in binary form must reproduce the above copyright
+</I>&gt;&gt;<i> + *    notice, this list of conditions and the following disclaimer in the
+</I>&gt;&gt;<i> + *    documentation and/or other materials provided with the distribution.
+</I>&gt;&gt;<i> + * 3. Neither the name of Volkswagen nor the names of its contributors
+</I>&gt;&gt;<i> + *    may be used to endorse or promote products derived from this software
+</I>&gt;&gt;<i> + *    without specific prior written permission.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Alternatively, provided that this notice is retained in full, this
+</I>&gt;&gt;<i> + * software may be distributed under the terms of the GNU General
+</I>&gt;&gt;<i> + * Public License (&quot;GPL&quot;) version 2, in which case the provisions of the
+</I>&gt;&gt;<i> + * GPL apply INSTEAD OF those given above.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * The provided data structures and external interfaces from this code
+</I>&gt;&gt;<i> + * are not restricted to be used by modules with a GPL compatible license.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+</I>&gt;&gt;<i> + * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+</I>&gt;&gt;<i> + * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+</I>&gt;&gt;<i> + * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+</I>&gt;&gt;<i> + * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+</I>&gt;&gt;<i> + * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+</I>&gt;&gt;<i> + * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+</I>&gt;&gt;<i> + * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+</I>&gt;&gt;<i> + * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+</I>&gt;&gt;<i> + * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+</I>&gt;&gt;<i> + * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+</I>&gt;&gt;<i> + * DAMAGE.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Send feedback to &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> please remove :)
+</I>
+Already done in v3.
+
+&gt;&gt;<i> +#include &lt;linux/module.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/init.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/kernel.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/sched.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/types.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/fcntl.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/interrupt.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/ptrace.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/string.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/errno.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/netdevice.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/if_arp.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/if_ether.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/skbuff.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/delay.h&gt;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#include &lt;linux/can.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/can/dev.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/can/error.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/can/dev.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/can/platform/cc770.h&gt;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#include &quot;cc770.h&quot;
+</I>&gt;<i> 
+</I>&gt;<i> Can you move all the definitions that are not needed in the other
+</I>&gt;<i> drivers (e.g. ISA, etc.) into this .c file?
+</I>
+Makes sense if the bus drivers are not allowed to access chips
+registers, which is currently not the case...
+
+&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#define DRV_NAME  &quot;cc770&quot;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +MODULE_AUTHOR(&quot;Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;&quot;);
+</I>&gt;&gt;<i> +MODULE_LICENSE(&quot;GPL v2&quot;);
+</I>&gt;&gt;<i> +MODULE_DESCRIPTION(DRV_NAME &quot;CAN netdevice driver&quot;);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +/*
+</I>&gt;&gt;<i> + * The CC770 is a CAN controller from Bosch, which is 100% compatible
+</I>&gt;&gt;<i> + * with the AN82527 from Intel, but with &quot;bugs&quot; being fixed and some
+</I>&gt;&gt;<i> + * additional functionality, mainly:
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * 1. RX and TX error counters are readable.
+</I>&gt;&gt;<i> + * 2. Support of silent (listen-only) mode.
+</I>&gt;&gt;<i> + * 3. Message object 15 can receive all types of frames, also RTR and EFF.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Details are available from Bosch's &quot;CC770_Product_Info_2007-01.pdf&quot;,
+</I>&gt;&gt;<i> + * which explains in detail the compatibility between the CC770 and the
+</I>&gt;&gt;<i> + * 82527. This driver use the additional functionality 3. on real CC770
+</I>&gt;&gt;<i> + * devices. Unfortunately, the CC770 does still not store the message
+</I>&gt;&gt;<i> + * identifier of received remote transmission request frames and
+</I>&gt;&gt;<i> + * therefore it's set to 0.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * The message objects 1..14 can be used for TX and RX while the message
+</I>&gt;&gt;<i> + * objects 15 is optimized for RX. It has a shadow register for reliable
+</I>&gt;&gt;<i> + * data receiption under heavy bus load. Therefore it makes sense to use
+</I>&gt;&gt;<i> + * this message object for the needed use case. The frame type (EFF/SFF)
+</I>&gt;&gt;<i> + * for the message object 15 can be defined via kernel module parameter
+</I>&gt;&gt;<i> + * &quot;msgobj15_eff&quot;. If not equal 0, it will receive 29-bit EFF frames,
+</I>&gt;&gt;<i> + * otherwise 11 bit SFF messages.
+</I>&gt;&gt;<i> + */
+</I>&gt;&gt;<i> +static int msgobj15_eff;
+</I>&gt;&gt;<i> +module_param(msgobj15_eff, int, S_IRUGO);
+</I>&gt;&gt;<i> +MODULE_PARM_DESC(msgobj15_eff, &quot;Extended 29-bit frames for message object 15 &quot;
+</I>&gt;&gt;<i> +		 &quot;(default: 11-bit standard frames)&quot;);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +static int i82527_compat;
+</I>&gt;&gt;<i> +module_param(i82527_compat, int, S_IRUGO);
+</I>&gt;&gt;<i> +MODULE_PARM_DESC(i82527_compat, &quot;Strict Intel 82527 comptibility mode &quot;
+</I>&gt;&gt;<i> +		 &quot;without using additional functions&quot;);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +/*
+</I>&gt;&gt;<i> + * This driver uses the last 5 message objects 11..15. The definitions
+</I>&gt;&gt;<i> + * and structure below allows to configure and assign them to the real
+</I>&gt;&gt;<i> + * message object.
+</I>&gt;&gt;<i> + */
+</I>&gt;&gt;<i> +static unsigned char cc770_obj_flags[CC770_OBJ_MAX] = {
+</I>&gt;&gt;<i> +	[CC770_OBJ_RX0] = CC770_OBJ_FLAG_RX,
+</I>&gt;&gt;<i> +	[CC770_OBJ_RX1] = CC770_OBJ_FLAG_RX | CC770_OBJ_FLAG_EFF,
+</I>&gt;&gt;<i> +	[CC770_OBJ_RX_RTR0] = CC770_OBJ_FLAG_RX | CC770_OBJ_FLAG_RTR,
+</I>&gt;&gt;<i> +	[CC770_OBJ_RX_RTR1] = CC770_OBJ_FLAG_RX | CC770_OBJ_FLAG_RTR |
+</I>&gt;&gt;<i> +			      CC770_OBJ_FLAG_EFF,
+</I>&gt;&gt;<i> +	[CC770_OBJ_TX] = 0,
+</I>&gt;&gt;<i> +};
+</I>&gt;<i> 
+</I>&gt;<i> Is is worth the trouble making this a per device instance option? In a
+</I>&gt;<i> OF-Tree world should this become an &quot;attribute&quot; (or what's the correct
+</I>&gt;<i> of-tree word for it?)
+</I>
+Well, only msg object 15 does have double buffering and should therefore
+be used for bulk data reception. Therefore we have for the i82527 the
+module parameter:
+
+  MODULE_PARM_DESC(msgobj15_eff,
+	           &quot;Extended 29-bit frames for message object 15 &quot;
+	 	   &quot;(default: 11-bit standard frames)&quot;);
+
+For TX we currently use just one object. Anyway, the device tree is not
+the right place to define such parameters because it's too static. The
+user may want to select it at runtime depending on the application, if
+at all. We can change it when there is a *real* requirement.
+
+&gt;&gt;<i> +	for (o = 0; o &lt;  CC770_OBJ_MAX; o++) {
+</I>&gt;<i>                          ^^^^^^^^^^^^^
+</I>&gt;<i> 
+</I>&gt;<i> what about ARRAY_SIZE(priv-&gt;obj_flags)
+</I>
+CC770_OBJ_MAX is not derived from a static array definition but as show
+below:
+
+  enum {
+	CC770_OBJ_RX0 = 0,	/* for receiving normal messages */
+	CC770_OBJ_RX1,		/* for receiving normal messages */
+	CC770_OBJ_RX_RTR0,	/* for receiving remote transmission requests */
+	CC770_OBJ_RX_RTR1,	/* for receiving remote transmission requests */
+	CC770_OBJ_TX,		/* for sending messages */
+	CC770_OBJ_MAX  &lt;================
+  };
+
+
+&gt;<i> nitpick:
+</I>&gt;<i> o is probalby short for object, but usually we use &quot;i&quot; for a for loop
+</I>&gt;<i> 
+</I>&gt;&gt;<i> +		obj_flags = priv-&gt;obj_flags[o];
+</I>&gt;&gt;<i> +		mo = obj2msgobj(o);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +		if (obj_flags &amp; CC770_OBJ_FLAG_RX) {
+</I>&gt;&gt;<i> +			/*
+</I>&gt;&gt;<i> +			 * We don't need extra objects for RTR and EFF if
+</I>&gt;&gt;<i> +			 * the additional CC770 functions are enabled.
+</I>&gt;&gt;<i> +			 */
+</I>&gt;&gt;<i> +			if (priv-&gt;control_normal_mode &amp; CTRL_EAF) {
+</I>&gt;&gt;<i> +				if (o &gt; 0)
+</I>&gt;&gt;<i> +					continue;
+</I>&gt;&gt;<i> +				netdev_dbg(dev, &quot;Message object %d for &quot;
+</I>&gt;&gt;<i> +					   &quot;RX data, RTR, SFF and EFF\n&quot;, mo);
+</I>&gt;&gt;<i> +			} else {
+</I>&gt;&gt;<i> +				netdev_dbg(dev,
+</I>&gt;&gt;<i> +					   &quot;Message object %d for RX %s %s\n&quot;,
+</I>&gt;&gt;<i> +					   mo, obj_flags &amp; CC770_OBJ_FLAG_RTR ?
+</I>&gt;&gt;<i> +					   &quot;RTR&quot; : &quot;data&quot;,
+</I>&gt;&gt;<i> +					   obj_flags &amp; CC770_OBJ_FLAG_EFF ?
+</I>&gt;&gt;<i> +					   &quot;EFF&quot; : &quot;SFF&quot;);
+</I>&gt;&gt;<i> +			}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +			if (obj_flags &amp; CC770_OBJ_FLAG_EFF)
+</I>&gt;&gt;<i> +				msgcfg = MSGCFG_XTD;
+</I>&gt;&gt;<i> +			else
+</I>&gt;&gt;<i> +				msgcfg = 0;
+</I>&gt;&gt;<i> +			if (obj_flags &amp; CC770_OBJ_FLAG_RTR)
+</I>&gt;&gt;<i> +				msgcfg |= MSGCFG_DIR;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +			cc770_write_reg(priv, msgobj[mo].config, msgcfg);
+</I>&gt;&gt;<i> +			cc770_write_reg(priv, msgobj[mo].ctrl0,
+</I>&gt;&gt;<i> +					MSGVAL_SET | TXIE_RES |
+</I>&gt;&gt;<i> +					RXIE_SET | INTPND_RES);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +			if (obj_flags &amp; CC770_OBJ_FLAG_RTR)
+</I>&gt;&gt;<i> +				cc770_write_reg(priv, msgobj[mo].ctrl1,
+</I>&gt;&gt;<i> +						NEWDAT_RES | CPUUPD_SET |
+</I>&gt;&gt;<i> +						TXRQST_RES | RMTPND_RES);
+</I>&gt;&gt;<i> +			else
+</I>&gt;&gt;<i> +				cc770_write_reg(priv, msgobj[mo].ctrl1,
+</I>&gt;&gt;<i> +						NEWDAT_RES | MSGLST_RES |
+</I>&gt;&gt;<i> +						TXRQST_RES | RMTPND_RES);
+</I>&gt;&gt;<i> +		} else {
+</I>&gt;&gt;<i> +			netdev_dbg(dev, &quot;Message object %d for &quot;
+</I>&gt;&gt;<i> +				   &quot;TX data, RTR, SFF and EFF\n&quot;, mo);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +			cc770_write_reg(priv, msgobj[mo].ctrl1,
+</I>&gt;&gt;<i> +					RMTPND_RES | TXRQST_RES |
+</I>&gt;&gt;<i> +					CPUUPD_RES | NEWDAT_RES);
+</I>&gt;&gt;<i> +			cc770_write_reg(priv, msgobj[mo].ctrl0,
+</I>&gt;&gt;<i> +					MSGVAL_RES | TXIE_RES |
+</I>&gt;&gt;<i> +					RXIE_RES | INTPND_RES);
+</I>&gt;&gt;<i> +		}
+</I>&gt;&gt;<i> +	}
+</I>&gt;&gt;<i> +}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +static void disable_all_objs(const struct cc770_priv *priv)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	int i, mo;
+</I>&gt;<i> 
+</I>&gt;<i> here you use &quot;i&quot;
+</I>
+OK, will fix.
+
+&gt;&gt;<i> +static int cc770_probe_chip(struct net_device *dev)
+</I>&gt;<i> 
+</I>&gt;<i> nitpick: This chip returns 1 on success and 0 on failure, IMHO unusual
+</I>&gt;<i> return value. Why not make it return -ENODEV in case of failure?
+</I>
+OK, will fix.
+
+...
+
+&gt;<i> Are these Hex numbers arbitrary values?
+</I>
+Looks like. Not really a clever probing, though. A comment would be
+useful, at least.
+
+&gt;&gt;<i> +	cc770_write_reg(priv, msgobj[1].data[1], 0x25);
+</I>&gt;&gt;<i> +	cc770_write_reg(priv, msgobj[2].data[3], 0x52);
+</I>&gt;&gt;<i> +	cc770_write_reg(priv, msgobj[10].data[6], 0xc3);
+</I>&gt;&gt;<i> +	if ((cc770_read_reg(priv, msgobj[1].data[1]) != 0x25) ||
+</I>&gt;&gt;<i> +	    (cc770_read_reg(priv, msgobj[2].data[3]) != 0x52) ||
+</I>&gt;&gt;<i> +	    (cc770_read_reg(priv, msgobj[10].data[6]) != 0xc3)) {
+</I>&gt;&gt;<i> +		netdev_info(dev, &quot;probing @0x%p failed (pattern)\n&quot;,
+</I>&gt;&gt;<i> +			    priv-&gt;reg_base);
+</I>&gt;&gt;<i> +		return 0;
+</I>&gt;&gt;<i> +	}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	/* Check if this chip is a CC770 supporting additional functions */
+</I>&gt;&gt;<i> +	if (cc770_read_reg(priv, control) &amp; CTRL_EAF)
+</I>&gt;&gt;<i> +		priv-&gt;control_normal_mode |= CTRL_EAF;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	return 1;
+</I>&gt;&gt;<i> +}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +static void cc770_start(struct net_device *dev)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	struct cc770_priv *priv = netdev_priv(dev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	/* leave reset mode */
+</I>&gt;&gt;<i> +	if (priv-&gt;can.state != CAN_STATE_STOPPED)
+</I>&gt;&gt;<i> +		set_reset_mode(dev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	/* leave reset mode */
+</I>&gt;&gt;<i> +	set_normal_mode(dev);
+</I>&gt;&gt;<i> +}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +static int cc770_set_mode(struct net_device *dev, enum can_mode mode)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	struct cc770_priv *priv = netdev_priv(dev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	if (!priv-&gt;open_time)
+</I>&gt;&gt;<i> +		return -EINVAL;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	switch (mode) {
+</I>&gt;&gt;<i> +	case CAN_MODE_START:
+</I>&gt;&gt;<i> +		cc770_start(dev);
+</I>&gt;&gt;<i> +		if (netif_queue_stopped(dev))
+</I>&gt;&gt;<i> +			netif_wake_queue(dev);
+</I>&gt;<i> 
+</I>&gt;<i> The &quot;if (netif_queue_stopped(dev))&quot; is not needed.
+</I>
+OK.
+
+&gt;&gt;<i> +	if (id &amp; CAN_EFF_FLAG) {
+</I>&gt;&gt;<i> +		id &amp;= CAN_EFF_MASK;
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].config,
+</I>&gt;&gt;<i> +				(dlc &lt;&lt; 4) + rtr + MSGCFG_XTD);
+</I>&gt;<i> 
+</I>&gt;<i> + is the same as | here, but IMHO bitwise or is more common coding styele.
+</I>
+OK, will fix.
+
+&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].id[3],
+</I>&gt;&gt;<i> +				(id &lt;&lt; 3) &amp; 0xFFU);
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].id[2],
+</I>&gt;&gt;<i> +				(id &gt;&gt; 5) &amp; 0xFFU);
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].id[1],
+</I>&gt;&gt;<i> +				(id &gt;&gt; 13) &amp; 0xFFU);
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].id[0],
+</I>&gt;&gt;<i> +				(id &gt;&gt; 21) &amp; 0xFFU);
+</I>&gt;<i> 
+</I>&gt;<i> msgobj[].id[] is an u8, so &amp; 0xff is not needed.
+</I>
+OK.
+
+&gt;&gt;<i> +	} else {
+</I>&gt;&gt;<i> +		id &amp;= CAN_SFF_MASK;
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].config,
+</I>&gt;&gt;<i> +				(dlc &lt;&lt; 4) + rtr);
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].id[0],
+</I>&gt;&gt;<i> +				(id &gt;&gt; 3) &amp; 0xFFU);
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].id[1],
+</I>&gt;&gt;<i> +				(id &lt;&lt; 5) &amp; 0xFFU);
+</I>&gt;<i> dito
+</I>&gt;&gt;<i> +	}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	dlc &amp;= 0x0f;		/* restore length only */
+</I>&gt;<i> 
+</I>&gt;<i> is this needed? The dlc should be valid.
+</I>
+No, can_dropped_invalid_skb() already does the check before.
+
+&gt;&gt;<i> +	for (i = 0; i &lt; dlc; i++)
+</I>&gt;&gt;<i> +		cc770_write_reg(priv, msgobj[mo].data[i], cf-&gt;data[i]);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	cc770_write_reg(priv, msgobj[mo].ctrl1,
+</I>&gt;&gt;<i> +			RMTPND_RES | TXRQST_SET | CPUUPD_RES | NEWDAT_UNC);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	stats-&gt;tx_bytes += dlc;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	can_put_echo_skb(skb, dev, 0);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	/*
+</I>&gt;&gt;<i> +	 * HM: We had some cases of repeated IRQs so make sure the
+</I>&gt;<i> 
+</I>&gt;<i> Who is HM?
+</I>
+Don't know ;-(.
+
+&gt;&gt;<i> +	if (ctrl1 &amp; RMTPND_SET) {
+</I>&gt;&gt;<i> +		/*
+</I>&gt;&gt;<i> +		 * Unfortunately, the chip does not store the real message
+</I>&gt;&gt;<i> +		 * identifier of the received remote transmission request
+</I>&gt;&gt;<i> +		 * frame. Therefore we set it to 0.
+</I>&gt;<i> 
+</I>&gt;<i> What a bug!
+</I>
+Well, it's a basic CAN controller, which is usually handled in a
+different way (a CAN id is handled by a dedicated msg object).
+
+&gt;&gt;<i> +	skb = alloc_can_err_skb(dev, &amp;cf);
+</I>&gt;&gt;<i> +	if (skb == NULL)
+</I>&gt;<i> !skb
+</I>
+Ok, will change.
+
+&gt;&gt;<i> +static void cc770_rx_interrupt(struct net_device *dev, unsigned int o)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	struct cc770_priv *priv = netdev_priv(dev);
+</I>&gt;&gt;<i> +	struct net_device_stats *stats = &amp;dev-&gt;stats;
+</I>&gt;&gt;<i> +	unsigned int mo = obj2msgobj(o);
+</I>&gt;&gt;<i> +	u8 ctrl1;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	while (1) {
+</I>&gt;<i> 
+</I>&gt;<i> What about limiting this?
+</I>
+It does make sense.
+
+&gt;&gt;<i> +	err = request_irq(dev-&gt;irq, &amp;cc770_interrupt, priv-&gt;irq_flags,
+</I>&gt;&gt;<i> +			  dev-&gt;name, (void *)dev);
+</I>&gt;<i> 
+</I>&gt;<i> the (void *) cast ist not needed
+</I>
+OK.
+
+
+&gt;&gt;<i> +	if (err) {
+</I>&gt;&gt;<i> +		close_candev(dev);
+</I>&gt;&gt;<i> +		return -EAGAIN;
+</I>&gt;&gt;<i> +	}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	/* init and start chip */
+</I>&gt;&gt;<i> +	cc770_start(dev);
+</I>&gt;&gt;<i> +	priv-&gt;open_time = jiffies;
+</I>&gt;<i> 
+</I>&gt;<i> open_time is used to track if the netdev is open, right? Can we use
+</I>&gt;<i> &quot;ndev-&gt;flags &amp; IFF_UP&quot; instead?
+</I>
+Probably, we have similar code in the sja1000.c but not in any other
+driver. It is just used in cc770_set_mode(). I guess it's not needed at
+all. I will remove it therefore. Need to check if there is a race with
+can_restart(), though.
+
+&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	netif_start_queue(dev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	return 0;
+</I>&gt;&gt;<i> +}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +static int cc770_close(struct net_device *dev)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	struct cc770_priv *priv = netdev_priv(dev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	netif_stop_queue(dev);
+</I>&gt;&gt;<i> +	set_reset_mode(dev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	free_irq(dev-&gt;irq, (void *)dev);
+</I>&gt;<i> cast not needed
+</I>
+OK.
+
+...
+
+&gt;&gt;<i> +static __init int cc770_init(void)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	if (msgobj15_eff) {
+</I>&gt;&gt;<i> +		cc770_obj_flags[CC770_OBJ_RX0] |= CC770_OBJ_FLAG_EFF;
+</I>&gt;&gt;<i> +		cc770_obj_flags[CC770_OBJ_RX1] &amp;= ~CC770_OBJ_FLAG_EFF;
+</I>&gt;&gt;<i> +	}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	pr_info(&quot;%s CAN netdevice driver\n&quot;, DRV_NAME);
+</I>&gt;<i> 
+</I>&gt;<i> You can add a #define pr_fmt(fmt), to get rid of the &quot;%s&quot;, DRV_NAME.
+</I>
+Will add:
+
+  #define pr_fmt(fmt) KBUILD_MODNAME &quot;: &quot; fmt
+
+&gt;&gt;<i> diff --git a/drivers/net/can/cc770/cc770.h b/drivers/net/can/cc770/cc770.h
+</I>&gt;&gt;<i> new file mode 100644
+</I>&gt;&gt;<i> index 0000000..c6b5800
+</I>&gt;&gt;<i> --- /dev/null
+</I>&gt;&gt;<i> +++ b/drivers/net/can/cc770/cc770.h
+</I>&gt;&gt;<i> @@ -0,0 +1,234 @@
+</I>&gt;&gt;<i> +/*
+</I>&gt;&gt;<i> + * cc770.h - Bosch CC770 and Intel AN82527 network device driver
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Copyright (C) 2009, 2011 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Derived from the old Socket-CAN i82527 driver:
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Copyright (c) 2002-2007 Volkswagen Group Electronic Research
+</I>&gt;&gt;<i> + * All rights reserved.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Redistribution and use in source and binary forms, with or without
+</I>&gt;&gt;<i> + * modification, are permitted provided that the following conditions
+</I>&gt;&gt;<i> + * are met:
+</I>&gt;&gt;<i> + * 1. Redistributions of source code must retain the above copyright
+</I>&gt;&gt;<i> + *    notice, this list of conditions and the following disclaimer.
+</I>&gt;&gt;<i> + * 2. Redistributions in binary form must reproduce the above copyright
+</I>&gt;&gt;<i> + *    notice, this list of conditions and the following disclaimer in the
+</I>&gt;&gt;<i> + *    documentation and/or other materials provided with the distribution.
+</I>&gt;&gt;<i> + * 3. Neither the name of Volkswagen nor the names of its contributors
+</I>&gt;&gt;<i> + *    may be used to endorse or promote products derived from this software
+</I>&gt;&gt;<i> + *    without specific prior written permission.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Alternatively, provided that this notice is retained in full, this
+</I>&gt;&gt;<i> + * software may be distributed under the terms of the GNU General
+</I>&gt;&gt;<i> + * Public License (&quot;GPL&quot;) version 2, in which case the provisions of the
+</I>&gt;&gt;<i> + * GPL apply INSTEAD OF those given above.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * The provided data structures and external interfaces from this code
+</I>&gt;&gt;<i> + * are not restricted to be used by modules with a GPL compatible license.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+</I>&gt;&gt;<i> + * &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+</I>&gt;&gt;<i> + * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+</I>&gt;&gt;<i> + * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+</I>&gt;&gt;<i> + * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+</I>&gt;&gt;<i> + * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+</I>&gt;&gt;<i> + * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+</I>&gt;&gt;<i> + * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+</I>&gt;&gt;<i> + * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+</I>&gt;&gt;<i> + * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+</I>&gt;&gt;<i> + * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+</I>&gt;&gt;<i> + * DAMAGE.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Send feedback to &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> please remove
+</I>
+Already done in v3.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002259.html">[Socketcan-users] [PATCH net-next v3 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002265.html">[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2263">[ date ]</a>
+              <a href="thread.html#2263">[ thread ]</a>
+              <a href="subject.html#2263">[ subject ]</a>
+              <a href="author.html#2263">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Some explainations about the file vcan.c
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20explainations%20about%20the%20file%20vcan.c&In-Reply-To=%3C46CBF5DA.1050307%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000186.html">
+   <LINK REL="Next"  HREF="000187.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Some explainations about the file vcan.c</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20explainations%20about%20the%20file%20vcan.c&In-Reply-To=%3C46CBF5DA.1050307%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Some explainations about the file vcan.c">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Aug 22 10:37:46 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000186.html">[Socketcan-users] Some explainations about the file vcan.c
+</A></li>
+        <LI>Next message: <A HREF="000187.html">[Socketcan-users] Socketcan Debian packages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#188">[ date ]</a>
+              <a href="thread.html#188">[ thread ]</a>
+              <a href="subject.html#188">[ subject ]</a>
+              <a href="author.html#188">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Lorenzo Montrucchio wrote:
+
+&gt;<i> I'm new in embedded systems (so please be kind with me even if my question
+</I>&gt;<i> will surely be a very silly one!) and I'm very interested in the Socket CAN
+</I>&gt;<i> project. I downloaded the file vcan.c and I tried to analyze it line by
+</I>&gt;<i> line.
+</I>
+&gt;<i> I was surpised by  the function vcan_tx.
+</I>
+&gt;<i> My questions are:
+</I>&gt;<i> _ why isn't there any function like netif_tx for the effective socket buffer
+</I>&gt;<i> transmission? I noticed that there is the function netif_rx for reception.
+</I>
+the counterpart to netif_rx ist the hard_start_xmit in the struct
+net_dev [1]
+
+&gt;<i> _ how is the packet, let's say physically, sent?
+</I>
+vcan.c is the virtual can device, thus a packet is never send
+physically. But If you have a real can-driver the packet is send in the
+hard_start_xmit function.
+
+&gt;<i> _ does the CAN core manage transmission elsewhere? And in this case where
+</I>&gt;<i> and how?
+</I>
+nope..
+
+&gt;<i> _ is all this bargain made by the linux networking stack?
+</I>
+Yes.
+
+&gt;<i> I know that I bothered you with a lot of questions nad I'm sorry for that.
+</I>&gt;<i> I also know that the answere will probably be very straightforward and I ask
+</I>&gt;<i> you to be patient with me!
+</I>
+regards - Marc
+
+[1] <A HREF="http://lxr.linux.no/source/include/linux/netdevice.h?a=arm#L445">http://lxr.linux.no/source/include/linux/netdevice.h?a=arm#L445</A>
+
+-- 
+ Dipl.-Ing. Marc Kleine-Budde | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+  Pengutronix - Linux Solutions for Science and Industry
+    Handelsregister: Amtsgericht Hildesheim, HRA 2686
+      Hannoversche Str. 2, 31134 Hildesheim, Germany
+    Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000186.html">[Socketcan-users] Some explainations about the file vcan.c
+</A></li>
+	<LI>Next message: <A HREF="000187.html">[Socketcan-users] Socketcan Debian packages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#188">[ date ]</a>
+              <a href="thread.html#188">[ thread ]</a>
+              <a href="subject.html#188">[ subject ]</a>
+              <a href="author.html#188">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

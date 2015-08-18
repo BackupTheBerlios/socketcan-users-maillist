@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] using socketcan from Python script
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C4A408FB7.60803%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000962.html">
+   <LINK REL="Next"  HREF="000964.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] using socketcan from Python script</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C4A408FB7.60803%40grandegger.com%3E"
+       TITLE="[Socketcan-users] using socketcan from Python script">wg at grandegger.com
+       </A><BR>
+    <I>Tue Jun 23 10:17:59 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000962.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+        <LI>Next message: <A HREF="000964.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#963">[ date ]</a>
+              <a href="thread.html#963">[ thread ]</a>
+              <a href="subject.html#963">[ subject ]</a>
+              <a href="author.html#963">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Matthias Fuchs wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> did anybody try to use socketcan from a Python script?
+</I>&gt;<i> I gave it a try but with no success:
+</I>&gt;<i> 
+</I>&gt;<i> ...
+</I>&gt;<i> import struct
+</I>&gt;<i> import socket
+</I>&gt;<i> 
+</I>&gt;<i> AF_CAN = 29
+</I>&gt;<i> PF_CAN = AF_CAN
+</I>&gt;<i> CAN_RAW = 1
+</I>&gt;<i> SOL_CAN_BASE = 100
+</I>&gt;<i> SOL_CAN_RAW = (SOL_CAN_BASE + CAN_RAW)
+</I>&gt;<i> CAN_RAW_FILTER = 1
+</I>&gt;<i> 
+</I>&gt;<i> # create socket
+</I>&gt;<i> s = socket.socket(PF_CAN, socket.SOCK_RAW, CAN_RAW)
+</I>&gt;<i> print &quot;socket=&quot;,
+</I>&gt;<i> print s
+</I>&gt;<i> 
+</I>&gt;<i> # setup id filter
+</I>&gt;<i> id = 0
+</I>&gt;<i> mask = 0
+</I>&gt;<i> result = s.setsockopt(SOL_CAN_RAW, CAN_RAW_FILTER, struct.pack(&quot;%i%i&quot; % (id,mask)))
+</I>&gt;<i> print &quot;setsockopt=&quot;,
+</I>&gt;<i> print result
+</I>&gt;<i> 
+</I>&gt;<i> # bind to any I/F (ifindex=0)
+</I>&gt;<i> result = s.bind(struct.pack(&quot;%i%i%i&quot; % (AF_CAN, 0, 0)))
+</I>&gt;<i> print &quot;bind=&quot;,
+</I>&gt;<i> print result
+</I>&gt;<i> ...
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> My idea to call socket.bind() seems to be incorrect:
+</I>&gt;<i> 
+</I>&gt;<i> socket= &lt;socket._socketobject object at 0xb7d6d4fc&gt;
+</I>&gt;<i> setsockopt= None
+</I>&gt;<i> Traceback (most recent call last):
+</I>&gt;<i>  File &quot;socketcan.py&quot;, line 26, in &lt;module&gt;
+</I>&gt;<i>    result = s.bind(struct.pack(&quot;%i%i%i&quot; % (AF_CAN, 0, 0)))
+</I>&gt;<i>  File &quot;&lt;string&gt;&quot;, line 1, in bind
+</I>&gt;<i> socket.error: getsockaddrarg: bad family
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I expect that I am doing something slightly wrong :-)
+</I>&gt;<i> Any idea?
+</I>
+Do you have the CAN RAW protocol support (can-raw.ko) loaded? It does
+not know the protocol family. You check with strace if the error is
+returned by the kernel.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000962.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+	<LI>Next message: <A HREF="000964.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#963">[ date ]</a>
+              <a href="thread.html#963">[ thread ]</a>
+              <a href="subject.html#963">[ subject ]</a>
+              <a href="author.html#963">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

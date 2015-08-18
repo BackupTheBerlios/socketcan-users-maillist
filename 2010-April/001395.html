@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] canconfig
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canconfig&In-Reply-To=%3C4BDAE417.8080201%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001394.html">
+   <LINK REL="Next"  HREF="001396.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] canconfig</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canconfig&In-Reply-To=%3C4BDAE417.8080201%40grandegger.com%3E"
+       TITLE="[Socketcan-users] canconfig">wg at grandegger.com
+       </A><BR>
+    <I>Fri Apr 30 16:07:19 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001394.html">[Socketcan-users] canconfig
+</A></li>
+        <LI>Next message: <A HREF="001396.html">[Socketcan-users] canconfig
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1395">[ date ]</a>
+              <a href="thread.html#1395">[ thread ]</a>
+              <a href="subject.html#1395">[ subject ]</a>
+              <a href="author.html#1395">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Nick,
+
+please do not drop the CC to the Socket-CAN mailing list.
+
+Nick Droogh wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> This is my current level of configuration:
+</I>&gt;<i> 
+</I>&gt;<i> -bash-3.2# ifconfig -a can0
+</I>&gt;<i> can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  
+</I>&gt;<i>           NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:10 
+</I>&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;<i>           Interrupt:145 
+</I>&gt;<i> 
+</I>&gt;<i> -bash-3.2# 
+</I>&gt;<i> 
+</I>&gt;<i> -bash-3.2# ifconfig can0 up
+</I>&gt;<i> [34966.146599] mpc5xxx_can f0000900.mscan: bit-timing not yet defined
+</I>&gt;<i> SIOCSIFFLAGS: Invalid argument
+</I>&gt;<i> -bash-3.2# 
+</I>&gt;<i> 
+</I>&gt;<i> I need to set the bit-timing and I saw others using the canconfig utility program.  What else do I need to do to get the interface up?
+</I>
+It's documented in the kernel's &quot;Documentation/networking/can.txt&quot;,
+chapter 6.5. You need a decent version of iproute2 [1]. If you are
+looking for something lighter, the CAN utils and libs from Pengutronix
+[2,3] might be more attractive.
+
+Wolfgang.
+
+[1] <A HREF="http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2">http://www.linuxfoundation.org/collaborate/workgroups/networking/iproute2</A>
+[2] git clone <A HREF="git://git.pengutronix.de/git/tools/canutils">git://git.pengutronix.de/git/tools/canutils</A>
+[3] git clone <A HREF="git://git.pengutronix.de/git/tools/libsocketcan">git://git.pengutronix.de/git/tools/libsocketcan</A> 
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001394.html">[Socketcan-users] canconfig
+</A></li>
+	<LI>Next message: <A HREF="001396.html">[Socketcan-users] canconfig
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1395">[ date ]</a>
+              <a href="thread.html#1395">[ thread ]</a>
+              <a href="subject.html#1395">[ subject ]</a>
+              <a href="author.html#1395">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

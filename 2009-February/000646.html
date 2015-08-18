@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SocketCAN problems with mpc52xx
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20problems%20with%20mpc52xx&In-Reply-To=%3C20090203170551.46727d79%40mail.cadlink.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000645.html">
+   <LINK REL="Next"  HREF="000647.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SocketCAN problems with mpc52xx</H1>
+    <B>igorg</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20problems%20with%20mpc52xx&In-Reply-To=%3C20090203170551.46727d79%40mail.cadlink.com%3E"
+       TITLE="[Socketcan-users] SocketCAN problems with mpc52xx">igorg at cadlink.com
+       </A><BR>
+    <I>Tue Feb  3 18:05:51 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000645.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+        <LI>Next message: <A HREF="000647.html">[Socketcan-users] SocketCAN problems with mpc52xx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#646">[ date ]</a>
+              <a href="thread.html#646">[ thread ]</a>
+              <a href="subject.html#646">[ subject ]</a>
+              <a href="author.html#646">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Everyone,
+
+I'm trying to get SocketCan working on my board (MPC5200B) and have a couple of problems:
+
+- I'm not able to receive anything back on CAN bus (I'm sure there are messages coming down as I can see them with CAN/USB device)
+- I'm able to send messages out - however after third message driver stops sending and &quot;ifconfig can0 down&quot; crashes the kernel:
+
+================
+bash-3.00# ifconfig can0 down
+[ 1264.451863] Unable to handle kernel paging request for data at address 0xffffffff
+[ 1264.459476] Faulting instruction address: 0xc0019884
+[ 1264.464516] Oops: Kernel access of bad area, sig: 11 [#1]
+[ 1264.469990] PREEMPT motion5200b
+[ 1264.473176] Modules linked in:
+[ 1264.476278] NIP: c0019884 LR: c001b9f8 CTR: c02480b4
+[ 1264.481320] REGS: c7b13c40 TRAP: 0300   Not tainted  (2.6.27.7)
+[ 1264.487326] MSR: 00001032 &lt;ME,IR,DR&gt;  CR: 82002024  XER: 20000000
+[ 1264.493536] DAR: ffffffff, DSISR: 20000000
+[ 1264.497693] TASK = c7915ba0[384] 'ifconfig' THREAD: c7b12000
+[ 1264.503254] GPR00: c001b9f8 c7b13cf0 c7915ba0 c795c41c 00000001 00000001 00000001 00000000
+[ 1264.511787] GPR08: 00000000 fffffff3 00000000 c7b12000 42002024 101b7d70 bff4f768 1013b4d8
+[ 1264.520320] GPR16: 1013b720 1013b5cc bff4f778 00000000 c7b13e48 ffff8914 c7849a20 c78afd28
+[ 1264.528852] GPR24: 00000000 00000001 00000001 00000000 00000001 00009032 c795c41c c795c73c
+[ 1264.537596] NIP [c0019884] __wake_up_common+0x30/0x9c
+[ 1264.542729] LR [c001b9f8] __wake_up_sync+0x48/0x90
+[ 1264.547592] Call Trace:
+[ 1264.550085] [c7b13cf0] [c01407b8] nfs_file_read+0x114/0x158 (unreliable)
+[ 1264.556915] [c7b13d20] [c001b9f8] __wake_up_sync+0x48/0x90
+[ 1264.562494] [c7b13d40] [c0248174] sock_def_write_space+0xc0/0xe0
+[ 1264.568595] [c7b13d50] [c02484c4] sock_wfree+0x90/0x94
+[ 1264.573824] [c7b13d60] [c024acc8] skb_release_all+0x70/0x90
+[ 1264.579492] [c7b13d70] [c024a25c] __kfree_skb+0x18/0xe8
+[ 1264.584801] [c7b13d80] [c02637e4] pfifo_fast_reset+0x68/0xa4
+[ 1264.590555] [c7b13da0] [c02626e4] qdisc_reset+0x24/0x34
+[ 1264.595860] [c7b13db0] [c026289c] dev_deactivate_queue+0x50/0x90
+[ 1264.601966] [c7b13dd0] [c0263134] dev_deactivate+0x4c/0x25c
+[ 1264.607651] [c7b13df0] [c02526a4] dev_close+0x70/0xd8
+[ 1264.612788] [c7b13e00] [c025252c] dev_change_flags+0x158/0x1ac
+[ 1264.618719] [c7b13e20] [c02985d0] devinet_ioctl+0x62c/0x75c
+[ 1264.624380] [c7b13e90] [c0298dd0] inet_ioctl+0xcc/0xf8
+[ 1264.629624] [c7b13ea0] [c0242b84] sock_ioctl+0x110/0x2bc
+[ 1264.635044] [c7b13ec0] [c008a618] vfs_ioctl+0x40/0xc0
+[ 1264.640182] [c7b13ee0] [c008a9c4] do_vfs_ioctl+0x32c/0x498
+[ 1264.645758] [c7b13f10] [c008ab70] sys_ioctl+0x40/0x74
+[ 1264.650902] [c7b13f40] [c00128b4] ret_from_syscall+0x0/0x38
+[ 1264.656569] --- Exception: c01 at 0x100eca2c
+[ 1264.656575]     LR = 0x10002e44
+[ 1264.664082] Instruction dump:
+[ 1264.667089] 9421ffd0 7c0802a6 bf210014 7c7e1b78 7c992378 90010034 7cbc2b78 7cda3378
+[ 1264.674984] 7cfb3b78 81230000 7f891800 3929fff4 &lt;8169000c&gt; 419e0054 800900087d234b78
+[ 1264.683077] Kernel panic - not syncing: Fatal exception in interrupt
+================
+
+my kernel boot looks like this:
+================
+...
+[    0.450876] vcan: Virtual CAN interface driver
+[    0.462081] mpc52xx-mscan mpc52xx-mscan.0: probe for port 0xC9030900 done (irq=151)
+[    0.471319] mpc52xx-mscan mpc52xx-mscan.1: probe for port 0xC9032980 done (irq=152)
+...
+[    1.006707] can: controller area network core (rev 20090105 abi 8)
+[    1.017862] can: raw protocol (rev 20090105)
+[    1.022288] can: broadcast manager protocol (rev 20090105 t)
+...
+================
+
+my can0 configure looks like this:
+================
+echo 250000 &gt; /sys/class/net/can0/can_bittiming/bitrate
+ifconfig can0 up
+================
+After which I get:
+mpc52xx-mscan mpc52xx-mscan.0: BTR0=0x20 BTR1=0x1c
+
+Does anybody knows what the problem is or have any suggestions what I should try?
+
+Thanks,
+Igor
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090203/a08ce025/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090203/a08ce025/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000645.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+	<LI>Next message: <A HREF="000647.html">[Socketcan-users] SocketCAN problems with mpc52xx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#646">[ date ]</a>
+              <a href="thread.html#646">[ thread ]</a>
+              <a href="subject.html#646">[ subject ]</a>
+              <a href="author.html#646">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

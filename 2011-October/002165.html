@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] BerliOS will be closed, how to proceed...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20BerliOS%20will%20be%20closed%2C%20how%20to%20proceed...&In-Reply-To=%3C4E8D722B.9020409%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002164.html">
+   <LINK REL="Next"  HREF="002176.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] BerliOS will be closed, how to proceed...</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20BerliOS%20will%20be%20closed%2C%20how%20to%20proceed...&In-Reply-To=%3C4E8D722B.9020409%40grandegger.com%3E"
+       TITLE="[Socketcan-users] BerliOS will be closed, how to proceed...">wg at grandegger.com
+       </A><BR>
+    <I>Thu Oct  6 11:17:31 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002164.html">[Socketcan-users] BerliOS will be closed, how to proceed...
+</A></li>
+        <LI>Next message: <A HREF="002176.html">[Socketcan-users] BerliOS will be closed, how to proceed...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2165">[ date ]</a>
+              <a href="thread.html#2165">[ thread ]</a>
+              <a href="subject.html#2165">[ subject ]</a>
+              <a href="author.html#2165">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Jan-Niklas,
+
+On 10/05/2011 01:17 PM, Jan-Niklas Meier wrote:
+&gt;<i> I am watching the SocketCAN project from a user point of view and if I
+</I>&gt;<i> wouldn't have known some people like Oliver who explained all the cool
+</I>&gt;<i> features to me I probably never would have used SocketCAN.
+</I>&gt;<i> I think it is good that Berlios is closing and it is time for something new.
+</I>&gt;<i> Mailing lists, diffs and SVN are technologies that surely worked well for
+</I>&gt;<i> years but there are new ways to do collaborative coding.
+</I>&gt;<i> If you want the young and wild web2.0 guys like me to find interest in this
+</I>&gt;<i> project I suggest a new way.
+</I>
+Well, maybe I'm already to old for that stuff. Anyway, the interest in
+this project should not depend on the tools we use for development ;-).
+
+&gt;<i> I talked with Oliver about my ideas and he said I should post theme here. So
+</I>&gt;<i> here it goes:
+</I>&gt;<i> 
+</I>&gt;<i> - use git as the version control system (many git-SVN comparisons on the
+</I>&gt;<i> internet; I think it _really_ is the way to go; kernel using git)
+</I>
+Yes, *abandon* SVN in favor of GIT is what we want do since a while.
+
+&gt;<i> - use GitHub as the hosting platform
+</I>&gt;<i> 
+</I>&gt;<i> - create a SocketCAN 'team' at GitHub containing the core developers who had
+</I>&gt;<i> write access to the SVN (<A HREF="https://github.com/features/projects/collaboration">https://github.com/features/projects/collaboration</A>)
+</I>
+That's what we already have on BerliOS and what we can't do with
+kernel.org accounts and facilities (because they are per maintainer/user),
+
+&gt;<i> - create two projects associated with the team:
+</I>&gt;<i> 
+</I>&gt;<i> 1. 'SocketCAN' with the current state of the SocketCAN-tree in the kernel
+</I>&gt;<i> (not what is currently in the SVN). All patches should go here and for a
+</I>&gt;<i> kernel update the changes should be pulled from this repository. Every user
+</I>&gt;<i> like me can fork this project, commit changes and send a pull request to the
+</I>&gt;<i> main repository. The core developers review the pull request, discuss it and
+</I>&gt;<i> accept it or not (<A HREF="https://github.com/features/projects/codereview">https://github.com/features/projects/codereview</A>)
+</I>
+Maitaining our own GIT kernel tree, that's what we tried to avoid so far
+as it means substantial effort. Pushing SocketCAN related patches
+mainline through the netdev mailing list and David Miller's
+net-(next-)2.6 tree works fine. Furthermore, we still need the
+out-of-kernel Socketcan tree, mainly for backward compatibility.
+
+&gt;<i> 2. 'can-utils' containing the content of the current SVN
+</I>&gt;<i> 
+</I>&gt;<i> - use the integrated wiki functionality of GitHub for documentation (
+</I>&gt;<i> <A HREF="https://github.com/features/projects/wikis">https://github.com/features/projects/wikis</A>)
+</I>
+Do we need a separate project to handle the kernel and utilities?
+
+&gt;<i> 
+</I>&gt;<i> - use the integrated issue tracker (
+</I>&gt;<i> <A HREF="https://github.com/features/projects/issues">https://github.com/features/projects/issues</A>)
+</I>
+Yep, a bug tracking system would be nice to have.
+
+&gt;<i> - possibly use github pages (<A HREF="http://pages.github.com/">http://pages.github.com/</A>) for general
+</I>&gt;<i> information about the project, logos, link to mailing list, can-utils
+</I>&gt;<i> binaries etc.)
+</I>&gt;<i> 
+</I>&gt;<i> - possibly buy a domain and redirect it to these pages
+</I>
+I have some free time but no free money ;-).
+
+&gt;<i> - don't discuss patches on the mailing list but do it inline on github. This
+</I>&gt;<i> is really cool! <A HREF="https://github.com/features/projects/codereview">https://github.com/features/projects/codereview</A>
+</I>
+Cool stuff, indeed, which might even allow efficient community
+development. But I hesitate to base my work on external tool/frontends.
+
+&gt;<i> - this way everything is in one place which is very handy for new developers
+</I>&gt;<i> and users
+</I>
+A one place solution has advantages but I would prefer SourceForge or
+GNU Savanna.
+
+&gt;<i> 
+</I>&gt;<i> - this is not a 'GitHub-only' solution because core developers can still
+</I>&gt;<i> pull changes from every other git repository
+</I>
+OK.
+
+&gt;<i> No I am not getting money from GitHub but I am convinced that the features
+</I>&gt;<i> they are offering are really great and fun.
+</I>
+Of course.
+
+&gt;<i> Just my two cents ;)
+</I>
+Thanks for you input.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002164.html">[Socketcan-users] BerliOS will be closed, how to proceed...
+</A></li>
+	<LI>Next message: <A HREF="002176.html">[Socketcan-users] BerliOS will be closed, how to proceed...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2165">[ date ]</a>
+              <a href="thread.html#2165">[ thread ]</a>
+              <a href="subject.html#2165">[ subject ]</a>
+              <a href="author.html#2165">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

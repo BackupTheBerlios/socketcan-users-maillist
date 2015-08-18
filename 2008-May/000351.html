@@ -1,0 +1,237 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MSCAN%20with%20linux-2.6-denx%20%28was%20HW%20Clock%29&In-Reply-To=%3C4824519A.9060706%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000349.html">
+   <LINK REL="Next"  HREF="000350.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MSCAN%20with%20linux-2.6-denx%20%28was%20HW%20Clock%29&In-Reply-To=%3C4824519A.9060706%40grandegger.com%3E"
+       TITLE="[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)">wg at grandegger.com
+       </A><BR>
+    <I>Fri May  9 15:28:58 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000349.html">[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+</A></li>
+        <LI>Next message: <A HREF="000350.html">[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#351">[ date ]</a>
+              <a href="thread.html#351">[ thread ]</a>
+              <a href="subject.html#351">[ subject ]</a>
+              <a href="author.html#351">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Breno wrote:
+</I>&gt;&gt;<i> [...deletions...]
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> Hi all, let me explain what I did at my can-utils dir. Below I describe
+</I>&gt;&gt;&gt;<i> all steps!!! The bolded ones are my commands!!!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> **************************************************************************************************
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *sh-3.00# ./candump -l can0*
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Enabling Logfile 'candump-1970-01-01_005122.log'
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> [1]+  Stopped(SIGTSTP)        ./candump -l can0
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *sh-3.00# bg*
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> [1]+ ./candump -l can0 &amp;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *sh-3.00# ./cansend can0 150#ABCDEF
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *  can0  150  [3] AB CD EF
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *sh-3.00# fg
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *./candump -l can0
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *sh-3.00# ifconfig
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> *can0      Link encap:UNSPEC  HWaddr
+</I>&gt;&gt;&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00           UP NOARP 
+</I>&gt;&gt;&gt;<i> MTU:16  Metric:1
+</I>&gt;&gt;&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;&gt;&gt;<i>           collisions:0 txqueuelen:10
+</I>&gt;&gt;&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;&gt;&gt;<i>           Interrupt:145 Base address:0xa900
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> can1      Link encap:UNSPEC  HWaddr
+</I>&gt;&gt;&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00           UP RUNNING
+</I>&gt;&gt;&gt;<i> NOARP  MTU:16  Metric:1
+</I>&gt;&gt;&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;&gt;&gt;<i>           collisions:0 txqueuelen:10
+</I>&gt;&gt;&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;&gt;&gt;<i>           Interrupt:146 Base address:0xc980
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> eth0      Link encap:Ethernet  HWaddr 00:04:9F:00:18:C9          
+</I>&gt;&gt;&gt;<i> inet addr:192.168.1.101  Bcast:192.168.1.255  Mask:255.255.255.0
+</I>&gt;&gt;&gt;<i>           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+</I>&gt;&gt;&gt;<i>           RX packets:19346 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;&gt;<i>           TX packets:10687 errors:0 dropped:0 overruns:0 carrier:1
+</I>&gt;&gt;&gt;<i>           collisions:0 txqueuelen:1000
+</I>&gt;&gt;&gt;<i>           RX bytes:19927594 (19.0 MiB)  TX bytes:1964222 (1.8 MiB)
+</I>&gt;&gt;&gt;<i>           Interrupt:133 Base address:0x3000
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> lo        Link encap:Local Loopback           inet addr:127.0.0.1 
+</I>&gt;&gt;&gt;<i> Mask:255.0.0.0
+</I>&gt;&gt;&gt;<i>           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>           RX packets:1 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;&gt;&gt;<i>           TX packets:1 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;&gt;&gt;<i>           collisions:0 txqueuelen:0
+</I>&gt;&gt;&gt;<i>           RX bytes:140 (140.0 b)  TX bytes:140 (140.0 b)
+</I>&gt;&gt;&gt;<i> ******************************************************************************
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Well, I used the candump and cansend and both seem to work perfectly.
+</I>&gt;&gt;&gt;<i> But my ifconfig still have no messages indicating activities!
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I just built the kernel for my TQM5200 board from DENX Linux 2.4.24 (GIT
+</I>&gt;&gt;<i> tree linux-2.6-denx, branch DENX-v2.6.24-stable). Here is what I get:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Boot log:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   mpc52xx-mscan initializing
+</I>&gt;&gt;<i>   mpc52xx-mscan mpc52xx-mscan.0: probe for a port 0xC506A900 done
+</I>&gt;&gt;<i>   mpc52xx-mscan mpc52xx-mscan.1: probe for a port 0xC506C980 done
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Test without cable connected or without using canconfig:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ifconfig can0 up
+</I>&gt;&gt;<i>   bash-3.00# ifconfig can1 up
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ./cansend can0 123#deadbeef
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ./candump -e 0xffff any
+</I>&gt;&gt;<i>   can0  123  [4] DE AD BE EF
+</I>&gt;&gt;<i>   can0  20000040  [8] 40 00 E9 68 0A 00 1E D3   ERRORFRAME
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   The controller reports &quot;error passive&quot; state&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# grep can /proc/interrupts
+</I>&gt;&gt;<i>   145:          1  MPC52xx Peripherals Edge      can0
+</I>&gt;&gt;<i>   146:          0  MPC52xx Peripherals Edge      can1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   &quot;ifconfig can0&quot; and &quot;ifconfig can1&quot; do not show any RX or TX bytes.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> With cable connected:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ./canconfig can0 -b 125000
+</I>&gt;&gt;<i>   bash-3.00# ./canconfig can1 -b 125000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ifconfig can0 up
+</I>&gt;&gt;<i>   bash-3.00# ifconfig can1 up
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ./cansend can0 123#deadbeef
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ./candump -e 0xffff any
+</I>&gt;&gt;<i>   can0  123  [4] DE AD BE EF
+</I>&gt;&gt;<i>   can1  123  [4] DE AD BE EF
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# grep can /proc/interrupts
+</I>&gt;&gt;<i>   145:          1  MPC52xx Peripherals Edge      can0
+</I>&gt;&gt;<i>   146:          1  MPC52xx Peripherals Edge      can1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   bash-3.00# ifconfig can0 | grep bytes
+</I>&gt;&gt;<i>             RX bytes:0 (0.0 b)  TX bytes:4 (4.0 b)
+</I>&gt;&gt;<i>   bash-3.00# ifconfig can1 | grep bytes
+</I>&gt;&gt;<i>             RX bytes:4 (4.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As I already mentioned, you definitely need to set the bit-rate before
+</I>&gt;&gt;<i> starting or using the device. I do it with canconfig but it could be
+</I>&gt;&gt;<i> done in your application as well, using the appropriate ioctl request.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You should really use the MSCAN driver from the SVN branch
+</I>&gt;&gt;<i> &quot;cannetdriver26&quot;, which does not have these limitations.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Hi Wolfgang, you mentioned the cannetdriver26. I showed you that the
+</I>&gt;<i> last commit I have on my DENX tree  is:
+</I>&gt;<i> 
+</I>&gt;<i> commit 76e8fbcc9e3e928a6898a93e6077264f5cb8f432
+</I>&gt;<i>  Author: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wolf at pollux.denx.de</A>&gt;
+</I>&gt;<i>  Date:   Thu Mar 27 17:41:09 2008 +0100
+</I>&gt;<i> 
+</I>&gt;<i>  Socket-CAN: merge with SVN trunk revision 690
+</I>&gt;<i> 
+</I>&gt;<i> And probably all problems are solved here, aren't they?
+</I>
+As I have showed you, there are no serious problems with that code. It's
+just cumbersome to set the bitrate before you start the device.
+
+The SVN branch &quot;cannetdriver26&quot; has been created to develop a common CAN
+device interface for all CAN drivers. In the SVN trunk, and that's what
+you have in your branch of linux-2.6-denx, there is the old stuff.
+
+&gt;<i> Do I really need the cannetdriver26. And in order to get it, Do I just
+</I>&gt;<i> have to copy the files and substitute them on my dir?
+</I>
+As I said, you don't need it to get MSCAN working. But it might be wise
+to switch to &quot;cannetdriver26&quot; to benefit from the new enhanced features
+like configuring the device via SYSFS. In that case you have two options:
+
+ - Switch to 2.6.25 of DENX linux-2.6-denx
+
+ - Use 2.6.24 from kernel.org and the &quot;cannetdriver26&quot; branch from the
+   SVN repository and build the modules externally.
+
+ - Use the &quot;cannetdriver26&quot; branch from the SVN repository and build the
+   modules externally. For that, you need to remove some related files
+   from the linux-2.6-denx tree. I could provide a script if you want to
+   follow that road. This is a hack, of course, which I do not really
+   suggest.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000349.html">[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+</A></li>
+	<LI>Next message: <A HREF="000350.html">[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#351">[ date ]</a>
+              <a href="thread.html#351">[ thread ]</a>
+              <a href="subject.html#351">[ subject ]</a>
+              <a href="author.html#351">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A6DB4C.90906%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000242.html">
+   <LINK REL="Next"  HREF="000248.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A6DB4C.90906%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Mon Feb  4 10:30:52 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000242.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000248.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#247">[ date ]</a>
+              <a href="thread.html#247">[ thread ]</a>
+              <a href="subject.html#247">[ subject ]</a>
+              <a href="author.html#247">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Daniel,
+
+Daniel Schnell wrote:
+&gt;<i> Daniel Schnell wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> And here is the output (I enabled printk timing output as well)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> [  150.234031] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;&gt;<i> queue awake! [  150.241462] mscan_hard_start_xmit:can0: flags=0x3
+</I>&gt;&gt;<i> active=0x7 pri=69 
+</I>&gt;&gt;<i> start=-149776 jiffies=-149769
+</I>&gt;&gt;<i> [  151.713983] NETDEV WATCHDOG: can0: transmit timed out [ 
+</I>&gt;&gt;<i> 151.719163] mscan_tx_timeout 
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Btw. I am using CAN as modules, I have attached a modified cansend.c which most of the time reproduces the symptoms (but unfortunately not always, grmpf ...). Then again I have seen some values change in the printk that you have attached the last time:
+</I>&gt;<i> 
+</I>&gt;<i> pri is: 66, 67, 69
+</I>&gt;<i> Flags:  0x2, 0x3
+</I>&gt;<i> Jiffies differences: between 7 and 8
+</I>&gt;<i> 
+</I>&gt;<i> Here is my approach:
+</I>&gt;<i> 
+</I>&gt;<i> 1.) ifdown can0 can1
+</I>&gt;<i> 2.) unload 
+</I>&gt;<i> 3.) ifup can0 (automatically loads modules)
+</I>&gt;<i> 4.) canbugsend can0 --loop=100 0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Voil&#225; !
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Ah yes: and when running &quot;candump can0&quot; at the same time, the error disappears :(
+</I>
+I did some debugging with cannetdriver26, also with Linux 2.6.24-rt1. I
+was unable to reproduce the bug with plain Linux *and* with Linux -rt.
+Well, with my first configuration of -rt I got the error message.
+Then I changed it to enable PCI and re-made the kernel and the
+Socket-CAN modules from scratch and the error *disappeared*. Well, don't
+ask my why. Likely due to some misconfiguration. Could you please
+re-test with fresh binaries?
+
+The TX buffer manipulation is protected by &quot;regs-&gt;cantier&quot;. TX
+interrupts are disabled at the begining of mscan_hard_start_xmit() and
+re-enabled at the end and mscan_isr() takes care of it:
+
+  static int mscan_hard_start_xmit(struct sk_buff *skb, struct net_device
+*dev)
+  {
+	...
+	out_8(&amp;regs-&gt;cantier, 0);
+	...	
+	out_8(&amp;regs-&gt;cantier, priv-&gt;tx_active);
+	return NETDEV_TX_OK;
+  }
+
+  static irqreturn_t mscan_isr(int irq, void *dev_id)
+  {
+	...
+	if (in_8(&amp;regs-&gt;cantier) &amp; MSCAN_TXE) {
+		/* process TX interrupts */
+	}
+	...
+  }
+
+This should work fine for plain Linux and also for -rt Linux, as long as
+the priority of the IRQ thread is higher than the one of the TX thread).
+It makes sense to use spin_lock_irqsave() and spin_unlock_irqrestore()
+instead, though.
+
+But my tests with -rt revealed a bug in the SJA1000 driver which did not
+show up with plain Linux :-(.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000242.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000248.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#247">[ date ]</a>
+              <a href="thread.html#247">[ thread ]</a>
+              <a href="subject.html#247">[ subject ]</a>
+              <a href="author.html#247">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

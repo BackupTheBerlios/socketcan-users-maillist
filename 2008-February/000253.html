@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A771DD.4040509%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000289.html">
+   <LINK REL="Next"  HREF="000290.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A771DD.4040509%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Mon Feb  4 21:13:17 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000289.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000290.html">[Socketcan-users] Undeliverable: February 73% OFF
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#253">[ date ]</a>
+              <a href="thread.html#253">[ thread ]</a>
+              <a href="subject.html#253">[ subject ]</a>
+              <a href="author.html#253">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hm, 2.6.23 did not have proper support for clock events, IIRC.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Attached is my configuration. Mind off that I enabled some debugging
+</I>&gt;&gt;&gt;<i> features. But these should only add timing overhead.
+</I>&gt;&gt;<i> Could you please enable CONFIG_RCU_TRACE. It is known to have some
+</I>&gt;&gt;<i> bad impact on the latencies and might make trouble. The reason is
+</I>&gt;&gt;<i> still unknown. I assume you are following the -rt mailing list.  
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I can do that. Any specific reason to enable RCU tracing ? I am not
+</I>&gt;<i> subscribed to -RT but this will change now. 
+</I>
+RCU tracing disabled results in high latencies. Why is still a mystery.
+Check the thread with the subject &quot;Strange latencies on mpc5200 powerpc&quot;
+on the linux-rt mailing list.
+
+&gt;<i> 
+</I>&gt;&gt;&gt;<i> How big is the difference between 2.6.23 and 2.6.24 in terms of
+</I>&gt;&gt;&gt;<i> MPC5200B ? Especially the oftree thingies change quite often and
+</I>&gt;&gt;&gt;<i> cause me a headache all the time. Could I just recompile 2.6.24 and
+</I>&gt;&gt;&gt;<i> use more or less the same device tree ?
+</I>&gt;&gt;<i> I think 2.6.23 does not have complete support for the MPC5200,
+</I>&gt;&gt;<i> especially BESTCOMM and FEC driver are missing. For me, 2.6.24
+</I>&gt;&gt;<i> (starting with -rc?) was the first official version supporting
+</I>&gt;&gt;<i> properly the MPC5200 and the Lite5200. Starting with that version it
+</I>&gt;&gt;<i> should be simpler to add support for your board. But the target is
+</I>&gt;&gt;<i> still moving fast including further changes to OF tree stuff :-(.     
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> The 2.6.23.1-rc5 kernel I am using is more or less the one provided by
+</I>&gt;<i> Pengutronix for their MPC5200B-Tiny board support package + our own
+</I>&gt;<i> patches. They have added some non standard 2.6.23 MPC5200B related
+</I>&gt;<i> patches, so FEC and BESTCOMM are working.
+</I>
+OK, that's a good reason to update to more &quot;official&quot; code. -rt is still
+highly experimental and you have to follow the kernel and -rt
+development in any case. Nobody will fix bugs on old kernel releases.
+
+&gt;&gt;<i> As I said. I had once a configuration showing the errors but was
+</I>&gt;&gt;<i> unable to reproduce it :-(. 
+</I>&gt;<i> 
+</I>&gt;<i> C'est domage ! Well but at least you tried :) Maybe in turning to 2.6.24
+</I>&gt;<i> I will get rid of the error as well. But on the long run probably
+</I>&gt;<i> spinlocks have to be added to the mscan driver to fix the task priority
+</I>&gt;<i> dependencies.
+</I>
+Yes, unfortunately, -rt requires special code adaption in many places.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000289.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000290.html">[Socketcan-users] Undeliverable: February 73% OFF
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#253">[ date ]</a>
+              <a href="thread.html#253">[ thread ]</a>
+              <a href="subject.html#253">[ subject ]</a>
+              <a href="author.html#253">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

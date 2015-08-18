@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%20tell%0A%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D1430581F50%40MSXHOME.rack.racksaver.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001377.html">
+   <LINK REL="Next"  HREF="001379.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb</H1>
+    <B>Stephen Hellriegel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%20tell%0A%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D1430581F50%40MSXHOME.rack.racksaver.com%3E"
+       TITLE="[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb">Stephen.Hellriegel at verari.com
+       </A><BR>
+    <I>Wed Apr 14 22:09:44 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001377.html">[Socketcan-users] slcand improvements
+</A></li>
+        <LI>Next message: <A HREF="001379.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1378">[ date ]</a>
+              <a href="thread.html#1378">[ thread ]</a>
+              <a href="subject.html#1378">[ subject ]</a>
+              <a href="author.html#1378">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+The following patch file enables a user to perform the following:
+Choose which device instance number you are going to get for a slcan port.
+This is really handy if you have 4 or more 1mbit slcan interfaces that come and go asynchronously in a Linux system...
+
+#Say you want to kick the CAN on /dev/TTYUSB9 as device can4
+stty swtch 4 -F /dev/TTYUSB9
+#now call slcand as normal
+ifconfig can4 up
+
+
+Presto, no hunting around to figure out which &quot;slc&quot; or &quot;can&quot; number the call to slcand came up on.
+
+This patch uses the device prefix &quot;can&quot; instead of &quot;slc&quot;.  A binary library we paid for has &quot;can&quot; hardcoded as the prefix of the CAN devicename; &quot;slc&quot; breaks it.
+Just search for the edit at slcan.c line 753 in the patch and you will see where you can change can back to slc if you are really fond of the slc prefix for any reason.
+
+If not, I would love for the default to be can instead of slc, to be compatible with other interfaces!
+
+There is no reason to consider slcan a second class CAN port, we stream continuous 1mbit data on it no problem.
+Yes people need to move away from the USB interrupt/HID style interface and use a bulk in/out endpoint to get
+great performance. Otherwise slcan adapters thru USB ports appear to be limited in the packets per second.
+
+-Steve
+
+p.s. In case your worried about the overloaded use of the swtch flag to stty:
+
+In article &lt;cjjvri$mqi$<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">1 at new-usenet.uk.sun.com</A>&lt;mailto:cjjvri$mqi$<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">1 at new-usenet.uk.sun.com</A>&gt;&gt;,
+ <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">andrew at cucumber.demon.co.uk</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">andrew at cucumber.demon.co.uk</A>&gt; (Andrew Gabriel) wrote:
+
+&gt;<i> In article &lt;cjjtns$dg4$<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">1 at yin.interaccess.com</A>&lt;mailto:cjjtns$dg4$<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">1 at yin.interaccess.com</A>&gt;&gt;,
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gazelle at yin.interaccess.com</A>&lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gazelle at yin.interaccess.com</A>&gt; (Kenny McCormack) writes:
+</I>&gt;<i> &gt; When I do &quot;stty&quot;, it shows something called &quot;swtch&quot; (in and among such
+</I>&gt;<i> &gt; things as &quot;intr&quot; and &quot;quit&quot;). &quot;man stty&quot; mentions &quot;swtch&quot;, but doesn't
+</I>&gt;<i> &gt; explain it. I could find no other reference to it in the man pages (at
+</I>&gt;<i> &gt; least those that I looked at).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; What is it?
+</I>&gt;<i>
+</I>&gt;<i> It's obsolete. It was the character for switching shells under
+</I>&gt;<i> shl - shell layers. When shells with job control came along,
+</I>&gt;<i> it became redundent.
+</I>
+And then when window systems and applications like &quot;screen&quot; came along,
+it because *really* obsolete.
+# delete everything above this line (and this line) to make a patch file
+--- slcan.c    2010-04-07 12:03:58.000000000 -0700
++++ slcan.c.new 2010-04-07 12:04:07.000000000 -0700
+@@ -124,7 +124,17 @@
+  * to use the slcan driver with an existing kernel.
+  */
+
++/*
++ * By default, do not turn on SLC_CHECK_TRANSMIT
++ * when a slcan device transmits into an unconnected network,
++ * the transmit timeout causes a kernel panic, this behaviour
++ * should be at the choice of the user.
++ */
++
++#if 0
+ #define SLC_CHECK_TRANSMIT
++#endif
++
+ #define SLCAN_MAGIC 0x53CA
+
+ static int maxdev = 10;              /* MAX number of SLCAN channels;
+@@ -670,7 +680,7 @@
+
+
+ /* Find a free SLCAN channel, and link in this `tty' line. */
+-static struct slcan *slc_alloc(dev_t line)
++static struct slcan *slc_alloc(dev_t line, char forcednum)
+ {
+        int i;
+ #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,32)
+@@ -727,10 +737,18 @@
+               }
+        }
+
++  /* Check if the user specified an exact interface to use */
++  if (forcednum) {
++    sel = forcednum-'0';
++    score=0;
++    i=sel;
++    dev=slcan_devs[i];
++  }
++
+        if (sel &gt;= 0) {
+               i = sel;
+               dev = slcan_devs[i];
+-              if (score &gt; 1) {
++              if ((score &gt; 1) &amp;&amp; (dev)) {
+                       sl = netdev_priv(dev);
+                       sl-&gt;flags &amp;= (1 &lt;&lt; SLF_INUSE);
+                       return sl;
+@@ -753,7 +771,7 @@
+
+        if (!dev) {
+               char name[IFNAMSIZ];
+-              sprintf(name, &quot;slc%d&quot;, i);
++              sprintf(name, &quot;can%d&quot;, i);
+
+               dev = alloc_netdev(sizeof(*sl), name, slc_setup);
+               if (!dev)
+@@ -813,7 +831,20 @@
+
+        /* OK.  Find a free SLCAN channel to use. */
+        err = -ENFILE;
+-       sl = slc_alloc(tty_devnum(tty));
++  /* Look to see if the user has requested a specific channel
++   * to be used (encoded as '0' plus the interface number requested in
++   * the otherwise unused swtch termios variable )
++   * stty swtch 'channel' device
++   *  where 'channel' is '0' to maxdevs (0)
++   *  where device is the name of the serial device (/dev/ttyUSB0)
++   */
++  if ((SWTC_CHAR(tty)&gt;='0') &amp;&amp; (SWTC_CHAR(tty)&lt;'0'+maxdev)){
++    sl = slc_alloc(tty_devnum(tty),SWTC_CHAR(tty));
++  } else {
++       /* OK.  Find a free SLCAN channel to use. */
++         sl = slc_alloc(tty_devnum(tty),0);
++  }
++
+        if (sl == NULL)
+               goto err_exit;
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100414/b51bde04/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100414/b51bde04/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001377.html">[Socketcan-users] slcand improvements
+</A></li>
+	<LI>Next message: <A HREF="001379.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1378">[ date ]</a>
+              <a href="thread.html#1378">[ thread ]</a>
+              <a href="subject.html#1378">[ subject ]</a>
+              <a href="author.html#1378">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RTCAN &amp; RT-Socket CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RTCAN%20%26%20RT-Socket%20CAN&In-Reply-To=%3C48288892.1020006%40das.ufsc.br%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000359.html">
+   <LINK REL="Next"  HREF="000361.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RTCAN &amp; RT-Socket CAN</H1>
+    <B>Breno</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RTCAN%20%26%20RT-Socket%20CAN&In-Reply-To=%3C48288892.1020006%40das.ufsc.br%3E"
+       TITLE="[Socketcan-users] RTCAN &amp; RT-Socket CAN">breno at das.ufsc.br
+       </A><BR>
+    <I>Mon May 12 20:12:34 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000359.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+        <LI>Next message: <A HREF="000361.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#360">[ date ]</a>
+              <a href="thread.html#360">[ thread ]</a>
+              <a href="subject.html#360">[ subject ]</a>
+              <a href="author.html#360">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Breno wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i> Breno wrote:
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;&gt;&gt;<i> Hi all, on my kernel option I can enable the RT-Socket CAN as a
+</I>&gt;&gt;&gt;&gt;<i> feature along with Xenomai support. Does it means if I enable it I
+</I>&gt;&gt;&gt;&gt;<i> start using RTCAN?
+</I>&gt;&gt;&gt;&gt;<i> Could anyone explain me the differences if it exists?
+</I>&gt;&gt;&gt;&gt;<i>     
+</I>&gt;&gt;&gt;&gt;<i>         
+</I>&gt;&gt;&gt;<i> RT-Socket-CAN is the real-time capable variant of Socket-CAN using the
+</I>&gt;&gt;&gt;<i> (almost) same API. It is based on RTDM and is used together with one of
+</I>&gt;&gt;&gt;<i> the Xenomai skins. If you use the RT-Socket-CAN MSCAN driver, you need
+</I>&gt;&gt;&gt;<i> to disable it for Socket-CAN, or better, disable Socket-CAN completely.
+</I>&gt;&gt;&gt;<i> Here are a few links related to RT-Socket-CAN:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://www.rts.uni-hannover.de/xenomai/lxr/source/ksrc/drivers/can/README">http://www.rts.uni-hannover.de/xenomai/lxr/source/ksrc/drivers/can/README</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://www.xenomai.org/documentation/trunk/html/api/group__rtcan.html">http://www.xenomai.org/documentation/trunk/html/api/group__rtcan.html</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://www.xenomai.org/documentation/trunk/html/api/examples.html">http://www.xenomai.org/documentation/trunk/html/api/examples.html</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> Thanks Wolfgang, those codes are great and help me  understand some
+</I>&gt;&gt;<i> issues. But,  I should have a Makefile to compile them, shouldn't? I 
+</I>&gt;&gt;<i> can 't use  only  ppc_6xx-gcc  rtcansend.c -o rtcansend, right?
+</I>&gt;&gt;<i> Do you have a Makefile?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://www.rts.uni-hannover.de/xenomai/lxr/source/examples/native/Makefile">http://www.rts.uni-hannover.de/xenomai/lxr/source/examples/native/Makefile</A>
+</I>&gt;<i> shows how to make Xenomai applications using the native skin, like
+</I>&gt;<i> rtcansend. Nevertheless, rtcansend will be built together with the other
+</I>&gt;<i> Xenomai user space applications.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>Hi all, I wonder know why many function declarations take place inside 
+an structure like:
+
+ #if defined(__KERNEL__) || defined(__XENO_SIM__)
+
+My compilation process always return error because it doesn't find the 
+functions declarations that is  inside  those  structures!
+
+What should I do?
+
+Thanks,
+
+Breno
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080512/e3443cfb/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080512/e3443cfb/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000359.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+	<LI>Next message: <A HREF="000361.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#360">[ date ]</a>
+              <a href="thread.html#360">[ thread ]</a>
+              <a href="subject.html#360">[ subject ]</a>
+              <a href="author.html#360">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

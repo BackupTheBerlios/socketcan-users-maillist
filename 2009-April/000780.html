@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Losing CAN messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Losing%20CAN%20messages&In-Reply-To=%3C49E60B7D.3000101%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000778.html">
+   <LINK REL="Next"  HREF="000785.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Losing CAN messages</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Losing%20CAN%20messages&In-Reply-To=%3C49E60B7D.3000101%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Losing CAN messages">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Apr 15 18:29:49 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000778.html">[Socketcan-users] Losing CAN messages
+</A></li>
+        <LI>Next message: <A HREF="000785.html">[Socketcan-users] Losing CAN messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#780">[ date ]</a>
+              <a href="thread.html#780">[ thread ]</a>
+              <a href="subject.html#780">[ subject ]</a>
+              <a href="author.html#780">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Richard,
+
+i hacked test/tst-raw.c like this:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~/socketcan/trunk/test$ svn diff
+Index: tst-raw.c
+===================================================================
+--- tst-raw.c	(Revision 967)
++++ tst-raw.c	(Arbeitskopie)
+@@ -69,6 +69,7 @@
+ 	char *ifname = &quot;vcan2&quot;;
+ 	int ifindex;
+ 	int opt;
++	int sock_buf_size;
+
+ 	/* sockopt test */
+ 	int loopback = 0;
+@@ -154,6 +155,23 @@
+ 		nbytes = write(s, &amp;frame, sizeof(struct can_frame));
+ 	}
+
++	i = sizeof(sock_buf_size);
++	nbytes = getsockopt(s, SOL_SOCKET, SO_RCVBUF,
++			    &amp;sock_buf_size, (socklen_t *)&amp;i);
++
++	printf(&quot;current sock_buf_size %X\n&quot;, sock_buf_size);
++
++	sock_buf_size = 0x80000;
++
++	nbytes = setsockopt(s, SOL_SOCKET, SO_RCVBUF,
++			    &amp;sock_buf_size, sizeof(sock_buf_size));
++
++	i = sizeof(sock_buf_size);
++	nbytes = getsockopt(s, SOL_SOCKET, SO_RCVBUF,
++			    &amp;sock_buf_size, (socklen_t *)&amp;i);
++
++	printf(&quot;new sock_buf_size %X\n&quot;, sock_buf_size);
++
+ 	while (1) {
+
+ 		if ((nbytes = read(s, &amp;frame, sizeof(struct can_frame))) &lt; 0) {
+
+
+
+And i got this:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~/socketcan/trunk/test$ ./tst-raw
+current sock_buf_size 1A000
+new sock_buf_size 3FFFE
+^C
+
+So there was a change (somehow ...)
+
+Let's give it a try ;-)
+
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000778.html">[Socketcan-users] Losing CAN messages
+</A></li>
+	<LI>Next message: <A HREF="000785.html">[Socketcan-users] Losing CAN messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#780">[ date ]</a>
+              <a href="thread.html#780">[ thread ]</a>
+              <a href="subject.html#780">[ subject ]</a>
+              <a href="author.html#780">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

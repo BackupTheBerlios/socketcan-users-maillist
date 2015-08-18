@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] setting timming at sja1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20setting%20timming%20at%20sja1000&In-Reply-To=%3C9cf2ca450810210657nbbede93nc8663a2d5eb3d674%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000504.html">
+   <LINK REL="Next"  HREF="000506.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] setting timming at sja1000</H1>
+    <B>g a</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20setting%20timming%20at%20sja1000&In-Reply-To=%3C9cf2ca450810210657nbbede93nc8663a2d5eb3d674%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] setting timming at sja1000">aguirre.citcea at gmail.com
+       </A><BR>
+    <I>Tue Oct 21 15:57:59 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000504.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+        <LI>Next message: <A HREF="000506.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#505">[ date ]</a>
+              <a href="thread.html#505">[ thread ]</a>
+              <a href="subject.html#505">[ subject ]</a>
+              <a href="author.html#505">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Oct 16, 2008 at 4:02 PM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+&gt;<i> g a wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>  i've just download the socketCAN modules (r: 836) i have no problems
+</I>&gt;&gt;<i> compiling on kernel 2.6.26-1-486. I have a dual CAN PCI/104 board with
+</I>&gt;&gt;<i> SJA1000T controller and has also a PCI &lt;-&gt; IO Bus bridge.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  i can load modules without any problem (sj1000, can-dev), and then
+</I>&gt;&gt;<i> vcan and can to perform a virtual can device creation, then i check
+</I>&gt;&gt;<i> send/receive messages loading the can-raw module using can-utils
+</I>&gt;&gt;<i> cansend and candump and work.
+</I>&gt;<i>
+</I>&gt;<i> Good :-)
+</I>
+so, that i was really do, is to create some virtual interface and
+exchange some kernel information, isn't it?
+
+&gt;&gt;<i> But, when i try to receive a message
+</I>&gt;&gt;<i> from another CAN device i can't see anything, in fact i cannot found
+</I>&gt;&gt;<i> where can i configure the speed parameter (like sja1000-io has), doing
+</I>&gt;&gt;<i> some test it also doesn't report any error (every module are loaded
+</I>&gt;&gt;<i> with debug level 3).
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Do you have a can0 or can1 device in your system at this stage?
+</I>
+no, i don't...
+
+&gt;<i> The 'new' sja1000 driver (which uses the CAN driver lib can-dev.ko) is just
+</I>&gt;<i> a common sja1000 driver, which is some kind of library to 'real' drivers
+</I>&gt;<i> like
+</I>&gt;<i>
+</I>&gt;<i> ems_pci, ems_pcmcia, ixxat_pci, peak_pci, pcm027, pipcan, kvaser_pci, ...
+</I>
+i see!, i thougth i could manage sja1000 directly.
+
+&gt;<i> I do not have any details of your PCI card - maybe one of the mentioned
+</I>&gt;<i> existing xxx_pci drivers already supports your card?!?
+</I>
+I'm not sure if my card is supported. As i told you in the first mail
+there is a PCI &lt;-&gt; IO bus bridge (PLX PCI9052). i was looking for some
+information about it on sysfs i get the PCI_ID 10b5:9050, indeed match
+with PLX tech and its  9050 chips family.
+
+&gt;<i> I would suggest to build _all_ of them and try e.g. &quot;modprobe ixxat_pci&quot; to
+</I>&gt;<i> check if your card is already recognized by the current drivers.
+</I>
+ok, i'll try it!
+
+&gt;<i> If not, please give some feedback about your chips on your PCI card (and
+</I>&gt;<i> it's PCI Identifiers) if anyone knows it here on the ML.
+</I>
+The PCI/104 card is iEi Tech. PM-1680-CBM: PLX 9052 pci to io bus
+bridge, sja1000 can controller and pca82c251 can transceiver. Tell me
+if you need some information about /sys/devices/pci...
+
+thanks for everything! tschuss!
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000504.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+	<LI>Next message: <A HREF="000506.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#505">[ date ]</a>
+              <a href="thread.html#505">[ thread ]</a>
+              <a href="subject.html#505">[ subject ]</a>
+              <a href="author.html#505">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

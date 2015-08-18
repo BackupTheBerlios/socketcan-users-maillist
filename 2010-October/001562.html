@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C20101013101217.GF382%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001560.html">
+   <LINK REL="Next"  HREF="001564.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C20101013101217.GF382%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Wed Oct 13 12:12:18 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001560.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001564.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1562">[ date ]</a>
+              <a href="thread.html#1562">[ thread ]</a>
+              <a href="subject.html#1562">[ subject ]</a>
+              <a href="author.html#1562">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Oct 13, 2010 at 12:01:18PM +0200, Marc Kleine-Budde wrote:
+&gt;<i> 
+</I>&gt;<i> On 10/13/2010 11:46 AM, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt; I'm following the discussion and realized that it will not work for
+</I>&gt;<i> &gt;&gt;&gt; devices doing the local loopback in hardware, like the flexcan
+</I>&gt;<i> &gt;&gt;&gt; controller. 
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; What is actually the advantage of using hardware loopback? One can
+</I>&gt;<i> &gt;&gt; always quit using it and use Tx interrupt for self reception ...
+</I>&gt;<i> 
+</I>&gt;<i> ...from my other mail:
+</I>&gt;<i> 
+</I>&gt;<i> I think we (the socketcan people) originally thought it's a better
+</I>&gt;<i> solution to loop the CAN frames back in hardware (if available), as it
+</I>&gt;<i> represents what's happening on the wire far better than software
+</I>&gt;<i> loopback.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Hey, we care about overhead ;-). CAN can cause high interrupt loads,
+</I>&gt;<i> &gt; especially at 1 MB/s.
+</I>&gt;<i> 
+</I>&gt;<i> On the flexcan, we use (currently) the hardware loopback. So a TX'ed CAN
+</I>&gt;<i> frame generates a TX-complete interrupt, which we need for the
+</I>&gt;<i> netif_wake_queue(). And it also generates a RX-interrupt due to the
+</I>&gt;<i> hardware loopback.
+</I>&gt;<i> 
+</I>Do I understand well that you didn't do can_put_echo_skb() etc?
+FYI, I'm just trying to understand what exactly is meant by
+'hardware' &amp; 'software' loopback.
+&gt;<i> 
+</I>&gt;<i> cheers, Marc
+</I>Kurt
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001560.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001564.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1562">[ date ]</a>
+              <a href="thread.html#1562">[ thread ]</a>
+              <a href="subject.html#1562">[ subject ]</a>
+              <a href="author.html#1562">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

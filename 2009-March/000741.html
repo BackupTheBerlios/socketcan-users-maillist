@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ask : CAN Frames Interpertation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C49D1DA90.8030603%40indoakses-online.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000739.html">
+   <LINK REL="Next"  HREF="000742.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ask : CAN Frames Interpertation</H1>
+    <B>Bino Oetomo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ask%20%3A%20CAN%20Frames%20Interpertation&In-Reply-To=%3C49D1DA90.8030603%40indoakses-online.com%3E"
+       TITLE="[Socketcan-users] ask : CAN Frames Interpertation">bino at indoakses-online.com
+       </A><BR>
+    <I>Tue Mar 31 10:55:44 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000739.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+        <LI>Next message: <A HREF="000742.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#741">[ date ]</a>
+              <a href="thread.html#741">[ thread ]</a>
+              <a href="subject.html#741">[ subject ]</a>
+              <a href="author.html#741">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear All
+C/q Kurt .... Thankyou for your enlightment
+Kurt Van Dijck wrote:
+&gt;<i> looks like J1939, I'll try to answer
+</I>&gt;<i>
+</I>&gt;<i> On Tue, Mar 31, 2009 at 05:23:43AM +0200, Bino Oetomo wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> ,
+</I>&gt;&gt;<i> I made a note for some structure of PGN 65132 (TCO 1).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  From what I read, the &quot;content&quot; of PGN 65132 (Please give me correction) :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Byte/Bit/Len : 1/1/3
+</I>&gt;&gt;<i> Name : Driver 1 Working State
+</I>&gt;&gt;<i> Example : 001
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Byte/Bit/Len = 1/4/3
+</I>&gt;&gt;<i> Name : Driver 1 Working State
+</I>&gt;&gt;<i> Example : 000
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Byte/Bit/Len : 1/7/2
+</I>&gt;&gt;<i> Name : Vehicle Motion Detect
+</I>&gt;&gt;<i> Example : 01 (detected)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Byte 1 Binary : 00100001
+</I>&gt;&gt;<i> Byte 1 Hex : 21
+</I>&gt;&gt;<i>     
+</I>&gt;<i> This is nothing j1939 related, from the above I'd make 0x41
+</I>&gt;<i>   
+</I>Kindly please explain me more on how you got 1000001
+
+&gt;<i> PGN (or 'parameter group number') is something j1939 specific.
+</I>&gt;<i> A 29 bit CAN id is split up into 
+</I>&gt;<i> (lsb)
+</I>&gt;<i> * 8bit SA (source address)
+</I>&gt;<i> * 16bit PGN
+</I>&gt;<i> * 1 bit data page (just a kind of 'extension' bit)
+</I>&gt;<i> * 1 bit reserved
+</I>&gt;<i> * finally, 3 priority bits
+</I>&gt;<i> (msg).
+</I>&gt;<i>
+</I>&gt;<i> The SA is static or dynamic on a bus, but at least, each sender has a
+</I>&gt;<i> unique SA.
+</I>&gt;<i> example: an engine controller has always SA = 0x00
+</I>&gt;<i>
+</I>&gt;<i> In your example, 61532 is decimal, cansend is uses hex.
+</I>&gt;<i>
+</I>&gt;<i> so typically you'd do :
+</I>&gt;<i> cansend vcan0 18FE6C00#....
+</I>&gt;<i> with the lowest 2 digits in the can_id the hex representation of the SA
+</I>&gt;<i> you use
+</I>&gt;<i>   
+</I>Got the picture
+I'm waiting for your next enlightment
+
+Sincerely
+-bino-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000739.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+	<LI>Next message: <A HREF="000742.html">[Socketcan-users] ask : CAN Frames Interpertation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#741">[ date ]</a>
+              <a href="thread.html#741">[ thread ]</a>
+              <a href="subject.html#741">[ subject ]</a>
+              <a href="author.html#741">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

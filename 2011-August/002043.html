@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%202/2%5D%20%5Bflexcan%5D%20Add%20support%0A%09for%09CONFIG_CAN_DEBUG_DEVICES&In-Reply-To=%3C4E3AD074.9090700%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002042.html">
+   <LINK REL="Next"  HREF="002044.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%202/2%5D%20%5Bflexcan%5D%20Add%20support%0A%09for%09CONFIG_CAN_DEBUG_DEVICES&In-Reply-To=%3C4E3AD074.9090700%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES">wg at grandegger.com
+       </A><BR>
+    <I>Thu Aug  4 19:01:40 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002042.html">[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+</A></li>
+        <LI>Next message: <A HREF="002044.html">[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2043">[ date ]</a>
+              <a href="thread.html#2043">[ thread ]</a>
+              <a href="subject.html#2043">[ subject ]</a>
+              <a href="author.html#2043">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 08/04/2011 06:41 PM, Robin Holt wrote:
+&gt;<i> On Thu, Aug 04, 2011 at 06:35:06PM +0200, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Robin,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On 08/04/2011 06:23 PM, Robin Holt wrote:
+</I>&gt;&gt;&gt;<i> Add a wrapper function for a register dump when CONFIG_CAN_DEBUG_DEVICES
+</I>&gt;&gt;&gt;<i> is set.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Signed-off-by: Robin Holt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">holt at sgi.com</A>&gt;
+</I>&gt;&gt;&gt;<i> To: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+</I>&gt;&gt;&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This patch is useful for development but should be dropped for mainline.
+</I>&gt;<i> 
+</I>&gt;<i> I am not sure why?  There is already a CONFIG_CAN_DEBUG_DEVICES Kconfig
+</I>&gt;<i> setting.  This just makes it of use for flexcan.c.  The code is not
+</I>&gt;<i> made less readable by the patch and when CONFIG_CAN_DEBUG_DEVICES=n,
+</I>&gt;<i> there is no code difference with and without the patch.  It seems like
+</I>&gt;<i> we would minimize bit rot if it were maintained in the mainline tree.
+</I>&gt;<i> What are the arguments against having it included?
+</I>
+Debugging output should be reduced to a few useful messages. A normal
+user will not understand the register content of that controller and
+may users use CONFIG_CAN_DEBUG_DEVICES=y by default. Though there should
+be no debug output in the TX and RX patch.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002042.html">[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+</A></li>
+	<LI>Next message: <A HREF="002044.html">[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2043">[ date ]</a>
+              <a href="thread.html#2043">[ thread ]</a>
+              <a href="subject.html#2043">[ subject ]</a>
+              <a href="author.html#2043">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

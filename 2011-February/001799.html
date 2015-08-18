@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Getting an ERRORFRAME after every normal receive frame
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20an%20ERRORFRAME%20after%20every%20normal%0A%20receive%20frame&In-Reply-To=%3CAANLkTikuzOe%2B2LwnnZBpT_bB7KE6wLTN-SzZdafzafFK%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001798.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Getting an ERRORFRAME after every normal receive frame</H1>
+    <B>Joseph Kubicky</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Getting%20an%20ERRORFRAME%20after%20every%20normal%0A%20receive%20frame&In-Reply-To=%3CAANLkTikuzOe%2B2LwnnZBpT_bB7KE6wLTN-SzZdafzafFK%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Getting an ERRORFRAME after every normal receive frame">jkebay at gmail.com
+       </A><BR>
+    <I>Mon Feb 21 08:49:36 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001798.html">[Socketcan-users] Getting an ERRORFRAME after every normal receive frame
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1799">[ date ]</a>
+              <a href="thread.html#1799">[ thread ]</a>
+              <a href="subject.html#1799">[ subject ]</a>
+              <a href="author.html#1799">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Yes - I'm receiving all the messages I expect correctly.
+
+I just looked a little closer, and it turns out I'm actually receiving the
+error frame just BEFORE the correct frame.  In other words, if I send frame
+0 1 2 3 4 5 to CAN ID 0 from my tester, candump prints:
+
+ can0  20000004  [8] 00 01 00 00 00 00 00 00   ERRORFRAME
+ can0    0  [6] 00 01 02 03 04 05
+
+in that order (the ERRORFRAME first).  According to candump, I get one of
+these ERRORFRAMEs (always the same) before each valid frame.
+
+
+On Sun, Feb 20, 2011 at 6:22 AM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;wrote:
+
+&gt;<i> On 02/18/2011 11:19 PM, Joseph Kubicky wrote:
+</I>&gt;<i> &gt; The message rate is low (about 25 frames/s).  I've stopped all periodic
+</I>&gt;<i> &gt; frames and just sent single frames manually (from the Kvaser software)
+</I>&gt;<i> and I
+</I>&gt;<i> &gt; still get the same error frame after each [correct] reception.
+</I>&gt;<i>
+</I>&gt;<i> Yes, and you seem to receive all messages correctly, without misses, I
+</I>&gt;<i> mean!?
+</I>&gt;<i>
+</I>&gt;<i> &gt; Here's the output of that command:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; root:/&gt; ip -d -s link show can0
+</I>&gt;<i> &gt; 2: can0: &lt;NOARP,UP,LOWER_UP,40000&gt; mtu 16 qdisc pfifo_fast state UNKNOWN
+</I>&gt;<i> &gt; qlen 10
+</I>&gt;<i> &gt;     link/[280]
+</I>&gt;<i> &gt;     can state STOPPED restart-ms 0
+</I>&gt;<i> &gt;     bitrate 500000 sample-point 0.800
+</I>&gt;<i> &gt;     tq 400 prop-seg 1 phase-seg1 2 phase-seg2 1 sjw 1
+</I>&gt;<i> &gt;     bfin_can: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 4..1024 brp-inc 1
+</I>&gt;<i> &gt;     clock 125000000
+</I>&gt;<i> &gt;     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;<i> &gt;     0          0          0          0          0          0
+</I>&gt;<i> &gt;     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i> &gt;     20342390   2565939  1282969 0       1282969 0
+</I>&gt;<i>
+</I>&gt;<i> It seems, that you get an overrun error for every second event.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110220/3d6a2708/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110220/3d6a2708/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001798.html">[Socketcan-users] Getting an ERRORFRAME after every normal receive frame
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1799">[ date ]</a>
+              <a href="thread.html#1799">[ thread ]</a>
+              <a href="subject.html#1799">[ subject ]</a>
+              <a href="author.html#1799">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

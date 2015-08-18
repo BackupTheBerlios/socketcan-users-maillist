@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] canlink: link can SocketCAN interfaces over tcp
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canlink%3A%20link%20can%20SocketCAN%20interfaces%20over%20tcp&In-Reply-To=%3CAANLkTikLd0HsH-c3jWsTYcLJYxW81DV5uJPamOJefAgc%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001618.html">
+   <LINK REL="Next"  HREF="001621.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] canlink: link can SocketCAN interfaces over tcp</H1>
+    <B>Felix Obenhuber</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canlink%3A%20link%20can%20SocketCAN%20interfaces%20over%20tcp&In-Reply-To=%3CAANLkTikLd0HsH-c3jWsTYcLJYxW81DV5uJPamOJefAgc%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] canlink: link can SocketCAN interfaces over tcp">felix at obenhuber.de
+       </A><BR>
+    <I>Thu Oct 28 19:10:11 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001618.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+        <LI>Next message: <A HREF="001621.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1620">[ date ]</a>
+              <a href="thread.html#1620">[ thread ]</a>
+              <a href="subject.html#1620">[ subject ]</a>
+              <a href="author.html#1620">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+inspired by the canlogserver, I wrote a small quickhack utility to
+link the can interfaces of our testbench with virtual interfaces on
+my workstation. The program simply passes the can data from
+a socketcan interface over a tcp connection to the counterpart.
+It's just a small utility without any kind of configuration management,
+bandwidth optimization etc., but feel free to add.
+
+Maybe someone here similar requirements.
+
+I don't know whether it's ready to commit to the repository, so feel
+free to annotate and comment.
+
+Here's the description from the patch:
+
+canlink links raw SocketCAN interfaces over a tcp connection.
+The utility is single binary for client and server. Each received
+can frame is transmitted in a single tcp frame. There's no
+intelligence like filters implemented. Error frames are masked.
+Several clients can connect to one server.
+
+To start the server part, append the interfaces, you'd like to provide
+as command line arguments e.g:
+
+canlink can0 can1 can3
+
+The client takes the servers hostname as argument with the -h switch:
+
+canlink -h serverhost vcan0 vcan1 vcan2 van4
+
+The used port can be adjusted with the -p switch (default 29500).
+
+Every frame received on the server can0 gets sent on the clients vcan0
+interface and vice versa. Same for can1 and vcan1 and so on. Canlink
+numbers the channels after their appearance on the command line.
+Thus vcan4 will not receive frames, but transmit.
+
+Thanks!
+
+cheers,
+
+Felix
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-can-utils-add-canlink-utility.patch
+Type: text/x-diff
+Size: 11197 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101028/79d267bc/attachment.patch">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101028/79d267bc/attachment.patch</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001618.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+	<LI>Next message: <A HREF="001621.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1620">[ date ]</a>
+              <a href="thread.html#1620">[ thread ]</a>
+              <a href="subject.html#1620">[ subject ]</a>
+              <a href="author.html#1620">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

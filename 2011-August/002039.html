@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC 2/2] [flexcan] Add support for	CONFIG_CAN_DEBUG_DEVICES
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%202/2%5D%20%5Bflexcan%5D%20Add%20support%20for%0A%09CONFIG_CAN_DEBUG_DEVICES&In-Reply-To=%3C1312474985-5384-3-git-send-email-holt%40sgi.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002040.html">
+   <LINK REL="Next"  HREF="002041.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC 2/2] [flexcan] Add support for	CONFIG_CAN_DEBUG_DEVICES</H1>
+    <B>Robin Holt</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%202/2%5D%20%5Bflexcan%5D%20Add%20support%20for%0A%09CONFIG_CAN_DEBUG_DEVICES&In-Reply-To=%3C1312474985-5384-3-git-send-email-holt%40sgi.com%3E"
+       TITLE="[Socketcan-users] [RFC 2/2] [flexcan] Add support for	CONFIG_CAN_DEBUG_DEVICES">holt at sgi.com
+       </A><BR>
+    <I>Thu Aug  4 18:23:05 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002040.html">[Socketcan-users] [RFC 1/2] [flexcan] Abstract off read/write for	big/little endian
+</A></li>
+        <LI>Next message: <A HREF="002041.html">[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2039">[ date ]</a>
+              <a href="thread.html#2039">[ thread ]</a>
+              <a href="subject.html#2039">[ subject ]</a>
+              <a href="author.html#2039">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Add a wrapper function for a register dump when CONFIG_CAN_DEBUG_DEVICES
+is set.
+
+Signed-off-by: Robin Holt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">holt at sgi.com</A>&gt;
+To: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+---
+ drivers/net/can/flexcan.c |   39 +++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 39 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 74b1706..62a20df 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -220,6 +220,37 @@ static inline void flexcan_write(u32 val, void __iomem *addr)
+ }
+ #endif
+ 
++#ifdef CONFIG_CAN_DEBUG_DEVICES
++void _flexcan_reg_dump(struct net_device *dev, const char *file, int line,
++		       const char *func)
++{
++	const struct flexcan_priv *priv = netdev_priv(dev);
++	struct flexcan_regs __iomem *regs = priv-&gt;base;
++
++	printk(KERN_INFO &quot;flexcan_reg_dump:%s:%d:%s()\n&quot;, file, line, func);
++	printk(KERN_INFO
++		&quot;\t  mcr 0x%08x  ctrl 0x%08x timer 0x%08x   rxg 0x%08x&quot;,
++		flexcan_read(&amp;regs-&gt;mcr),
++		flexcan_read(&amp;regs-&gt;ctrl),
++		flexcan_read(&amp;regs-&gt;timer),
++		flexcan_read(&amp;regs-&gt;rxgmask));
++	printk(KERN_INFO
++		&quot;\t rx14 0x%08x  rx15 0x%08x   ecr 0x%08x   esr 0x%08x&quot;,
++		flexcan_read(&amp;regs-&gt;rx14mask),
++		flexcan_read(&amp;regs-&gt;rx15mask),
++		flexcan_read(&amp;regs-&gt;ecr),
++		flexcan_read(&amp;regs-&gt;esr));
++	printk(KERN_INFO
++		&quot;\timsk2 0x%08x imsk1 0x%08x iflg2 0x%08x iflg1 0x%08x&quot;,
++		flexcan_read(&amp;regs-&gt;imask2),
++		flexcan_read(&amp;regs-&gt;imask1),
++		flexcan_read(&amp;regs-&gt;iflag2),
++		flexcan_read(&amp;regs-&gt;iflag1));
++}
++#define flexcan_reg_dump(_d) _flexcan_reg_dump(_d, __FILE__, __LINE__, __func__)
++#else
++#define flexcan_reg_dump(_d)
++#endif
+ /*
+  * Swtich transceiver on or off
+  */
+@@ -280,6 +311,8 @@ static int flexcan_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	u32 can_id;
+ 	u32 ctrl = FLEXCAN_MB_CNT_CODE(0xc) | (cf-&gt;can_dlc &lt;&lt; 16);
+ 
++	flexcan_reg_dump(dev);
++
+ 	if (can_dropped_invalid_skb(dev, skb))
+ 		return NETDEV_TX_OK;
+ 
+@@ -312,6 +345,8 @@ static int flexcan_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	/* tx_packets is incremented in flexcan_irq */
+ 	stats-&gt;tx_bytes += cf-&gt;can_dlc;
+ 
++	flexcan_reg_dump(dev);
++
+ 	return NETDEV_TX_OK;
+ }
+ 
+@@ -580,6 +615,8 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+ 	u32 reg_iflag1, reg_esr;
+ 
++	flexcan_reg_dump(dev);
++
+ 	reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
+ 	reg_esr = flexcan_read(&amp;regs-&gt;esr);
+ 	flexcan_write(FLEXCAN_ESR_ERR_INT, &amp;regs-&gt;esr);	/* ACK err IRQ */
+@@ -620,6 +657,8 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 		netif_wake_queue(dev);
+ 	}
+ 
++	flexcan_reg_dump(dev);
++
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+1.7.2.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002040.html">[Socketcan-users] [RFC 1/2] [flexcan] Abstract off read/write for	big/little endian
+</A></li>
+	<LI>Next message: <A HREF="002041.html">[Socketcan-users] [RFC 2/2] [flexcan] Add support	for	CONFIG_CAN_DEBUG_DEVICES
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2039">[ date ]</a>
+              <a href="thread.html#2039">[ thread ]</a>
+              <a href="subject.html#2039">[ subject ]</a>
+              <a href="author.html#2039">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000&In-Reply-To=%3C49E5D6F1.7000602%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000772.html">
+   <LINK REL="Next"  HREF="000774.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000&In-Reply-To=%3C49E5D6F1.7000602%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Using sja1000">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed Apr 15 14:45:37 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000772.html">[Socketcan-users] Using sja1000
+</A></li>
+        <LI>Next message: <A HREF="000774.html">[Socketcan-users] Using sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#773">[ date ]</a>
+              <a href="thread.html#773">[ thread ]</a>
+              <a href="subject.html#773">[ subject ]</a>
+              <a href="author.html#773">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alexandre V&#233;zina wrote:
+&gt;<i> Hi guys,
+</I>&gt;<i>
+</I>&gt;<i> I have some problem using SocketCAN with sja1000.
+</I>&gt;<i>
+</I>&gt;<i>  - I am using linux 2.6.24.4 on Debian.
+</I>&gt;<i>  - I compiled SocketCAN modules as you provide them (default).
+</I>&gt;<i>  - I use this board:
+</I>&gt;<i> <A HREF="http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1(pc/104">http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1(pc/104</A>)
+</I>&gt;<i>  - The CAN board is plugged on this board:
+</I>&gt;<i> <A HREF="http://www.embeddedarm.com/products/board-detail.php?product=TS-7200">http://www.embeddedarm.com/products/board-detail.php?product=TS-7200</A>
+</I>&gt;<i>
+</I>&gt;<i> I am able to link a vcan interface by running:
+</I>&gt;<i>
+</I>&gt;<i> # modprobe vcan
+</I>&gt;<i> # ip link add type vcan
+</I>&gt;<i> # ip link dev vcan0 add type vcan
+</I>&gt;<i>   
+</I>
+The vcan is a pure software device (like the loopback device for IP) and 
+therefore you can create as much as you want from them.
+
+&gt;<i> I don't understand how to do the same with sja1000. (ip link add type
+</I>&gt;<i> sja1000 doesn't work :D). In fact, as a final result, I would like to have a
+</I>&gt;<i> &quot;/dev/can0&quot; linked with my sja1000.
+</I>&gt;<i>   
+</I>
+The SJA1000 driver is a *real* hardware driver. Please read chapter 1 &amp; 6 of
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+
+In the end you'll have a CAN network device (can0, can1, ... like eth0) 
+and *not* /dev/can0 which is a character device model driver.
+
+The supported CAN drivers are under 
+socketcan/trunk/kernel/2.6/drivers/net/can
+
+There are also several SJA1000 drivers (like the PIPCAN driver).
+
+I'm not aware how to support exactly your board, which presents the 
+SJA1000 registers linear in the I/O address space. I assume the pipcan 
+driver is a good point to start with. Or you go to the 
+drivers/net/can/old/sja1000 directory and try the sja1000-io driver 
+there with the appropriate module commandline settings for the io-space 
+and interrupts according your TS-CAN1 board.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000772.html">[Socketcan-users] Using sja1000
+</A></li>
+	<LI>Next message: <A HREF="000774.html">[Socketcan-users] Using sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#773">[ date ]</a>
+              <a href="thread.html#773">[ thread ]</a>
+              <a href="subject.html#773">[ subject ]</a>
+              <a href="author.html#773">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

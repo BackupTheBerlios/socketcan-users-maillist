@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newbie Question about the SJA1000_Platform Driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newbie%20Question%20about%20the%20SJA1000_Platform%20Driver&In-Reply-To=%3C33414181.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002361.html">
+   <LINK REL="Next"  HREF="002363.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newbie Question about the SJA1000_Platform Driver</H1>
+    <B>FredEi</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newbie%20Question%20about%20the%20SJA1000_Platform%20Driver&In-Reply-To=%3C33414181.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users] Newbie Question about the SJA1000_Platform Driver">feinstei at frontier.com
+       </A><BR>
+    <I>Wed Feb 29 17:50:55 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002361.html">[Socketcan-users] test
+</A></li>
+        <LI>Next message: <A HREF="002363.html">[Socketcan-users] Newbie Question about the SJA1000_Platform Driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2362">[ date ]</a>
+              <a href="thread.html#2362">[ thread ]</a>
+              <a href="subject.html#2362">[ subject ]</a>
+              <a href="author.html#2362">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Please excuse my ignorance, but I'm very new to compiling Linux kernels,
+setting parameters for Platform type drivers etc.   Our Intel Atom based
+board has an SJA1000 controller on it that worked in older versions of Linux
+(such as Ubuntu 10.04) with the SJA1000_ISA driver that was included with
+Ubuntu.  Unfortunately, with Debian Squeeze (the latest version), it seems
+that this driver has been replaced with SJA1000_PLATFORM.  However, unlike
+the SJA1000_ISA driver, i cannot simply edit a &quot;.conf&quot; file in the
+/etc/modprobe.d directory in order to set the ISA ports and IRQ's that the
+hardware is assisgned to.  Thus (remember, be kind, I'm a beginner at
+this!!), I assume that I need to use the SJA1000_PLATFORM driver included
+with Debian Squeeze.....
+
+My question:
+
+Is there a simple way (that doesn't involve recompiling the Linux Kernel) to
+set the following &quot;options&quot; for the SJA1000_PLATFORM driver so it'll support
+my ISA hardware?
+
+Shown below is my &quot;.conf&quot; file that I used for the SJA1000_ISA driver....
+
+alias can0 sja1000_isa } How do I tell SocketCAN that can0 is the
+SJA1000_PLATFORM driver?
+alias can1 sja1000_isa }
+options sja1000_isa port=0xff80,0xffa0 irq=3,4 }how do I tell the driver
+what ports and IRQ's my hardware's at?
+
+How do I do the same thing for the SJA1000_PLATFORM driver????
+
+Thanks for any information that you can provide!
+
+Fred E.
+South Bend, IN USA
+
+
+  
+-- 
+View this message in context: <A HREF="http://old.nabble.com/Newbie-Question-about-the-SJA1000_Platform-Driver-tp33414181p33414181.html">http://old.nabble.com/Newbie-Question-about-the-SJA1000_Platform-Driver-tp33414181p33414181.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002361.html">[Socketcan-users] test
+</A></li>
+	<LI>Next message: <A HREF="002363.html">[Socketcan-users] Newbie Question about the SJA1000_Platform Driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2362">[ date ]</a>
+              <a href="thread.html#2362">[ thread ]</a>
+              <a href="subject.html#2362">[ subject ]</a>
+              <a href="author.html#2362">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

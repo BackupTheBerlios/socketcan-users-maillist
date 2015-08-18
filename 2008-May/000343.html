@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48234246.5030505%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000350.html">
+   <LINK REL="Next"  HREF="000335.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48234246.5030505%40grandegger.com%3E"
+       TITLE="[Socketcan-users] HW Clock">wg at grandegger.com
+       </A><BR>
+    <I>Thu May  8 20:11:18 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000350.html">[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+</A></li>
+        <LI>Next message: <A HREF="000335.html">[Socketcan-users] Medical Doctor Directory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#343">[ date ]</a>
+              <a href="thread.html#343">[ thread ]</a>
+              <a href="subject.html#343">[ subject ]</a>
+              <a href="author.html#343">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+again, don't drop the CC to the mailing list.
+
+Breno wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>[...deletions...]
+&gt;&gt;<i> Have you already seen CAN messages on the CAN bus from your MSCAN, e.g.
+</I>&gt;&gt;<i> with an external CAN bus analyzer.
+</I>
+You did not answer this question!
+
+&gt;&gt;<i> Could you please build the canconfig utility from
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2007-July/000549.html">https://lists.berlios.de/pipermail/socketcan-core/2007-July/000549.html</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> and run it on your board:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   # canconfig -b 5000000 can0 up
+</I>&gt;&gt;<i>   # canconfig -b 5000000 can1 up
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Does it help? I remember a problem with initial bit-rate setting for MSCAN.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Hi, I built the utils and now I have all cansend, candump available.
+</I>&gt;<i> Then I execute ./cansend can0 123#ABCDEF. After that I executed
+</I>&gt;<i> ./candump -l can0. The candump command returned  continuously :
+</I>&gt;<i> 
+</I>&gt;<i> *can0      150     [8]   61   62   63   64   65   66   67   68
+</I>&gt;<i> 
+</I>&gt;<i> **can0      150     [8]   61   62   63   64   65   66   67   68
+</I>&gt;<i> 
+</I>&gt;<i> **can0      150     [8]   61   62   63   64   65   66   67   68*
+</I>
+Where do these stars &quot;*&quot; come from?
+
+&gt;<i> .......
+</I>&gt;<i> 
+</I>
+Well, but you want receive messages on can1, therefore please use
+&quot;candump any&quot;.
+
+&gt;<i> My ifconfig insists on returning a line with *Tx bytes(0.0 b) and Rx(0.0
+</I>&gt;<i> b) *.
+</I>&gt;<i> 
+</I>&gt;<i> Is that a normal behavior?
+</I>
+Could you please show the output of &quot;ifconfig can0&quot; and &quot;ifconfig can1&quot;.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000350.html">[Socketcan-users] MSCAN with linux-2.6-denx (was HW Clock)
+</A></li>
+	<LI>Next message: <A HREF="000335.html">[Socketcan-users] Medical Doctor Directory
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#343">[ date ]</a>
+              <a href="thread.html#343">[ thread ]</a>
+              <a href="subject.html#343">[ subject ]</a>
+              <a href="author.html#343">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

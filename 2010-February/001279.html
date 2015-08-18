@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6ECCA5.5040608%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001274.html">
+   <LINK REL="Next"  HREF="001282.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6ECCA5.5040608%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Sun Feb  7 15:22:29 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001274.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001282.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1279">[ date ]</a>
+              <a href="thread.html#1279">[ thread ]</a>
+              <a href="subject.html#1279">[ subject ]</a>
+              <a href="author.html#1279">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Hi Christian,
+</I>&gt;<i> 
+</I>&gt;<i> christian pellegrin wrote:
+</I>&gt;&gt;<i> The following patch adds the possibility to monitor TEC/REC. I found
+</I>&gt;&gt;<i> it quite useful for understanding how the bus works. I see that not
+</I>&gt;&gt;<i> all controllers support is but for those that do it might be useful.
+</I>&gt;<i> 
+</I>&gt;<i> It might be useful for debugging, I agree, but is it useful for the real
+</I>&gt;<i> user? Kurt posted a similar patch using SysFS some time ago and we
+</I>&gt;<i> didn't take it because it is not supported on all systems. Instead, we
+</I>&gt;<i> would like to add the TEC and REC value, if possible, to the data[6..7]
+</I>&gt;<i> fields of the error frame. This information is hardware specific anyhow.
+</I>&gt;<i> Would that fit your needs?
+</I>
+Well, it's not the same thing and as we need to touch iproute2 anyway
+for the bus-error addition, I tend to add your TXerr an RXerr counter
+stuff, but not as part of the statistic counters. It should be handled
+via separate IFLA_CAN_ERROR_COUNTER request, which returns an error if
+it is not available. The ip utility should display it after state, where
+it logically belongs to:
+
+    $ ip -details -statistics link show can0
+    2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10
+      link/can
+      can &lt;TRIPLE-SAMPLING&gt; restart-ms 100
+      state ERROR-ACTIVE (error-counter tx 127 rx 240)
+
+The error counters are only displayed if readable. Any other opinions or
+improvements? Would that be useful for real users?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001274.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001282.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1279">[ date ]</a>
+              <a href="thread.html#1279">[ thread ]</a>
+              <a href="subject.html#1279">[ subject ]</a>
+              <a href="author.html#1279">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

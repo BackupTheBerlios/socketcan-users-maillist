@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SocketCan on s3c64xx Board
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCan%20on%20s3c64xx%20Board&In-Reply-To=%3C53e8d4ef.10d32.13127c6d836.Coremail.hongjiujing%40126.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001945.html">
+   <LINK REL="Next"  HREF="001947.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SocketCan on s3c64xx Board</H1>
+    <B>tommy.hong</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCan%20on%20s3c64xx%20Board&In-Reply-To=%3C53e8d4ef.10d32.13127c6d836.Coremail.hongjiujing%40126.com%3E"
+       TITLE="[Socketcan-users] SocketCan on s3c64xx Board">hongjiujing at 126.com
+       </A><BR>
+    <I>Thu Jul 14 10:32:48 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001945.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+        <LI>Next message: <A HREF="001947.html">[Socketcan-users] SocketCan on s3c64xx Board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1946">[ date ]</a>
+              <a href="thread.html#1946">[ thread ]</a>
+              <a href="subject.html#1946">[ subject ]</a>
+              <a href="author.html#1946">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear All:
+             Hi, i have portting linux 2.6.35 SocketCAN sja1000 driver to my s3c6410 ARM11 2.6.29.6 Kernel.Following is tips:
+
+1)
+#ifdef CONFIG_CAN_SJA1000
+static struct resource s3c6410_sja1000_resources[] = {
+        {
+                .start   = S3C64XX_SJA1000_CS_ADDR, //USE CS4
+                .end     = S3C64XX_SJA1000_CS_ADDR + 0x100 - 1,
+                .flags   = IORESOURCE_MEM,
+        }, {
+                /*SJA1000 Use GPN2*/
+                .start   = S3C_EINT(2),
+                .end     = S3C_EINT(2),
+                .flags   = IORESOURCE_IRQ | IORESOURCE_IRQ_LOWEDGE,
+        },
+};
+
+struct sja1000_platform_data s3c6410_sja1000_platform_data = {
+        .osc_freq       = 16000000,
+        .ocr            = OCR_TX1_PULLDOWN | OCR_TX0_PUSHPULL,
+        .cdr            = CDR_CBP,
+};
+
+static struct platform_device s3c6410_sja1000 = {
+        .name = &quot;sja1000_platform&quot;,
+        .dev = {
+                .platform_data = &amp;s3c6410_sja1000_platform_data,
+        },
+        .resource = s3c6410_sja1000_resources,
+        .num_resources = ARRAY_SIZE(s3c6410_sja1000_resources),
+};
+#endif
+
+2)I modify drivers/net/can/sja1000/sja1000_platform.c ,
+void __iomem  *data_regs,*ale_regs;
+static u8 sp_read_reg8(const struct sja1000_priv *priv, int reg)
+{
+        writeb(reg,ale_regs);
+        return readb(data_regs);
+}
+
+static void sp_write_reg8(const struct sja1000_priv *priv, int reg, u8 val)
+{
+        writeb(reg,ale_regs);
+        writeb(val,data_regs);
+}
+
+in sp_probe,i add following:
+
+        /*S3C64XX,S3C64XX_GPN1-&gt;ALE,S3C64XX_GPN3-&gt;DATA,S3C64XX_GPK11-&gt;RESET*/
+        data_regs = ioremap_nocache(S3C64XX_GPN(3), resource_size(res_mem));
+        if (!addr) {
+                err = -ENOMEM;
+                iounmap(data_regs);
+        }
+        ale_regs = ioremap_nocache(S3C64XX_GPN(1), resource_size(res_mem));
+        if (!addr) {
+                err = -ENOMEM;
+                iounmap(ale_regs);
+        }
+
+        /*CAN_RST*/
+        s3c_gpio_cfgpin(S3C64XX_GPK(11),S3C_GPIO_OUTPUT);
+        gpio_set_value(S3C64XX_GPK(11), 1);
+        /*CAN RST*/
+        dev = alloc_sja1000dev(0);
+         .....
+
+
+After downing zImage to my s3c6410,
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at s3c6410</A> /]# ifconfig -a
+can0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00 
+          NOARP  MTU:16  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:10
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:103
+[<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at s3c6410</A> /]# ifconfig can0 up
+sja1000_platform sja1000_platform.0: bit-timing not yet defined
+ifconfig: SIOCSIFFLAGS: Invalid argument
+[<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at s3c64xx</A> /]# cat /proc/interrupts
+
+there are no my CAN interrupt
+
+according to above error,i need to use iproute to &quot;ip link set can0 up type can bitrate 1000000&quot;?
+please review my code,if there are some issue?
+
+B.R
+Tommy
+
+        
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110714/2561bcb4/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110714/2561bcb4/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001945.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+	<LI>Next message: <A HREF="001947.html">[Socketcan-users] SocketCan on s3c64xx Board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1946">[ date ]</a>
+              <a href="thread.html#1946">[ thread ]</a>
+              <a href="subject.html#1946">[ subject ]</a>
+              <a href="author.html#1946">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

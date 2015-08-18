@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C49070D6E.8020104%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000527.html">
+   <LINK REL="Next"  HREF="000543.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ixxat-pci (with sja1000) doesn't receive</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C49070D6E.8020104%40grandegger.com%3E"
+       TITLE="[Socketcan-users] ixxat-pci (with sja1000) doesn't receive">wg at grandegger.com
+       </A><BR>
+    <I>Tue Oct 28 14:02:38 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000527.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+        <LI>Next message: <A HREF="000543.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#528">[ date ]</a>
+              <a href="thread.html#528">[ thread ]</a>
+              <a href="subject.html#528">[ subject ]</a>
+              <a href="author.html#528">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>g a wrote:
+&gt;<i> On Mon, Oct 27, 2008 at 3:37 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;<i> g a wrote:
+</I>&gt;&gt;&gt;<i> On Fri, Oct 24, 2008 at 8:41 AM, Oliver Hartkopp
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> i add those lines directly in /etc/modprobe.d/alias, and add some
+</I>&gt;&gt;&gt;<i> information about specific CAN board:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> alias can0 ixxat-pci
+</I>&gt;&gt;&gt;<i> alias can1 ixxat-pci
+</I>&gt;&gt;&gt;<i> options sja1000 debug=3
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> instead of it i just see can0 at /sys.
+</I>&gt;&gt;&gt;<i> about dmesg response, when i start up the system, modules get load:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> CAN netdevice library
+</I>&gt;&gt;&gt;<i> sja1000 CAN netdevice driver
+</I>&gt;&gt;&gt;<i> sja1000: debug level set to 3.
+</I>&gt;&gt;&gt;<i> can-ixxat-pci 0000:00:09.0: Initializing device 10b5:9050
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> then i set bitrate and start can0 up :
+</I>&gt;&gt;&gt;<i> $ echo 125 &gt; /sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;&gt;<i> You have to specify the bit-rate in bits/sec!!!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   echo 125000 &gt; /sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> $ ifconfig can0 up
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> at dmesg i see:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> can-ixxat-pci 0000:00:09.0: bitrate error 2854069.8%
+</I>&gt;&gt;&gt;<i> can-ixxat-pci 0000:00:09.0: BTR0=0x3f BTR1=0x7f
+</I>&gt;&gt;<i> This is due to a bug, which is fixed in the meantime. ifconfig will then
+</I>&gt;&gt;<i> actually fail. Please use a more recent version.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> i put the candump to listen to:
+</I>&gt;&gt;&gt;<i> $ candump any,0:0,#FFFFFFFF
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> then dmesg response me:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> can: controller area network core (rev 20071116 abi 8)
+</I>&gt;&gt;&gt;<i> NET: Registered protocol family 29
+</I>&gt;&gt;&gt;<i> can: raw protocol (rev 20071116)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> and that's all for the moment, i'll take a look at pci 9052 data book
+</I>&gt;&gt;&gt;<i> to see that you told me about sja1000 and plx conections. Thanks!
+</I>&gt;&gt;<i> Please use a proper bit-rate and retry.
+</I>&gt;<i> 
+</I>&gt;<i> perfect!, it works! my next step is to see why can1 doesn't appear at /sys
+</I>&gt;<i> thank you so much!!
+</I>
+Please check the code in ixxat_pci_init_one(). To detect the second
+device, the card gets reseted first and then the reset values of the
+registers of the second chip are inspected:
+
+ 	/* Check if second channel is available */
+	if (readb(base_addr + CHANNEL_OFFSET + REG_MOD) == 0x21 &amp;&amp;
+	    readb(base_addr + CHANNEL_OFFSET + REG_SR) == 0x0c &amp;&amp;
+	    readb(base_addr + CHANNEL_OFFSET + REG_IR) == 0xe0) {
+		board-&gt;dev[1] = ixxat_pci_add_chan(pdev,
+				base_addr + CHANNEL_OFFSET);
+		if (IS_ERR(board-&gt;dev[1]))
+			goto failure_unreg_dev0;
+
+		intcsr |= INTCSR_LINTI2;
+	}
+
+What are the values of these MOD, SR and IR registeres?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000527.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+	<LI>Next message: <A HREF="000543.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#528">[ date ]</a>
+              <a href="thread.html#528">[ thread ]</a>
+              <a href="subject.html#528">[ subject ]</a>
+              <a href="author.html#528">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

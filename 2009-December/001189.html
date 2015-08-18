@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Local loopback broken?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Local%20loopback%20broken%3F&In-Reply-To=%3C4B16DB93.30206%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001188.html">
+   <LINK REL="Next"  HREF="001200.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Local loopback broken?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Local%20loopback%20broken%3F&In-Reply-To=%3C4B16DB93.30206%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Local loopback broken?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Dec  2 22:26:43 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001188.html">[Socketcan-users] Local loopback broken?
+</A></li>
+        <LI>Next message: <A HREF="001200.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1189">[ date ]</a>
+              <a href="thread.html#1189">[ thread ]</a>
+              <a href="subject.html#1189">[ subject ]</a>
+              <a href="author.html#1189">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Answering myself:
+
+I discovered a problem with the patch in 2.6.30-stable, see:
+
+<A HREF="http://marc.info/?l=linux-netdev&amp;m=125978891705230&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=125978891705230&amp;w=2</A>
+
+Oliver Hartkopp wrote:
+&gt;<i> Matthias Fuchs wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> what happened to this?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I observed this behavior with Socket-CAN SVN r1091 on 2.6.30 kernels.
+</I>&gt;<i> 
+</I>&gt;<i> Hi Matthias,
+</I>&gt;<i> 
+</I>&gt;<i> this problem is *not* inside SocketCAN aka /linux/net/can/* ...
+</I>&gt;<i> 
+</I>&gt;<i> It's inside the surrounding networking infrastructure.
+</I>&gt;<i> 
+</I>&gt;<i> It has been fixed here:
+</I>&gt;<i> <A HREF="http://patchwork.ozlabs.org/patch/28993/">http://patchwork.ozlabs.org/patch/28993/</A>
+</I>&gt;<i> 
+</I>&gt;<i> Committed to Mainline Linux here (for 2.6.31)
+</I>&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=d55d87fdff8252d0e2f7c28c2d443aee17e9d70f">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=d55d87fdff8252d0e2f7c28c2d443aee17e9d70f</A>
+</I>&gt;<i> 
+</I>&gt;<i> Committed for 2.6.30-stable here (should be ok in 2.6.30.5)
+</I>&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.30.y.git;a=commitdiff;h=172570a224fe66d560c097e48fca15b620c76e72">http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.30.y.git;a=commitdiff;h=172570a224fe66d560c097e48fca15b620c76e72</A>
+</I>&gt;<i> 
+</I>&gt;<i> So if you upgrade to 2.6.30.5 it should work as the problem is only between
+</I>&gt;<i> 2.6.30 and 2.6.30.4 .
+</I>&gt;<i> 
+</I>&gt;<i> Does that info help you?
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;&gt;<i> On Saturday 20 June 2009 14:42, Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;&gt;<i> Michel Marti wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I recently updated my Kernel from 2.6.26 to 2.6.30 and since then, CAN frames sent over
+</I>&gt;&gt;&gt;&gt;&gt;<i> the virtual CAN device (vcan) get looped back to the sender of the frame, as if the
+</I>&gt;&gt;&gt;&gt;&gt;<i> CAN_RAW_RECV_OWN_MSGS socket option was enabled (it isn't). Socketcan from SVN-trunk shows
+</I>&gt;&gt;&gt;&gt;&gt;<i> the same behaviour... Am I missing something or is this a bug?
+</I>&gt;&gt;&gt;&gt;<i> I'll take a look at it.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Stay tuned :-)
+</I>&gt;&gt;&gt;<i> Hi Michel,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> the needed sk reference for omitting the own received messages is killed by a
+</I>&gt;&gt;&gt;<i> new skb_orphan() call in net/core/dev.c introduced in
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.30.y.git;a=commitdiff;h=9a279bcbe347496799711155ed41a89bc40f79c5">http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.30.y.git;a=commitdiff;h=9a279bcbe347496799711155ed41a89bc40f79c5</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> So it first occurs in 2.6.30.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks for pointing me to this issue!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I'll try to get some feedback from Herbert Xu about this and how we can solve
+</I>&gt;&gt;&gt;<i> these kinds of problems in the future.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Additionally i'll create some test-application for LTP to be sure that kernel
+</I>&gt;&gt;&gt;<i> changes do not kill established CAN functionalities.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;<i> Oliver
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Socketcan-users mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001188.html">[Socketcan-users] Local loopback broken?
+</A></li>
+	<LI>Next message: <A HREF="001200.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1189">[ date ]</a>
+              <a href="thread.html#1189">[ thread ]</a>
+              <a href="subject.html#1189">[ subject ]</a>
+              <a href="author.html#1189">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

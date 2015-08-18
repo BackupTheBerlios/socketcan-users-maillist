@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTi%3D_Z_T_8CCZz8s_HyuFwZ6Dq0eN4Zb5ynQtvf3B%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001662.html">
+   <LINK REL="Next"  HREF="001664.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3CAANLkTi%3D_Z_T_8CCZz8s_HyuFwZ6Dq0eN4Zb5ynQtvf3B%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">lambert.willy at gmail.com
+       </A><BR>
+    <I>Mon Nov 29 22:13:14 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001662.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001664.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1663">[ date ]</a>
+              <a href="thread.html#1663">[ thread ]</a>
+              <a href="subject.html#1663">[ subject ]</a>
+              <a href="author.html#1663">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok, doc also says :
+_ &quot;The exact index description of the SJA1000 is given in the correcponding
+datasheets of Philips&quot;
+So I think you are rigth I'll have a look at the code.
+
+But if it's managing standard SJA1000 registers why socketCan driver
+wouldn't work ?
+
+2010/11/29 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 11/29/2010 10:00 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt; My docs says :
+</I>&gt;<i> &gt; _ basis adress (0xD0000 for me) + 0x0000 to 0x00FF : CAN-Controller 1
+</I>&gt;<i> &gt; _ basis adress + 0x0100 to 0x01FF : Reset CAN1
+</I>&gt;<i> &gt; _ basis adress + 0x0200 to 0x02FF : CAN-Controller 2
+</I>&gt;<i> &gt; _ basis adress + 0x0300 to 0x03FF : Reset CAN2
+</I>&gt;<i> &gt; So I there is still a stange difference between one controller range and
+</I>&gt;<i> the
+</I>&gt;<i> &gt; 0x20 byte register of SJA1000. Maybe the only problem interfacing my
+</I>&gt;<i> board
+</I>&gt;<i> &gt; with socket can is here...
+</I>&gt;<i>
+</I>&gt;<i> Well, it just says that the Reset-Region starts at offset 0x200. Does
+</I>&gt;<i> the IXXAT driver touch that region? If yes, where? And how are the
+</I>&gt;<i> registers accessed?
+</I>&gt;<i>
+</I>&gt;<i> &gt; They told me explicitly to use only one IRQ for both controllers :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; me  &gt; I can't write irq=5,7 as stated in the docs
+</I>&gt;<i> &gt;&gt; ixxat &gt; Please use the same IRQ for both CAN controllers.
+</I>&gt;<i>
+</I>&gt;<i> OK, then irq=5,5 should just work fine.
+</I>&gt;<i>
+</I>&gt;<i> &gt; But anyway, at the moment making just one working is enougth. I will
+</I>&gt;<i> setup
+</I>&gt;<i> &gt; the second one when I'll have something working.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'll do my best to instrument this code and give you the result
+</I>&gt;<i>
+</I>&gt;<i> Good luck.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101129/22754142/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101129/22754142/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001662.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001664.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1663">[ date ]</a>
+              <a href="thread.html#1663">[ thread ]</a>
+              <a href="subject.html#1663">[ subject ]</a>
+              <a href="author.html#1663">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problem%20in%20adding%20mcp251x_info%20into%20platform%0A%09definition%20file&In-Reply-To=%3Co2i7401a78a1004080758m763ae647r4ab15bce379f5522%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001366.html">
+   <LINK REL="Next"  HREF="001363.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problem in adding mcp251x_info into platform	definition file</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problem%20in%20adding%20mcp251x_info%20into%20platform%0A%09definition%20file&In-Reply-To=%3Co2i7401a78a1004080758m763ae647r4ab15bce379f5522%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Problem in adding mcp251x_info into platform	definition file">nudtrobert at gmail.com
+       </A><BR>
+    <I>Thu Apr  8 16:58:30 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001366.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+        <LI>Next message: <A HREF="001363.html">[Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1361">[ date ]</a>
+              <a href="thread.html#1361">[ thread ]</a>
+              <a href="subject.html#1361">[ subject ]</a>
+              <a href="author.html#1361">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2010/4/7 christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at evolware.org</A>&gt;
+
+&gt;<i> On Wed, Apr 7, 2010 at 5:19 AM, Lei Luo &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nudtrobert at gmail.com</A>&gt; wrote:
+</I>&gt;<i> &gt; Hi Christian,
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> Hi, please always remember to CC the socketcan mailing list so people
+</I>&gt;<i> googling can find this. And we can say RTFM to them if they ask this
+</I>&gt;<i> question again. ;-)
+</I>&gt;<i>
+</I>
+Sorry for my mistake.
+
+
+&gt;<i>
+</I>&gt;<i>
+</I> &gt; I am a newbie of socketcan, I got the source code from the svn server.
+&gt;<i> &gt; There are two mcp2510 can  controllers in my arm at91rm9200 board. I
+</I>&gt;<i> &gt; compiled and installed socketcan with mcp251x modules successfully. But
+</I>&gt;<i> &gt; there is no can device after OS loaded in my board. So, how should I do
+</I>&gt;<i> to
+</I>&gt;<i> &gt; add the mcp251x_info to the platform definition file as what you
+</I>&gt;<i> have said
+</I>&gt;<i> &gt; in the beginning of mcp251x.c? I added it into at91rm9200_device.c, and
+</I>&gt;<i> &gt; include &lt;socketcan/can/platform/mcp251x.h&gt;, some err informations such as
+</I>&gt;<i> &gt; &quot;mcp251x_setup&quot; presented.
+</I>&gt;<i>
+</I>&gt;<i> I just recently configured a mcp251x for a at91sam9260 machine which
+</I>&gt;<i> is not too different from the at91rm9200. If you use the SVN version
+</I>&gt;<i> (so I guess old kernel) you have to copy mcp251x.h somewhere in the
+</I>&gt;<i> kernel include path. Then add to your board device:
+</I>&gt;<i>
+</I>&gt;<i> ....
+</I>&gt;<i> #include &lt;linux/can/mcp251x.h&gt;
+</I>&gt;<i>
+</I>&gt;<i> .....
+</I>&gt;<i>
+</I>&gt;<i> static struct mcp251x_platform_data mcp251x_info = {
+</I>&gt;<i>        .oscillator_frequency = 4000000,
+</I>&gt;<i>  // &lt;- set the crystal you used
+</I>&gt;<i>        .model = CAN_MCP251X_MCP2510,
+</I>&gt;<i>        .transceiver_enable = NULL,
+</I>&gt;<i> // &lt;- if you want to power up/down the transceiver for PM
+</I>&gt;<i> };
+</I>&gt;<i>
+</I>&gt;<i> static struct spi_board_info ek_spi_devices[] = {
+</I>&gt;<i> ......
+</I>&gt;<i>  {
+</I>&gt;<i>    .modalias       = &quot;mcp251x&quot;,
+</I>&gt;<i>    .platform_data  = &amp;mcp251x_info,
+</I>&gt;<i>    .irq            = AT91_PIN_PB18,
+</I>&gt;<i> // &lt;- set the IRQ
+</I>&gt;<i>    .max_speed_hz   = 5*1000*100,
+</I>&gt;<i>    .chip_select    = 0,
+</I>&gt;<i>    .controller_data = (void *) AT91_PIN_PB3,
+</I>&gt;<i> // &lt;- set the CS line
+</I>&gt;<i>    .bus_num        = 0,
+</I>&gt;<i> // &lt;- if you are on SPI port 0, otherwise 1
+</I>&gt;<i>  },
+</I>&gt;<i> ......
+</I>&gt;<i>  };
+</I>&gt;<i>
+</I>&gt;<i> static void __init ek_board_init(void)
+</I>&gt;<i> {
+</I>&gt;<i> .....
+</I>&gt;<i>          /* SPI */
+</I>&gt;<i>          at91_set_gpio_output(AT91_PIN_PB17, 0); /* power on */
+</I>&gt;<i> // &lt;- if you control power of the MCP
+</I>&gt;<i>          at91_set_gpio_output(AT91_PIN_PB16, 1); /* can reset */
+</I>&gt;<i> // &lt;- if you control reset of the MCP remember to deassert it
+</I>&gt;<i>          at91_add_device_spi(ek_spi_devices, ARRAY_SIZE(ek_spi_devices));
+</I>&gt;<i> .....
+</I>&gt;<i>
+</I>&gt;<i> For 2 CAN devices just do it twice :-). Remember to enable debug
+</I>&gt;<i> *before* loading modules (echo a big number to
+</I>&gt;<i> /proc/sys/kernel/printk). When you load modules you will see something
+</I>&gt;<i> like &quot;MCP probed&quot; or &quot;MCP no probed&quot;. If you don't see this anything
+</I>&gt;<i> you didn't do what's above or haven't loaded all the necessary modules
+</I>&gt;<i> (SPI master driver for example). If you see &quot;not probed&quot; please send
+</I>&gt;<i> the complete debug output. Chances are that you SPI link is not
+</I>&gt;<i> working or you got the wrong CS/IRQ pin.
+</I>&gt;<i>
+</I>I added can definitions into board-dk.c. When I &quot;modprobe mcp251x&quot;, it shows
+&quot;CAN device driver interface&quot; in console, mcp251x modules is loaded as can
+be seen from &quot;lsmod&quot;. But I can't find can device files such as &quot;can0, can1,
+...&quot; and there is no can infomation in &quot;ip link show&quot;.
+Is something I did wrong? Or the device files of can should not created
+automaticly as they are connected with spi?
+
+The code I added is as follows:
+
+static struct mcp251x_platform_data mcp251x_info = {
+       .oscillator_frequency = 12000000,
+       .model = CAN_MCP251X_MCP2510,
+};
+
+static struct spi_board_info dk_spi_devices[] = {
+ {
+   .modalias       = &quot;mcp251x&quot;,
+   .platform_data  = &amp;mcp251x_info,
+   .irq            = AT91_PIN_PC14,// &lt;- set the IRQ
+   .max_speed_hz   = 5*1000*1000,
+   .chip_select    = 2,
+   .controller_data = (void *) AT91_PIN_PA4,// &lt;- set the CS line
+ },
+  {
+   .modalias       = &quot;mcp251x&quot;,
+   .platform_data  = &amp;mcp251x_info,
+   .irq            = AT91_PIN_PC15,// &lt;- set the IRQ
+   .max_speed_hz   = 5*1000*1000,
+   .chip_select    = 3,
+   .controller_data = (void *) AT91_PIN_PA6,// &lt;- set the CS line
+ }
+};
+
+Thanks for helps!
+Regards,
+Luo
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100408/2b0d313a/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100408/2b0d313a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001366.html">[Socketcan-users] problem in cross compiling socketcan
+</A></li>
+	<LI>Next message: <A HREF="001363.html">[Socketcan-users] Problem in adding mcp251x_info into platform	definition file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1361">[ date ]</a>
+              <a href="thread.html#1361">[ thread ]</a>
+              <a href="subject.html#1361">[ subject ]</a>
+              <a href="author.html#1361">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

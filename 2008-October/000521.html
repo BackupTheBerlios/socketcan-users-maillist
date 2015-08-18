@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C490611EE.6030408%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000519.html">
+   <LINK REL="Next"  HREF="000522.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C490611EE.6030408%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">wg at grandegger.com
+       </A><BR>
+    <I>Mon Oct 27 20:09:34 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000519.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000522.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#521">[ date ]</a>
+              <a href="thread.html#521">[ thread ]</a>
+              <a href="subject.html#521">[ subject ]</a>
+              <a href="author.html#521">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> On Mon, 2008-10-27 at 15:21 +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i> ...
+</I>&gt;&gt;&gt;<i> We really don't like to use a newer version of the linux kernel at the
+</I>&gt;&gt;&gt;<i> moment, so backporting socketcan is the prefered method. Unfortunately
+</I>&gt;&gt;<i> What a pity.
+</I>&gt;<i> 
+</I>&gt;<i> Well, yes, but in my experience new kernels on powerpc tend to break the
+</I>&gt;<i> oftree and driver bindings for the oftree quite happily. Until this API
+</I>&gt;<i> is not settled yet, it's a tedious work chasing up.
+</I>
+Well, upgrading might indeed be a pain as various interfaces changed
+substantially like I2C, etc. But The latest and greatest Socket-CAN is
+also available for 2.6.24 and the API definition has settled in the
+meantime.
+
+&gt;<i> ... 
+</I>&gt;&gt;<i> Setting CAN device parameters like the bit-rate is now supported via
+</I>&gt;&gt;<i> SYSFS files:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   $ echo &quot;125000&quot; &gt; /sys/class/net/can0/can_bittiming/bitrate&quot;
+</I>&gt;<i> 
+</I>&gt;<i> Okay, worked.
+</I>&gt;<i> 
+</I>&gt;&gt;<i>   $ ifconfig cano up
+</I>&gt;<i> 
+</I>&gt;<i> Worked as well !
+</I>&gt;<i> 
+</I>&gt;<i> But without
+</I>&gt;<i> echo &quot;125000&quot; &gt;/sys/class/net/can0/can_bittiming/bitrate
+</I>&gt;<i> 
+</I>&gt;<i> I got
+</I>&gt;<i> ifconfig: SIOCSIFFLAGS: Invalid argument
+</I>
+That's by intention. A default bitrate is error-prone.
+
+&gt;<i> So the former is essential and I have to change some startup scripts.
+</I>&gt;<i> Would have maybe been good to provide a compatible canconfig program for
+</I>&gt;<i> backwards compatibility ...
+</I>
+canconfig was never part of the Socket-CAN distribution (SVN repository).
+
+&gt;<i> Is setting of the baudrate via user space API still supported ? 
+</I>&gt;<i> When upgrading socket-can, do I have to recompile all user space
+</I>&gt;<i> programs as well ?
+</I>
+The IOCTLs have been removed as there is little chance to get them
+included in the mainline kernel. Please use the SYSFS files instead.
+
+Also be aware that the bit-timing algorithm changed calculating somehow
+different values for your MPC5200 board.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000519.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000522.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#521">[ date ]</a>
+              <a href="thread.html#521">[ thread ]</a>
+              <a href="subject.html#521">[ subject ]</a>
+              <a href="author.html#521">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF1378F.1080906%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001119.html">
+   <LINK REL="Next"  HREF="001121.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF1378F.1080906%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov  4 09:13:03 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001119.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001121.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1120">[ date ]</a>
+              <a href="thread.html#1120">[ thread ]</a>
+              <a href="subject.html#1120">[ subject ]</a>
+              <a href="author.html#1120">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> On Tue, Nov 03, 2009 at 07:54:21PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Hi Fu,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i> in following the new patch as discussed yesterday. I add a XXX marked
+</I>&gt;&gt;&gt;&gt;<i> comment to this. Works all right on my setup. Please review.
+</I>&gt;&gt;&gt;<i> I will try it on my setup later today or tomorrow.
+</I>&gt;&gt;<i> I just started to do some tests, sorry for the delay. When I stop the
+</I>&gt;&gt;<i> device without any traffic, I get the message:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # ./ip link set can2 up type can bitrate 125000
+</I>&gt;&gt;<i> # ifconfig can2 down
+</I>&gt;<i> 
+</I>&gt;<i> should the ifconfig down not come before setting the bitrate?
+</I>
+The device was not yet started (up).
+
+&gt;&gt;<i> mpc52xx_can f0000980.can: SLPRQ timeout reached, failed to enter sleep mode!
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have a MPC5200 v1.2. I assume that you do not see that behavior on
+</I>&gt;&gt;<i> your test board!?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Yes I do. You just ran into the ominous hardware bug we discussed and
+</I>&gt;<i> the patch is for. I replaced the error return value with a warning here.
+</I>&gt;<i> This is exactly the fix we need so that the device won't get frozen.
+</I>
+You mean, an &quot;ifconfig canX up&quot; followed by a &quot;ifconfig canX down&quot; will
+always through the warning above? If yes, a simple mdelay() would do the
+jobs as well.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001119.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001121.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1120">[ date ]</a>
+              <a href="thread.html#1120">[ thread ]</a>
+              <a href="subject.html#1120">[ subject ]</a>
+              <a href="author.html#1120">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

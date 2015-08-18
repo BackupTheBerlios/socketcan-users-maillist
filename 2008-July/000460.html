@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080703095150.GA3197%40local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000459.html">
+   <LINK REL="Next"  HREF="000455.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Hans J. Koch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080703095150.GA3197%40local%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">hjk at linutronix.de
+       </A><BR>
+    <I>Thu Jul  3 11:51:50 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000459.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000455.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#460">[ date ]</a>
+              <a href="thread.html#460">[ thread ]</a>
+              <a href="subject.html#460">[ subject ]</a>
+              <a href="author.html#460">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Jul 03, 2008 at 10:24:21AM +0200, Kurt Van Dijck wrote:
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Robert Schwebel wrote:
+</I>&gt;&gt;<i> On Thu, Jul 03, 2008 at 12:59:45AM +0200, Hans J. Koch wrote:
+</I>&gt;&gt;&gt;&gt;<i> You surely can also do
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 	echo $phase_seg1 &gt; /sys/bla/blub
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> for all the values in this moment, but it is error prone, many steps and
+</I>&gt;&gt;&gt;&gt;<i> counter intuitive. Such a table in the kernel is cheap and we should
+</I>&gt;&gt;&gt;&gt;<i> make it easy for the user to express simple things like &quot;use 125000
+</I>&gt;&gt;&gt;&gt;<i> kbit&quot; in an easy and intuitive way.
+</I>&gt;&gt;&gt;<i> Yep. But we should also have the /sys/bla/blub stuff to satisfy the
+</I>&gt;&gt;&gt;<i> &quot;experts&quot;. It doesn't have to be atomic because we have to shutdown the
+</I>&gt;&gt;&gt;<i> interface anyway. So it can be simple and clean one-value-per-file sysfs
+</I>&gt;&gt;&gt;<i> attributes. Completely hardware independent. It's the drivers task to
+</I>&gt;&gt;&gt;<i> sort it out correctly.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You repeat my argumentation :-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> It's also easier for C applications. They don't have to care about
+</I>&gt;&gt;&gt;&gt;<i> calling canconfig with system() or have to deal with all that
+</I>&gt;&gt;&gt;&gt;<i> values; usually, an application wants to be independend from the bit
+</I>&gt;&gt;&gt;&gt;<i> time details. Most of our customers just know that their app runs at
+</I>&gt;&gt;&gt;&gt;<i> 250 kBit or 125 kBit, and that can easily be coded into the
+</I>&gt;&gt;&gt;&gt;<i> application. With the table, bit timing details are *config time
+</I>&gt;&gt;&gt;&gt;<i> issues*, and that's exactly what they are.
+</I>&gt;&gt;&gt;<i> Well, if it's just an application internally used in one project by
+</I>&gt;&gt;&gt;<i> one customer, you're right. But people like the ixxat guys who write
+</I>&gt;&gt;&gt;<i> generic CAN software
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 1) have to support _everything_ that is possible and might be needed,
+</I>&gt;&gt;&gt;<i> 2) should be able to do this in a hardware-independent way
+</I>&gt;<i> More than, or limited to what exists in CAN2.0B?
+</I>
+I'd say, limited to that. Everything that's beyond standards should not
+be exported to userspace. The driver might use it internally in a
+sensible way.
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> All the IXXAT based projects we have done so far work very well with
+</I>&gt;&gt;<i> that scheme. In the end, it was *invented* after we had problems with
+</I>&gt;&gt;<i> the former scheme not fulfilling all their stack requirements.
+</I>&gt;<i> Exporting all possibilities that are beyond CAN2.0B, are responsibility of the driver.
+</I>
+I advise against it. Let's have a look at the SJA1000 SAM bit as an
+example. The datasheet recommends setting that bit for &quot;low/medium speed
+busses&quot; and clearing it for &quot;high speed busses&quot;. So the driver could
+define a limit and set the bit accordingly. No need to export it.
+
+If you exported it, _every_ general purpose userspace software would
+have to check if the controller is a SJA1000 and then set/clear the bit
+itself. And you'd need similar procedures for _all_ special features of
+_all_ chips. To make it very clear, it really doesn't matter if you
+stick the label &quot;expert mode&quot; to it. There is no such thing, only _one_
+socketcan interface.
+
+&gt;<i> I see here an opportunity to export one extra attribute, ie, the chip that is used
+</I>&gt;<i> internally, or the driver that supports it.
+</I>&gt;<i> Do we all agree that for 'normal' operation, a scheme with bitrate, brp, sjw, ... fits the needs?
+</I>&gt;<i> From there, every driver exports its own extra attributes to provide _everything_ else?
+</I>
+No, as I explained above. Extra chip features could be used if we find a
+generic way to export some kind of &quot;can_capabilities&quot; attribute. The
+WLAN interface does similar things, e.g. you can find out if your chip
+supports monitor mode in a generic way.
+
+To use the above example, instead of exporting the chip specific SAM
+bit, there could be a capability flag HAS_SPECIAL_LOWSPEED_TREATMENT. If
+this flag is set, a userspace application can offer a &quot;low speed&quot;
+setting and the driver will export a can_low_speed attribute that can be
+set to 0 or 1.
+
+The available capabilities would be documented so that userspace apps
+could still be completely generic and would not have to care about what
+chip is in there. Of course, drivers would be required to set all these
+things to sensible default values (like WLAN drivers, which disable
+monitor mode by default).
+
+&gt;<i>
+</I>&gt;<i> It still poses a problem that probably, complex sysfs attributes are created.
+</I>
+No way. If we came up with such a crappy interface, the netdev people
+would probably (after they finished using their brown paper bags) blow
+our drivers to hell.
+
+Thanks,
+Hans
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000459.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000455.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#460">[ date ]</a>
+              <a href="thread.html#460">[ thread ]</a>
+              <a href="subject.html#460">[ subject ]</a>
+              <a href="author.html#460">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kernel integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20integration&In-Reply-To=%3C20070803081644.GA9840%40enneenne.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000181.html">
+   <LINK REL="Next"  HREF="000183.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kernel integration</H1>
+    <B>Rodolfo Giometti</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kernel%20integration&In-Reply-To=%3C20070803081644.GA9840%40enneenne.com%3E"
+       TITLE="[Socketcan-users] Kernel integration">giometti at enneenne.com
+       </A><BR>
+    <I>Fri Aug  3 10:16:44 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000181.html">[Socketcan-users] Kernel integration
+</A></li>
+        <LI>Next message: <A HREF="000183.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#182">[ date ]</a>
+              <a href="thread.html#182">[ thread ]</a>
+              <a href="subject.html#182">[ subject ]</a>
+              <a href="author.html#182">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Aug 02, 2007 at 09:06:16PM +0200, Oliver Hartkopp wrote:
+&gt;<i> 
+</I>&gt;<i> if you could look at the SVN log you will see all our changes based on
+</I>&gt;<i> hints and advises from the netdev list and from every change the inside
+</I>&gt;<i> kernel since our first posting
+</I>&gt;<i> (<A HREF="http://marc.info/?l=linux-netdev&amp;m=117932884006029&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=117932884006029&amp;w=2</A>) that was
+</I>&gt;<i> already quickly reviewed by Thomas Gleixner. Indeed we've done all the
+</I>&gt;<i> things that have been requested.
+</I>
+Ok.
+
+&gt;<i> The problem is, that there are many misunderstandings as CAN is very
+</I>&gt;<i> different to the other networking stuff and you have to go a bit deeper
+</I>&gt;<i> to understand the broken CAN design in opposite to Ethernet and IP. And
+</I>&gt;<i> there was also a misunderstanding with my wish to include the  PF_CAN
+</I>&gt;<i> core first and not to wait for the suggested changes in the VCAN driver
+</I>&gt;<i> (as the protocol family and the netdriver are really _different_
+</I>&gt;<i> things!). Finally this RFC to Partick (
+</I>&gt;<i> <A HREF="http://marc.info/?l=linux-netdev&amp;m=118460167525654&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118460167525654&amp;w=2</A> ) waits to be
+</I>&gt;<i> answered since 17 days ... i made some changes in the comments today to
+</I>&gt;<i> point out the intention more precisely, which might (hopefully) make
+</I>&gt;<i> this RFC to Patrick obsolete ...
+</I>
+I see.
+
+&gt;<i> Btw. everything that has to be fixed and beautified is done now, as we
+</I>&gt;<i> *really* adopted the hints. But David is (due to all these
+</I>&gt;<i> misunderstandings) on edge - which i can understand in parts.
+</I>&gt;<i> 
+</I>&gt;<i> AFAIK Urs want's to post the patch series try#4 this evening which is
+</I>&gt;<i> try#3 (<A HREF="http://marc.info/?l=linux-netdev&amp;m=118248490902398&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118248490902398&amp;w=2</A>) with some
+</I>&gt;<i> changes described in
+</I>&gt;<i> (<A HREF="http://marc.info/?l=linux-netdev&amp;m=118398142013357&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=118398142013357&amp;w=2</A>) and some
+</I>&gt;<i> changes caused by the ongoing kernel development.
+</I>
+Ok.
+
+Can I ask to you why you don't use a GIT repository? :) Or, if you do,
+where can I find it?
+
+&gt;<i> If you have still any questions on PF_CAN or it's concepts please try to
+</I>&gt;<i> discuss them here first (as i don't want to make the netdev ML
+</I>&gt;<i> discussions even more curious in these critical times ;-) You can find a
+</I>
+I will.
+
+&gt;<i> full qualified documentation under
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+</I>
+Great! Thanks. I'm going to read it.
+
+&gt;<i> Thanks for your interest &amp; activity!
+</I>
+Thanks to you for your code! ;)
+
+Ciao,
+
+Rodolfo
+
+-- 
+
+GNU/Linux Solutions                  e-mail:    <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giometti at enneenne.com</A>
+Linux Device Driver                             <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giometti at gnudd.com</A>
+Embedded Systems                     		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giometti at linux.it</A>
+UNIX programming                     phone:     +39 349 2432127
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20070803/dc19e37d/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20070803/dc19e37d/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000181.html">[Socketcan-users] Kernel integration
+</A></li>
+	<LI>Next message: <A HREF="000183.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#182">[ date ]</a>
+              <a href="thread.html#182">[ thread ]</a>
+              <a href="subject.html#182">[ subject ]</a>
+              <a href="author.html#182">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

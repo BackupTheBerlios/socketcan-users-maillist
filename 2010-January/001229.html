@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] README.submitting-patches
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20README.submitting-patches&In-Reply-To=%3C4B53336A.1010906%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001228.html">
+   <LINK REL="Next"  HREF="001230.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] README.submitting-patches</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20README.submitting-patches&In-Reply-To=%3C4B53336A.1010906%40grandegger.com%3E"
+       TITLE="[Socketcan-users] README.submitting-patches">wg at grandegger.com
+       </A><BR>
+    <I>Sun Jan 17 16:57:30 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001228.html">[Socketcan-users] README.submitting-patches
+</A></li>
+        <LI>Next message: <A HREF="001230.html">[Socketcan-users] (no subject)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1229">[ date ]</a>
+              <a href="thread.html#1229">[ thread ]</a>
+              <a href="subject.html#1229">[ subject ]</a>
+              <a href="author.html#1229">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfram Sang wrote:
+&gt;<i> On Sun, Jan 17, 2010 at 03:29:35PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hello,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> as promised, I composed and committed a little README on how to get your
+</I>&gt;&gt;<i> Socket-CAN changes into the Linux kernel or BerliOS repo. See:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/README.submitting-patches">http://svn.berlios.de/svnroot/repos/socketcan/trunk/README.submitting-patches</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Any comment, feedback, correction or improvement is welcome. For your
+</I>&gt;&gt;<i> convenience, I have attached the file below:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> How to get your Socket-CAN changes into the Linux kernel or BerliOS repo
+</I>&gt;&gt;<i> ========================================================================
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The Socket-CAN repository at BerliOS [1] allows to build *out-of-tree*
+</I>&gt;&gt;<i> Socket-CAN kernel modules and is mainly useful for old kernel versions
+</I>&gt;&gt;<i> and development. Currently it is based on Subversion but we want to
+</I>&gt;&gt;<i> switch to GIT sooner or later. We try to keep the BerliOS repo in sync
+</I>&gt;&gt;<i> with the kernel by backporting patches from the kernel and vice versa.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If your changes are already mature in terms of functionality and code
+</I>&gt;&gt;<i> quality, you may want to get them immetiately into the mainline kernel.
+</I>&gt;<i> 
+</I>&gt;<i> immediately
+</I>&gt;<i> 
+</I>&gt;&gt;<i> If you feel that's not already the case and some more discussion and
+</I>&gt;&gt;<i> feedback is required, it's useful to prepare and publish a patch for the
+</I>&gt;&gt;<i> BerliOS repo first. Also the requirements for acceptance are not that
+</I>&gt;&gt;<i> strict than for kernel inclusion. If kernel inclusion is your primary
+</I>&gt;&gt;<i> goal, it makes sense to start preparing patches for the kernel
+</I>&gt;&gt;<i> straightaway. An eventual backport to the BerliOS repo is usually quite
+</I>&gt;&gt;<i> simply and does not require a full review, reducing at the same time the
+</I>&gt;<i> 
+</I>&gt;<i> /simply/simple
+</I>
+Both fixed.
+
+&gt;<i> 
+</I>&gt;&gt;<i> maintainers workload.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Patches for kernel inclusion:
+</I>&gt;&gt;<i> ----------------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> For kernel inclusion you need to prepare patches against David Millers
+</I>&gt;&gt;<i> &quot;net-next-2.6&quot; GIT tree, which you can get as shown below:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   $ git clone \
+</I>&gt;&gt;<i>     <A HREF="git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6.git">git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next-2.6.git</A>
+</I>&gt;<i> 
+</I>&gt;<i> I think the 80 columns-rule is really inconvenient here.
+</I>
+Well, the &quot;\&quot; is not that bad.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001228.html">[Socketcan-users] README.submitting-patches
+</A></li>
+	<LI>Next message: <A HREF="001230.html">[Socketcan-users] (no subject)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1229">[ date ]</a>
+              <a href="thread.html#1229">[ thread ]</a>
+              <a href="subject.html#1229">[ subject ]</a>
+              <a href="author.html#1229">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

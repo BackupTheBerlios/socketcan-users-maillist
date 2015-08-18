@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] TS-CAN1 on SJA1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TS-CAN1%20on%20SJA1000&In-Reply-To=%3C4B9E285F.80904%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001343.html">
+   <LINK REL="Next"  HREF="001348.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] TS-CAN1 on SJA1000</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20TS-CAN1%20on%20SJA1000&In-Reply-To=%3C4B9E285F.80904%40grandegger.com%3E"
+       TITLE="[Socketcan-users] TS-CAN1 on SJA1000">wg at grandegger.com
+       </A><BR>
+    <I>Mon Mar 15 13:30:23 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001343.html">[Socketcan-users] TS-CAN1 on SJA1000
+</A></li>
+        <LI>Next message: <A HREF="001348.html">[Socketcan-users] TS-CAN1 on SJA1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1344">[ date ]</a>
+              <a href="thread.html#1344">[ thread ]</a>
+              <a href="subject.html#1344">[ subject ]</a>
+              <a href="author.html#1344">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Alexey,
+
+Alexey Serov wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> We've just ordered TS-CAN1 PC/104 cards for our project (
+</I>&gt;<i> <A HREF="http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1">http://www.embeddedarm.com/products/board-detail.php?product=TS-CAN1</A> ). I
+</I>&gt;<i> searched through the mailing list and found the thread:
+</I>&gt;<i> <A HREF="http://old.nabble.com/TSCAN1-driver-td26053967.html">http://old.nabble.com/TSCAN1-driver-td26053967.html</A> .
+</I>&gt;<i> 
+</I>&gt;<i> In this thread I found the source of TS-CAN1 driver, but as I understand, it
+</I>&gt;<i> is not working. Also, I found the source of the driver for Xenomai
+</I>&gt;<i> environment.
+</I>
+IIRC, Alexandre got it working finally. That driver is a good starting
+point, at least. It definitely needs some modification to get it ready
+for mainline, e.g. as it is for the ISA bus, it should use
+isa_register_driver (see sja1000_isa.c).
+
+&gt;<i> 
+</I>&gt;<i> So, my question: does exist working TS-CAN1 driver for socket-can in public
+</I>&gt;<i> domain or I'll have to look into Xenomai?
+</I>
+See above. The Xenomai driver is another good example.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001343.html">[Socketcan-users] TS-CAN1 on SJA1000
+</A></li>
+	<LI>Next message: <A HREF="001348.html">[Socketcan-users] TS-CAN1 on SJA1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1344">[ date ]</a>
+              <a href="thread.html#1344">[ thread ]</a>
+              <a href="subject.html#1344">[ subject ]</a>
+              <a href="author.html#1344">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] BCM , receiving without filter , and Can_id
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20BCM%20%2C%20receiving%20without%20filter%20%2C%20and%20Can_id&In-Reply-To=%3C502CF5A6.9060207%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002384.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] BCM , receiving without filter , and Can_id</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20BCM%20%2C%20receiving%20without%20filter%20%2C%20and%20Can_id&In-Reply-To=%3C502CF5A6.9060207%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] BCM , receiving without filter , and Can_id">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Thu Aug 16 15:29:10 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002384.html">[Socketcan-users] BCM , receiving without filter , and Can_id
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2385">[ date ]</a>
+              <a href="thread.html#2385">[ thread ]</a>
+              <a href="subject.html#2385">[ subject ]</a>
+              <a href="author.html#2385">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Mahesh,
+
+first this mailing list is obsolete - please move to
+
+	<A HREF="http://vger.kernel.org/vger-lists.html#linux-can">http://vger.kernel.org/vger-lists.html#linux-can</A>
+
+for further postings.
+
+On 16.08.2012 10:48, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Mahesh.Maharjan-EXT at continental-corporation.com</A> wrote:
+
+&gt;<i> I am working with imx Auto-Infotainment board, here I want to use the flexcan 
+</I>&gt;<i> BCM for both receiving and transmission process for can_message. But I want to 
+</I>&gt;<i> receive all CAN-message from Bus without getting filter Or, without defined 
+</I>&gt;<i> can_id in source file---
+</I>&gt;<i> I am missing something defining in my declaration for RX_SET up Or setting 
+</I>&gt;<i> FILTER_ID, ( without using it)
+</I>&gt;<i> It is possible to , so I can receiver message instead of declaring the can_id ?
+</I>&gt;<i> 
+</I>&gt;<i> Or I should use flexcan_RAW and BCM together , for receiver process and 
+</I>&gt;<i> transmission process separately.
+</I>
+Yes. Think about the multi-user capabilities of your system.
+You may open many CAN_BCM sockets as well as CAN_RAW sockets.
+
+When creating a CAN_RAW socket you may use it as-is (and get all CAN traffic)
+or you may filter the CAN_RAW socket by CAN-ID filters (see documentation):
+
+<A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/networking/can.txt;h=820f55344edc0a035358fa643bbe79c48d4d887f;hb=HEAD#l424">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git;a=blob;f=Documentation/networking/can.txt;h=820f55344edc0a035358fa643bbe79c48d4d887f;hb=HEAD#l424</A>
+
+Additionally you may create one or more CAN_BCM sockets to create BCM jobs to
+send CAN frames periodically or to detect payload changes in received
+messages as well as timeouts.
+
+Regards,
+Oliver
+
+ps. please post your mails with text-only (no HTML)
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002384.html">[Socketcan-users] BCM , receiving without filter , and Can_id
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2385">[ date ]</a>
+              <a href="thread.html#2385">[ thread ]</a>
+              <a href="subject.html#2385">[ subject ]</a>
+              <a href="author.html#2385">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

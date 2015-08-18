@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EC915E.6050701%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000020.html">
+   <LINK REL="Next"  HREF="000022.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C44EC915E.6050701%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug 23 19:33:18 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000020.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000022.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#21">[ date ]</a>
+              <a href="thread.html#21">[ thread ]</a>
+              <a href="subject.html#21">[ subject ]</a>
+              <a href="author.html#21">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jan Kiszka wrote:
+&gt;<i> Hartkopp, Oliver (K-GEFE/E) wrote:
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at denx.de</A> wrote:
+</I>&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> while playing with RAW CAN sockets of LLCF (socketcan for Linux 2.4) I
+</I>&gt;&gt;&gt;<i> realized, that TX messages are automatically looped back to the local
+</I>&gt;&gt;&gt;<i> interface. What is the intention of this feature? Can this feature be
+</I>&gt;&gt;&gt;<i> switched off?
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> this is indeed a wanted feature, as you may have more than one application
+</I>&gt;&gt;<i> working on the same CAN-netdevice. Netdevices only send or receive frames -
+</I>&gt;&gt;<i> they do not implement any loopback funktionality.
+</I>&gt;&gt;<i> But this functionality is important implementing a broadcast bus like the
+</I>&gt;&gt;<i> CAN-bus.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Mmh, that's not that obvious to me (did I miss the related discussion on
+</I>&gt;<i> this?). We are not designing a new IPC mechanism here, but a networking
+</I>&gt;<i> API.
+</I>&gt;<i> 
+</I>&gt;<i> I'm not disputing that this can be a useful feature for certain
+</I>&gt;<i> applications, but I'm convinced it should be only optional and off by
+</I>&gt;<i> default. That would follow the rule of least surprise when comparing CAN
+</I>&gt;<i> with other networking devices. The overhead when it's unused is another
+</I>&gt;<i> counterargument.
+</I>&gt;<i> 
+</I>&gt;<i> This feature is not included in the RT-variant so far, and I can only
+</I>&gt;<i> imagine that it would make sense to add it if
+</I>&gt;<i>  A) people ask for it and
+</I>&gt;<i>  B) it's user-controllable.
+</I>
+Yes, I already put it on my TODO list. I would made it an option 
+configurable via kernel configuration parameter. I also don't like to 
+have it build in by default.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000020.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000022.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#21">[ date ]</a>
+              <a href="thread.html#21">[ thread ]</a>
+              <a href="subject.html#21">[ subject ]</a>
+              <a href="author.html#21">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

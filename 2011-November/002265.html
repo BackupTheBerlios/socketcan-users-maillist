@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%201/4%5D%20can%3A%20cc770%3A%20add%0A%20driver%20core%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED3941D.3070302%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002263.html">
+   <LINK REL="Next"  HREF="002267.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%201/4%5D%20can%3A%20cc770%3A%20add%0A%20driver%20core%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED3941D.3070302%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Nov 28 15:01:01 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002263.html">[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</A></li>
+        <LI>Next message: <A HREF="002267.html">[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2265">[ date ]</a>
+              <a href="thread.html#2265">[ thread ]</a>
+              <a href="subject.html#2265">[ subject ]</a>
+              <a href="author.html#2265">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/28/2011 02:52 PM, Wolfgang Grandegger wrote:
+
+[...]
+
+&gt;&gt;&gt;<i> +/*
+</I>&gt;&gt;&gt;<i> + * This driver uses the last 5 message objects 11..15. The definitions
+</I>&gt;&gt;&gt;<i> + * and structure below allows to configure and assign them to the real
+</I>&gt;&gt;&gt;<i> + * message object.
+</I>&gt;&gt;&gt;<i> + */
+</I>&gt;&gt;&gt;<i> +static unsigned char cc770_obj_flags[CC770_OBJ_MAX] = {
+</I>&gt;&gt;&gt;<i> +	[CC770_OBJ_RX0] = CC770_OBJ_FLAG_RX,
+</I>&gt;&gt;&gt;<i> +	[CC770_OBJ_RX1] = CC770_OBJ_FLAG_RX | CC770_OBJ_FLAG_EFF,
+</I>&gt;&gt;&gt;<i> +	[CC770_OBJ_RX_RTR0] = CC770_OBJ_FLAG_RX | CC770_OBJ_FLAG_RTR,
+</I>&gt;&gt;&gt;<i> +	[CC770_OBJ_RX_RTR1] = CC770_OBJ_FLAG_RX | CC770_OBJ_FLAG_RTR |
+</I>&gt;&gt;&gt;<i> +			      CC770_OBJ_FLAG_EFF,
+</I>&gt;&gt;&gt;<i> +	[CC770_OBJ_TX] = 0,
+</I>&gt;&gt;&gt;<i> +};
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Is is worth the trouble making this a per device instance option? In a
+</I>&gt;&gt;<i> OF-Tree world should this become an &quot;attribute&quot; (or what's the correct
+</I>&gt;&gt;<i> of-tree word for it?)
+</I>&gt;<i> 
+</I>&gt;<i> Well, only msg object 15 does have double buffering and should therefore
+</I>&gt;<i> be used for bulk data reception. Therefore we have for the i82527 the
+</I>&gt;<i> module parameter:
+</I>&gt;<i> 
+</I>&gt;<i>   MODULE_PARM_DESC(msgobj15_eff,
+</I>&gt;<i> 	           &quot;Extended 29-bit frames for message object 15 &quot;
+</I>&gt;<i> 	 	   &quot;(default: 11-bit standard frames)&quot;);
+</I>&gt;<i> 
+</I>&gt;<i> For TX we currently use just one object. Anyway, the device tree is not
+</I>&gt;<i> the right place to define such parameters because it's too static. The
+</I>&gt;<i> user may want to select it at runtime depending on the application, if
+</I>&gt;<i> at all. We can change it when there is a *real* requirement.
+</I>
+Fine with me.
+
+&gt;&gt;&gt;<i> +	for (o = 0; o &lt;  CC770_OBJ_MAX; o++) {
+</I>&gt;&gt;<i>                          ^^^^^^^^^^^^^
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> what about ARRAY_SIZE(priv-&gt;obj_flags)
+</I>&gt;<i> 
+</I>&gt;<i> CC770_OBJ_MAX is not derived from a static array definition but as show
+</I>&gt;<i> below:
+</I>
+Okay...
+
+&gt;<i>   enum {
+</I>&gt;<i> 	CC770_OBJ_RX0 = 0,	/* for receiving normal messages */
+</I>&gt;<i> 	CC770_OBJ_RX1,		/* for receiving normal messages */
+</I>&gt;<i> 	CC770_OBJ_RX_RTR0,	/* for receiving remote transmission requests */
+</I>&gt;<i> 	CC770_OBJ_RX_RTR1,	/* for receiving remote transmission requests */
+</I>&gt;<i> 	CC770_OBJ_TX,		/* for sending messages */
+</I>&gt;<i> 	CC770_OBJ_MAX  &lt;================
+</I>
+...then add a &quot;,&quot; here :P
+
+Marc
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20111128/9c0b0496/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20111128/9c0b0496/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002263.html">[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</A></li>
+	<LI>Next message: <A HREF="002267.html">[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2265">[ date ]</a>
+              <a href="thread.html#2265">[ thread ]</a>
+              <a href="subject.html#2265">[ subject ]</a>
+              <a href="author.html#2265">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

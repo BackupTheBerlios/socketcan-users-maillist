@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v4 0/4] can: cc770: add support for the Bosch CC770 and Intel AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v4%200/4%5D%20can%3A%20cc770%3A%20add%0A%20support%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED4BBFC.6010306%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002277.html">
+   <LINK REL="Next"  HREF="002272.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v4 0/4] can: cc770: add support for the Bosch CC770 and Intel AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v4%200/4%5D%20can%3A%20cc770%3A%20add%0A%20support%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED4BBFC.6010306%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v4 0/4] can: cc770: add support for the Bosch CC770 and Intel AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Tue Nov 29 12:03:24 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002277.html">[Socketcan-users] [PATCH net-next v4 0/4] can: cc770: add support for the Bosch CC770 and Intel AN82527
+</A></li>
+        <LI>Next message: <A HREF="002272.html">[Socketcan-users] [PATCH net-next v4 1/4] can: cc770: add driver	core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2278">[ date ]</a>
+              <a href="thread.html#2278">[ thread ]</a>
+              <a href="subject.html#2278">[ subject ]</a>
+              <a href="author.html#2278">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/29/2011 11:51 AM, Marc Kleine-Budde wrote:
+&gt;<i> On 11/29/2011 11:47 AM, Marc Kleine-Budde wrote:
+</I>&gt;&gt;<i> On 11/29/2011 10:11 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Already since a while we have support for the Bosch CC770 and Intel
+</I>&gt;&gt;&gt;<i> AN82527 CAN controllers in our out-of-tree Socket-CAN repository.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> In the meantime I found a TQM855L board with two AN82527 on it,
+</I>&gt;&gt;&gt;<i> which allowed me to provide and test a generic platform driver
+</I>&gt;&gt;&gt;<i> as well.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Changes since v1:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> - remove version.h includes
+</I>&gt;&gt;&gt;<i> - some minor corrections in the ISA bus driver
+</I>&gt;&gt;&gt;<i> - add platform header file to the driver core
+</I>&gt;&gt;&gt;<i> - add generic platform driver
+</I>&gt;&gt;&gt;<i> - add and update device tree nodes for tqm8xx and tqm8548
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Changes since v2:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> - correct license text as suggest by Oliver Hartkopp
+</I>&gt;&gt;&gt;<i> - use the new module_platform_driver function
+</I>&gt;&gt;&gt;<i> - provide get_berr_counter callback for cc770
+</I>&gt;&gt;&gt;<i> - improve CAN error state change handling
+</I>&gt;&gt;&gt;<i> - more comprehensive cc770_isa driver description
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Changes since v3:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> - pre-define pr_fmt()
+</I>&gt;&gt;&gt;<i> - use KBUILD_MODNAME instead of DRV_NAME
+</I>&gt;&gt;&gt;<i> - use ARRAY_SIZE() whenever appropriate
+</I>&gt;&gt;&gt;<i> - use variable name &quot;o&quot; for message objects consistantly
+</I>&gt;&gt;&gt;<i> - use proper error code for cc770_probe_chip
+</I>&gt;&gt;&gt;<i> - remove unneeded member priv-&gt;open_time
+</I>&gt;&gt;&gt;<i> - remove unnecessary masking of u8 variables (with 0xff)
+</I>&gt;&gt;&gt;<i> - use &quot;!skb&quot; instead of &quot;skb == NULL&quot;
+</I>&gt;&gt;&gt;<i> - CC770_MSG_MAX now limits the number of messages read in the ISR
+</I>&gt;&gt;&gt;<i> - use &quot;|&quot; instead of &quot;+&quot; to combine bit masks
+</I>&gt;&gt;&gt;<i> - remove return code check of platform_get_resource() in remove function
+</I>&gt;&gt;&gt;<i> - remove postal address from GPL copyright text
+</I>&gt;&gt;&gt;<i> - fix WARNING: __packed is preferred over __attribute__((packed))
+</I>&gt;&gt;&gt;<i> - some more minor fixes (casts, white space, etc.)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Feel free to add by Acked-by to patches 1 and 2.
+</I>&gt;<i>                    ^^
+</I>&gt;<i> my
+</I>
+Will do for the next version. You may also want to ack them explicitly.
+
+Thanks,
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002277.html">[Socketcan-users] [PATCH net-next v4 0/4] can: cc770: add support for the Bosch CC770 and Intel AN82527
+</A></li>
+	<LI>Next message: <A HREF="002272.html">[Socketcan-users] [PATCH net-next v4 1/4] can: cc770: add driver	core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2278">[ date ]</a>
+              <a href="thread.html#2278">[ thread ]</a>
+              <a href="subject.html#2278">[ subject ]</a>
+              <a href="author.html#2278">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

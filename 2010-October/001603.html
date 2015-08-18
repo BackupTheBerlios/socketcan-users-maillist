@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x: repeated frames while sending
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CBF37E1.9030702%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001602.html">
+   <LINK REL="Next"  HREF="001604.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x: repeated frames while sending</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CBF37E1.9030702%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mcp251x: repeated frames while sending">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 20 20:41:37 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001602.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+        <LI>Next message: <A HREF="001604.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1603">[ date ]</a>
+              <a href="thread.html#1603">[ thread ]</a>
+              <a href="subject.html#1603">[ subject ]</a>
+              <a href="author.html#1603">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/19/2010 10:58 PM, Marc Kleine-Budde wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> On 10/19/2010 10:41 PM, Jargalan Nermunkh wrote:
+</I>&gt;&gt;<i> I am using the 2.6.35 driver for the mcp251x (using the one in the
+</I>&gt;&gt;<i> &quot;spi-rewrite&quot; tree) with the 8 patches found here:
+</I>&gt;&gt;<i> <A HREF="http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.htmland">http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.htmland</A>
+</I>&gt;&gt;<i> fix for the 000 or 004 IDs.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Kernel is from the &quot;spi-rewrite&quot; tree and the only change is to bring up the
+</I>&gt;&gt;<i> spi bus and running on an OMAP-L138 (
+</I>&gt;&gt;<i> <A HREF="http://www.mitydsp.com/products-services/cpu-engines/mitydsp-l138F/">http://www.mitydsp.com/products-services/cpu-engines/mitydsp-l138F/</A>).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am bringing up can0 with &quot;ip link set can0 up txqueuelen 1000 type can
+</I>&gt;&gt;<i> bitrate 1000000). I have recompiled the can-utils found in the Socket can
+</I>&gt;&gt;<i> SVN repo for the OMAP-L138. The repeated frames are produced when &quot;cangen
+</I>&gt;&gt;<i> -vv -g 0 -I 255 -L 1 -D i can0&quot;. The repeated frames can be seen on another
+</I>&gt;&gt;<i> board and when it is sent to a Lawicel CAN dongle.
+</I>&gt;<i> 
+</I>&gt;<i> Perfecto :)
+</I>
+I'm seeing repeated frames with the mcp251x driver at 1Mbit, too. The async
+driver works fine. If you want to test:
+
+<A HREF="http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/mcp251x-async">http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/mcp251x-async</A>
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101020/67f4d2c8/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101020/67f4d2c8/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001602.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+	<LI>Next message: <A HREF="001604.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1603">[ date ]</a>
+              <a href="thread.html#1603">[ thread ]</a>
+              <a href="subject.html#1603">[ subject ]</a>
+              <a href="author.html#1603">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

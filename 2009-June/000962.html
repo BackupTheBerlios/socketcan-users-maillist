@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] using socketcan from Python script
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C200906230955.06130.matthias.fuchs%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000960.html">
+   <LINK REL="Next"  HREF="000963.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] using socketcan from Python script</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C200906230955.06130.matthias.fuchs%40esd.eu%3E"
+       TITLE="[Socketcan-users] using socketcan from Python script">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Tue Jun 23 09:55:05 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000960.html">[Socketcan-users] Local loopback broken?
+</A></li>
+        <LI>Next message: <A HREF="000963.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#962">[ date ]</a>
+              <a href="thread.html#962">[ thread ]</a>
+              <a href="subject.html#962">[ subject ]</a>
+              <a href="author.html#962">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+did anybody try to use socketcan from a Python script?
+I gave it a try but with no success:
+
+...
+import struct
+import socket
+
+AF_CAN = 29
+PF_CAN = AF_CAN
+CAN_RAW = 1
+SOL_CAN_BASE = 100
+SOL_CAN_RAW = (SOL_CAN_BASE + CAN_RAW)
+CAN_RAW_FILTER = 1
+
+# create socket
+s = socket.socket(PF_CAN, socket.SOCK_RAW, CAN_RAW)
+print &quot;socket=&quot;,
+print s
+
+# setup id filter
+id = 0
+mask = 0
+result = s.setsockopt(SOL_CAN_RAW, CAN_RAW_FILTER, struct.pack(&quot;%i%i&quot; % (id,mask)))
+print &quot;setsockopt=&quot;,
+print result
+
+# bind to any I/F (ifindex=0)
+result = s.bind(struct.pack(&quot;%i%i%i&quot; % (AF_CAN, 0, 0)))
+print &quot;bind=&quot;,
+print result
+...
+
+
+My idea to call socket.bind() seems to be incorrect:
+
+socket= &lt;socket._socketobject object at 0xb7d6d4fc&gt;
+setsockopt= None
+Traceback (most recent call last):
+ File &quot;socketcan.py&quot;, line 26, in &lt;module&gt;
+   result = s.bind(struct.pack(&quot;%i%i%i&quot; % (AF_CAN, 0, 0)))
+ File &quot;&lt;string&gt;&quot;, line 1, in bind
+socket.error: getsockaddrarg: bad family
+
+
+I expect that I am doing something slightly wrong :-)
+Any idea?
+
+
+Matthias
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000960.html">[Socketcan-users] Local loopback broken?
+</A></li>
+	<LI>Next message: <A HREF="000963.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#962">[ date ]</a>
+              <a href="thread.html#962">[ thread ]</a>
+              <a href="subject.html#962">[ subject ]</a>
+              <a href="author.html#962">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

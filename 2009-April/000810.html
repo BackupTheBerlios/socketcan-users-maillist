@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socket CAN error handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%20CAN%20error%20handling&In-Reply-To=%3C49F4C575.3050903%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000809.html">
+   <LINK REL="Next"  HREF="000813.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socket CAN error handling</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%20CAN%20error%20handling&In-Reply-To=%3C49F4C575.3050903%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] socket CAN error handling">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Apr 26 22:35:01 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000809.html">[Socketcan-users] socket CAN error handling
+</A></li>
+        <LI>Next message: <A HREF="000813.html">[Socketcan-users] socket CAN error handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#810">[ date ]</a>
+              <a href="thread.html#810">[ thread ]</a>
+              <a href="subject.html#810">[ subject ]</a>
+              <a href="author.html#810">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Heinz-J&#252;rgen Oertel wrote:
+</I>
+
+&gt;&gt;&gt;<i> May be you can consider avoiding _error frame_ in the doc and source code.
+</I>
+I read &quot;source code&quot; here ;-)
+
+&gt;&gt;<i> Sorry - too late.
+</I>&gt;<i> 
+</I>&gt;<i> Why to late? I do not see a problem to change the documentation if it
+</I>&gt;<i> helps to avoid confusion. &quot;error message&quot; seems more appropriate to me
+</I>&gt;<i> as well.
+</I>&gt;<i> 
+</I>
+You think of renaming &quot;error frame&quot; -&gt; &quot;error message&quot; without changing any
+C-related defines, will say only in documentation and comments?
+
+If so, i won't have any concerns to change this naming convention ...
+
+But changing the API by changing structure names and C-defines would beak the
+user-space API and existing binaries.
+
+&gt;&gt;<i> Maybe the netlink interface can also be a new (additional) notification path
+</I>&gt;&gt;<i> in the future.
+</I>&gt;<i> 
+</I>&gt;<i> Error reporting via socket is flexible and should make all (I hope)
+</I>&gt;<i> users happy. I don't see a need using the netlink interface for hat purpose.
+</I>
+Yes, that's fine to me also.
+
+Cheers,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000809.html">[Socketcan-users] socket CAN error handling
+</A></li>
+	<LI>Next message: <A HREF="000813.html">[Socketcan-users] socket CAN error handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#810">[ date ]</a>
+              <a href="thread.html#810">[ thread ]</a>
+              <a href="subject.html#810">[ subject ]</a>
+              <a href="author.html#810">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

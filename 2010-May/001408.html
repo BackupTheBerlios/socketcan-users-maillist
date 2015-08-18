@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problem booting with a ESD CAN interface card
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problem%20booting%20with%20a%20ESD%20CAN%20interface%20card&In-Reply-To=%3C4BFD3D74.7070702%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001407.html">
+   <LINK REL="Next"  HREF="001409.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problem booting with a ESD CAN interface card</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problem%20booting%20with%20a%20ESD%20CAN%20interface%20card&In-Reply-To=%3C4BFD3D74.7070702%40esd.eu%3E"
+       TITLE="[Socketcan-users] Problem booting with a ESD CAN interface card">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Wed May 26 17:25:40 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001407.html">[Socketcan-users] Problem booting with a ESD CAN interface card
+</A></li>
+        <LI>Next message: <A HREF="001409.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1408">[ date ]</a>
+              <a href="thread.html#1408">[ thread ]</a>
+              <a href="subject.html#1408">[ subject ]</a>
+              <a href="author.html#1408">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nape,
+
+I ack with Wolfgang that this might be a Xenomai issue and I see
+that you got some promising comments on the xenomai-help list.
+
+Looking at your kernel messages it seems that your harddisk driver
+is very unlucky. So I vote for an interrupt conflict.
+
+Matthias
+
+Nape Ibrahim Lentsoane wrote:
+&gt;<i> Thanks,
+</I>&gt;<i> I'm very new at this so I hope I'll be able to provide comprehensible
+</I>&gt;<i> information
+</I>&gt;<i> 
+</I>&gt;<i> On Wed, May 26, 2010 at 12:15 PM, Matthias Fuchs &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">matthias.fuchs at esd.eu</A>&gt;wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi Nape,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> what driver are you using for this board with Xenomai?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Well, we installed Xenomai with RT-Socket-CAN enabled. Some couple of
+</I>&gt;<i> drivers are available with Xenomai
+</I>&gt;<i> but I believe the one for ESD PCI and PMC cards is this one: xeno_can_esd_pci.
+</I>&gt;<i> That said I do not manually load the the driver. I just plug in the
+</I>&gt;<i> board and power up.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Do you load
+</I>&gt;&gt;<i> any driver for this board when booting plain ubuntu?
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i>  No, not at all.
+</I>&gt;<i> 
+</I>&gt;<i> Which one?
+</I>&gt;&gt;<i> What error messages do you get?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Ok, I'm gonna try to put whatever I could see here.
+</I>&gt;<i> 
+</I>&gt;<i> I get the following messages:
+</I>&gt;<i> 
+</I>&gt;<i> &quot;Loading Hardware Drivers...
+</I>&gt;<i> Loading Kernel Modules....
+</I>&gt;<i> Loading Manual Drivers.....
+</I>&gt;<i> (Then the error starts here)
+</I>&gt;<i> 
+</I>&gt;<i> ata 3.00: Status {DRDY}
+</I>&gt;<i> ata 3.00: revalidation failed (errno=-5)
+</I>&gt;<i> ata 3.00: revalidation failed (errno=-5)
+</I>&gt;<i> 
+</I>&gt;<i> /dev/sda5: UNEXPECTED INCONSISTENCY:RUN fsck MANUALLY (i.e., without -a or
+</I>&gt;<i> -p options)
+</I>&gt;<i> Error writting block 32768(Attempt to write block from filesystem resulted
+</I>&gt;<i> in short write)
+</I>&gt;<i> /dev/sda5: UNEXPECTEfsck died with exit status 8
+</I>&gt;<i> 
+</I>&gt;<i> *An automatic filesystem check(fsck) of the root filesystem failed.
+</I>&gt;<i> A manual fsck must be performed, then the sytem restarted.
+</I>&gt;<i> The fsck should be performed in maintainance mode with the root filesystem
+</I>&gt;<i> mounted in read-only mode
+</I>&gt;<i> *The root filesystem is currently mounted in read-only mode.
+</I>&gt;<i> A maintainance shell will now be started.
+</I>&gt;<i> After performing system maintainance, press Control -D to to terminate the
+</I>&gt;<i> maintainance shell and restart the system.
+</I>&gt;<i> 
+</I>&gt;<i> [376.797396] end_request: I/O error, dev sda, sector 57208614
+</I>&gt;<i> [376.797396] end_request: I/O error, dev sda, sector 57208614
+</I>&gt;<i> 
+</I>&gt;<i> Atempt to start maintainance shell failed
+</I>&gt;<i> Will restart in 5 seconds.
+</I>&gt;<i> 
+</I>&gt;<i> [376.797396] end_request: I/O error, dev sda, sector 57208614
+</I>&gt;<i> [376.797396] end_request: I/O error, dev sda, sector 57208614
+</I>&gt;<i> [376.797396] end_request: I/O error, dev sda, sector 57208614
+</I>&gt;<i> 
+</I>&gt;<i> [1170.526883] end_request: I/O error, dev sda, sector 146663214
+</I>&gt;<i> [1170.526883] EXT3-fs error (device sda5): ext3_find_entry: reading
+</I>&gt;<i> directory #4056581 offset
+</I>&gt;<i> 
+</I>&gt;<i> *Mounting local filesystem...
+</I>&gt;<i> *activating swapfile swap...
+</I>&gt;<i> 
+</I>&gt;<i> [1170.526883] end_request: I/O error, dev sda, sector 150513048
+</I>&gt;<i> 
+</I>&gt;<i> 17713048 offset 0 #&quot;
+</I>&gt;<i> 
+</I>&gt;<i> Then it hangs here. This is about all I can see
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Thanks,
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Matthias
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Wednesday 26 May 2010 11:52, Nape Ibrahim Lentsoane wrote:
+</I>&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> We have recently bought a PMC-CAN/266 from ESD Electronics and I'm
+</I>&gt;&gt;<i> currently
+</I>&gt;&gt;&gt;<i> experiencing some problems with it when intalling it on a Linux Ubuntu
+</I>&gt;&gt;&gt;<i> machine with Xenomai installed. When we plug the board into the PC it[PC]
+</I>&gt;&gt;&gt;<i> does not want to boot successfully, it hangs and gives error messages
+</I>&gt;&gt;<i> after
+</I>&gt;&gt;&gt;<i> an attempt at &quot;Loading Manual Drivers...&quot;. But, if I boot the machine
+</I>&gt;&gt;<i> with
+</I>&gt;&gt;&gt;<i> the generic Ubuntu OS(no Xenomai) it boots fine with the card plugged in.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> What could I be doing wrong here, can someone help?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> For info: when I power up the PC without the PMC card it boots normal
+</I>&gt;&gt;<i> with
+</I>&gt;&gt;&gt;<i> no errors.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Regards,
+</I>&gt;&gt;&gt;<i> Nape
+</I>&gt;&gt;&gt;<i>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001407.html">[Socketcan-users] Problem booting with a ESD CAN interface card
+</A></li>
+	<LI>Next message: <A HREF="001409.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS -	receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1408">[ date ]</a>
+              <a href="thread.html#1408">[ thread ]</a>
+              <a href="subject.html#1408">[ subject ]</a>
+              <a href="author.html#1408">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

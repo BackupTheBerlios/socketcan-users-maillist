@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Bitrate calculations seem wrong
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bitrate%20calculations%20seem%20wrong&In-Reply-To=%3C491C7524.3020803%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000583.html">
+   <LINK REL="Next"  HREF="000558.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Bitrate calculations seem wrong</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Bitrate%20calculations%20seem%20wrong&In-Reply-To=%3C491C7524.3020803%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Bitrate calculations seem wrong">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov 13 19:42:44 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000583.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+        <LI>Next message: <A HREF="000558.html">[Socketcan-users] Added ISO 15765-2 CAN transport protocol for	protocol family CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#585">[ date ]</a>
+              <a href="thread.html#585">[ thread ]</a>
+              <a href="subject.html#585">[ subject ]</a>
+              <a href="author.html#585">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Gary Thomas wrote:
+</I>&gt;&gt;&gt;<i> Looking at the bitrate calculations for the SJA1000 @16MHz,
+</I>&gt;&gt;&gt;<i> I get different values in the driver than what's recommended
+</I>&gt;&gt;&gt;<i> by CiA.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> $ ./can-calc-bit-timing -c 16000000
+</I>&gt;&gt;&gt;<i> Bit timing parameters for sja1000 using 16000000Hz
+</I>&gt;&gt;&gt;<i> Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+</I>&gt;&gt;&gt;<i> 1000000     62   7    4    4   1   1 75.0%  0.0% 0x00 0x3a
+</I>&gt;&gt;&gt;<i>  800000     62  11    4    4   1   1 80.0%  0.0% 0x00 0x3e
+</I>&gt;&gt;&gt;<i>  500000    125  11    2    2   1   2 87.5%  0.0% 0x01 0x1c
+</I>&gt;&gt;&gt;<i>  250000    250  11    2    2   1   4 87.5%  0.0% 0x03 0x1c
+</I>&gt;&gt;&gt;<i>  125000    500  11    2    2   1   8 87.5%  0.0% 0x07 0x1c
+</I>&gt;&gt;&gt;<i>  100000    625  11    2    2   1  10 87.5%  0.0% 0x09 0x1c
+</I>&gt;&gt;&gt;<i>   50000   1250  11    2    2   1  20 87.5%  0.0% 0x13 0x1c
+</I>&gt;&gt;&gt;<i>   20000   3125  11    2    2   1  50 87.5%  0.0% 0x31 0x1c
+</I>&gt;&gt;&gt;<i>   10000   4000   8    8    8   1  64 68.0%  0.0% 0x3f 0x7f
+</I>&gt;&gt;<i> The CAN clock frequency is usually 16/2 = 8 MHz.
+</I>&gt;<i> 
+</I>&gt;<i> Understood - I'm just trying to work with my hardware folks
+</I>&gt;<i> and they want/need either 16MHz or 32MHz.
+</I>
+Most SJA1000 hardware uses an oscillator of 16MHz. The real CAN clock
+frequency is then 8 MHz. 32MHz is OK as well, but you will not be able
+use the very low bitrates. The frequency should be a multiple of 8MHz.
+
+&gt;&gt;<i> $ ./can-calc-bit-timing -c 8000000 sja1000
+</I>&gt;&gt;<i> Bit timing parameters for sja1000 using 8000000Hz
+</I>&gt;&gt;<i> Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error BTR0 BTR1
+</I>&gt;&gt;<i> 1000000    125   3    2    2   1   1 75.0%  0.0% 0x00 0x14
+</I>&gt;&gt;<i>  800000    125   5    2    2   1   1 80.0%  0.0% 0x00 0x16
+</I>&gt;&gt;<i>  500000    125  11    2    2   1   1 87.5%  0.0% 0x00 0x1c
+</I>&gt;&gt;<i>  250000    250  11    2    2   1   2 87.5%  0.0% 0x01 0x1c
+</I>&gt;&gt;<i>  125000    500  11    2    2   1   4 87.5%  0.0% 0x03 0x1c
+</I>&gt;&gt;<i>  100000    625  11    2    2   1   5 87.5%  0.0% 0x04 0x1c
+</I>&gt;&gt;<i>   50000   1250  11    2    2   1  10 87.5%  0.0% 0x09 0x1c
+</I>&gt;&gt;<i>   20000   3125  11    2    2   1  25 87.5%  0.0% 0x18 0x1c
+</I>&gt;&gt;<i>   10000   6250  11    2    2   1  50 87.5%  0.0% 0x31 0x1c
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> &gt;From the CiA calculator (only their desired setups):
+</I>&gt;&gt;<i> What CIA calculator did you use? 
+</I>&gt;<i> 
+</I>&gt;<i> The one you pointed at yesterday (and below):
+</I>&gt;<i>   <A HREF="http://www.port.de/engl/canprod/sv_req_form.html">http://www.port.de/engl/canprod/sv_req_form.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> I only cut/pasted the highlighted values.  They match the
+</I>&gt;<i> driver calculations (/can-calc-bit-timing) except for 1Mb
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> Rate                                    SP      BTR0    BTR1
+</I>&gt;&gt;&gt;<i> 1000	1	16	13	2	87.5	0x00	0x1c
+</I>&gt;&gt;&gt;<i> 500	2	16	13	2	87.5	0x01	0x1c
+</I>&gt;&gt;&gt;<i> 250	4	16	13	2	87.5	0x03	0x1c
+</I>&gt;&gt;&gt;<i> 125	8	16	13	2	87.5	0x07	0x1c
+</I>&gt;&gt;&gt;<i> 100	10	16	13	2	87.5	0x09	0x1c
+</I>&gt;&gt;&gt;<i> 50	20	16	13	2	87.5	0x13	0x1c
+</I>&gt;&gt;&gt;<i> 20	50	16	13	2	87.5	0x31	0x1c
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Any ideas why the difference(s)?
+</I>&gt;&gt;<i> I understood that the CIA recommended sample points are the one listed
+</I>&gt;&gt;<i> above, e.g. 75% for 1MBit, 80% for 800 kbit and 87.5 for &lt;= 500kbit.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Note: the values don't seem to match up @8Mhz either.
+</I>&gt;&gt;<i> To show a few references. The above parameters match the one calculated
+</I>&gt;&gt;<i> or listed by:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   <A HREF="http://www.esacademy.com/faq/calc/sja1000.htm">http://www.esacademy.com/faq/calc/sja1000.htm</A>
+</I>&gt;&gt;<i>   <A HREF="http://www.port.de/engl/canprod/sv_req_form.html">http://www.port.de/engl/canprod/sv_req_form.html</A>
+</I>&gt;&gt;<i>   <A HREF="http://www.softing.com/home/en/industrial-automation/products/can-bus/more-can-bus/high-speed/cia-ds-102-baudrates.php">http://www.softing.com/home/en/industrial-automation/products/can-bus/more-can-bus/high-speed/cia-ds-102-baudrates.php</A>
+</I>&gt;<i> 
+</I>&gt;<i> Thanks.  The more references and support I have, the easier
+</I>&gt;<i> it will be for me to convince the hardware folks that the
+</I>&gt;<i> driver actually gets it right :-)
+</I>
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000583.html">[Socketcan-users] Bitrate calculations seem wrong
+</A></li>
+	<LI>Next message: <A HREF="000558.html">[Socketcan-users] Added ISO 15765-2 CAN transport protocol for	protocol family CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#585">[ date ]</a>
+              <a href="thread.html#585">[ thread ]</a>
+              <a href="subject.html#585">[ subject ]</a>
+              <a href="author.html#585">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

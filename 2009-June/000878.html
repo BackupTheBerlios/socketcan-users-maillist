@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%09PC104&In-Reply-To=%3Cb2da33020906110724o774bffd4r97ccad0dead1fbbc%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000876.html">
+   <LINK REL="Next"  HREF="000879.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104</H1>
+    <B>khurram gulzar</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%09PC104&In-Reply-To=%3Cb2da33020906110724o774bffd4r97ccad0dead1fbbc%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104">khurramgulzar at gmail.com
+       </A><BR>
+    <I>Thu Jun 11 16:24:31 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000876.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+        <LI>Next message: <A HREF="000879.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#878">[ date ]</a>
+              <a href="thread.html#878">[ thread ]</a>
+              <a href="subject.html#878">[ subject ]</a>
+              <a href="author.html#878">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>hi,
+it doesnt work still
+here is the debug msgs from the kernel.
+
+[   60.786233] can: controller area network core (rev 20090105 abi 8)
+[   60.786582] NET: Registered protocol family 29
+[   82.108690] can: raw protocol (rev 20090105)
+[  139.705514] i82527-iomem driver v0.0.4 (2007-08-03)
+[  139.705637] i82527-iomem - options [clk 8.000000 MHz] [restart_ms 100ms]
+[debug 0]
+[  139.705758] i82527-iomem - options [force_dmc 1] [irq_mode 1]
+[  139.705902] i82527-iomem: checking for i82527 on address 0xD8000 ...
+[  139.707888] i82527-iomem: base 0xC00D8000 / irq 10 / speed 1000 / btr 0x0
+/ rx_probe 0 / mo15 sff
+[  139.708078] can0 (): not using net_device_ops yet
+[  139.710129] i82527-iomem: checking for i82527 on address 0xD8100 ...
+[  139.710190] i82527-iomem: base 0xC00D8100 / irq 11 / speed 1000 / btr 0x0
+/ rx_probe 0 / mo15 sff
+[  139.710373] can1 (): not using net_device_ops yet
+[  370.085075] can0: calculated best baudrate: 1000000 / btr is 0x4032
+[  370.085197] can0: setting BTR0=40 BTR1=32
+[  370.085278] can0: i82527: using msg object 15 for SFF receiption.
+[  377.596003] can1: calculated best baudrate: 1000000 / btr is 0x4032
+[  377.596125] can1: setting BTR0=40 BTR1=32
+[  377.596205] can1: i82527: using msg object 15 for SFF receiption.
+[  383.988815] ------------[ cut here ]------------
+[  383.988936] WARNING: at net/sched/sch_generic.c:226
+dev_watchdog+0x18c/0x1a0()
+[  383.989052] NETDEV WATCHDOG: can0 (): transmit timed out
+[  383.989138] Modules linked in: i82527_iomem can_raw can ipv6 loop
+snd_usb_audio snd_pcm snd_timer snd_page_alloc snd_usb_lib snd_rawmidi
+snd_seq_device snd_hwdep snd usbhid soundcore ehci_hcd ohci_hcd evdev r6040
+usbcore mii
+[  383.990005] Pid: 0, comm: swapper Not tainted 2.6.29.1-vortex86dx #1
+[  383.990101] Call Trace:
+[  383.990188]  [&lt;c01145e6&gt;] warn_slowpath+0x76/0x90
+[  383.990281]  [&lt;c0111b01&gt;] ? __wake_up+0x11/0x20
+[  383.990381]  [&lt;c012158f&gt;] ? insert_work+0x3f/0x50
+[  383.990487]  [&lt;c0111000&gt;] ? pick_next_task_fair+0x0/0x70
+[  383.990614]  [&lt;c0129642&gt;] ? update_wall_time+0x2a2/0x780
+[  383.990716]  [&lt;c0110b0e&gt;] ? check_preempt_curr_idle+0xe/0x10
+[  383.990815]  [&lt;c0259bdc&gt;] dev_watchdog+0x18c/0x1a0
+[  383.990915]  [&lt;c011be04&gt;] ? mod_timer+0x14/0x30
+[  383.991005]  [&lt;c011bf27&gt;] run_timer_softirq+0x107/0x150
+[  383.991098]  [&lt;c0259a50&gt;] ? dev_watchdog+0x0/0x1a0
+[  383.991197]  [&lt;c01187f4&gt;] __do_softirq+0x64/0xf0
+[  383.991289]  [&lt;c01188ab&gt;] do_softirq+0x2b/0x30
+[  383.991377]  [&lt;c0118b45&gt;] irq_exit+0x35/0x40
+[  383.991467]  [&lt;c01047cc&gt;] do_IRQ+0x3c/0x70
+[  383.991575]  [&lt;c01034a7&gt;] common_interrupt+0x27/0x30
+[  383.991678]  [&lt;c01076c8&gt;] ? default_idle+0x38/0x50
+[  383.991768]  [&lt;c01019cb&gt;] cpu_idle+0x2b/0x40
+[  383.991865]  [&lt;c02a9ccd&gt;] rest_init+0x4d/0x50
+[  383.991951] ---[ end trace 8b0782bafae4041a ]---
+[  383.992062] can0: i82527: using msg object 15 for SFF receiption.
+[  427.987516] can0: i82527: using msg object 15 for SFF receiption.
+[  472.986171] can0: i82527: using msg object 15 for SFF receiption.
+
+
+and what is Swapper not tainted ??
+
+On Thu, Jun 11, 2009 at 3:52 PM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;wrote:
+
+&gt;<i> khurram gulzar wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt; I am using Vortex86dx PC104 along with Eurotech CAN Card Com1274
+</I>&gt;<i> &gt; The linux kernel i am using is 2.6.29.1
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I installed the socket CAN i probe the hardware with i82527-iomem.ko
+</I>&gt;<i> &gt; and it probe successfully
+</I>&gt;<i> &gt; I also get the interface up by
+</I>&gt;<i> &gt; ifconfig can0 up command
+</I>&gt;<i> &gt; but when i send packets using cansend example prog nothing comes out
+</I>&gt;<i> &gt; and when i check the ifconfig can0
+</I>&gt;<i> &gt; sent bytes increases but all packets sent suffer error
+</I>&gt;<i> &gt; I am running with the options
+</I>&gt;<i> &gt; i82527-iomem.ko base=0xD8000,0xD8100 irq=10,11 speed=1000,1000
+</I>&gt;<i> &gt; clk=16000000,16000000
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; there are two cans on com1274 module
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; How to get the socket Can running.?
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> I searched for the thread - but i did not find it so far.
+</I>&gt;<i>
+</I>&gt;<i> AFAIR add
+</I>&gt;<i>
+</I>&gt;<i> clk=8000000 force_dmc=1
+</I>&gt;<i>
+</I>&gt;<i> So in a complete commandline:
+</I>&gt;<i> i82527-iomem.ko base=0xD8000,0xD8100 irq=10,11 speed=1000,1000 clk=8000000
+</I>&gt;<i> force_dmc=1
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090611/cec7a3a6/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090611/cec7a3a6/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000876.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+	<LI>Next message: <A HREF="000879.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#878">[ date ]</a>
+              <a href="thread.html#878">[ thread ]</a>
+              <a href="subject.html#878">[ subject ]</a>
+              <a href="author.html#878">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

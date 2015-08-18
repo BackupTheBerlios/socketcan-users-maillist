@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] At91_can transmitting error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3COFFCF6BB64.696F9576-ONC125749E.0031C42D-C125749E.0032CA9F%40cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000479.html">
+   <LINK REL="Next"  HREF="000481.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] At91_can transmitting error</H1>
+    <B>jorgefm at cirsa.com</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3COFFCF6BB64.696F9576-ONC125749E.0031C42D-C125749E.0032CA9F%40cirsa.com%3E"
+       TITLE="[Socketcan-users] At91_can transmitting error">jorgefm at cirsa.com
+       </A><BR>
+    <I>Thu Aug  7 11:12:40 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000479.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+        <LI>Next message: <A HREF="000481.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#480">[ date ]</a>
+              <a href="thread.html#480">[ thread ]</a>
+              <a href="subject.html#480">[ subject ]</a>
+              <a href="author.html#480">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote on 07/08/2008 09:31:45:
+
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">jorgefm at cirsa.com</A> wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote on 06/08/2008 18:21:40:
+</I>&gt;<i> [...snip...]
+</I>&gt;<i> &gt; Hi Wolfgang,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I've try your suggestion and I get the next messages. With the
+</I>&gt;<i> &gt; at91_can.ko just loaded I get a lot of
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; net can0: CERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: CERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: CERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Then when I try to send some frames
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ./cangen can0
+</I>&gt;<i> &gt; net can0: CERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; net can0: TX start for mb #8
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: BOFF irq
+</I>&gt;<i> &gt; net can0: can_restart_on (69176)
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: can_restart_dev (69186)
+</I>&gt;<i> &gt; net can0: set_baud, baud=1000000, clock=100000000
+</I>&gt;<i> &gt; net can0: 16 time quanta, brp=5, sjw=1, propag=6, phase1=8, phase2=5
+</I>&gt;<i> &gt; net can0: Setting CAN_BR to 0x00051574
+</I>&gt;<i> &gt; net can0: TX start for mb #8
+</I>&gt;<i> &gt; net can0: TX start for mb #9
+</I>&gt;<i> &gt; net can0: TX start for mb #10
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: TX start for mb #11
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: TX start for mb #12
+</I>&gt;<i> &gt; net can0: TX start for mb #13
+</I>&gt;<i> &gt; net can0: TX start for mb #14
+</I>&gt;<i> &gt; net can0: TX start for mb #15
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> &gt; net can0: TX timeout!
+</I>&gt;<i> &gt; net can0: set_baud, baud=1000000, clock=100000000
+</I>&gt;<i> &gt; net can0: 16 time quanta, brp=5, sjw=1, propag=6, phase1=8, phase2=5
+</I>&gt;<i> &gt; net can0: Setting CAN_BR to 0x00051574
+</I>&gt;<i> &gt; net can0: TX start for mb #8
+</I>&gt;<i> &gt; net can0: TX start for mb #9
+</I>&gt;<i> &gt; net can0: TX start for mb #10
+</I>&gt;<i> &gt; net can0: TX start for mb #11
+</I>&gt;<i> &gt; net can0: TX start for mb #12
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; net can0: BERR irq
+</I>&gt;<i> &gt; net can0: SERR irq
+</I>&gt;<i> &gt; net can0: FERR irq
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; and so on...
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; The can microcontroller on the nodes and the pc is a SJA1000, is there
+</I>&gt;<i> &gt; any problem mixing different kind of can controllers?
+</I>&gt;<i> 
+</I>&gt;<i>  From my point of view, you have still electrical problems. I assume 
+</I>&gt;<i> that  the other nodes on the bus do use 1MB/s as well. Some hints and 
+</I>&gt;<i> questions:
+</I>&gt;<i> 
+</I>&gt;<i> - Does the cable work in an independent setup (with AT91 off)?
+</I>&gt;<i> - How long is the cable and is ground connected?
+</I>&gt;<i> - Is the cable terminated properly with 120 Ohm between CAN_L and CAN_H
+</I>&gt;<i>    at *both* ends?
+</I>&gt;<i> - Try a lower bitrate.
+</I>&gt;<i> - Use a CAN bus monitor/analyser
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>
+I've return to the original configuration (brp=5, sjw=3, propag=6, 
+phase1=5, phase2=4)
+because with the suggested one I can't read frames! In order to reduce the 
+problem 
+I only have one node terminated with a 120 ohm resistor and the atmel 
+board
+with the jumper on, which means the board is terminated to. Now I can read 
+again
+but I have the same errors transmiting... 
+
+&gt;<i> - Does the cable work in an independent setup (with AT91 off)?
+</I>The network where I attach the atmel board is running ok, then I know the 
+nodes
+are working properly.
+
+&gt;<i> - How long is the cable and is ground connected?
+</I>I'm using a tow-wires 75cm long cable. One end goes to CAN_H and CAN_L
+
+&gt;<i> - Is the cable terminated properly with 120 Ohm between CAN_L and CAN_H
+</I>&gt;<i>    at *both* ends?
+</I>Yes
+
+&gt;<i> - Try a lower bitrate.
+</I>I'll try it.
+
+&gt;<i> - Use a CAN bus monitor/analyser
+</I>I'll try it. Well, I think I'll wait until the end of holidays to get the 
+electronic
+guy help with the oscilloscope...
+
+Anybody using this atmel board/chip has the can working ok?
+
+Thank you
+Jorge
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080807/28479d8e/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080807/28479d8e/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000479.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+	<LI>Next message: <A HREF="000481.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#480">[ date ]</a>
+              <a href="thread.html#480">[ thread ]</a>
+              <a href="subject.html#480">[ subject ]</a>
+              <a href="author.html#480">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

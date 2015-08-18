@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Setting the clock, ocr and cdr values
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20the%20clock%2C%20ocr%20and%20cdr%20values&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D45E9077C%40NTMBOX.central.cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001830.html">
+   <LINK REL="Next"  HREF="001832.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Setting the clock, ocr and cdr values</H1>
+    <B>Jorge Fernandez Monteagudo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Setting%20the%20clock%2C%20ocr%20and%20cdr%20values&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D45E9077C%40NTMBOX.central.cirsa.com%3E"
+       TITLE="[Socketcan-users] Setting the clock, ocr and cdr values">jorgefm at cirsa.com
+       </A><BR>
+    <I>Mon Mar 14 14:37:58 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001830.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+        <LI>Next message: <A HREF="001832.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1831">[ date ]</a>
+              <a href="thread.html#1831">[ thread ]</a>
+              <a href="subject.html#1831">[ subject ]</a>
+              <a href="author.html#1831">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> -----Mensaje original-----
+</I>&gt;<i> De: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+</I>&gt;<i> Enviado el: Monday, March 14, 2011 1:06 PM
+</I>&gt;<i> Para: Jorge Fernandez Monteagudo
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Asunto: Re: [Socketcan-users] Setting the clock, ocr and cdr values
+</I>&gt;<i>
+</I>&gt;<i> On 03/14/2011 11:42 AM, Jorge Fernandez Monteagudo wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I'm trying to implement my can infrastructure with socketcan. I would
+</I>&gt;<i> like to know where to find
+</I>&gt;<i> &gt; information about the values from sja1000_priv struct, the
+</I>&gt;<i> can.clock.freq, ocr and cdr.
+</I>&gt;<i>
+</I>&gt;<i> Not sure what you are looking for. The meaning of theses values is
+</I>&gt;<i> described in the SJA1000 datasheet.
+</I>&gt;<i>
+</I>
+Well, I'm trying to setup the sja1000 chip using the socketcan architecture.
+In my old code I had the registers CDR, BTR0, BTR1, OCR, CMR and IER
+loaded with some values in order to set the pelican mode with 1Mbps
+and let the chip ready to serve interruptions. Now I'm trying to replicate
+this in a modified version of the plx_pci.c but I've seen that the only
+register used are from the sja1000_priv struct.
+
+
+&gt;<i> &gt; I'm following the plx_pci.c code but in my driver I setup these
+</I>&gt;<i> register in a different way.
+</I>&gt;<i> &gt; First, I set the CDR &lt;- 0xC0, then I set the clock using the BTR0 and
+</I>&gt;<i> BTR1 registers to set the 1Mbps
+</I>&gt;<i> &gt; baudrate, BTR0 &lt;- 0x01, BTR1 &lt;- 0x10 and finally the OCR register is
+</I>&gt;<i> initialized with OCR &lt;- 0x1A.
+</I>&gt;<i>
+</I>&gt;<i> The input clock frequency, cdr and ocr must be defined by the SJA1000
+</I>&gt;<i> driver, e.g.:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37.3/drivers/net/can/sja1000/plx_pci.c#">http://lxr.linux.no/#linux+v2.6.37.3/drivers/net/can/sja1000/plx_pci.c#</A>
+</I>&gt;<i> L526
+</I>&gt;<i>
+</I>&gt;<i> Some drivers allow to set these values via module parameter. So,
+</I>&gt;<i> depending on the driver appropriate for your CAN hardware, you need to
+</I>&gt;<i> adjust them. The bit-timing have to be defined via netlink interface as
+</I>&gt;<i> described here:
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37.3/Documentation/networking/can.txt#L">http://lxr.linux.no/#linux+v2.6.37.3/Documentation/networking/can.txt#L</A>
+</I>&gt;<i> 635
+</I>&gt;<i>
+</I>
+Thanks for the info, now I get an error in dmesg: &quot;bit-timing not yet defined&quot;
+then I suppose I'll need to follow this last link.
+
+
+&gt;<i> What CAN hardware are you using?
+</I>&gt;<i>
+</I>
+It's a SJA1000 can controller embedded inside a FPGA implementing a PCI bus
+controller, then I need to set up the CAN address window before accessing the
+CAN and I'm following the plx_pci.c code.
+
+&gt;<i> Wolfgang.
+</I>
+Regards,
+Jorge
+
+Este mensaje se dirige exclusivamente a su destinatario y puede contener informaci&#243;n privilegiada o CONFIDENCIAL. Si no es vd. el destinatario indicado, queda notificado de que la utilizaci&#243;n, divulgaci&#243;n y/o copia sin autorizaci&#243;n est&#225; prohibida en virtud de la legislaci&#243;n vigente. Si ha recibido este mensaje por error, le rogamos que nos lo comunique inmediatamente por esta misma v&#237;a y proceda a su destrucci&#243;n.
+
+This message is intended exclusively for its addressee and may contain information that is CONFIDENTIAL and protected by professional privilege.
+If you are not the intended recipient you are hereby notified that any dissemination, copy or disclosure of this communication is strictly prohibited by law. If this message has been received in error, please immediately notify us via e-mail and delete it.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001830.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+	<LI>Next message: <A HREF="001832.html">[Socketcan-users] Setting the clock, ocr and cdr values
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1831">[ date ]</a>
+              <a href="thread.html#1831">[ thread ]</a>
+              <a href="subject.html#1831">[ subject ]</a>
+              <a href="author.html#1831">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C871v5w1r4d.fsf%40steelpick.2x.cz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001671.html">
+   <LINK REL="Next"  HREF="001673.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kenrel panic with CAN gateway on MPC5200</H1>
+    <B>Michal Sojka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C871v5w1r4d.fsf%40steelpick.2x.cz%3E"
+       TITLE="[Socketcan-users] Kenrel panic with CAN gateway on MPC5200">sojkam1 at fel.cvut.cz
+       </A><BR>
+    <I>Sun Dec  5 10:54:58 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001671.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+        <LI>Next message: <A HREF="001673.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1672">[ date ]</a>
+              <a href="thread.html#1672">[ thread ]</a>
+              <a href="subject.html#1672">[ subject ]</a>
+              <a href="author.html#1672">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, 05 Dec 2010, Marc Kleine-Budde wrote:
+&gt;<i> On 12/05/2010 01:00 AM, Michal Sojka wrote:
+</I>&gt;<i> &gt; Hi Oliver and others,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I'm experiencing strange kernel panics with CAN gateway running on
+</I>&gt;<i> &gt; MPC5200. The panic happens with 2.6.36.1 where I manually added gw.c and
+</I>&gt;<i> &gt; hw.h from subversion. It also happens with 2.6.33.7 where the whole
+</I>&gt;<i> &gt; socketcan was copied from SVN. Interestingly, it does not occur with
+</I>&gt;<i> &gt; 2.6.33.7-rt29 (rt_preempt) with the same socketcan from svn. The details
+</I>&gt;<i> &gt; are bellow. This is 100% reproducible and the gateway configuration is
+</I>&gt;<i> &gt; &quot;cangw -A -s can0 -d can1&quot;. Do you have any clue what can be the cause
+</I>&gt;<i> &gt; of the panic?
+</I>&gt;<i> 
+</I>&gt;<i> Maybe it's a locking problem. With RT the whole locking stuff is changed
+</I>&gt;<i> in the background. Use the 2.6.36 kernel go to the kernel hacking menu
+</I>&gt;<i> and switch on all the lock checking stuff, then try to reproduce the
+</I>&gt;<i> problem.
+</I>
+Hi,
+
+thanks for the tip. Now, with &quot;Spinlock debugging: sleep-inside-spinlock
+checking&quot; I get the following, which seems a bit more useful:
+
+    BUG: sleeping function called from invalid context at /home/wsh/projects/can-benchmark/kernel/2.6.36/mm/slab.c:3101
+    in_atomic(): 1, irqs_disabled(): 0, pid: 379, name: cangw
+    Call Trace:
+    [c7abdb50] [c0009c04] show_stack+0xb0/0x1d4 (unreliable)
+    [c7abdba0] [c02ffe54] dump_stack+0x2c/0x44
+    [c7abdbb0] [c002157c] __might_sleep+0xfc/0x124
+    [c7abdbc0] [c00c45bc] kmem_cache_alloc+0x15c/0x180
+    [c7abdbf0] [c02d60d8] can_rx_register+0x78/0x210
+    [c7abdc30] [c02d9ebc] cgw_create_job+0x1cc/0x220
+    [c7abdc50] [c026c208] rtnetlink_rcv_msg+0x21c/0x28c
+    [c7abdc70] [c02762a4] netlink_rcv_skb+0xb8/0x100
+    [c7abdc90] [c026bfd0] rtnetlink_rcv+0x40/0x5c
+    [c7abdcb0] [c0275e9c] netlink_unicast+0x320/0x368
+    [c7abdd00] [c0276a0c] netlink_sendmsg+0x2e0/0x33c
+    [c7abdd50] [c0244cc0] sock_sendmsg+0x9c/0xd4
+    [c7abde20] [c0247194] sys_sendto+0xcc/0x108
+    [c7abdf00] [c0248980] sys_socketcall+0x17c/0x218
+    [c7abdf40] [c0012524] ret_from_syscall+0x0/0x38
+    --- Exception: c01 at 0xff3413c
+        LR = 0x10001f9c
+    BUG: spinlock bad magic on CPU#0, swapper/0
+     lock: c798aabc, .magic: c0000000, .owner: &lt;none&gt;/-1, .owner_cpu: -1069424200
+    Call Trace:
+    [c7ffbd00] [c0009c04] show_stack+0xb0/0x1d4 (unreliable)
+    [c7ffbd50] [c02ffe54] dump_stack+0x2c/0x44
+    [c7ffbd60] [c01afa50] spin_bug+0x84/0xd0
+    [c7ffbd80] [c01afbfc] do_raw_spin_lock+0x3c/0x15c
+    [c7ffbdb0] [c02ff70c] _raw_spin_lock+0x34/0x4c
+    [c7ffbdd0] [c025bbdc] dev_queue_xmit+0xa4/0x428
+    [c7ffbe00] [c02d630c] can_send+0x9c/0x1a0
+    [c7ffbe20] [c02d991c] can_can_gw_rcv+0x108/0x164
+    [c7ffbe50] [c02d53b4] can_rcv_filter+0xf8/0x2e8
+    [c7ffbe70] [c02d566c] can_rcv+0xc8/0x140
+    [c7ffbe90] [c025a0d0] __netif_receive_skb+0x2cc/0x338
+    [c7ffbed0] [c025a314] netif_receive_skb+0x5c/0x98
+    [c7ffbef0] [c0208374] mscan_rx_poll+0x1c0/0x454
+    [c7ffbf50] [c025a644] net_rx_action+0x104/0x230
+    [c7ffbfa0] [c00317a8] __do_softirq+0x118/0x22c
+    [c7ffbff0] [c0011eec] call_do_softirq+0x14/0x24
+    [c042fe60] [c0006d78] do_softirq+0x84/0xa8
+    [c042fe80] [c00314cc] irq_exit+0x88/0xb4
+    [c042fe90] [c0006efc] do_IRQ+0xe0/0x234
+    [c042fec0] [c0012bbc] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c042ff80] [c000afb8] cpu_idle+0x68/0x10c (unreliable)
+    [c042ffa0] [c0003ec0] rest_init+0x9c/0xbc
+    [c042ffc0] [c03da91c] start_kernel+0x2c0/0x2d8
+    [c042fff0] [00003438] 0x3438
+
+I tried to fix the sleeping call by the following patches, but the
+original problem still appears.
+
+diff --git a/net/can/gw.c b/net/can/gw.c
+index 94ba3f1..7779ca6 100644
+--- a/net/can/gw.c
++++ b/net/can/gw.c
+@@ -822,11 +822,14 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
+        if (gwj-&gt;dst.dev-&gt;type != ARPHRD_CAN)
+                goto put_src_dst_out;
+                
+-       spin_lock(&amp;cgw_list_lock);
+ 
+        err = cgw_register_filter(gwj);
+-       if (!err)
+-               hlist_add_head_rcu(&amp;gwj-&gt;list, &amp;cgw_list);
++       if (err)
++               goto put_src_dst_out;
++
++       spin_lock(&amp;cgw_list_lock);
++
++       hlist_add_head_rcu(&amp;gwj-&gt;list, &amp;cgw_list);
+ 
+        spin_unlock(&amp;cgw_list_lock);
+ 
+My second attempt was:
+
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index 702be5a..b046ff0 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -418,7 +418,7 @@ int can_rx_register(struct net_device *dev, canid_t can_id, canid_t mask,
+        if (dev &amp;&amp; dev-&gt;type != ARPHRD_CAN)
+                return -ENODEV;
+ 
+-       r = kmem_cache_alloc(rcv_cache, GFP_KERNEL);
++       r = kmem_cache_alloc(rcv_cache, GFP_ATOMIC);
+        if (!r)
+                return -ENOMEM;
+ 
+With both patches I still get the original panic (now preceeded with
+spinlock bad magic):
+                
+    BUG: spinlock bad magic on CPU#0, swapper/0
+     lock: c7986abc, .magic: c0000000, .owner: &lt;none&gt;/-1, .owner_cpu: -1069424200
+    Call Trace:
+    [c7ffbd00] [c0009c04] show_stack+0xb0/0x1d4 (unreliable)
+    [c7ffbd50] [c02ffe54] dump_stack+0x2c/0x44
+    [c7ffbd60] [c01afa50] spin_bug+0x84/0xd0
+    [c7ffbd80] [c01afbfc] do_raw_spin_lock+0x3c/0x15c
+    [c7ffbdb0] [c02ff70c] _raw_spin_lock+0x34/0x4c
+    [c7ffbdd0] [c025bbdc] dev_queue_xmit+0xa4/0x428
+    [c7ffbe00] [c02d630c] can_send+0x9c/0x1a0
+    [c7ffbe20] [c02d991c] can_can_gw_rcv+0x108/0x164
+    [c7ffbe50] [c02d53b4] can_rcv_filter+0xf8/0x2e8
+    [c7ffbe70] [c02d566c] can_rcv+0xc8/0x140
+    [c7ffbe90] [c025a0d0] __netif_receive_skb+0x2cc/0x338
+    [c7ffbed0] [c025a314] netif_receive_skb+0x5c/0x98
+    [c7ffbef0] [c0208374] mscan_rx_poll+0x1c0/0x454
+    [c7ffbf50] [c025a644] net_rx_action+0x104/0x230
+    [c7ffbfa0] [c00317a8] __do_softirq+0x118/0x22c
+    [c7ffbff0] [c0011eec] call_do_softirq+0x14/0x24
+    [c042fe60] [c0006d78] do_softirq+0x84/0xa8
+    [c042fe80] [c00314cc] irq_exit+0x88/0xb4
+    [c042fe90] [c0006efc] do_IRQ+0xe0/0x234
+    [c042fec0] [c0012bbc] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c042ff80] [c000afb8] cpu_idle+0x68/0x10c (unreliable)
+    [c042ffa0] [c0003ec0] rest_init+0x9c/0xbc
+    [c042ffc0] [c03da91c] start_kernel+0x2c0/0x2d8
+    [c042fff0] [00003438] 0x3438
+    Unrecoverable FP Unavailable Exception 801 at c7986ca0
+    Oops: Unrecoverable FP Unavailable Exception, sig: 6 [#1]
+    PREEMPT Shark
+    last sysfs file: /sys/devices/lpb.0/fc000000.flash/mtd/mtd2ro/dev
+    Modules linked in:
+    NIP: c7986ca0 LR: c025bc3c CTR: c7986ca0
+    REGS: c7ffbd20 TRAP: 0801   Not tainted  (2.6.36.1-00006-g2e11adb-dirty)
+    MSR: 00009032 &lt;EE,ME,IR,DR&gt;  CR: 22002024  XER: 2000005f
+    TASK = c0411520[0] 'swapper' THREAD: c042e000
+    GPR00: c7986ca0 c7ffbdd0 c0411520 c79b8240 c7986a60 00000010 c043b384 00004000 
+    GPR08: c043b788 00000000 00003fff c7ffbdd0 42002024 
+    NIP [c7986ca0] 0xc7986ca0
+    LR [c025bc3c] dev_queue_xmit+0x104/0x428
+    Call Trace:
+    [c7ffbdd0] [c025bbdc] dev_queue_xmit+0xa4/0x428 (unreliable)
+    [c7ffbe00] [c02d630c] can_send+0x9c/0x1a0
+    [c7ffbe20] [c02d991c] can_can_gw_rcv+0x108/0x164
+    [c7ffbe50] [c02d53b4] can_rcv_filter+0xf8/0x2e8
+    [c7ffbe70] [c02d566c] can_rcv+0xc8/0x140
+    [c7ffbe90] [c025a0d0] __netif_receive_skb+0x2cc/0x338
+    [c7ffbed0] [c025a314] netif_receive_skb+0x5c/0x98
+    [c7ffbef0] [c0208374] mscan_rx_poll+0x1c0/0x454
+    [c7ffbf50] [c025a644] net_rx_action+0x104/0x230
+    [c7ffbfa0] [c00317a8] __do_softirq+0x118/0x22c
+    [c7ffbff0] [c0011eec] call_do_softirq+0x14/0x24
+    [c042fe60] [c0006d78] do_softirq+0x84/0xa8
+    [c042fe80] [c00314cc] irq_exit+0x88/0xb4
+    [c042fe90] [c0006efc] do_IRQ+0xe0/0x234
+    [c042fec0] [c0012bbc] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c042ff80] [c000afb8] cpu_idle+0x68/0x10c (unreliable)
+    [c042ffa0] [c0003ec0] rest_init+0x9c/0xbc
+    [c042ffc0] [c03da91c] start_kernel+0x2c0/0x2d8
+    [c042fff0] [00003438] 0x3438
+    Instruction dump:
+    XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX 
+    XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX 
+    Kernel panic - not syncing: Fatal exception in interrupt
+    Call Trace:
+    [c7ffbc10] [c0009c04] show_stack+0xb0/0x1d4 (unreliable)
+    [c7ffbc60] [c02ffe54] dump_stack+0x2c/0x44
+    [c7ffbc70] [c02fff28] panic+0xbc/0x200
+    [c7ffbcd0] [c000faf8] die+0x1a4/0x1cc
+    [c7ffbcf0] [c000fc34] kernel_fp_unavailable_exception+0x4c/0x64
+    [c7ffbd10] [c0012bbc] ret_from_except+0x0/0x14
+    --- Exception: 801 at 0xc7986ca0
+        LR = dev_queue_xmit+0x104/0x428
+    [c7ffbdd0] [c025bbdc] dev_queue_xmit+0xa4/0x428 (unreliable)
+    [c7ffbe00] [c02d630c] can_send+0x9c/0x1a0
+    [c7ffbe20] [c02d991c] can_can_gw_rcv+0x108/0x164
+    [c7ffbe50] [c02d53b4] can_rcv_filter+0xf8/0x2e8
+    [c7ffbe70] [c02d566c] can_rcv+0xc8/0x140
+    [c7ffbe90] [c025a0d0] __netif_receive_skb+0x2cc/0x338
+    [c7ffbed0] [c025a314] netif_receive_skb+0x5c/0x98
+    [c7ffbef0] [c0208374] mscan_rx_poll+0x1c0/0x454
+    [c7ffbf50] [c025a644] net_rx_action+0x104/0x230
+    [c7ffbfa0] [c00317a8] __do_softirq+0x118/0x22c
+    [c7ffbff0] [c0011eec] call_do_softirq+0x14/0x24
+    [c042fe60] [c0006d78] do_softirq+0x84/0xa8
+    [c042fe80] [c00314cc] irq_exit+0x88/0xb4
+    [c042fe90] [c0006efc] do_IRQ+0xe0/0x234
+    [c042fec0] [c0012bbc] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c042ff80] [c000afb8] cpu_idle+0x68/0x10c (unreliable)
+    [c042ffa0] [c0003ec0] rest_init+0x9c/0xbc
+    [c042ffc0] [c03da91c] start_kernel+0x2c0/0x2d8
+    [c042fff0] [00003438] 0x3438
+
+I'll continue ivestigating the problem.
+
+-Michal
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001671.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+	<LI>Next message: <A HREF="001673.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1672">[ date ]</a>
+              <a href="thread.html#1672">[ thread ]</a>
+              <a href="subject.html#1672">[ subject ]</a>
+              <a href="author.html#1672">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

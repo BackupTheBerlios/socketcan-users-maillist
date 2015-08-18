@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Do i need xenomai for RT-SocketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Do%20i%20need%20xenomai%20for%20RT-SocketCAN&In-Reply-To=%3CAANLkTik439VMNA0C_F0c2PM1xuUUF40fxKZChL2VaOoM%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001456.html">
+   <LINK REL="Next"  HREF="001458.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Do i need xenomai for RT-SocketCAN</H1>
+    <B>yigit agabey</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Do%20i%20need%20xenomai%20for%20RT-SocketCAN&In-Reply-To=%3CAANLkTik439VMNA0C_F0c2PM1xuUUF40fxKZChL2VaOoM%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Do i need xenomai for RT-SocketCAN">yagabey at gmail.com
+       </A><BR>
+    <I>Wed Jul  7 11:51:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001456.html">[Socketcan-users] Do i need xenomai for RT-SocketCAN
+</A></li>
+        <LI>Next message: <A HREF="001458.html">[Socketcan-users] Socketcan with Python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1457">[ date ]</a>
+              <a href="thread.html#1457">[ thread ]</a>
+              <a href="subject.html#1457">[ subject ]</a>
+              <a href="author.html#1457">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Thanks for the useful info..
+
+2010/7/7 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> Hi Yigit,
+</I>&gt;<i>
+</I>&gt;<i> please do not drop the CC to the mailing list.
+</I>&gt;<i>
+</I>&gt;<i> On 07/07/2010 09:25 AM, yigit agabey wrote:
+</I>&gt;<i> &gt; Thanks for the answer.
+</I>&gt;<i> &gt; Perhaps here is not the right place for that question, but i wonder if
+</I>&gt;<i> &gt; CONFIG_PREEMPT_RT supports real time drivers or not?
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Anyway, Socket-CAN should work fine with &quot;-rt&quot; Linux, with soft
+</I>&gt;<i> real-time
+</I>&gt;<i> &gt; behavior, though.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I've made some tests with SocketCAN and see that the results are far away
+</I>&gt;<i> &gt; from determinism. It even doesn't look like soft-real time behaviour.
+</I>&gt;<i> &gt; Should  some changes be made  on SocketCAN source for it to work with
+</I>&gt;<i> &quot;-rt&quot;
+</I>&gt;<i> &gt; Linux at least with soft realtime Behaviour?(Actually i dont wan to deal
+</I>&gt;<i> &gt; with Xenoai if CONFIG_PREEMPT_RT can do the job)
+</I>&gt;<i>
+</I>&gt;<i> Well, using the -rt patch does not make automatically the kernel and
+</I>&gt;<i> drivers fully hard real-time capable, e.g. Socket-CAN uses the Linux
+</I>&gt;<i> network stack, which does dynamic memory allocation, which can cause
+</I>&gt;<i> rather high latencies. If you need classic hard real-time, I recommend
+</I>&gt;<i> Xenomai with RT-Socket-CAN. If your requirements are not that strict,
+</I>&gt;<i> -rt might be good enough as well. Be aware that &quot;-rt&quot; does handle
+</I>&gt;<i> soft-irqs and interrupts in threads and you need to adjust the
+</I>&gt;<i> priorities to get reasonable latencies.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100707/28cd2941/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100707/28cd2941/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001456.html">[Socketcan-users] Do i need xenomai for RT-SocketCAN
+</A></li>
+	<LI>Next message: <A HREF="001458.html">[Socketcan-users] Socketcan with Python
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1457">[ date ]</a>
+              <a href="thread.html#1457">[ thread ]</a>
+              <a href="subject.html#1457">[ subject ]</a>
+              <a href="author.html#1457">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

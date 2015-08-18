@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] candump stops, and how to test performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3C4993CE35.3090202%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000669.html">
+   <LINK REL="Next"  HREF="000672.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] candump stops, and how to test performance</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3C4993CE35.3090202%40grandegger.com%3E"
+       TITLE="[Socketcan-users] candump stops, and how to test performance">wg at grandegger.com
+       </A><BR>
+    <I>Thu Feb 12 08:22:29 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000669.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+        <LI>Next message: <A HREF="000672.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#671">[ date ]</a>
+              <a href="thread.html#671">[ thread ]</a>
+              <a href="subject.html#671">[ subject ]</a>
+              <a href="author.html#671">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian,
+
+christian pellegrin wrote:
+&gt;<i> On Wed, Feb 11, 2009 at 8:52 PM, Cliff Brake &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">cliff.brake at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;<i> How do you want to move forward on this issue?  Do you plan to submit
+</I>&gt;&gt;<i> a patch, or would you like me to?  Also, should we include 2 &amp; 3 or
+</I>&gt;&gt;<i> just one of them?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Because I cannot test the driver can you provide the patch? I think
+</I>&gt;<i> solution 2 (by getting rid of all the stuff that is tied with
+</I>&gt;<i> MAX_LOOPS) should be ok.
+</I>&gt;<i> 
+</I>&gt;<i> Anyway your observations about ethernet usb  device are interesting.
+</I>&gt;<i> 
+</I>&gt;<i> To interpret the bitfields for the error frame have a look in
+</I>&gt;<i> include/linux/can/errors.h. It looks to me that it says
+</I>&gt;<i> CAN_ERR_CRTL_RX_OVERFLOW in data[1], so it make sense.
+</I>
+Yep, nice to see that the error frames are really useful. I just
+realized a minor issue with error frame creating. To avoid confusion,
+all other data field should be set to 0 using memset.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000669.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+	<LI>Next message: <A HREF="000672.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#671">[ date ]</a>
+              <a href="thread.html#671">[ thread ]</a>
+              <a href="subject.html#671">[ subject ]</a>
+              <a href="author.html#671">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

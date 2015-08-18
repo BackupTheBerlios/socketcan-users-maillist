@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%09i.MX%20devices&In-Reply-To=%3C201008111645.58257.oe%40port.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001474.html">
+   <LINK REL="Next"  HREF="001476.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices</H1>
+    <B>Heinz-J&#252;rgen Oertel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%09i.MX%20devices&In-Reply-To=%3C201008111645.58257.oe%40port.de%3E"
+       TITLE="[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices">oe at port.de
+       </A><BR>
+    <I>Wed Aug 11 16:45:53 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001474.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+        <LI>Next message: <A HREF="001476.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1475">[ date ]</a>
+              <a href="thread.html#1475">[ thread ]</a>
+              <a href="subject.html#1475">[ subject ]</a>
+              <a href="author.html#1475">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Dienstag, 10. August 2010 15:23:30 schrieb Marc Kleine-Budde:
+&gt;<i> Heinz-J&#252;rgen Oertel wrote:
+</I>&gt;<i> &gt; Hello,
+</I>&gt;<i> &gt; can please someone confirm that the more stable crystal oscillator
+</I>&gt;<i> &gt; frequency can be used to drive the FlexCAN module instead of the 66.5 MHz
+</I>&gt;<i> &gt; PLL clock?
+</I>&gt;<i> 
+</I>&gt;<i> According to the datasheet the CLK_SRC Bit of the CTRL reg selects the
+</I>&gt;<i> CAN engine clock. I don't know which clock is more stable.
+</I>
+From the manual:
+
+   13   This bit selects the clock source to the CAN protocol interface 
+        (CPI) to be either the peripheral clock (driven by CLK_SRC
+        the PLL) or the crystal oscillator clock.
+        The selected clock is the one fed to the prescaler to generate
+        the SCLK (SCLK). In order to guarantee reliable operation,
+        this bit must only be changed while the module is in disable
+        mode. See Section 24.4.8.4, &quot;Protocol Timing,&quot; for more information.
+        0 The CAN engine clock source is the oscillator clock (24.576 MHz)
+        1 The CAN engine clock source is the bus clock (66.5 MHz)
+
+and in &quot;24.4.8.4 Protocol Timing&quot;
+
+    The crystal oscillator clock must be selected
+    whenever a tight tolerance (up to 0.1%) is required in the CAN bus timing.
+    The crystal oscillator clock has better jitter performance
+    than PLL-generated clocks.
+
+especially with 1 Mbit/s it's better to use the crystal oscillator clock.
+
+ 
+&gt;<i> However the mainline driver only supports the bus clock.
+</I>
+and with this clock, if it is 66.5 MHz, one Mbit/s can not be reached.
+&gt;<i> Patches are, as
+</I>&gt;<i> always, welcome.
+</I>
+Once I know how to do it, than let's  see.
+For now it's really difficult to dive into such system internals.
+It's difficult to read the hardware manual describing the clocks and even more 
+difficult to find and _use_ the already available BSP functions and consider 
+all side effects. That is may problem. Only setting bit 13 in the clock 
+control register seems not to be the solution. Doing it, my system freezes 
+completely (kernel 2.6.32.)
+
+&gt;<i> 
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i> 
+</I>
+Heinz
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part.
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100811/3b1ffe23/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100811/3b1ffe23/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001474.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+	<LI>Next message: <A HREF="001476.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1475">[ date ]</a>
+              <a href="thread.html#1475">[ thread ]</a>
+              <a href="subject.html#1475">[ subject ]</a>
+              <a href="author.html#1475">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

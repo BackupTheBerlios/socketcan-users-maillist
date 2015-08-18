@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48236E75.9090404%40das.ufsc.br%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000342.html">
+   <LINK REL="Next"  HREF="000345.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Breno</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48236E75.9090404%40das.ufsc.br%3E"
+       TITLE="[Socketcan-users] HW Clock">breno at das.ufsc.br
+       </A><BR>
+    <I>Thu May  8 23:19:49 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000342.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000345.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#344">[ date ]</a>
+              <a href="thread.html#344">[ thread ]</a>
+              <a href="subject.html#344">[ subject ]</a>
+              <a href="author.html#344">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Breno wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anyway, I'm attaching my cansend and canrcv file so that you can 
+</I>&gt;&gt;<i> analyze whether  there is a  implementation error or not.
+</I>&gt;<i>
+</I>&gt;<i>                 setsockopt(s1, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+</I>&gt;<i>                  while(1)
+</I>&gt;<i>          {
+</I>&gt;<i>              printf(&quot;%d\n&quot;,nbytes1);
+</I>&gt;<i>              nbytes1 = read(s1,&amp;frame1,sizeof(struct can_frame));
+</I>&gt;<i>              perror(&quot;read&quot;);
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hm, you are disabling *all* the receive filters and try to receive CAN 
+</I>&gt;<i> frames ;-)
+</I>&gt;<i>
+</I>&gt;<i> This can not work.
+</I>&gt;<i>
+</I>&gt;<i> Please remove the setsockopt() in your canrcv.c.
+</I>&gt;<i>
+</I>&gt;<i> Per default (when no setsockopt() is invoked) there is one filter set 
+</I>&gt;<i> that receives everything.
+</I>&gt;<i>
+</I>&gt;<i> In your cansend.c you make double work:
+</I>&gt;<i>
+</I>&gt;<i>         if (bind(s0, (struct sockaddr *)&amp;addr0, sizeof(addr0)) &lt; 0)
+</I>&gt;<i>         {
+</I>&gt;<i>              perror(&quot;bind&quot;);
+</I>&gt;<i>              exit(1);
+</I>&gt;<i>         }
+</I>&gt;<i>                 //setsockopt(s1, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+</I>&gt;<i>                     /*Frame CAN*/
+</I>&gt;<i>        frame0.can_id  = 0x150;
+</I>&gt;<i>        frame0.can_dlc = 8;
+</I>&gt;<i>        frame0.data[0] = 'a';
+</I>&gt;<i>        frame0.data[1] = 'b';
+</I>&gt;<i>        frame0.data[2] = 'c';
+</I>&gt;<i>        frame0.data[3] = 'd';
+</I>&gt;<i>        frame0.data[4] = 'e';
+</I>&gt;<i>        frame0.data[5] = 'f';
+</I>&gt;<i>     frame0.data[6] = 'g';
+</I>&gt;<i>        frame0.data[7] = 'h';
+</I>&gt;<i>       
+</I>&gt;<i>        nbytes0 = sendto(s0, &amp;frame0, sizeof(struct can_frame), 0, 
+</I>&gt;<i> (struct sockaddr*)&amp;addr0, sizeof(addr0));
+</I>&gt;<i>          perror(&quot;sendto&quot;);
+</I>&gt;<i>
+</I>&gt;<i> When you bound the socket to a specific interface (here: can0) using 
+</I>&gt;<i> sendto() is superflous. Try write().
+</I>&gt;<i>
+</I>&gt;<i> Anyway you should try the applications &quot;cansend&quot; and &quot;candump&quot; as 
+</I>&gt;<i> Wolfgang stated before.
+</I>&gt;<i> These tools are working surely.
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>         
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>Hi all, let me explain what I did at my can-utils dir. Below I describe 
+all steps!!! The bolded ones are my commands!!!
+
+**************************************************************************************************
+*sh-3.00# ./candump -l can0*
+
+
+Enabling Logfile 'candump-1970-01-01_005122.log'
+
+
+[1]+  Stopped(SIGTSTP)        ./candump -l can0
+
+*sh-3.00# bg*
+
+[1]+ ./candump -l can0 &amp;
+
+*sh-3.00# ./cansend can0 150#ABCDEF
+
+*  can0  150  [3] AB CD EF
+
+*sh-3.00# fg
+
+*./candump -l can0
+
+*sh-3.00# ifconfig
+
+
+*can0      Link encap:UNSPEC  HWaddr 
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00 
+          UP NOARP  MTU:16  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:10
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+          Interrupt:145 Base address:0xa900
+
+can1      Link encap:UNSPEC  HWaddr 
+00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00 
+          UP RUNNING NOARP  MTU:16  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:10
+          RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+          Interrupt:146 Base address:0xc980
+
+eth0      Link encap:Ethernet  HWaddr 00:04:9F:00:18:C9 
+          inet addr:192.168.1.101  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:19346 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:10687 errors:0 dropped:0 overruns:0 carrier:1
+          collisions:0 txqueuelen:1000
+          RX bytes:19927594 (19.0 MiB)  TX bytes:1964222 (1.8 MiB)
+          Interrupt:133 Base address:0x3000
+
+lo        Link encap:Local Loopback 
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+
+          RX packets:1 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:1 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:140 (140.0 b)  TX bytes:140 (140.0 b)
+******************************************************************************
+Well, I used the candump and cansend and both seem to work perfectly. 
+But my ifconfig still have no messages indicating activities!
+
+Thanks again,
+
+Breno
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080508/729d8c5a/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080508/729d8c5a/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000342.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000345.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#344">[ date ]</a>
+              <a href="thread.html#344">[ thread ]</a>
+              <a href="subject.html#344">[ subject ]</a>
+              <a href="author.html#344">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

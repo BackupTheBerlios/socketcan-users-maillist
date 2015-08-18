@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Local loopback broken?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Local%20loopback%20broken%3F&In-Reply-To=%3C200912021527.55452.matthias.fuchs%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001183.html">
+   <LINK REL="Next"  HREF="001188.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Local loopback broken?</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Local%20loopback%20broken%3F&In-Reply-To=%3C200912021527.55452.matthias.fuchs%40esd.eu%3E"
+       TITLE="[Socketcan-users] Local loopback broken?">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Wed Dec  2 15:27:55 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001183.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+        <LI>Next message: <A HREF="001188.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1187">[ date ]</a>
+              <a href="thread.html#1187">[ thread ]</a>
+              <a href="subject.html#1187">[ subject ]</a>
+              <a href="author.html#1187">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+what happened to this?
+
+I observed this behavior with Socket-CAN SVN r1091 on 2.6.30 kernels.
+
+Matthias
+
+On Saturday 20 June 2009 14:42, Oliver Hartkopp wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;<i> &gt; Michel Marti wrote:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;&gt; I recently updated my Kernel from 2.6.26 to 2.6.30 and since then, CAN frames sent over
+</I>&gt;<i> &gt;&gt; the virtual CAN device (vcan) get looped back to the sender of the frame, as if the
+</I>&gt;<i> &gt;&gt; CAN_RAW_RECV_OWN_MSGS socket option was enabled (it isn't). Socketcan from SVN-trunk shows
+</I>&gt;<i> &gt;&gt; the same behaviour... Am I missing something or is this a bug?
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I'll take a look at it.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Stay tuned :-)
+</I>&gt;<i> 
+</I>&gt;<i> Hi Michel,
+</I>&gt;<i> 
+</I>&gt;<i> the needed sk reference for omitting the own received messages is killed by a
+</I>&gt;<i> new skb_orphan() call in net/core/dev.c introduced in
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.30.y.git;a=commitdiff;h=9a279bcbe347496799711155ed41a89bc40f79c5">http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.30.y.git;a=commitdiff;h=9a279bcbe347496799711155ed41a89bc40f79c5</A>
+</I>&gt;<i> 
+</I>&gt;<i> So it first occurs in 2.6.30.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for pointing me to this issue!
+</I>&gt;<i> 
+</I>&gt;<i> I'll try to get some feedback from Herbert Xu about this and how we can solve
+</I>&gt;<i> these kinds of problems in the future.
+</I>&gt;<i> 
+</I>&gt;<i> Additionally i'll create some test-application for LTP to be sure that kernel
+</I>&gt;<i> changes do not kill established CAN functionalities.
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+-- 
+-------------------------------------------------------------------------
+Dipl.-Ing. Matthias Fuchs
+Head of System Design
+
+esd electronic system design gmbh
+Vahrenwalder Str. 207 - 30165 Hannover - GERMANY
+Phone: +49-511-37298-0 - Fax: +49-511-37298-68
+Please visit our homepage <A HREF="http://www.esd.eu">http://www.esd.eu</A>
+Quality Products - Made in Germany
+-------------------------------------------------------------------------
+Gesch&#228;ftsf&#252;hrer: Klaus Detering, Dr. Werner Schulze
+Amtsgericht Hannover HRB 51373 - VAT-ID DE 115672832
+-------------------------------------------------------------------------
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001183.html">[Socketcan-users] FW: CAN Id is trucated
+</A></li>
+	<LI>Next message: <A HREF="001188.html">[Socketcan-users] Local loopback broken?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1187">[ date ]</a>
+              <a href="thread.html#1187">[ thread ]</a>
+              <a href="subject.html#1187">[ subject ]</a>
+              <a href="author.html#1187">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

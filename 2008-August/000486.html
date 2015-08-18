@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] problem with 82527 PC/104 board
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%2082527%20PC/104%20board&In-Reply-To=%3C48B5AC82.6070609%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000485.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] problem with 82527 PC/104 board</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20problem%20with%2082527%20PC/104%20board&In-Reply-To=%3C48B5AC82.6070609%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] problem with 82527 PC/104 board">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Aug 27 21:35:30 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000485.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#486">[ date ]</a>
+              <a href="thread.html#486">[ thread ]</a>
+              <a href="subject.html#486">[ subject ]</a>
+              <a href="author.html#486">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Alexey Serov wrote:
+&gt;<i> Thanks! It finally worked with the following configuration:
+</I>&gt;<i>
+</I>&gt;<i> options i82527-iomem irq=4,6 base=0xD0000,0xD0100 speed=125,125
+</I>&gt;<i> irq_mode=2,2 force_dmc=1,1 clk=8000000,8000000
+</I>&gt;<i>
+</I>&gt;<i> (by default the clock value was set to 16MHz, and that was wrong)
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Hi Alexey,
+
+congrats to get it working. I was working with the driver a long time 
+ago, but i remember that setting the clock to 8MHz and to use 
+force_dmc=1 was also my setup. Sorry for not getting to this earlier ...
+
+Btw. the module parameters 'irq_mode', 'force_dmc' and 'clk' are no 
+parameter arrays and can only be set once for the driver.
+
+The correct representation of your setup must be:
+
+options i82527-iomem irq=4,6 base=0xD0000,0xD0100 speed=125,125 irq_mode=2 force_dmc=1 clk=8000000
+
+
+Have fun!
+
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000485.html">[Socketcan-users] problem with 82527 PC/104 board
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#486">[ date ]</a>
+              <a href="thread.html#486">[ thread ]</a>
+              <a href="subject.html#486">[ subject ]</a>
+              <a href="author.html#486">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

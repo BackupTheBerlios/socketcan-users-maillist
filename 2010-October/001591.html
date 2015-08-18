@@ -1,0 +1,117 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp2515 frames with ID 004 and 000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3C4CBDC527.4070100%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001590.html">
+   <LINK REL="Next"  HREF="001593.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp2515 frames with ID 004 and 000</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3C4CBDC527.4070100%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mcp2515 frames with ID 004 and 000">mkl at pengutronix.de
+       </A><BR>
+    <I>Tue Oct 19 18:19:51 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001590.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+        <LI>Next message: <A HREF="001593.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1591">[ date ]</a>
+              <a href="thread.html#1591">[ thread ]</a>
+              <a href="subject.html#1591">[ subject ]</a>
+              <a href="author.html#1591">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/19/2010 06:16 PM, Jargalan Nermunkh wrote:
+&gt;&gt;<i> I'm a bit in a hurry....Long story short: it's a bug in the (in-driver)
+</I>&gt;&gt;<i> can error frame generation [1]. I'm going to fix this later.
+</I>
+&gt;<i> Forgot to mention in my other e-mails that the ID 000 and 004 messages are
+</I>&gt;<i> easier to produce when there is only 1 byte of data is sent.
+</I>
+Oh, that's good.
+
+I've identified the problem, please try this fix:
+
+From cca3ff648bcee45bfc6cd17824fac4d5f75ab45d Mon Sep 17 00:00:00 2001
+From: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+Date: Tue, 19 Oct 2010 17:52:59 +0200
+Subject: [PATCH] can: mcp251x: fix generation of error frames
+
+The function &quot;mcp251x_error_skb&quot; should generate error frames, which are
+identified by the &quot;CAN_ERR_FLAG&quot; in can_id. The function overwrites the
+can_id so that the frames show up as normal instead of error frames.
+
+This patch fixes the problem by or'ing the can_id instead of overwriting.
+
+Signed-off-by: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+---
+ drivers/net/can/mcp251x.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/net/can/mcp251x.c b/drivers/net/can/mcp251x.c
+index 59f40bc..6aadc3e 100644
+--- a/drivers/net/can/mcp251x.c
++++ b/drivers/net/can/mcp251x.c
+@@ -705,7 +705,7 @@ static void mcp251x_error_skb(struct net_device *net, int can_id, int data1)
+ 
+ 	skb = alloc_can_err_skb(net, &amp;frame);
+ 	if (skb) {
+-		frame-&gt;can_id = can_id;
++		frame-&gt;can_id |= can_id;
+ 		frame-&gt;data[1] = data1;
+ 		netif_rx_ni(skb);
+ 	} else {
+-- 
+1.7.0.4
+
+Marc
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/58467637/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/58467637/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001590.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+	<LI>Next message: <A HREF="001593.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1591">[ date ]</a>
+              <a href="thread.html#1591">[ thread ]</a>
+              <a href="subject.html#1591">[ subject ]</a>
+              <a href="author.html#1591">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

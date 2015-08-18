@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000&In-Reply-To=%3C49E5DA30.10008%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000773.html">
+   <LINK REL="Next"  HREF="000775.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000&In-Reply-To=%3C49E5DA30.10008%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Using sja1000">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed Apr 15 14:59:28 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000773.html">[Socketcan-users] Using sja1000
+</A></li>
+        <LI>Next message: <A HREF="000775.html">[Socketcan-users] Losing CAN messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#774">[ date ]</a>
+              <a href="thread.html#774">[ thread ]</a>
+              <a href="subject.html#774">[ subject ]</a>
+              <a href="author.html#774">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i>
+</I>&gt;<i> The supported CAN drivers are under 
+</I>&gt;<i> socketcan/trunk/kernel/2.6/drivers/net/can
+</I>&gt;<i>
+</I>&gt;<i> There are also several SJA1000 drivers (like the PIPCAN driver).
+</I>&gt;<i>
+</I>&gt;<i> I'm not aware how to support exactly your board, which presents the 
+</I>&gt;<i> SJA1000 registers linear in the I/O address space. I assume the pipcan 
+</I>&gt;<i> driver is a good point to start with. Or you go to the 
+</I>&gt;<i> drivers/net/can/old/sja1000 directory and try the sja1000-io driver 
+</I>&gt;<i> there with the appropriate module commandline settings for the io-space 
+</I>&gt;<i> and interrupts according your TS-CAN1 board.
+</I>&gt;<i>   
+</I>
+Hm - i just took a look into the TS-CAN1 manual.
+
+It looks like your SJA1000 registers are accessed via bank switching in 
+blocks of 32 registers.
+
+As there is a TS1-CAN adaption code for the register access in
+
+<A HREF="http://ocera.cvs.sourceforge.net/viewvc/ocera/ocera/components/comm/can/lincan/src/tscan1.c?revision=1.9&amp;view=markup">http://ocera.cvs.sourceforge.net/viewvc/ocera/ocera/components/comm/can/lincan/src/tscan1.c?revision=1.9&amp;view=markup</A>
+
+you can probably bring that code into shape so that it works with the 
+old SJA1000 driver or you can create a new SocketCAN TS-CAN1 driver 
+based on the pipcan source ...
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000773.html">[Socketcan-users] Using sja1000
+</A></li>
+	<LI>Next message: <A HREF="000775.html">[Socketcan-users] Losing CAN messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#774">[ date ]</a>
+              <a href="thread.html#774">[ thread ]</a>
+              <a href="subject.html#774">[ subject ]</a>
+              <a href="author.html#774">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

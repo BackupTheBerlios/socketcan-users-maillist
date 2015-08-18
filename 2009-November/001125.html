@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF18ECC.4060404%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001124.html">
+   <LINK REL="Next"  HREF="001126.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF18ECC.4060404%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov  4 15:25:16 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001124.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001126.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1125">[ date ]</a>
+              <a href="thread.html#1125">[ thread ]</a>
+              <a href="subject.html#1125">[ subject ]</a>
+              <a href="author.html#1125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Wed, Nov 04, 2009 at 09:30:18AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On Wed, Nov 04, 2009 at 09:13:03AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> ....
+</I>&gt;&gt;&gt;&gt;<i> ? I'm a little confused, just for the record: You called
+</I>&gt;&gt;&gt;&gt;<i> ifconfig can2 down
+</I>&gt;&gt;&gt;&gt;<i> before you brought up the interface?
+</I>&gt;&gt;&gt;<i> No, because the module was just loaded. But even if I do a &quot;ifconfig
+</I>&gt;&gt;&gt;<i> can2 down&quot;, it will fail.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> init_mode (slprq | initrq) is set while the interface is shut down. This
+</I>&gt;&gt;<i> is the place where the warning comes from.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> No. The slprq will eventually fail if there're irregular activities on
+</I>&gt;&gt;&gt;&gt;<i> the bus, like a opposite with wrong baudrate keep resending its stuffs.
+</I>&gt;&gt;&gt;<i> On my board, it always fails! Even without any traffic on the bus.
+</I>&gt;&gt;<i> This is really strange, I can't reproduce this on my board here.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> # /sbin/ip link set can1 type can bitrate 125000
+</I>&gt;&gt;<i> [  215.118944] mpc52xx_can f0000980.can: setting BTR0=0x15 BTR1=0x18
+</I>&gt;&gt;<i> # ifconfig can1 down
+</I>&gt;&gt;<i> # ifconfig can1 up
+</I>&gt;&gt;<i> #
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Btw. the platform I'm working on is a 1.4
+</I>&gt;&gt;<i> # cat /proc/cpuinfo | grep revision
+</I>&gt;&gt;<i> revision        : 1.4 (pvr 8082 2014)
+</I>&gt;&gt;<i> I will try to do some tests on another mpc5200b hardware here also later
+</I>&gt;&gt;<i> today.
+</I>&gt;<i> 
+</I>&gt;<i> As I already said, I use an old MPC5200 (without *B*). Will try later
+</I>&gt;<i> today with a MPC5200B.
+</I>
+I switched to &quot;MPC5200B v2.2, Core v1.4 at 396 MHz&quot; and the problem does
+*not* show up any more. Before I used a &quot;MPC5200 v1.2, Core v1.1 at 396
+MHz&quot;. Now I remember vaguely, that I was indeed fighting with this
+strange behavior. The manual instructs to enter sleep mode first and
+thereafter the init mode, but as that did'nt work, sleep and init are
+set in one step. Maybe we simply do s/dev_err/dev_dbg/. What do you think?
+
+Wolfgang,
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001124.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001126.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1125">[ date ]</a>
+              <a href="thread.html#1125">[ thread ]</a>
+              <a href="subject.html#1125">[ subject ]</a>
+              <a href="author.html#1125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

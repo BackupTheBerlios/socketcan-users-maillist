@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080702223404.GF3199%40local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000448.html">
+   <LINK REL="Next"  HREF="000439.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Hans J. Koch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C20080702223404.GF3199%40local%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">hjk at linutronix.de
+       </A><BR>
+    <I>Thu Jul  3 00:34:04 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000448.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000439.html">[Socketcan-users] Results of the Poll on bit time setting with	Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#452">[ date ]</a>
+              <a href="thread.html#452">[ thread ]</a>
+              <a href="subject.html#452">[ subject ]</a>
+              <a href="author.html#452">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Jul 02, 2008 at 10:40:03PM +0200, Oliver Hartkopp wrote:
+&gt;<i> Robert Schwebel wrote:
+</I>&gt;<i> &gt; On Wed, Jul 02, 2008 at 09:52:01PM +0200, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;   
+</I>&gt;<i> &gt;&gt; You can either set the bit-rate *or* the bit-timing. If you set the 
+</I>&gt;<i> &gt;&gt; bit-rate, the bit-timing will be determined by an algorithm or a 
+</I>&gt;<i> &gt;&gt; built-in table. Therefore the correct wording should have been: &quot;The 
+</I>&gt;<i> &gt;&gt; indirect setting via updatable table seems not that attractive&quot;.
+</I>&gt;<i> &gt;&gt;     
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; In our approach, you *specify* the bit timing and *call*it 125000. Then
+</I>&gt;<i> &gt; you *select* the 125000 &quot;bitrate&quot;.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; You can also specify a bit timing and call it Fridolin_Tux. It could
+</I>&gt;<i> &gt; then be selected by
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 	ifdown can0
+</I>&gt;<i> &gt; 	canconfig can0 Fridolin_Tux
+</I>&gt;<i> &gt; 	ifup can0
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This is completely independend of any heuristics (which could also be
+</I>&gt;<i> &gt; triggered to specify such a line). You could add an API for &quot;please
+</I>&gt;<i> &gt; invent a bit timing for 125000&quot; to trigger an algorithm, or a &quot;please
+</I>&gt;<i> &gt; generate a CiA-well-known-bit-timing for 250000&quot; call. The end result is
+</I>&gt;<i> &gt; always a bit timing set, which is indexed by the &quot;speaking name&quot; which
+</I>&gt;<i> &gt; reflects the bitrate.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;   
+</I>&gt;<i> 
+</I>&gt;<i> ACK :-)
+</I>&gt;<i> 
+</I>&gt;<i> &gt; This is convenient for users, because they can set the bitrate in an
+</I>&gt;<i> &gt; intuitive way (canconfig can0 125000). The system administrator / BSP
+</I>&gt;<i> &gt; integrator has to know what 125000 means on this particular hardware
+</I>&gt;<i> &gt; (chip + board + corresponding clocks) and has to configure it somewhere.
+</I>&gt;<i> &gt; And the end user can define his very own stuff if he knows what he does.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;   
+</I>&gt;<i> 
+</I>&gt;<i> ACK.
+</I>
+Fine. In the end we're getting somewhere...
+Please add my ACK, too.
+
+Thanks,
+Hans
+
+
+&gt;<i> 
+</I>&gt;<i> Oliver.
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-core mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-core at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-core">https://lists.berlios.de/mailman/listinfo/socketcan-core</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000448.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000439.html">[Socketcan-users] Results of the Poll on bit time setting with	Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#452">[ date ]</a>
+              <a href="thread.html#452">[ thread ]</a>
+              <a href="subject.html#452">[ subject ]</a>
+              <a href="author.html#452">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

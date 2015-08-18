@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%0A%20%3D%3Fiso-8859-1%3Fq%3FRFC_interframe_drop_cmsg_f%3DFCr_C%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3FAN-RAW_sockets%3D3F_-_was%3D3A_af%3D5Fpacket%3D3A_add_interframe_d%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3Frop_cmsg_%3D28v6%3D29%3F%3D&In-Reply-To=%3C4AC9C128.3070201%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001070.html">
+   <LINK REL="Next"  HREF="001073.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%0A%20%3D%3Fiso-8859-1%3Fq%3FRFC_interframe_drop_cmsg_f%3DFCr_C%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3FAN-RAW_sockets%3D3F_-_was%3D3A_af%3D5Fpacket%3D3A_add_interframe_d%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3Frop_cmsg_%3D28v6%3D29%3F%3D&In-Reply-To=%3C4AC9C128.3070201%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Oct  5 11:49:28 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001070.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+        <LI>Next message: <A HREF="001073.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1071">[ date ]</a>
+              <a href="thread.html#1071">[ thread ]</a>
+              <a href="subject.html#1071">[ subject ]</a>
+              <a href="author.html#1071">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Hey,
+
+Oliver Hartkopp wrote:
+&gt;<i> Neil Horman introduced a new control message to detect dropped rx messages in
+</I>&gt;<i> the packet socket, which has been committed to Mainline upstream today.
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://marc.info/?l=linux-netdev&amp;m=125450261121971&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=125450261121971&amp;w=2</A>
+</I>&gt;<i> 
+</I>&gt;<i> Is this an interesting idea for CAN-RAW users also?
+</I>&gt;<i> Does anyone would like to have something like that in CAN-RAW sockets?
+</I>
+yes, here. It would be nice if the userspace application gets a
+notification that some messages have been dropped, due to too short
+buffers on the applications rx path. This is what I typically get during
+high bitrates with the cansequence tool (if I don't tune the buffers).
+
+cheers, Marc
+
+- --
+Pengutronix e.K.                         | Marc Kleine-Budde           |
+Linux Solutions for Science and Industry | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund                 | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686         | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+Comment: Using GnuPG with Mozilla - <A HREF="http://enigmail.mozdev.org">http://enigmail.mozdev.org</A>
+
+iEYEARECAAYFAkrJwQwACgkQjTAFq1RaXHMu6ACfeLbQiqAqOI8sC2TbXO1MLwmo
+8hwAninVBNAVi3MEG5oE2uN0Otc/J+WN
+=Njs8
+-----END PGP SIGNATURE-----
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001070.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+	<LI>Next message: <A HREF="001073.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1071">[ date ]</a>
+              <a href="thread.html#1071">[ thread ]</a>
+              <a href="subject.html#1071">[ subject ]</a>
+              <a href="author.html#1071">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

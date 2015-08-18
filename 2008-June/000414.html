@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SJA1000 errors
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SJA1000%20errors&In-Reply-To=%3C50A6AE7EE6F18E4C97E9AE374FEC613701049005%40GLKMS2104.GREENLNK.NET%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000426.html">
+   <LINK REL="Next"  HREF="000415.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SJA1000 errors</H1>
+    <B>Goodall, Mark (UK)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SJA1000%20errors&In-Reply-To=%3C50A6AE7EE6F18E4C97E9AE374FEC613701049005%40GLKMS2104.GREENLNK.NET%3E"
+       TITLE="[Socketcan-users] SJA1000 errors">mark.goodall at baesystems.com
+       </A><BR>
+    <I>Thu Jun 19 11:38:20 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000426.html">[Socketcan-users] Newbie got his socket CAN working...
+</A></li>
+        <LI>Next message: <A HREF="000415.html">[Socketcan-users] SJA1000 errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#414">[ date ]</a>
+              <a href="thread.html#414">[ thread ]</a>
+              <a href="subject.html#414">[ subject ]</a>
+              <a href="author.html#414">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+When I load the SJA1000 kernel module with debug and start sending and
+receiving data over the bus I get a string of the following errors
+before the connection fails completely:
+ 
+can0: ALI #1#
+can0: ALC = 0x00
+can0: BEI #2#
+can0: EEC = 0xA2 (RX, stuff error, ID.28 to ID.28)
+can0: handled 2 IRQs
+ 
+guessing from the errors, I think that this means it was attempting to
+send at the same moment a message arrives, causing the arbitration loss,
+but the stuff error means the recv''d message is also invalid?
+ 
+Is this a problem on the recv'ing end or the other controller.
+ 
+Mark Goodall
+Research Associate
+tel: 0117 302 8222
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mark.goodall at baesystems.com</A>
+ 
+Advanced Information Processing
+BAE SYSTEMS, Advanced Technology Centre, Sowerby Building, FPC 267, PO
+Box 5, Filton, Bristol BS34 7QW, United Kingdom 
+
+BAE Systems (Operations) Limited
+Registered Office: Warwick House, PO Box 87, Farnborough Aerospace
+Centre, Farnborough, Hants, GU14 6YU, UK
+Registered in England &amp; Wales No: 1996687
+ 
+
+
+********************************************************************
+This email and any attachments are confidential to the intended
+recipient and may also be privileged. If you are not the intended
+recipient please delete it from your system and notify the sender.
+You should not copy it or use it for any purpose nor disclose or
+distribute its contents to any other person.
+********************************************************************
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080619/cfe838ce/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080619/cfe838ce/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000426.html">[Socketcan-users] Newbie got his socket CAN working...
+</A></li>
+	<LI>Next message: <A HREF="000415.html">[Socketcan-users] SJA1000 errors
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#414">[ date ]</a>
+              <a href="thread.html#414">[ thread ]</a>
+              <a href="subject.html#414">[ subject ]</a>
+              <a href="author.html#414">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

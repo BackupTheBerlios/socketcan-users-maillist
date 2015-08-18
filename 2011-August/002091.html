@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4E4CA945.7080504%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002088.html">
+   <LINK REL="Next"  HREF="002092.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4E4CA945.7080504%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Aug 18 07:55:17 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002088.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+        <LI>Next message: <A HREF="002092.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2091">[ date ]</a>
+              <a href="thread.html#2091">[ thread ]</a>
+              <a href="subject.html#2091">[ subject ]</a>
+              <a href="author.html#2091">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 16.08.2011 21:45, Willy Lambert wrote:
+
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> I used sja1000 on a 32bits system and I am trying to switch to a 64b system.
+</I>&gt;<i> It not possible to select CONFIG_SJA1000_ISA when CONFIG_ISA is not set, which
+</I>&gt;<i> is not available when CONFIG_X86_64 is set.
+</I>&gt;<i> 
+</I>&gt;<i> As in xenomai &quot;socket&quot; drivers I am able to use my board, I wonder why this is
+</I>&gt;<i> not possible under a vanilla linux. I access my HW by iomem (the equivalent
+</I>&gt;<i> xenomai driver is xeno_can_mem), is there an equivalent socket can driver ?
+</I>
+
+Hi Willy,
+
+i've looked into
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c</A>
+
+which should have a similar problem, as these old-style serial hardware is
+also using the ISA bus.
+
+But the serial drivers are now depending on HAS_IOMEM
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/Kconfig#L4">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/Kconfig#L4</A>
+
+and they use platform calls
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3177">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3177</A>
+
+like platform_device_alloc(), platform_device_add(),
+platform_driver_register() and friends ...
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3349">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3349</A>
+
+The sja1000_isa.c still uses the ISA pendants
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/sja1000/sja1000_isa.c#L253">http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/sja1000/sja1000_isa.c#L253</A>
+
+So IMO the sja1000_isa driver 'just' needs to be converted like they did with
+the serial drivers.
+
+@Wolfgang/Marc: Or is it better to create some platform bindings for x86 and
+use the 'sja1000_platform' driver??
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002088.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+	<LI>Next message: <A HREF="002092.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2091">[ date ]</a>
+              <a href="thread.html#2091">[ thread ]</a>
+              <a href="subject.html#2091">[ subject ]</a>
+              <a href="author.html#2091">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

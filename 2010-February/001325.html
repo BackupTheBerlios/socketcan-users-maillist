@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] netlink based CAN gateway kernel module
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20netlink%20based%20CAN%20gateway%20kernel%20module&In-Reply-To=%3C4B8413B8.4070905%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001324.html">
+   <LINK REL="Next"  HREF="001326.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] netlink based CAN gateway kernel module</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20netlink%20based%20CAN%20gateway%20kernel%20module&In-Reply-To=%3C4B8413B8.4070905%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] netlink based CAN gateway kernel module">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Feb 23 18:43:20 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001324.html">[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+</A></li>
+        <LI>Next message: <A HREF="001326.html">[Socketcan-users] can0 doesn't show after Linux boots up (at91_can driver built into kernel)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1325">[ date ]</a>
+              <a href="thread.html#1325">[ thread ]</a>
+              <a href="subject.html#1325">[ subject ]</a>
+              <a href="author.html#1325">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>(just a repost on SocketCAN users mailing list)
+
+Hi all,
+
+as some of you already might have seen on the increasing SVN versions the last 
+week, i have implemented a (quite old) idea for a kernel internal CAN message
+routing.
+
+The can-gw is configurable with the netlink (precisely rtnetlink) interface
+via PF_NETLINK sockets like 'iproute2' and 'iptable' do. It's named as 'gateway'
+and not as 'bridge' as it is not only capable to route CAN frames but can modify
+application level data.
+
+The can-gw features:
+
+- based on the PF_CAN core infrastructure for msg filtering / msg sending
+
+- route CAN frames to a specific CAN interface
+  - without filter
+  - with a specified can_filter that's also known from the can-raw sockets
+
+- modify (routed) CAN frames on the fly
+  - with other given CAN frame content or it's elements can_id, can_dlc, data
+    - AND (bit operation)
+    - OR  (bit operation)
+    - XOR (bit operation)
+    - SET (replace CAN frame elements)
+
+- extra flags for
+  - echo of sent CAN frames (mandatory on vcan's :-)
+  - option to preserve the original rx interface timestamp
+
+In general the can-gw module src can be enhanced to route on non-CAN interfaces.
+
+The routing of CAN frames inside the kernel makes sense because of the missing 
+copy to/from userspace and the scheduling that happens to userspace apps.
+First tests proved a low latency (about 22 usecs on my Core2Duo 2GHz) and
+especially a low jitter for the routed CAN frames.
+
+The can-gw is tested on the latest net-next-2.6 and a 2.6.28 kernel.
+
+The new files in the SVN are
+
+trunk/kernel/2.6/include/socketcan/can/gw.h 
+trunk/kernel/2.6/include/linux/can/gw.h (just includes socketcan/can/gw.h)
+trunk/kernel/2.6/net/can/gw.c
+
+and a simple can-gw netlink config tool can be found here
+
+trunk/can-utils/cangw.c
+
+Feel free to check it out and give some feedback on the can-gw.
+
+Have fun,
+Oliver
+
+---
+
+user$ cangw -?
+
+Usage: cangw [options]
+
+Commands:  -A (add a new rule)
+           -D (delete a rule)
+           -F (flush - delete all rules)  [not yet implemented]
+           -L (list all rules)
+Mandatory: -s &lt;src_dev&gt;  (source netdevice)
+           -d &lt;dst_dev&gt;  (destination netdevice)
+Options:   -t (preserve src_dev rx timestamp)
+           -e (echo sent frames - recommended on vcanx)
+           -f &lt;filter&gt; (set CAN filter)
+           -m &lt;mod&gt; (set frame modifications)
+
+Values are given and expected in hexadecimal values. Leading 0s can be omitted.
+
+&lt;filter&gt; is a &lt;value&gt;:&lt;mask&gt; CAN identifier filter
+
+&lt;mod&gt; is a CAN frame modification instruction consisting of
+&lt;instruction&gt;:&lt;can_frame-elements&gt;:&lt;can_id&gt;.&lt;can_dlc&gt;.&lt;can_data&gt;
+ - &lt;instruction&gt; is one of 'AND' 'OR' 'XOR' 'SET'
+ - &lt;can_frame-elements&gt; is _one_ or _more_ of 'I'dentifier 'L'ength 'D'ata
+ - &lt;can_id&gt; is an u32 value containing the CAN Identifier
+ - &lt;can_dlc&gt; is an u8 value containing the data length code (0 .. 8)
+ - &lt;can_data&gt; is always eight(!) u8 values containing the CAN frames data
+The instructions are performed in the order 'AND' -&gt; 'OR' -&gt; 'XOR' -&gt; 'SET'
+
+Example:
+cangw -A -s can0 -d vcan3 -f 123:C00007FF -m SET:IL:80000333.4.1122334455667788
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001324.html">[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+</A></li>
+	<LI>Next message: <A HREF="001326.html">[Socketcan-users] can0 doesn't show after Linux boots up (at91_can driver built into kernel)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1325">[ date ]</a>
+              <a href="thread.html#1325">[ thread ]</a>
+              <a href="subject.html#1325">[ subject ]</a>
+              <a href="author.html#1325">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

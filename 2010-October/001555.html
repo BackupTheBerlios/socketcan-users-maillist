@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C166589D0B9DD2547A1319599B9BADA1F5AA05D%40vsv-exchange.ixxat.intranet.priv%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001552.html">
+   <LINK REL="Next"  HREF="001557.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>gribov at ixxat.de</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C166589D0B9DD2547A1319599B9BADA1F5AA05D%40vsv-exchange.ixxat.intranet.priv%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">gribov at ixxat.de
+       </A><BR>
+    <I>Wed Oct 13 11:35:40 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001552.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001557.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1555">[ date ]</a>
+              <a href="thread.html#1555">[ thread ]</a>
+              <a href="subject.html#1555">[ subject ]</a>
+              <a href="author.html#1555">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> I'm following the discussion and realized that it will not work for
+</I>&gt;<i> devices doing the local loopback in hardware, like the flexcan
+</I>&gt;<i> controller. 
+</I>
+What is actually the advantage of using hardware loopback? One can
+always quit using it and use Tx interrupt for self reception ...
+
+&gt;<i> Strictly speaking it will only work properly for drivers
+</I>&gt;<i> doing the local loopback in software when the TX done interrupt is
+</I>&gt;<i> handled. Also some USB devices are not able to do that properly.
+</I>
+Yes, active cards is a problem. The firmware shall support self
+reception
+and loop back the sent messages in order to guarantee correct behavior. 
+The timestamp is also pain ...
+
+Regards,
+Vladislav
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001552.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001557.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1555">[ date ]</a>
+              <a href="thread.html#1555">[ thread ]</a>
+              <a href="subject.html#1555">[ subject ]</a>
+              <a href="author.html#1555">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

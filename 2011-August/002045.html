@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E3AD869.5080507%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002033.html">
+   <LINK REL="Next"  HREF="002012.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E3AD869.5080507%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Aug  4 19:35:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002033.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="002012.html">[Socketcan-users] Hot plug support
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2045">[ date ]</a>
+              <a href="thread.html#2045">[ thread ]</a>
+              <a href="subject.html#2045">[ subject ]</a>
+              <a href="author.html#2045">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;&gt;<i> To use the kernel-based CAN routing, you need to build the can-gw protocol
+</I>&gt;&gt;<i> which
+</I>&gt;&gt;<i> is based on the PF_CAN network layer stuff and currently only sits in the
+</I>&gt;&gt;<i> Berlios SVN:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/net/can/gw.c?op=log&amp;">http://svn.berlios.de/wsvn/socketcan/trunk/kernel/2.6/net/can/gw.c?op=log&amp;</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> That was patched into my kernel within minutes. 
+</I>
+Fine :-)
+
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You also need the configuration tool cangw which is in
+</I>&gt;&gt;<i> trunk/can-utils/cangw.c
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> That should be easy too, I thought...
+</I>&gt;<i> I have those can-utils in my target code so I just copied cangw.c there and
+</I>&gt;<i> added it to the Makefile....
+</I>&gt;<i> Then I rewrote the Makefile to be less talking and more informative...
+</I>&gt;<i> Then I hardened the compiler flags and then I was busy to remove all those
+</I>&gt;<i> double- and shadow-declarations from all of the tools, including cangw.c...
+</I>
+??? - what do you mean in detail? Something to improve?
+
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The can-gw is pretty fast and efficient, so that you won't see any
+</I>&gt;&gt;<i> relevant timing
+</I>&gt;&gt;<i> differences.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If you get any problems using can-gw or the cangw userspacetool please ask
+</I>&gt;&gt;<i> me.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm always interested in feedback ;-)
+</I>&gt;&gt;<i>
+</I>&gt;<i> It's actually flashing and we see.... Ready!
+</I>&gt;<i> 
+</I>&gt;<i> Normally, as I just like to mirror vcan0&lt;-&gt;can0, my rule should be easy like
+</I>&gt;<i> #cangw -A -s can0 -d vcan0
+</I>&gt;<i> #cangw -A -s vcan0 -d can0 -e
+</I>&gt;<i> 
+</I>&gt;<i> and I run slave and master on vcan0.
+</I>&gt;<i> I don't see the need for any filtering, are you?
+</I>
+No - not in your use-case. It's just possible to do.
+
+E.g. if you have several single CAN-IDs to route, you can just create a script
+with several cangw -A ... lines and you're done.
+
+&gt;<i> A first simple compare of candump -ta can0 and candump -ta vcan0 looks
+</I>&gt;<i> pretty fine!
+</I>&gt;<i> Disconnected plug from can0... vcan0 still active -&gt; Good!
+</I>&gt;<i> Reconnecting the debugger... can0 active again -&gt; Good!
+</I>&gt;<i> CanOPEN LEDs constantly showing green... -&gt; Not so perfect but that's one
+</I>&gt;<i> for the next release :)
+</I>
+You can probable route the error msgs too, or query the controller state via
+netlink.
+
+&gt;<i> 
+</I>&gt;<i> So I guess this is the correct setup?
+</I>
+Yep!
+
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Even if can-gw is using netlink i created a separate tool as all the
+</I>&gt;&gt;<i> CAN-stuff
+</I>&gt;&gt;<i> and filtering is so different to IP and other networking.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> And you did a pretty good job with that :)
+</I>
+Thanks :-)
+
+&gt;<i> As kernel 2.6.39 has some different include paths I quick hacked them into
+</I>&gt;<i> the code. After cleaning it up I can send you the code or a diff if you
+</I>&gt;<i> like.
+</I>
+Yes, of course.
+
+I'll probably put some #if KERNELVERSION stuff around that in the SVN.
+
+My plan is to check the gw.c code for the possibility to make Ethernet/IP
+routings from/to CAN before i post it on netdev ML. Currently only CAN_CAN
+mappings are possible.
+
+&gt;<i> A big thanks!
+</I>
+Ditto! It's always nice to see, that things are requested i spent my time for ;-)
+
+Best regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002033.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="002012.html">[Socketcan-users] Hot plug support
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2045">[ date ]</a>
+              <a href="thread.html#2045">[ thread ]</a>
+              <a href="subject.html#2045">[ subject ]</a>
+              <a href="author.html#2045">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

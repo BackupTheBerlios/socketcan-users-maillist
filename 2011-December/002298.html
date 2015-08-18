@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20next-next%200/2%5D%20can%3A%20cc770%3A%20add%20support%0A%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED73A42.7060602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002299.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20next-next%200/2%5D%20can%3A%20cc770%3A%20add%20support%0A%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED73A42.7060602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Thu Dec  1 09:26:42 CET 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002299.html">[Socketcan-users] [PATCH net-next v6 0/4] can: cc770: add support	for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2298">[ date ]</a>
+              <a href="thread.html#2298">[ thread ]</a>
+              <a href="subject.html#2298">[ subject ]</a>
+              <a href="author.html#2298">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/30/2011 10:07 PM, David Miller wrote:
+&gt;<i> From: Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+</I>&gt;<i> Date: Wed, 30 Nov 2011 07:37:08 +0100
+</I>&gt;<i> 
+</I>&gt;&gt;<i> On 30.11.2011 00:39, David Miller wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> From: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i> Date: Thu, 24 Nov 2011 13:07:26 +0100
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Already since a while we have support for the Bosch CC770 and Intel
+</I>&gt;&gt;&gt;&gt;<i> AN82527 CAN controllers in our out-of-tree Socket-CAN repository.
+</I>&gt;&gt;&gt;&gt;<i> It would be nice if somebody could test the driver. Unfortunately,
+</I>&gt;&gt;&gt;&gt;<i> I currently do not have hardware at hand. I have not yet ported the
+</I>&gt;&gt;&gt;&gt;<i> OF platform driver as it needs further attaention due to the merge
+</I>&gt;&gt;&gt;&gt;<i> of the platform and OF platform interface.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Wolfgang Grandegger (2):
+</I>&gt;&gt;&gt;&gt;<i>   can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+</I>&gt;&gt;&gt;&gt;<i>   can: cc770: legacy CC770 ISA bus driver
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> All applied, thank you.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hello Dave,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> this patchset was superseded for some time.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We're currently in the v4 patchset (dated 2011-11-29).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> See <A HREF="http://patchwork.ozlabs.org/patch/128244/">http://patchwork.ozlabs.org/patch/128244/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Do you want to revert the commit or should Wolfgang post a diff patch to get
+</I>&gt;&gt;<i> to v4 ??
+</I>&gt;<i> 
+</I>&gt;<i> A not very good job was done here communicating to me what is happening.
+</I>&gt;<i> Endless revisions, and not clear indication to me what should or should
+</I>&gt;<i> not be applied as a result.
+</I>
+Well, not sure what I should have communicated to you, but ...
+
+&gt;<i> I want you guys to appoint someone to be the defacto CAN driver and
+</I>&gt;<i> subsystem maintainer who collects and merges all the driver and
+</I>&gt;<i> protocol patches into his tree, and acts as the one and only interface
+</I>&gt;<i> for me when changes are ready to be included.
+</I>
+... I agree that this will work better and it hopefully will then also
+save your valuable time. We will discuss in the Socket-CAN community who
+will/can act as the one and only interface to you.
+
+&gt;<i> I sorted this out by reverting the older changes and applying V5.
+</I>&gt;<i> 
+</I>&gt;<i> But I had to fix things up, when applying patch #3 there are empty
+</I>&gt;<i> trailing lines in some of the new files generated, and that causes
+</I>&gt;<i> git to complain.
+</I>
+Sorry for the bad quality of my patch series. I will try to do a better
+job next time.
+
+Thanks,
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002299.html">[Socketcan-users] [PATCH net-next v6 0/4] can: cc770: add support	for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2298">[ date ]</a>
+              <a href="thread.html#2298">[ thread ]</a>
+              <a href="subject.html#2298">[ subject ]</a>
+              <a href="author.html#2298">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

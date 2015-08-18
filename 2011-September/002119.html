@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4E6271CD.6040407%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002120.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4E6271CD.6040407%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">wg at grandegger.com
+       </A><BR>
+    <I>Sat Sep  3 20:28:29 CEST 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002120.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2119">[ date ]</a>
+              <a href="thread.html#2119">[ thread ]</a>
+              <a href="subject.html#2119">[ subject ]</a>
+              <a href="author.html#2119">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Willy,
+
+On 08/30/2011 01:36 PM, Willy Lambert wrote:
+&gt;<i> 2011/8/30 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> 
+</I>&gt;&gt;<i> On 08/30/2011 11:18 AM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;<i> 2011/8/18 Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On 08/18/2011 07:55 AM, Oliver Hartkopp wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 16.08.2011 21:45, Willy Lambert wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I used sja1000 on a 32bits system and I am trying to switch to a 64b
+</I>&gt;&gt;&gt;&gt;<i> system.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> It not possible to select CONFIG_SJA1000_ISA when CONFIG_ISA is not
+</I>&gt;&gt;<i> set,
+</I>&gt;&gt;&gt;&gt;<i> which
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> is not available when CONFIG_X86_64 is set.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> As in xenomai &quot;socket&quot; drivers I am able to use my board, I wonder why
+</I>&gt;&gt;&gt;&gt;<i> this is
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> not possible under a vanilla linux. I access my HW by iomem (the
+</I>&gt;&gt;&gt;&gt;<i> equivalent
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> xenomai driver is xeno_can_mem), is there an equivalent socket can
+</I>&gt;&gt;&gt;&gt;<i> driver ?
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Willy,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> i've looked into
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> which should have a similar problem, as these old-style serial hardware
+</I>&gt;&gt;&gt;&gt;<i> is
+</I>&gt;&gt;&gt;&gt;&gt;<i> also using the ISA bus.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> But the serial drivers are now depending on HAS_IOMEM
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/Kconfig#L4">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/Kconfig#L4</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> and they use platform calls
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3177">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3177</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> like platform_device_alloc(), platform_device_add(),
+</I>&gt;&gt;&gt;&gt;&gt;<i> platform_driver_register() and friends ...
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3349">http://lxr.linux.no/#linux+v3.0.3/drivers/tty/serial/8250.c#L3349</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> The sja1000_isa.c still uses the ISA pendants
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/sja1000/sja1000_isa.c#L253">http://lxr.linux.no/#linux+v3.0.3/drivers/net/can/sja1000/sja1000_isa.c#L253</A>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> So IMO the sja1000_isa driver 'just' needs to be converted like they
+</I>&gt;&gt;<i> did
+</I>&gt;&gt;&gt;&gt;<i> with
+</I>&gt;&gt;&gt;&gt;&gt;<i> the serial drivers.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> @Wolfgang/Marc: Or is it better to create some platform bindings for
+</I>&gt;&gt;<i> x86
+</I>&gt;&gt;&gt;&gt;<i> and
+</I>&gt;&gt;&gt;&gt;&gt;<i> use the 'sja1000_platform' driver??
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> A platform driver is of course sexier :)
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Marc
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Does someone know what is to do in order to make this sja1000_platform
+</I>&gt;&gt;&gt;<i> driver in my case ?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think we have first to fix the HAS_ISA vs. HAS_IOMEM issue. The
+</I>&gt;&gt;<i> sja1000 driver supports both, I/O port and memory mapped accesses. For
+</I>&gt;&gt;<i> the first we need HAS_ISA and for the latter HAS_IOMEM... that's my
+</I>&gt;&gt;<i> current understanding. I will have a closer look later today or tomorrow.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Thanks in advance, I am using IOMEM, so this fix should be directly usefull
+</I>&gt;<i> for me.
+</I>
+What CAN hardware are you using? And what bus is it
+connected to? Why do I ask? In &quot;arch/x86/Kconfig&quot; there is: 
+
+  # x86_64 have no ISA slots, but can have ISA-style DMA.
+  config ISA_DMA_API
+        bool &quot;ISA-style DMA support&quot; if (X86_64 &amp;&amp; EXPERT)
+        default y
+        help
+          Enables ISA-style DMA support for devices requiring such controllers.
+          If unsure, say Y.
+
+  if X86_32
+
+  config ISA
+        bool &quot;ISA support&quot;
+        ---help---
+          Find out whether you have ISA slots on your motherboard.  ISA is the
+          name of a bus system, i.e. the way the CPU talks to the other stuff
+          inside your box.  Other bus systems are PCI, EISA, MicroChannel
+          (MCA) or VESA.  ISA is an older system, now being displaced by PCI;
+          newer boards don't support it.  If you have ISA, say Y, otherwise N.
+
+
+Maybe the assumption that the x86_64 does not have ISA slots is wrong and we
+should fix that instead of moving to a platform driver like Oliver suggested.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002120.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2119">[ date ]</a>
+              <a href="thread.html#2119">[ thread ]</a>
+              <a href="subject.html#2119">[ subject ]</a>
+              <a href="author.html#2119">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

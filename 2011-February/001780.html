@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can device error flags unset?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20device%20error%20flags%20unset%3F&In-Reply-To=%3C4D5010CA.4030108%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001779.html">
+   <LINK REL="Next"  HREF="001781.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can device error flags unset?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20device%20error%20flags%20unset%3F&In-Reply-To=%3C4D5010CA.4030108%40grandegger.com%3E"
+       TITLE="[Socketcan-users] can device error flags unset?">wg at grandegger.com
+       </A><BR>
+    <I>Mon Feb  7 16:33:30 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001779.html">[Socketcan-users] can device error flags unset?
+</A></li>
+        <LI>Next message: <A HREF="001781.html">[Socketcan-users] can device error flags unset?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1780">[ date ]</a>
+              <a href="thread.html#1780">[ thread ]</a>
+              <a href="subject.html#1780">[ subject ]</a>
+              <a href="author.html#1780">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 02/07/2011 03:47 PM, Alexander Stein wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> On Monday 07 February 2011, 14:20:57 Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> On 02/07/2011 01:35 PM, Alexander Stein wrote:
+</I>&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I know I can get error flags reading can error messages.
+</I>&gt;&gt;&gt;<i> This works nicely and give me CAN_ERR_CRTL_RX_WARNING and/or
+</I>&gt;&gt;&gt;<i> CAN_ERR_CRTL_TX_WARNING, CAN_ERR_CRTL_RX_PASSIVE and
+</I>&gt;&gt;&gt;<i> CAN_ERR_CRTL_TX_PASSIVE when they are set.
+</I>&gt;&gt;&gt;<i> But how can I know if those flags are removed? Do I get another can error
+</I>&gt;&gt;&gt;<i> frame with those bits unset?
+</I>&gt;&gt;&gt;<i> Well, you can expand this question to all error flags.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think have a related patch in my pipeline, which I have attached below.
+</I>&gt;&gt;<i> Unfortunately, it's for an old kernel version but if it's what you are
+</I>&gt;&gt;<i> looking for, I would adapt it to the most recent net-next-2.6 tree.
+</I>&gt;&gt;<i> The  RFC is open. Other opinion are welcome as well.
+</I>&gt;<i> 
+</I>&gt;<i> See some comments below.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> [RFC PATCH] can: improved CAN error state handling
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So far we only report CAN error state changes to the worse:
+</I>&gt;&gt;<i> &quot;error-active -&gt; error-warning -&gt; error-passive -&gt; bus-off&quot;, but not
+</I>&gt;&gt;<i> &quot;bus-off -&gt; error-active&quot; or &quot;error-passive -&gt; error-warning -&gt;
+</I>&gt;&gt;<i> error-active&quot;. There have been request from other users to correct
+</I>&gt;&gt;<i> that behavior.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This patch reports any state changes reported by the SJA1000 and
+</I>&gt;&gt;<i> MSCAN-MPC5200 controller. It introduces &quot;CAN_ERR_CRTL_ACTIVE&quot; to
+</I>&gt;&gt;<i> signal state changes to error active. Furthermore, the SJA1000
+</I>&gt;&gt;<i> triggers now the bus-off recovery procedure when restarted. So far,
+</I>&gt;&gt;<i> the controller was stopped the hard way and then restarted. I did
+</I>&gt;&gt;<i> two test to analyze the state changes behavior:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1. First I forced the controller into the error-passive my sending
+</I>&gt;&gt;<i>    a message (with cansend) without cable connected (*). Then I
+</I>&gt;&gt;<i>    reconnected the cable (**) and continued to send messages (with
+</I>&gt;&gt;<i>    cangen) (***) until the error active state is reached:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    On SJA1000:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    # candump any,0:0,#FFFFFFFF
+</I>&gt;&gt;<i>    (*)
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 08 00 00 00 00 60 00   ERROR-WARNING
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 20 00 00 00 00 80 00   ERROR-PASSIVE
+</I>&gt;&gt;<i>    (**)
+</I>&gt;&gt;<i>    can0  123  [4] DE AD BE EF
+</I>&gt;&gt;<i>    (***)
+</I>&gt;&gt;<i>    can0  42A  [1] 00
+</I>&gt;&gt;<i>    ...
+</I>&gt;&gt;<i>    can0  42A  [1] 07
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 08 00 00 00 00 7F 00   ERROR-WARNING
+</I>&gt;&gt;<i>    can0  42A  [1] 08
+</I>&gt;&gt;<i>    ...
+</I>&gt;&gt;<i>    can0  42A  [1] 27
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 40 00 00 00 00 5F 00   ERROR-ACTIVE
+</I>&gt;&gt;<i>                                           \-- tx-err
+</I>&gt;&gt;<i>    On MSCAN:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    # candump any,0:0,#FFFFFFFF
+</I>&gt;&gt;<i>    (*)
+</I>&gt;&gt;<i>    can2  20000004  [8] 00 08 00 00 00 00 00 00   ERROR-WARNING
+</I>&gt;&gt;<i>    can2  20000004  [8] 00 20 00 00 00 00 00 00   ERROR-PASSIVE
+</I>&gt;&gt;<i>    (**)
+</I>&gt;&gt;<i>    can2  123  [4] DE AD BE EF
+</I>&gt;&gt;<i>    can2  20000004  [8] 00 08 00 00 00 00 00 00   ERROR-WARNING
+</I>&gt;&gt;<i>    (***)
+</I>&gt;&gt;<i>    can2  42A  [1] 00
+</I>&gt;&gt;<i>    can2  42A  [1] 01
+</I>&gt;&gt;<i>    ...
+</I>&gt;&gt;<i>    can2  42A  [1] 1E
+</I>&gt;&gt;<i>    can2  42A  [1] 1F
+</I>&gt;&gt;<i>    can2  20000004  [8] 00 40 00 00 00 00 00 00   ERROR-ACTIVE
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    As you can see, the state change to error-active is signaled
+</I>&gt;&gt;<i>    differently. The MSCAN seems not to respect the specs :-(.
+</I>&gt;&gt;<i>    When time permits, I will also try the MSCAN on the MPC2511.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2. I forced the controller into bus-off by short-circuiting
+</I>&gt;&gt;<i>    the low and high lines and sending a message (*), Then I
+</I>&gt;&gt;<i>    restarted the controller manually with
+</I>&gt;&gt;<i>    &quot;ip link set can0 type can restart&quot;:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    On SJA1000:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    # ./candump -t d any,0:0,#FFFFFFFF
+</I>&gt;&gt;<i>    (*)
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 08 00 00 00 00 88 00   ERROR-WARNING
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 20 00 00 00 00 88 00   ERROR-PASSIVE
+</I>&gt;&gt;<i>    can0  20000044  [8] 00 00 00 00 00 00 7F 00   BUS-OFF
+</I>&gt;&gt;<i>    (**)
+</I>&gt;&gt;<i>    can0  20000100  [8] 00 00 00 00 00 00 00 00   RESTARTED
+</I>&gt;&gt;<i>    can0  20000004  [8] 00 40 00 00 00 00 00 00   ERROR-ACTIVE
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    On SJA1000:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    # ./candump -t d any,0:0,#FFFFFFFF
+</I>&gt;&gt;<i>    (*)
+</I>&gt;&gt;<i>    can2  20000004  [8] 00 08 00 00 00 00 00 00   ERROR-WARNING
+</I>&gt;&gt;<i>    can2  20000040  [8] 00 00 00 00 00 00 00 00   BUS-OFF
+</I>&gt;&gt;<i>    (**)
+</I>&gt;&gt;<i>    can2  20000100  [8] 00 00 00 00 00 00 00 00   RESTARTED
+</I>&gt;&gt;<i>    can2  20000004  [8] 00 40 00 00 00 00 00 00   ERROR-ACTIVE
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>    The MSCAN seems not to signal the ERROR-PASSIVE state before
+</I>&gt;&gt;<i>    going bus-off.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Would be interesting to see, how other CAN controllers behave.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do you think? Would that patch/approach fit your/our needs?
+</I>&gt;<i> 
+</I>&gt;<i> Mh, it seems you have some other patches for candump.c/lib.c to actually print 
+</I>&gt;<i> the state change.
+</I>
+I added the strings like &quot;ERROR_WARNING&quot; at the end manually. I think
+that's what you mean!? I once started to make a patch for candump to
+print the meaning of the CAN id and data fields in a human readable
+format. That would be a nice to have. I'm going to dig for it.
+
+&gt;<i> Well, on the other hand, at91_can, flexcan and pch_can are the only 
+</I>&gt;<i> controllers currently sending an CAN_ERR_ACK in can_id. Which you will be 
+</I>&gt;<i> spammed with.
+</I>
+Yes, that are the infamous &quot;ack slot&quot; errors. Strictly speaking the
+CAN_ERR_ACK is not correct. It sneaked in some time ago. It's a normal
+bus error and it should therefore be:
+
+		cf-&gt;can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
+	        cf-&gt;data[2] |= CAN_ERR_PROT_UNSPEC;
+		cf-&gt;data[3] |= CAN_ERR_PROT_LOC_ACK; /* ACK slot */
+
+That's what the SJA1000 reports and a few other drivers need to be fixed
+as well.
+
+See also
+<A HREF="http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00212.html">http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00212.html</A>
+
+&gt;<i> But using an own application to send/receive some CAN messages where I parse 
+</I>&gt;<i> the error frames (ignoring ACK error though), I currently use 
+</I>&gt;<i> CAN_ERR_PROT_ACTIVE to know when I got back active.
+</I>
+That was implemented by Mark but we need a general solution for all drivers.
+
+&gt;<i> The idea behind your patch seems ok to me. ATM I'm getting used to socketcan 
+</I>&gt;<i> using at91_can on an 2.6.35.9 kernel.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> --- net-next-2.6.orig/drivers/net/can/dev.c
+</I>&gt;&gt;<i> +++ net-next-2.6/drivers/net/can/dev.c
+</I>&gt;&gt;<i> @@ -230,6 +230,68 @@ int can_get_bittiming(struct net_device
+</I>&gt;&gt;<i>  	return 0;
+</I>&gt;&gt;<i>  }
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> +void can_change_state(struct net_device *dev, struct can_frame *cf,
+</I>&gt;&gt;<i> +		      enum can_state new_state);
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	struct flexcan_priv *priv = netdev_priv(dev);
+</I>&gt;<i>             ^^^^^^^^^^^^
+</I>&gt;<i> This seems wrong to me.
+</I>
+Obviously it needs to be fixed. Anyway, it does not harm.
+
+&gt;&gt;<i> +	struct can_berr_counter bec;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	if (state == priv-&gt;can.state)
+</I>&gt;&gt;<i> +		return;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	if (priv-&gt;can.do_get_berr_counter)
+</I>&gt;&gt;<i> +		priv-&gt;can.do_get_berr_counter(&amp;bec);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	cf-&gt;can_id |= CAN_ERR_STATE_CHANGE;
+</I>&gt;&gt;<i> +	if (state &gt; priv-&gt;can.state &amp;&amp; state != CAN_STATE_BUS_OFF)
+</I>&gt;<i>          ^^^^^
+</I>&gt;<i> As far as I can see, this should also be new_state.
+</I>
+OK, I need to check that patch more thoroughly. Maybe I just picked an
+old version.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001779.html">[Socketcan-users] can device error flags unset?
+</A></li>
+	<LI>Next message: <A HREF="001781.html">[Socketcan-users] can device error flags unset?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1780">[ date ]</a>
+              <a href="thread.html#1780">[ thread ]</a>
+              <a href="subject.html#1780">[ subject ]</a>
+              <a href="author.html#1780">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

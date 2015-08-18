@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C490868BF.4080309%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000539.html">
+   <LINK REL="Next"  HREF="000541.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C490868BF.4080309%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed Oct 29 14:44:31 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000539.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000541.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#540">[ date ]</a>
+              <a href="thread.html#540">[ thread ]</a>
+              <a href="subject.html#540">[ subject ]</a>
+              <a href="author.html#540">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> The network layer alone is absolutely irrelevant.
+</I>
+Sorry this is really nonsense. The networklayer defines the socket API 
+which is *the* relevant API for all CAN applications in userspace. This 
+is indeed the *only* really relevant API - the rest is peanuts and can 
+be handled by thousands of OSS contractors/distributors.
+
+&gt;<i>  For production
+</I>&gt;<i> projects, you need the *whole* stack, including bittime setting, being
+</I>&gt;<i> able to work on random non-release kernels etc and all this is
+</I>&gt;<i> extraordinarily complicated until now and was the reason for Marc to
+</I>&gt;<i> move to git.
+</I>&gt;<i>   
+</I>
+You are heavily mixing up things:
+Stack != userspace utils != git
+
+The thing that has to be done is finalizing the TODO list for the CAN 
+driver lib from Wolfgang and to bring the drivers into mainline. There 
+is nothing &quot;extraordinarily complicated&quot; ... you always try to make 
+things complicated but this is no sales conversation here so you can 
+also skip that.
+
+&gt;<i> Yes, there is space for improvement for the canutils and I second your
+</I>&gt;<i> oppinion that things should be unified. So please feel free to send
+</I>&gt;<i> patches, or wait unitl it went high enough on our pet project todo list
+</I>&gt;<i> that somebody actually starts working on it :)
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+H&#228;h?
+
+I assume at least 90% of the SocketCAN users using the (as you like: 
+hardened, stable and heavily in production use) tools from BerliOS SVN 
+that cover almost everything you need.
+
+In the directory
+
+<A HREF="http://www.pengutronix.de/software/socket-can/download/canutils/v3.0/">http://www.pengutronix.de/software/socket-can/download/canutils/v3.0/</A>
+
+are five tools with a very limited functionality and a crappy commandline interface from early days and then *you* ask to send patches for *that*?
+
+Please wake up, browse, compile and use the stuff under socketcan/trunk/can-utils *before* making these kind of suggestions.
+
+
+If you really read the last paragraph of this thread
+<A HREF="https://lists.berlios.de/pipermail/socketcan-users/2008-October/000523.html">https://lists.berlios.de/pipermail/socketcan-users/2008-October/000523.html</A>
+
+you might have seen my proposal which says in easy (and therefore not so 
+kind) words:
+
+- trash your crappy 'candump', 'canecho' and 'cansend' apps
+- maintain 'cansequence' and 'canconfig' together in the BerliOS SVN
+- send ideas and patches against BerliOS SVN if you feel something is 
+missing
+
+Hey what is so complicated in that suggestion? Am i writing in japanese?
+
+SocketCAN related topics are discussed here. And whenever there are 
+questions from people using the ptx-dist OSEALS-BSP tools the confusion 
+starts. This is not really nice for OSEALS-BSP users. As you are always 
+claim to speak for your $CUSTOMERS you should ask them, if they feel 
+comfortable with that situation. I do not (as one of your BSP 
+$CUSTOMERS) ...
+
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000539.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000541.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#540">[ date ]</a>
+              <a href="thread.html#540">[ thread ]</a>
+              <a href="subject.html#540">[ subject ]</a>
+              <a href="author.html#540">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

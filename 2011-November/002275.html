@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%201/4%5D%20can%3A%20cc770%3A%20add%0A%20driver%20core%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED4A3CD.4060908%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002271.html">
+   <LINK REL="Next"  HREF="002279.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%201/4%5D%20can%3A%20cc770%3A%20add%0A%20driver%20core%20for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C4ED4A3CD.4060908%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 1/4] can: cc770: add driver core for the Bosch CC770 and Intel AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Tue Nov 29 10:20:13 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002271.html">[Socketcan-users] [PATCH net-next v4 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002279.html">[Socketcan-users] getting the fill level of rx and tx fifos
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2275">[ date ]</a>
+              <a href="thread.html#2275">[ thread ]</a>
+              <a href="subject.html#2275">[ subject ]</a>
+              <a href="author.html#2275">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marc,
+
+On 11/28/2011 12:28 PM, Marc Kleine-Budde wrote:
+&gt;<i> On 11/25/2011 10:43 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i> ---
+</I>&gt;&gt;<i>  drivers/net/can/Kconfig            |    2 +
+</I>&gt;&gt;<i>  drivers/net/can/Makefile           |    1 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/Kconfig      |    3 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/Makefile     |    7 +
+</I>&gt;&gt;<i>  drivers/net/can/cc770/cc770.c      |  895 ++++++++++++++++++++++++++++++++++++
+</I>&gt;&gt;<i>  drivers/net/can/cc770/cc770.h      |  234 ++++++++++
+</I>&gt;&gt;<i>  include/linux/can/platform/cc770.h |   33 ++
+</I>&gt;&gt;<i>  7 files changed, 1175 insertions(+), 0 deletions(-)
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/Kconfig
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/Makefile
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/cc770.c
+</I>&gt;&gt;<i>  create mode 100644 drivers/net/can/cc770/cc770.h
+</I>&gt;&gt;<i>  create mode 100644 include/linux/can/platform/cc770.h
+</I>&gt;<i> 
+</I>&gt;<i> I don't know the hardware, but the code looks good to me, some comments:
+</I>&gt;<i> - The driver doesn't use NAPI, can this be added
+</I>&gt;<i> - The rx-handlers have a while(1) loop
+</I>&gt;<i>   For NAPI you have to add accounting, for the non NAPI case it would
+</I>&gt;<i>   be good, too.
+</I>&gt;<i> - I think you can move a large number of lines from the .h file into
+</I>&gt;<i>   the driver. Code that's not used in the different binding drivers.
+</I>&gt;<i> 
+</I>&gt;<i> More comments inline (mostly nitpicking)
+</I>
+I just sent out v4. For the sake of readability, I finally did not move
+most of the head definitions in cc770.h into cc770.c and used the
+variable name &quot;o&quot; consistently for the message object index (instead of
+using &quot;i&quot;).
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002271.html">[Socketcan-users] [PATCH net-next v4 2/4] can: cc770: add legacy	ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002279.html">[Socketcan-users] getting the fill level of rx and tx fifos
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2275">[ date ]</a>
+              <a href="thread.html#2275">[ thread ]</a>
+              <a href="subject.html#2275">[ subject ]</a>
+              <a href="author.html#2275">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

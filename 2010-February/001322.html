@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20How%20to%20set%20bitrate%20%28or%3A%20is%0A%09CONFIG_CAN_CALC_BITRATE%20broken%3F%29&In-Reply-To=%3C4B7DAEDA.2070908%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001321.html">
+   <LINK REL="Next"  HREF="001323.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20How%20to%20set%20bitrate%20%28or%3A%20is%0A%09CONFIG_CAN_CALC_BITRATE%20broken%3F%29&In-Reply-To=%3C4B7DAEDA.2070908%40grandegger.com%3E"
+       TITLE="[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)">wg at grandegger.com
+       </A><BR>
+    <I>Thu Feb 18 22:19:22 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001321.html">[Socketcan-users] Enumerating a list of CAN interfaces
+</A></li>
+        <LI>Next message: <A HREF="001323.html">[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1322">[ date ]</a>
+              <a href="thread.html#1322">[ thread ]</a>
+              <a href="subject.html#1322">[ subject ]</a>
+              <a href="author.html#1322">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ira W. Snyder wrote:
+&gt;<i> Hello all,
+</I>&gt;<i> 
+</I>&gt;<i> I'm working on a driver for the Janz ICAN3 module. Now that I'm getting
+</I>&gt;<i> good review feedback, I've found some errors in the driver. One of them
+</I>&gt;<i> was that I was missing candev_open() and candev_close() in the netdevice
+</I>&gt;<i> open() and close() routines.
+</I>
+Ah, missed that.
+
+&gt;<i> So I added them, but I cannot bring up the the CAN devices anymore. I
+</I>&gt;<i> get this message in the kernel log:
+</I>&gt;<i> 
+</I>&gt;<i> janz-ican3 janz-ican3.0: bit-timing not yet defined
+</I>&gt;<i> 
+</I>&gt;<i> Great, so I need to set the bit timing. Let's try that:
+</I>
+Yes.
+
+&gt;<i> $ ip link set can0 up type can bitrate 1000000
+</I>&gt;<i> RTNETLINK answers: Numerical argument out of domain
+</I>&gt;<i> 
+</I>&gt;<i> That doesn't work either! What, why? The kernel logs show:
+</I>&gt;<i> janz-ican3 janz-ican3.0: bitrate error 100.0% too high
+</I>
+Like a problem with your clock setting:
+
+  priv-&gt;can.clock.freq = 8000000; /* if your osclillator clock is 16MHz */
+
+Maybe this line is even mising.
+
+&gt;<i> My driver is setup exactly the same as the SJA1000 driver. The
+</I>&gt;<i> bittiming_const and do_set_bittiming() functions are copied almost
+</I>&gt;<i> exactly from the sja1000.c driver.
+</I>&gt;<i> 
+</I>&gt;<i> Does anyone have any insight to offer about what I did wrong?
+</I>
+See above. The clock setting is in the SJA1000 card/board drivers, e.g.
+ems_pci.c.
+
+&gt;<i> For completeness, my janz-ican3 driver is included below, just in case
+</I>&gt;<i> anyone needs to look at the code. It has changed slightly, as I am
+</I>&gt;<i> incorporating comments from the last RFCv2 posting.
+</I>&gt;<i> 
+</I>&gt;<i> Also, is there some way to set the default bitrate of a device, so a
+</I>&gt;<i> user doesn't have to specify the bitrate to bring the device up? This
+</I>&gt;<i> card comes out of reset with a bitrate of 1000000, and is ready to run.
+</I>
+No, that's by purpose. A default bitrate is error-prune.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001321.html">[Socketcan-users] Enumerating a list of CAN interfaces
+</A></li>
+	<LI>Next message: <A HREF="001323.html">[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1322">[ date ]</a>
+              <a href="thread.html#1322">[ thread ]</a>
+              <a href="subject.html#1322">[ subject ]</a>
+              <a href="author.html#1322">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

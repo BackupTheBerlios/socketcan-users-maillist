@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C66E02E.4090608%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001488.html">
+   <LINK REL="Next"  HREF="001490.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C66E02E.4090608%40grandegger.com%3E"
+       TITLE="[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices">wg at grandegger.com
+       </A><BR>
+    <I>Sat Aug 14 20:27:58 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001488.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+        <LI>Next message: <A HREF="001490.html">[Socketcan-users] Problem in adding mcp251x_info into platform definition file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1489">[ date ]</a>
+              <a href="thread.html#1489">[ thread ]</a>
+              <a href="subject.html#1489">[ subject ]</a>
+              <a href="author.html#1489">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 08/14/2010 07:44 PM, Marc Kleine-Budde wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> I see that you typical use a sample point at 75%.
+</I>&gt;&gt;&gt;&gt;&gt;<i> CANopen has a &quot;Recommended location of sample point&quot; at 87.5%. (CiA 301).
+</I>&gt;&gt;&gt;&gt;<i> I don't have access to the standard, but [1] lists a sample point of 75%
+</I>&gt;&gt;&gt;&gt;<i> for 1000 kbit/s and 80% for 800 kbit/s. All slower bitrates have the
+</I>&gt;&gt;&gt;&gt;<i> 87.5% sample point.
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;&gt;<i> [1] www.can-cia.org/fileadmin/cia/files/icc/9/koppe.pdf
+</I>&gt;&gt;&gt;<i> It's from 2003
+</I>&gt;&gt;&gt;<i> I hope the list will accept small pictures. 
+</I>&gt;&gt;&gt;<i> From CiA301   Version 4.1, 11. April 2007
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Grrr, our current settings are based on the following mail:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2008-May/001231.html">https://lists.berlios.de/pipermail/socketcan-core/2008-May/001231.html</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> For backward compatibility, I'm not sure if I want to modify them silently?
+</I>&gt;<i> 
+</I>&gt;<i> I just checked with the &quot;can-calc-bit-timing&quot;. The current algorithm
+</I>&gt;<i> find the same bit timing parameters for all can cores, no matter if
+</I>&gt;<i> we're using the older or the newer CIA recommendations.
+</I>
+Hm, but not for 1MHz/sec:
+
+$ ./can-calc-bit-timing -b 1000000 sja1000
+Bit timing parameters for sja1000 with 8.000000 MHz ref clock
+nominal                                 real Bitrt   nom  real SampP
+Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP Bitrate Error SampP SampP Error BTR0 BTR1
+1000000    125   2    3    2   1   1 1000000  0.0% 75.0% 75.0%  0.0% 0x00 0x14
+
+$ ./can-calc-bit-timing -b 1000000 -s 875 sja1000
+Bit timing parameters for sja1000 with 8.000000 MHz ref clock
+nominal                                 real Bitrt   nom  real SampP
+Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP Bitrate Error SampP SampP Error BTR0 BTR1
+1000000    125   3    3    1   1   1 1000000  0.0% 87.5% 87.5%  0.0% 0x00 0x05
+
+I'm actually thinking to printout some kind of warning if
+1 MHz/sec is seleceted, e.g.:
+
+  dev_warn(dev, &quot;New CIA recommended sample point of 0.875 used&quot;);
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001488.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+	<LI>Next message: <A HREF="001490.html">[Socketcan-users] Problem in adding mcp251x_info into platform definition file
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1489">[ date ]</a>
+              <a href="thread.html#1489">[ thread ]</a>
+              <a href="subject.html#1489">[ subject ]</a>
+              <a href="author.html#1489">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

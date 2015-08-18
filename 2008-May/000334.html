@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C4822160A.30302%40das.ufsc.br%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000336.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Breno</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C4822160A.30302%40das.ufsc.br%3E"
+       TITLE="[Socketcan-users] HW Clock">breno at das.ufsc.br
+       </A><BR>
+    <I>Wed May  7 22:50:18 CEST 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000336.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#334">[ date ]</a>
+              <a href="thread.html#334">[ thread ]</a>
+              <a href="subject.html#334">[ subject ]</a>
+              <a href="author.html#334">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Hi Breno,
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">breno at das.ufsc.br</A> wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Hi Wolfgang, I found  a message that seems somehow strange to me while the
+</I>&gt;&gt;<i> kernel is being loaded on my lite5200 board. It said at the end that the
+</I>&gt;&gt;<i> HW clock can't be read. Does it have any relevance? Could implicate on
+</I>&gt;&gt;<i> unexpected behavior for RT process?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> I think it has nothing to do with Socket-CAN. Just disable Socket-CAN in
+</I>&gt;<i> your kernel to check. And please be more precise next time by providing
+</I>&gt;<i>   more information, e.g. log output.
+</I>&gt;<i>
+</I>&gt;<i> What do you mean with RT process? In case you are using Xenomai or
+</I>&gt;<i> RT-Soccket-CAN, you are off-topic here. Please send such questions to
+</I>&gt;<i> the Xenomai-help mailing list.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>Hi Wolfgang, I'm trying to send can packages from CAN0 interface and 
+receive them from CAN1 interface. I started two separated processes, one 
+sending and another one receiving.  Unfortunately my read or recvfrom 
+commands is blocked, I mean it seems that no bytes are read.
+The ifconfig command didn't return any packages sent or received at any 
+interface.
+But the /proc/net/can/stats show messages like:
+
+17121725 transmitted frames (TXF)
+ 17121724 received frames (RXF)
+ 17121724 matched frames (RXMF)
+
+      100 % total match ratio (RXMR)
+    30388 frames/s total tx rate (TXR)
+    30388 frames/s total rx rate (RXR)
+
+      100 % current match ratio (CRXMR)
+    29635 frames/s current tx rate (CTXR)
+    29635 frames/s current rx rate (CRXR)
+
+      100 % max match ratio (MRXMR)
+    30500 frames/s max tx rate (MTXR)
+    30501 frames/s max rx rate (MRXR)
+
+        2 current receive list entries (CRCV)
+        2 maximum receive list entries (MRCV)
+
+       10 statistic resets (STR)
+
+Btw if I decide just run the send process, I mead stopping the receive, 
+I still have received frames (RXF) different  of zero. Does it mean that 
+any loopback is enable?
+
+Thanks all,
+
+Breno
+
+ 
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080507/6dfb096b/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080507/6dfb096b/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000336.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#334">[ date ]</a>
+              <a href="thread.html#334">[ thread ]</a>
+              <a href="subject.html#334">[ subject ]</a>
+              <a href="author.html#334">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP 2515 RX problems
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3C4C5C5A93.2020309%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001470.html">
+   <LINK REL="Next"  HREF="001472.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP 2515 RX problems</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP%202515%20RX%20problems&In-Reply-To=%3C4C5C5A93.2020309%40grandegger.com%3E"
+       TITLE="[Socketcan-users] MCP 2515 RX problems">wg at grandegger.com
+       </A><BR>
+    <I>Fri Aug  6 20:55:15 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001470.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+        <LI>Next message: <A HREF="001472.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1471">[ date ]</a>
+              <a href="thread.html#1471">[ thread ]</a>
+              <a href="subject.html#1471">[ subject ]</a>
+              <a href="author.html#1471">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Christian,
+
+On 08/06/2010 04:34 PM, christian pellegrin wrote:
+&gt;<i> On Fri, Aug 6, 2010 at 3:56 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;<i> To be clear, out-of-order messages are also not OK.
+</I>&gt;<i> 
+</I>&gt;<i> Yes I was looking at this with some interleave analysis. I think the
+</I>&gt;<i> problem lies in the following race:
+</I>&gt;<i> 
+</I>&gt;<i> // suppose we come here with RXB0 filled with packet X
+</I>&gt;<i>                 u8 intf = mcp251x_read_reg(spi, CANINTF);
+</I>&gt;<i>                 u8 eflag;
+</I>&gt;<i>                 int can_id = 0, data1 = 0;
+</I>&gt;<i> 
+</I>&gt;<i> // packet X+1 arrives and lands in RXB1
+</I>&gt;<i> 
+</I>&gt;<i>                 if (intf &amp; CANINTF_RX0IF) {
+</I>&gt;<i>                         mcp251x_hw_rx(spi, 0);
+</I>&gt;<i>                         /* Free one buffer ASAP */
+</I>&gt;<i>                         mcp251x_write_bits(spi, CANINTF, intf &amp; CANINTF_RX0IF,
+</I>&gt;<i>                                            0x00);
+</I>&gt;<i>                 }
+</I>&gt;<i> 
+</I>&gt;<i> // packet X+2 arrives and lands in RXB0
+</I>&gt;<i> // unfortunately variable intf is old and doesn't show that we have
+</I>&gt;<i> something in RXB1
+</I>&gt;<i> // (*1)
+</I>&gt;<i>                 if (intf &amp; CANINTF_RX1IF)
+</I>&gt;<i>                         mcp251x_hw_rx(spi, 1);
+</I>&gt;<i> 
+</I>&gt;<i> now on the next turn we will have packet X+2 in RXB0 and X+1 in RXB1
+</I>&gt;<i> so we read them out-of-order. The easiest way to solve the problem is
+</I>&gt;<i> to take out the line:
+</I>&gt;<i> 
+</I>&gt;<i>                         /* Free one buffer ASAP */
+</I>&gt;<i>                         mcp251x_write_bits(spi, CANINTF, intf &amp; CANINTF_RX0IF,
+</I>&gt;<i>                                            0x00);
+</I>&gt;<i> 
+</I>&gt;<i> but we risk to lose more packets. Perhaps also rereading intf in (*1)
+</I>&gt;<i> could work but we must be careful when we reset CANINTF register to
+</I>&gt;<i> not lose an interrupt for RXB0. I will do some tests but after next
+</I>&gt;<i> week because I don't have the access to the hardware until then.
+</I>
+I personally don't known that controller. Anyway, avoiding out-of-order
+messages with more than one TX objects is tricky on other controllers as
+well, e.g. AT91 and MSCAN. For that purpose I commited some time ago the
+utility &quot;canfdtest&quot; to the SVN utils:
+
+<A HREF="http://svn.berlios.de/viewvc/socketcan/trunk/can-utils/canfdtest.c?revision=1088&amp;view=markup">http://svn.berlios.de/viewvc/socketcan/trunk/can-utils/canfdtest.c?revision=1088&amp;view=markup</A>
+
+Might be useful here as well.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001470.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+	<LI>Next message: <A HREF="001472.html">[Socketcan-users] MCP 2515 RX problems
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1471">[ date ]</a>
+              <a href="thread.html#1471">[ thread ]</a>
+              <a href="subject.html#1471">[ subject ]</a>
+              <a href="author.html#1471">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

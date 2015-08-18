@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Memory leak with raw socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F31026.9080705%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000088.html">
+   <LINK REL="Next"  HREF="000091.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Memory leak with raw socket</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F31026.9080705%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Memory leak with raw socket">wg at grandegger.com
+       </A><BR>
+    <I>Sat Mar 10 21:08:06 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000088.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+        <LI>Next message: <A HREF="000091.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#89">[ date ]</a>
+              <a href="thread.html#89">[ thread ]</a>
+              <a href="subject.html#89">[ subject ]</a>
+              <a href="author.html#89">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+Oliver Hartkopp wrote:
+&gt;<i> Daniel Schnell schrieb:
+</I>&gt;&gt;<i> Robert Schwebel wrote:
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> On Fri, Mar 09, 2007 at 04:52:03PM +0100, Eberhard Stoll wrote:
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;&gt;&gt;<i> i think i've discovered a memory leak problem when i want to send can
+</I>&gt;&gt;&gt;&gt;<i> packages over a raw socket which has a full tx queue.
+</I>&gt;&gt;&gt;&gt;<i> I'm using a MPC5200 board with mscan interface on a 2.4.25 kernel of
+</I>&gt;&gt;&gt;&gt;<i> denx. My socketcan version is commit 55 in subversion.
+</I>&gt;&gt;&gt;&gt;<i>       
+</I>&gt;&gt;&gt;<i> 2.4 is dead. Any chance to try it on 2.6?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Robert
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We are using 2.4.25 from Denx on a MPC5200B as well and before nobody provides an official 2.6 support we will stick to it. The socketcan implementation should be the same even on 2.4 kernels.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Best regards,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> 
+</I>&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> Eberhard is right. There IS a memory leak when the all TX buffers inside 
+</I>&gt;<i> the MSCAN controller are in use.
+</I>&gt;<i> 
+</I>&gt;<i> Instead of
+</I>&gt;<i> 
+</I>&gt;<i>     if (buf == 3) {
+</I>&gt;<i> 	/* No buffer is available */
+</I>&gt;<i> 	printk(KERN_ERR &quot;%s: %s: no buffer is available\n&quot;, DRV_NAME, __FUNCTION__);
+</I>&gt;<i> 	return 0;
+</I>&gt;<i>     }
+</I>&gt;<i> 
+</I>&gt;<i> the 'return 0' should be something like 'goto out_free_skbuff' to jump 
+</I>&gt;<i> to the appropriate label and free the skbuff.
+</I>
+Ah, I see. This code is bogus anyhow, because it does not ensure that 
+the messages go out in order. We should restrict to one buffer only (or 
+use Andrew's driver from 2.6).
+
+&gt;<i> Indeed i did not expect to use more than one of the MSCAN buffers. The 
+</I>&gt;<i> right way is at  mscan_start_xmit() :
+</I>&gt;<i> 
+</I>&gt;<i> 1. Stop netif queue
+</I>&gt;<i> 2. Put frame to the controller
+</I>&gt;<i> 3. Free skbuff
+</I>&gt;<i> 
+</I>&gt;<i> On missing TX interrupt the function mscan_tx_timeout() is called. It has to
+</I>&gt;<i> 
+</I>&gt;<i> 1. Reset the controller
+</I>&gt;<i> 2. Wake the netif queue
+</I>&gt;<i> 
+</I>&gt;<i> So point 1 is currently missing. In the case of a tx-timeout the 
+</I>&gt;<i> TX-buffer should be purged before waking up the queue. So if you want to 
+</I>&gt;<i> fix the real problem, fix it here ;-)
+</I>
+OK.
+
+&gt;<i> Regarding Roberts comment, that Kernel 2.4 is dead: As we are using an 
+</I>&gt;<i> old PPC405 with 4 SJA1000-CAN-busses (at 2.4.20) for us it's still 
+</I>&gt;<i> important to maintain the Kernel 2.4 path. Currently i'm very happy that 
+</I>&gt;<i> both Kernel implementations are on the same level, so that you can use 
+</I>&gt;<i> the socketcan application either on Kernel 2.4 and Kernel 2.6.
+</I>
+Hm, but the API is different, isn't it?
+
+&gt;<i> But regarding the mscan-driver for Kernel 2.4, i have to admit, that it 
+</I>&gt;<i> was a quick hack for me, to use our sja1000-driver framework and put the 
+</I>&gt;<i> contoller specific access things from the patched PEAK-driver from the 
+</I>&gt;<i> WolfGangs (denx) inside. It was working fine for me, but i did not 
+</I>&gt;<i> continue working on it due to other priorities :-/
+</I>
+Yes, this driver has some limitations and bugs which I discovered when 
+porting it to RT-Socket-CAN.
+
+&gt;<i> I currently do not have the Kernel 2.4 MPC5200 environment on my Linux 
+</I>&gt;<i> box. So if you have some reasonable (&amp; tested) patches for this 2.4 
+</I>&gt;<i> driver feel free to submit them here.
+</I>
+I will have a look a.s.a.p.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000088.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+	<LI>Next message: <A HREF="000091.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#89">[ date ]</a>
+              <a href="thread.html#89">[ thread ]</a>
+              <a href="subject.html#89">[ subject ]</a>
+              <a href="author.html#89">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

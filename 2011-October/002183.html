@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] import svn to git
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20import%20svn%20to%20git&In-Reply-To=%3C4E96AAF9.40401%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002182.html">
+   <LINK REL="Next"  HREF="002184.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] import svn to git</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20import%20svn%20to%20git&In-Reply-To=%3C4E96AAF9.40401%40grandegger.com%3E"
+       TITLE="[Socketcan-users] import svn to git">wg at grandegger.com
+       </A><BR>
+    <I>Thu Oct 13 11:10:17 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002182.html">[Socketcan-users] import svn to git (was: Re: BerliOS will be closed, how to proceed...)
+</A></li>
+        <LI>Next message: <A HREF="002184.html">[Socketcan-users] import svn to git
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2183">[ date ]</a>
+              <a href="thread.html#2183">[ thread ]</a>
+              <a href="subject.html#2183">[ subject ]</a>
+              <a href="author.html#2183">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Marc,
+
+On 10/13/2011 10:37 AM, Marc Kleine-Budde wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> On 10/13/2011 09:13 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> over night, while I was sleeping, the mailing list moved :-), let's go
+</I>&gt;&gt;<i> ahead finding a new home for the can-utils, kernel-out-of-tree and maybe
+</I>&gt;&gt;<i> libsocketcan...
+</I>&gt;<i> 
+</I>&gt;<i> I think it's a good idea to import the berlios svn subtree containing
+</I>&gt;<i> the can-utils into the git repo on the new server. The git history looks
+</I>&gt;<i> better if we convert the svn usernames to a proper author field, e.g.:
+</I>&gt;<i> &quot;John Developer &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">john.developer at example.com</A>&gt;&quot;.
+</I>
+Yep, as described also in &quot;Importing from SVN&quot; at
+
+  <A HREF="http://savannah.gnu.org/maintenance/UsingGit">http://savannah.gnu.org/maintenance/UsingGit</A>
+
+&gt;<i> Urs, Oliver, Wolfgang and all other contributors, what's your preferred
+</I>&gt;<i> email?
+</I>
+  Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i>From that description it also seems that we can push only to one git
+</I>repository per project. This again rises the question how to handle and
+name the can-utils and can-kmods. I see the following possibilities:
+
+1. *One* project named &quot;socketcan&quot; or &quot;linux-can&quot; for both. In the git
+   repo we could then store all socketcan related code in:
+
+   can-utils/...      The CAN Utils
+   can-lib/...        Eventually A Socketcan library, might be
+                      integrated into can-utils
+   kernel/...         Out-of-tree kernel modules for 2.6 and 3.x
+   kernel-2.4/...     Old kernel modules for 2.4
+
+2. *Two* different projects named &quot;can-utils&quot; and &quot;can-kmod&quot;.
+
+Any preferences?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002182.html">[Socketcan-users] import svn to git (was: Re: BerliOS will be closed, how to proceed...)
+</A></li>
+	<LI>Next message: <A HREF="002184.html">[Socketcan-users] import svn to git
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2183">[ date ]</a>
+              <a href="thread.html#2183">[ thread ]</a>
+              <a href="subject.html#2183">[ subject ]</a>
+              <a href="author.html#2183">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] using socketcan from Python script
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C200906241103.57504.matthias.fuchs%40esd.eu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000968.html">
+   <LINK REL="Next"  HREF="000971.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] using socketcan from Python script</H1>
+    <B>Matthias Fuchs</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20using%20socketcan%20from%20Python%20script&In-Reply-To=%3C200906241103.57504.matthias.fuchs%40esd.eu%3E"
+       TITLE="[Socketcan-users] using socketcan from Python script">matthias.fuchs at esd.eu
+       </A><BR>
+    <I>Wed Jun 24 11:03:57 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000968.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+        <LI>Next message: <A HREF="000971.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#969">[ date ]</a>
+              <a href="thread.html#969">[ thread ]</a>
+              <a href="subject.html#969">[ subject ]</a>
+              <a href="author.html#969">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wednesday 24 June 2009 10:27, Oliver Hartkopp wrote:
+&gt;<i> Matthias Fuchs wrote:
+</I>&gt;<i> &gt; On Wednesday 24 June 2009 08:44, Oliver Hartkopp wrote:
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; struct sockaddr_can {
+</I>&gt;<i> &gt;&gt;         sa_family_t can_family;
+</I>&gt;<i> &gt;&gt;         int         can_ifindex;
+</I>&gt;<i> &gt;&gt;         union {
+</I>&gt;<i> &gt;&gt;                 /* transport protocol class address information (e.g. ISOTP) */
+</I>&gt;<i> &gt;&gt;                 struct { canid_t rx_id, tx_id; } tp;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;                 /* reserved for future CAN protocols address information */
+</I>&gt;<i> &gt;&gt;         } can_addr;
+</I>&gt;<i> &gt;&gt; };
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Not only that it has 2 canid_t's in the union, what would lead to
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; result = s.bind(struct.pack(&quot;%i%i%i%i&quot; % (AF_CAN, 0, 0, 0)))
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; but the sa_family_t is defined as unsigned short, so it may be
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; result = s.bind(struct.pack(&quot;%H%i%i%i&quot; % (AF_CAN, 0, 0, 0)))
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; ???
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt; Oops, at least from the Python syntax side the line must be:
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; 	s.bind(struct.pack(&quot;HIII&quot;, AF_CAN, 0, 0, 0))
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; But the result is the same. I will either dig through the 
+</I>&gt;<i> &gt; Python socket module's sourcecode or contact some python gurus.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; I also expect that the C struct has a hole behind the can_family
+</I>&gt;<i> &gt; short because the struct is not packed.
+</I>&gt;<i> 
+</I>&gt;<i> What about
+</I>&gt;<i> 
+</I>&gt;<i> s.bind(struct.pack(&quot;HHIII&quot;, 0, AF_CAN, 0, 0, 0))
+</I>&gt;<i> 
+</I>&gt;<i> or
+</I>&gt;<i> 
+</I>&gt;<i> s.bind(struct.pack(&quot;HHIII&quot;, AF_CAN, 0, 0, 0, 0))
+</I>&gt;<i> 
+</I>&gt;<i> I assume we're leaving the platform independed code there ...
+</I>&gt;<i> 
+</I>&gt;<i> But i wonder how this is done in python with other protocol families than
+</I>&gt;<i> PF_INET ...
+</I>&gt;<i> 
+</I>&gt;<i> As s.bind(('localhost', 80)) is mentioned in some online docs, the parameters
+</I>&gt;<i> of s.bind are probably fixed for PF_INET use ?!
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>I checked the sourcecode of the python socket module. Bad news.
+
+socket.bind() calls this code:
+
+sock_bind(PySocketSockObject *s, PyObject *addro)
+{
+        sock_addr_t addrbuf;
+        int addrlen;
+        int res;
+
+        if (!getsockaddrarg(s, addro, SAS2SA(&amp;addrbuf), &amp;addrlen))
+                return NULL;
+        Py_BEGIN_ALLOW_THREADS
+        res = bind(s-&gt;sock_fd, SAS2SA(&amp;addrbuf), addrlen);
+        Py_END_ALLOW_THREADS
+        if (res &lt; 0)
+                return s-&gt;errorhandler();
+        Py_INCREF(Py_None);
+        return Py_None;
+}
+
+getscokaddrarg interprets the bind argument in a huge switch/case for every protocol
+family. And this is the end of that switch:
+
+       /* More cases here... */
+
+        default:
+                PyErr_SetString(socket_error, &quot;getsockaddrarg: bad family&quot;);
+                return 0;
+
+        }
+
+This explains my problem :-(
+
+Trying to fix that ...
+Matthias
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000968.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+	<LI>Next message: <A HREF="000971.html">[Socketcan-users] using socketcan from Python script
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#969">[ date ]</a>
+              <a href="thread.html#969">[ thread ]</a>
+              <a href="subject.html#969">[ subject ]</a>
+              <a href="author.html#969">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

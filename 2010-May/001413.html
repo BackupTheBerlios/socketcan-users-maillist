@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%20receive%20own%20messages%20problem&In-Reply-To=%3COF1C3592E6.1FEE371F-ON65257734.00181D84-65257734.0054EAC1%40lntemsys.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001412.html">
+   <LINK REL="Next"  HREF="001414.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem</H1>
+    <B>Navaneethan P</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20linux-2.6.31%20CAN%20driver%20-%0A%20CAN_RAW_RECV_OWN_MSGS%20-%20receive%20own%20messages%20problem&In-Reply-To=%3COF1C3592E6.1FEE371F-ON65257734.00181D84-65257734.0054EAC1%40lntemsys.com%3E"
+       TITLE="[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem">Navaneethan.P at Lntemsys.com
+       </A><BR>
+    <I>Mon May 31 17:29:25 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001412.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+        <LI>Next message: <A HREF="001414.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1413">[ date ]</a>
+              <a href="thread.html#1413">[ thread ]</a>
+              <a href="subject.html#1413">[ subject ]</a>
+              <a href="author.html#1413">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver and Wolfgang,
+
+Sorry for late reply. 
+
+&gt;<i>The normal loopback is done in software by setting IFF_ECHO and handling
+</I>&gt;<i>echo skb's appropriately. can_put_echo_skb() should be called in the
+</I>&gt;<i>xmit function and can_get_echo_skb() when the TX is done (normally when
+</I>&gt;<i>the TX done interrupt occurs). This seems not be implemented in your
+</I>&gt;<i>driver.
+</I>
+If I enable, can_get_echo_skb and can_pet_echo_skb, irrespective of the 
+CAN_RAW_RECV_OWN_MSG, sent frames are looped back.
+Is this because I set the IFF_ECHO in my driver?
+
+Can you please make me understand this issue?
+
+CAN_RAW_RECV_OWN_MSGS may not be frequently used. but it has to be 
+supported by the CAN driver as per the can documentation section 4.1.3. 
+right?
+
+Has any body tested CAN_RAW_RECV_OWN_MSGS on linux kernel 2.6.31?or is it 
+the problem with my driver. 
+
+Thanks in advance.
+
+Thanks &amp; Regards,
+Navaneethan P 
+
+----- Forwarded by Navaneethan P/LNTEMSYS on 05/31/2010 09:51 AM -----
+
+On 26.05.2010 20:13, Wolfgang Grandegger wrote:
+&gt;<i> On 05/26/2010 07:29 PM, navanee than wrote:
+</I>&gt;&gt;<i> Hi All, 
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I am using linux-2.6.31 kernel and a slightly modified version of 
+</I>mcp251x driver. 
+&gt;&gt;<i> If I set the socket options using CAN_RAW_RECV_OWN_MSGS, to receive the 
+</I>sent frames, it is not receiving back. 
+&gt;<i> 
+</I>&gt;<i> This means that you want to receive the message sent on the *same*
+</I>&gt;<i> socket as well? For clarification, please read section 4.1.3 and 4.1.3:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://lxr.linux.no/linux+*/Documentation/networking/can.txt#L448">http://lxr.linux.no/linux+*/Documentation/networking/can.txt#L448</A>
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I enabled local echo (IFF_ECHO), in my code. 
+</I>
+Indeed - the relevant sections are 4.1.3,  3.2 and 6.2 ...
+
+The IFF_ECHO is a flag for the device driver that only indicates, that the
+driver is capable to perform the loopback on driver level.
+
+Please don't mix that up with CAN_RAW_RECV_OWN_MSGS, which is a per-socket
+option (you usually do not want to set :-)
+&gt;<i> 
+</I>&gt;<i> Local loopback is supported by default. 
+</I>
+ACK.
+
+Regards,
+Oliver
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100531/df2ba7d0/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100531/df2ba7d0/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001412.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+	<LI>Next message: <A HREF="001414.html">[Socketcan-users] linux-2.6.31 CAN driver - CAN_RAW_RECV_OWN_MSGS - receive own messages problem
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1413">[ date ]</a>
+              <a href="thread.html#1413">[ thread ]</a>
+              <a href="subject.html#1413">[ subject ]</a>
+              <a href="author.html#1413">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

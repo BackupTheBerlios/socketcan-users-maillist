@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] queuesize manipulation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20queuesize%20manipulation&In-Reply-To=%3C4B9FBD51.9020609%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001345.html">
+   <LINK REL="Next"  HREF="001347.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] queuesize manipulation</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20queuesize%20manipulation&In-Reply-To=%3C4B9FBD51.9020609%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] queuesize manipulation">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Mar 16 18:18:09 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001345.html">[Socketcan-users] queuesize manipulation
+</A></li>
+        <LI>Next message: <A HREF="001347.html">[Socketcan-users] queuesize manipulation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1346">[ date ]</a>
+              <a href="thread.html#1346">[ thread ]</a>
+              <a href="subject.html#1346">[ subject ]</a>
+              <a href="author.html#1346">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Matthias Fuchs wrote:
+
+&gt;<i> On Thursday 11 March 2010 17:46, Kurt Van Dijck wrote:
+</I>
+&gt;&gt;<i> Try to look at it this way: poll()/select() only work well if you know
+</I>&gt;&gt;<i> you're the _only_ user using the file (reason: if more users use the same fd,
+</I>&gt;&gt;<i> user A can write between B's calls to poll() &amp; write()).
+</I>&gt;<i> This really makes poll/select unusable. I really like the idea (of the esd 
+</I>&gt;<i> CAN driver) that multiple applications can use/share one CAN interface without
+</I>&gt;<i> really interfering. Up to now I was not really aware of SocketCAN's shared
+</I>&gt;<i> txqueue.
+</I>
+The potential problem come up with different applications having different
+communication concepts.
+
+An example with applications A and B:
+
+A want's to send data every 100 ms
+B communicates with ISO-TP 15765-2 transportprotocol
+
+Assuming the communication parameters of ISO-TP are set to transmit CAN frames
+with 0ms frame distance: Sending a 4095 byte ISO-TP PDU will generate 4095/7 =
+585 CAN frames, that are pushed into the tx queue en-bloc(!!).
+
+Imagine what happens to A's cyclic sent frames ... at 500 kbit/s they are
+blocked for at least 649ms :-(
+
+The idea to solve this problem could  be an implementation of CAN-capable
+queueing disciplines (qdisc) inside the Linux kernel.
+
+As you might know qdiscs from peer-to-peer data throttling, you would need to
+specify new approaches for CAN-qdics according the CAN use-cases.
+
+E.g. SFQ (stochastic fair queueing) with round robin scheduling by using 2048
+queues (for 11-bit CAN Ids) could be an approach.
+
+Quite interesting idea, i think. E.g. for a diploma thesis ;-)
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001345.html">[Socketcan-users] queuesize manipulation
+</A></li>
+	<LI>Next message: <A HREF="001347.html">[Socketcan-users] queuesize manipulation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1346">[ date ]</a>
+              <a href="thread.html#1346">[ thread ]</a>
+              <a href="subject.html#1346">[ subject ]</a>
+              <a href="author.html#1346">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

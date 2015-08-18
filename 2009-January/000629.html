@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan over ethernet?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3C496F7C36.7060201%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000628.html">
+   <LINK REL="Next"  HREF="000631.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan over ethernet?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3C496F7C36.7060201%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socketcan over ethernet?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jan 15 19:11:02 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000628.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+        <LI>Next message: <A HREF="000631.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#629">[ date ]</a>
+              <a href="thread.html#629">[ thread ]</a>
+              <a href="subject.html#629">[ subject ]</a>
+              <a href="author.html#629">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Haddon wrote:
+&gt;<i> Thank you, that is very helpful.  We're still strategizing on what the
+</I>&gt;<i> best path would be.  Changing our application to use vcan0 instead of
+</I>&gt;<i> can0 is acceptable.  So we would still need socketcan in this scenario
+</I>&gt;<i> to plumb the vcan interfaces, right?  
+</I>&gt;<i>   
+</I>
+Yep!
+
+&gt;<i> Another path we thought about is removing socketcan and modifying the
+</I>&gt;<i> library to use network sockets instead of can.
+</I>&gt;<i>   
+</I>
+If have the possibility to change your existing application in this 
+depth and you only have one application accessing the CAN at one time, 
+this would presumably be the better approach.
+
+Regards,
+Oliver
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>] 
+</I>&gt;<i> Sent: Wednesday, January 14, 2009 10:52 PM
+</I>&gt;<i> To: Robert Haddon
+</I>&gt;<i> Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Subject: Re: [Socketcan-users] Socketcan over ethernet?
+</I>&gt;<i>
+</I>&gt;<i> Robert Haddon wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> My company has an investment in CAN applications that use a
+</I>&gt;&gt;<i>     
+</I>&gt;<i> proprietary
+</I>&gt;<i>   
+</I>&gt;&gt;<i> API that uses socketcan and peak pcan controllers/drivers underneath
+</I>&gt;&gt;<i> that.  We are considering changing out the peak controllers and moving
+</I>&gt;&gt;<i> to an Ethernet-to-CAN(x2) ASIC.  We would send/recv UDP or TCP packets
+</I>&gt;&gt;<i> with CAN payloads.  I was wondering if anyone had an idea at the
+</I>&gt;&gt;<i> development effort required to tweak socketcan to use an Ethernet
+</I>&gt;&gt;<i> interface instead of a can network interface?  It would be great if we
+</I>&gt;&gt;<i> could preserve our upper layer application as-is.
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Hello Robert,
+</I>&gt;<i>
+</I>&gt;<i> the SocketCAN sockets with all it's filters and CAN network devices are 
+</I>&gt;<i> a relatively closed eco-system in the Linux Kernel. The CAN core can 
+</I>&gt;<i> only use netdevices with ARPHDR_CAN and no ARPHRD_ETHER as ethernet 
+</I>&gt;<i> cards have. This is caused by a completely different addressing schema 
+</I>&gt;<i> between 'broadcasting some kind of sender addresses' and ethernet 
+</I>&gt;<i> addressing (see linux/Documentation/networking/can.txt).
+</I>&gt;<i>
+</I>&gt;<i> As you would like to push the CAN frames over IP (preferable UDP) only 
+</I>&gt;<i> exchanging the CAN netdev driver with an ethernet card would be not 
+</I>&gt;<i> enough, as the ethernet card itself cannot speak IP ...
+</I>&gt;<i>
+</I>&gt;<i>  From what i've understood from your requirements, i would suggest to 
+</I>&gt;<i> write some application in userspace, that
+</I>&gt;<i>
+</I>&gt;<i> - get's CAN frames via virtual CAN interfaces (vcan) and put's them into
+</I>&gt;<i>
+</I>&gt;<i> a UDP/IP socket - or alternatively you can write bare ethernet frames 
+</I>&gt;<i> using packet sockets (AF_PACKET) - or whatever needed
+</I>&gt;<i>
+</I>&gt;<i> - gets UDP (or whatever) packets and push them into the approriate vcan 
+</I>&gt;<i> interface
+</I>&gt;<i>
+</I>&gt;<i> This is a very easy thing to do. Are you familiar with virtual CAN 
+</I>&gt;<i> netdevices?
+</I>&gt;<i>
+</I>&gt;<i> Your existing application run's on virtual CAN interfaces and everything
+</I>&gt;<i>
+</I>&gt;<i> it writes to the vcan0 will show up in your CAN2UDP bridge program due 
+</I>&gt;<i> to the internal loopback mechanism of the SocketCAN core - and vice
+</I>&gt;<i> versa.
+</I>&gt;<i>
+</I>&gt;<i> If you need to preserve your application as-is (e.g. you can't tell it 
+</I>&gt;<i> to use different CAN netdevices like vcan0 and vcan1 instead of can0 and
+</I>&gt;<i>
+</I>&gt;<i> can1) you can create virtual CAN netdevices with 'real' CAN interface 
+</I>&gt;<i> names, like:
+</I>&gt;<i>
+</I>&gt;<i> ip link add dev can0 type vcan
+</I>&gt;<i>
+</I>&gt;<i> This looks a bit hackish but probably fit's into your needs ;-)
+</I>&gt;<i> How to create vcan's is also available in can.txt.
+</I>&gt;<i>
+</I>&gt;<i> I hope these ideas helped you so far. Or did i miss anything of your 
+</I>&gt;<i> requirements?
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i>   
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000628.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+	<LI>Next message: <A HREF="000631.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#629">[ date ]</a>
+              <a href="thread.html#629">[ thread ]</a>
+              <a href="subject.html#629">[ subject ]</a>
+              <a href="author.html#629">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

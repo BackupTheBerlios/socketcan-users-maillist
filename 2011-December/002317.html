@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 04/14] can: bfin_can/ti_hecc/mscan:	add missing do_get_berr_counter callback
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2004/14%5D%20can%3A%20bfin_can/ti_hecc/mscan%3A%0A%09add%20missing%20do_get_berr_counter%20callback&In-Reply-To=%3C1323269728-17491-5-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002324.html">
+   <LINK REL="Next"  HREF="002325.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 04/14] can: bfin_can/ti_hecc/mscan:	add missing do_get_berr_counter callback</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2004/14%5D%20can%3A%20bfin_can/ti_hecc/mscan%3A%0A%09add%20missing%20do_get_berr_counter%20callback&In-Reply-To=%3C1323269728-17491-5-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 04/14] can: bfin_can/ti_hecc/mscan:	add missing do_get_berr_counter callback">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:18 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002324.html">[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus error reporting enable berr interrupt
+</A></li>
+        <LI>Next message: <A HREF="002325.html">[Socketcan-users] [RFC PATCH 05/14] can: add error counters to the	data fields of any CAN error message
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2317">[ date ]</a>
+              <a href="thread.html#2317">[ thread ]</a>
+              <a href="subject.html#2317">[ subject ]</a>
+              <a href="author.html#2317">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/bfin_can.c    |   15 +++++++++++++++
+ drivers/net/can/mscan/mscan.c |   16 +++++++++++++++-
+ drivers/net/can/ti_hecc.c     |   12 ++++++++++++
+ 3 files changed, 42 insertions(+), 1 deletions(-)
+
+diff --git a/drivers/net/can/bfin_can.c b/drivers/net/can/bfin_can.c
+index 9cf4ddb..3f88473 100644
+--- a/drivers/net/can/bfin_can.c
++++ b/drivers/net/can/bfin_can.c
+@@ -221,6 +221,20 @@ static int bfin_can_set_mode(struct net_device *dev, enum can_mode mode)
+ 	return 0;
+ }
+ 
++static int bfin_can_get_berr_counter(const struct net_device *dev,
++				     struct can_berr_counter *bec)
++{
++	struct bfin_can_priv *priv = netdev_priv(dev);
++	struct bfin_can_regs __iomem *reg = priv-&gt;membase;
++
++	u16 cec = bfin_read(&amp;reg-&gt;cec);
++
++	bec-&gt;txerr = cec &gt;&gt; 8;
++	bec-&gt;rxerr = cec;
++
++	return 0;
++}
++
+ static int bfin_can_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	struct bfin_can_priv *priv = netdev_priv(dev);
+@@ -505,6 +519,7 @@ struct net_device *alloc_bfin_candev(void)
+ 	priv-&gt;can.bittiming_const = &amp;bfin_can_bittiming_const;
+ 	priv-&gt;can.do_set_bittiming = bfin_can_set_bittiming;
+ 	priv-&gt;can.do_set_mode = bfin_can_set_mode;
++	priv-&gt;can.do_get_berr_counter = bfin_can_get_berr_counter;
+ 	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES;
+ 
+ 	return dev;
+diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/mscan.c
+index ad8e687..41a2a2d 100644
+--- a/drivers/net/can/mscan/mscan.c
++++ b/drivers/net/can/mscan/mscan.c
+@@ -559,6 +559,18 @@ static int mscan_do_set_bittiming(struct net_device *dev)
+ 	return 0;
+ }
+ 
++static int mscan_get_berr_counter(const struct net_device *dev,
++				  struct can_berr_counter *bec)
++{
++	struct mscan_priv *priv = netdev_priv(dev);
++	struct mscan_regs __iomem *regs = priv-&gt;reg_base;
++
++	bec-&gt;txerr = in_8(&amp;regs-&gt;cantxerr);
++	bec-&gt;rxerr = in_8(&amp;regs-&gt;canrxerr);
++
++	return 0;
++}
++
+ static int mscan_open(struct net_device *dev)
+ {
+ 	int ret;
+@@ -638,8 +650,10 @@ int register_mscandev(struct net_device *dev, int mscan_clksrc)
+ 	else
+ 		ctl1 &amp;= ~MSCAN_CLKSRC;
+ 
+-	if (priv-&gt;type == MSCAN_TYPE_MPC5121)
++	if (priv-&gt;type == MSCAN_TYPE_MPC5121) {
++		priv-&gt;can.do_get_berr_counter = mscan_get_berr_counter;
+ 		ctl1 |= MSCAN_BORM; /* bus-off recovery upon request */
++	}
+ 
+ 	ctl1 |= MSCAN_CANE;
+ 	out_8(&amp;regs-&gt;canctl1, ctl1);
+diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+index d50e5e0..ebaee3c 100644
+--- a/drivers/net/can/ti_hecc.c
++++ b/drivers/net/can/ti_hecc.c
+@@ -458,6 +458,17 @@ static int ti_hecc_do_set_mode(struct net_device *ndev, enum can_mode mode)
+ 	return ret;
+ }
+ 
++static int ti_hecc_get_berr_counter(const struct net_device *dev,
++					struct can_berr_counter *bec)
++{
++	struct ti_hecc_priv *priv = netdev_priv(ndev);
++
++	bec-&gt;txerr = hecc_read(priv, HECC_CANTEC);
++	bec-&gt;rxerr = hecc_read(priv, HECC_CANREC);
++
++	return 0;
++}
++
+ /*
+  * ti_hecc_xmit: HECC Transmit
+  *
+@@ -922,6 +933,7 @@ static int ti_hecc_probe(struct platform_device *pdev)
+ 	priv-&gt;can.bittiming_const = &amp;ti_hecc_bittiming_const;
+ 	priv-&gt;can.do_set_mode = ti_hecc_do_set_mode;
+ 	priv-&gt;can.do_get_state = ti_hecc_get_state;
++	priv-&gt;can.do_get_berr_counter = ti_hecc_get_berr_counter;
+ 	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES;
+ 
+ 	spin_lock_init(&amp;priv-&gt;mbx_lock);
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002324.html">[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus error reporting enable berr interrupt
+</A></li>
+	<LI>Next message: <A HREF="002325.html">[Socketcan-users] [RFC PATCH 05/14] can: add error counters to the	data fields of any CAN error message
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2317">[ date ]</a>
+              <a href="thread.html#2317">[ thread ]</a>
+              <a href="subject.html#2317">[ subject ]</a>
+              <a href="author.html#2317">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

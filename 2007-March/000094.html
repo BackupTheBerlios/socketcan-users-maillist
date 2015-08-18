@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Memory leak with raw socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F460B3.2050803%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000093.html">
+   <LINK REL="Next"  HREF="000090.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Memory leak with raw socket</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Memory%20leak%20with%20raw%20socket&In-Reply-To=%3C45F460B3.2050803%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Memory leak with raw socket">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Mar 11 21:04:03 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000093.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+        <LI>Next message: <A HREF="000090.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#94">[ date ]</a>
+              <a href="thread.html#94">[ thread ]</a>
+              <a href="subject.html#94">[ subject ]</a>
+              <a href="author.html#94">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Hi Oliver,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hm, but the API is different, isn't it?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No, it's completely the same API in the trunk/kernel/2.4 .
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As we're still using the Kernel 2.4 in our PPC405 box at Volkswagen, 
+</I>&gt;&gt;<i> we backported all the current changes and developments from the 
+</I>&gt;&gt;<i> Kernel 2.6 path. This is also important, if you'd like to use the 
+</I>&gt;&gt;<i> test-apps in trunk/test and the stuff under trunk/can-utils. These 
+</I>&gt;&gt;<i> tools are using the Kernel 2.6 includes - but the content of the 
+</I>&gt;&gt;<i> includes is just the same as for the Kernel 2.4 path. The binaries 
+</I>&gt;&gt;<i> you compile in trunk/can-utils work on kernel 2.4 &amp; 2.6 either. :-)
+</I>&gt;<i>
+</I>&gt;<i> Ah, that's great. I looked for the implementation of the SIOC* IOCTL 
+</I>&gt;<i> requests, but they are not yet implemented for 2.6 either.
+</I>&gt;<i>
+</I>&gt;<i> BTW, what is SIOCGCANERRORCONFIG intended for? Did we already discuss 
+</I>&gt;<i> it? Likely I have missed something.
+</I>&gt;<i>
+</I>
+Indeed all the ioctl() stuff is an open point to me. I would suggest to 
+get the PF_CAN core into the Mainstream Kernel and to work on the 
+(missing items of the) CAN-netdriver interface in parallel. The big 
+amount of typedefs that's currently planned in linux/can/ioctl.h is 
+definitely not Kernel style.
+
+The only thing that is fixed is the discussed content in 
+linux/can/error.h (the definition of the error frame). Regarding your 
+question, i would /assume/ the SIOCGCANERRORCONFIG to be the 
+configuration for the CAN-driver. E.g. which parts of the errorframe to 
+be supported by the driver.
+
+Regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000093.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+	<LI>Next message: <A HREF="000090.html">[Socketcan-users] Memory leak with raw socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#94">[ date ]</a>
+              <a href="thread.html#94">[ thread ]</a>
+              <a href="subject.html#94">[ subject ]</a>
+              <a href="author.html#94">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

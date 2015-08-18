@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] sja1000_platform interrupt sharing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20sja1000_platform%20interrupt%20sharing&In-Reply-To=%3C6C5A3B79888A804CAB605257CD26D37703955B43%40vwagwox00032.vw.vwg%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002382.html">
+   <LINK REL="Next"  HREF="002384.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] sja1000_platform interrupt sharing</H1>
+    <B>Schmitt, Sven (EVM/8)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20sja1000_platform%20interrupt%20sharing&In-Reply-To=%3C6C5A3B79888A804CAB605257CD26D37703955B43%40vwagwox00032.vw.vwg%3E"
+       TITLE="[Socketcan-users] sja1000_platform interrupt sharing">Sven.Schmitt at volkswagen.de
+       </A><BR>
+    <I>Thu Aug  9 12:43:38 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002382.html">[Socketcan-users] Error handling when writing socketcan drivers
+</A></li>
+        <LI>Next message: <A HREF="002384.html">[Socketcan-users] BCM , receiving without filter , and Can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2383">[ date ]</a>
+              <a href="thread.html#2383">[ thread ]</a>
+              <a href="subject.html#2383">[ subject ]</a>
+              <a href="author.html#2383">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I've found something confusing when I wanted to use more than one
+sja1000 attached to a platform bus with interrupt sharing. The flag for
+the sja1000 resources I wanted to set first was the
+IORESOURCE_IRQ_SHAREABLE* flag because of the other IORESOURCE_IRQ_XXX
+flags. But this flag is ignored by the sja1000_platform driver because
+it has another position. If I use the generic IRQF_SHARED** flag
+everything works fine. Does it make sense to patch the driver in a way
+like that:
+
+--- linux-3.5/drivers/net/can/sja1000/sja1000_platform.c.orig
+2012-08-09 10:38:57.405381025 +0200
++++ linux-3.5/drivers/net/can/sja1000/sja1000_platform.c
+2012-08-09 10:57:22.693364557 +0200
+@@ -109,6 +109,8 @@
+ 	priv = netdev_priv(dev);
+ 
+ 	dev-&gt;irq = res_irq-&gt;start;
++	if(res_irq-&gt;flags &amp; IORESOURCE_IRQ_SHAREABLE)
++		priv-&gt;irq_flags |= IRQF_SHARED;
+ 	priv-&gt;irq_flags = res_irq-&gt;flags &amp; (IRQF_TRIGGER_MASK |
+IRQF_SHARED);
+ 	priv-&gt;reg_base = addr;
+ 	/* The CAN clock frequency is half the oscillator clock
+frequency */
+
+
+
+*
+include/linux/ioport.h:
+#define IORESOURCE_IRQ_SHAREABLE
+&lt;<A HREF="http://lxr.free-electrons.com/ident?i=IORESOURCE_IRQ_SHAREABLE">http://lxr.free-electrons.com/ident?i=IORESOURCE_IRQ_SHAREABLE</A>&gt;
+(1&lt;&lt;4)
+
+**
+include/linux/interrupt.h:
+#define IRQF_SHARED &lt;<A HREF="http://lxr.free-electrons.com/ident?i=IRQF_SHARED">http://lxr.free-electrons.com/ident?i=IRQF_SHARED</A>&gt;
+0x00000080 
+
+
+Best regards,
+Sven Schmitt
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20120809/e4a63722/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20120809/e4a63722/attachment.html</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002382.html">[Socketcan-users] Error handling when writing socketcan drivers
+</A></li>
+	<LI>Next message: <A HREF="002384.html">[Socketcan-users] BCM , receiving without filter , and Can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2383">[ date ]</a>
+              <a href="thread.html#2383">[ thread ]</a>
+              <a href="subject.html#2383">[ subject ]</a>
+              <a href="author.html#2383">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

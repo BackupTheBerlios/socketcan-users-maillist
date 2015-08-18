@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C874oat1434.fsf%40steelpick.2x.cz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001671.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kenrel panic with CAN gateway on MPC5200</H1>
+    <B>Michal Sojka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C874oat1434.fsf%40steelpick.2x.cz%3E"
+       TITLE="[Socketcan-users] Kenrel panic with CAN gateway on MPC5200">sojkam1 at fel.cvut.cz
+       </A><BR>
+    <I>Sun Dec  5 01:00:15 CET 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001671.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1670">[ date ]</a>
+              <a href="thread.html#1670">[ thread ]</a>
+              <a href="subject.html#1670">[ subject ]</a>
+              <a href="author.html#1670">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver and others,
+
+I'm experiencing strange kernel panics with CAN gateway running on
+MPC5200. The panic happens with 2.6.36.1 where I manually added gw.c and
+hw.h from subversion. It also happens with 2.6.33.7 where the whole
+socketcan was copied from SVN. Interestingly, it does not occur with
+2.6.33.7-rt29 (rt_preempt) with the same socketcan from svn. The details
+are bellow. This is 100% reproducible and the gateway configuration is
+&quot;cangw -A -s can0 -d can1&quot;. Do you have any clue what can be the cause
+of the panic?
+
+With 2.6.33.7 I get:
+
+    Unable to handle kernel paging request for instruction fetch
+    Faulting instruction address: 0x8cd6acc4
+    Oops: Kernel access of bad area, sig: 11 [#1]
+    PREEMPT Shark
+    Modules linked in:
+    NIP: 8cd6acc4 LR: c025fdac CTR: 8cd6acc7
+    REGS: c03f3bd0 TRAP: 0400   Not tainted  (2.6.33.7-00005-ge2f49b5)
+    MSR: 20009032 &lt;EE,ME,IR,DR&gt;  CR: 22008028  XER: 0000005f
+    TASK = c03d6478[0] 'swapper' THREAD: c03f2000
+    GPR00: 8cd6acc7 c03f3c80 c03d6478 c79fec00 c78cd4ad 00000048 c79fec44 00000002 
+    GPR08: 000000e0 00000000 00000001 c03f3c80 42000022 7f33ff4e 80000000 00000042 
+    GPR16: 00000008 20000000 c909e900 00000001 c03f3d88 c79386e0 00000008 c79fe51c 
+    GPR24: 0000000c c78cd4f9 c7975800 c7949828 c7a33d24 c79fec00 c78cd4ad c03f3c80 
+    NIP [8cd6acc4] 0x8cd6acc4
+    LR [c025fdac] dev_queue_xmit+0xec/0x588
+    Call Trace:
+    [c03f3c80] [c025fd68] dev_queue_xmit+0xa8/0x588 (unreliable)
+    [c03f3cb0] [c02d5128] can_send+0x9c/0x1a0
+    [c03f3cd0] [c02d85ec] can_can_gw_rcv+0x108/0x164
+    [c03f3d00] [c02d3fdc] can_rcv_filter+0xf8/0x2e8
+    [c03f3d20] [c02d4294] can_rcv+0xc8/0x140
+    [c03f3d40] [c025e6f8] netif_receive_skb+0x2a8/0x34c
+    [c03f3d80] [c020a774] mscan_rx_poll+0x1c0/0x464
+    [c03f3de0] [c025f1b8] net_rx_action+0x104/0x238
+    [c03f3e30] [c00368c8] __do_softirq+0x128/0x244
+    [c03f3e80] [c00075e0] do_softirq+0x64/0x80
+    [c03f3e90] [c00365d0] irq_exit+0x98/0xc4
+    [c03f3ea0] [c00076d8] do_IRQ+0xdc/0x188
+    [c03f3ed0] [c0014d40] ret_from_except+0x0/0x14
+    [c03f3f90] [c000aed8] cpu_idle+0x68/0x10c (unreliable)
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c03f3fb0] [c0003f34] rest_init+0x98/0xc4
+    [c03f3fc0] [c039f914] start_kernel+0x2e0/0x2f8
+    [c03f3ff0] [00003438] 0x3438
+    Instruction dump:
+    XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX 
+    XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX 
+    Kernel panic - not syncing: Fatal exception in interrupt
+    Call Trace:
+    [c03f3ac0] [c0009cc0] show_stack+0x70/0x1d4 (unreliable)
+    [c03f3b10] [c02fde74] dump_stack+0x2c/0x44
+    [c03f3b20] [c02fdf30] panic+0xa4/0x19c
+    [c03f3b70] [c0011d90] die+0x184/0x1a0
+    --- Exception: c03f3d88 at 0x42000022
+        LR = 0x8
+    [c03f3ba0] [c0016558] bad_page_fault+0x90/0xe0 (unreliable)
+    [c03f3bc0] [c0014b48] handle_page_fault+0x7c/0x80
+    --- Exception: 400 at 0x8cd6acc4
+        LR = dev_queue_xmit+0xec/0x588
+    [c03f3c80] [c025fd68] dev_queue_xmit+0xa8/0x588 (unreliable)
+    [c03f3cb0] [c02d5128] can_send+0x9c/0x1a0
+    [c03f3cd0] [c02d85ec] can_can_gw_rcv+0x108/0x164
+    [c03f3d00] [c02d3fdc] can_rcv_filter+0xf8/0x2e8
+    [c03f3d20] [c02d4294] can_rcv+0xc8/0x140
+    [c03f3d40] [c025e6f8] netif_receive_skb+0x2a8/0x34c
+    [c03f3d80] [c020a774] mscan_rx_poll+0x1c0/0x464
+    [c03f3de0] [c025f1b8] net_rx_action+0x104/0x238
+    [c03f3e30] [c00368c8] __do_softirq+0x128/0x244
+    [c03f3e80] [c00075e0] do_softirq+0x64/0x80
+    [c03f3e90] [c00365d0] irq_exit+0x98/0xc4
+    [c03f3ea0] [c00076d8] do_IRQ+0xdc/0x188
+    [c03f3ed0] [c0014d40] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c03f3f90] [c000aed8] cpu_idle+0x68/0x10c (unreliable)
+    [c03f3fb0] [c0003f34] rest_init+0x98/0xc4
+    [c03f3fc0] [c039f914] start_kernel+0x2e0/0x2f8
+    [c03f3ff0] [00003438] 0x3438
+    
+Dissassembled code is the following (!!!! marks the faulty instruction):
+
+            if (q-&gt;enqueue) {
+    c025fd54:       80 1e 00 00     lwz     r0,0(r30)
+    c025fd58:       2f 80 00 00     cmpwi   cr7,r0,0
+    c025fd5c:       41 9e 01 94     beq-    cr7,c025fef0 &lt;dev_queue_xmit+0x230&gt;
+            raw_spin_lock_init(&amp;(_lock)-&gt;rlock);            \
+    } while (0)
+    
+    static inline void spin_lock(spinlock_t *lock)
+    {
+            raw_spin_lock(&amp;lock-&gt;rlock);
+    c025fd60:       38 60 00 01     li      r3,1
+    c025fd64:       4b dc 47 cd     bl      c0024530 &lt;add_preempt_count&gt;
+    c025fd68:       80 1e 00 4c     lwz     r0,76(r30) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    {
+            spinlock_t *root_lock = qdisc_lock(q);
+            int rc;
+    
+            spin_lock(root_lock);
+            if (unlikely(test_bit(__QDISC_STATE_DEACTIVATED, &amp;q-&gt;state))) {
+    c025fd6c:       3b 3e 00 4c     addi    r25,r30,76
+    c025fd70:       70 09 00 04     andi.   r9,r0,4
+    c025fd74:       40 82 01 f0     bne-    c025ff64 &lt;dev_queue_xmit+0x2a4&gt;
+    
+This corresponds to the following place in C sources:
+
+    static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
+    				 struct net_device *dev,
+    				 struct netdev_queue *txq)
+    {
+    	spinlock_t *root_lock = qdisc_lock(q);
+    	int rc;
+    
+    	spin_lock(root_lock);
+
+With 2.6.36.1 I get similar panic. Before, it was &quot;Unable to handle
+kernel paging request for instruction fetch&quot;, now it is:
+
+    Unable to handle kernel paging request for data at address 0xfffffffe
+    Faulting instruction address: 0xc0262358
+    Oops: Kernel access of bad area, sig: 11 [#1]
+    PREEMPT Shark
+    last sysfs file: /sys/devices/lpb.0/fc000000.flash/mtd/mtd2ro/dev
+    Modules linked in:
+    NIP: c0262358 LR: c026218c CTR: 00000000
+    REGS: c7ffbd20 TRAP: 0300   Not tainted  (2.6.36.1-00006-g2e11adb)
+    MSR: 00009032 &lt;EE,ME,IR,DR&gt;  CR: 42008024  XER: 0000005f
+    DAR: fffffffe, DSISR: 20000000
+    TASK = c03e44d0[0] 'swapper' THREAD: c0400000
+    GPR00: c7939560 c7ffbdd0 c03e44d0 00000100 00000000 00000060 c798bb64 00000000 
+    GPR08: 000000e8 00000002 00000001 00000002 42000022 7f33ff4e 80000000 00000042 
+    GPR16: 00000008 20000000 c909e900 00000001 c7ffbef8 c0404a84 c0404a80 c78b4000 
+    GPR24: 00000000 c798bb20 c79395c0 c7a77e20 c796f800 c798bb20 fffffffe c7ffbdd0 
+    NIP [c0262358] dev_queue_xmit+0x200/0x4f0
+    LR [c026218c] dev_queue_xmit+0x34/0x4f0
+    Call Trace:
+    [c7ffbdd0] [c026218c] dev_queue_xmit+0x34/0x4f0 (unreliable)
+    [c7ffbe00] [c02dd1f4] can_send+0x9c/0x1a0
+    [c7ffbe20] [c02e07a8] can_can_gw_rcv+0x108/0x164
+    [c7ffbe50] [c02dc224] can_rcv_filter+0xf8/0x2e8
+    [c7ffbe70] [c02dc4dc] can_rcv+0xc8/0x140
+    [c7ffbe90] [c02606f0] __netif_receive_skb+0x2cc/0x338
+    [c7ffbed0] [c0260934] netif_receive_skb+0x5c/0x98
+    [c7ffbef0] [c020d72c] mscan_rx_poll+0x1c0/0x454
+    [c7ffbf50] [c0260c64] net_rx_action+0x104/0x230
+    [c7ffbfa0] [c0031350] __do_softirq+0x118/0x22c
+    [c7ffbff0] [c0011704] call_do_softirq+0x14/0x24
+    [c0401e60] [c0006bdc] do_softirq+0x84/0xa8
+    [c0401e80] [c0031074] irq_exit+0x88/0xb4
+    [c0401e90] [c0006d60] do_IRQ+0xe0/0x234
+    [c0401ec0] [c00123d4] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c0401f80] [c000a7a8] cpu_idle+0x68/0x10c (unreliable)
+    [c0401fa0] [c0003ec0] rest_init+0x9c/0xbc
+    [c0401fc0] [c03ad91c] start_kernel+0x2c0/0x2d8
+    [c0401ff0] [00003438] 0x3438
+    Instruction dump:
+    41920198 817e000c 2f8b0000 419c018c 55693032 55602036 7ca04850 5569043e 
+    b13d0074 801c01c8 7f402a14 83da0004 &lt;801e0000&gt; 2f800000 409efe88 801c00d8 
+    Kernel panic - not syncing: Fatal exception in interrupt
+    Call Trace:
+    [c7ffbc00] [c00095dc] show_stack+0xb0/0x1d4 (unreliable)
+    [c7ffbc50] [c030664c] dump_stack+0x2c/0x44
+    [c7ffbc60] [c0306720] panic+0xbc/0x1fc
+    [c7ffbcc0] [c000f34c] die+0x1b8/0x1e8
+    --- Exception: c7ffbef8 at 0x42000022
+        LR = 0x8
+    [c7ffbcf0] [c0013b8c] bad_page_fault+0x90/0xe0 (unreliable)
+    [c7ffbd10] [c00121dc] handle_page_fault+0x7c/0x80
+    --- Exception: 300 at dev_queue_xmit+0x200/0x4f0
+        LR = dev_queue_xmit+0x34/0x4f0
+    [c7ffbe00] [c02dd1f4] can_send+0x9c/0x1a0
+    [c7ffbe20] [c02e07a8] can_can_gw_rcv+0x108/0x164
+    [c7ffbe50] [c02dc224] can_rcv_filter+0xf8/0x2e8
+    [c7ffbe70] [c02dc4dc] can_rcv+0xc8/0x140
+    [c7ffbe90] [c02606f0] __netif_receive_skb+0x2cc/0x338
+    [c7ffbed0] [c0260934] netif_receive_skb+0x5c/0x98
+    [c7ffbef0] [c020d72c] mscan_rx_poll+0x1c0/0x454
+    [c7ffbf50] [c0260c64] net_rx_action+0x104/0x230
+    [c7ffbfa0] [c0031350] __do_softirq+0x118/0x22c
+    [c7ffbff0] [c0011704] call_do_softirq+0x14/0x24
+    [c0401e60] [c0006bdc] do_softirq+0x84/0xa8
+    [c0401e80] [c0031074] irq_exit+0x88/0xb4
+    [c0401e90] [c0006d60] do_IRQ+0xe0/0x234
+    [c0401ec0] [c00123d4] ret_from_except+0x0/0x14
+    --- Exception: 501 at cpu_idle+0xfc/0x10c
+        LR = cpu_idle+0xfc/0x10c
+    [c0401f80] [c000a7a8] cpu_idle+0x68/0x10c (unreliable)
+    [c0401fa0] [c0003ec0] rest_init+0x9c/0xbc
+    [c0401fc0] [c03ad91c] start_kernel+0x2c0/0x2d8
+    [c0401ff0] [00003438] 0x3438
+    
+This sounds to me like a buffer overflow error, which rewrites a piece
+of struct Qdics.
+
+-Michal
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001671.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1670">[ date ]</a>
+              <a href="thread.html#1670">[ thread ]</a>
+              <a href="subject.html#1670">[ subject ]</a>
+              <a href="author.html#1670">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

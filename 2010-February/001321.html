@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Enumerating a list of CAN interfaces
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Enumerating%20a%20list%20of%20CAN%20interfaces&In-Reply-To=%3C4B7A51DC.4070501%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001320.html">
+   <LINK REL="Next"  HREF="001322.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Enumerating a list of CAN interfaces</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Enumerating%20a%20list%20of%20CAN%20interfaces&In-Reply-To=%3C4B7A51DC.4070501%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Enumerating a list of CAN interfaces">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Feb 16 09:05:48 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001320.html">[Socketcan-users] Enumerating a list of CAN interfaces
+</A></li>
+        <LI>Next message: <A HREF="001322.html">[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1321">[ date ]</a>
+              <a href="thread.html#1321">[ thread ]</a>
+              <a href="subject.html#1321">[ subject ]</a>
+              <a href="author.html#1321">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Stuart Longland wrote:
+</I>
+&gt;&gt;<i> Ideally a meaningful description would be helpful (e.g. 
+</I>&gt;&gt;<i> &quot;vcan0 - Virtual CAN Device&quot; or &quot;slcan0 - Lawicel CAN232 on 
+</I>&gt;&gt;<i> /dev/ttyUSB0&quot;) but I'm not sure that information is exposed anywhere, 
+</I>&gt;&gt;<i> just the device name itself (&quot;vcan0&quot; or &quot;slcan0&quot; in this example) would 
+</I>&gt;&gt;<i> suffice.
+</I>
+Such details e.g. for the LAWICAL USB could be also exposed by the USB
+subssystem. But in the case you use the CAN232 with /dev/ttyS0 you need
+something special ...
+
+Regards,
+Oliver
+
+&gt;&gt;<i>
+</I>&gt;&gt;<i> 	Is it possible to generate such a list, and how would I go about it?
+</I>&gt;<i> 
+</I>&gt;<i> The ifconfig or ip utilities list the network devices e.g.:
+</I>&gt;<i> 
+</I>&gt;<i>  # ip -d -s link
+</I>&gt;<i> 
+</I>&gt;<i> I think the simplest way to get the list is to use the ioctl request
+</I>&gt;<i> &quot;SIOCGIFCONF&quot;. Other ioctl request may then help to find out the
+</I>&gt;<i> protocol and device name used to isolate CAN devices. More details of a
+</I>&gt;<i> CAN device can be queried via netlink interface.
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001320.html">[Socketcan-users] Enumerating a list of CAN interfaces
+</A></li>
+	<LI>Next message: <A HREF="001322.html">[Socketcan-users] How to set bitrate (or: is	CONFIG_CAN_CALC_BITRATE broken?)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1321">[ date ]</a>
+              <a href="thread.html#1321">[ thread ]</a>
+              <a href="subject.html#1321">[ subject ]</a>
+              <a href="author.html#1321">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

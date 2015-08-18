@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] cross compiling Socketcan for an (slightly) older kernel
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cross%20compiling%20Socketcan%20for%20an%20%28slightly%29%0A%20older%20kernel&In-Reply-To=%3C4AFC2173.2080602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001140.html">
+   <LINK REL="Next"  HREF="001142.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] cross compiling Socketcan for an (slightly) older kernel</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20cross%20compiling%20Socketcan%20for%20an%20%28slightly%29%0A%20older%20kernel&In-Reply-To=%3C4AFC2173.2080602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] cross compiling Socketcan for an (slightly) older kernel">wg at grandegger.com
+       </A><BR>
+    <I>Thu Nov 12 15:53:39 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001140.html">[Socketcan-users] cross compiling Socketcan for an (slightly)	older kernel
+</A></li>
+        <LI>Next message: <A HREF="001142.html">[Socketcan-users]  mcp2515 on ARM9 s3c2440
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1141">[ date ]</a>
+              <a href="thread.html#1141">[ thread ]</a>
+              <a href="subject.html#1141">[ subject ]</a>
+              <a href="author.html#1141">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Heinz-J&#252;rgen Oertel wrote:
+&gt;<i> Am Mittwoch, 21. Oktober 2009 16:31:24 schrieb Heinz-J&#252;rgen Oertel:
+</I>&gt;&gt;&gt;<i> Am Mittwoch, 21. Oktober 2009 14:21:22 schrieb Wolfgang Grandegger:
+</I>&gt;&gt;&gt;<i> ......
+</I>&gt;&gt;&gt;<i> Could you please use and test the patch below. I will apply if it
+</I>&gt;&gt;&gt;<i> works.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i> Wolfgang,
+</I>&gt;&gt;<i> I'm far from testing as I wrote. I'm still not able to run the driver on my
+</I>&gt;&gt;<i> hardware. Unfortunately I can spent only a fraction of my time on the
+</I>&gt;&gt;<i> project an will be tomorrow out of office.
+</I>&gt;&gt;<i> I'll test as soon as possible.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Heinz
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> [PATCH] Wrapper for resource_size() for kernel versions &lt; 2.6.27
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This fix makes the sja1000 platform driver compatible with 2.6.25.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i>  ......
+</I>&gt;<i> 
+</I>&gt;<i> Hello,
+</I>&gt;<i> it took a while, but I now can confirm that the patch is working.
+</I>&gt;<i> I have an architecture running having three sja1000 mapped in the memory area 
+</I>&gt;<i> with indexed (name used in sja1000_isa) addressing and sharing one interrupt 
+</I>&gt;<i> line on an ATMEL 9200.
+</I>&gt;<i> 
+</I>&gt;<i> The patch for the sja1000_isa.c is coming soon  (I hope).
+</I>
+Hm, the sja1000_platform driver seems more appropriate for your
+hardware. The sja1000_isa is for legacy devices on the ISA bus.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001140.html">[Socketcan-users] cross compiling Socketcan for an (slightly)	older kernel
+</A></li>
+	<LI>Next message: <A HREF="001142.html">[Socketcan-users]  mcp2515 on ARM9 s3c2440
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1141">[ date ]</a>
+              <a href="thread.html#1141">[ thread ]</a>
+              <a href="subject.html#1141">[ subject ]</a>
+              <a href="author.html#1141">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

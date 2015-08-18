@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Create patches with latest CAN drivers for 2.6.25+
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Create%20patches%20with%20latest%20CAN%20drivers%20for%202.6.25%2B&In-Reply-To=%3C490769D6.3040609%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000537.html">
+   <LINK REL="Next"  HREF="000545.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Create patches with latest CAN drivers for 2.6.25+</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Create%20patches%20with%20latest%20CAN%20drivers%20for%202.6.25%2B&In-Reply-To=%3C490769D6.3040609%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Create patches with latest CAN drivers for 2.6.25+">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Oct 28 20:36:54 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000537.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000545.html">[Socketcan-users] Little OT and newbie: How to wait for received	CAN messages?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#535">[ date ]</a>
+              <a href="thread.html#535">[ thread ]</a>
+              <a href="subject.html#535">[ subject ]</a>
+              <a href="author.html#535">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+triggered by Daniel Schnell i thought about creating patches with all 
+the new CAN drivers for current Kernels like 2.6.25, 2.6.26 and 2.6.27 
+which originally already have CAN support.
+
+I created a new file list 'FILES-2.6.25x-DRIVERS' that only contains the 
+CAN driver stuff.
+
+So if you would like to patch your 2.6.25 Kernel with the latest CAN 
+drivers:
+
+~/socketcan/trunk$ ./mkpatch 2.6.25 &lt; FILES-2.6.25x-DRIVERS &gt; 
+/tmp/2.6.25-drivers.patch
+
+or
+~/socketcan/trunk$ ./mkpatch 2.6.26 &lt; FILES-2.6.25x-DRIVERS &gt; 
+/tmp/2.6.26-drivers.patch
+~/socketcan/trunk$ ./mkpatch 2.6.27 &lt; FILES-2.6.25x-DRIVERS &gt; 
+/tmp/2.6.27-drivers.patch
+
+The e.g. 2.6.27-drivers.patch can be applied in your vanilla Kernel e.g. 
+with:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at box</A>:/usr/src/linux-2.6.27.4# patch -p1 &lt; /tmp/2.6.27-drivers.patch
+
+Than you can run 'make menuconfig' and select the CAN drivers you want.
+
+Info for the experts: The version depended base patches in 
+patches/2.6.2x.diff first remove the existing vcan files which are in 
+the mainline Kernel before the big driver patch is applied.
+
+Have fun,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000537.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000545.html">[Socketcan-users] Little OT and newbie: How to wait for received	CAN messages?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#535">[ date ]</a>
+              <a href="thread.html#535">[ thread ]</a>
+              <a href="subject.html#535">[ subject ]</a>
+              <a href="author.html#535">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

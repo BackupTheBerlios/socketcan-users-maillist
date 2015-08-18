@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.5.1331738229.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000765.html">
+   <LINK REL="Next"  HREF="000849.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.5.1331738229.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 16:17:01 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000765.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="000849.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#779">[ date ]</a>
+              <a href="thread.html#779">[ thread ]</a>
+              <a href="subject.html#779">[ subject ]</a>
+              <a href="author.html#779">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE><A HREF="http://www.google.de/search?hl=de&amp;q=socket+receive+buffer+size+linux&amp;btnG=Suche&amp;meta=">http://www.google.de/search?hl=de&amp;q=socket+receive+buffer+size+linux&amp;btnG=Suche&amp;meta=</A>
+
+the IBM page gives some hints, how to tune the sockets receive buffer size:
+
+<A HREF="http://www.ibm.com/developerworks/linux/library/l-hisock.html">http://www.ibm.com/developerworks/linux/library/l-hisock.html</A>
+
+----8&lt;----snip!----
+
+Listing 2. Manually setting the send and receive socket buffer sizes
+
+int ret, sock, sock_buf_size;
+
+sock = socket( AF_INET, SOCK_STREAM, 0 );
+
+sock_buf_size = BDP;
+
+ret = setsockopt( sock, SOL_SOCKET, SO_SNDBUF,
+                   (char *)&amp;sock_buf_size, sizeof(sock_buf_size) );
+
+ret = setsockopt( sock, SOL_SOCKET, SO_RCVBUF,
+                   (char *)&amp;sock_buf_size, sizeof(sock_buf_size) );
+
+Within the Linux 2.6 kernel, the window size for the send buffer is taken as
+defined by the user in the call, but the receive buffer is doubled
+automatically. You can verify the size of each buffer using the getsockopt call.
+
+----8&lt;----snip!----
+
+So this could be a good starting point for improvements - but i do not know
+what &quot;the receive buffer is doubled automatically&quot; means for our use-case.
+
+When this automatic receive buffer enhancement is only implemented in PF_INET
+this could be an improvement idea for PF_CAN also.
+
+I would try to play with [set|get]sockopt() SO_RCVBUF first, if there is any
+improvement ...
+
+Feedback is welcome ;-)
+
+Thanks,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000765.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="000849.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#779">[ date ]</a>
+              <a href="thread.html#779">[ thread ]</a>
+              <a href="subject.html#779">[ subject ]</a>
+              <a href="author.html#779">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

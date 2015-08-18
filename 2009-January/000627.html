@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan over ethernet?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3C496EDCFB.2020504%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000626.html">
+   <LINK REL="Next"  HREF="000628.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan over ethernet?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3C496EDCFB.2020504%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socketcan over ethernet?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jan 15 07:51:39 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000626.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+        <LI>Next message: <A HREF="000628.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#627">[ date ]</a>
+              <a href="thread.html#627">[ thread ]</a>
+              <a href="subject.html#627">[ subject ]</a>
+              <a href="author.html#627">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Haddon wrote:
+&gt;<i> My company has an investment in CAN applications that use a proprietary
+</I>&gt;<i> API that uses socketcan and peak pcan controllers/drivers underneath
+</I>&gt;<i> that.  We are considering changing out the peak controllers and moving
+</I>&gt;<i> to an Ethernet-to-CAN(x2) ASIC.  We would send/recv UDP or TCP packets
+</I>&gt;<i> with CAN payloads.  I was wondering if anyone had an idea at the
+</I>&gt;<i> development effort required to tweak socketcan to use an Ethernet
+</I>&gt;<i> interface instead of a can network interface?  It would be great if we
+</I>&gt;<i> could preserve our upper layer application as-is.
+</I>&gt;<i>   
+</I>
+Hello Robert,
+
+the SocketCAN sockets with all it's filters and CAN network devices are 
+a relatively closed eco-system in the Linux Kernel. The CAN core can 
+only use netdevices with ARPHDR_CAN and no ARPHRD_ETHER as ethernet 
+cards have. This is caused by a completely different addressing schema 
+between 'broadcasting some kind of sender addresses' and ethernet 
+addressing (see linux/Documentation/networking/can.txt).
+
+As you would like to push the CAN frames over IP (preferable UDP) only 
+exchanging the CAN netdev driver with an ethernet card would be not 
+enough, as the ethernet card itself cannot speak IP ...
+
+ From what i've understood from your requirements, i would suggest to 
+write some application in userspace, that
+
+- get's CAN frames via virtual CAN interfaces (vcan) and put's them into 
+a UDP/IP socket - or alternatively you can write bare ethernet frames 
+using packet sockets (AF_PACKET) - or whatever needed
+
+- gets UDP (or whatever) packets and push them into the approriate vcan 
+interface
+
+This is a very easy thing to do. Are you familiar with virtual CAN 
+netdevices?
+
+Your existing application run's on virtual CAN interfaces and everything 
+it writes to the vcan0 will show up in your CAN2UDP bridge program due 
+to the internal loopback mechanism of the SocketCAN core - and vice versa.
+
+If you need to preserve your application as-is (e.g. you can't tell it 
+to use different CAN netdevices like vcan0 and vcan1 instead of can0 and 
+can1) you can create virtual CAN netdevices with 'real' CAN interface 
+names, like:
+
+ip link add dev can0 type vcan
+
+This looks a bit hackish but probably fit's into your needs ;-)
+How to create vcan's is also available in can.txt.
+
+I hope these ideas helped you so far. Or did i miss anything of your 
+requirements?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000626.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+	<LI>Next message: <A HREF="000628.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#627">[ date ]</a>
+              <a href="thread.html#627">[ thread ]</a>
+              <a href="subject.html#627">[ subject ]</a>
+              <a href="author.html#627">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

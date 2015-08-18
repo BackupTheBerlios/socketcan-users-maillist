@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan_attach and resetting line disciplines
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan_attach%20and%20resetting%20line%20disciplines&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D13E61CAA49%40MSXHOME.rack.racksaver.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000820.html">
+   <LINK REL="Next"  HREF="000822.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan_attach and resetting line disciplines</H1>
+    <B>Robert Haddon</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan_attach%20and%20resetting%20line%20disciplines&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D13E61CAA49%40MSXHOME.rack.racksaver.com%3E"
+       TITLE="[Socketcan-users] slcan_attach and resetting line disciplines">robert.haddon at verari.com
+       </A><BR>
+    <I>Mon Apr 27 19:48:37 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000820.html">[Socketcan-users]  slcan_attach and resetting line disciplines
+</A></li>
+        <LI>Next message: <A HREF="000822.html">[Socketcan-users] slcan_attach and resetting line disciplines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#821">[ date ]</a>
+              <a href="thread.html#821">[ thread ]</a>
+              <a href="subject.html#821">[ subject ]</a>
+              <a href="author.html#821">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Fwiw, I ended up making slcand to do the same thing.  I started off trying to turn off the LDISC reset in the kernel source but that yielded no love and I ceased that approach when I realized I was in over my head.
+I can share the source if desired, but 95% of it I lifted from wikipedia's example daemon code.
+
+---
+Sent from my mobile.
+
+
+----- Original Message -----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>&gt;
+To: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>&gt;
+Sent: Mon Apr 27 03:20:54 2009
+Subject: [Socketcan-users]  slcan_attach and resetting line disciplines
+
+Hi all,
+
+I did meet the same issue when I wanted slcan_attach to be called from  
+a startup script, without any user interaction.
+
+This patch adds a -k option to keep slcan_attach indefinitely opened.  
+It is more a workaround than a clean solution, anyway it may help...
+
+Regards,
+
+Lionel
+
+--- ../../../../socketcan/rev874/can-utils/slcan_attach.c         
+2008-12-01 17:27:49.000000000 +0100
++++ slcan_attach.c      2009-04-27 11:44:10.000000000 +0200
+@@ -64,6 +64,7 @@
+         fprintf(stderr, &quot;         -b &lt;btr&gt;   (set bit time register  
+value)\n&quot;);
+         fprintf(stderr, &quot;         -d         (only detach line  
+discipline)\n&quot;);
+         fprintf(stderr, &quot;         -w         (attach - wait for  
+keypess - detach)\n&quot;);
++       fprintf(stderr, &quot;         -k         (attach - keep  
+indefinitely attached)\n&quot;);
+         fprintf(stderr, &quot;\nExamples:\n&quot;);
+         fprintf(stderr, &quot;slcan_attach -w -o -s6 -c /dev/ttyS1\n&quot;);
+         fprintf(stderr, &quot;slcan_attach /dev/ttyS1\n&quot;);
+@@ -80,13 +81,14 @@
+         int waitkey = 0;
+         int send_open = 0;
+         int send_close = 0;
++        int keep_attached = 0;
+         char *speed = NULL;
+         char *btr = NULL;
+         char buf[10];
+         char *tty;
+         int opt;
+
+-       while ((opt = getopt(argc, argv, &quot;l:dwocs:b:&quot;)) != -1) {
++       while ((opt = getopt(argc, argv, &quot;l:dwocs:b:k&quot;)) != -1) {
+                 switch (opt) {
+                 case 'l':
+                         fprintf(stderr, &quot;Ignored option '-l'\n&quot;);
+@@ -120,6 +122,10 @@
+                                 print_usage(argv[0]);
+                         break;
+
++               case 'k':
++                       keep_attached = 1;
++                       break;
++
+                 default:
+                         print_usage(argv[0]);
+                         break;
+@@ -159,6 +165,13 @@
+                 }
+         }
+
++       if (keep_attached) {
++               while (1)
++               {
++                       sleep(10000000);
++               }
++       }
++
+         if (waitkey) {
+                 printf(&quot;Press any key to detach %s ...\n&quot;, tty);
+                 getchar();
+
+
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000820.html">[Socketcan-users]  slcan_attach and resetting line disciplines
+</A></li>
+	<LI>Next message: <A HREF="000822.html">[Socketcan-users] slcan_attach and resetting line disciplines
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#821">[ date ]</a>
+              <a href="thread.html#821">[ thread ]</a>
+              <a href="subject.html#821">[ subject ]</a>
+              <a href="author.html#821">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

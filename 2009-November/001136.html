@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan w/ MCP2515 and dropped rx frames
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20w/%20MCP2515%20and%20dropped%20rx%20frames&In-Reply-To=%3C4AF88ABE.1060603%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001135.html">
+   <LINK REL="Next"  HREF="001138.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan w/ MCP2515 and dropped rx frames</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20w/%20MCP2515%20and%20dropped%20rx%20frames&In-Reply-To=%3C4AF88ABE.1060603%40grandegger.com%3E"
+       TITLE="[Socketcan-users] socketcan w/ MCP2515 and dropped rx frames">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov  9 22:33:50 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001135.html">[Socketcan-users]  socketcan w/ MCP2515 and dropped rx frames
+</A></li>
+        <LI>Next message: <A HREF="001138.html">[Socketcan-users] socketcan w/ MCP2515 and dropped rx frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1136">[ date ]</a>
+              <a href="thread.html#1136">[ thread ]</a>
+              <a href="subject.html#1136">[ subject ]</a>
+              <a href="author.html#1136">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Christian Keydel wrote:
+&gt;<i> Hi, I have added socketcan (trunk rev. 1033 from 8/11/2009) to a Linux board
+</I>&gt;<i> support package for an ARM9-based processor running at 208 MHz. The Linux
+</I>&gt;<i> kernel version is 2.6.27.8. The environment has busybox and no suitable
+</I>&gt;<i> netlink interface (ip command doesn't allow setting CAN properties) so I can
+</I>&gt;<i> use the sysfs interface only. The CAN bitrate is 250 kbps and I am using
+</I>&gt;<i> max. clock at the SPI interface to the MCP2515 (10 MHz). We are using the
+</I>&gt;<i> CAN RAW driver.
+</I>
+You could download and cross-compile the latest 'ip' from the iproute2
+packet as show:
+
+   <A HREF="git://git.kernel.org/pub/scm/network/iproute2/iproute2.git">git://git.kernel.org/pub/scm/network/iproute2/iproute2.git</A>
+
+This would also allow to inspect the CAN statistics. The SysFS interface
+is deprecated.
+
+&gt;<i> In principle the setup works, but we appear to be dropping CAN packets at
+</I>&gt;<i> the driver level. We have added several filters in the application level CAN
+</I>&gt;<i> driver, and these filters appear to work under nominal message traffic
+</I>&gt;<i> loads, but when we increase the message traffic on the CAN bus, the
+</I>&gt;<i> controller driver appears to drop packets.
+</I>&gt;<i> 
+</I>&gt;<i> Here is the code snippet for the software filters that we have added in the
+</I>&gt;<i> application level driver:
+</I>&gt;<i> 
+</I>&gt;<i>         rfilter[0].can_id   = 0x41;
+</I>&gt;<i>         rfilter[0].can_mask = 0xFF;
+</I>&gt;<i>         rfilter[1].can_id   = 0xFFF1D8;
+</I>&gt;<i>         rfilter[1].can_mask = 0xFFFFFF;
+</I>&gt;<i>         rfilter[2].can_id   = 0xFFF2D8;
+</I>&gt;<i>         rfilter[2].can_mask = 0xFFFFFF;
+</I>&gt;<i>         rfilter[3].can_id   = 0xEAFF00;
+</I>&gt;<i>         rfilter[3].can_mask = 0xFFFF00;
+</I>&gt;<i> 
+</I>&gt;<i>         setsockopt(canSocket, SOL_CAN_RAW, CAN_RAW_FILTER, &amp;rfilter,
+</I>&gt;<i> sizeof(rfilter));
+</I>&gt;<i> 
+</I>&gt;<i> We do a non-blocking (flags = MSG_DONTWAIT) call to recvfrom() at a 10 msec
+</I>&gt;<i> update rate. We are generating the following msgs at the given rates:
+</I>&gt;<i> 
+</I>&gt;<i> 0x18EA1D41 (filter[0])     at once per 5 secs rate.
+</I>&gt;<i> 0x18FEF341 (filter[0])     at once per second rate.
+</I>&gt;<i> 0x18FFF1D8 (filter[1])     at once per 100msecs rate.
+</I>&gt;<i> 
+</I>&gt;<i> We are additionally broadcasting messages that do not pass any filters to
+</I>&gt;<i> make up a 300 messages per second traffic load.
+</I>
+You can run
+
+# candump any,0:0,#FFFFFFFF
+
+in a separate window to check what messages are delivered and realize
+eventual error messages.
+
+&gt;<i> We have broadcast and dropped the following messages, apparently at the
+</I>&gt;<i> controller driver level, over a run of approx. 16 minutes and 30 seconds:
+</I>&gt;<i> 
+</I>&gt;<i> 0x18EA1D41   - broadcast 183 times    received at app driver 180
+</I>&gt;<i> 0x18FEF341   - broadcast 997 times    received at app driver 982
+</I>&gt;<i> 0x18FFF1D8   - broadcast 9460 times   received at app driver 9290
+</I>&gt;<i> 
+</I>&gt;<i> Can someone give me any hints on how to troubleshoot this? Is there any
+</I>&gt;<i> debug output available that could help? Right now I don't even know at which
+</I>&gt;<i> level the frames are dropped.
+</I>
+What does ifconfig show you? Also you can enable the kernel option
+CAN_DEBUG_DEVICES and look for CAN kernel messages using dmesg.
+Furthermore, you find some CAN network statistics in /proc/net/can.
+
+It could happen that the socket receive buffer gets full. You could
+trying to increase the receive buffer size setsockopt(..SO_RCVBUF..).
+Looking to the code (raw.c) it seems that the skb is dropped silently.
+It would be nice to increment some statistics or to use a dev_dbg(), at
+least. Or have I missed something?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001135.html">[Socketcan-users]  socketcan w/ MCP2515 and dropped rx frames
+</A></li>
+	<LI>Next message: <A HREF="001138.html">[Socketcan-users] socketcan w/ MCP2515 and dropped rx frames
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1136">[ date ]</a>
+              <a href="thread.html#1136">[ thread ]</a>
+              <a href="subject.html#1136">[ subject ]</a>
+              <a href="author.html#1136">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

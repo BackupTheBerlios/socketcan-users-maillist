@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Some questions about using socket can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20questions%20about%20using%20socket%20can&In-Reply-To=%3CBLU166-W5468DB9B31D46B416D3E04C6FA0%40phx.gbl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002155.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Some questions about using socket can</H1>
+    <B>li guohu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Some%20questions%20about%20using%20socket%20can&In-Reply-To=%3CBLU166-W5468DB9B31D46B416D3E04C6FA0%40phx.gbl%3E"
+       TITLE="[Socketcan-users] Some questions about using socket can">liguohu at live.com
+       </A><BR>
+    <I>Mon Oct  3 05:21:05 CEST 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002155.html">[Socketcan-users] Some questions about using socket can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2154">[ date ]</a>
+              <a href="thread.html#2154">[ thread ]</a>
+              <a href="subject.html#2154">[ subject ]</a>
+              <a href="author.html#2154">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Dear Sir / Madam,I am using the socketcan to try to send can message. But now I encounter some questions. So I write this mail to seek help.The CPU I am using is freescale's MPC5125. And the board is TWR-MPC1525. The linux kernel I am using is linux 2.6.29.1 and patched by freescale. And I use the raw can protocol.And I am using the cantest to try to send some message. But it failed. I can not send or receive anything. But I can use the command of &quot;ifconfig can0 up&quot; to open the can interface. The cantest I used is put in the attachment.When I try to send more message, I get some message from the linux kernel as follows:NETDEV WATCHDOG: can0 (fsl-mscan): transmit timed out ------------[ cut here ]------------ Badness at net/sched/sch_generic.c:230 NIP: c0351d00 LR: c0351d00 CTR: c025572c REGS: cf835e60 TRAP: 0700   Not tainted  (2.6.29.1) MSR: 00029032 &lt;EE,ME,CE,IR,DR&gt;  CR: 48004024  XER: 00000000 TASK = cf82ca10[4] 'sirq-timer/0' THREAD: cf834000 GPR00: c0351d00 cf835f10 cf82ca10 00000039 0000219e ffffffff c0540000 c0500000 GPR08: cf82ca10 c0500000 c0540000 c0507994 003a1836 00000000 0ff79000 00000000 GPR16: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 0f96dba0 GPR24: 00000000 0ff77dc0 c05449a4 00000000 cf9936ec cf9936e0 00000001 cfb14000 NIP [c0351d00] dev_watchdog+0x180/0x264 LR [c0351d00] dev_watchdog+0x180/0x264 Call Trace: [cf835f10] [c0351d00] dev_watchdog+0x180/0x264 (unreliable) [cf835f70] [c0032548] run_timer_softirq+0x224/0x2cc [cf835fa0] [c002d300] ksoftirqd+0x144/0x254 [cf835fd0] [c003e894] kthread+0x4c/0x88 [cf835ff0] [c0012230] kernel_thread+0x4c/0x68 Instruction dump: 80092e6c 2f800000 40be0038 38810008 7fe3fb78 38a00040 4bfea035 7fe4fb78 7c651b78 3c60c04a 38638e64 4bcd62d5 &lt;0fe00000&gt; 38000001 3d20c054 90092e6c mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout mscan_tx_timeout May be I used the socketcan in a wrong manner. So can you show me the interface of the raw can protocol for user space? Moreover, I don't know which function call the mscan_tx_timeout() function. This makes me even more confusing. Maybe I can get some information from you. I am waiting for your message eagerly. 		 	   		  
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20111003/e09868cd/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20111003/e09868cd/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: cantest-1.0.zip
+Type: application/octet-stream
+Size: 24389 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20111003/e09868cd/attachment.obj">https://lists.berlios.de/pipermail/socketcan-users/attachments/20111003/e09868cd/attachment.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002155.html">[Socketcan-users] Some questions about using socket can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2154">[ date ]</a>
+              <a href="thread.html#2154">[ thread ]</a>
+              <a href="subject.html#2154">[ subject ]</a>
+              <a href="author.html#2154">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

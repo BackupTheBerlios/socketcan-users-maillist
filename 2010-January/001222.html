@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Patching kernel core with SocketCan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Patching%20kernel%20core%20with%20SocketCan&In-Reply-To=%3C181804936ABC2349BE503168465576460D496134%40exchserver.basler.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001221.html">
+   <LINK REL="Next"  HREF="001223.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Patching kernel core with SocketCan</H1>
+    <B>Steve Deiters</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Patching%20kernel%20core%20with%20SocketCan&In-Reply-To=%3C181804936ABC2349BE503168465576460D496134%40exchserver.basler.com%3E"
+       TITLE="[Socketcan-users] Patching kernel core with SocketCan">SteveDeiters at BASLER.com
+       </A><BR>
+    <I>Wed Jan  6 20:19:59 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001221.html">[Socketcan-users] Patching kernel core with SocketCan
+</A></li>
+        <LI>Next message: <A HREF="001223.html">[Socketcan-users] Patching kernel core with SocketCan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1222">[ date ]</a>
+              <a href="thread.html#1222">[ thread ]</a>
+              <a href="subject.html#1222">[ subject ]</a>
+              <a href="author.html#1222">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I think you have the order of redirection wrong in the Makefile.  I have
+a diff of what I think you want.  Anyway, I'm not sure that is necessary
+as it is doing that replacement already in the strip-src script.  I
+didn't know what it was using it for, so I had commented it out earlier
+and was just copying all the headers over.
+
+With this change it now patches cleanly.  Although I will have to wait
+for the MPC5121 to be added to the trunk before I can do anything
+further.
+
+Thanks.
+
+
+Index: Makefile
+===================================================================
+--- Makefile	(revision 1101)
++++ Makefile	(working copy)
+@@ -11,7 +11,7 @@
+ KERNELRELEASE = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
+ 
+ patch26:
+-	./mkpatch $(KERNELRELEASE) | sed -e
+'s/socketcan\/can/linux\/can/' &gt; patch-$(KERNELRELEASE)-socketcan &lt;
+FILES-2.6
++	./mkpatch $(KERNELRELEASE) &lt; FILES-2.6 | sed -e
+'s/socketcan\/can/linux\/can/' &gt; patch-$(KERNELRELEASE)-socketcan
+ 
+ patch26all:
+-	./mkpatch $(KERNELRELEASE) | sed -e
+'s/socketcan\/can/linux\/can/' &gt; patch-$(KERNELRELEASE)-socketcan-all &lt;
+FILES-2.6-ALL
++	./mkpatch $(KERNELRELEASE) &lt; FILES-2.6-ALL | sed -e
+'s/socketcan\/can/linux\/can/' &gt; patch-$(KERNELRELEASE)-socketcan-all
+ 
+
+-----Original Message-----
+From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>] 
+Sent: Wednesday, January 06, 2010 12:53 PM
+To: Steve Deiters
+Cc: Wolfram Sang; Wolfgang Grandegger; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-core at lists.berlios.de</A>;
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: Patching kernel core with SocketCan
+
+Oliver Hartkopp wrote:
+&gt;<i> Wolfram Sang wrote:
+</I>&gt;&gt;&gt;<i> I haven't tested if anything works yet.  I'm curious if this is 
+</I>&gt;&gt;&gt;<i> expected to get a workable patch or if I missed something.
+</I>&gt;&gt;<i> Wolfgang just posted an MPC5121-CAN-driver for a recent kernel.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Yes - and it's currently not available in the SocketCAN SVN.
+</I>&gt;<i> 
+</I>&gt;<i> I assume Wolfgang will add the MPC5121 support for the mpc5xxx driver 
+</I>&gt;<i> to the SocketCAN SVN as soon as it is accepted on netdev-ML for
+</I>mainline.
+&gt;<i> 
+</I>&gt;<i> Btw. the FILES-2.6-* are really out of date for generating patches.
+</I>
+Hi Steve,
+
+i updated the FILES-2.6-ALL file list and added a sed command in the
+Makefile to rename all include/socketcan occurrences with include/linux.
+
+Please check out the latest SVN and try it again.
+
+If you want to create the patch without the Makefile, it should look
+like this
+now:
+
+./mkpatch 2.6.24 &lt; FILES-2.6-ALL | sed -e 's/socketcan\/can/linux\/can/'
+&gt;<i> patch-2.6.24-socketcan-all
+</I>
+I also fixed the CC770 Kconfig as i've seen in your mail ;-)
+
+Please remember that there's still no MPC5121 support in the SVN
+sources.
+
+Thanks &amp; best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001221.html">[Socketcan-users] Patching kernel core with SocketCan
+</A></li>
+	<LI>Next message: <A HREF="001223.html">[Socketcan-users] Patching kernel core with SocketCan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1222">[ date ]</a>
+              <a href="thread.html#1222">[ thread ]</a>
+              <a href="subject.html#1222">[ subject ]</a>
+              <a href="author.html#1222">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

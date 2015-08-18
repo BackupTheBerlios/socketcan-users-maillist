@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] poll broken (for can)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20poll%20broken%20%28for%20can%29&In-Reply-To=%3C4D923B00.20500%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001849.html">
+   <LINK REL="Next"  HREF="001851.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] poll broken (for can)</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20poll%20broken%20%28for%20can%29&In-Reply-To=%3C4D923B00.20500%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] poll broken (for can)">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Mar 29 22:03:12 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001849.html">[Socketcan-users] poll broken (for can)
+</A></li>
+        <LI>Next message: <A HREF="001851.html">[Socketcan-users] poll broken (for can)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1850">[ date ]</a>
+              <a href="thread.html#1850">[ thread ]</a>
+              <a href="subject.html#1850">[ subject ]</a>
+              <a href="author.html#1850">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 28.03.2011 21:32, Marc Kleine-Budde wrote:
+&gt;<i> On 03/28/2011 07:53 PM, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> On 28.03.2011 18:13, Marc Kleine-Budde wrote:
+</I>&gt;&gt;&gt;<i> On 03/28/2011 05:55 PM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> BTW: I figured out why poll() wakes you up but the next write will fail
+</I>&gt;&gt;&gt;&gt;&gt;<i> with -ENOBUFS again.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Ah, I'm curious? I also did realize that poll does burn CPU cycles
+</I>&gt;&gt;&gt;&gt;<i> (instead of waiting).
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The poll callback checks if the used memory is less than the half of per
+</I>&gt;&gt;&gt;<i> socket snd buffer (IIRC ~60K). See:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> datagram_poll (<A HREF="http://lxr.linux.no/linux+v2.6.38/net/core/datagram.c#L737">http://lxr.linux.no/linux+v2.6.38/net/core/datagram.c#L737</A>)
+</I>&gt;&gt;&gt;<i> sock_writeable (<A HREF="http://lxr.linux.no/linux+v2.6.38/include/net/sock.h#L1618">http://lxr.linux.no/linux+v2.6.38/include/net/sock.h#L1618</A>)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Because the size of a can frame (+the skb overhead) is much less then
+</I>&gt;&gt;&gt;<i> the ethernet frame (+overhead) the default value for the snd buffer is
+</I>&gt;&gt;&gt;<i> too big for can.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> We get the -ENOBUF from write() if the tx_queue_len (default 10) is
+</I>&gt;&gt;&gt;<i> exceeded.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/linux+v2.6.38/drivers/net/can/dev.c#L435">http://lxr.linux.no/linux+v2.6.38/drivers/net/can/dev.c#L435</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lxr.linux.no/linux+v2.6.38/net/can/af_can.c#L268">http://lxr.linux.no/linux+v2.6.38/net/can/af_can.c#L268</A>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What would be your suggestion? Decreasing the socket send buffer for CAN by
+</I>&gt;&gt;<i> default?
+</I>&gt;<i> 
+</I>&gt;<i> I haven't done any testing.....As far as I understand the code, we can
+</I>&gt;<i> a) increase the default tx_queue_len and/or
+</I>&gt;<i> b) decrease the default snd buffer size.
+</I>&gt;<i> 
+</I>&gt;<i> Note: a) is a per device setting whereas b) is a per socket setting.
+</I>&gt;<i> 
+</I>&gt;<i> With the current settings the -ENOBUF is triggered if we have X unsend
+</I>&gt;<i> can frames (per device) where X equals the tx_queue_len. This means
+</I>&gt;<i> using 5 applications, it about 2 queued (i.e. unsent) frames per app and
+</I>&gt;<i> device.
+</I>&gt;<i> 
+</I>&gt;<i> If we increase the tx_queue_len to a high value (via ifconfig), so that
+</I>&gt;<i> the snd buffer is fully used, before the tx_queue_len is exceeded the
+</I>&gt;<i> write system call will block, (or return -EAGAIN of opened non
+</I>&gt;<i> blocking). At least the last time I've done this.
+</I>&gt;<i> 
+</I>&gt;<i> I think solution b) would lead to a similar behavioural change.
+</I>&gt;<i> 
+</I>&gt;<i> What do we really want to specify?
+</I>
+Hm - the problem could be that people expect their frames to be sent 'in
+time', so if we increase the tx_queue_len, it's not transparent when the
+frames are potentially leaving the system - and if the application data is
+already out-dated when hitting the medium.
+
+What about having up to three CAN frames in each CAN_RAW socket send buffer
+and e.g.50 frames in the tx_queue_len of the netdevice as a starting point?
+
+
+&gt;<i> 
+</I>&gt;<i> Something like: queue up to X frames per socket and queue only Y frames
+</I>&gt;<i> per device. Where Y = X * n and n is &quot;I don't know yet&quot;?
+</I>&gt;<i> 
+</I>&gt;<i> Y is simple, it's the tx_queue_len. But X is more complicated. The can
+</I>&gt;<i> frames have non constant length (i.e. dlc) and I'm not sure that the
+</I>&gt;<i> netdev people say if we misuse the sock_alloc_send_pskb() for our
+</I>&gt;<i> tx-flow-control :)
+</I>
+I would propose to count the CAN frames independently from the can_dlc. AFAIK
+the tx_queue_len is dealing with skb's - and the skb-&gt;len for the socket send
+buffer is also size of struct can_frame, right?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001849.html">[Socketcan-users] poll broken (for can)
+</A></li>
+	<LI>Next message: <A HREF="001851.html">[Socketcan-users] poll broken (for can)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1850">[ date ]</a>
+              <a href="thread.html#1850">[ thread ]</a>
+              <a href="subject.html#1850">[ subject ]</a>
+              <a href="author.html#1850">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

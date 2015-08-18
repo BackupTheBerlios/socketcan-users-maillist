@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CBB3BC0.3080602%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001573.html">
+   <LINK REL="Next"  HREF="001577.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CBB3BC0.3080602%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Oct 17 20:09:04 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001573.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001577.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1575">[ date ]</a>
+              <a href="thread.html#1575">[ thread ]</a>
+              <a href="subject.html#1575">[ subject ]</a>
+              <a href="author.html#1575">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 16.10.2010 23:10, Marc Kleine-Budde wrote:
+&gt;<i> On 10/16/2010 11:50 AM, Oliver Hartkopp wrote:
+</I>&gt;<i> [...]
+</I>&gt;&gt;<i> Looks like a deja-vu :-)
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Can you send your exact Kernel version?
+</I>&gt;&gt;<i> The correct behaviour hase been killed here
+</I>&gt;<i> 
+</I>&gt;&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=fc6055a5ba31e2c14e36e8939f9bf2b6d586a7f5">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commit;h=fc6055a5ba31e2c14e36e8939f9bf2b6d586a7f5</A>
+</I>&gt;<i> 
+</I>&gt;<i> Let's ask git, which was the first Kernel with the problem?
+</I>&gt;<i> 
+</I>&gt;<i> git describe --contains fc6055a5ba31e2c14e36e8939f9bf2b6d586a7f5
+</I>&gt;<i> v2.6.35-rc1~473^2~452
+</I>&gt;<i> 
+</I>&gt;<i> That means the problem has been introduced before &quot;v2.6.35-rc1&quot;.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> and fixed here
+</I>&gt;&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=cff0d6e6edac7672b3f915bb4fb59f279243b7f9">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=commitdiff;h=cff0d6e6edac7672b3f915bb4fb59f279243b7f9</A>
+</I>&gt;<i> 
+</I>&gt;<i> git describe --contains cff0d6e6edac7672b3f915bb4fb59f279243b7f9
+</I>&gt;<i> v2.6.36-rc1~571^2~6
+</I>&gt;<i> 
+</I>&gt;<i> ...and was fixed with v2.6.36-rc1
+</I>&gt;<i> 
+</I>&gt;<i> Maybe the fix was backported to stable?
+</I>&gt;<i> 
+</I>&gt;<i> git log --pretty=oneline v2.6.35..linux-2.6-stable/linux-2.6.35.y net/can/raw.c
+</I>&gt;<i> a5f18b1cca50987eb7773bb0be0d8730dfb10306 can-raw: Fix skb_orphan_try handling
+</I>&gt;<i> 
+</I>&gt;<i> git describe --contains a5f18b1cca50987eb7773bb0be0d8730dfb10306
+</I>&gt;<i> v2.6.35.4~32
+</I>&gt;<i> 
+</I>&gt;<i> it's been fixed with v2.6.35.4
+</I>&gt;<i> 
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i> 
+</I>
+This proves the old rule:
+
+A fool with a tool is still a fool.
+
+:<i>-))
+</I>
+Thanks for this explanation - i definitely need more practice with git.
+
+The Kernel versions you got from asking git are correct.
+
+Thanks,
+Oliver
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001573.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001577.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1575">[ date ]</a>
+              <a href="thread.html#1575">[ thread ]</a>
+              <a href="subject.html#1575">[ subject ]</a>
+              <a href="author.html#1575">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

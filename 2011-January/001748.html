@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C30746599.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001744.html">
+   <LINK REL="Next"  HREF="001749.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>uprinz</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C30746599.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">uprinz2 at netscape.net
+       </A><BR>
+    <I>Mon Jan 24 09:37:09 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001744.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="001749.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1748">[ date ]</a>
+              <a href="thread.html#1748">[ thread ]</a>
+              <a href="subject.html#1748">[ subject ]</a>
+              <a href="author.html#1748">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+Oliver Hartkopp wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Ulrich,
+</I>&gt;<i> 
+</I>&gt;<i> additional to have separate filter capabilities for each open socket the
+</I>&gt;<i> idea
+</I>&gt;<i> is that you can have multiple (multi-user) CAN applications on your Linux
+</I>&gt;<i> box.
+</I>&gt;<i> 
+</I>&gt;<i> To ensure all the CAN applications have independently the correct view on
+</I>&gt;<i> the
+</I>&gt;<i> real CAN bus the locally generated massages are looped back into the local
+</I>&gt;<i> host once they are sent on the wire, see:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://lxr.linux.no/#linux+v2.6.37/Documentation/networking/can.txt#L176">http://lxr.linux.no/#linux+v2.6.37/Documentation/networking/can.txt#L176</A>
+</I>&gt;<i> 
+</I>&gt;<i> So with SocketCAN having two or more applications independently using the
+</I>&gt;<i> same
+</I>&gt;<i> CAN bus is the standard behaviour.
+</I>&gt;<i> 
+</I>&gt;<i> Have fun!
+</I>&gt;<i> 
+</I>&gt;<i> Oliver
+</I>&gt;<i> 
+</I>
+Hi Oliver!
+
+Thank you for pointing me to that manual. That' s all I needed. I got the
+SocketCAN stack included in a complete SDK and didn't see it. Now my live is
+much easier and both, Master and Slave are working.
+
+Thank you very much!
+
+Best regards
+Ulrich
+
+-----
+Best regards
+Ulrich
+-- 
+View this message in context: <A HREF="http://old.nabble.com/On-Linux-two-applications-use-the-same-bus--tp30728796p30746599.html">http://old.nabble.com/On-Linux-two-applications-use-the-same-bus--tp30728796p30746599.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001744.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="001749.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1748">[ date ]</a>
+              <a href="thread.html#1748">[ thread ]</a>
+              <a href="subject.html#1748">[ subject ]</a>
+              <a href="author.html#1748">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

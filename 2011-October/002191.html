@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] import svn to git
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20import%20svn%20to%20git&In-Reply-To=%3C4E974F26.8020502%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002188.html">
+   <LINK REL="Next"  HREF="002189.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] import svn to git</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20import%20svn%20to%20git&In-Reply-To=%3C4E974F26.8020502%40grandegger.com%3E"
+       TITLE="[Socketcan-users] import svn to git">wg at grandegger.com
+       </A><BR>
+    <I>Thu Oct 13 22:50:46 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002188.html">[Socketcan-users] import svn to git
+</A></li>
+        <LI>Next message: <A HREF="002189.html">[Socketcan-users] import svn to git
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2191">[ date ]</a>
+              <a href="thread.html#2191">[ thread ]</a>
+              <a href="subject.html#2191">[ subject ]</a>
+              <a href="author.html#2191">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/13/2011 09:27 PM, Marc Kleine-Budde wrote:
+&gt;<i> On 10/13/2011 08:12 PM, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> On 10/13/11 11:20, Marc Kleine-Budde wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 10/13/2011 11:10 AM, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> From that description it also seems that we can push only to one git
+</I>&gt;&gt;&gt;&gt;<i> repository per project. This again rises the question how to handle and
+</I>&gt;&gt;&gt;&gt;<i> name the can-utils and can-kmods. I see the following possibilities:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 1. *One* project named &quot;socketcan&quot; or &quot;linux-can&quot; for both. In the git
+</I>&gt;&gt;&gt;&gt;<i>    repo we could then store all socketcan related code in:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>    can-utils/...      The CAN Utils
+</I>&gt;&gt;&gt;&gt;<i>    can-lib/...        Eventually A Socketcan library, might be
+</I>&gt;&gt;&gt;&gt;<i>                       integrated into can-utils
+</I>&gt;&gt;&gt;&gt;<i>    kernel/...         Out-of-tree kernel modules for 2.6 and 3.x
+</I>&gt;&gt;&gt;&gt;<i>    kernel-2.4/...     Old kernel modules for 2.4
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 2. *Two* different projects named &quot;can-utils&quot; and &quot;can-kmod&quot;.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> At least two repos, one for the userspace one for the kernel. Maybe even
+</I>&gt;&gt;&gt;<i> more then one userspace repo.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes. Having separated kernel-space and user-space repos looks good.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If we have the possibility to have more than one repos as Martin pointed out here
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="http://git.savannah.gnu.org/cgit/freetype/">http://git.savannah.gnu.org/cgit/freetype/</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> we could name them e.g.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> can/user.git
+</I>&gt;&gt;<i> can/kernel.git
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> while user.git contains directories 'utils', 'lib', 'samples', 'apps?'
+</I>&gt;&gt;<i> and kernel.git contains directories 'linux-2.4' and 'linux'
+</I>
+&gt;<i> I don't like user.git and kernel.git, because when you do a git clone,
+</I>&gt;<i> you have directories called &quot;user&quot; and &quot;kernel&quot;. Especially &quot;user&quot; is
+</I>&gt;<i> too generic.
+</I>
+If the project is named &quot;linux-can&quot;, I think we could get
+
+  linux-can.git
+  linux-can-utils.git
+  ...
+
+&gt;<i> Using git it makes IMHO no sense to have linux-2.4 and linux (&gt;=2.6)
+</I>&gt;<i> next to each other in one repo. Either make it two repos or two heads.
+</I>
+A repo for each sub dir mentioned above is far too much.
+
+&gt;<i> If you have linux-can.git containing the 2.6+ out-of-tree modules you
+</I>&gt;<i> can cherry pick fixes from the mainline kernel.
+</I>
+Yes, that would be nice.
+
+&gt;&gt;<i> I'm not really sure about the naming though.
+</I>
+What about creating one *clean* project &quot;can-utils&quot; for the *official*
+CAN utilities for the Linux distributions. Plus another one named
+&quot;linux-can&quot; mainly for the out-of-tree kernel modules and all other
+stuff we would like to keep, linux-2.4, examples, etc.
+
+It looks to me that *extra* git repositories at GNU Savannah are rare
+and not really supported by the WEB interface. The following link just
+lists one repository:
+
+  <A HREF="http://savannah.nongnu.org/git/?group=freetype">http://savannah.nongnu.org/git/?group=freetype</A>
+
+We also need to request them via email to the Savannah support team.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002188.html">[Socketcan-users] import svn to git
+</A></li>
+	<LI>Next message: <A HREF="002189.html">[Socketcan-users] import svn to git
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2191">[ date ]</a>
+              <a href="thread.html#2191">[ thread ]</a>
+              <a href="subject.html#2191">[ subject ]</a>
+              <a href="author.html#2191">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

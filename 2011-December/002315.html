@@ -1,0 +1,254 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 11/14] can: mscan: consolidate error	state handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2011/14%5D%20can%3A%20mscan%3A%20consolidate%20error%0A%09state%20handling&In-Reply-To=%3C1323269728-17491-12-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002314.html">
+   <LINK REL="Next"  HREF="002316.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 11/14] can: mscan: consolidate error	state handling</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2011/14%5D%20can%3A%20mscan%3A%20consolidate%20error%0A%09state%20handling&In-Reply-To=%3C1323269728-17491-12-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 11/14] can: mscan: consolidate error	state handling">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:25 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002314.html">[Socketcan-users] [RFC PATCH 10/14] can: sja1000: consolidate	bus-off handling
+</A></li>
+        <LI>Next message: <A HREF="002316.html">[Socketcan-users] [RFC PATCH 12/14] can: mscan: consolidate bus-off	handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2315">[ date ]</a>
+              <a href="thread.html#2315">[ thread ]</a>
+              <a href="subject.html#2315">[ subject ]</a>
+              <a href="author.html#2315">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Allow state to decrease bus-off-&gt;passive-&gt;warning-&gt;active.
+Use the common function can_chage_state().
+
+Here is an example output of &quot;candump -candump -td -e any,0:0,#FFFFFFFF&quot;
+for a recovery from error passive state due to no ack/cable (reconnect
+after 5s) for a MSCAN on a MPC5200 SOC:
+
+ (000.204135)  can2    6  [8] 25 84 EF 0F 3F 3D B7 3E
+ (000.206547)  can2  20000204  [8] 00 08 00 00 00 00 00 00   ERRORFRAME
+        controller-problem{tx-error-warning}
+        state-change{tx-error-warning}
+ (000.000909)  can2  20000204  [8] 00 20 00 00 00 00 00 00   ERRORFRAME
+        controller-problem{tx-error-passive}
+        state-change{tx-error-passive}
+ (004.928785)  can2    7  [7] 4D BA 4C 90 60 BB D6
+ (000.000204)  can2  20000200  [8] 00 08 00 00 00 00 00 00   ERRORFRAME
+        state-change{tx-error-warning}
+ (000.000000)  can2    8  [1] 6F
+ (000.000239)  can2    9  [8] 24 CD C3 9A 62 16 37 30
+ ...
+ (000.204000)  can2   33  [8] 58 DC 54 02 4D CF 61 BF
+ (000.000152)  can2  20000200  [8] 00 40 00 00 00 00 00 00   ERRORFRAME
+        state-change{back-to-error-active}
+ (000.203725)  can2   34  [0]
+ (000.204074)  can2   35  [5] 71 E9 59 E5 2E
+
+And for a MSCAN on a MPC5121 SOC:
+
+ (000.203997)  can0    6  [8] 0F 21 AA BD 6C F5 2F 43
+ (000.206737)  can0  20000204  [8] 00 08 00 00 00 00 60 00   ERRORFRAME
+        controller-problem{tx-error-warning}
+        state-change{tx-error-warning}
+        error-counter-tx-rx{{96}{0}}
+ (000.000962)  can0  20000204  [8] 00 20 00 00 00 00 80 00   ERRORFRAME
+        controller-problem{tx-error-passive}
+        state-change{tx-error-passive}
+        error-counter-tx-rx{{128}{0}}
+ (004.929359)  can0    7  [8] 64 7E BF 12 15 4A 22 E4
+ (000.000117)  can0  20000200  [8] 00 08 00 00 00 00 7F 00   ERRORFRAME
+        state-change{tx-error-warning}
+        error-counter-tx-rx{{127}{0}}
+ (000.000163)  can0    8  [1] 1C
+ ...
+ (000.204030)  can0   35  [8] 2D 8F 0E CA 26 4D 0D 37
+ (000.000123)  can0  20000200  [8] 00 40 00 00 00 00 5F 00   ERRORFRAME
+        state-change{back-to-error-active}
+        error-counter-tx-rx{{95}{0}}
+ (000.203879)  can0   36  [8] 6F C9 05 BA 73 9A A5 E2
+
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/mscan/mscan.c |   89 ++++++++++++++++-------------------------
+ 1 files changed, 34 insertions(+), 55 deletions(-)
+
+diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/mscan.c
+index 41a2a2d..e9e6b14 100644
+--- a/drivers/net/can/mscan/mscan.c
++++ b/drivers/net/can/mscan/mscan.c
+@@ -290,20 +290,6 @@ static netdev_tx_t mscan_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	return NETDEV_TX_OK;
+ }
+ 
+-/* This function returns the old state to see where we came from */
+-static enum can_state check_set_state(struct net_device *dev, u8 canrflg)
+-{
+-	struct mscan_priv *priv = netdev_priv(dev);
+-	enum can_state state, old_state = priv-&gt;can.state;
+-
+-	if (canrflg &amp; MSCAN_CSCIF &amp;&amp; old_state &lt;= CAN_STATE_BUS_OFF) {
+-		state = state_map[max(MSCAN_STATE_RX(canrflg),
+-				      MSCAN_STATE_TX(canrflg))];
+-		priv-&gt;can.state = state;
+-	}
+-	return old_state;
+-}
+-
+ static void mscan_get_rx_frame(struct net_device *dev, struct can_frame *frame)
+ {
+ 	struct mscan_priv *priv = netdev_priv(dev);
+@@ -350,60 +336,50 @@ static void mscan_get_err_frame(struct net_device *dev, struct can_frame *frame,
+ 	struct mscan_priv *priv = netdev_priv(dev);
+ 	struct mscan_regs __iomem *regs = priv-&gt;reg_base;
+ 	struct net_device_stats *stats = &amp;dev-&gt;stats;
+-	enum can_state old_state;
+ 
+ 	netdev_dbg(dev, &quot;error interrupt (canrflg=%#x)\n&quot;, canrflg);
+-	frame-&gt;can_id = CAN_ERR_FLAG;
+ 
+ 	if (canrflg &amp; MSCAN_OVRIF) {
+ 		frame-&gt;can_id |= CAN_ERR_CRTL;
+-		frame-&gt;data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
++		frame-&gt;data[1] |= CAN_ERR_CRTL_RX_OVERFLOW;
+ 		stats-&gt;rx_over_errors++;
+ 		stats-&gt;rx_errors++;
+ 	} else {
+ 		frame-&gt;data[1] = 0;
+ 	}
+ 
+-	old_state = check_set_state(dev, canrflg);
+-	/* State changed */
+-	if (old_state != priv-&gt;can.state) {
+-		switch (priv-&gt;can.state) {
+-		case CAN_STATE_ERROR_WARNING:
+-			frame-&gt;can_id |= CAN_ERR_CRTL;
+-			priv-&gt;can.can_stats.error_warning++;
+-			if ((priv-&gt;shadow_statflg &amp; MSCAN_RSTAT_MSK) &lt;
+-			    (canrflg &amp; MSCAN_RSTAT_MSK))
+-				frame-&gt;data[1] |= CAN_ERR_CRTL_RX_WARNING;
+-			if ((priv-&gt;shadow_statflg &amp; MSCAN_TSTAT_MSK) &lt;
++	if (canrflg &amp; MSCAN_CSCIF) {
++		enum can_state state = state_map[max(MSCAN_STATE_RX(canrflg),
++						     MSCAN_STATE_TX(canrflg))];
++		unsigned int err_dir = CAN_ERR_DIR_UNKNOWN;
++
++		if (state != priv-&gt;can.state) {
++
++			if ((priv-&gt;shadow_statflg &amp; MSCAN_TSTAT_MSK) !=
+ 			    (canrflg &amp; MSCAN_TSTAT_MSK))
+-				frame-&gt;data[1] |= CAN_ERR_CRTL_TX_WARNING;
+-			break;
+-		case CAN_STATE_ERROR_PASSIVE:
+-			frame-&gt;can_id |= CAN_ERR_CRTL;
+-			priv-&gt;can.can_stats.error_passive++;
+-			frame-&gt;data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
+-			break;
+-		case CAN_STATE_BUS_OFF:
+-			frame-&gt;can_id |= CAN_ERR_BUSOFF;
+-			/*
+-			 * The MSCAN on the MPC5200 does recover from bus-off
+-			 * automatically. To avoid that we stop the chip doing
+-			 * a light-weight stop (we are in irq-context).
+-			 */
+-			if (priv-&gt;type != MSCAN_TYPE_MPC5121) {
+-				out_8(&amp;regs-&gt;cantier, 0);
+-				out_8(&amp;regs-&gt;canrier, 0);
+-				setbits8(&amp;regs-&gt;canctl0,
+-					 MSCAN_SLPRQ | MSCAN_INITRQ);
++				err_dir |= CAN_ERR_DIR_TX;
++			if ((priv-&gt;shadow_statflg &amp; MSCAN_RSTAT_MSK) !=
++			    (canrflg &amp; MSCAN_RSTAT_MSK))
++				err_dir |= CAN_ERR_DIR_RX;
++			if (state == CAN_STATE_BUS_OFF) {
++				/*
++				 * The MSCAN on the MPC5200 does recover from
++				 * bus-off automatically. To avoid that we
++				 * stop the chip doing a light-weight stop
++				 * (we  are in irq-context).
++				 */
++				if (priv-&gt;type != MSCAN_TYPE_MPC5121) {
++					out_8(&amp;regs-&gt;cantier, 0);
++					out_8(&amp;regs-&gt;canrier, 0);
++					setbits8(&amp;regs-&gt;canctl0,
++						 MSCAN_SLPRQ | MSCAN_INITRQ);
++				}
++				can_bus_off(dev);
+ 			}
+-			can_bus_off(dev);
+-			break;
+-		default:
+-			break;
++			can_change_state(dev, frame, state, err_dir);
+ 		}
++		priv-&gt;shadow_statflg = canrflg &amp; MSCAN_STAT_MSK;
+ 	}
+-	priv-&gt;shadow_statflg = canrflg &amp; MSCAN_STAT_MSK;
+-	frame-&gt;can_dlc = CAN_ERR_DLC;
+ 	out_8(&amp;regs-&gt;canrflg, MSCAN_ERR_IF);
+ }
+ 
+@@ -424,7 +400,10 @@ static int mscan_rx_poll(struct napi_struct *napi, int quota)
+ 		if (!(canrflg &amp; (MSCAN_RXF | MSCAN_ERR_IF)))
+ 			break;
+ 
+-		skb = alloc_can_skb(dev, &amp;frame);
++		if (canrflg &amp; MSCAN_RXF)
++			skb = alloc_can_skb(dev, &amp;frame);
++		else /* MSCAN_ERR_IF */
++			skb = alloc_can_err_skb(dev, &amp;frame);
+ 		if (!skb) {
+ 			if (printk_ratelimit())
+ 				netdev_notice(dev, &quot;packet dropped\n&quot;);
+@@ -435,7 +414,7 @@ static int mscan_rx_poll(struct napi_struct *napi, int quota)
+ 
+ 		if (canrflg &amp; MSCAN_RXF)
+ 			mscan_get_rx_frame(dev, frame);
+-		else if (canrflg &amp; MSCAN_ERR_IF)
++		else /* MSCAN_ERR_IF */
+ 			mscan_get_err_frame(dev, frame, canrflg);
+ 
+ 		stats-&gt;rx_packets++;
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002314.html">[Socketcan-users] [RFC PATCH 10/14] can: sja1000: consolidate	bus-off handling
+</A></li>
+	<LI>Next message: <A HREF="002316.html">[Socketcan-users] [RFC PATCH 12/14] can: mscan: consolidate bus-off	handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2315">[ date ]</a>
+              <a href="thread.html#2315">[ thread ]</a>
+              <a href="subject.html#2315">[ subject ]</a>
+              <a href="author.html#2315">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

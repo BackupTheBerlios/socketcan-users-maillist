@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Select on a RTCAN socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Select%20on%20a%20RTCAN%20socket&In-Reply-To=%3C44EC8B62.8020306%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000017.html">
+   <LINK REL="Next"  HREF="000019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Select on a RTCAN socket</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Select%20on%20a%20RTCAN%20socket&In-Reply-To=%3C44EC8B62.8020306%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Select on a RTCAN socket">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug 23 19:07:46 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000017.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+        <LI>Next message: <A HREF="000019.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Daniel,
+
+Daniel Schnell wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> I wanted to use select() on a socket to find out how many messages are 
+</I>&gt;<i> available. I have opened this socket to access the RTCAN sockets under 
+</I>&gt;<i> Xenomai. According to /usr/xenomai/lib/posix.wrappers select is not 
+</I>&gt;<i> &#8220;supported&#8221; by the realtime kernel. Accordingly it doesn&#8217;t work. If i 
+</I>&gt;<i> start the according task under SCHED_FIFO, the task simply hangs when 
+</I>&gt;<i> initiating select(), in SCHED_OTHER it is simply returning: bad file 
+</I>&gt;<i> descriptor.
+</I>
+select is not supported and cannot be used, indeed.
+
+&gt;<i> Any ideas ? Is there any other way to find out, how many messages are 
+</I>&gt;<i> waiting ?
+</I>
+Select returns the sockets which have data but it does not tell you how 
+many messages are waiting. You could use separate threads to read from 
+sockets.
+
+BTW: this mail is off-topic on the socketcan MLs.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000017.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+	<LI>Next message: <A HREF="000019.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

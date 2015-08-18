@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C9cf2ca450810291004x1c0d8ac8p7f39d40bad771f69%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000528.html">
+   <LINK REL="Next"  HREF="000544.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ixxat-pci (with sja1000) doesn't receive</H1>
+    <B>g a</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C9cf2ca450810291004x1c0d8ac8p7f39d40bad771f69%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] ixxat-pci (with sja1000) doesn't receive">aguirre.citcea at gmail.com
+       </A><BR>
+    <I>Wed Oct 29 18:04:21 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000528.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+        <LI>Next message: <A HREF="000544.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#543">[ date ]</a>
+              <a href="thread.html#543">[ thread ]</a>
+              <a href="subject.html#543">[ subject ]</a>
+              <a href="author.html#543">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Oct 28, 2008 at 2:02 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+&gt;<i> g a wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> perfect!, it works! my next step is to see why can1 doesn't appear at /sys
+</I>&gt;&gt;<i> thank you so much!!
+</I>&gt;<i>
+</I>&gt;<i> Please check the code in ixxat_pci_init_one(). To detect the second
+</I>&gt;<i> device, the card gets reseted first and then the reset values of the
+</I>&gt;<i> registers of the second chip are inspected:
+</I>&gt;<i>
+</I>&gt;<i>        /* Check if second channel is available */
+</I>&gt;<i>        if (readb(base_addr + CHANNEL_OFFSET + REG_MOD) == 0x21 &amp;&amp;
+</I>&gt;<i>            readb(base_addr + CHANNEL_OFFSET + REG_SR) == 0x0c &amp;&amp;
+</I>&gt;<i>            readb(base_addr + CHANNEL_OFFSET + REG_IR) == 0xe0) {
+</I>&gt;<i>                board-&gt;dev[1] = ixxat_pci_add_chan(pdev,
+</I>&gt;<i>                                base_addr + CHANNEL_OFFSET);
+</I>&gt;<i>                if (IS_ERR(board-&gt;dev[1]))
+</I>&gt;<i>                        goto failure_unreg_dev0;
+</I>&gt;<i>
+</I>&gt;<i>                intcsr |= INTCSR_LINTI2;
+</I>&gt;<i>        }
+</I>&gt;<i>
+</I>&gt;<i> What are the values of these MOD, SR and IR registeres?
+</I>
+REG_SR and REG_IR have the correct values (0x0c and 0xe0) but REG_MOD
+has 0x2b instead of 0x21. Should i set to 0x21?
+
+thanks!!
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000528.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+	<LI>Next message: <A HREF="000544.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#543">[ date ]</a>
+              <a href="thread.html#543">[ thread ]</a>
+              <a href="subject.html#543">[ subject ]</a>
+              <a href="author.html#543">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

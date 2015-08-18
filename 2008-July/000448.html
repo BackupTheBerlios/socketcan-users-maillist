@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Poll on bit time setting with Socket-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BE7A3.2080404%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000447.html">
+   <LINK REL="Next"  HREF="000452.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Poll on bit time setting with Socket-CAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Poll%20on%20bit%20time%20setting%20with%20Socket-CAN&In-Reply-To=%3C486BE7A3.2080404%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Poll on bit time setting with Socket-CAN">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Jul  2 22:40:03 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000447.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+        <LI>Next message: <A HREF="000452.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#448">[ date ]</a>
+              <a href="thread.html#448">[ thread ]</a>
+              <a href="subject.html#448">[ subject ]</a>
+              <a href="author.html#448">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Schwebel wrote:
+&gt;<i> On Wed, Jul 02, 2008 at 09:52:01PM +0200, Wolfgang Grandegger wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> You can either set the bit-rate *or* the bit-timing. If you set the 
+</I>&gt;&gt;<i> bit-rate, the bit-timing will be determined by an algorithm or a 
+</I>&gt;&gt;<i> built-in table. Therefore the correct wording should have been: &quot;The 
+</I>&gt;&gt;<i> indirect setting via updatable table seems not that attractive&quot;.
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> In our approach, you *specify* the bit timing and *call*it 125000. Then
+</I>&gt;<i> you *select* the 125000 &quot;bitrate&quot;.
+</I>&gt;<i>
+</I>&gt;<i> You can also specify a bit timing and call it Fridolin_Tux. It could
+</I>&gt;<i> then be selected by
+</I>&gt;<i>
+</I>&gt;<i> 	ifdown can0
+</I>&gt;<i> 	canconfig can0 Fridolin_Tux
+</I>&gt;<i> 	ifup can0
+</I>&gt;<i>
+</I>&gt;<i> This is completely independend of any heuristics (which could also be
+</I>&gt;<i> triggered to specify such a line). You could add an API for &quot;please
+</I>&gt;<i> invent a bit timing for 125000&quot; to trigger an algorithm, or a &quot;please
+</I>&gt;<i> generate a CiA-well-known-bit-timing for 250000&quot; call. The end result is
+</I>&gt;<i> always a bit timing set, which is indexed by the &quot;speaking name&quot; which
+</I>&gt;<i> reflects the bitrate.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+ACK :-)
+
+&gt;<i> This is convenient for users, because they can set the bitrate in an
+</I>&gt;<i> intuitive way (canconfig can0 125000). The system administrator / BSP
+</I>&gt;<i> integrator has to know what 125000 means on this particular hardware
+</I>&gt;<i> (chip + board + corresponding clocks) and has to configure it somewhere.
+</I>&gt;<i> And the end user can define his very own stuff if he knows what he does.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+ACK.
+
+Oliver.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000447.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+	<LI>Next message: <A HREF="000452.html">[Socketcan-users] Poll on bit time setting with Socket-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#448">[ date ]</a>
+              <a href="thread.html#448">[ thread ]</a>
+              <a href="subject.html#448">[ subject ]</a>
+              <a href="author.html#448">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

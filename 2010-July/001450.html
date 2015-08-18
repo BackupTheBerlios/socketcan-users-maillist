@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SJA 1000 bit timing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SJA%201000%20bit%20timing&In-Reply-To=%3C201007050912.18540.oe%40port.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001451.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SJA 1000 bit timing</H1>
+    <B>Heinz-J&#252;rgen Oertel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SJA%201000%20bit%20timing&In-Reply-To=%3C201007050912.18540.oe%40port.de%3E"
+       TITLE="[Socketcan-users] SJA 1000 bit timing">oe at port.de
+       </A><BR>
+    <I>Mon Jul  5 09:12:14 CEST 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001451.html">[Socketcan-users] local loopback timestamp
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1450">[ date ]</a>
+              <a href="thread.html#1450">[ thread ]</a>
+              <a href="subject.html#1450">[ subject ]</a>
+              <a href="author.html#1450">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Freitag, 25. Juni 2010 17:52:56 schrieb Dan Toganel:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> I need to develop a CAN driver for SJA 1000 controller.
+</I>&gt;<i> What is not very clear for me is the interpretation of Bit Timing
+</I>&gt;<i>  Registers. More exactly what is the connection between BTR0 (Baud Rate
+</I>&gt;<i>  Prescaler and Synchronization Jump Width) and BTR1 (Time Segment 1 and
+</I>&gt;<i>  Time
+</I>&gt;<i> Segment 2) with the Nominal Bit Time (Synchronization, Propation Time,
+</I>&gt;<i> Phase Buffer 1, Phase Buffer2 Segments) from CAN specification.
+</I>&gt;<i> And how can I calculate the Nominal Bit Time for a certain speed (for
+</I>&gt;<i> example 10 Kb/second).
+</I>&gt;<i> 
+</I>&gt;<i> Can you help me?
+</I>&gt;<i> _______________________________________________
+</I>
+
+You can try to use the values obtained with:
+<A HREF="http://www.port.de/cgi-bin/tq.cgi?ctype=Philips&amp;CLK=8&amp;sample_point=87.5">http://www.port.de/cgi-bin/tq.cgi?ctype=Philips&amp;CLK=8&amp;sample_point=87.5</A>
+
+It is important to know the ingoing clock frequency. I used 8 MHz, because 
+usual the SJA1000 is used with an 16 MHz crystal oscillator.
+
+Heinz
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part.
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100705/72d5dff6/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100705/72d5dff6/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001451.html">[Socketcan-users] local loopback timestamp
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1450">[ date ]</a>
+              <a href="thread.html#1450">[ thread ]</a>
+              <a href="subject.html#1450">[ subject ]</a>
+              <a href="author.html#1450">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

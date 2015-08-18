@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Userspace%20Lawicel%20%22CANUSB%22%20device%20via%20libftdi&In-Reply-To=%3C4948D466.2040301%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000605.html">
+   <LINK REL="Next"  HREF="000607.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Userspace%20Lawicel%20%22CANUSB%22%20device%20via%20libftdi&In-Reply-To=%3C4948D466.2040301%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Dec 17 11:28:54 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000605.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+        <LI>Next message: <A HREF="000607.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#606">[ date ]</a>
+              <a href="thread.html#606">[ thread ]</a>
+              <a href="subject.html#606">[ subject ]</a>
+              <a href="author.html#606">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Stuart Longland wrote:
+&gt;<i>     At the moment, I'm driving the CAN devices using the slcan driver,  
+</I>&gt;<i> which, when it works, works quite well.  I understand reading the  
+</I>&gt;<i> documentation for these devices, that using them in the pseudo RS232  
+</I>&gt;<i> mode has some inefficiencies due to the slowness of the serial link  
+</I>&gt;<i> (max 115200bps).  The biggest problem however has been stability.
+</I>&gt;<i>
+</I>&gt;<i>    slcan_attach appears at first to provide a means to automatically  
+</I>&gt;<i> set the speed (1Mbps; S8 in our case) and open the CAN channel before  
+</I>&gt;<i> attaching it to slc0.  However, this doesn't appear to work very  
+</I>&gt;<i> well... maybe I'm doing it wrong, but more frequently than not, a  
+</I>&gt;<i> kernel bug is triggered, and the machine has to be rebooted before I  
+</I>&gt;<i> can do any work.  (root logins seize up...etc.)
+</I>&gt;<i>   
+</I>
+Hi Stuart,
+
+you get a kernel oops when attaching the slc0 ??
+This is *really* new to me. Can you post the kernel output for that case?
+
+&gt;<i>    The procedure seems to work most times is:
+</I>&gt;<i>
+</I>&gt;<i> # screen /dev/ttyUSB0 115200
+</I>&gt;<i> S8
+</I>&gt;<i> O
+</I>&gt;<i>
+</I>&gt;<i> (then get out of screen with ^A,K,y)
+</I>&gt;<i> # slcan_attach /dev/ttyUSB0
+</I>&gt;<i> # ifconfig slc0 up
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Please try the new slcan_attach with is in the current SVN.
+
+You can attach the device without a separate application like screen or 
+minicom now:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~/net-next-2.6$ slcan_attach
+
+Usage: slcan_attach [options] tty
+
+Options: -o (send open command 'O\r')
+-c (send close command 'C\r')
+-s &lt;speed&gt; (set CAN speed 0..8)
+-b &lt;btr&gt; (set bit time register value)
+-d (only detach line discipline)
+-w (attach - wait for keypess - detach)
+
+Examples:
+slcan_attach -w -o -s6 -c /dev/ttyS1
+slcan_attach /dev/ttyS1
+slcan_attach -d /dev/ttyS1
+
+
+&gt;<i>    Although not every time -- sometimes I get told there's &quot;no such  
+</I>&gt;<i> device&quot; when I try to bring the interface up (slc0 exists though)...  
+</I>&gt;<i> nothing shows up in dmesg other than the fact that slcan was loaded.
+</I>&gt;<i>   
+</I>
+Hm - maybe when you atttach the slc0 under heavy load it may last some 
+time until slc0 get's registered ... this should be better with the new 
+slcan_attach also.
+
+&gt;<i>    Given the FTDI chip in these CAN devices, has a faster mode, I was  
+</I>&gt;<i> wondering if there was some means of writing a userspace CAN driver  
+</I>&gt;<i> (using libftdi; which I can get working trivially, and works  
+</I>&gt;<i> reliably[1]) and then getting that to hook into the SocketCAN  
+</I>&gt;<i> framework using a TUN/TAP-like device.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+This is an interesting idea but i expect this approach to have a 
+performance impact as you need to copy the frames into userspace, parse 
+and convert them, and then push them back to kernelspace.
+
+&gt;<i>    Alternatively, would it be better to look at libftdi, and write a  
+</I>&gt;<i> kernel-side equivalent that'll allow better control of these devices?
+</I>
+I won't bet that you can find any 'better control' inside libftdi ... 
+but if you find something please let us know.
+
+The approach to use a line discipline for CANUSB and to switch the i/o 
+stream to the netdevice like you know it from your modem using SLIP is 
+the correct way to handle this.
+
+If you get an oops when attaching the slc0 this has to be fixed. The 
+process of the input stream is quite easy to understand and looks really 
+solid to me. I wonder if our problems with slcan result in slcan.c or in 
+the serial tty stuff. Maybe i need to cook a real patch for the slcan 
+driver to let Alan Cox take a look on it (with some attached kernel 
+oopses) - or we need to investigate how the pppd does his job when 
+switching the line discipline to the slip0 and back ...
+
+&gt;<i>    
+</I>&gt;<i> What are peoples' thoughts here?
+</I>&gt;<i>   
+</I>
+Yeah. Anyone else?
+
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000605.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+	<LI>Next message: <A HREF="000607.html">[Socketcan-users] Userspace Lawicel &quot;CANUSB&quot; device via libftdi
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#606">[ date ]</a>
+              <a href="thread.html#606">[ thread ]</a>
+              <a href="subject.html#606">[ subject ]</a>
+              <a href="author.html#606">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

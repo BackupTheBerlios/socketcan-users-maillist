@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6BF2F0.5060309%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001257.html">
+   <LINK REL="Next"  HREF="001259.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6BF2F0.5060309%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Feb  5 11:29:04 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001257.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001259.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1258">[ date ]</a>
+              <a href="thread.html#1258">[ thread ]</a>
+              <a href="subject.html#1258">[ subject ]</a>
+              <a href="author.html#1258">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>christian pellegrin wrote:
+&gt;<i> On Fri, Feb 5, 2010 at 10:05 AM, Kurt Van Dijck &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">kurt.van.dijck at eia.be</A>&gt; wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I never enabled the bus-error interrupts anywhere embedded.
+</I>&gt;&gt;<i> To research odd behaviour, the error counters were helpfull,
+</I>&gt;<i> 
+</I>&gt;<i> I like this idea much. I speak from a point of view of meanness ;-) :
+</I>&gt;<i> we have paid the chip manufacturer for the REC and TEC counters that
+</I>&gt;<i> are cleverly incremented and decremented (AFAIK it's more likely they
+</I>&gt;<i> are incremented that decremented, so there is always a window in which
+</I>&gt;<i> the user space application can catch an increase in them even if not
+</I>&gt;<i> polling at an excessive rate) by the controller itself so they could
+</I>&gt;<i> be easily exported to user space. Perhaps all we need is a function
+</I>&gt;<i> for this in can_priv such do_get_err_counters. Even better if these
+</I>&gt;<i> counters are exported via sysfs so the function above is guaranteed to
+</I>&gt;<i> be called in  non-atomic context.
+</I>&gt;<i> 
+</I>
+Trying to summarize these points, what about this:
+
+1. We disable bus-error interrupts by default
+
+2. They can be enabled via netlink
+
+3. Once they are enabled we send the (unified) rx/tx error counters inside the
+currently reserved bytes of the CAN error frame to the userspace.
+
+Would this meet the requirements in production-use and development-use ??
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001257.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001259.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1258">[ date ]</a>
+              <a href="thread.html#1258">[ thread ]</a>
+              <a href="subject.html#1258">[ subject ]</a>
+              <a href="author.html#1258">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

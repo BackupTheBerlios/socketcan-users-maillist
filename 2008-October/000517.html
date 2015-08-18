@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C9cf2ca450810270725le78b9b0yf4e7b43b46758e49%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000515.html">
+   <LINK REL="Next"  HREF="000518.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ixxat-pci (with sja1000) doesn't receive</H1>
+    <B>g a</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ixxat-pci%20%28with%20sja1000%29%20doesn%27t%20receive&In-Reply-To=%3C9cf2ca450810270725le78b9b0yf4e7b43b46758e49%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] ixxat-pci (with sja1000) doesn't receive">aguirre.citcea at gmail.com
+       </A><BR>
+    <I>Mon Oct 27 15:25:01 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000515.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+        <LI>Next message: <A HREF="000518.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#517">[ date ]</a>
+              <a href="thread.html#517">[ thread ]</a>
+              <a href="subject.html#517">[ subject ]</a>
+              <a href="author.html#517">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Fri, Oct 24, 2008 at 8:41 AM, Oliver Hartkopp
+&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oliver.hartkopp at volkswagen.de</A>&gt; wrote:
+&gt;<i>
+</I>&gt;&gt;<i> g a wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> BTW: when i load the module to use can-utils (candump) i get
+</I>&gt;&gt;&gt;<i> NET: Registered protocol family 29
+</I>&gt;&gt;&gt;<i> can: request_module (can-proto-1) failed.
+</I>&gt;&gt;&gt;<i> can: raw protocol (rev 20071116)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi Gonzalo,
+</I>&gt;<i>
+</I>&gt;<i> the autoloading of kernel modules needs some description for the module
+</I>&gt;<i> loader:
+</I>&gt;<i>
+</I>&gt;<i> -----
+</I>&gt;<i>
+</I>&gt;<i> # On debian systems copy this file to the directory
+</I>&gt;<i> # /etc/modutils and say 'update-modules.modutils'.
+</I>&gt;<i> # Other systems: Add this content to /etc/modules.conf
+</I>&gt;<i>
+</I>&gt;<i> # protocol family PF_CAN
+</I>&gt;<i> alias net-pf-29 can
+</I>&gt;<i>
+</I>&gt;<i> # protocols in PF_CAN
+</I>&gt;<i> alias can-proto-1 can-raw
+</I>&gt;<i> alias can-proto-2 can-bcm
+</I>&gt;<i> alias can-proto-3 can-tp16
+</I>&gt;<i> alias can-proto-4 can-tp20
+</I>&gt;<i> alias can-proto-5 can-mcnet
+</I>&gt;<i> alias can-proto-6 can-isotp
+</I>&gt;<i> alias can-proto-7 can-bap
+</I>&gt;<i>
+</I>&gt;<i> -----
+</I>&gt;<i>
+</I>&gt;<i> The file 'llcf' that can be found in socketcan/trunk/etc/llcf
+</I>&gt;<i> needs to be copied directly into /etc/modprobe.d e.g. on debian systems.
+</I>
+i add those lines directly in /etc/modprobe.d/alias, and add some
+information about specific CAN board:
+
+alias can0 ixxat-pci
+alias can1 ixxat-pci
+options sja1000 debug=3
+
+instead of it i just see can0 at /sys.
+about dmesg response, when i start up the system, modules get load:
+
+CAN netdevice library
+sja1000 CAN netdevice driver
+sja1000: debug level set to 3.
+can-ixxat-pci 0000:00:09.0: Initializing device 10b5:9050
+
+then i set bitrate and start can0 up :
+$ echo 125 &gt; /sys/class/net/can0/can_bittiming/bitrate
+$ ifconfig can0 up
+
+at dmesg i see:
+
+can-ixxat-pci 0000:00:09.0: bitrate error 2854069.8%
+can-ixxat-pci 0000:00:09.0: BTR0=0x3f BTR1=0x7f
+
+i put the candump to listen to:
+$ candump any,0:0,#FFFFFFFF
+
+then dmesg response me:
+
+can: controller area network core (rev 20071116 abi 8)
+NET: Registered protocol family 29
+can: raw protocol (rev 20071116)
+
+and that's all for the moment, i'll take a look at pci 9052 data book
+to see that you told me about sja1000 and plx conections. Thanks!
+
+tschuss!!!
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000515.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+	<LI>Next message: <A HREF="000518.html">[Socketcan-users] ixxat-pci (with sja1000) doesn't receive
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#517">[ date ]</a>
+              <a href="thread.html#517">[ thread ]</a>
+              <a href="subject.html#517">[ subject ]</a>
+              <a href="author.html#517">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C20091028200827.GA13647%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001105.html">
+   <LINK REL="Next"  HREF="001107.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C20091028200827.GA13647%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">l.fu at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 28 21:08:27 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001105.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001107.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1106">[ date ]</a>
+              <a href="thread.html#1106">[ thread ]</a>
+              <a href="subject.html#1106">[ subject ]</a>
+              <a href="author.html#1106">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+On Wed, Oct 28, 2009 at 07:49:04PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Hi Fu,
+</I>&gt;<i> 
+</I>&gt;<i> Luotao Fu wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; On Wed, Oct 28, 2009 at 04:45:10PM +0100, Wolfgang Grandegger wrote:
+</I>...
+&gt;<i> We can blame the hardware, but it will not help us. We need a proper
+</I>&gt;<i> workaround sooner than later.
+</I>&gt;<i> 
+</I>
+definitively
+
+&gt;<i> &gt; behaviour. Nevertheless It awed to be worked around somehow. What do you
+</I>&gt;<i> &gt; think about kicking out the loop checking for SLPAK, so that we will
+</I>&gt;<i> &gt; give the controller a small chance to first get to sleep mode and
+</I>&gt;<i> &gt; otherwise reinit any way. This is ugly, since it still could break the
+</I>&gt;<i> &gt; bus somehow in rare conditions, however this still better than a
+</I>&gt;<i> &gt; controller, which will get stucked for sure for certain scenarios.
+</I>&gt;<i> 
+</I>&gt;<i> That's a resonable option, indeed, if it works. Also, it would give us
+</I>&gt;<i> some time to understand the real cause of the problem.
+</I>&gt;<i> 
+</I>
+It will work all right. I mean that's still a small portion of
+posisibillities, that the mscan cannot finish the task it is doing
+255*100us after the slprq reaches. This is imho quite impossible though.
+I will send out a new patch tommorow.
+
+&gt;<i> &gt; Or we could add a flag to save the status of slprq while closing the
+</I>&gt;<i> &gt; device and check it again while reopening, so that we could at least
+</I>&gt;<i> &gt; get a clue, which is going wrong. With the current driver this problem
+</I>&gt;<i> &gt; is not even catched, which is also bad. What do you think?
+</I>&gt;<i> 
+</I>&gt;<i> The error conditions should be checked. Everthing else is a bug. I
+</I>&gt;<i> remember, that the start and stop of the MSCAN was tricky from the
+</I>&gt;<i> beginning.
+</I>
+I will have a look in other drivers how similar error conditions, if
+any, is handeld and try to make an extra patch for this.
+
+Cheers
+Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091028/768bd5c2/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091028/768bd5c2/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001105.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001107.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1106">[ date ]</a>
+              <a href="thread.html#1106">[ thread ]</a>
+              <a href="subject.html#1106">[ subject ]</a>
+              <a href="author.html#1106">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

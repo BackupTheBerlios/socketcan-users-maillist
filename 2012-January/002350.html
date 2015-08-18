@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] increase buffer size
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20increase%20buffer%20size&In-Reply-To=%3C4F1E9DA9.9060804%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002349.html">
+   <LINK REL="Next"  HREF="002351.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] increase buffer size</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20increase%20buffer%20size&In-Reply-To=%3C4F1E9DA9.9060804%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] increase buffer size">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Jan 24 13:01:45 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002349.html">[Socketcan-users] increase buffer size
+</A></li>
+        <LI>Next message: <A HREF="002351.html">[Socketcan-users] increase buffer size
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2350">[ date ]</a>
+              <a href="thread.html#2350">[ thread ]</a>
+              <a href="subject.html#2350">[ subject ]</a>
+              <a href="author.html#2350">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Steffen,
+
+On 24.01.2012 12:18, Steffen Rose wrote:
+
+&gt;<i> I want to increase the transmit quere of a can device.
+</I>
+
+You can do this with ifconfig or the 'ip' tool from the iproute2 package.
+
+Examples:
+
+ifconfig can0 txqueuelen 1000
+
+or
+
+ip link set can0 txqueuelen 1000
+
+
+&gt;<i> 
+</I>&gt;<i> As I understand, the virtual devices don't have a quere. Is it right?
+</I>&gt;<i> 
+</I>
+
+Generally yes. A vcan is a software device like the 'lo' interface for IP.
+Both (vcan &amp; lo) transfer the packets directly back to the rx queue instantly.
+
+But you can create vcans having a tx-queue len:
+
+Here i created a virtual CAN interface 'xxx' with a txqueuelen of 10:
+
+root# ip link add xxx type vcan
+root# ip link set xxx txqueuelen 10
+root# ip link set xxx up
+root# ip link show xxx
+10: xxx: &lt;NOARP,UP,LOWER_UP&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+    link/can
+root#
+
+But this has no effect as long as you do not add some kind of queueing
+discipline that throttles the bandwidth on the specific interface.
+
+&gt;<i> As I understand, for physical devices the transmit quere is located within the 
+</I>&gt;<i> sockets, not in the can device driver. Is it right?
+</I>
+
+The tx buffers of the sockets are not really used e.g. for CAN_RAW sockets.
+The tx queue len of the CAN network interface are relevant for you.
+
+&gt;<i> 
+</I>&gt;<i> Do you have an small code snippet for the changing of the quere size?
+</I>
+
+Better use the tools stated above.
+
+But you can (as root) modify these values e.g. with netlink sockets.
+
+Regards,
+Oliver
+
+ps.
+
+please do not use this mailing list any longer but send your questions
+to the new &quot;linux-can&quot; mailing list address &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A>&quot;.
+For subscription or mailing list archives please have a look to:
+
+   <A HREF="http://vger.kernel.org/vger-lists.html#linux-can">http://vger.kernel.org/vger-lists.html#linux-can</A>
+
+Mail archives of the new linux-can mailing list can be found at:
+
+   <A HREF="http://dir.gmane.org/gmane.linux.can">http://dir.gmane.org/gmane.linux.can</A>
+   <A HREF="http://marc.info/?l=linux-can&amp;r=1&amp;w=2">http://marc.info/?l=linux-can&amp;r=1&amp;w=2</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002349.html">[Socketcan-users] increase buffer size
+</A></li>
+	<LI>Next message: <A HREF="002351.html">[Socketcan-users] increase buffer size
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2350">[ date ]</a>
+              <a href="thread.html#2350">[ thread ]</a>
+              <a href="subject.html#2350">[ subject ]</a>
+              <a href="author.html#2350">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

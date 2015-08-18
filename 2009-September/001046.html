@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan and LinCAN benchmarks
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20and%20LinCAN%20benchmarks&In-Reply-To=%3C4A9FFFC6.7000502%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001044.html">
+   <LINK REL="Next"  HREF="001047.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan and LinCAN benchmarks</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20and%20LinCAN%20benchmarks&In-Reply-To=%3C4A9FFFC6.7000502%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Socketcan and LinCAN benchmarks">wg at grandegger.com
+       </A><BR>
+    <I>Thu Sep  3 19:41:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001044.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+        <LI>Next message: <A HREF="001047.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1046">[ date ]</a>
+              <a href="thread.html#1046">[ thread ]</a>
+              <a href="subject.html#1046">[ subject ]</a>
+              <a href="author.html#1046">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Michal,
+
+Michal Sojka wrote:
+&gt;<i> On Thursday 03 of September 2009 14:01:49 Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Michal Sojka wrote:
+</I>&gt;&gt;&gt;&gt;<i> Your results are interesting, indeed. Could you please describe the
+</I>&gt;&gt;&gt;&gt;<i> kernel config, especially preemption type, of the kernel used a bit
+</I>&gt;&gt;&gt;&gt;<i> more. And also the load scenarios.
+</I>&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I've just updated the results to include used kernel configs. What
+</I>&gt;&gt;&gt;<i> regards preemption it was like this:
+</I>&gt;&gt;&gt;<i> config-2.6.26-2-686:CONFIG_PREEMPT_NOTIFIERS=y
+</I>&gt;&gt;&gt;<i> config-2.6.26-2-686:CONFIG_PREEMPT_NONE=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4:CONFIG_PREEMPT_RCU=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4:CONFIG_PREEMPT=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4:CONFIG_DEBUG_PREEMPT=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4-rt16:CONFIG_PREEMPT_RCU=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4-rt16:CONFIG_PREEMPT_RT=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4-rt16:CONFIG_PREEMPT=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4-rt16:CONFIG_PREEMPT_SOFTIRQS=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4-rt16:CONFIG_PREEMPT_HARDIRQS=y
+</I>&gt;&gt;&gt;<i> config-2.6.29.4-rt16:CONFIG_DEBUG_PREEMPT=y
+</I>&gt;&gt;&gt;<i> config-2.6.31-rc7:CONFIG_PREEMPT_RCU=y
+</I>&gt;&gt;&gt;<i> config-2.6.31-rc7:CONFIG_PREEMPT=y
+</I>&gt;&gt;&gt;<i> config-2.6.31-rc7:CONFIG_DEBUG_PREEMPT=y
+</I>&gt;&gt;<i> OK, CONFIG_PREEMPT was enabled. BTW: at what rate do you send the messages.
+</I>&gt;<i> 
+</I>&gt;<i> For tests without -w option (most of them) this was as fast as possible i.e. 
+</I>&gt;<i> whenever a response is received a next ping is sent. The test called rtt-w was 
+</I>&gt;<i> done to check whether the delay between reception and sending has some effect 
+</I>&gt;<i> on the results.
+</I>
+OK.
+
+&gt;<i> 
+</I>&gt;&gt;&gt;&gt;&gt;<i> The testbed was a Pentium 4 box with a Kvaser quad-head PCI card
+</I>&gt;&gt;&gt;&gt;&gt;<i> (SJA1000 based). We have simply connected output 1 to output 2 and
+</I>&gt;&gt;&gt;&gt;&gt;<i> measured the time how long it takes for the message to go forth and
+</I>&gt;&gt;&gt;&gt;&gt;<i> back. We have used canping [1] tool to generate CAN traffic.
+</I>&gt;&gt;&gt;&gt;<i> Could you be more precise how the test was performed and what interfaces
+</I>&gt;&gt;&gt;&gt;<i> are involved (can0 and can1?). I do not understand what you mean with
+</I>&gt;&gt;&gt;&gt;<i> &quot;connected output 1 to output 2&quot;. You send and receive the messages on
+</I>&gt;&gt;&gt;&gt;<i> the same system?
+</I>&gt;&gt;&gt;<i> Yes, messages are send and received on the same system. Therefore the
+</I>&gt;&gt;&gt;<i> measured time comprises 2*(send overhead + message transmission + receive
+</I>&gt;&gt;&gt;<i> overhead)+canping reply generation overhead.
+</I>&gt;&gt;<i> My criticism here is that send and receive are related in time
+</I>&gt;&gt;<i> (synchronous). I think you will get different latency results if you
+</I>&gt;&gt;<i> measure the round-trip time initiated by an external system. The test
+</I>&gt;&gt;<i> target just receives the message and sends it back.
+</I>&gt;<i> 
+</I>&gt;<i> I agree. There will be an overhead in context switching between master and 
+</I>&gt;<i> slave canping processes. But the goal was to compare two different drivers, 
+</I>&gt;<i> under the same conditions which, I think, was done in our tests. Do you know 
+</I>&gt;<i> of another source of latencies in our tests?
+</I>
+OK, it's fine if you just want to compare the overhead of the two
+drivers. But the worst case latency (jitter of the rtt) is a interesting
+figure as well and you need more load and maybe also more time to get
+measure it. Then also a difference between -rt and vanilla should show
+up. Furthermore, I expect that the char driver has the better real-time
+behavior, in case it does not use dynamic memory allocation.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001044.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+	<LI>Next message: <A HREF="001047.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1046">[ date ]</a>
+              <a href="thread.html#1046">[ thread ]</a>
+              <a href="subject.html#1046">[ subject ]</a>
+              <a href="author.html#1046">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

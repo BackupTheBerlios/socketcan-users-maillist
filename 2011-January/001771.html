@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mixing RAW and BCM sockets
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mixing%20RAW%20and%20BCM%20sockets&In-Reply-To=%3C20110129191532.GA29908%40milesteg.arr%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001767.html">
+   <LINK REL="Next"  HREF="001772.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mixing RAW and BCM sockets</H1>
+    <B>Daniele Venzano</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mixing%20RAW%20and%20BCM%20sockets&In-Reply-To=%3C20110129191532.GA29908%40milesteg.arr%3E"
+       TITLE="[Socketcan-users] Mixing RAW and BCM sockets">linux at brownhat.org
+       </A><BR>
+    <I>Sat Jan 29 20:15:33 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001767.html">[Socketcan-users] Mixing RAW and BCM sockets
+</A></li>
+        <LI>Next message: <A HREF="001772.html">[Socketcan-users] Mixing RAW and BCM sockets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1771">[ date ]</a>
+              <a href="thread.html#1771">[ thread ]</a>
+              <a href="subject.html#1771">[ subject ]</a>
+              <a href="author.html#1771">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Jan 26, 2011 at 07:38:24PM +0100, Oliver Hartkopp wrote:
+&gt;<i> Hello Daniele,
+</I>&gt;<i> 
+</I>&gt;<i> can you tell me, why you are setting the sockets to not loop sent CAN frames
+</I>&gt;<i> to the local host?
+</I>
+I was porting an application that used a char-device CAN driver
+to check if some IDs are present on the CAN. If those IDs are not
+on the bus, it decides to be the master and sends the messages.
+
+With loopback the application was looping between the following
+statuses:
+- wonderful, no one is sending, I'm the master, I start sending
+- oh no! someone else is the master, I stop sending
+
+The application uses several sockets because it makes different reads
+in different threads. Unfortunately the goal was to do the smallest
+change, not the more elegant one.
+
+BCM could do the receiving side with the RX_FILTER option very efficently,
+simplyfing a lot of code at the same time, but I could not use that
+without some major overhaul.
+
+The bigger picture is a big crane with two cabins, each with an HMI that
+the operator can use. The HMIs can be in a &quot;passive&quot; or &quot;active&quot; status,
+according to the master mechanism explained above and the status of
+ignition keys.
+The CAN architecture is far from optimal, but it works and the software
+on the controllers is, after 7-8 years, very stable.
+
+A search for &quot;reggiane mhc&quot; on Google images will give you an idea of
+the machine.
+
+Thanks,
+Daniele
+
+-- 
+Daniele Venzano
+<A HREF="http://www.brownhat.org">http://www.brownhat.org</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001767.html">[Socketcan-users] Mixing RAW and BCM sockets
+</A></li>
+	<LI>Next message: <A HREF="001772.html">[Socketcan-users] Mixing RAW and BCM sockets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1771">[ date ]</a>
+              <a href="thread.html#1771">[ thread ]</a>
+              <a href="subject.html#1771">[ subject ]</a>
+              <a href="author.html#1771">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

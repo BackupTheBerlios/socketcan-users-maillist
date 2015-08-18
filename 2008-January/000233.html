@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A22935.3050309%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000230.html">
+   <LINK REL="Next"  HREF="000235.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A22935.3050309%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jan 31 21:01:57 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000230.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000235.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#233">[ date ]</a>
+              <a href="thread.html#233">[ thread ]</a>
+              <a href="subject.html#233">[ subject ]</a>
+              <a href="author.html#233">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;&gt;<i> I have this error since quite some time and it still persists in the
+</I>&gt;&gt;&gt;<i> actual socketcan-trunk (r658), which I backported to 2.6.23.1
+</I>&gt;&gt;&gt;<i> (anybody interested in the patch ?)
+</I>&gt;&gt;&gt;<i>       
+</I>&gt;&gt;<i> Do you have already a patch?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Yupp. I had to change quite a few things inside the socket-can project
+</I>&gt;<i> and used mkpatch and afterwards manually removed some incompatibilities
+</I>&gt;<i> inside the patch (remove include of compat.h,  adding struct
+</I>&gt;<i> net_device_stats net_stats to dev.h, removing 1st parameter from
+</I>&gt;<i> get_dev_by_index() ).
+</I>&gt;<i> But this cleanly applies now to 2.6.23.1 and works at least for the test
+</I>&gt;<i> programs I am using. The final patch is over 376kb uncompressed or 84kb
+</I>&gt;<i> compressed. Is this too large as an attachment to the list ?
+</I>&gt;<i>   
+</I>
+Aehm - i just fixed the files trunk/FILES-2.6 and trunk/FILES-2.6-ALL as 
+&quot;compat.h&quot; was missing there!
+To remove compat.h and do all these mentioned fixed by hand is the wrong 
+approach!
+
+It should just work with
+
+mkpatch 2.6.23 &lt; FILES-2.6 &gt; mypatchoutput
+
+mkpatch removes all the KERNELVERSION depended stuff automatically.
+
+It would be nice, if you could provide a 2.6.23.diff file which content 
+is analogue to the other diff-files in trunk/patches/* ...
+
+And then the above mkpatch execution should create a state-of-the-art 
+patch for your 2.6.23.1
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000230.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000235.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#233">[ date ]</a>
+              <a href="thread.html#233">[ thread ]</a>
+              <a href="subject.html#233">[ subject ]</a>
+              <a href="author.html#233">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

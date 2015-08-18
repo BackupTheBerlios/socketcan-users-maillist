@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] candump stops, and how to test performance
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3Ccabda6420902110659r771c6e38yb81cbaa9475b2389%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000664.html">
+   <LINK REL="Next"  HREF="000667.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] candump stops, and how to test performance</H1>
+    <B>christian pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20candump%20stops%2C%20and%20how%20to%20test%20performance&In-Reply-To=%3Ccabda6420902110659r771c6e38yb81cbaa9475b2389%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] candump stops, and how to test performance">chripell at gmail.com
+       </A><BR>
+    <I>Wed Feb 11 15:59:12 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000664.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+        <LI>Next message: <A HREF="000667.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#665">[ date ]</a>
+              <a href="thread.html#665">[ thread ]</a>
+              <a href="subject.html#665">[ subject ]</a>
+              <a href="author.html#665">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Feb 11, 2009 at 3:11 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+
+&gt;&gt;<i> If I run it with -g10, it will run all day long.  With -g1, the
+</I>&gt;&gt;<i> receiving side soon stops, and the only way I can get it to work again
+</I>&gt;&gt;<i> is send something (cansend can0 123#DEADBEEF), and then it will
+</I>&gt;&gt;<i> receive again.  Is this expected?
+</I>&gt;<i>
+</I>&gt;<i> Looks like a race with interrupt handling.
+</I>&gt;<i>
+</I>
+I had a look at the code (right now I don't have a system to do
+testing) and perhaps found a problem. If the rate of incoming packets
+is high enough (as you describe) at least one of the RX buffer is
+always full (there is not enough time for the mcp251x workqueue to
+empty both of them) so the interrupt line stays always asserted. But
+the workqueue exits after MAX_LOOPS loops anyway (with interrupt line
+low). The interrupts are edge triggers so we will never get an
+interrupt again until something (a transmission) triggers the work
+handler that clears the interrupt state.
+
+So there are 3 ways I can think of to cure this problem:
+
+1) use level triggered interrupts but this needs a rework with some
+enable/disable irq to avoind an interrupt storm. And some platform
+(PXA being one of these if I remember well) don't support level
+interrupts.
+
+2) just take out  &quot;&amp;&amp; loops &lt; MAX_LOOPS&quot; in the
+mcp251x_irq_work_handler while loop. I'm not sure if this can lead to
+a monopolization of the CPU by this driver.
+
+3) add something like:
+
+if (mcp251x_read_reg(spi, CANINTF)) queue_work(priv-&gt;wq, &amp;priv-&gt;irq_work);
+
+before the end of mcp251x_irq_work_handler
+
+Cliff, can you kindly try 2 or 3 and stress test the the system again?
+
+Thanks,
+
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000664.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+	<LI>Next message: <A HREF="000667.html">[Socketcan-users] candump stops, and how to test performance
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#665">[ date ]</a>
+              <a href="thread.html#665">[ thread ]</a>
+              <a href="subject.html#665">[ subject ]</a>
+              <a href="author.html#665">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

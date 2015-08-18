@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] accessing remote CAn interfaces
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20accessing%20remote%20CAn%20interfaces&In-Reply-To=%3C20090427083449.GA5367%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000815.html">
+   <LINK REL="Next"  HREF="000817.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] accessing remote CAn interfaces</H1>
+    <B>Robert Schwebel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20accessing%20remote%20CAn%20interfaces&In-Reply-To=%3C20090427083449.GA5367%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] accessing remote CAn interfaces">r.schwebel at pengutronix.de
+       </A><BR>
+    <I>Mon Apr 27 10:34:49 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000815.html">[Socketcan-users] accessing remote CAn interfaces
+</A></li>
+        <LI>Next message: <A HREF="000817.html">[Socketcan-users] accessing remote CAN interfaces
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#816">[ date ]</a>
+              <a href="thread.html#816">[ thread ]</a>
+              <a href="subject.html#816">[ subject ]</a>
+              <a href="author.html#816">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Mon, Apr 27, 2009 at 10:31:53AM +0200, Heinz-J&#252;rgen Oertel wrote:
+&gt;<i>  still new  to socketCAN.
+</I>&gt;<i> 
+</I>&gt;<i> Is it possible to access a local CAN interface from a remote computer?
+</I>&gt;<i> 
+</I>&gt;<i> eg. something like candump but with additionally specifying the IP address of 
+</I>&gt;<i> the computer where the CAN interface is physically connected
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> $ candump any,0:0,#FFFFFFFF 192.168.1.100
+</I>&gt;<i> 
+</I>&gt;<i> I saw in can-utils canlogserver.
+</I>&gt;<i> I this the only way, starting the  canlogserver on the computer with the 
+</I>&gt;<i> physical CAN and the remote host has than to connect to the canlogserver ?
+</I>
+ssh 192.168.1.100 candump any,0:0,#FFFFFFFF
+
+rsc
+-- 
+Pengutronix e.K.                           |                             |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000815.html">[Socketcan-users] accessing remote CAn interfaces
+</A></li>
+	<LI>Next message: <A HREF="000817.html">[Socketcan-users] accessing remote CAN interfaces
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#816">[ date ]</a>
+              <a href="thread.html#816">[ thread ]</a>
+              <a href="subject.html#816">[ subject ]</a>
+              <a href="author.html#816">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

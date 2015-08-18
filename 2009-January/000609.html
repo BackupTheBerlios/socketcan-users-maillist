@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] rtcanconfig rtcansend rtcanrecv
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rtcanconfig%20rtcansend%20rtcanrecv&In-Reply-To=%3CCF7FB0793253794F9F45991443E5FE2003E4BABF18%40us194mx002.tycoelectronics.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000610.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] rtcanconfig rtcansend rtcanrecv</H1>
+    <B>Charlton, John</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rtcanconfig%20rtcansend%20rtcanrecv&In-Reply-To=%3CCF7FB0793253794F9F45991443E5FE2003E4BABF18%40us194mx002.tycoelectronics.net%3E"
+       TITLE="[Socketcan-users] rtcanconfig rtcansend rtcanrecv">john.charlton at tycoelectronics.com
+       </A><BR>
+    <I>Wed Jan  7 17:17:14 CET 2009</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000610.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#609">[ date ]</a>
+              <a href="thread.html#609">[ thread ]</a>
+              <a href="subject.html#609">[ subject ]</a>
+              <a href="author.html#609">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I added a kernel module to the xenomai ksrc/drivers/xenomai/can/sja1000.  It builds and installs with make modules_install for linux-2.6.27.7 and xenomai-2.4.6.1.  I am using OpenEmbedded on an i686 NANO-7240 single board computer.  I load the kernal modules and start for two TS_CAN1 CAN boards with the following commands:
+
+insmod xeno_can_sja1000.ko
+insmod xeno_can_tscan1.ko io=0x100,0x120 irq=5,7
+rtcanconfig rtcan0 --baudrate=125000 start
+rtcanconfig rtcan1 --baudrate=125000 start
+
+/proc/rtcan/rtcan0/info:
+Device     rtcan0
+Controller SJA1000
+Board      TSCAN1-Board
+Clock-Hz   8000000
+Baudrate   125000
+Bit-time   brp=4 prop_seg=0 phase_seg1=13 phase_seg2=2 sjw=1 sam=0
+Ctrl-Mode
+State      active
+TX-Counter 0
+RX-Counter 0
+Errors     0
+Refcount   0
+
+/proc/rtcan/rtcan1/info:
+Device     rtcan1
+Controller SJA1000
+Board      TSCAN1-Board
+Clock-Hz   8000000
+Baudrate   125000
+Bit-time   brp=4 prop_seg=0 phase_seg1=13 phase_seg2=2 sjw=1 sam=0
+Ctrl-Mode
+State      active
+TX-Counter 0
+RX-Counter 0
+Errors     0
+Refcount   0
+
+In one terminal I receive from rtcan0 as follows:
+rtcanrecv rtcan0 --verbose
+interface rtcan0
+s=0, ifr_name=rtcan0
+
+In a second terminal I send to rtcan1 as follows:
+rtcansend rtcan1 --verbose --identifier=0x123 0xde 0xad
+interface rtcan1
+s=1, ifr_name=rtcan1
+&lt;0x123&gt; [2] de ad
+Cleaning up...
+
+Nothing happens on the rtcanrecv side--it remains blocked.  If I send a second time the rtcansend side blocks after the s=1, ifr_name=rtcan1 is displayed.
+
+I am new to CAN interfaces so I don't know if the Bit-time and Clock-Hz parameters are correct.  I appreciate any advice.  I am proceeding to get more output from the xeno_can_tscan1 kernel module.  I have the two TS_CAN1 interfaces output/input connected directly together with a short (3 inch) straight 10 conductor ribbon cable.  Both boards have the 120 ohm termination.
+
+--John
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000610.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#609">[ date ]</a>
+              <a href="thread.html#609">[ thread ]</a>
+              <a href="subject.html#609">[ subject ]</a>
+              <a href="author.html#609">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

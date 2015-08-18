@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] PCAN no longer works
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20PCAN%20no%20longer%20works&In-Reply-To=%3C482A8F26.7040905%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000368.html">
+   <LINK REL="Next"  HREF="000365.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] PCAN no longer works</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20PCAN%20no%20longer%20works&In-Reply-To=%3C482A8F26.7040905%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] PCAN no longer works">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Wed May 14 09:05:10 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000368.html">[Socketcan-users] PCAN no longer works
+</A></li>
+        <LI>Next message: <A HREF="000365.html">[Socketcan-users] Directorys for specialties such as:	anesthesiologists, otolaryngologists,	infectious disease specialists and many other popular specialties
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#369">[ date ]</a>
+              <a href="thread.html#369">[ thread ]</a>
+              <a href="subject.html#369">[ subject ]</a>
+              <a href="author.html#369">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Neal Probert wrote:
+&gt;<i> Dang!  Figured it out.  The old build had NETDEV_SUPPORT in the 
+</I>&gt;<i> Makefile.  The new one has AUTO_NETDEV_SUPPORT for the 2.6.25 kernel.  
+</I>&gt;<i> It would be nice to have a INSTALL.txt or README.txt file .  Ack!
+</I>&gt;<i>
+</I>&gt;<i> Neal Probert wrote:
+</I>&gt;<i>   
+</I>&gt;&gt;<i> Something's changed.  Of course, I upgraded to Ubuntu Hardy with it's 
+</I>&gt;&gt;<i> 2.6.24 kernel.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I did a recompile of the Socket-CAN and Peak Systems drivers (PCAN) 6.7.
+</I>&gt;&gt;<i>     
+</I>
+Hi Neal,
+
+indeed there should be no change for Kernel 2.6.24 as you always needed 
+to say
+
+make NET=NETDEV_SUPPORT
+
+to compile with netdev support since PEAK driver 6.0 - as NETDEV_SUPPORT 
+is not the default.
+
+The only change is that the Kernel config setting CONFIG_CAN is checked 
+since 2.6.25 and when it's set, NETDEV_SUPPORT is enabled automatically.
+
+That's exactly what's described in the Changelog on the PEAK Website:
+
+<A HREF="http://www.peak-system.com/linux/index.htm">http://www.peak-system.com/linux/index.htm</A>
+&quot;Automaticly compiling for Socket CAN Support if the Kernel option 
+&quot;CONFIG_CAN&quot; is set (Kernel 2.6.25 or higher)&quot;
+
+Have fun!
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000368.html">[Socketcan-users] PCAN no longer works
+</A></li>
+	<LI>Next message: <A HREF="000365.html">[Socketcan-users] Directorys for specialties such as:	anesthesiologists, otolaryngologists,	infectious disease specialists and many other popular specialties
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#369">[ date ]</a>
+              <a href="thread.html#369">[ thread ]</a>
+              <a href="subject.html#369">[ subject ]</a>
+              <a href="author.html#369">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

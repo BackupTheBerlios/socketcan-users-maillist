@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C32184356.post%40talk.nabble.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002009.html">
+   <LINK REL="Next"  HREF="002013.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>uprinz</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C32184356.post%40talk.nabble.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">uprinz2 at netscape.net
+       </A><BR>
+    <I>Wed Aug  3 10:39:39 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002009.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="002013.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2011">[ date ]</a>
+              <a href="thread.html#2011">[ thread ]</a>
+              <a href="subject.html#2011">[ subject ]</a>
+              <a href="author.html#2011">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+Hi Wolfgang!
+
+
+Wolfgang Grandegger wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Ulrich,
+</I>&gt;<i> ...
+</I>&gt;<i> You could handle the errno ENOBUFS and simply retry after some short
+</I>&gt;<i> delay without printing a message.
+</I>&gt;<i> 
+</I>
+My fault, I thought it was a driver message, but it came from my sources...
+
+
+Wolfgang Grandegger wrote:
+&gt;<i> 
+</I>&gt;&gt;<i> I configured the bus with 
+</I>&gt;&gt;<i> 
+</I>&gt;&gt;<i>         ifconfig $1 down
+</I>&gt;&gt;<i>         echo &quot;$1: Setting bitrate $BITRATE, restart $RESTART&quot;
+</I>&gt;&gt;<i>         ip link set $1 type can bitrate $BITRATE triple-sampling on
+</I>&gt;<i> 
+</I>&gt;<i> BTW, triple-sampling with 125 kb/s is pretty unusual.
+</I>&gt;<i> 
+</I>
+You're right, just forgot to remove that line in the setup script.
+
+
+Wolfgang Grandegger wrote:
+&gt;<i> 
+</I>&gt;<i> What does &quot;ip -d -s link&quot; display? What type of errors and state changes
+</I>&gt;<i> do you see?
+</I>&gt;<i> 
+</I>2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen
+10
+    link/can
+    can state ERROR-PASSIVE restart-ms 100
+    bitrate 125000 sample-point 0.875
+    tq 500 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+    flexcan: tseg1 4..16 tseg2 2..8 sjw 1..4 brp 1..256 brp-inc 1
+    clock 24000000
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          0          5          7          0
+    RX: bytes  packets  errors  dropped overrun mcast
+    9358       1360     0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    5537       795      0       0       0       0
+
+So I see the bus is in ERROR_PASSIVE and that is my problem I think.
+The 'virtual' slave is running, but the master does not start as the slave
+filled up the buffers.
+
+I did an &quot;ip link set can0 type can loopback on&quot; and it worked. But then I
+connected an external CAN device (debugger) and cannot see the messages from
+the slave. (The master gets them). 
+
+with ifconfig down, ip link set can0 type can loopback off, ifconfig up the
+messages are going in and out perfectly.
+
+So it must run with and without having any physical slaves connected. 
+
+Any idea of how to get that in a row?
+
+Ulrich
+
+
+-----
+Best regards
+Ulrich
+-- 
+View this message in context: <A HREF="http://old.nabble.com/On-Linux-two-applications-use-the-same-bus--tp30728796p32184356.html">http://old.nabble.com/On-Linux-two-applications-use-the-same-bus--tp30728796p32184356.html</A>
+Sent from the Socket-CAN Users mailing list archive at Nabble.com.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002009.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="002013.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2011">[ date ]</a>
+              <a href="thread.html#2011">[ thread ]</a>
+              <a href="subject.html#2011">[ subject ]</a>
+              <a href="author.html#2011">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

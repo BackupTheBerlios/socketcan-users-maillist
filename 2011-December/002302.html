@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v6 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v6%204/4%5D%20powerpc%3A%20tqm8548/tqm8xx%3A%0A%09add%20and%20update%20CAN%20device%20nodes&In-Reply-To=%3C1322732481-2255-5-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002301.html">
+   <LINK REL="Next"  HREF="002304.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v6 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v6%204/4%5D%20powerpc%3A%20tqm8548/tqm8xx%3A%0A%09add%20and%20update%20CAN%20device%20nodes&In-Reply-To=%3C1322732481-2255-5-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v6 4/4] powerpc: tqm8548/tqm8xx:	add and update CAN device nodes">wg at grandegger.com
+       </A><BR>
+    <I>Thu Dec  1 10:41:21 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002301.html">[Socketcan-users] [PATCH net-next v6 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002304.html">[Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2302">[ date ]</a>
+              <a href="thread.html#2302">[ thread ]</a>
+              <a href="subject.html#2302">[ subject ]</a>
+              <a href="author.html#2302">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This patch enables or updates support for the CC770 and AN82527
+CAN controller on the TQM8548 and TQM8xx boards.
+
+CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">devicetree-discuss at lists.ozlabs.org</A>
+CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linuxppc-dev at ozlabs.org</A>
+CC: Kumar Gala &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">galak at kernel.crashing.org</A>&gt;
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ arch/powerpc/boot/dts/tqm8548-bigflash.dts |   19 ++++++++++++++-----
+ arch/powerpc/boot/dts/tqm8548.dts          |   19 ++++++++++++++-----
+ arch/powerpc/boot/dts/tqm8xx.dts           |   25 +++++++++++++++++++++++++
+ 3 files changed, 53 insertions(+), 10 deletions(-)
+
+diff --git a/arch/powerpc/boot/dts/tqm8548-bigflash.dts b/arch/powerpc/boot/dts/tqm8548-bigflash.dts
+index 9452c3c..d918752 100644
+--- a/arch/powerpc/boot/dts/tqm8548-bigflash.dts
++++ b/arch/powerpc/boot/dts/tqm8548-bigflash.dts
+@@ -352,7 +352,7 @@
+ 		ranges = &lt;
+ 			0 0x0 0xfc000000 0x04000000	// NOR FLASH bank 1
+ 			1 0x0 0xf8000000 0x08000000	// NOR FLASH bank 0
+-			2 0x0 0xa3000000 0x00008000	// CAN (2 x i82527)
++			2 0x0 0xa3000000 0x00008000	// CAN (2 x CC770)
+ 			3 0x0 0xa3010000 0x00008000	// NAND FLASH
+ 
+ 		&gt;;
+@@ -393,18 +393,27 @@
+ 		};
+ 
+ 		/* Note: CAN support needs be enabled in U-Boot */
+-		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can0 at 2</A>,0 {
+-			compatible = &quot;intel,82527&quot;; // Bosch CC770
++		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 2</A>,0 {
++			compatible = &quot;bosch,cc770&quot;; // Bosch CC770
+ 			reg = &lt;2 0x0 0x100&gt;;
+ 			interrupts = &lt;4 1&gt;;
+ 			interrupt-parent = &lt;&amp;mpic&gt;;
++			bosch,external-clock-frequency = &lt;16000000&gt;;
++			bosch,disconnect-rx1-input;
++			bosch,disconnect-tx1-output;
++			bosch,iso-low-speed-mux;
++			bosch,clock-out-frequency = &lt;16000000&gt;;
+ 		};
+ 
+-		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can1 at 2</A>,100 {
+-			compatible = &quot;intel,82527&quot;; // Bosch CC770
++		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 2</A>,100 {
++			compatible = &quot;bosch,cc770&quot;; // Bosch CC770
+ 			reg = &lt;2 0x100 0x100&gt;;
+ 			interrupts = &lt;4 1&gt;;
+ 			interrupt-parent = &lt;&amp;mpic&gt;;
++			bosch,external-clock-frequency = &lt;16000000&gt;;
++			bosch,disconnect-rx1-input;
++			bosch,disconnect-tx1-output;
++			bosch,iso-low-speed-mux;
+ 		};
+ 
+ 		/* Note: NAND support needs to be enabled in U-Boot */
+diff --git a/arch/powerpc/boot/dts/tqm8548.dts b/arch/powerpc/boot/dts/tqm8548.dts
+index 619776f..988d887 100644
+--- a/arch/powerpc/boot/dts/tqm8548.dts
++++ b/arch/powerpc/boot/dts/tqm8548.dts
+@@ -352,7 +352,7 @@
+ 		ranges = &lt;
+ 			0 0x0 0xfc000000 0x04000000	// NOR FLASH bank 1
+ 			1 0x0 0xf8000000 0x08000000	// NOR FLASH bank 0
+-			2 0x0 0xe3000000 0x00008000	// CAN (2 x i82527)
++			2 0x0 0xe3000000 0x00008000	// CAN (2 x CC770)
+ 			3 0x0 0xe3010000 0x00008000	// NAND FLASH
+ 
+ 		&gt;;
+@@ -393,18 +393,27 @@
+ 		};
+ 
+ 		/* Note: CAN support needs be enabled in U-Boot */
+-		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can0 at 2</A>,0 {
+-			compatible = &quot;intel,82527&quot;; // Bosch CC770
++		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 2</A>,0 {
++			compatible = &quot;bosch,cc770&quot;; // Bosch CC770
+ 			reg = &lt;2 0x0 0x100&gt;;
+ 			interrupts = &lt;4 1&gt;;
+ 			interrupt-parent = &lt;&amp;mpic&gt;;
++			bosch,external-clock-frequency = &lt;16000000&gt;;
++			bosch,disconnect-rx1-input;
++			bosch,disconnect-tx1-output;
++			bosch,iso-low-speed-mux;
++			bosch,clock-out-frequency = &lt;16000000&gt;;
+ 		};
+ 
+-		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can1 at 2</A>,100 {
+-			compatible = &quot;intel,82527&quot;; // Bosch CC770
++		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 2</A>,100 {
++			compatible = &quot;bosch,cc770&quot;; // Bosch CC770
+ 			reg = &lt;2 0x100 0x100&gt;;
+ 			interrupts = &lt;4 1&gt;;
+ 			interrupt-parent = &lt;&amp;mpic&gt;;
++			bosch,external-clock-frequency = &lt;16000000&gt;;
++			bosch,disconnect-rx1-input;
++			bosch,disconnect-tx1-output;
++			bosch,iso-low-speed-mux;
+ 		};
+ 
+ 		/* Note: NAND support needs to be enabled in U-Boot */
+diff --git a/arch/powerpc/boot/dts/tqm8xx.dts b/arch/powerpc/boot/dts/tqm8xx.dts
+index f6da7ec..c3dba25 100644
+--- a/arch/powerpc/boot/dts/tqm8xx.dts
++++ b/arch/powerpc/boot/dts/tqm8xx.dts
+@@ -57,6 +57,7 @@
+ 
+ 		ranges = &lt;
+ 			0x0 0x0 0x40000000 0x800000
++			0x3 0x0 0xc0000000 0x200
+ 		&gt;;
+ 
+ 		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">flash at 0</A>,0 {
+@@ -67,6 +68,30 @@
+ 			bank-width = &lt;4&gt;;
+ 			device-width = &lt;2&gt;;
+ 		};
++
++		/* Note: CAN support needs be enabled in U-Boot */
++		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 3</A>,0 {
++			compatible = &quot;intc,82527&quot;;
++			reg = &lt;3 0x0 0x80&gt;;
++			interrupts = &lt;8 1&gt;;
++			interrupt-parent = &lt;&amp;PIC&gt;;
++			bosch,external-clock-frequency = &lt;16000000&gt;;
++			bosch,disconnect-rx1-input;
++			bosch,disconnect-tx1-output;
++			bosch,iso-low-speed-mux;
++			bosch,clock-out-frequency = &lt;16000000&gt;;
++		};
++
++		<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 3</A>,100 {
++			compatible = &quot;intc,82527&quot;;
++			reg = &lt;3 0x100 0x80&gt;;
++			interrupts = &lt;8 1&gt;;
++			interrupt-parent = &lt;&amp;PIC&gt;;
++			bosch,external-clock-frequency = &lt;16000000&gt;;
++			bosch,disconnect-rx1-input;
++			bosch,disconnect-tx1-output;
++			bosch,iso-low-speed-mux;
++		};
+ 	};
+ 
+ 	<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">soc at fff00000</A> {
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002301.html">[Socketcan-users] [PATCH net-next v6 3/4] can: cc770: add platform	bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002304.html">[Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2302">[ date ]</a>
+              <a href="thread.html#2302">[ thread ]</a>
+              <a href="subject.html#2302">[ subject ]</a>
+              <a href="author.html#2302">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

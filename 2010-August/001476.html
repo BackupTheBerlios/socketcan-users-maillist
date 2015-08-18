@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C62BD85.5090407%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001475.html">
+   <LINK REL="Next"  HREF="001477.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C62BD85.5090407%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Aug 11 17:11:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001475.html">[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+</A></li>
+        <LI>Next message: <A HREF="001477.html">[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1476">[ date ]</a>
+              <a href="thread.html#1476">[ thread ]</a>
+              <a href="subject.html#1476">[ subject ]</a>
+              <a href="author.html#1476">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Heinz-J&#252;rgen Oertel wrote:
+&gt;<i> Am Dienstag, 10. August 2010 15:23:30 schrieb Marc Kleine-Budde:
+</I>&gt;&gt;<i> Heinz-J&#252;rgen Oertel wrote:
+</I>&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;<i> can please someone confirm that the more stable crystal oscillator
+</I>&gt;&gt;&gt;<i> frequency can be used to drive the FlexCAN module instead of the 66.5 MHz
+</I>&gt;&gt;&gt;<i> PLL clock?
+</I>&gt;&gt;<i> According to the datasheet the CLK_SRC Bit of the CTRL reg selects the
+</I>&gt;&gt;<i> CAN engine clock. I don't know which clock is more stable.
+</I>&gt;<i> 
+</I>&gt;<i> From the manual:
+</I>&gt;<i> 
+</I>&gt;<i>    13   This bit selects the clock source to the CAN protocol interface 
+</I>&gt;<i>         (CPI) to be either the peripheral clock (driven by CLK_SRC
+</I>&gt;<i>         the PLL) or the crystal oscillator clock.
+</I>&gt;<i>         The selected clock is the one fed to the prescaler to generate
+</I>&gt;<i>         the SCLK (SCLK). In order to guarantee reliable operation,
+</I>&gt;<i>         this bit must only be changed while the module is in disable
+</I>&gt;<i>         mode. See Section 24.4.8.4, &quot;Protocol Timing,&quot; for more information.
+</I>&gt;<i>         0 The CAN engine clock source is the oscillator clock (24.576 MHz)
+</I>&gt;<i>         1 The CAN engine clock source is the bus clock (66.5 MHz)
+</I>&gt;<i> 
+</I>&gt;<i> and in &quot;24.4.8.4 Protocol Timing&quot;
+</I>&gt;<i> 
+</I>&gt;<i>     The crystal oscillator clock must be selected
+</I>&gt;<i>     whenever a tight tolerance (up to 0.1%) is required in the CAN bus timing.
+</I>&gt;<i>     The crystal oscillator clock has better jitter performance
+</I>&gt;<i>     than PLL-generated clocks.
+</I>&gt;<i> 
+</I>&gt;<i> especially with 1 Mbit/s it's better to use the crystal oscillator clock.
+</I>
+Thanks for the hint! Good to know.
+
+&gt;&gt;<i> However the mainline driver only supports the bus clock.
+</I>&gt;<i> 
+</I>&gt;<i> and with this clock, if it is 66.5 MHz, one Mbit/s can not be reached.
+</I>
+Here, 1 Mbit/s works. These are the timing values calculates by the
+automatic algorithm:
+
+[<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">frogger at hardanger</A>:berlios-can-utils (master)]$ ./can-calc-bit-timing flexcan -c 66500000
+Bit timing parameters for flexcan with 66.500000 MHz ref clock
+nominal                                 real Bitrt   nom  real SampP
+Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP Bitrate Error SampP SampP Error   CAN_CTRL
+1000000     90   3    4    3   1   6 1007575  0.8% 75.0% 72.7%  3.1% 0x051a0002
+ 800000    180   2    2    2   1  12  791666  1.0% 80.0% 71.4% 10.8% 0x0b090001
+ 500000    105   7    8    3   1   7  500000  0.0% 87.5% 84.2%  3.8% 0x063a0006
+ 250000    285   5    6    2   1  19  250000  0.0% 87.5% 85.7%  2.1% 0x12290004
+ 125000    571   5    6    2   1  38  125000  0.0% 87.5% 85.7%  2.1% 0x25290004
+ 100000    526   7    8    3   1  35  100000  0.0% 87.5% 84.2%  3.8% 0x223a0006
+  50000   1428   5    6    2   1  95   50000  0.0% 87.5% 85.7%  2.1% 0x5e290004
+  20000   2631   7    8    3   1 175   20000  0.0% 87.5% 84.2%  3.8% 0xae3a0006
+  10000 ***bitrate not possible***
+
+&gt;&gt;<i> Patches are, as
+</I>&gt;&gt;<i> always, welcome.
+</I>&gt;<i> 
+</I>&gt;<i> Once I know how to do it, than let's  see.
+</I>&gt;<i> For now it's really difficult to dive into such system internals.
+</I>&gt;<i> It's difficult to read the hardware manual describing the clocks and even more 
+</I>&gt;<i> difficult to find and _use_ the already available BSP functions and consider 
+</I>&gt;<i> all side effects. That is may problem. Only setting bit 13 in the clock 
+</I>&gt;<i> control register seems not to be the solution. Doing it, my system freezes 
+</I>&gt;<i> completely (kernel 2.6.32.)
+</I>
+Use printk to check if setting this bit stalls the system. Add a printk
+to the interrupt handler, too.
+
+You have to load &quot;priv-&gt;can.clock.freq&quot; with the correct value, in order
+to let the algorithm calculate sane register values. If using the
+oscillator clock maybe you're not allowed to turn on the bus clock. Does
+the oscillator clock require some explicit enabling?
+
+Cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100811/ae75eb93/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100811/ae75eb93/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001475.html">[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+</A></li>
+	<LI>Next message: <A HREF="001477.html">[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1476">[ date ]</a>
+              <a href="thread.html#1476">[ thread ]</a>
+              <a href="subject.html#1476">[ subject ]</a>
+              <a href="author.html#1476">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

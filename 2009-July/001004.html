@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN bus receovery
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bus%20receovery&In-Reply-To=%3C4A71F841.2040208%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001002.html">
+   <LINK REL="Next"  HREF="001005.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN bus receovery</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bus%20receovery&In-Reply-To=%3C4A71F841.2040208%40grandegger.com%3E"
+       TITLE="[Socketcan-users] CAN bus receovery">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jul 30 21:45:05 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001002.html">[Socketcan-users] CAN bus receovery
+</A></li>
+        <LI>Next message: <A HREF="001005.html">[Socketcan-users] CAN bus receovery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1004">[ date ]</a>
+              <a href="thread.html#1004">[ thread ]</a>
+              <a href="subject.html#1004">[ subject ]</a>
+              <a href="author.html#1004">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Heinz-J&#252;rgen Oertel wrote:
+&gt;<i> Am Donnerstag, 30. April 2009 18:19:08 schrieb Wolfgang Grandegger:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at ppc_target</A>:~ ifconfig can4 down
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at ppc_target</A>:~ echo 1 &gt;/sys/class/net/can4/can_restart
+</I>&gt;&gt;<i> This will return an error status. The restart does only make sense for a
+</I>&gt;&gt;<i> running device. It is used to recover from bus-off without shutting down
+</I>&gt;&gt;<i> the device.
+</I>&gt;<i> 
+</I>&gt;<i> Is this the only way to recover from bus off? Isn't there some ioctl() call 
+</I>&gt;<i> that can easily be used?
+</I>
+There is no ioctl because it did not have a chance to make it into the
+kernel.
+
+&gt;<i> I searched ./trunk/kernel/2.6/Documentation/networking/can.txt
+</I>&gt;<i> but found nothing related.
+</I>
+Unfortunately, the SysFS-Interface did not make it into the kernel.
+Instead, a netlink interface is available starting with 2.6.31-rc1. Here
+is the interesting documentation from chapter 6.5 of:
+
+<A HREF="http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;f=Documentation/networking/can.txt;h=cd79735013f94728c15359f292f5fad4b1d0f838;hb=HEAD">http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git;a=blob;f=Documentation/networking/can.txt;h=cd79735013f94728c15359f292f5fad4b1d0f838;hb=HEAD</A>
+
+  A device may enter the &quot;bus-off&quot; state if too much errors occurred on
+  the CAN bus. Then no more messages are received or sent. An automatic
+  bus-off recovery can be enabled by setting the &quot;restart-ms&quot; to a
+  non-zero value, e.g.:
+
+    $ ip link set canX type can restart-ms 100
+
+  Alternatively, the application may realize the &quot;bus-off&quot; condition
+  by monitoring CAN error frames and do a restart when appropriate with
+  the command:
+
+    $ ip link set canX type can restart
+
+  Note that a restart will also create a CAN error frame (see also
+  chapter 3.4).
+
+A restart could be performed through the netlink interface.
+Unfortunately, I do not have a simple user space example but it should
+not be a big deal to extract it from the &quot;ip&quot; program of the iproute2
+utility.
+
+Does this answer your question?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001002.html">[Socketcan-users] CAN bus receovery
+</A></li>
+	<LI>Next message: <A HREF="001005.html">[Socketcan-users] CAN bus receovery
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1004">[ date ]</a>
+              <a href="thread.html#1004">[ thread ]</a>
+              <a href="subject.html#1004">[ subject ]</a>
+              <a href="author.html#1004">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

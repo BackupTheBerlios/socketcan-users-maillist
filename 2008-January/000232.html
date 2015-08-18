@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3CDD39B5C3F4963040ADC9768BE7E430CB02AAE233%40is-hdq-exchange.marel.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000231.html">
+   <LINK REL="Next"  HREF="000236.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Daniel Schnell</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3CDD39B5C3F4963040ADC9768BE7E430CB02AAE233%40is-hdq-exchange.marel.net%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">daniel.schnell at marel.com
+       </A><BR>
+    <I>Thu Jan 31 20:21:26 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000231.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000236.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#232">[ date ]</a>
+              <a href="thread.html#232">[ thread ]</a>
+              <a href="subject.html#232">[ subject ]</a>
+              <a href="author.html#232">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> 
+</I>&gt;<i> did you use the socketcan/trunk/mkpatch script for that? If not i may
+</I>&gt;<i> help you next time ;-) 
+</I>&gt;<i> 
+</I>
+Hi Oliver,
+
+Yes I used it but it was not working without changes, because e.g. 1.)
+there was no patches/2.6.23.1.diff file (I just copied over 2.6.21.diff
+as 2.6.23.1.diff), 2.) FILES-2.6-ALL is not correct, as some paths have
+to be prefixed with &quot;old/&quot; and compat.h was missing then 3.) the
+Makefile variable KERNELDIR has to be set to the correct location of
+2.6.23.1 kernel, 4.) the net_stats variable for struct can_priv is also
+necessary for kernels _including_ 2.6.23.
+
+Attached is a patch (my outlook has a problem with inline patches) which
+I created with svn diff from socketcan trunk and the local changes. This
+patch does not touch the Makefile but I think one should give some
+possible argument override to KERNELDIR via e.g. some variable.
+
+
+&gt;<i> 
+</I>&gt;<i> The NETDEV WATCHDOG stuff is a general functionality provided by the
+</I>&gt;<i> Linux kernel to check whether a (successful) TX interrupt confirms
+</I>&gt;<i> the successful sending of a frame. In the case of this NETDEV
+</I>&gt;<i> WATCHDOG the send request in the CAN controller has to be canceled.   
+</I>&gt;<i> 
+</I>&gt;<i> The overflow of the Tx Ring looks like a problem in locking and
+</I>&gt;<i> filling the mscan TX ring somewhere in the mscan driver. Maybe Andrey
+</I>&gt;<i> Volkov or Wolfgang Grandegger know more about this issue.  
+</I>
+Actually we found out that if we always wait for 1 ms after every send
+(or before every send how ever you see it) there is no message like the
+one mentioned and everything works just great. If the error occurs and
+we try to resend the packet (return value from send is btw. then
+-ENOBUFS), we have to wait up to 350ms to get rid of it. So there is a
+timing issue somewhere.
+
+Best regards.
+
+
+Daniel Schnell.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: socketcan-linux-2.6.23.1.patch
+Type: application/octet-stream
+Size: 8344 bytes
+Desc: socketcan-linux-2.6.23.1.patch
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080131/df471700/attachment.obj">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080131/df471700/attachment.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000231.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000236.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#232">[ date ]</a>
+              <a href="thread.html#232">[ thread ]</a>
+              <a href="subject.html#232">[ subject ]</a>
+              <a href="author.html#232">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

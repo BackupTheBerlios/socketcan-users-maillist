@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20tools%20and%20Lawicel%20USB-CAN&In-Reply-To=%3C4B61EF2E.1040901%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001238.html">
+   <LINK REL="Next"  HREF="001240.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SocketCAN tools and Lawicel USB-CAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SocketCAN%20tools%20and%20Lawicel%20USB-CAN&In-Reply-To=%3C4B61EF2E.1040901%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] SocketCAN tools and Lawicel USB-CAN">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Jan 28 21:10:22 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001238.html">[Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+</A></li>
+        <LI>Next message: <A HREF="001240.html">[Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1239">[ date ]</a>
+              <a href="thread.html#1239">[ thread ]</a>
+              <a href="subject.html#1239">[ subject ]</a>
+              <a href="author.html#1239">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Gary Thomas wrote:
+&gt;<i> I know I've used this before, but I'm having trouble with it
+</I>&gt;<i> running 2.6.32.  When I insert the USB device, I get /dev/ttyUSB0
+</I>&gt;<i> via the ftdi_sio+usbserial modules.  When I run slcan_attach,
+</I>&gt;<i> I get an invalid IOCTL error (strace dump attached).
+</I>&gt;<i> 
+</I>&gt;<i> # ~gary/slcan_attach -w -o -s8 -c /dev/ttyUSB0
+</I>&gt;<i> ioctl: Invalid argument
+</I>&gt;<i> 
+</I>
+open(&quot;/dev/ttyUSB0&quot;, O_WRONLY|O_NOCTTY) = 3
+write(3, &quot;S8\r&quot;, 3)                     = 3
+write(3, &quot;O\r&quot;, 2)                      = 2
+ioctl(3, TIOCSETD, [17])                = -1 EINVAL (Invalid argument)
+
+
+&gt;<i> Any ideas what I'm doing wrong?
+</I>
+Yeah :-)
+
+I strongly assume, you did not load the slcan module.
+
+And therefore there's no chance to switch /dev/ttyUSB0 to the slcan line
+discipline.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001238.html">[Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+</A></li>
+	<LI>Next message: <A HREF="001240.html">[Socketcan-users] SocketCAN tools and Lawicel USB-CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1239">[ date ]</a>
+              <a href="thread.html#1239">[ thread ]</a>
+              <a href="subject.html#1239">[ subject ]</a>
+              <a href="author.html#1239">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6FDF13.3020407%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001293.html">
+   <LINK REL="Next"  HREF="001294.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6FDF13.3020407%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Mon Feb  8 10:53:23 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001293.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001294.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1295">[ date ]</a>
+              <a href="thread.html#1295">[ thread ]</a>
+              <a href="subject.html#1295">[ subject ]</a>
+              <a href="author.html#1295">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Kurt Van Dijck wrote:
+&gt;<i> On Mon, Feb 08, 2010 at 10:24:34AM +0100, Kurt Van Dijck wrote:
+</I>&gt;&gt;<i> On Mon, Feb 08, 2010 at 10:12:12AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Kurt Van Dijck wrote:
+</I>&gt;&gt;&gt;&gt;<i> On Sun, Feb 07, 2010 at 06:25:39PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> christian pellegrin wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> On Sun, Feb 7, 2010 at 6:05 PM, Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> christian pellegrin wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> increase). Can you confirm that? Normal state changes are interrupt
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> driver. So, if the hardware does not trigger an interrupt, we have a
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> problem.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> On the mcp251x we get an interrupt when we get back from error-warning
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> to error-active but I don't know if we have to send some kind of error
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> frame in this case. Now nothing is sent, I was worried if this is
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> right.
+</I>&gt;&gt;&gt;&gt;&gt;<i> Good question. I think we should send an error message for any state
+</I>&gt;&gt;&gt;&gt;&gt;<i> change also for passive-&gt;warning-&gt;active, which we currently do not
+</I>&gt;&gt;&gt;&gt;&gt;<i> handle by software. We speak about controller *problems* and there is
+</I>&gt;&gt;&gt;&gt;&gt;<i> currently no CAN_ERR_CRTL_ACTIVE. Well, that's another weak point :-(.
+</I>&gt;&gt;&gt;&gt;&gt;<i> This needs some more thoughts/discussion.
+</I>&gt;&gt;&gt;&gt;<i> We had some discussion lately, but having an interrupt (and some message
+</I>&gt;&gt;&gt;&gt;<i>    to userspace) seems like a non-optional requirement to me.
+</I>
+&gt;&gt;&gt;<i> I don't understand. What is &quot;non-optional&quot;? Currently we just report
+</I>&gt;&gt;&gt;<i> controller *problems*, meaning state changes
+</I>&gt;&gt;&gt;<i> active-&gt;warning-&gt;passive-&gt;bus-off.
+</I>
+This should answer your question below.
+
+&gt;&gt;<i> sorry for the confusion.
+</I>&gt;&gt;<i> I meant: having an 'bus state change' interrupt seems a requirement to
+</I>&gt;&gt;<i> me (therefore : non-optional, but it depends on CAN chip capabilities).
+</I>&gt;&gt;<i> This (bus-state-change interrupt) is, IMO, more important than the bus
+</I>&gt;&gt;<i> error interrupts.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Therefore, I think that it may not be very good not sending anything
+</I>&gt;&gt;<i> on the 'error-warning to error-active interrupt', as was mentioned
+</I>&gt;&gt;<i> above.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Implementing bus-error interrupts, but poor bus state change interrupts
+</I>&gt;&gt;<i> requires the user to enable bus-error interrupts, and tracking the bus
+</I>&gt;&gt;<i> state itself. I do not like that (But I did no mcp251x work either).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think we agree, but I didn't express my opinion very clear :-)
+</I>&gt;<i> 
+</I>&gt;<i> Looking back into the header file (error.h), I realize there is no
+</I>&gt;<i> option to report all bus-state changes yet, or I'm looking wrong.
+</I>
+No, see above.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001293.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001294.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1295">[ date ]</a>
+              <a href="thread.html#1295">[ thread ]</a>
+              <a href="subject.html#1295">[ subject ]</a>
+              <a href="author.html#1295">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

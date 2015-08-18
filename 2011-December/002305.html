@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EDBC05D.8070109%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002304.html">
+   <LINK REL="Next"  HREF="002306.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EDBC05D.8070109%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Sun Dec  4 19:47:57 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002304.html">[Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527
+</A></li>
+        <LI>Next message: <A HREF="002306.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2305">[ date ]</a>
+              <a href="thread.html#2305">[ thread ]</a>
+              <a href="subject.html#2305">[ subject ]</a>
+              <a href="author.html#2305">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> On 11/28/2011 05:06 PM, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> ... using a reasonable default for bcr of 0x40. But you may need to
+</I>&gt;&gt;&gt;&gt;<i> provide better values for cir, bcr and cor.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> OMG, sorry that I was bothering You but You are absolutely right and with Your
+</I>&gt;&gt;&gt;<i> statement You brought be back on track and You made my day. Thank You !!!!!!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I just took the values for cpu and bus I was using in my lincan driver and funny
+</I>&gt;&gt;&gt;<i> enough now it's working absolutely perfect.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Module: modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Was just sending 50000 telegrams, perfect and no problem at all.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks a lot again!!!!
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This looks like a Tested-by :-)
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang, I just sent out v4. Any chance to give this patch a try? It
+</I>&gt;<i> would be best to use a recent kernel version but I could also adapt the
+</I>&gt;<i> patch to your kernel version, 2.6.39, I think!?
+</I>
+Sorry for my delayed reply, but wasn't earlier possible.
+Yes, of course, as long as I have the hardware available I can do some tests, even
+on a recent kernel due the fact having the project so far completed, just another
+test run on the 9th of December.
+
+Due the flood of emails I lost now track which version You would be interested in
+and maybe also which kernel version, so, please let me know and maybe were I may
+download the patches.
+
+&gt;<i>
+</I>&gt;<i> As you are using a CC770 chip, I'm especially interested in the relevant
+</I>&gt;<i> kernel log (dmesg) and &quot;ip -d -s link show&quot;.
+</I>
+Should be not a problem at all.
+
+&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+Wolfgang
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002304.html">[Socketcan-users] [PATCH next-next 0/2] can: cc770: add support for the Bosch CC770 and Intel AN82527
+</A></li>
+	<LI>Next message: <A HREF="002306.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2305">[ date ]</a>
+              <a href="thread.html#2305">[ thread ]</a>
+              <a href="subject.html#2305">[ subject ]</a>
+              <a href="author.html#2305">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

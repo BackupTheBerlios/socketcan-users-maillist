@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47B06026.9010707%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000284.html">
+   <LINK REL="Next"  HREF="000286.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47B06026.9010707%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Mon Feb 11 15:48:06 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000284.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000286.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#285">[ date ]</a>
+              <a href="thread.html#285">[ thread ]</a>
+              <a href="subject.html#285">[ subject ]</a>
+              <a href="author.html#285">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Interesting, some watchdog seems to restart the board. As the trace
+</I>&gt;&gt;<i> is not complete, could you please replace tprint() in mscan.c showing
+</I>&gt;&gt;<i> the trace from bottom to top with the code below:  
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -------------------
+</I>&gt;&gt;<i> static void tprint(struct mscan_priv *priv) {
+</I>&gt;&gt;<i>         int i, j, d;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         printk(&quot;tprint: head at %d\n&quot;, priv-&gt;tcount);
+</I>&gt;&gt;<i>         for (i = priv-&gt;tcount; i &gt; (priv-&gt;tcount - TSIZE); i--) {
+</I>&gt;&gt;<i>                 j = i &gt;= 0 ? i : i + TSIZE;
+</I>&gt;&gt;<i>                 d = priv-&gt;tdata[j];
+</I>&gt;&gt;<i>                 printk(&quot;%04d: %02x %02x %02x %02x\n&quot;, j,
+</I>&gt;&gt;<i>                        (d &gt;&gt; 24) &amp; 0xff, (d &gt;&gt; 16) &amp; 0xff,
+</I>&gt;&gt;<i>                        (d &gt;&gt; 8)  &amp; 0xff, d &amp; 0xff);
+</I>&gt;&gt;<i>         }
+</I>&gt;&gt;<i> }
+</I>&gt;&gt;<i> -------------------
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hopefully the last try.
+</I>
+Looks like :-) Puh, it's a bug in the MSCAN driver.
+
+&gt;<i> [   66.149326] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [   66.156736] can0: TX on=1 pend=3
+</I>&gt;<i> [   66.160036] tprint: head at 713
+</I>&gt;<i> [   66.163263] 0713: 05 00 ea 02
+</I>&gt;<i> [   66.166298] 0712: 00 01 07 07
+</I>&gt;<i> [   66.169336] 0711: 06 01 07 07
+</I>&gt;<i> [   66.172367] 0710: 05 00 7b 02
+</I>
+There is *no* TX done event. Do you have other traffic on the CAN bus
+triggering RX interrupts? That's the reason why I was unable to trigger
+it, grrr.
+
+&gt;<i> [   66.175401] 0709: 03 00 07 07
+</I>&gt;<i> [   66.178441] 0708: 02 00 00 07
+</I>&gt;<i> [   66.181481] 0707: 01 00 7b 02
+</I>&gt;<i> [   66.184528] 0706: 00 01 05 05
+</I>&gt;<i> [   66.187569] 0705: 06 01 07 05
+</I>&gt;<i> [   66.190617] 0704: 05 00 7a 02
+</I>
+&gt;<i> [   66.193658] 0703: 04 00 02 05
+</I>
+Normally a TX done event is handled.
+
+&gt;<i> [   66.196709] 0702: 03 02 07 07
+</I>&gt;<i> [   66.199749] 0701: 02 00 00 07
+</I>&gt;<i> [   66.202782] 0700: 01 00 7a 02
+</I>
+&gt;<i> Yes our watchdog is biting here, but I can turn it off if you like :)
+</I>
+No problem. The important information was in the first lines anyhow.
+Going to provide a fix later today or tomorrow.
+
+Thanks for testing,
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000284.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000286.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#285">[ date ]</a>
+              <a href="thread.html#285">[ thread ]</a>
+              <a href="subject.html#285">[ subject ]</a>
+              <a href="author.html#285">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

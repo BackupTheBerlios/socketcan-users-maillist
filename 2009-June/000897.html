@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A325193.6080101%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000896.html">
+   <LINK REL="Next"  HREF="000898.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socket%20CAN%20with%20intel%2082527%20CAN%20Controller%20on%0A%20PC104&In-Reply-To=%3C4A325193.6080101%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104">wg at grandegger.com
+       </A><BR>
+    <I>Fri Jun 12 15:01:07 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000896.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+        <LI>Next message: <A HREF="000898.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#897">[ date ]</a>
+              <a href="thread.html#897">[ thread ]</a>
+              <a href="subject.html#897">[ subject ]</a>
+              <a href="author.html#897">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> I also believe, that the bit-time calculation of the driver should work,
+</I>&gt;&gt;<i> I used to work with btr= ...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> but it uses some strange defaults. Oliver?
+</I>&gt;&gt;<i> I know where i had my setup now: It was a request from the VII project. I'll
+</I>&gt;&gt;<i> boot my VW-Laptop and search for the details.
+</I>&gt;<i> 
+</I>&gt;<i> I found the following for the ser1274 PC104 card:
+</I>&gt;<i> 
+</I>&gt;<i> 1. There was a special programm from Eurotech &quot;com1274_ser&quot; to set the I/O
+</I>&gt;<i> ports and interrupts for the two CAN interfaces located on the ser1274 card.
+</I>&gt;<i> I configured the interrupt lines to 4 and 15 and the iomem startaddresses to
+</I>&gt;<i> 0xd8000 and 0xd8100, and 'enabled' the CAN interfaces.
+</I>&gt;<i> 
+</I>&gt;<i> 2. Additionally to force_dmc=1 which is needed for the 8MHz controller clock,
+</I>&gt;<i> i needed to block all the local interrupts when  accessing the i82527
+</I>&gt;<i> controllers on the ser1274.
+</I>&gt;<i> 
+</I>&gt;<i> My setup was
+</I>&gt;<i> 
+</I>&gt;<i> insmod ./i82527-iomem.ko clk=8 force_dmc=1 base=0xd8000,0xd8100 irq=4,15
+</I>&gt;<i> speed=100,500
+</I>&gt;<i> 
+</I>&gt;<i> or
+</I>&gt;<i> 
+</I>&gt;<i> insmod ./i82527-iomem.ko clk=8 force_dmc=1 base=0xd8000,0xd8100 irq=4,15
+</I>&gt;<i> btr=0x432f,0x4067
+</I>&gt;<i> 
+</I>&gt;<i> I also added irq_mode=2 or irq_mode=3 to block the local interrupts.
+</I>&gt;<i> 
+</I>&gt;<i> Maybe that helps - also regarding the btr settings for 500kBit and 8MHz
+</I>&gt;<i> controller clock speed ...
+</I>
+Yes, that makes sense. Khurram, could you please try:
+
+  insmod ./i82527-iomem.ko clk=8 btr=0x0014,0x0014 force_dmc=1
+
+This should setup a bitrate of 1MB/s with the sample-point at 75%.
+Without clk=8, the DSC bit will be set down-scaling the frequency by a
+factor of 2 and that's why you realized 500 kB/s. According to the
+manual, the DMC bit should not be needed but maybe this hardware is special.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000896.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on PC104
+</A></li>
+	<LI>Next message: <A HREF="000898.html">[Socketcan-users] Socket CAN with intel 82527 CAN Controller on	PC104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#897">[ date ]</a>
+              <a href="thread.html#897">[ thread ]</a>
+              <a href="subject.html#897">[ subject ]</a>
+              <a href="author.html#897">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

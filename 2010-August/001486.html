@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C65169A.2010501%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001485.html">
+   <LINK REL="Next"  HREF="001483.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%20in%0A%20i.MX%20devices&In-Reply-To=%3C4C65169A.2010501%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices">mkl at pengutronix.de
+       </A><BR>
+    <I>Fri Aug 13 11:55:38 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001485.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+        <LI>Next message: <A HREF="001483.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1486">[ date ]</a>
+              <a href="thread.html#1486">[ thread ]</a>
+              <a href="subject.html#1486">[ subject ]</a>
+              <a href="author.html#1486">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Heinz-J&#252;rgen Oertel wrote:
+[...]
+&gt;<i> Once I know how to do it, than let's  see.
+</I>&gt;<i> For now it's really difficult to dive into such system internals.
+</I>&gt;<i> It's difficult to read the hardware manual describing the clocks and even more 
+</I>&gt;<i> difficult to find and _use_ the already available BSP functions and consider 
+</I>&gt;<i> all side effects. That is may problem. Only setting bit 13 in the clock 
+</I>&gt;<i> control register seems not to be the solution. Doing it, my system freezes 
+</I>&gt;<i> completely (kernel 2.6.32.)
+</I>
+BTW:
+My current project deals with the mx35 and flexcan, too, but I'm using
+the bus clock. If you access the mailbox registers and the clock is not
+turned on the system freezes, too. However, access to other registers works.
+
+Cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100813/12b7ca4b/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100813/12b7ca4b/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001485.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+	<LI>Next message: <A HREF="001483.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1486">[ date ]</a>
+              <a href="thread.html#1486">[ thread ]</a>
+              <a href="subject.html#1486">[ subject ]</a>
+              <a href="author.html#1486">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

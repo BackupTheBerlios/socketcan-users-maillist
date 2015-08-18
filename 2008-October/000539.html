@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C20081029124441.GV9852%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000538.html">
+   <LINK REL="Next"  HREF="000540.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Robert Schwebel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C20081029124441.GV9852%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">r.schwebel at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 29 13:44:41 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000538.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000540.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#539">[ date ]</a>
+              <a href="thread.html#539">[ thread ]</a>
+              <a href="subject.html#539">[ subject ]</a>
+              <a href="author.html#539">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Oct 29, 2008 at 01:08:24PM +0100, Oliver Hartkopp wrote:
+&gt;&gt;<i> When things settle down and become well defined in the Linux
+</I>&gt;&gt;<i> *Mainline*, canutils will follow that and we'll maintain compatiblity
+</I>&gt;&gt;<i> to whatever versions are out there.
+</I>&gt;<i>
+</I>&gt;<i> ???
+</I>&gt;<i>
+</I>&gt;<i> The socket API *is* settled down and carved in stone as it *is* in
+</I>&gt;<i> mainline Kernel. The only slightly open thing is the CAN driver
+</I>&gt;<i> configuration interface  as we all know.
+</I>
+Which is quite essential if you *really* want to use it - and we use it
+in *production* systems. Until now, it always was a huge mess to bring
+SocketCAN with all necessary features to a random modern and non-x86
+kernel.
+
+&gt;<i> IMO it's quite useless to maintain a second 'cansend' or 'candump' or
+</I>&gt;<i> not to unify these userspace tools now.
+</I>&gt;<i>
+</I>&gt;<i> What are you waiting for? Can i sense any concerns to use the 'latest
+</I>&gt;<i> &amp;  greatest' on your side? ;-)
+</I>
+It's like with any other OSS projects out there. Things get done if
+somebody needs them. If you need something integrated in the canutils,
+please send patches. Otherwhise we'll do it if we need it of if one of
+our customers needs it.
+
+&gt;<i> It would be nice, if you could answer this thread:
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-users/2008-October/000523.html">https://lists.berlios.de/pipermail/socketcan-users/2008-October/000523.html</A>
+</I>
+The network layer alone is absolutely irrelevant. For production
+projects, you need the *whole* stack, including bittime setting, being
+able to work on random non-release kernels etc and all this is
+extraordinarily complicated until now and was the reason for Marc to
+move to git.
+
+Yes, there is space for improvement for the canutils and I second your
+oppinion that things should be unified. So please feel free to send
+patches, or wait unitl it went high enough on our pet project todo list
+that somebody actually starts working on it :)
+
+rsc
+-- 
+ Dipl.-Ing. Robert Schwebel | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+ Pengutronix - Linux Solutions for Science and Industry
+   Handelsregister:  Amtsgericht Hildesheim, HRA 2686
+     Hannoversche Str. 2, 31134 Hildesheim, Germany
+   Phone: +49-5121-206917-0 |  Fax: +49-5121-206917-9
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000538.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000540.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#539">[ date ]</a>
+              <a href="thread.html#539">[ thread ]</a>
+              <a href="subject.html#539">[ subject ]</a>
+              <a href="author.html#539">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

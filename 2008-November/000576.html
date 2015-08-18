@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan problems for settings &gt; 125kbit
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C491C1F47.7000106%40marel.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000574.html">
+   <LINK REL="Next"  HREF="000577.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan problems for settings &gt; 125kbit</H1>
+    <B>Daniel Schnell</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%20problems%20for%20settings%20%3E%20125kbit&In-Reply-To=%3C491C1F47.7000106%40marel.com%3E"
+       TITLE="[Socketcan-users] mscan problems for settings &gt; 125kbit">danielsch at marel.com
+       </A><BR>
+    <I>Thu Nov 13 13:36:23 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000574.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+        <LI>Next message: <A HREF="000577.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#576">[ date ]</a>
+              <a href="thread.html#576">[ thread ]</a>
+              <a href="subject.html#576">[ subject ]</a>
+              <a href="author.html#576">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+
+Wolfgang Grandegger wrote:
+&gt;<i> I think I found the problem. There are constraints for tseg1 and tseg2
+</I>&gt;<i> which I have overlooked. The attached patch should fix that. Please
+</I>&gt;<i> give it a try and let me know.
+</I>&gt;<i>   
+</I>
+This looks so much better now !
+
+I tested quickly on IPB Clock 132 and 66 MHz the CAN rates 125, 250 and 
+500 Kbit with an attached IO-Unit and all of these settings work now. I 
+have not tested 1Mbit, because we don't need it and my I/O unit doesn't 
+support it.
+
+Here are the settings I get for different IPB frequencies:
+
+IPB: 66MHz
+125 Kbit, BTR0=0x20 BTR1=0x1c, SP 87,5 %
+250 Kbit, BTR0=0x15 BTR1=0x18, SP 83,3 %
+500 Kbit, BTR0=0x0a BTR1=0x18, SP 83,3%,
+
+IPB: 132MHz
+125 Kbit, BTR0=0x2f BTR1=0x4f, SP 77,2%
+250 Kbit, BTR0=0x20 BTR1=0x1c, SP 87,5 %
+500 Kbit, BTR0=0x15 BTR1=0x18, SP 83,3%
+
+The sampling points (SP) are the default settings of the driver.
+If I want to change the SP, then I see that writing to the file
+/sys/class/net/can0/can_bittiming/sample_point, the driver makes a best 
+effort to come near the requested sample point, like that:
+
+ifconfig can0 down
+echo &quot;500000&quot;&gt;/sys/class/net/can0/can_bittiming/bitrate
+echo &quot;772&quot;&gt;/sys/class/net/can0/can_bittiming/sample_point
+ifconfig can0 up
+[  288.019680] mpc52xx-mscan mpc52xx-mscan.0: BTR0=0x20 BTR1=0x14
+cat /sys/class/net/can0/can_bittiming/sample_point
+750
+
+
+This is indeed very nice. Thanks for the fix.
+
+Daniel
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000574.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+	<LI>Next message: <A HREF="000577.html">[Socketcan-users] mscan problems for settings &gt; 125kbit
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#576">[ date ]</a>
+              <a href="thread.html#576">[ thread ]</a>
+              <a href="subject.html#576">[ subject ]</a>
+              <a href="author.html#576">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Many%20Steps%20Closer%2C%0A%20But%20A%20Helping%20Hand%20Still%20Needed%20...&In-Reply-To=%3C4E16C6FD.7090501%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001940.html">
+   <LINK REL="Next"  HREF="001942.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Many%20Steps%20Closer%2C%0A%20But%20A%20Helping%20Hand%20Still%20Needed%20...&In-Reply-To=%3C4E16C6FD.7090501%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Fri Jul  8 10:59:41 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001940.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+        <LI>Next message: <A HREF="001942.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1941">[ date ]</a>
+              <a href="thread.html#1941">[ thread ]</a>
+              <a href="subject.html#1941">[ subject ]</a>
+              <a href="author.html#1941">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am 08.07.2011 10:20, schrieb Stu Statman:
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 7/8/11 12:15 AM, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Am 08.07.2011 04:07, schrieb Stu Statman:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> We have SocketCAN and the utilities up and running and can see the CAN
+</I>&gt;&gt;&gt;<i> traffic flowing (Yay!). However, it's not clear to me that the cansend
+</I>&gt;&gt;&gt;<i> utility is actually doing anything. If I use cansend to send in a frame,
+</I>&gt;&gt;&gt;<i> I should see that in candump, right?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> To be specific, I'm doing this :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> cansend can0 18EA0001#03.F0.01
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> That's an ISO request for a Schneider inverter specific PGN. I copied it
+</I>&gt;&gt;&gt;<i> directly from an earlier request, caught by candump, that a Schneider
+</I>&gt;&gt;&gt;<i> utility app sent in :
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> can0 18EA0001 [3] 03 F0 01
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The inverter sends out a valid reply to that, along the lines of
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> can0 19F00300 etc
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> However, when I attempt to send in that frame (using the cansend call
+</I>&gt;&gt;&gt;<i> above), I don't see anything in candump; neither my request nor the
+</I>&gt;&gt;&gt;<i> expected response shows up. Does candump ignore cansend calls from the
+</I>&gt;&gt;&gt;<i> local machine? Did I construct the cansend call incorrectly? Do I need
+</I>&gt;&gt;&gt;<i> to do something about that source address (1)?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No. In general this should work as you tried.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The frames you sent out with
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> cansend &lt;interface&gt; &lt;frame-content&gt;
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> should be visible for all applications on the local host.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> E.g. you can (and should) try this with the virtual CAN interfaces:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Create a virtual CAN interface and use cansend/cangen and in a
+</I>&gt;&gt;<i> different terminal candump.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As you wrote, that you can see incomming traffic, you should monitor
+</I>&gt;&gt;<i> this (continuous) traffic with candump and then send (in another
+</I>&gt;&gt;<i> terminal) a CAN frame with cansend. Does the incomming traffic stop then?
+</I>&gt;<i> How do I create a virtual CAN interface? (Sorry for the n00b question ...)
+</I>
+Always welcome :-)
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L607">http://lxr.linux.no/#linux+v2.6.39/Documentation/networking/can.txt#L607</A>
+
+There's also a script i personally use in /etc/init.d which creates four 
+vcans (vcan0 .. vcan3) by default:
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan/trunk/etc/can_if">http://svn.berlios.de/wsvn/socketcan/trunk/etc/can_if</A>
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001940.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+	<LI>Next message: <A HREF="001942.html">[Socketcan-users] Many Steps Closer, But A Helping Hand Still Needed ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1941">[ date ]</a>
+              <a href="thread.html#1941">[ thread ]</a>
+              <a href="subject.html#1941">[ subject ]</a>
+              <a href="author.html#1941">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

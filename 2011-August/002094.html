@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Advice needed starting SocketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Advice%20needed%20starting%20SocketCAN&In-Reply-To=%3C561453779232B648829350EBCA189B2106E95510%40EUREVS1.eur.ci.root%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002093.html">
+   <LINK REL="Next"  HREF="002097.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Advice needed starting SocketCAN</H1>
+    <B>Ansell, John</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Advice%20needed%20starting%20SocketCAN&In-Reply-To=%3C561453779232B648829350EBCA189B2106E95510%40EUREVS1.eur.ci.root%3E"
+       TITLE="[Socketcan-users] Advice needed starting SocketCAN">John.Ansell at CooperIndustries.com
+       </A><BR>
+    <I>Fri Aug 19 18:19:07 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002093.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+        <LI>Next message: <A HREF="002097.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2094">[ date ]</a>
+              <a href="thread.html#2094">[ thread ]</a>
+              <a href="subject.html#2094">[ subject ]</a>
+              <a href="author.html#2094">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi guys,
+
+I'm very new to Linux and socketCAN, so please forgive a silly question!
+
+I need some advice regarding starting up the can0 and can1 devices
+please.
+
+Hardware is an AT91SAM9 (ARM) driving 2 MCP2515 controllers. I've built
+CAN support into the kernel, 2.6.38. Probes are successful and the CAN
+drivers are being loaded.
+
+I'm using busybox to handle the commands. Trouble is, the ip command in
+busybox doesn't support the 'type can' or 'bitrate' parameters.
+
+Now I don't really need user configurability from the console, fixed
+parameters will do. Can I set the CAN port up from a userland task,
+maybe via ioctls or something?
+Has anybody got a busybox build to work?
+Does anybody have any good information to help me build the ip command
+(for ARM) if I need to?
+
+Thanks in advance for your help!
+
+Best regards
+John Ansell
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002093.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+	<LI>Next message: <A HREF="002097.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2094">[ date ]</a>
+              <a href="thread.html#2094">[ thread ]</a>
+              <a href="subject.html#2094">[ subject ]</a>
+              <a href="author.html#2094">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

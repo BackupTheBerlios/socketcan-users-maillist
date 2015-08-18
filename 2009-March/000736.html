@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] question : Simulator that work with VCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20question%20%3A%20Simulator%20that%20work%20with%20VCAN&In-Reply-To=%3C49D16923.6010603%40indoakses-online.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000735.html">
+   <LINK REL="Next"  HREF="000732.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] question : Simulator that work with VCAN</H1>
+    <B>Bino Oetomo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20question%20%3A%20Simulator%20that%20work%20with%20VCAN&In-Reply-To=%3C49D16923.6010603%40indoakses-online.com%3E"
+       TITLE="[Socketcan-users] question : Simulator that work with VCAN">bino at indoakses-online.com
+       </A><BR>
+    <I>Tue Mar 31 02:51:47 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000735.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+        <LI>Next message: <A HREF="000732.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#736">[ date ]</a>
+              <a href="thread.html#736">[ thread ]</a>
+              <a href="subject.html#736">[ subject ]</a>
+              <a href="author.html#736">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear All
+
+C/q Oliver
+
+Thankyou (again) for your enlightment
+
+Oliver Hartkopp wrote:
+&gt;<i> Yes! This is exactly the plan.
+</I>&gt;<i>
+</I>&gt;<i> As you are able to switch from one ethernet card to another without 
+</I>&gt;<i> changing your networking application (e.g. Firefox) you are able to 
+</I>&gt;<i> change between different CAN interfaces without changing your CAN 
+</I>&gt;<i> application.
+</I>&gt;<i>
+</I>
+&gt;<i>
+</I>&gt;<i> Looks like a temporary issue :-))
+</I>&gt;<i>
+</I>Well .. actualy I have one ... but it's a micro controler based 
+FMS-RS232.. and it do all the dirty work for me, so I don't need to do 
+any CAN decoding.
+All I need to do is just --&gt; cat /dev/ttyS0 | mydumper.sh
+It work like a charm for most European HeavyDuty ..
+And with this and a wifi and gps .. I build a kind of Vehicle Health 
+Monitoring system ... based on OpenGTS.
+
+But I need to learn for American Equipment such as Caterpillar ... and 
+It's hard to find such device that work like for FMS.
+That is the point to start learning about CAN Frames
+&gt;<i>
+</I>&gt;<i> Looking into
+</I>&gt;<i>
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/lib.h">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/lib.h</A>
+</I>&gt;<i> you'll find descriptions for the current CAN frame representations for 
+</I>&gt;<i> candump, cansend and friends.
+</I>&gt;<i>
+</I>&gt;<i> These formats are provided in the lib.c file in the same directory.
+</I>&gt;<i>
+</I>&gt;<i> You can also invoke 'candump any -L' to produce the format on stdout 
+</I>&gt;<i> that's usually used for logfiles (e.g. created by 'candump any -l').
+</I>&gt;<i> This logfile format contains the Unix timestamp, the CAN interface and 
+</I>&gt;<i> the CAN frame - which is the information you need for a full qualified 
+</I>&gt;<i> CAN frame description.
+</I>&gt;<i>
+</I>&gt;<i> With 'log2long' you can convert the logfile format into a better 
+</I>&gt;<i> readable format.
+</I>&gt;<i>
+</I>&gt;<i> candump -ta any
+</I>&gt;<i>
+</I>&gt;<i> is therefore the same in the output as
+</I>&gt;<i>
+</I>&gt;<i> candump -L any | log2long
+</I>&gt;<i>
+</I>&gt;<i> The Logfiles also allow comments, that are detected when a line in the 
+</I>&gt;<i> logfile does not start with '(' for the usual timestamp.
+</I>&gt;<i>
+</I>&gt;<i> So you can write in your logfile:
+</I>&gt;<i>
+</I>&gt;<i> NAME=&quot;my log where the sensor crashed&quot;
+</I>&gt;<i> DATE=&quot;Wednesday, 2009-04-01 12:00 UTC&quot;
+</I>&gt;<i> SENSORCAN=&quot;can0&quot;
+</I>&gt;<i> (1234567890.223344)  can0 123#1122
+</I>&gt;<i> (1234567890.223380)  can0 123#1123
+</I>&gt;<i> ...
+</I>&gt;<i>
+</I>&gt;<i> See 'canplayer -?' for details.
+</I>&gt;<i>
+</I>&gt;<i> Would some kind of 'log2pgn' analogue to 'log2long' fit your needs?
+</I>&gt;<i>
+</I>
+This is the first email I read this morning ..
+Hmmm ... I think this will be a long CAN learning day to day.
+I'll cut my phone line .. shut down my cellphone
+
+I'll be back soon ... with another dumb question.
+
+Sincerely
+-bino-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000735.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+	<LI>Next message: <A HREF="000732.html">[Socketcan-users] question : Simulator that work with VCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#736">[ date ]</a>
+              <a href="thread.html#736">[ thread ]</a>
+              <a href="subject.html#736">[ subject ]</a>
+              <a href="author.html#736">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

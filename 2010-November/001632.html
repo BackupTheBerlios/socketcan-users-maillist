@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Failed%20to%20load%20sja1000_isa.ko%20on%20a%20PC104%0A%20proc%2Bcan%20stack&In-Reply-To=%3CAANLkTi%3DdXCq9gZ5oUdm8Vs9f-MLFzSaVNwuj1Spbwc-y%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001629.html">
+   <LINK REL="Next"  HREF="001630.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Failed%20to%20load%20sja1000_isa.ko%20on%20a%20PC104%0A%20proc%2Bcan%20stack&In-Reply-To=%3CAANLkTi%3DdXCq9gZ5oUdm8Vs9f-MLFzSaVNwuj1Spbwc-y%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack">lambert.willy at gmail.com
+       </A><BR>
+    <I>Wed Nov 10 23:30:32 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001629.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+        <LI>Next message: <A HREF="001630.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1632">[ date ]</a>
+              <a href="thread.html#1632">[ thread ]</a>
+              <a href="subject.html#1632">[ subject ]</a>
+              <a href="author.html#1632">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>It's working (I mean module loading) !
+
+The first mistake we, Wolfgang and I, made is that we can't read : The
+adress range is from C0000-FFC00 (a zero was forgotten) so it was in a free
+section :))))))))
+
+Then I had BIOS options in order to reserve memory to the ISA bus which I
+would have never found if you didn't tell me, so thank you a lot.
+
+
+
+
+2010/11/10 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i> On 11/10/2010 07:39 PM, Willy Lambert wrote:
+</I>&gt;<i> &gt; The name is &quot;reserved&quot; :p
+</I>&gt;<i> &gt; Which range could I choose in this map (see log below) ? I can't see what
+</I>&gt;<i> is
+</I>&gt;<i> &gt; free space and what is occupied space.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I don't understand what &quot;accessible via ioport&quot; means, could you detail
+</I>&gt;<i> this
+</I>&gt;<i> &gt; please ?
+</I>&gt;<i>
+</I>&gt;<i> ISA devices may also be accessed via I/O ports (using inb and outb). But
+</I>&gt;<i> that's not the case for the IXXAT PC-104 card.
+</I>&gt;<i>
+</I>&gt;<i> &gt; ** iomem **
+</I>&gt;<i> &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at alpha</A>:/lib/modules/2.6.32.11-target-alpha-v2/kernel# cat
+</I>&gt;<i> /proc/iomem
+</I>&gt;<i>
+</I>&gt;<i> According to the IXXAT data sheet:
+</I>&gt;<i>
+</I>&gt;<i>  PC address range: C000h-FFC0h (memory mapped), adjustable in 1 kB steps
+</I>&gt;<i>
+</I>&gt;<i> &gt; 00000000-0000ffff : reserved
+</I>&gt;<i>
+</I>&gt;<i> But that range is reserved on you system. Don't know why. Maybe due to
+</I>&gt;<i> some missing kernel config or some magic BIOS setting.
+</I>&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101110/d317570c/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101110/d317570c/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001629.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+	<LI>Next message: <A HREF="001630.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1632">[ date ]</a>
+              <a href="thread.html#1632">[ thread ]</a>
+              <a href="subject.html#1632">[ subject ]</a>
+              <a href="author.html#1632">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

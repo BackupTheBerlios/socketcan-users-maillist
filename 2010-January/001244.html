@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ANNOUNCE%3A%20new%20socket%20level%20option%20to%20report%0A%20number%20of%20rx%20queue%20overflows&In-Reply-To=%3C7EB97D3B68437742B8D26BD8D960EA98031A2E6CC1%40SERVER20.skov.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001243.html">
+   <LINK REL="Next"  HREF="001245.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows</H1>
+    <B>Mikael Rahbek</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ANNOUNCE%3A%20new%20socket%20level%20option%20to%20report%0A%20number%20of%20rx%20queue%20overflows&In-Reply-To=%3C7EB97D3B68437742B8D26BD8D960EA98031A2E6CC1%40SERVER20.skov.com%3E"
+       TITLE="[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows">mr at skov.dk
+       </A><BR>
+    <I>Fri Jan 29 13:00:31 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001243.html">[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+</A></li>
+        <LI>Next message: <A HREF="001245.html">[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1244">[ date ]</a>
+              <a href="thread.html#1244">[ thread ]</a>
+              <a href="subject.html#1244">[ subject ]</a>
+              <a href="author.html#1244">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi again
+
+Something went wrong when I synchronized my Windows machine to my Linux machine.
+
+The Makefile was not updated.
+
+My fault :-)
+
+Now it works:
+
+Mikael
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>]
+</I>&gt;<i> Sent: 29. januar 2010 11:55
+</I>&gt;<i> To: Mikael Rahbek
+</I>&gt;<i> Cc: socketcan-users; SocketCAN Core Mailing List
+</I>&gt;<i> Subject: Re: ANNOUNCE: new socket level option to report number of rx
+</I>&gt;<i> queue overflows
+</I>&gt;<i> 
+</I>&gt;<i> Mikael Rahbek wrote:
+</I>&gt;<i> &gt; Hi
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I have pulled the latest SocketCan from
+</I>&gt;<i> <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk">http://svn.berlios.de/svnroot/repos/socketcan/trunk</A>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; But when I compile the utilities I get a compile error:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; candump.c:526: error: 'SO_RXQ_OVFL' undeclared (first use in this
+</I>&gt;<i> function)
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; This is if I compile it on Fedora 11.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Is it only possible to compile, if the kernel version is 2.6.33?
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> Of course it should compile always and only complain, if it run's on a
+</I>&gt;<i> Kernel
+</I>&gt;<i> &lt; 2.6.33 when dropcount is required.
+</I>&gt;<i> 
+</I>&gt;<i> For that reason, i added
+</I>&gt;<i> 
+</I>&gt;<i>    -DSO_RXQ_OVFL=40
+</I>&gt;<i> 
+</I>&gt;<i> in trunk/can-utils/Makefile
+</I>&gt;<i> 
+</I>&gt;<i> Do you still have this problem when using the Makefile there?
+</I>&gt;<i> 
+</I>&gt;<i> It would be possible to add something like
+</I>&gt;<i> 
+</I>&gt;<i> #ifndef SO_RXQ_OVFL
+</I>&gt;<i> #define SO_RXQ_OVFL 40
+</I>&gt;<i> #endif
+</I>&gt;<i> 
+</I>&gt;<i> into the code of candump.c but this looked a bit hackish to me.
+</I>&gt;<i> 
+</I>&gt;<i> I don't have a strong preference to put this definition only into the
+</I>&gt;<i> compiler
+</I>&gt;<i> defines (in the Makefile). Any other opinion out there how to handle
+</I>&gt;<i> this?
+</I>&gt;<i> 
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001243.html">[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+</A></li>
+	<LI>Next message: <A HREF="001245.html">[Socketcan-users] ANNOUNCE: new socket level option to report number of rx queue overflows
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1244">[ date ]</a>
+              <a href="thread.html#1244">[ thread ]</a>
+              <a href="subject.html#1244">[ subject ]</a>
+              <a href="author.html#1244">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

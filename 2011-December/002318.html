@@ -1,0 +1,962 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 02/14] can: replace the	dev_dbg/info/err/... with the new netdev_xxx macros
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2002/14%5D%20can%3A%20replace%20the%0A%09dev_dbg/info/err/...%20with%20the%20new%20netdev_xxx%20macros&In-Reply-To=%3C1323269728-17491-3-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002323.html">
+   <LINK REL="Next"  HREF="002312.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 02/14] can: replace the	dev_dbg/info/err/... with the new netdev_xxx macros</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2002/14%5D%20can%3A%20replace%20the%0A%09dev_dbg/info/err/...%20with%20the%20new%20netdev_xxx%20macros&In-Reply-To=%3C1323269728-17491-3-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 02/14] can: replace the	dev_dbg/info/err/... with the new netdev_xxx macros">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:16 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002323.html">[Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding by clearing all interrupt sources
+</A></li>
+        <LI>Next message: <A HREF="002312.html">[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus	error reporting enable berr interrupt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2318">[ date ]</a>
+              <a href="thread.html#2318">[ thread ]</a>
+              <a href="subject.html#2318">[ subject ]</a>
+              <a href="author.html#2318">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/bfin_can.c        |   21 +++++--------
+ drivers/net/can/dev.c             |   23 +++++++--------
+ drivers/net/can/flexcan.c         |   44 +++++++++++++---------------
+ drivers/net/can/mcp251x.c         |    3 +-
+ drivers/net/can/mscan/mscan.c     |   17 +++++------
+ drivers/net/can/sja1000/sja1000.c |   19 ++++++------
+ drivers/net/can/ti_hecc.c         |   20 ++++++------
+ drivers/net/can/usb/ems_usb.c     |   57 +++++++++++++++----------------------
+ drivers/net/can/usb/esd_usb2.c    |   27 ++++++++----------
+ 9 files changed, 103 insertions(+), 128 deletions(-)
+
+diff --git a/drivers/net/can/bfin_can.c b/drivers/net/can/bfin_can.c
+index 349e0fa..9cf4ddb 100644
+--- a/drivers/net/can/bfin_can.c
++++ b/drivers/net/can/bfin_can.c
+@@ -82,8 +82,7 @@ static int bfin_can_set_bittiming(struct net_device *dev)
+ 	bfin_write(&amp;reg-&gt;clock, clk);
+ 	bfin_write(&amp;reg-&gt;timing, timing);
+ 
+-	dev_info(dev-&gt;dev.parent, &quot;setting CLOCK=0x%04x TIMING=0x%04x\n&quot;,
+-			clk, timing);
++	netdev_info(dev, &quot;setting CLOCK=0x%04x TIMING=0x%04x\n&quot;, clk, timing);
+ 
+ 	return 0;
+ }
+@@ -108,8 +107,7 @@ static void bfin_can_set_reset_mode(struct net_device *dev)
+ 	while (!(bfin_read(&amp;reg-&gt;control) &amp; CCA)) {
+ 		udelay(10);
+ 		if (--timeout == 0) {
+-			dev_err(dev-&gt;dev.parent,
+-					&quot;fail to enter configuration mode\n&quot;);
++			netdev_err(dev, &quot;fail to enter configuration mode\n&quot;);
+ 			BUG();
+ 		}
+ 	}
+@@ -165,8 +163,7 @@ static void bfin_can_set_normal_mode(struct net_device *dev)
+ 	while (bfin_read(&amp;reg-&gt;status) &amp; CCA) {
+ 		udelay(10);
+ 		if (--timeout == 0) {
+-			dev_err(dev-&gt;dev.parent,
+-					&quot;fail to leave configuration mode\n&quot;);
++			netdev_err(dev, &quot;fail to leave configuration mode\n&quot;);
+ 			BUG();
+ 		}
+ 	}
+@@ -331,7 +328,7 @@ static int bfin_can_err(struct net_device *dev, u16 isrc, u16 status)
+ 
+ 	if (isrc &amp; RMLIS) {
+ 		/* data overrun interrupt */
+-		dev_dbg(dev-&gt;dev.parent, &quot;data overrun interrupt\n&quot;);
++		netdev_dbg(dev, &quot;data overrun interrupt\n&quot;);
+ 		cf-&gt;can_id |= CAN_ERR_CRTL;
+ 		cf-&gt;data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+ 		stats-&gt;rx_over_errors++;
+@@ -339,7 +336,7 @@ static int bfin_can_err(struct net_device *dev, u16 isrc, u16 status)
+ 	}
+ 
+ 	if (isrc &amp; BOIS) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;bus-off mode interrupt\n&quot;);
++		netdev_dbg(dev, &quot;bus-off mode interrupt\n&quot;);
+ 		state = CAN_STATE_BUS_OFF;
+ 		cf-&gt;can_id |= CAN_ERR_BUSOFF;
+ 		can_bus_off(dev);
+@@ -347,13 +344,12 @@ static int bfin_can_err(struct net_device *dev, u16 isrc, u16 status)
+ 
+ 	if (isrc &amp; EPIS) {
+ 		/* error passive interrupt */
+-		dev_dbg(dev-&gt;dev.parent, &quot;error passive interrupt\n&quot;);
++		netdev_dbg(dev, &quot;error passive interrupt\n&quot;);
+ 		state = CAN_STATE_ERROR_PASSIVE;
+ 	}
+ 
+ 	if ((isrc &amp; EWTIS) || (isrc &amp; EWRIS)) {
+-		dev_dbg(dev-&gt;dev.parent,
+-				&quot;Error Warning Transmit/Receive Interrupt\n&quot;);
++		netdev_dbg(dev, &quot;Error Warning Transmit/Receive Interrupt\n&quot;);
+ 		state = CAN_STATE_ERROR_WARNING;
+ 	}
+ 
+@@ -636,8 +632,7 @@ static int bfin_can_suspend(struct platform_device *pdev, pm_message_t mesg)
+ 		while (!(bfin_read(&amp;reg-&gt;intr) &amp; SMACK)) {
+ 			udelay(10);
+ 			if (--timeout == 0) {
+-				dev_err(dev-&gt;dev.parent,
+-						&quot;fail to enter sleep mode\n&quot;);
++				netdev_err(dev, &quot;fail to enter sleep mode\n&quot;);
+ 				BUG();
+ 			}
+ 		}
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index 120f1ab..ac4ac92 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -130,13 +130,13 @@ static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt)
+ 		/* Error in one-tenth of a percent */
+ 		error = (best_error * 1000) / bt-&gt;bitrate;
+ 		if (error &gt; CAN_CALC_MAX_ERROR) {
+-			dev_err(dev-&gt;dev.parent,
+-				&quot;bitrate error %ld.%ld%% too high\n&quot;,
+-				error / 10, error % 10);
++			netdev_err(dev,
++				   &quot;bitrate error %ld.%ld%% too high\n&quot;,
++				   error / 10, error % 10);
+ 			return -EDOM;
+ 		} else {
+-			dev_warn(dev-&gt;dev.parent, &quot;bitrate error %ld.%ld%%\n&quot;,
+-				 error / 10, error % 10);
++			netdev_warn(dev, &quot;bitrate error %ld.%ld%%\n&quot;,
++				    error / 10, error % 10);
+ 		}
+ 	}
+ 
+@@ -172,7 +172,7 @@ static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt)
+ #else /* !CONFIG_CAN_CALC_BITTIMING */
+ static int can_calc_bittiming(struct net_device *dev, struct can_bittiming *bt)
+ {
+-	dev_err(dev-&gt;dev.parent, &quot;bit-timing calculation not available\n&quot;);
++	netdev_err(dev, &quot;bit-timing calculation not available\n&quot;);
+ 	return -EINVAL;
+ }
+ #endif /* CONFIG_CAN_CALC_BITTIMING */
+@@ -313,8 +313,7 @@ void can_put_echo_skb(struct sk_buff *skb, struct net_device *dev,
+ 		priv-&gt;echo_skb[idx] = skb;
+ 	} else {
+ 		/* locking problem with netif_stop_queue() ?? */
+-		dev_err(dev-&gt;dev.parent, &quot;%s: BUG! echo_skb is occupied!\n&quot;,
+-			__func__);
++		netdev_err(dev, &quot;%s: BUG! echo_skb is occupied!\n&quot;, __func__);
+ 		kfree_skb(skb);
+ 	}
+ }
+@@ -392,7 +391,7 @@ void can_restart(unsigned long data)
+ 	stats-&gt;rx_bytes += cf-&gt;can_dlc;
+ 
+ restart:
+-	dev_dbg(dev-&gt;dev.parent, &quot;restarted\n&quot;);
++	netdev_dbg(dev, &quot;restarted\n&quot;);
+ 	priv-&gt;can_stats.restarts++;
+ 
+ 	/* Now restart the device */
+@@ -400,7 +399,7 @@ restart:
+ 
+ 	netif_carrier_on(dev);
+ 	if (err)
+-		dev_err(dev-&gt;dev.parent, &quot;Error %d during restart&quot;, err);
++		netdev_err(dev, &quot;Error %d during restart&quot;, err);
+ }
+ 
+ int can_restart_now(struct net_device *dev)
+@@ -433,7 +432,7 @@ void can_bus_off(struct net_device *dev)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
+ 
+-	dev_dbg(dev-&gt;dev.parent, &quot;bus-off\n&quot;);
++	netdev_dbg(dev, &quot;bus-off\n&quot;);
+ 
+ 	netif_carrier_off(dev);
+ 	priv-&gt;can_stats.bus_off++;
+@@ -545,7 +544,7 @@ int open_candev(struct net_device *dev)
+ 	struct can_priv *priv = netdev_priv(dev);
+ 
+ 	if (!priv-&gt;bittiming.tq &amp;&amp; !priv-&gt;bittiming.bitrate) {
+-		dev_err(dev-&gt;dev.parent, &quot;bit-timing not yet defined\n&quot;);
++		netdev_err(dev, &quot;bit-timing not yet defined\n&quot;);
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index feb8e64..0ce914a 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -315,34 +315,34 @@ static void do_bus_err(struct net_device *dev,
+ 	cf-&gt;can_id |= CAN_ERR_PROT | CAN_ERR_BUSERROR;
+ 
+ 	if (reg_esr &amp; FLEXCAN_ESR_BIT1_ERR) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;BIT1_ERR irq\n&quot;);
++		netdev_dbg(dev, &quot;BIT1_ERR irq\n&quot;);
+ 		cf-&gt;data[2] |= CAN_ERR_PROT_BIT1;
+ 		tx_errors = 1;
+ 	}
+ 	if (reg_esr &amp; FLEXCAN_ESR_BIT0_ERR) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;BIT0_ERR irq\n&quot;);
++		netdev_dbg(dev, &quot;BIT0_ERR irq\n&quot;);
+ 		cf-&gt;data[2] |= CAN_ERR_PROT_BIT0;
+ 		tx_errors = 1;
+ 	}
+ 	if (reg_esr &amp; FLEXCAN_ESR_ACK_ERR) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;ACK_ERR irq\n&quot;);
++		netdev_dbg(dev, &quot;ACK_ERR irq\n&quot;);
+ 		cf-&gt;can_id |= CAN_ERR_ACK;
+ 		cf-&gt;data[3] |= CAN_ERR_PROT_LOC_ACK;
+ 		tx_errors = 1;
+ 	}
+ 	if (reg_esr &amp; FLEXCAN_ESR_CRC_ERR) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;CRC_ERR irq\n&quot;);
++		netdev_dbg(dev, &quot;CRC_ERR irq\n&quot;);
+ 		cf-&gt;data[2] |= CAN_ERR_PROT_BIT;
+ 		cf-&gt;data[3] |= CAN_ERR_PROT_LOC_CRC_SEQ;
+ 		rx_errors = 1;
+ 	}
+ 	if (reg_esr &amp; FLEXCAN_ESR_FRM_ERR) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;FRM_ERR irq\n&quot;);
++		netdev_dbg(dev, &quot;FRM_ERR irq\n&quot;);
+ 		cf-&gt;data[2] |= CAN_ERR_PROT_FORM;
+ 		rx_errors = 1;
+ 	}
+ 	if (reg_esr &amp; FLEXCAN_ESR_STF_ERR) {
+-		dev_dbg(dev-&gt;dev.parent, &quot;STF_ERR irq\n&quot;);
++		netdev_dbg(dev, &quot;STF_ERR irq\n&quot;);
+ 		cf-&gt;data[2] |= CAN_ERR_PROT_STUFF;
+ 		rx_errors = 1;
+ 	}
+@@ -371,7 +371,7 @@ static void do_state(struct net_device *dev,
+ 		 */
+ 		if (new_state &gt;= CAN_STATE_ERROR_WARNING &amp;&amp;
+ 		    new_state &lt;= CAN_STATE_BUS_OFF) {
+-			dev_dbg(dev-&gt;dev.parent, &quot;Error Warning IRQ\n&quot;);
++			netdev_dbg(dev, &quot;Error Warning IRQ\n&quot;);
+ 			priv-&gt;can.can_stats.error_warning++;
+ 
+ 			cf-&gt;can_id |= CAN_ERR_CRTL;
+@@ -387,7 +387,7 @@ static void do_state(struct net_device *dev,
+ 		 */
+ 		if (new_state &gt;= CAN_STATE_ERROR_PASSIVE &amp;&amp;
+ 		    new_state &lt;= CAN_STATE_BUS_OFF) {
+-			dev_dbg(dev-&gt;dev.parent, &quot;Error Passive IRQ\n&quot;);
++			netdev_dbg(dev, &quot;Error Passive IRQ\n&quot;);
+ 			priv-&gt;can.can_stats.error_passive++;
+ 
+ 			cf-&gt;can_id |= CAN_ERR_CRTL;
+@@ -397,8 +397,8 @@ static void do_state(struct net_device *dev,
+ 		}
+ 		break;
+ 	case CAN_STATE_BUS_OFF:
+-		dev_err(dev-&gt;dev.parent,
+-			&quot;BUG! hardware recovered automatically from BUS_OFF\n&quot;);
++		netdev_err(dev, &quot;BUG! &quot;
++			   &quot;hardware recovered automatically from BUS_OFF\n&quot;);
+ 		break;
+ 	default:
+ 		break;
+@@ -407,7 +407,7 @@ static void do_state(struct net_device *dev,
+ 	/* process state changes depending on the new state */
+ 	switch (new_state) {
+ 	case CAN_STATE_ERROR_ACTIVE:
+-		dev_dbg(dev-&gt;dev.parent, &quot;Error Active\n&quot;);
++		netdev_dbg(dev, &quot;Error Active\n&quot;);
+ 		cf-&gt;can_id |= CAN_ERR_PROT;
+ 		cf-&gt;data[2] = CAN_ERR_PROT_ACTIVE;
+ 		break;
+@@ -629,12 +629,12 @@ static void flexcan_set_bittiming(struct net_device *dev)
+ 	if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_3_SAMPLES)
+ 		reg |= FLEXCAN_CTRL_SMP;
+ 
+-	dev_info(dev-&gt;dev.parent, &quot;writing ctrl=0x%08x\n&quot;, reg);
++	netdev_info(dev, &quot;writing ctrl=0x%08x\n&quot;, reg);
+ 	flexcan_write(reg, &amp;regs-&gt;ctrl);
+ 
+ 	/* print chip status */
+-	dev_dbg(dev-&gt;dev.parent, &quot;%s: mcr=0x%08x ctrl=0x%08x\n&quot;, __func__,
+-		flexcan_read(&amp;regs-&gt;mcr), flexcan_read(&amp;regs-&gt;ctrl));
++	netdev_dbg(dev, &quot;%s: mcr=0x%08x ctrl=0x%08x\n&quot;, __func__,
++		   flexcan_read(&amp;regs-&gt;mcr), flexcan_read(&amp;regs-&gt;ctrl));
+ }
+ 
+ /*
+@@ -660,9 +660,8 @@ static int flexcan_chip_start(struct net_device *dev)
+ 
+ 	reg_mcr = flexcan_read(&amp;regs-&gt;mcr);
+ 	if (reg_mcr &amp; FLEXCAN_MCR_SOFTRST) {
+-		dev_err(dev-&gt;dev.parent,
+-			&quot;Failed to softreset can module (mcr=0x%08x)\n&quot;,
+-			reg_mcr);
++		netdev_err(dev, &quot;Failed to softreset can module (mcr=0x%08x)\n&quot;,
++			   reg_mcr);
+ 		err = -ENODEV;
+ 		goto out;
+ 	}
+@@ -684,7 +683,7 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	reg_mcr |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_FEN | FLEXCAN_MCR_HALT |
+ 		FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN |
+ 		FLEXCAN_MCR_IDAM_C;
+-	dev_dbg(dev-&gt;dev.parent, &quot;%s: writing mcr=0x%08x&quot;, __func__, reg_mcr);
++	netdev_dbg(dev, &quot;%s: writing mcr=0x%08x&quot;, __func__, reg_mcr);
+ 	flexcan_write(reg_mcr, &amp;regs-&gt;mcr);
+ 
+ 	/*
+@@ -710,7 +709,7 @@ static int flexcan_chip_start(struct net_device *dev)
+ 
+ 	/* save for later use */
+ 	priv-&gt;reg_ctrl_default = reg_ctrl;
+-	dev_dbg(dev-&gt;dev.parent, &quot;%s: writing ctrl=0x%08x&quot;, __func__, reg_ctrl);
++	netdev_dbg(dev, &quot;%s: writing ctrl=0x%08x&quot;, __func__, reg_ctrl);
+ 	flexcan_write(reg_ctrl, &amp;regs-&gt;ctrl);
+ 
+ 	for (i = 0; i &lt; ARRAY_SIZE(regs-&gt;cantxfg); i++) {
+@@ -742,8 +741,8 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	flexcan_write(FLEXCAN_IFLAG_DEFAULT, &amp;regs-&gt;imask1);
+ 
+ 	/* print chip status */
+-	dev_dbg(dev-&gt;dev.parent, &quot;%s: reading mcr=0x%08x ctrl=0x%08x\n&quot;,
+-		__func__, flexcan_read(&amp;regs-&gt;mcr), flexcan_read(&amp;regs-&gt;ctrl));
++	netdev_dbg(dev, &quot;%s: reading mcr=0x%08x ctrl=0x%08x\n&quot;, __func__,
++		   flexcan_read(&amp;regs-&gt;mcr), flexcan_read(&amp;regs-&gt;ctrl));
+ 
+ 	return 0;
+ 
+@@ -881,8 +880,7 @@ static int __devinit register_flexcandev(struct net_device *dev)
+ 	 */
+ 	reg = flexcan_read(&amp;regs-&gt;mcr);
+ 	if (!(reg &amp; FLEXCAN_MCR_FEN)) {
+-		dev_err(dev-&gt;dev.parent,
+-			&quot;Could not enable RX FIFO, unsupported core\n&quot;);
++		netdev_err(dev, &quot;Could not enable RX FIFO, unsupported core\n&quot;);
+ 		err = -ENODEV;
+ 		goto out;
+ 	}
+diff --git a/drivers/net/can/mcp251x.c b/drivers/net/can/mcp251x.c
+index 330140e..346785c 100644
+--- a/drivers/net/can/mcp251x.c
++++ b/drivers/net/can/mcp251x.c
+@@ -712,8 +712,7 @@ static void mcp251x_error_skb(struct net_device *net, int can_id, int data1)
+ 		frame-&gt;data[1] = data1;
+ 		netif_rx_ni(skb);
+ 	} else {
+-		dev_err(&amp;net-&gt;dev,
+-			&quot;cannot allocate error skb\n&quot;);
++		netdev_err(net, &quot;cannot allocate error skb\n&quot;);
+ 	}
+ }
+ 
+diff --git a/drivers/net/can/mscan/mscan.c b/drivers/net/can/mscan/mscan.c
+index 1c82dd8..ad8e687 100644
+--- a/drivers/net/can/mscan/mscan.c
++++ b/drivers/net/can/mscan/mscan.c
+@@ -95,9 +95,9 @@ static int mscan_set_mode(struct net_device *dev, u8 mode)
+ 			 * any, at once.
+ 			 */
+ 			if (i &gt;= MSCAN_SET_MODE_RETRIES)
+-				dev_dbg(dev-&gt;dev.parent,
+-					&quot;device failed to enter sleep mode. &quot;
+-					&quot;We proceed anyhow.\n&quot;);
++				netdev_dbg(dev,
++					   &quot;device failed to enter sleep mode. &quot;
++					   &quot;We proceed anyhow.\n&quot;);
+ 			else
+ 				priv-&gt;can.state = CAN_STATE_SLEEPING;
+ 		}
+@@ -213,7 +213,7 @@ static netdev_tx_t mscan_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	switch (hweight8(i)) {
+ 	case 0:
+ 		netif_stop_queue(dev);
+-		dev_err(dev-&gt;dev.parent, &quot;Tx Ring full when queue awake!\n&quot;);
++		netdev_err(dev, &quot;Tx Ring full when queue awake!\n&quot;);
+ 		return NETDEV_TX_BUSY;
+ 	case 1:
+ 		/*
+@@ -352,7 +352,7 @@ static void mscan_get_err_frame(struct net_device *dev, struct can_frame *frame,
+ 	struct net_device_stats *stats = &amp;dev-&gt;stats;
+ 	enum can_state old_state;
+ 
+-	dev_dbg(dev-&gt;dev.parent, &quot;error interrupt (canrflg=%#x)\n&quot;, canrflg);
++	netdev_dbg(dev, &quot;error interrupt (canrflg=%#x)\n&quot;, canrflg);
+ 	frame-&gt;can_id = CAN_ERR_FLAG;
+ 
+ 	if (canrflg &amp; MSCAN_OVRIF) {
+@@ -427,7 +427,7 @@ static int mscan_rx_poll(struct napi_struct *napi, int quota)
+ 		skb = alloc_can_skb(dev, &amp;frame);
+ 		if (!skb) {
+ 			if (printk_ratelimit())
+-				dev_notice(dev-&gt;dev.parent, &quot;packet dropped\n&quot;);
++				netdev_notice(dev, &quot;packet dropped\n&quot;);
+ 			stats-&gt;rx_dropped++;
+ 			out_8(&amp;regs-&gt;canrflg, canrflg);
+ 			continue;
+@@ -551,8 +551,7 @@ static int mscan_do_set_bittiming(struct net_device *dev)
+ 		BTR1_SET_TSEG2(bt-&gt;phase_seg2) |
+ 		BTR1_SET_SAM(priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_3_SAMPLES));
+ 
+-	dev_info(dev-&gt;dev.parent, &quot;setting BTR0=0x%02x BTR1=0x%02x\n&quot;,
+-		btr0, btr1);
++	netdev_info(dev, &quot;setting BTR0=0x%02x BTR1=0x%02x\n&quot;, btr0, btr1);
+ 
+ 	out_8(&amp;regs-&gt;canbtr0, btr0);
+ 	out_8(&amp;regs-&gt;canbtr1, btr1);
+@@ -575,7 +574,7 @@ static int mscan_open(struct net_device *dev)
+ 
+ 	ret = request_irq(dev-&gt;irq, mscan_isr, 0, dev-&gt;name, dev);
+ 	if (ret &lt; 0) {
+-		dev_err(dev-&gt;dev.parent, &quot;failed to attach interrupt\n&quot;);
++		netdev_err(dev, &quot;failed to attach interrupt\n&quot;);
+ 		goto exit_napi_disable;
+ 	}
+ 
+diff --git a/drivers/net/can/sja1000/sja1000.c b/drivers/net/can/sja1000/sja1000.c
+index 04a3f1b..ebbcfca 100644
+--- a/drivers/net/can/sja1000/sja1000.c
++++ b/drivers/net/can/sja1000/sja1000.c
+@@ -128,7 +128,7 @@ static void set_reset_mode(struct net_device *dev)
+ 		status = priv-&gt;read_reg(priv, REG_MOD);
+ 	}
+ 
+-	dev_err(dev-&gt;dev.parent, &quot;setting SJA1000 into reset mode failed!\n&quot;);
++	netdev_err(dev, &quot;setting SJA1000 into reset mode failed!\n&quot;);
+ }
+ 
+ static void set_normal_mode(struct net_device *dev)
+@@ -156,7 +156,7 @@ static void set_normal_mode(struct net_device *dev)
+ 		status = priv-&gt;read_reg(priv, REG_MOD);
+ 	}
+ 
+-	dev_err(dev-&gt;dev.parent, &quot;setting SJA1000 into normal mode failed!\n&quot;);
++	netdev_err(dev, &quot;setting SJA1000 into normal mode failed!\n&quot;);
+ }
+ 
+ static void sja1000_start(struct net_device *dev)
+@@ -209,8 +209,7 @@ static int sja1000_set_bittiming(struct net_device *dev)
+ 	if (priv-&gt;can.ctrlmode &amp; CAN_CTRLMODE_3_SAMPLES)
+ 		btr1 |= 0x80;
+ 
+-	dev_info(dev-&gt;dev.parent,
+-		 &quot;setting BTR0=0x%02x BTR1=0x%02x\n&quot;, btr0, btr1);
++	netdev_info(dev, &quot;setting BTR0=0x%02x BTR1=0x%02x\n&quot;, btr0, btr1);
+ 
+ 	priv-&gt;write_reg(priv, REG_BTR0, btr0);
+ 	priv-&gt;write_reg(priv, REG_BTR1, btr1);
+@@ -378,7 +377,7 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 
+ 	if (isrc &amp; IRQ_DOI) {
+ 		/* data overrun interrupt */
+-		dev_dbg(dev-&gt;dev.parent, &quot;data overrun interrupt\n&quot;);
++		netdev_dbg(dev, &quot;data overrun interrupt\n&quot;);
+ 		cf-&gt;can_id |= CAN_ERR_CRTL;
+ 		cf-&gt;data[1] = CAN_ERR_CRTL_RX_OVERFLOW;
+ 		stats-&gt;rx_over_errors++;
+@@ -388,7 +387,7 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 
+ 	if (isrc &amp; IRQ_EI) {
+ 		/* error warning interrupt */
+-		dev_dbg(dev-&gt;dev.parent, &quot;error warning interrupt\n&quot;);
++		netdev_dbg(dev, &quot;error warning interrupt\n&quot;);
+ 
+ 		if (status &amp; SR_BS) {
+ 			state = CAN_STATE_BUS_OFF;
+@@ -429,7 +428,7 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 	}
+ 	if (isrc &amp; IRQ_EPI) {
+ 		/* error passive interrupt */
+-		dev_dbg(dev-&gt;dev.parent, &quot;error passive interrupt\n&quot;);
++		netdev_dbg(dev, &quot;error passive interrupt\n&quot;);
+ 		if (status &amp; SR_ES)
+ 			state = CAN_STATE_ERROR_PASSIVE;
+ 		else
+@@ -437,7 +436,7 @@ static int sja1000_err(struct net_device *dev, uint8_t isrc, uint8_t status)
+ 	}
+ 	if (isrc &amp; IRQ_ALI) {
+ 		/* arbitration lost interrupt */
+-		dev_dbg(dev-&gt;dev.parent, &quot;arbitration lost interrupt\n&quot;);
++		netdev_dbg(dev, &quot;arbitration lost interrupt\n&quot;);
+ 		alc = priv-&gt;read_reg(priv, REG_ALC);
+ 		priv-&gt;can.can_stats.arbitration_lost++;
+ 		stats-&gt;tx_errors++;
+@@ -495,7 +494,7 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
+ 		status = priv-&gt;read_reg(priv, REG_SR);
+ 
+ 		if (isrc &amp; IRQ_WUI)
+-			dev_warn(dev-&gt;dev.parent, &quot;wakeup interrupt\n&quot;);
++			netdev_warn(dev, &quot;wakeup interrupt\n&quot;);
+ 
+ 		if (isrc &amp; IRQ_TI) {
+ 			/* transmission complete interrupt */
+@@ -522,7 +521,7 @@ irqreturn_t sja1000_interrupt(int irq, void *dev_id)
+ 		priv-&gt;post_irq(priv);
+ 
+ 	if (n &gt;= SJA1000_MAX_IRQ)
+-		dev_dbg(dev-&gt;dev.parent, &quot;%d messages handled in ISR&quot;, n);
++		netdev_dbg(dev, &quot;%d messages handled in ISR&quot;, n);
+ 
+ 	return (n) ? IRQ_HANDLED : IRQ_NONE;
+ }
+diff --git a/drivers/net/can/ti_hecc.c b/drivers/net/can/ti_hecc.c
+index df809e3..d50e5e0 100644
+--- a/drivers/net/can/ti_hecc.c
++++ b/drivers/net/can/ti_hecc.c
+@@ -306,7 +306,7 @@ static int ti_hecc_set_btc(struct ti_hecc_priv *priv)
+ 		if (bit_timing-&gt;brp &gt; 4)
+ 			can_btc |= HECC_CANBTC_SAM;
+ 		else
+-			dev_warn(priv-&gt;ndev-&gt;dev.parent, &quot;WARN: Triple&quot; \
++			netdev_warn(priv-&gt;ndev, &quot;WARN: Triple&quot;
+ 				&quot;sampling not set due to h/w limitations&quot;);
+ 	}
+ 	can_btc |= ((bit_timing-&gt;sjw - 1) &amp; 0x3) &lt;&lt; 8;
+@@ -315,7 +315,7 @@ static int ti_hecc_set_btc(struct ti_hecc_priv *priv)
+ 	/* ERM being set to 0 by default meaning resync at falling edge */
+ 
+ 	hecc_write(priv, HECC_CANBTC, can_btc);
+-	dev_info(priv-&gt;ndev-&gt;dev.parent, &quot;setting CANBTC=%#x\n&quot;, can_btc);
++	netdev_info(priv-&gt;ndev, &quot;setting CANBTC=%#x\n&quot;, can_btc);
+ 
+ 	return 0;
+ }
+@@ -332,7 +332,7 @@ static void ti_hecc_reset(struct net_device *ndev)
+ 	u32 cnt;
+ 	struct ti_hecc_priv *priv = netdev_priv(ndev);
+ 
+-	dev_dbg(ndev-&gt;dev.parent, &quot;resetting hecc ...\n&quot;);
++	netdev_dbg(ndev, &quot;resetting hecc ...\n&quot;);
+ 	hecc_set_bit(priv, HECC_CANMC, HECC_CANMC_SRES);
+ 
+ 	/* Set change control request and wait till enabled */
+@@ -496,7 +496,7 @@ static netdev_tx_t ti_hecc_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	if (unlikely(hecc_read(priv, HECC_CANME) &amp; mbx_mask)) {
+ 		spin_unlock_irqrestore(&amp;priv-&gt;mbx_lock, flags);
+ 		netif_stop_queue(ndev);
+-		dev_err(priv-&gt;ndev-&gt;dev.parent,
++		dev_err(priv-&gt;ndev,
+ 			&quot;BUG: TX mbx not ready tx_head=%08X, tx_tail=%08X\n&quot;,
+ 			priv-&gt;tx_head, priv-&gt;tx_tail);
+ 		return NETDEV_TX_BUSY;
+@@ -550,7 +550,7 @@ static int ti_hecc_rx_pkt(struct ti_hecc_priv *priv, int mbxno)
+ 	skb = alloc_can_skb(priv-&gt;ndev, &amp;cf);
+ 	if (!skb) {
+ 		if (printk_ratelimit())
+-			dev_err(priv-&gt;ndev-&gt;dev.parent,
++			netdev_err(priv-&gt;ndev,
+ 				&quot;ti_hecc_rx_pkt: alloc_can_skb() failed\n&quot;);
+ 		return -ENOMEM;
+ 	}
+@@ -668,7 +668,7 @@ static int ti_hecc_error(struct net_device *ndev, int int_status,
+ 	skb = alloc_can_err_skb(ndev, &amp;cf);
+ 	if (!skb) {
+ 		if (printk_ratelimit())
+-			dev_err(priv-&gt;ndev-&gt;dev.parent,
++			netdev_err(priv-&gt;ndev,
+ 				&quot;ti_hecc_error: alloc_can_err_skb() failed\n&quot;);
+ 		return -ENOMEM;
+ 	}
+@@ -684,7 +684,7 @@ static int ti_hecc_error(struct net_device *ndev, int int_status,
+ 				cf-&gt;data[1] |= CAN_ERR_CRTL_RX_WARNING;
+ 		}
+ 		hecc_set_bit(priv, HECC_CANES, HECC_CANES_EW);
+-		dev_dbg(priv-&gt;ndev-&gt;dev.parent, &quot;Error Warning interrupt\n&quot;);
++		netdev_dbg(priv-&gt;ndev, &quot;Error Warning interrupt\n&quot;);
+ 		hecc_clear_bit(priv, HECC_CANMC, HECC_CANMC_CCR);
+ 	}
+ 
+@@ -699,7 +699,7 @@ static int ti_hecc_error(struct net_device *ndev, int int_status,
+ 				cf-&gt;data[1] |= CAN_ERR_CRTL_RX_PASSIVE;
+ 		}
+ 		hecc_set_bit(priv, HECC_CANES, HECC_CANES_EP);
+-		dev_dbg(priv-&gt;ndev-&gt;dev.parent, &quot;Error passive interrupt\n&quot;);
++		netdev_dbg(priv-&gt;ndev, &quot;Error passive interrupt\n&quot;);
+ 		hecc_clear_bit(priv, HECC_CANMC, HECC_CANMC_CCR);
+ 	}
+ 
+@@ -824,7 +824,7 @@ static int ti_hecc_open(struct net_device *ndev)
+ 	err = request_irq(ndev-&gt;irq, ti_hecc_interrupt, IRQF_SHARED,
+ 			ndev-&gt;name, ndev);
+ 	if (err) {
+-		dev_err(ndev-&gt;dev.parent, &quot;error requesting interrupt\n&quot;);
++		netdev_err(ndev, &quot;error requesting interrupt\n&quot;);
+ 		return err;
+ 	}
+ 
+@@ -833,7 +833,7 @@ static int ti_hecc_open(struct net_device *ndev)
+ 	/* Open common can device */
+ 	err = open_candev(ndev);
+ 	if (err) {
+-		dev_err(ndev-&gt;dev.parent, &quot;open_candev() failed %d\n&quot;, err);
++		netdev_err(ndev, &quot;open_candev() failed %d\n&quot;, err);
+ 		ti_hecc_transceiver_switch(priv, 0);
+ 		free_irq(ndev-&gt;irq, ndev);
+ 		return err;
+diff --git a/drivers/net/can/usb/ems_usb.c b/drivers/net/can/usb/ems_usb.c
+index a72c7bf..bf088b5 100644
+--- a/drivers/net/can/usb/ems_usb.c
++++ b/drivers/net/can/usb/ems_usb.c
+@@ -288,8 +288,7 @@ static void ems_usb_read_interrupt_callback(struct urb *urb)
+ 		return;
+ 
+ 	default:
+-		dev_info(netdev-&gt;dev.parent, &quot;Rx interrupt aborted %d\n&quot;,
+-			 urb-&gt;status);
++		netdev_info(netdev, &quot;Rx interrupt aborted %d\n&quot;, urb-&gt;status);
+ 		break;
+ 	}
+ 
+@@ -298,8 +297,7 @@ static void ems_usb_read_interrupt_callback(struct urb *urb)
+ 	if (err == -ENODEV)
+ 		netif_device_detach(netdev);
+ 	else if (err)
+-		dev_err(netdev-&gt;dev.parent,
+-			&quot;failed resubmitting intr urb: %d\n&quot;, err);
++		netdev_err(netdev, &quot;failed resubmitting intr urb: %d\n&quot;, err);
+ }
+ 
+ static void ems_usb_rx_can_msg(struct ems_usb *dev, struct ems_cpc_msg *msg)
+@@ -431,8 +429,7 @@ static void ems_usb_read_bulk_callback(struct urb *urb)
+ 		return;
+ 
+ 	default:
+-		dev_info(netdev-&gt;dev.parent, &quot;Rx URB aborted (%d)\n&quot;,
+-			 urb-&gt;status);
++		netdev_info(netdev, &quot;Rx URB aborted (%d)\n&quot;, urb-&gt;status);
+ 		goto resubmit_urb;
+ 	}
+ 
+@@ -477,7 +474,7 @@ static void ems_usb_read_bulk_callback(struct urb *urb)
+ 			msg_count--;
+ 
+ 			if (start &gt; urb-&gt;transfer_buffer_length) {
+-				dev_err(netdev-&gt;dev.parent, &quot;format error\n&quot;);
++				netdev_err(netdev, &quot;format error\n&quot;);
+ 				break;
+ 			}
+ 		}
+@@ -493,8 +490,8 @@ resubmit_urb:
+ 	if (retval == -ENODEV)
+ 		netif_device_detach(netdev);
+ 	else if (retval)
+-		dev_err(netdev-&gt;dev.parent,
+-			&quot;failed resubmitting read bulk urb: %d\n&quot;, retval);
++		netdev_err(netdev,
++			   &quot;failed resubmitting read bulk urb: %d\n&quot;, retval);
+ }
+ 
+ /*
+@@ -521,8 +518,7 @@ static void ems_usb_write_bulk_callback(struct urb *urb)
+ 		return;
+ 
+ 	if (urb-&gt;status)
+-		dev_info(netdev-&gt;dev.parent, &quot;Tx URB aborted (%d)\n&quot;,
+-			 urb-&gt;status);
++		netdev_info(netdev, &quot;Tx URB aborted (%d)\n&quot;, urb-&gt;status);
+ 
+ 	netdev-&gt;trans_start = jiffies;
+ 
+@@ -605,16 +601,14 @@ static int ems_usb_start(struct ems_usb *dev)
+ 		/* create a URB, and a buffer for it */
+ 		urb = usb_alloc_urb(0, GFP_KERNEL);
+ 		if (!urb) {
+-			dev_err(netdev-&gt;dev.parent,
+-				&quot;No memory left for URBs\n&quot;);
++			netdev_err(netdev, &quot;No memory left for URBs\n&quot;);
+ 			return -ENOMEM;
+ 		}
+ 
+ 		buf = usb_alloc_coherent(dev-&gt;udev, RX_BUFFER_SIZE, GFP_KERNEL,
+ 					 &amp;urb-&gt;transfer_dma);
+ 		if (!buf) {
+-			dev_err(netdev-&gt;dev.parent,
+-				&quot;No memory left for USB buffer\n&quot;);
++			netdev_err(netdev, &quot;No memory left for USB buffer\n&quot;);
+ 			usb_free_urb(urb);
+ 			return -ENOMEM;
+ 		}
+@@ -642,13 +636,13 @@ static int ems_usb_start(struct ems_usb *dev)
+ 
+ 	/* Did we submit any URBs */
+ 	if (i == 0) {
+-		dev_warn(netdev-&gt;dev.parent, &quot;couldn't setup read URBs\n&quot;);
++		netdev_warn(netdev, &quot;couldn't setup read URBs\n&quot;);
+ 		return err;
+ 	}
+ 
+ 	/* Warn if we've couldn't transmit all the URBs */
+ 	if (i &lt; MAX_RX_URBS)
+-		dev_warn(netdev-&gt;dev.parent, &quot;rx performance may be slow\n&quot;);
++		netdev_warn(netdev, &quot;rx performance may be slow\n&quot;);
+ 
+ 	/* Setup and start interrupt URB */
+ 	usb_fill_int_urb(dev-&gt;intr_urb, dev-&gt;udev,
+@@ -662,8 +656,7 @@ static int ems_usb_start(struct ems_usb *dev)
+ 		if (err == -ENODEV)
+ 			netif_device_detach(dev-&gt;netdev);
+ 
+-		dev_warn(netdev-&gt;dev.parent, &quot;intr URB submit failed: %d\n&quot;,
+-			 err);
++		netdev_warn(netdev, &quot;intr URB submit failed: %d\n&quot;, err);
+ 
+ 		return err;
+ 	}
+@@ -695,7 +688,7 @@ failed:
+ 	if (err == -ENODEV)
+ 		netif_device_detach(dev-&gt;netdev);
+ 
+-	dev_warn(netdev-&gt;dev.parent, &quot;couldn't submit control: %d\n&quot;, err);
++	netdev_warn(netdev, &quot;couldn't submit control: %d\n&quot;, err);
+ 
+ 	return err;
+ }
+@@ -735,8 +728,7 @@ static int ems_usb_open(struct net_device *netdev)
+ 		if (err == -ENODEV)
+ 			netif_device_detach(dev-&gt;netdev);
+ 
+-		dev_warn(netdev-&gt;dev.parent, &quot;couldn't start device: %d\n&quot;,
+-			 err);
++		netdev_warn(netdev, &quot;couldn't start device: %d\n&quot;, err);
+ 
+ 		close_candev(netdev);
+ 
+@@ -769,13 +761,13 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 	/* create a URB, and a buffer for it, and copy the data to the URB */
+ 	urb = usb_alloc_urb(0, GFP_ATOMIC);
+ 	if (!urb) {
+-		dev_err(netdev-&gt;dev.parent, &quot;No memory left for URBs\n&quot;);
++		netdev_err(netdev, &quot;No memory left for URBs\n&quot;);
+ 		goto nomem;
+ 	}
+ 
+ 	buf = usb_alloc_coherent(dev-&gt;udev, size, GFP_ATOMIC, &amp;urb-&gt;transfer_dma);
+ 	if (!buf) {
+-		dev_err(netdev-&gt;dev.parent, &quot;No memory left for USB buffer\n&quot;);
++		netdev_err(netdev, &quot;No memory left for USB buffer\n&quot;);
+ 		usb_free_urb(urb);
+ 		goto nomem;
+ 	}
+@@ -818,7 +810,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 		usb_unanchor_urb(urb);
+ 		usb_free_coherent(dev-&gt;udev, size, buf, urb-&gt;transfer_dma);
+ 
+-		dev_warn(netdev-&gt;dev.parent, &quot;couldn't find free context\n&quot;);
++		netdev_warn(netdev, &quot;couldn't find free context\n&quot;);
+ 
+ 		return NETDEV_TX_BUSY;
+ 	}
+@@ -849,7 +841,7 @@ static netdev_tx_t ems_usb_start_xmit(struct sk_buff *skb, struct net_device *ne
+ 		if (err == -ENODEV) {
+ 			netif_device_detach(netdev);
+ 		} else {
+-			dev_warn(netdev-&gt;dev.parent, &quot;failed tx_urb %d\n&quot;, err);
++			netdev_warn(netdev, &quot;failed tx_urb %d\n&quot;, err);
+ 
+ 			stats-&gt;tx_dropped++;
+ 		}
+@@ -889,7 +881,7 @@ static int ems_usb_close(struct net_device *netdev)
+ 
+ 	/* Set CAN controller to reset mode */
+ 	if (ems_usb_write_mode(dev, SJA1000_MOD_RM))
+-		dev_warn(netdev-&gt;dev.parent, &quot;couldn't stop device&quot;);
++		netdev_warn(netdev, &quot;couldn't stop device&quot;);
+ 
+ 	close_candev(netdev);
+ 
+@@ -926,7 +918,7 @@ static int ems_usb_set_mode(struct net_device *netdev, enum can_mode mode)
+ 	switch (mode) {
+ 	case CAN_MODE_START:
+ 		if (ems_usb_write_mode(dev, SJA1000_MOD_NORMAL))
+-			dev_warn(netdev-&gt;dev.parent, &quot;couldn't start device&quot;);
++			netdev_warn(netdev, &quot;couldn't start device&quot;);
+ 
+ 		if (netif_queue_stopped(netdev))
+ 			netif_wake_queue(netdev);
+@@ -951,8 +943,7 @@ static int ems_usb_set_bittiming(struct net_device *netdev)
+ 	if (dev-&gt;can.ctrlmode &amp; CAN_CTRLMODE_3_SAMPLES)
+ 		btr1 |= 0x80;
+ 
+-	dev_info(netdev-&gt;dev.parent, &quot;setting BTR0=0x%02x BTR1=0x%02x\n&quot;,
+-		 btr0, btr1);
++	netdev_info(netdev, &quot;setting BTR0=0x%02x BTR1=0x%02x\n&quot;, btr0, btr1);
+ 
+ 	dev-&gt;active_params.msg.can_params.cc_params.sja1000.btr0 = btr0;
+ 	dev-&gt;active_params.msg.can_params.cc_params.sja1000.btr1 = btr1;
+@@ -1057,15 +1048,13 @@ static int ems_usb_probe(struct usb_interface *intf,
+ 
+ 	err = ems_usb_command_msg(dev, &amp;dev-&gt;active_params);
+ 	if (err) {
+-		dev_err(netdev-&gt;dev.parent,
+-			&quot;couldn't initialize controller: %d\n&quot;, err);
++		netdev_err(netdev, &quot;couldn't initialize controller: %d\n&quot;, err);
+ 		goto cleanup_tx_msg_buffer;
+ 	}
+ 
+ 	err = register_candev(netdev);
+ 	if (err) {
+-		dev_err(netdev-&gt;dev.parent,
+-			&quot;couldn't register CAN device: %d\n&quot;, err);
++		netdev_err(netdev, &quot;couldn't register CAN device: %d\n&quot;, err);
+ 		goto cleanup_tx_msg_buffer;
+ 	}
+ 
+diff --git a/drivers/net/can/usb/esd_usb2.c b/drivers/net/can/usb/esd_usb2.c
+index eb8b0e6..6f3fafb 100644
+--- a/drivers/net/can/usb/esd_usb2.c
++++ b/drivers/net/can/usb/esd_usb2.c
+@@ -470,8 +470,7 @@ static void esd_usb2_write_bulk_callback(struct urb *urb)
+ 		return;
+ 
+ 	if (urb-&gt;status)
+-		dev_info(netdev-&gt;dev.parent, &quot;Tx URB aborted (%d)\n&quot;,
+-			 urb-&gt;status);
++		netdev_info(netdev, &quot;Tx URB aborted (%d)\n&quot;, urb-&gt;status);
+ 
+ 	netdev-&gt;trans_start = jiffies;
+ }
+@@ -651,7 +650,7 @@ failed:
+ 	if (err == -ENODEV)
+ 		netif_device_detach(netdev);
+ 
+-	dev_err(netdev-&gt;dev.parent, &quot;couldn't start device: %d\n&quot;, err);
++	netdev_err(netdev, &quot;couldn't start device: %d\n&quot;, err);
+ 
+ 	return err;
+ }
+@@ -687,8 +686,7 @@ static int esd_usb2_open(struct net_device *netdev)
+ 	/* finally start device */
+ 	err = esd_usb2_start(priv);
+ 	if (err) {
+-		dev_warn(netdev-&gt;dev.parent,
+-			 &quot;couldn't start device: %d\n&quot;, err);
++		netdev_warn(netdev, &quot;couldn't start device: %d\n&quot;, err);
+ 		close_candev(netdev);
+ 		return err;
+ 	}
+@@ -721,7 +719,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff *skb,
+ 	/* create a URB, and a buffer for it, and copy the data to the URB */
+ 	urb = usb_alloc_urb(0, GFP_ATOMIC);
+ 	if (!urb) {
+-		dev_err(netdev-&gt;dev.parent, &quot;No memory left for URBs\n&quot;);
++		netdev_err(netdev, &quot;No memory left for URBs\n&quot;);
+ 		stats-&gt;tx_dropped++;
+ 		dev_kfree_skb(skb);
+ 		goto nourbmem;
+@@ -730,7 +728,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff *skb,
+ 	buf = usb_alloc_coherent(dev-&gt;udev, size, GFP_ATOMIC,
+ 				 &amp;urb-&gt;transfer_dma);
+ 	if (!buf) {
+-		dev_err(netdev-&gt;dev.parent, &quot;No memory left for USB buffer\n&quot;);
++		netdev_err(netdev, &quot;No memory left for USB buffer\n&quot;);
+ 		stats-&gt;tx_dropped++;
+ 		dev_kfree_skb(skb);
+ 		goto nobufmem;
+@@ -766,7 +764,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff *skb,
+ 	 * This may never happen.
+ 	 */
+ 	if (!context) {
+-		dev_warn(netdev-&gt;dev.parent, &quot;couldn't find free context\n&quot;);
++		netdev_warn(netdev, &quot;couldn't find free context\n&quot;);
+ 		ret = NETDEV_TX_BUSY;
+ 		goto releasebuf;
+ 	}
+@@ -806,7 +804,7 @@ static netdev_tx_t esd_usb2_start_xmit(struct sk_buff *skb,
+ 		if (err == -ENODEV)
+ 			netif_device_detach(netdev);
+ 		else
+-			dev_warn(netdev-&gt;dev.parent, &quot;failed tx_urb %d\n&quot;, err);
++			netdev_warn(netdev, &quot;failed tx_urb %d\n&quot;, err);
+ 
+ 		goto releasebuf;
+ 	}
+@@ -845,7 +843,7 @@ static int esd_usb2_close(struct net_device *netdev)
+ 	for (i = 0; i &lt;= ESD_MAX_ID_SEGMENT; i++)
+ 		msg.msg.filter.mask[i] = 0;
+ 	if (esd_usb2_send_msg(priv-&gt;usb2, &amp;msg) &lt; 0)
+-		dev_err(netdev-&gt;dev.parent, &quot;sending idadd message failed\n&quot;);
++		netdev_err(netdev, &quot;sending idadd message failed\n&quot;);
+ 
+ 	/* set CAN controller to reset mode */
+ 	msg.msg.hdr.len = 2;
+@@ -854,7 +852,7 @@ static int esd_usb2_close(struct net_device *netdev)
+ 	msg.msg.setbaud.rsvd = 0;
+ 	msg.msg.setbaud.baud = cpu_to_le32(ESD_USB2_NO_BAUDRATE);
+ 	if (esd_usb2_send_msg(priv-&gt;usb2, &amp;msg) &lt; 0)
+-		dev_err(netdev-&gt;dev.parent, &quot;sending setbaud message failed\n&quot;);
++		netdev_err(netdev, &quot;sending setbaud message failed\n&quot;);
+ 
+ 	priv-&gt;can.state = CAN_STATE_STOPPED;
+ 
+@@ -910,7 +908,7 @@ static int esd_usb2_set_bittiming(struct net_device *netdev)
+ 	msg.msg.setbaud.rsvd = 0;
+ 	msg.msg.setbaud.baud = cpu_to_le32(canbtr);
+ 
+-	dev_info(netdev-&gt;dev.parent, &quot;setting BTR=%#x\n&quot;, canbtr);
++	netdev_info(netdev, &quot;setting BTR=%#x\n&quot;, canbtr);
+ 
+ 	return esd_usb2_send_msg(priv-&gt;usb2, &amp;msg);
+ }
+@@ -988,15 +986,14 @@ static int esd_usb2_probe_one_net(struct usb_interface *intf, int index)
+ 
+ 	err = register_candev(netdev);
+ 	if (err) {
+-		dev_err(&amp;intf-&gt;dev,
+-			&quot;couldn't register CAN device: %d\n&quot;, err);
++		dev_err(&amp;intf-&gt;dev, &quot;couldn't register CAN device: %d\n&quot;, err);
+ 		free_candev(netdev);
+ 		err = -ENOMEM;
+ 		goto done;
+ 	}
+ 
+ 	dev-&gt;nets[index] = priv;
+-	dev_info(netdev-&gt;dev.parent, &quot;device %s registered\n&quot;, netdev-&gt;name);
++	netdev_info(netdev, &quot;device %s registered\n&quot;, netdev-&gt;name);
+ 
+ done:
+ 	return err;
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002323.html">[Socketcan-users] [RFC PATCH 01/14] can: flexcan: fix irq flooding by clearing all interrupt sources
+</A></li>
+	<LI>Next message: <A HREF="002312.html">[Socketcan-users] [RFC PATCH 03/14] can: flexcan: only for bus	error reporting enable berr interrupt
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2318">[ date ]</a>
+              <a href="thread.html#2318">[ thread ]</a>
+              <a href="subject.html#2318">[ subject ]</a>
+              <a href="author.html#2318">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

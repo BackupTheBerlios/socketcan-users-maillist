@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Geting a real Kvaser CAN card to work
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Geting%20a%20real%20Kvaser%20CAN%20card%20to%20work&In-Reply-To=%3C4CA4624B.2070108%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001512.html">
+   <LINK REL="Next"  HREF="001514.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Geting a real Kvaser CAN card to work</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Geting%20a%20real%20Kvaser%20CAN%20card%20to%20work&In-Reply-To=%3C4CA4624B.2070108%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Geting a real Kvaser CAN card to work">wg at grandegger.com
+       </A><BR>
+    <I>Thu Sep 30 12:11:23 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001512.html">[Socketcan-users] Geting a real Kvaser CAN card to work
+</A></li>
+        <LI>Next message: <A HREF="001514.html">[Socketcan-users] Geting a real Kvaser CAN card to work
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1513">[ date ]</a>
+              <a href="thread.html#1513">[ thread ]</a>
+              <a href="subject.html#1513">[ subject ]</a>
+              <a href="author.html#1513">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 09/30/2010 11:40 AM, Ewgenij Sokolovski wrote:
+&gt;<i> Hello, list. I am a newbie to the CAN sockets. I worked a time with virtual CAN sockets and it worked well. Now, I tried to test my software with a real can interface. I have a car PC with a Kvaser PCIcanx II HS/HS card installed on it. A Debian Lenny system is running on it. However, I installed a new kernel version 2.6.32 in order to work with socketCans.
+</I>&gt;<i> 
+</I>&gt;<i> My problem is that I cannot get the can-interface of my Kvaser card to show up. I loaded the kvaser_pci modul with modprobe. However, when I type in
+</I>&gt;<i> 
+</I>&gt;<i> ip link set can0 type kvaser_pci
+</I>&gt;<i> 
+</I>&gt;<i> or
+</I>&gt;<i> 
+</I>&gt;<i> ip link set can0 type can
+</I>&gt;<i> 
+</I>&gt;<i> I get the message &quot;cannot find device can0&quot;. What am I doing wrong???
+</I>
+Do you find any device related messages in the kernel log e.g.:
+&quot;xilinx version=%d number of channels=%d&quot;? If not, the device was maybe
+not recognized. What PCI device and vendor id does your kvaser_pci
+device have?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001512.html">[Socketcan-users] Geting a real Kvaser CAN card to work
+</A></li>
+	<LI>Next message: <A HREF="001514.html">[Socketcan-users] Geting a real Kvaser CAN card to work
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1513">[ date ]</a>
+              <a href="thread.html#1513">[ thread ]</a>
+              <a href="subject.html#1513">[ subject ]</a>
+              <a href="author.html#1513">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

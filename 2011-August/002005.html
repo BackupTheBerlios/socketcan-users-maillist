@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20peak_pci.c%3A%20Add%20support%20for%203rd%20and%0A%204th%20CAN%20channel%20on%20some%20Peak%20PCI%20cards&In-Reply-To=%3COF4BEC2516.7C39ECF5-ONC12578DF.004FFF3E-C12578DF.005145F9%40retarus.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002004.html">
+   <LINK REL="Next"  HREF="002006.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards</H1>
+    <B>Thomas Wiedemann</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20peak_pci.c%3A%20Add%20support%20for%203rd%20and%0A%204th%20CAN%20channel%20on%20some%20Peak%20PCI%20cards&In-Reply-To=%3COF4BEC2516.7C39ECF5-ONC12578DF.004FFF3E-C12578DF.005145F9%40retarus.de%3E"
+       TITLE="[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards">Thomas.Wiedemann at iav.de
+       </A><BR>
+    <I>Mon Aug  1 16:48:05 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002004.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+        <LI>Next message: <A HREF="002006.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2005">[ date ]</a>
+              <a href="thread.html#2005">[ thread ]</a>
+              <a href="subject.html#2005">[ subject ]</a>
+              <a href="author.html#2005">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; schrieb am 01.08.2011 16:23:42:
+&gt;<i> Hi Thomas,
+</I>&gt;<i> 
+</I>&gt;<i> On 08/01/2011 04:08 PM, Thomas Wiedemann wrote:
+</I>&gt;<i> &gt; Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; schrieb am 01.08.2011 
+</I>15:58:54:
+&gt;<i> &gt;&gt; On 08/01/2011 03:54 PM, Thomas Wiedemann wrote:
+</I>&gt;<i> &gt;&gt;&gt; Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt; schrieb am 01.08.2011 
+</I>&gt;<i> &gt; 15:32:14:
+</I>&gt;<i> &gt;&gt;&gt;&gt; Hi Marc,
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; On 08/01/2011 02:55 PM, Marc Kleine-Budde wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; On 08/01/2011 02:17 PM, Thomas Wiedemann wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Hi,
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; i've attached a patch for the Peak CAN PCI driver, which enables 
+</I>&gt;<i> &gt;&gt;&gt; support 
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; for the 3rd and 4th channel available on some cards. It works* 
+</I>for 
+&gt;<i> &gt;&gt;&gt; me.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; Thanks for the patch. Please don't attach patches, rather post 
+</I>them
+&gt;<i> &gt;&gt;&gt;&gt;&gt; inline. Please follow the cannonical patch format as documented 
+</I>&gt;<i> &gt; here:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; <A HREF="http://lxr.linux.no/linux+v3.0/Documentation/SubmittingPatches">http://lxr.linux.no/linux+v3.0/Documentation/SubmittingPatches</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; See further remarks inline.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; I just noticed that this patch is against the berlios tree. I 
+</I>don't 
+&gt;<i> &gt;&gt;&gt; know
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; if there is a mainline driver that supports the peak pci cards.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; No, there is't. But maybe Thomas is interested to push it mainline,
+</I>&gt;<i> &gt;&gt;&gt;&gt; after some more fixes. It should be implemented like the other PCI
+</I>&gt;<i> &gt;&gt;&gt;&gt; drivers, e.g. ems_pci or even the plx_pci driver might be OK. I 
+</I>need 
+&gt;<i> &gt; to
+</I>&gt;<i> &gt;&gt;&gt;&gt; check. I could then provide a patch which Thomas may test on his
+</I>&gt;<i> &gt;&gt;&gt;&gt; hardware. I have a two-channel PCAN-PCI card available.
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; It makes no big difference for me whether it is in mainline or not, 
+</I>&gt;<i> &gt; the 
+</I>&gt;<i> &gt;&gt;&gt; socket-can tree from berlios is fine. I would rather not have to 
+</I>&gt;<i> &gt; bother 
+</I>&gt;<i> &gt;&gt;&gt; with your coding style ;)
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Well, it's also not *my* coding style ;-).
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; But if you'd provide a patch, i would surely test it.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; That would be great. I will have time middle of August to work on 
+</I>this
+&gt;<i> &gt;&gt; driver.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Fine.
+</I>&gt;<i> &gt; When you rewrite the whole driver, I guess it does not make sense for 
+</I>me 
+&gt;<i> &gt; to rewrite the patch with Marc's hints then, right? (beside of getting 
+</I>
+&gt;<i> &gt; some practice on kernel coding style for the next patch ;)
+</I>&gt;<i> 
+</I>&gt;<i> Unfortunately, the Socket-CAN-Repository at BerliOS is not really in
+</I>&gt;<i> good shape, e.g. up-to-date and I'm not sure, if I will finally backport
+</I>&gt;<i> it. Therefore, please fix the remaining issues and we will apply it
+</I>&gt;<i> without further nitpicking... for the time being.
+</I>
+I'm still a bit confused about the two trees. What are the differences 
+between BerliOS and mainline? Is the BerliOS-tree deprecated?
+
+
+&gt;<i> What kernel version are you using? Any chance to switch to 3.x?
+</I>
+I'm using the Linux kernel version 2.6.31.12, without plans to upgrade it 
+soon. However, i could try to set up linux on a USB device or something, 
+and then try to compile linux kernel 3.0 and check the driver.
+ 
+
+
+--------
+Thomas Wiedemann
+Entwicklungsingenieur / Fahrerassistenz &amp; Funktionale Sicherheit
+IAV GmbH / Kauffahrtei 25 / 09120 CHEMNITZ / GERMANY
+
+Sitz/Registered Office: Berlin, 
+Registergericht/Registration Court: Amtsgericht Charlottenburg, 
+Registernummer/Company Registration Number: HRB 21 280, 
+Gesch&#228;ftsf&#252;hrer/Managing Directors: Kurt Blumenr&#246;der, Michael Schubert, 
+Dr. R&#252;diger Goyk
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002004.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+	<LI>Next message: <A HREF="002006.html">[Socketcan-users] [PATCH] peak_pci.c: Add support for 3rd and 4th CAN channel on some Peak PCI cards
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2005">[ date ]</a>
+              <a href="thread.html#2005">[ thread ]</a>
+              <a href="subject.html#2005">[ subject ]</a>
+              <a href="author.html#2005">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

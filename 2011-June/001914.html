@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] net/can: activate bit-timing calculation	and netlink based drivers by default
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20net/can%3A%20activate%20bit-timing%20calculation%0A%09and%20netlink%20based%20drivers%20by%20default&In-Reply-To=%3C1309160391-22486-1-git-send-email-mkl%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001917.html">
+   <LINK REL="Next"  HREF="001918.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] net/can: activate bit-timing calculation	and netlink based drivers by default</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20net/can%3A%20activate%20bit-timing%20calculation%0A%09and%20netlink%20based%20drivers%20by%20default&In-Reply-To=%3C1309160391-22486-1-git-send-email-mkl%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] net/can: activate bit-timing calculation	and netlink based drivers by default">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Jun 27 09:39:51 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001917.html">[Socketcan-users] Newbie needs a little help... ESD can-usb/2 not	configuring in ubuntu
+</A></li>
+        <LI>Next message: <A HREF="001918.html">[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1914">[ date ]</a>
+              <a href="thread.html#1914">[ thread ]</a>
+              <a href="subject.html#1914">[ subject ]</a>
+              <a href="author.html#1914">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The two options &quot;CAN bit-timing calculation&quot; and
+&quot;Platform CAN drivers with Netlink support&quot; have a &quot;default Y&quot;. In order to
+activate them by default, change to &quot;default y&quot;.
+
+Signed-off-by: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+---
+ drivers/net/can/Kconfig |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/can/Kconfig b/drivers/net/can/Kconfig
+index bbf06f7..f1f9fd9 100644
+--- a/drivers/net/can/Kconfig
++++ b/drivers/net/can/Kconfig
+@@ -36,7 +36,7 @@ config CAN_SLCAN
+ config CAN_DEV
+ 	tristate &quot;Platform CAN drivers with Netlink support&quot;
+ 	depends on CAN
+-	default Y
++	default y
+ 	---help---
+ 	  Enables the common framework for platform CAN drivers with Netlink
+ 	  support. This is the standard library for CAN drivers.
+@@ -45,7 +45,7 @@ config CAN_DEV
+ config CAN_CALC_BITTIMING
+ 	bool &quot;CAN bit-timing calculation&quot;
+ 	depends on CAN_DEV
+-	default Y
++	default y
+ 	---help---
+ 	  If enabled, CAN bit-timing parameters will be calculated for the
+ 	  bit-rate specified via Netlink argument &quot;bitrate&quot; when the device
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001917.html">[Socketcan-users] Newbie needs a little help... ESD can-usb/2 not	configuring in ubuntu
+</A></li>
+	<LI>Next message: <A HREF="001918.html">[Socketcan-users] [PATCH] net/can: activate bit-timing calculation and netlink based drivers by default
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1914">[ date ]</a>
+              <a href="thread.html#1914">[ thread ]</a>
+              <a href="subject.html#1914">[ subject ]</a>
+              <a href="author.html#1914">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

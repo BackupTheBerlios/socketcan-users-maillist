@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Flexcan on i.mx536 Infotainment Platform
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Flexcan%20on%20i.mx536%20Infotainment%20Platform&In-Reply-To=%3C4FD9DB62.50302%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002378.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Flexcan on i.mx536 Infotainment Platform</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Flexcan%20on%20i.mx536%20Infotainment%20Platform&In-Reply-To=%3C4FD9DB62.50302%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Flexcan on i.mx536 Infotainment Platform">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jun 14 14:38:58 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002378.html">[Socketcan-users] Flexcan on i.mx536 Infotainment Platform
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2379">[ date ]</a>
+              <a href="thread.html#2379">[ thread ]</a>
+              <a href="subject.html#2379">[ subject ]</a>
+              <a href="author.html#2379">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 06/04/2012 11:34 PM, Keith Jones wrote:
+&gt;<i> Hello,
+</I>&gt;<i> 
+</I>&gt;<i> I booted up my new Infotainment demo board after ported 2.6.39 flexcan (flexcan.h flexcan.c) support into my 2.6.35 linux distro. 
+</I>&gt;<i> 
+</I>&gt;<i> After seeing flexcan driver register and performing the following commands, I get constant interrupts and error packets visualized using my Canoe CANbus sniffer. I am using 250K baud. Did not check termination. No oscilloscope was used as yet. Can not receive any packets. can state goes from ERROR-ACTIVE to ERROR-PASSIVE.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Any clues?
+</I>
+Is there at least one more CAN node on the bus acknowledging the
+message? If not, the behavior is normal. Also improper termination or
+bit-timing could cause bus errors.
+
+Is Flexcan known to work on that hardware and software? The transceivers
+might still be off, etc.
+
+Wolfgang.
+
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> --------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> .
+</I>&gt;<i> .
+</I>&gt;<i> 
+</I>&gt;<i> vcan: Virtual CAN interface driver
+</I>&gt;<i> CAN device driver interface
+</I>&gt;<i> flexcan netdevice driver
+</I>&gt;<i> flexcan flexcan.0: device registered (reg_base=e09f0000, irq=82)
+</I>&gt;<i> flexcan flexcan.1: device registered (reg_base=e09f8000, irq=83)
+</I>&gt;<i> .
+</I>&gt;<i> .
+</I>&gt;<i> .
+</I>&gt;<i> ----------------------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> ~$  ip link set can0 up type can bitrate 250000
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$ ip -d -s link show can0
+</I>&gt;<i> 2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+</I>&gt;<i>     link/can
+</I>&gt;<i>     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+</I>&gt;<i>     bitrate 250000 sample-point 0.875
+</I>&gt;<i>     tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;<i>     flexcan: tseg1 4..16 tseg2 2..8 sjw 1..4 brp 1..256 brp-inc 1
+</I>&gt;<i>     clock 24000000
+</I>&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;<i>     0          0          0          4          4          0
+</I>&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i>     64         8        0       0       0       0
+</I>&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;<i>     4          0        0
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> ~$ cansend can0 123#1122334455
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$ ip -d -s link show can0
+</I>&gt;<i> 2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+</I>&gt;<i>     link/can
+</I>&gt;<i>     can state ERROR-PASSIVE (berr-counter tx 128 rx 0) restart-ms 0
+</I>&gt;<i>     bitrate 250000 sample-point 0.875
+</I>&gt;<i>     tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;<i>     flexcan: tseg1 4..16 tseg2 2..8 sjw 1..4 brp 1..256 brp-inc 1
+</I>&gt;<i>     clock 24000000
+</I>&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;<i>     0          0          0          5          5          0
+</I>&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i>     80         10       0       0       0       0
+</I>&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;<i>     5          0        0       0       0       0
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$ cat /proc/interrupts
+</I>&gt;<i>            CPU0
+</I>&gt;<i>   1:       1491    MXC_TZIC  mxsdhci
+</I>&gt;<i>   2:          0    MXC_TZIC  mxsdhci
+</I>&gt;<i>   6:          1    MXC_TZIC  mxc_sdma
+</I>&gt;<i>   8:          2    MXC_TZIC  mxc_nd
+</I>&gt;<i>   9:          0    MXC_TZIC  VPU_CODEC_IRQ
+</I>&gt;<i>  10:          0    MXC_TZIC  mxc_ipu
+</I>&gt;<i>  11:          2    MXC_TZIC  mxc_ipu
+</I>&gt;<i>  12:          0    MXC_TZIC  ydx
+</I>&gt;<i>  14:          0    MXC_TZIC  usb_wakeup, ehci_hcd:usb2
+</I>&gt;<i>  16:          0    MXC_TZIC  usb_wakeup, ehci_hcd:usb3
+</I>&gt;<i>  18:          0    MXC_TZIC  usb_wakeup, fsl-usb2-otg, ehci_hcd:usb1, fsl-usb2-udc
+</I>&gt;<i>  24:          0    MXC_TZIC  mxc_rtc
+</I>&gt;<i>  28:          0    MXC_TZIC  ahci
+</I>&gt;<i>  31:       4093    MXC_TZIC  mxcintuart
+</I>&gt;<i>  36:          1    MXC_TZIC  CSPI_IRQ
+</I>&gt;<i>  39:      69290    MXC_TZIC  i.MX Timer Tick
+</I>&gt;<i>  63:        198    MXC_TZIC  imx-i2c
+</I>&gt;<i>  64:         60    MXC_TZIC  imx-i2c
+</I>&gt;<i>  66:          0    MXC_TZIC  asrc
+</I>&gt;<i>  69:          0    MXC_TZIC  mxc_iim
+</I>&gt;<i>  73:          0    MXC_TZIC  dvfs
+</I>&gt;<i>  82:    1283596    MXC_TZIC  can0
+</I>&gt;<i>  84:          0    MXC_TZIC  g12
+</I>&gt;<i> 129:          0           -  mxsdhci
+</I>&gt;<i> 132:          0           -  mxsdhci
+</I>&gt;<i> 191:          0           -  eth0
+</I>&gt;<i> Err:          0
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at freescale</A> /usr/bin$
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002378.html">[Socketcan-users] Flexcan on i.mx536 Infotainment Platform
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2379">[ date ]</a>
+              <a href="thread.html#2379">[ thread ]</a>
+              <a href="subject.html#2379">[ subject ]</a>
+              <a href="author.html#2379">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

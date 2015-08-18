@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Get all CAN interfaces on a machine
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Get%20all%20CAN%20interfaces%20on%20a%20machine&In-Reply-To=%3C1288606601.2082.27.camel%40Krikkit1%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001623.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Get all CAN interfaces on a machine</H1>
+    <B>Jan-Niklas Meier</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Get%20all%20CAN%20interfaces%20on%20a%20machine&In-Reply-To=%3C1288606601.2082.27.camel%40Krikkit1%3E"
+       TITLE="[Socketcan-users] Get all CAN interfaces on a machine">dschanoeh at googlemail.com
+       </A><BR>
+    <I>Mon Nov  1 11:16:41 CET 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001623.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1622">[ date ]</a>
+              <a href="thread.html#1622">[ thread ]</a>
+              <a href="subject.html#1622">[ subject ]</a>
+              <a href="author.html#1622">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello!
+I am currently trying to get a list of all CAN interfaces on my machine.
+Im am using ioctl() with SIOCGIFCONF for this purpose as already
+mentioned in a previous post on this mailinglist
+(<A HREF="http://old.nabble.com/Enumerating-a-list-of-CAN-interfaces-td27603207.html">http://old.nabble.com/Enumerating-a-list-of-CAN-interfaces-td27603207.html</A>).
+
+I found out that it makes no difference with which protocol I create the
+socket - I always get all interfaces like lo and eth0. My problem is
+that there also is a vcan0 which is not listed. Does this method only
+work for nonvirtual CAN interfaces and is there any possibility to get
+them listed too? Unfortunately I don't have a &quot;real&quot; CAN device for
+testing...
+
+Here is the code I am using:
+
+struct ifreq *ifr;
+struct ifconf ifc;
+int sock, i;
+int numif;
+
+memset(&amp;ifc, 0, sizeof(ifc));
+ifc.ifc_ifcu.ifcu_req = NULL;
+ifc.ifc_len = 0;
+
+/* Create a socket to be able to use ioctl */
+if ((sock = socket(PF_CAN, SOCK_RAW, CAN_RAW)) &lt; 0) {
+	perror(&quot;socket&quot;);
+	exit(1);
+}
+
+/* First call to determin how much memory will be needed */
+if (ioctl(sock, SIOCGIFCONF, &amp;ifc) &lt; 0) {
+	perror(&quot;ioctl&quot;);
+	exit(2);
+}
+		
+/* Malloc the necessary memory */   
+if ((ifr = malloc(ifc.ifc_len)) == NULL) {
+	perror(&quot;malloc&quot;);
+	exit(3);
+}
+ifc.ifc_ifcu.ifcu_req = ifr;
+
+/* Request the infomation */
+if (ioctl(sock, SIOCGIFCONF, &amp;ifc) &lt; 0) {
+	perror(&quot;ioctl2&quot;);
+	exit(4);
+}
+close(sock);
+
+numif = ifc.ifc_len / sizeof(struct ifreq);
+for (i = 0; i &lt; numif; i++) {
+	struct ifreq *r = &amp;ifr[i];
+	printf(&quot;%-8s\n&quot;, r-&gt;ifr_name);
+}
+
+free(ifr);
+
+Regards,
+Jan-Niklas
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 490 bytes
+Desc: This is a digitally signed message part
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101101/d4a39b24/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101101/d4a39b24/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001623.html">[Socketcan-users] Get all CAN interfaces on a machine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1622">[ date ]</a>
+              <a href="thread.html#1622">[ thread ]</a>
+              <a href="subject.html#1622">[ subject ]</a>
+              <a href="author.html#1622">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

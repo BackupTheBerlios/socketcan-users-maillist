@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x: repeated frames while sending
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CC60823.9020607%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001612.html">
+   <LINK REL="Next"  HREF="001605.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x: repeated frames while sending</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CC60823.9020607%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mcp251x: repeated frames while sending">mkl at pengutronix.de
+       </A><BR>
+    <I>Tue Oct 26 00:43:47 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001612.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+        <LI>Next message: <A HREF="001605.html">[Socketcan-users] filter: retrieve matched filter index on message	reception?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1614">[ date ]</a>
+              <a href="thread.html#1614">[ thread ]</a>
+              <a href="subject.html#1614">[ subject ]</a>
+              <a href="author.html#1614">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 10/22/2010 06:55 PM, Marc Kleine-Budde wrote:
+&gt;&gt;<i> I tried to use the mcp2515 driver but ran into some trouble. The driver is
+</I>&gt;&gt;<i> recognized and I can see can0 with &quot;ifconfig -a&quot; but when I try to send a
+</I>&gt;&gt;<i> CAN message it crashes and I have to reset the board. I think my problem is
+</I>&gt;&gt;<i> coming from not setting up the irq correctly. It is set in the
+</I>&gt;&gt;<i> .board_specific_setup in mcp251x_platform_data from GPIO but mcp2515.c never
+</I>&gt;&gt;<i> calls .board_specific and when the mcp2515 registers the irq is 0. How do I
+</I>&gt;&gt;<i> setup the irq?
+</I>&gt;<i> 
+</I>&gt;<i> a) move the things from the .board_specific function to your boardfile
+</I>&gt;<i>    and call them prior to registering the mcp2515 at the spi framework
+</I>&gt;<i> b) wait until someone implements the .board_specific hook in the driver
+</I>&gt;<i> c) implement it yourself
+</I>&gt;<i> 
+</I>&gt;<i> Oh...wait...someone just did b)
+</I>
+&gt;<i> (not tested so far)
+</I>
+I've rewritten the device initialisation and added support for all
+three callback (power, transceiver and init). Grab the latest driver from:
+
+<A HREF="http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/mcp251x-async">http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/mcp251x-async</A>
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101026/cc9795ce/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101026/cc9795ce/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001612.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+	<LI>Next message: <A HREF="001605.html">[Socketcan-users] filter: retrieve matched filter index on message	reception?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1614">[ date ]</a>
+              <a href="thread.html#1614">[ thread ]</a>
+              <a href="subject.html#1614">[ subject ]</a>
+              <a href="author.html#1614">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E3933AB.7060700%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002011.html">
+   <LINK REL="Next"  HREF="002014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E3933AB.7060700%40grandegger.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug  3 13:40:27 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002011.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="002014.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2013">[ date ]</a>
+              <a href="thread.html#2013">[ thread ]</a>
+              <a href="subject.html#2013">[ subject ]</a>
+              <a href="author.html#2013">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ulrich,
+
+On 08/03/2011 10:39 AM, uprinz wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Wolfgang!
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hi Ulrich,
+</I>&gt;&gt;<i> ...
+</I>&gt;&gt;<i> You could handle the errno ENOBUFS and simply retry after some short
+</I>&gt;&gt;<i> delay without printing a message.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> My fault, I thought it was a driver message, but it came from my sources...
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I configured the bus with 
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>         ifconfig $1 down
+</I>&gt;&gt;&gt;<i>         echo &quot;$1: Setting bitrate $BITRATE, restart $RESTART&quot;
+</I>&gt;&gt;&gt;<i>         ip link set $1 type can bitrate $BITRATE triple-sampling on
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> BTW, triple-sampling with 125 kb/s is pretty unusual.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> You're right, just forgot to remove that line in the setup script.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What does &quot;ip -d -s link&quot; display? What type of errors and state changes
+</I>&gt;&gt;<i> do you see?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen
+</I>&gt;<i> 10
+</I>&gt;<i>     link/can
+</I>&gt;<i>     can state ERROR-PASSIVE restart-ms 100
+</I>&gt;<i>     bitrate 125000 sample-point 0.875
+</I>&gt;<i>     tq 500 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+</I>&gt;<i>     flexcan: tseg1 4..16 tseg2 2..8 sjw 1..4 brp 1..256 brp-inc 1
+</I>&gt;<i>     clock 24000000
+</I>&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;<i>     0          0          0          5          7          0
+</I>&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i>     9358       1360     0       0       0       0
+</I>&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;<i>     5537       795      0       0       0       0
+</I>&gt;<i> 
+</I>&gt;<i> So I see the bus is in ERROR_PASSIVE and that is my problem I think.
+</I>&gt;<i> The 'virtual' slave is running, but the master does not start as the slave
+</I>&gt;<i> filled up the buffers.
+</I>
+Yes, the messages do not go out because not other CAN device is
+responding and therefore the TX queue of the socket is full after some
+time ==&gt; ENOBUFS.
+
+&gt;<i> I did an &quot;ip link set can0 type can loopback on&quot; and it worked. But then I
+</I>&gt;<i> connected an external CAN device (debugger) and cannot see the messages from
+</I>&gt;<i> the slave. (The master gets them). 
+</I>
+&gt;<i> with ifconfig down, ip link set can0 type can loopback off, ifconfig up the
+</I>&gt;<i> messages are going in and out perfectly.
+</I>&gt;<i> 
+</I>&gt;<i> So it must run with and without having any physical slaves connected. 
+</I>
+You need at least *one* device on the CAN bus responding. If there are
+no physical slaves, the error state will go up to &quot;ERROR PASSIVE&quot;.
+That's usually also what happens if you have no cable connected.
+
+&gt;<i> Any idea of how to get that in a row?
+</I>
+If I have not missed anything, your behaviour looks pretty normal to me.
+You could use &quot;ip ... berr-reporting on&quot; and use &quot;candump
+any,0:0,#FFFFFFFF&quot; to understand a bit better what happens.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002011.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="002014.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2013">[ date ]</a>
+              <a href="thread.html#2013">[ thread ]</a>
+              <a href="subject.html#2013">[ subject ]</a>
+              <a href="author.html#2013">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

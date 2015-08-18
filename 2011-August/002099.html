@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Need help starting socketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C4E528E64.3060107%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002096.html">
+   <LINK REL="Next"  HREF="002100.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Need help starting socketCAN</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C4E528E64.3060107%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Need help starting socketCAN">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Aug 22 19:14:12 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002096.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+        <LI>Next message: <A HREF="002100.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2099">[ date ]</a>
+              <a href="thread.html#2099">[ thread ]</a>
+              <a href="subject.html#2099">[ subject ]</a>
+              <a href="author.html#2099">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 22.08.2011 14:22, Ansell, John wrote:
+
+&gt;<i> Hi guys,
+</I>
+
+
+Hi John,
+
+i'll try to enhance the answer from Rene a bit ;-)
+
+&gt;<i> I need some advice regarding starting up the can0 and can1 devices please.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;<i> 
+</I>&gt;<i> Hardware is an AT91SAM9 (ARM) driving two MCP2515 controllers, one on each of
+</I>&gt;<i> the SPI ports. SocketCAN support is built into the kernel, 2.6.38. dmesg shows
+</I>&gt;<i> probes are successful and the CAN drivers are being loaded.
+</I>
+
+Then you should see the CAN netdevices also in /proc/net/dev
+
+There are no CAN files created in /dev/xxx as the CAN devices use the network
+driver model like ethernet cards.
+
+&gt;<i> 
+</I>&gt;<i> I'm using busybox to handle the commands. Trouble is, its ip command doesn't
+</I>&gt;<i> support the 'type can' or 'bitrate' parameters so the can devices stay &#145;down&#146;.
+</I>&gt;<i> 
+</I>&gt;<i> How can I get my can interfaces &#145;up&#146;? Can I set the bitrate from a userland
+</I>&gt;<i> task, maybe via ioctls or something?
+</I>
+
+As Rene wrote, you need a 'recent' 'ip' from the iproute2 package:
+
+<A HREF="http://git.kernel.org/?p=network/iproute2/iproute2.git;a=summary">http://git.kernel.org/?p=network/iproute2/iproute2.git;a=summary</A>
+
+&gt;<i> 
+</I>&gt;<i> Has anybody got a busybox build to work?
+</I>
+
+In our setup we disabled the 'ip' tool in busybox and compiled the 'ip' from
+iproute2 ...
+
+&gt;<i> 
+</I>&gt;<i> I don&#146;t see a CAN device in /dev &#150; should I?
+</I>
+
+That's correct that you don't see things in /dev/xxx .-)
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002096.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+	<LI>Next message: <A HREF="002100.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2099">[ date ]</a>
+              <a href="thread.html#2099">[ thread ]</a>
+              <a href="subject.html#2099">[ subject ]</a>
+              <a href="author.html#2099">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

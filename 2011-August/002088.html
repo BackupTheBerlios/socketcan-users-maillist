@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3CCAKvQZ_3HSdfOn4xGq7j8GsWJ%2BiHVan0Ygr%3DtR%2BcQm-tpQQWV2A%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002087.html">
+   <LINK REL="Next"  HREF="002091.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3CCAKvQZ_3HSdfOn4xGq7j8GsWJ%2BiHVan0Ygr%3DtR%2BcQm-tpQQWV2A%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">lambert.willy at gmail.com
+       </A><BR>
+    <I>Tue Aug 16 21:45:31 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002087.html">[Socketcan-users] Fwd:  socketcan utilities download?
+</A></li>
+        <LI>Next message: <A HREF="002091.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2088">[ date ]</a>
+              <a href="thread.html#2088">[ thread ]</a>
+              <a href="subject.html#2088">[ subject ]</a>
+              <a href="author.html#2088">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+I used sja1000 on a 32bits system and I am trying to switch to a 64b system.
+It not possible to select CONFIG_SJA1000_ISA when CONFIG_ISA is not set,
+which is not available when CONFIG_X86_64 is set.
+
+As in xenomai &quot;socket&quot; drivers I am able to use my board, I wonder why this
+is not possible under a vanilla linux. I access my HW by iomem (the
+equivalent xenomai driver is xeno_can_mem), is there an equivalent socket
+can driver ?
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110816/0eb6b369/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110816/0eb6b369/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002087.html">[Socketcan-users] Fwd:  socketcan utilities download?
+</A></li>
+	<LI>Next message: <A HREF="002091.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2088">[ date ]</a>
+              <a href="thread.html#2088">[ thread ]</a>
+              <a href="subject.html#2088">[ subject ]</a>
+              <a href="author.html#2088">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

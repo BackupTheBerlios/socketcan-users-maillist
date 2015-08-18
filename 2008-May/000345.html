@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C4823F20F.4080909%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000344.html">
+   <LINK REL="Next"  HREF="000346.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C4823F20F.4080909%40grandegger.com%3E"
+       TITLE="[Socketcan-users] HW Clock">wg at grandegger.com
+       </A><BR>
+    <I>Fri May  9 08:41:19 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000344.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000346.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#345">[ date ]</a>
+              <a href="thread.html#345">[ thread ]</a>
+              <a href="subject.html#345">[ subject ]</a>
+              <a href="author.html#345">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>&gt;&gt;<i> Breno wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Anyway, I'm attaching my cansend and canrcv file so that you can
+</I>&gt;&gt;&gt;<i> analyze whether  there is a  implementation error or not.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>                 setsockopt(s1, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+</I>&gt;&gt;<i>                  while(1)
+</I>&gt;&gt;<i>          {
+</I>&gt;&gt;<i>              printf(&quot;%d\n&quot;,nbytes1);
+</I>&gt;&gt;<i>              nbytes1 = read(s1,&amp;frame1,sizeof(struct can_frame));
+</I>&gt;&gt;<i>              perror(&quot;read&quot;);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Hm, you are disabling *all* the receive filters and try to receive CAN
+</I>&gt;&gt;<i> frames ;-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This can not work.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Please remove the setsockopt() in your canrcv.c.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Per default (when no setsockopt() is invoked) there is one filter set
+</I>&gt;&gt;<i> that receives everything.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In your cansend.c you make double work:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>         if (bind(s0, (struct sockaddr *)&amp;addr0, sizeof(addr0)) &lt; 0)
+</I>&gt;&gt;<i>         {
+</I>&gt;&gt;<i>              perror(&quot;bind&quot;);
+</I>&gt;&gt;<i>              exit(1);
+</I>&gt;&gt;<i>         }
+</I>&gt;&gt;<i>                 //setsockopt(s1, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+</I>&gt;&gt;<i>                     /*Frame CAN*/
+</I>&gt;&gt;<i>        frame0.can_id  = 0x150;
+</I>&gt;&gt;<i>        frame0.can_dlc = 8;
+</I>&gt;&gt;<i>        frame0.data[0] = 'a';
+</I>&gt;&gt;<i>        frame0.data[1] = 'b';
+</I>&gt;&gt;<i>        frame0.data[2] = 'c';
+</I>&gt;&gt;<i>        frame0.data[3] = 'd';
+</I>&gt;&gt;<i>        frame0.data[4] = 'e';
+</I>&gt;&gt;<i>        frame0.data[5] = 'f';
+</I>&gt;&gt;<i>     frame0.data[6] = 'g';
+</I>&gt;&gt;<i>        frame0.data[7] = 'h';
+</I>&gt;&gt;<i>       
+</I>&gt;&gt;<i>        nbytes0 = sendto(s0, &amp;frame0, sizeof(struct can_frame), 0,
+</I>&gt;&gt;<i> (struct sockaddr*)&amp;addr0, sizeof(addr0));
+</I>&gt;&gt;<i>          perror(&quot;sendto&quot;);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> When you bound the socket to a specific interface (here: can0) using
+</I>&gt;&gt;<i> sendto() is superflous. Try write().
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Anyway you should try the applications &quot;cansend&quot; and &quot;candump&quot; as
+</I>&gt;&gt;<i> Wolfgang stated before.
+</I>&gt;&gt;<i> These tools are working surely.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Regards,
+</I>&gt;&gt;<i> Oliver
+</I>&gt;&gt;<i>         
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> Hi all, let me explain what I did at my can-utils dir. Below I describe
+</I>&gt;<i> all steps!!! The bolded ones are my commands!!!
+</I>&gt;<i> 
+</I>&gt;<i> **************************************************************************************************
+</I>&gt;<i> *sh-3.00# ./candump -l can0*
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Enabling Logfile 'candump-1970-01-01_005122.log'
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> [1]+  Stopped(SIGTSTP)        ./candump -l can0
+</I>&gt;<i> 
+</I>&gt;<i> *sh-3.00# bg*
+</I>&gt;<i> 
+</I>&gt;<i> [1]+ ./candump -l can0 &amp;
+</I>&gt;<i> 
+</I>&gt;<i> *sh-3.00# ./cansend can0 150#ABCDEF
+</I>&gt;<i> 
+</I>&gt;<i> *  can0  150  [3] AB CD EF
+</I>&gt;<i> 
+</I>&gt;<i> *sh-3.00# fg
+</I>&gt;<i> 
+</I>&gt;<i> *./candump -l can0
+</I>&gt;<i> 
+</I>&gt;<i> *sh-3.00# ifconfig
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> *can0      Link encap:UNSPEC  HWaddr
+</I>&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00 
+</I>&gt;<i>           UP NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:10
+</I>&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;<i>           Interrupt:145 Base address:0xa900
+</I>&gt;<i> 
+</I>&gt;<i> can1      Link encap:UNSPEC  HWaddr
+</I>&gt;<i> 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00 
+</I>&gt;<i>           UP RUNNING NOARP  MTU:16  Metric:1
+</I>&gt;<i>           RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:10
+</I>&gt;<i>           RX bytes:0 (0.0 b)  TX bytes:0 (0.0 b)
+</I>&gt;<i>           Interrupt:146 Base address:0xc980
+</I>&gt;<i> 
+</I>&gt;<i> eth0      Link encap:Ethernet  HWaddr 00:04:9F:00:18:C9 
+</I>&gt;<i>           inet addr:192.168.1.101  Bcast:192.168.1.255  Mask:255.255.255.0
+</I>&gt;<i>           UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+</I>&gt;<i>           RX packets:19346 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:10687 errors:0 dropped:0 overruns:0 carrier:1
+</I>&gt;<i>           collisions:0 txqueuelen:1000
+</I>&gt;<i>           RX bytes:19927594 (19.0 MiB)  TX bytes:1964222 (1.8 MiB)
+</I>&gt;<i>           Interrupt:133 Base address:0x3000
+</I>&gt;<i> 
+</I>&gt;<i> lo        Link encap:Local Loopback 
+</I>&gt;<i>           inet addr:127.0.0.1  Mask:255.0.0.0
+</I>&gt;<i>           UP LOOPBACK RUNNING  MTU:16436  Metric:1
+</I>&gt;<i> 
+</I>&gt;<i>           RX packets:1 errors:0 dropped:0 overruns:0 frame:0
+</I>&gt;<i>           TX packets:1 errors:0 dropped:0 overruns:0 carrier:0
+</I>&gt;<i>           collisions:0 txqueuelen:0
+</I>&gt;<i>           RX bytes:140 (140.0 b)  TX bytes:140 (140.0 b)
+</I>&gt;<i> ******************************************************************************
+</I>&gt;<i> Well, I used the candump and cansend and both seem to work perfectly.
+</I>&gt;<i> But my ifconfig still have no messages indicating activities!
+</I>
+Well, you just see looped back messages can0 -&gt; can0, which do not
+update the netdev stats.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000344.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000346.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#345">[ date ]</a>
+              <a href="thread.html#345">[ thread ]</a>
+              <a href="subject.html#345">[ subject ]</a>
+              <a href="author.html#345">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

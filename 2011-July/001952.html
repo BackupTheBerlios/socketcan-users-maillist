@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Help with CAN_RAW_LOOPBACK
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E208C77.30108%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001950.html">
+   <LINK REL="Next"  HREF="001951.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Help with CAN_RAW_LOOPBACK</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Help%20with%20CAN_RAW_LOOPBACK&In-Reply-To=%3C4E208C77.30108%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Help with CAN_RAW_LOOPBACK">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Jul 15 20:52:39 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001950.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+        <LI>Next message: <A HREF="001951.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1952">[ date ]</a>
+              <a href="thread.html#1952">[ thread ]</a>
+              <a href="subject.html#1952">[ subject ]</a>
+              <a href="author.html#1952">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 15.07.2011 20:22, Oliver Hartkopp wrote:
+&gt;<i> On 15.07.2011 20:01, Mike Brown wrote:
+</I>
+&gt;&gt;<i>
+</I>&gt;&gt;<i> What might need to do to get the Flexcan interface to behave the same as the
+</I>&gt;&gt;<i> virtual can interface?
+</I>&gt;<i> 
+</I>&gt;<i> There was a problem that has been introduced in the 2.6.35 in the networking
+</I>&gt;<i> stack that has been fixed in the stable series, see:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.35.y.git;a=commitdiff;h=a5f18b1cca50987eb7773bb0be0d8730dfb10306">http://git.kernel.org/?p=linux/kernel/git/stable/linux-2.6.35.y.git;a=commitdiff;h=a5f18b1cca50987eb7773bb0be0d8730dfb10306</A>
+</I>&gt;<i> 
+</I>&gt;<i> Please check, if this patch is also part of your 2.6.35.13 tree.
+</I>
+Some additional hint:
+
+You can check, if your current setup has the described problem, with a test
+application called tst-rcv-own-msgs (in the SVN at socketcan/trunk/test):
+
+The major thing is to load the vcan driver with echo on driver level to
+identify your described problem.
+
+This is the test script from the Linux Test Project (ltp):
+
+
+# load needed CAN networklayer modules
+modprobe -f can
+modprobe -f can_raw
+
+# ensure the vcan driver to perform the ECHO on driver level
+modprobe -r vcan
+modprobe -f vcan echo=1
+
+VCAN=vcan0
+
+# create virtual CAN device
+ip link add dev $VCAN type vcan || exit 1
+ifconfig $VCAN up
+
+# check precondition for CAN frame flow test
+HAS_ECHO=`ip link show $VCAN | grep -c ECHO`
+
+if [ $HAS_ECHO -ne 1 ]
+then
+    exit 1
+fi
+
+# test of CAN filters on af_can.c
+./tst-filter $VCAN || exit 1
+
+# test of CAN frame flow down to the netdevice and up again
+./tst-rcv-own-msgs $VCAN || exit 1
+
+exit 0
+
+---
+
+If this script ends with
+
+Starting PF_CAN frame flow test.
+checking socket default settings ... ok.
+check loopback 0 recv_own_msgs 0 ... ok.
+check loopback 0 recv_own_msgs 1 ... ok.
+check loopback 1 recv_own_msgs 0 ... ok.
+check loopback 1 recv_own_msgs 1 ... ok.
+PF_CAN frame flow test was successful.
+
+Then everything is fine in your kernel :-)
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001950.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+	<LI>Next message: <A HREF="001951.html">[Socketcan-users] Help with CAN_RAW_LOOPBACK
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1952">[ date ]</a>
+              <a href="thread.html#1952">[ thread ]</a>
+              <a href="subject.html#1952">[ subject ]</a>
+              <a href="author.html#1952">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

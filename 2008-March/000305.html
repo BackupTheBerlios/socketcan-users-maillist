@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problems with	cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%0A%09cross-compilation%09using%09%22powerpc-linux-gnu-gcc%22&In-Reply-To=%3C47DE3C79.8070507%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000304.html">
+   <LINK REL="Next"  HREF="000306.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problems with	cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%0A%09cross-compilation%09using%09%22powerpc-linux-gnu-gcc%22&In-Reply-To=%3C47DE3C79.8070507%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Problems with	cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Mar 17 10:40:09 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000304.html">[Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+        <LI>Next message: <A HREF="000306.html">[Socketcan-users] Problems with	cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#305">[ date ]</a>
+              <a href="thread.html#305">[ thread ]</a>
+              <a href="subject.html#305">[ subject ]</a>
+              <a href="author.html#305">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+
+&gt;<i> Here is how it works for me (with my OSELAS Toolchain):
+</I>&gt;<i> 
+</I>&gt;<i> 1. Add the PATH where we can find the cross compiler binaries ( like 
+</I>&gt;<i> &quot;powerpc-603e-linux-gnu-gcc&quot; and &quot;powerpc-603e-linux-gnu-ld&quot; )
+</I>&gt;<i> 
+</I>&gt;<i> export PATH=/opt/OSELAS.Toolchain-1.1.0/powerpc-603e-linux-gnu/gcc-4.1.2-glibc-2.5-kernel-2.6.18/bin:$PATH
+</I>&gt;<i> 
+</I>&gt;<i> 2. Go into the appropriate path (like ~/socketcan/trunk/kernel/2.6 )
+</I>&gt;<i> 
+</I>&gt;<i> 3. Say &quot;make ARCH=powerpc KERNELDIR=/home/olli/cg3.2/build-target/linux-2.6.23.1 CROSS_COMPILE=powerpc-603e-linux-gnu-&quot;
+</I>&gt;<i> 
+</I>&gt;<i> In point 3. also 'ARCH=ppc' is valid and this commandline can be easily extended with 'CONFIG_CAN_MSCAN=m' and friends ... 
+</I>&gt;<i> 
+</I>&gt;<i> @Fabrizio: Remark that my cross compiler has a name prefix &quot;powerpc-603e-linux-gnu-&quot; which might be different in your case.
+</I>
+BTW: if may skip the PATH export thingy, if you use:
+
+make ARCH=powerpc
+CROSS_COMPILE=p/opt/OSELAS.Toolchain-1.1.0/powerpc-603e-linux-gnu/gcc-4.1.2-glibc-2.5-kernel-2.6.18/bin/owerpc-603e-linux-gnu-
+
+Marc
+-- 
+ Marc Kleine-Budde              Phone: +49-231-2826-924
+ Pengutronix - Linux Solutions for Science and Industry
+ Vertretung West/Dortmund     <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 252 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080317/a6aeab35/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080317/a6aeab35/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000304.html">[Socketcan-users] Problems with cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+	<LI>Next message: <A HREF="000306.html">[Socketcan-users] Problems with	cross-compilation	using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#305">[ date ]</a>
+              <a href="thread.html#305">[ thread ]</a>
+              <a href="subject.html#305">[ subject ]</a>
+              <a href="author.html#305">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

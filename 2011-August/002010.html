@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Hot plug support
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Hot%20plug%20support&In-Reply-To=%3C4E384577.8030502%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002008.html">
+   <LINK REL="Next"  HREF="002009.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Hot plug support</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Hot%20plug%20support&In-Reply-To=%3C4E384577.8030502%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Hot plug support">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Aug  2 20:44:07 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002008.html">[Socketcan-users] Hot plug support
+</A></li>
+        <LI>Next message: <A HREF="002009.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2010">[ date ]</a>
+              <a href="thread.html#2010">[ thread ]</a>
+              <a href="subject.html#2010">[ subject ]</a>
+              <a href="author.html#2010">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 02.08.2011 17:58, Max S. wrote:
+&gt;<i> Hello, 
+</I>
+Hi Max,
+
+&gt;<i> I would like to know if and how socketcan supports hotpluging.
+</I>&gt;<i> 
+</I>&gt;<i> I'm using a usb device (PCANUsb).
+</I>
+in general the PCAN driver comes with some udev rules that set up the chardev
+CAN devices (like /dev/pcan32, etc).
+
+These udev rules are not very relevant to the netdevices called can0, can1,
+... that are created additionally when the PEAK driver detects it's USB hardware.
+
+&gt;<i> What are the basics of making a socket device hotplugable, and what does
+</I>&gt;<i> that look like in C?
+</I>&gt;<i> 
+</I>&gt;<i> If a socket file descriptor disappears, you will get a short read. How
+</I>&gt;<i> would one know when the device reappears and recover?
+</I>
+The problem (especially with USB devices) is that they can disappear and
+reappear. In the module commandline from the pcan driver you can assign
+netdevice names to chardevice names (see PDF doc) but there's no guarantee,
+that the chardev-name is chosen the same at re-plug time.
+
+The best is to create a udev rule, that checks the 'irq' column in /proc/pcan
+which contains a device ID (usually 255) that can be modified with a PEAK tool
+to distinguish PCAN USB devices properly.
+
+You can use this kind of udev rule to put a defined PCAN USB device ID to a
+predefined CAN netdevice name (by renaming the netdev with the ip tool).
+
+In any case you would need to handle the -ENODEV in your CAN application.
+
+E.g. you can terminate the application and start it, after the udev rule
+recovered the correct CAN device. Or your can poll until -ENODEV does not
+appear when opening the socket (more precisely when using ioctl() ) :-(
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002008.html">[Socketcan-users] Hot plug support
+</A></li>
+	<LI>Next message: <A HREF="002009.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2010">[ date ]</a>
+              <a href="thread.html#2010">[ thread ]</a>
+              <a href="subject.html#2010">[ subject ]</a>
+              <a href="author.html#2010">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

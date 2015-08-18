@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Weird issues
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Weird%20issues&In-Reply-To=%3C485112C3.1050306%40probestar.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000402.html">
+   <LINK REL="Next"  HREF="000404.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Weird issues</H1>
+    <B>Neal Probert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Weird%20issues&In-Reply-To=%3C485112C3.1050306%40probestar.com%3E"
+       TITLE="[Socketcan-users] Weird issues">nprobert at probestar.com
+       </A><BR>
+    <I>Thu Jun 12 14:12:51 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000402.html">[Socketcan-users] [patch] make socketcan-trunk (r758) compile on not so recent (debian) linux kernels
+</A></li>
+        <LI>Next message: <A HREF="000404.html">[Socketcan-users] study centrist
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#403">[ date ]</a>
+              <a href="thread.html#403">[ thread ]</a>
+              <a href="subject.html#403">[ subject ]</a>
+              <a href="author.html#403">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I have a Linux daemon process that opens up a bunch of sockets, 
+including one to the CAN interface.
+
+When I run it under my user account in the foreground or in the 
+background as a daemon, it works just fine.  It's a TCP server daemon 
+that listens on UDP and passes data to CAN.  The TCP side is for 
+command, control and status.
+
+However, if I run it under root, I get all kinds of socket errors on the 
+CAN socket and other sockets.
+
+So for now, I run it under my user account.  Btw, It seems to help if I 
+put a sleep just before the startup of daemon in my startup script after 
+loading all the CAN modules.
+
+Running on the 2.6.24-18 kernel (Ubuntu) 32 and 64 bit.  Using the Peak 
+Systems PCAN USB device.
+
+Any ideas?
+
+-- 
+
+        /// ProbeStar Telematics Systems, LLC. ///
+    Automotive, Mobile and Embedded Systems Consulting 
+
+==// Neal W. Probert (President)   / Email: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nprobert at probestar.com</A> //
+=// Web: www.probestar.com        / Phone: 248-522-6836           //=
+// Fax:                          / Cell:                         //==
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000402.html">[Socketcan-users] [patch] make socketcan-trunk (r758) compile on not so recent (debian) linux kernels
+</A></li>
+	<LI>Next message: <A HREF="000404.html">[Socketcan-users] study centrist
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#403">[ date ]</a>
+              <a href="thread.html#403">[ thread ]</a>
+              <a href="subject.html#403">[ subject ]</a>
+              <a href="author.html#403">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

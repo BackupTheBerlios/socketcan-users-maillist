@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Lost arbitration errors
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Lost%20arbitration%20errors&In-Reply-To=%3C201105160814.22470.oe%40port.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001882.html">
+   <LINK REL="Next"  HREF="001873.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Lost arbitration errors</H1>
+    <B>Heinz-J&#252;rgen Oertel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Lost%20arbitration%20errors&In-Reply-To=%3C201105160814.22470.oe%40port.de%3E"
+       TITLE="[Socketcan-users] Lost arbitration errors">oe at port.de
+       </A><BR>
+    <I>Mon May 16 08:14:17 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001882.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+        <LI>Next message: <A HREF="001873.html">[Socketcan-users] Cannot find device &quot;can0&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1884">[ date ]</a>
+              <a href="thread.html#1884">[ thread ]</a>
+              <a href="subject.html#1884">[ subject ]</a>
+              <a href="author.html#1884">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Freitag, 13. Mai 2011, 12:16:45 schrieb Wolfgang Grandegger:
+&gt;<i> &gt;&gt; The error is definitely reported by the CAN controller and therefore
+</I>&gt;<i> &gt;&gt; it's due to an electrical problem on the CAN bus. Well, I'm not a CAN
+</I>&gt;<i> &gt;&gt; hardware expert and therefore I can't tell if such error do harm or
+</I>&gt;<i> &gt;&gt; can even be ignored. Googling for &quot;can arbiration lost&quot; revealed:
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; <A HREF="http://www.cancapture.com/knowledgebase/18-cancaptureknowledgebase/33-kb">http://www.cancapture.com/knowledgebase/18-cancaptureknowledgebase/33-kb</A>
+</I>&gt;<i> &gt;&gt; -arbitration-lost-error-messages.html
+</I>&gt;<i> &gt;&gt; 
+</I>&gt;<i> &gt;&gt; which seem to answer you question to some extend.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thanks, your are really better than me in googleling
+</I>&gt;<i> 
+</I>&gt;<i> Does that document explain your problems? I mean, do you have more than
+</I>&gt;<i> one node sending CAN messages?
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Is there a mean to disable this error un socketCan ?
+</I>&gt;<i> 
+</I>&gt;<i> No, but it will only be delivered to user-space sockets on request (via
+</I>&gt;<i> setsockopt ...).
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>
+
+The reference link sent by Wolfgang explains this &quot;error&quot; very well.
+The controller only reports that it has lost the arbitration against a higher 
+priority CAN frame. I would not say its an error.
+In CANopen this will happen in such situations as described by Willy.
+After the CANopen devices have seen the SYNC Frame on the bus,
+they will sent out there synchronous PDOs nearly immediately,
+all at the very same time.
+Regarding to the CAN protocol the arbitration process starts
+in order to let pass the highest priority frame, that is the lowest CAN Id.
+All other PDOs, having CAN frames with a higher Id, will start the next 
+arbitration process after the first one was successfully transmitted.
+And so on a long as there are CAN frames that has to be sent.
+
+Regards
+  Heinz 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 190 bytes
+Desc: This is a digitally signed message part.
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110516/7b09f854/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110516/7b09f854/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001882.html">[Socketcan-users] Lost arbitration errors
+</A></li>
+	<LI>Next message: <A HREF="001873.html">[Socketcan-users] Cannot find device &quot;can0&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1884">[ date ]</a>
+              <a href="thread.html#1884">[ thread ]</a>
+              <a href="subject.html#1884">[ subject ]</a>
+              <a href="author.html#1884">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

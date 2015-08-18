@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100204114600.GA327%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001252.html">
+   <LINK REL="Next"  HREF="001254.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C20100204114600.GA327%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Thu Feb  4 12:46:01 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001252.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001254.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1253">[ date ]</a>
+              <a href="thread.html#1253">[ thread ]</a>
+              <a href="subject.html#1253">[ subject ]</a>
+              <a href="author.html#1253">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Feb 04, 2010 at 11:35:17AM +0100, Marc Kleine-Budde wrote:
+&gt;<i> 
+</I>&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt; A possible solution might be to switch of the error interrupt and poll
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt;&gt; it e.g. with delayed work.
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; Detecting a high rate and throttling the rate is not trivial and I
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; hesitate to add a complex solution, also because bus-errors are only
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; available on a few CAN controllers, e.g. SJA1000 and AT91. Marc, what do
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;&gt; you have in mind?
+</I>&gt;<i> &gt;&gt;&gt;&gt; Have you ever thought about ratelimit?
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; In
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;     <A HREF="http://lxr.linux.no/#linux+v2.6.32/lib/ratelimit.c">http://lxr.linux.no/#linux+v2.6.32/lib/ratelimit.c</A>
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; there is an implementation that's usually used e.g. as net_ratelimit() to slow
+</I>&gt;<i> &gt;&gt;&gt;&gt; down printks at several locations inside the kernel.
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; As we are already in interrupt context there's no spin_lock_irqsave() needed,
+</I>&gt;<i> &gt;&gt;&gt;&gt; but we might implement an extra can_ratelimit() using a private
+</I>&gt;<i> 
+</I>&gt;<i> I'm not sure about the spinlock, we might also be in the NAPI context
+</I>&gt;<i> (IIRC softirq that is). But that will clarify later when we have an
+</I>&gt;<i> example implementation....
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt;&gt;    struct ratelimit_state buserr_ratelimit;
+</I>&gt;<i> 
+</I>&gt;<i> &gt;&gt;&gt;&gt; we could add to the in the can_priv structure.
+</I>&gt;<i> &gt;&gt;&gt; Hm, this will only help partially. We need to decrease the interrupt
+</I>&gt;<i> &gt;&gt;&gt; rate not just the delivery rate. Or have I missed something? Also,
+</I>&gt;<i> &gt;&gt;&gt; bus-errors in sequence might provide useful information.
+</I>&gt;<i> &gt;&gt; With a ratelimit we can detect if an error interrupt fires &quot;too often&quot;.
+</I>&gt;<i> &gt;&gt; If the &quot;ratelimit&quot; triggers the interrupt should be masked. It must be
+</I>&gt;<i> &gt;&gt; re-enabled after a certain time though.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Yes, disable the bus-error interrupt after a certain amount and
+</I>&gt;<i> &gt; re-enable it after some time, would be my favorite as well. But choosing
+</I>&gt;<i> &gt; the right parameters is not easy and depends on the CPU power.
+</I>&gt;<i> 
+</I>&gt;<i> ...and on the selected bitrate.
+</I>&gt;<i> 
+</I>&gt;<i> I think a &quot;pure&quot; ratelimit isn't a good choice. From my point of view
+</I>&gt;<i> (with no CAN background) we should limit only if the errors are
+</I>&gt;<i> consecutive, a successfully transmitted or received CAN frame should
+</I>&gt;<i> reset our limiter.
+</I>Or a bus-off indication.
+Resetting the rate-limit at successfull tx or rx requires disabling
+_only_  the bus-error interrupt and not the TX &amp; RX interrupt,
+and is therefore chip specific?
+&gt;<i> 
+</I>&gt;<i> Maybe a real world CAN expert can say something to this.
+</I>&gt;<i> 
+</I>&gt;<i> cheers, Marc
+</I>Kurt
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001252.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001254.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1253">[ date ]</a>
+              <a href="thread.html#1253">[ thread ]</a>
+              <a href="subject.html#1253">[ subject ]</a>
+              <a href="author.html#1253">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

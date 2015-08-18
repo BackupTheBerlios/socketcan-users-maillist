@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Find identifier in the can_id
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3C4E80AAEE.6060706%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002148.html">
+   <LINK REL="Next"  HREF="002150.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Find identifier in the can_id</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3C4E80AAEE.6060706%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Find identifier in the can_id">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Sep 26 18:40:14 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002148.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+        <LI>Next message: <A HREF="002150.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2149">[ date ]</a>
+              <a href="thread.html#2149">[ thread ]</a>
+              <a href="subject.html#2149">[ subject ]</a>
+              <a href="author.html#2149">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 09/26/11 09:10, Damien R. wrote:
+
+&gt;<i> On 23/09/11 18:40, Oliver Hartkopp wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> There are Standard frame format frames (SFF) and Extended frame format frames
+</I>&gt;&gt;<i> (EFF) possible on CAN. Both are correct. SFF frames have a 11 bit ID, EFF
+</I>&gt;&gt;<i> frames a 29 bit ID. That's it.
+</I>&gt;<i> 
+</I>&gt;<i> Yes I agree and it is what you explained in the can documentation. The problem
+</I>&gt;<i> is that I have a proprietary protocol specification which specifies that
+</I>&gt;<i> frames have a 11 bit ID (and so I assume a standard frame format) but the SFF
+</I>&gt;<i> flag is not set.
+</I>
+
+There is no SFF flag!!
+
+if you look at the can_id in struct can_frame at check the CAN_EFF_FLAG:
+
+CAN_EFF_FLAG is set   -&gt; EFF frame
+CAN_EFF_FLAG is clear -&gt; SFF frame
+
+When working with SFF IDs (11 bit) the CAN_EFF_FLAG is always cleared.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002148.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+	<LI>Next message: <A HREF="002150.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2149">[ date ]</a>
+              <a href="thread.html#2149">[ thread ]</a>
+              <a href="subject.html#2149">[ subject ]</a>
+              <a href="author.html#2149">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

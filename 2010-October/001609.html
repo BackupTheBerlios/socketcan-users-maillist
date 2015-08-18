@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: CAN documentation
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20CAN%20documentation&In-Reply-To=%3C4CC12CFF.3070805%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001576.html">
+   <LINK REL="Next"  HREF="001610.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: CAN documentation</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20CAN%20documentation&In-Reply-To=%3C4CC12CFF.3070805%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] RFC: CAN documentation">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Oct 22 08:19:43 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001576.html">[Socketcan-users] [PATCH] Add BCM intro, opcodes and TX_DELETE to can.txt
+</A></li>
+        <LI>Next message: <A HREF="001610.html">[Socketcan-users] RFC: CAN documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1609">[ date ]</a>
+              <a href="thread.html#1609">[ thread ]</a>
+              <a href="subject.html#1609">[ subject ]</a>
+              <a href="author.html#1609">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+i went through the initial patch Daniele Venzano thankfully provided for the
+CAN-BCM socket. That patch may be about 30% of the final BCM description.
+
+The current documentation amount looks like this:
+
+$ wc -l bcmdoc.patch
+180 bcmdoc.patch
+$ wc -l socketcan/trunk/kernel/2.6/Documentation/networking/can.txt
+858 socketcan/trunk/kernel/2.6/Documentation/networking/can.txt
+$ wc -l socketcan/trunk/README.isotp
+257 socketcan/trunk/README.isotp
+
+I assume when adding all the upcoming documentation to can.txt it will become
+unusable. IMO there are several parts to handle:
+
+- general overview &amp; credits
+- PF_CAN infrastructure
+- CAN-RAW
+- CAN-BCM
+- CAN-ISOTP
+- CAN driver infrastructure
+- CAN driver configuration
+
+I thought about creating a new directory Dockumentation/networking/can
+where files like overview.txt, can-raw.txt, drivers.txt could be placed.
+
+An other idea could be to move the documentation to wiki.kernel.org, like
+the good example <A HREF="https://i2c.wiki.kernel.org">https://i2c.wiki.kernel.org</A> - which would urge the developer
+to be always online to browse it.
+
+What do you think?
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001576.html">[Socketcan-users] [PATCH] Add BCM intro, opcodes and TX_DELETE to can.txt
+</A></li>
+	<LI>Next message: <A HREF="001610.html">[Socketcan-users] RFC: CAN documentation
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1609">[ date ]</a>
+              <a href="thread.html#1609">[ thread ]</a>
+              <a href="subject.html#1609">[ subject ]</a>
+              <a href="author.html#1609">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

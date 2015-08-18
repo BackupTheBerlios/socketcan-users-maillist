@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C4A94FE1E.7060405%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001031.html">
+   <LINK REL="Next"  HREF="001034.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Phillips%20SJA1000%20on%20a%20Siemens%20Microbox%20PC427B&In-Reply-To=%3C4A94FE1E.7060405%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug 26 11:19:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001031.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+        <LI>Next message: <A HREF="001034.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1033">[ date ]</a>
+              <a href="thread.html#1033">[ thread ]</a>
+              <a href="subject.html#1033">[ subject ]</a>
+              <a href="author.html#1033">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Lipkowski, Merten wrote:
+&gt;<i> Well, at first I have to say thanks, you helped me a lot, and I learned
+</I>&gt;<i> a lot.
+</I>&gt;<i> But I still doesn't work...
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> I found this in the Documentation of the MicroboxPC: 
+</I>&gt;<i> IRQ10        	CAN (optional) or DP12/MPI (optional) or free
+</I>&gt;<i> ISA-exclusiv (CAN) / PCI-exclusiv (DP12)/ free
+</I>&gt;<i> 
+</I>&gt;<i> Within the BIOS I can only configure the &quot;Base I/O Address&quot;, not the
+</I>&gt;<i> IRQ. I set the address to 0x5000.
+</I>&gt;<i> 
+</I>&gt;<i> &quot;modprobe port=0x5000 irq=10&quot; 
+</I>&gt;<i> seems to work :-)
+</I>
+Cool, the device was identified but the IRQ might still be wrong...
+
+&gt;<i> 
+</I>&gt;<i> but 
+</I>&gt;<i> &quot;ifconfig can0 up&quot;
+</I>&gt;<i> returns with:
+</I>&gt;<i> &quot;SIOCSIFFLAGS: Invalid argument&quot;
+</I>&gt;<i> 
+</I>&gt;<i> and 
+</I>&gt;<i> &quot;dmesg&quot;
+</I>&gt;<i> says:
+</I>&gt;<i> &quot;sja1000_isa sja1000_isa.0: bit-timing not yet defined&quot;
+</I>&gt;<i> 
+</I>&gt;<i> how to define the bit-timing?
+</I>
+You need the &quot;ip&quot; program from the &quot;iproute2&quot; utility suite, which you
+can get as shown below:
+
+git clone \ 	
+<A HREF="git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2">git://git.kernel.org/pub/scm/linux/kernel/git/shemminger/iproute2</A>
+
+For further information information read chapter 6.5 of
+<A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt">http://svn.berlios.de/svnroot/repos/socketcan/trunk/kernel/2.6/Documentation/networking/can.txt</A>
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001031.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+	<LI>Next message: <A HREF="001034.html">[Socketcan-users] Phillips SJA1000 on a Siemens Microbox PC427B
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1033">[ date ]</a>
+              <a href="thread.html#1033">[ thread ]</a>
+              <a href="subject.html#1033">[ subject ]</a>
+              <a href="author.html#1033">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

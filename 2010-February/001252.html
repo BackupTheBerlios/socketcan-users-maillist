@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6AA2E5.1000500%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001251.html">
+   <LINK REL="Next"  HREF="001253.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B6AA2E5.1000500%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">mkl at pengutronix.de
+       </A><BR>
+    <I>Thu Feb  4 11:35:17 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001251.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001253.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1252">[ date ]</a>
+              <a href="thread.html#1252">[ thread ]</a>
+              <a href="subject.html#1252">[ subject ]</a>
+              <a href="author.html#1252">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> A possible solution might be to switch of the error interrupt and poll
+</I>&gt;&gt;&gt;&gt;&gt;&gt;&gt;<i> it e.g. with delayed work.
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Detecting a high rate and throttling the rate is not trivial and I
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> hesitate to add a complex solution, also because bus-errors are only
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> available on a few CAN controllers, e.g. SJA1000 and AT91. Marc, what do
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> you have in mind?
+</I>&gt;&gt;&gt;&gt;<i> Have you ever thought about ratelimit?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> In
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>     <A HREF="http://lxr.linux.no/#linux+v2.6.32/lib/ratelimit.c">http://lxr.linux.no/#linux+v2.6.32/lib/ratelimit.c</A>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> there is an implementation that's usually used e.g. as net_ratelimit() to slow
+</I>&gt;&gt;&gt;&gt;<i> down printks at several locations inside the kernel.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> As we are already in interrupt context there's no spin_lock_irqsave() needed,
+</I>&gt;&gt;&gt;&gt;<i> but we might implement an extra can_ratelimit() using a private
+</I>
+I'm not sure about the spinlock, we might also be in the NAPI context
+(IIRC softirq that is). But that will clarify later when we have an
+example implementation....
+
+&gt;&gt;&gt;&gt;<i>    struct ratelimit_state buserr_ratelimit;
+</I>
+&gt;&gt;&gt;&gt;<i> we could add to the in the can_priv structure.
+</I>&gt;&gt;&gt;<i> Hm, this will only help partially. We need to decrease the interrupt
+</I>&gt;&gt;&gt;<i> rate not just the delivery rate. Or have I missed something? Also,
+</I>&gt;&gt;&gt;<i> bus-errors in sequence might provide useful information.
+</I>&gt;&gt;<i> With a ratelimit we can detect if an error interrupt fires &quot;too often&quot;.
+</I>&gt;&gt;<i> If the &quot;ratelimit&quot; triggers the interrupt should be masked. It must be
+</I>&gt;&gt;<i> re-enabled after a certain time though.
+</I>
+&gt;<i> Yes, disable the bus-error interrupt after a certain amount and
+</I>&gt;<i> re-enable it after some time, would be my favorite as well. But choosing
+</I>&gt;<i> the right parameters is not easy and depends on the CPU power.
+</I>
+...and on the selected bitrate.
+
+I think a &quot;pure&quot; ratelimit isn't a good choice. From my point of view
+(with no CAN background) we should limit only if the errors are
+consecutive, a successfully transmitted or received CAN frame should
+reset our limiter.
+
+Maybe a real world CAN expert can say something to this.
+
+cheers, Marc
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 260 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100204/e9bef822/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100204/e9bef822/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001251.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001253.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1252">[ date ]</a>
+              <a href="thread.html#1252">[ thread ]</a>
+              <a href="subject.html#1252">[ subject ]</a>
+              <a href="author.html#1252">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using multiple CAN-channels
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20multiple%20CAN-channels&In-Reply-To=%3C4B2240D6.60109%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001215.html">
+   <LINK REL="Next"  HREF="001217.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using multiple CAN-channels</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20multiple%20CAN-channels&In-Reply-To=%3C4B2240D6.60109%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Using multiple CAN-channels">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Dec 11 13:53:42 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001215.html">[Socketcan-users]  Using multiple CAN-channels
+</A></li>
+        <LI>Next message: <A HREF="001217.html">[Socketcan-users] Using multiple CAN-channels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1216">[ date ]</a>
+              <a href="thread.html#1216">[ thread ]</a>
+              <a href="subject.html#1216">[ subject ]</a>
+              <a href="author.html#1216">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>ferrymax wrote:
+&gt;<i> Hi! 
+</I>
+Hi Markus,
+
+&gt;<i> 
+</I>&gt;<i> I am trying to write a network device driver for using multiple
+</I>&gt;<i> CAN-channels. 
+</I>&gt;<i> I have a network-device-driver-module &quot;can&quot;.
+</I>
+This is just the networklayer core for PF_CAN (no driver).
+
+&gt;<i> I use the command &quot;ip link add
+</I>&gt;<i> dev canX type can&quot; to create can0 to can3. 
+</I>&gt;<i> 
+</I>
+You created &quot;virtual&quot; CAN interfaces named like &quot;real&quot; CAN interfaces here.
+
+&gt;<i> In an example application, I can connect to each of these devices with a
+</I>&gt;<i> socket by setting &quot;ifr_name&quot; for ioctrl accordingly. So far so good. 
+</I>&gt;<i> 
+</I>&gt;<i> What I just don't get is how I can distinguish the four devices in the &quot;can&quot;
+</I>&gt;<i> module. E.g., the &quot;can_transmit()&quot; [=net_device_ops.ndo_start_xmit()]
+</I>&gt;<i> function is called with the respective net_device parameter for the calling
+</I>&gt;<i> socket. However, I need to know which CHANNEL is calling (i.e., can0, can1,
+</I>&gt;<i> ...) to forward the message to the correct mailbox. 
+</I>&gt;<i> 
+</I>&gt;<i> Also, if I call &quot;ip link add can0 type can&quot;, the init function
+</I>&gt;<i> [=rtnl_link_ops.setup()] is called. The name-field of the net_device
+</I>&gt;<i> parameter, however, is NOT can0, as I would have expected. So I am missing
+</I>&gt;<i> the link between the &quot;ip link add&quot; command and the device-module. 
+</I>&gt;<i> 
+</I>&gt;<i> I guess I'm missing something really important and fundamental here... 
+</I>
+You need to have the ifindex to define on which CAN netdevice (canX, vcanX)
+you are sending.
+
+See linux/Documentation/networking/can.txt :-)
+
+Do you have &quot;real&quot; CAN hardware?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001215.html">[Socketcan-users]  Using multiple CAN-channels
+</A></li>
+	<LI>Next message: <A HREF="001217.html">[Socketcan-users] Using multiple CAN-channels
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1216">[ date ]</a>
+              <a href="thread.html#1216">[ thread ]</a>
+              <a href="subject.html#1216">[ subject ]</a>
+              <a href="author.html#1216">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

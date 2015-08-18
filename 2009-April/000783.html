@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN with switchable power
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20with%20switchable%20power&In-Reply-To=%3C49E61E47.4000800%40mlbassoc.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000782.html">
+   <LINK REL="Next"  HREF="000784.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN with switchable power</H1>
+    <B>Gary Thomas</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20with%20switchable%20power&In-Reply-To=%3C49E61E47.4000800%40mlbassoc.com%3E"
+       TITLE="[Socketcan-users] CAN with switchable power">gary at mlbassoc.com
+       </A><BR>
+    <I>Wed Apr 15 19:49:59 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000782.html">[Socketcan-users] CAN with switchable power
+</A></li>
+        <LI>Next message: <A HREF="000784.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#783">[ date ]</a>
+              <a href="thread.html#783">[ thread ]</a>
+              <a href="subject.html#783">[ subject ]</a>
+              <a href="author.html#783">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Gary Thomas wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> There is no error from the transceiver
+</I>&gt;<i> 
+</I>&gt;<i> There is an error pin on your transceiver. You should connect some logic
+</I>&gt;<i> testing equipment to this pin (e.g. some kind of multi-meter).
+</I>
+You misunderstood - I _can_ monitor this pin and it is not asserted
+when these problems occur.
+
+&gt;<i> E.g. the bus converter from PEAK also provides this useful error LED:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://www.peak-system.com/Product-Details.49+M5be9a5f9823.0.html?&amp;L=1&amp;tx_commerce_pi1[catUid">http://www.peak-system.com/Product-Details.49+M5be9a5f9823.0.html?&amp;L=1&amp;tx_commerce_pi1[catUid</A>]=7&amp;tx_commerce_pi1[showUid]=25
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> What kind of CAN transceiver do you use and how are the status and enable pins
+</I>&gt;&gt;&gt;<i> wired?
+</I>&gt;&gt;<i> TJA1054
+</I>&gt;<i> 
+</I>&gt;<i> Aaah! I really assumed this fault tolerant transceiver to be in your setup :-)
+</I>&gt;<i> Please check out it's error conditions in the TJA1054 spec!!
+</I>&gt;<i> 
+</I>&gt;&gt;<i>    INH     pin 1 unconnected
+</I>&gt;&gt;<i>    /Wake   pin 7 unconnected
+</I>&gt;<i> 
+</I>&gt;<i> pulled high looks better here :-)
+</I>
+I'll have this checked.
+
+&gt;<i> 
+</I>&gt;&gt;<i>    /STB    pin 5 Pulled high
+</I>&gt;&gt;<i>    EN      pin 6 Pulled high
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> When one of the error conditions hits the transceiver the 'normal' operation
+</I>&gt;<i> is disabled. When you have 'valid' CAN traffic on CAN_L / CAN_H the errors
+</I>&gt;<i> normally disappear and the transceiver goes back into operational state ...
+</I>&gt;<i> 
+</I>&gt;<i> For this reason the other nodes (not your host) should generate CAN traffic on
+</I>&gt;<i> their own ... and then your transceiver will find back to normal operation.
+</I>
+The CAN devices do this - they are normally in idle (CANOpen) mode and
+send out a 1-byte packet every second or so.  The problem is that if
+they are powered off when the CAN interface comes up, then powered on,
+they don't seem to send this packet properly.  From what I'm told, they
+appear to go into &quot;babble&quot; mode (probably because of no ACK)
+
+As I said, we got the Peak-PCI card to do the same thing (I was testing
+to see if they problem was with the FPGA core), so this condition seems
+to be endemic with either the SJA1000 or the driver.
+
+Thanks for your time
+
+-- 
+------------------------------------------------------------
+Gary Thomas                 |  Consulting for the
+MLB Associates              |    Embedded world
+------------------------------------------------------------
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000782.html">[Socketcan-users] CAN with switchable power
+</A></li>
+	<LI>Next message: <A HREF="000784.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#783">[ date ]</a>
+              <a href="thread.html#783">[ thread ]</a>
+              <a href="subject.html#783">[ subject ]</a>
+              <a href="author.html#783">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using sja1000_isa on a 64b system
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4EBEE043.6070601%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002201.html">
+   <LINK REL="Next"  HREF="002203.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using sja1000_isa on a 64b system</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20sja1000_isa%20on%20a%2064b%20system&In-Reply-To=%3C4EBEE043.6070601%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Using sja1000_isa on a 64b system">wg at grandegger.com
+       </A><BR>
+    <I>Sat Nov 12 22:08:19 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002201.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+        <LI>Next message: <A HREF="002203.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2202">[ date ]</a>
+              <a href="thread.html#2202">[ thread ]</a>
+              <a href="subject.html#2202">[ subject ]</a>
+              <a href="author.html#2202">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/12/2011 10:55 AM, Willy Lambert wrote:
+&gt;<i> 2011/11/12 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;:
+</I>&gt;&gt;<i> 2011/11/10 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;:
+</I>&gt;&gt;&gt;<i> Hi Willy,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 11/09/2011 07:03 PM, Willy Lambert wrote:
+</I>&gt;&gt;&gt;&gt;<i> 2011/9/5 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;&gt;<i> Ah, at a closer look, the PC/104-Plus is an extension of the PC/104 from
+</I>&gt;&gt;&gt;&gt;&gt;<i> factor with an additional connector for PCI. It therefore still supports
+</I>&gt;&gt;&gt;&gt;&gt;<i> ISA bus communication, which the IXXAT PC-I 04/104 board uses.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Therefore I'm going to prepare a patch removing the &quot;X86_32&quot; restriction
+</I>&gt;&gt;&gt;&gt;&gt;<i> for CONFIG_ISA above. Sorry for confusion.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> May I bump this up ? I read your conversation on other linux ML, but I
+</I>&gt;&gt;&gt;&gt;<i> don't really know how it ended.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Some time ago I posted a patch to the relevant mls removing the
+</I>&gt;&gt;&gt;<i> restriction mentioned above. But enabling CONFIG_ISA also for x86_64
+</I>&gt;&gt;&gt;<i> systems is not wished mainly to avoid the expected mess with old
+</I>&gt;&gt;&gt;<i> legacy ISA driver code. Therefore we should convert the driver to a
+</I>&gt;&gt;&gt;<i> platform driver. I have attached the *untested* patch below. Could you
+</I>&gt;&gt;&gt;<i> please give it a try? If it works fine, I will send it finally to the
+</I>&gt;&gt;&gt;<i> netdev ml.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> From dd2c8d7cf8f23a20aecd234a6cf7675b59f5779d Mon Sep 17 00:00:00 2001
+</I>&gt;&gt;&gt;<i> From: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i> Date: Thu, 10 Nov 2011 09:10:18 +0100
+</I>&gt;&gt;&gt;<i> Subject: [PATCH] can: sja1000_isa: convert to platform driver to support x86_64 systems
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This driver is currently not supported on x86_64 systems because the
+</I>&gt;&gt;&gt;<i> &quot;isa_driver&quot; interface is used. To overcome this limitation, this
+</I>&gt;&gt;&gt;<i> driver is converted to a platform driver, similar to the serial 8250
+</I>&gt;&gt;&gt;<i> driver.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;&gt;<i> ---
+</I>&gt;&gt;&gt;<i>  drivers/net/can/sja1000/Kconfig       |    1 -
+</I>&gt;&gt;&gt;<i>  drivers/net/can/sja1000/sja1000_isa.c |   86 ++++++++++++++++++++++-----------
+</I>&gt;&gt;&gt;<i>  2 files changed, 57 insertions(+), 30 deletions(-)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> diff --git a/drivers/net/can/sja1000/Kconfig b/drivers/net/can/sja1000/Kconfig
+</I>&gt;&gt;&gt;<i> index fe9e64d..36e9d59 100644
+</I>&gt;&gt;&gt;<i> --- a/drivers/net/can/sja1000/Kconfig
+</I>&gt;&gt;&gt;<i> +++ b/drivers/net/can/sja1000/Kconfig
+</I>&gt;&gt;&gt;<i> @@ -6,7 +6,6 @@ if CAN_SJA1000
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  config CAN_SJA1000_ISA
+</I>&gt;&gt;&gt;<i>        tristate &quot;ISA Bus based legacy SJA1000 driver&quot;
+</I>&gt;&gt;&gt;<i> -       depends on ISA
+</I>&gt;&gt;&gt;<i>        ---help---
+</I>&gt;&gt;&gt;<i>          This driver adds legacy support for SJA1000 chips connected to
+</I>&gt;&gt;&gt;<i>          the ISA bus using I/O port, memory mapped or indirect access.
+</I>&gt;&gt;&gt;<i> diff --git a/drivers/net/can/sja1000/sja1000_isa.c b/drivers/net/can/sja1000/sja1000_isa.c
+</I>&gt;&gt;&gt;<i> index 496223e..3301031 100644
+</I>&gt;&gt;&gt;<i> --- a/drivers/net/can/sja1000/sja1000_isa.c
+</I>&gt;&gt;&gt;<i> +++ b/drivers/net/can/sja1000/sja1000_isa.c
+</I>&gt;&gt;&gt;<i> @@ -17,7 +17,7 @@
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  #include &lt;linux/kernel.h&gt;
+</I>&gt;&gt;&gt;<i>  #include &lt;linux/module.h&gt;
+</I>&gt;&gt;&gt;<i> -#include &lt;linux/isa.h&gt;
+</I>&gt;&gt;&gt;<i> +#include &lt;linux/platform_device.h&gt;
+</I>&gt;&gt;&gt;<i>  #include &lt;linux/interrupt.h&gt;
+</I>&gt;&gt;&gt;<i>  #include &lt;linux/netdevice.h&gt;
+</I>&gt;&gt;&gt;<i>  #include &lt;linux/delay.h&gt;
+</I>&gt;&gt;&gt;<i> @@ -75,6 +75,8 @@ MODULE_PARM_DESC(ocr, &quot;Output control register &quot;
+</I>&gt;&gt;&gt;<i>  #define SJA1000_IOSIZE          0x20
+</I>&gt;&gt;&gt;<i>  #define SJA1000_IOSIZE_INDIRECT 0x02
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> +static struct platform_device *sja1000_isa_devs[MAXDEV];
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i>  static u8 sja1000_isa_mem_read_reg(const struct sja1000_priv *priv, int reg)
+</I>&gt;&gt;&gt;<i>  {
+</I>&gt;&gt;&gt;<i>        return readb(priv-&gt;reg_base + reg);
+</I>&gt;&gt;&gt;<i> @@ -115,24 +117,13 @@ static void sja1000_isa_port_write_reg_indirect(const struct sja1000_priv *priv,
+</I>&gt;&gt;&gt;<i>        outb(val, base + 1);
+</I>&gt;&gt;&gt;<i>  }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -static int __devinit sja1000_isa_match(struct device *pdev, unsigned int idx)
+</I>&gt;&gt;&gt;<i> -{
+</I>&gt;&gt;&gt;<i> -       if (port[idx] || mem[idx]) {
+</I>&gt;&gt;&gt;<i> -               if (irq[idx])
+</I>&gt;&gt;&gt;<i> -                       return 1;
+</I>&gt;&gt;&gt;<i> -       } else if (idx)
+</I>&gt;&gt;&gt;<i> -               return 0;
+</I>&gt;&gt;&gt;<i> -
+</I>&gt;&gt;&gt;<i> -       dev_err(pdev, &quot;insufficient parameters supplied\n&quot;);
+</I>&gt;&gt;&gt;<i> -       return 0;
+</I>&gt;&gt;&gt;<i> -}
+</I>&gt;&gt;&gt;<i> -
+</I>&gt;&gt;&gt;<i> -static int __devinit sja1000_isa_probe(struct device *pdev, unsigned int idx)
+</I>&gt;&gt;&gt;<i> +static int __devinit sja1000_isa_probe(struct platform_device *pdev)
+</I>&gt;&gt;&gt;<i>  {
+</I>&gt;&gt;&gt;<i>        struct net_device *dev;
+</I>&gt;&gt;&gt;<i>        struct sja1000_priv *priv;
+</I>&gt;&gt;&gt;<i>        void __iomem *base = NULL;
+</I>&gt;&gt;&gt;<i>        int iosize = SJA1000_IOSIZE;
+</I>&gt;&gt;&gt;<i> +       int idx = pdev-&gt;id;
+</I>&gt;&gt;&gt;<i>        int err;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        if (mem[idx]) {
+</I>&gt;&gt;&gt;<i> @@ -203,17 +194,17 @@ static int __devinit sja1000_isa_probe(struct device *pdev, unsigned int idx)
+</I>&gt;&gt;&gt;<i>        else
+</I>&gt;&gt;&gt;<i>                priv-&gt;cdr = CDR_DEFAULT;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -       dev_set_drvdata(pdev, dev);
+</I>&gt;&gt;&gt;<i> -       SET_NETDEV_DEV(dev, pdev);
+</I>&gt;&gt;&gt;<i> +       dev_set_drvdata(&amp;pdev-&gt;dev, dev);
+</I>&gt;&gt;&gt;<i> +       SET_NETDEV_DEV(dev, &amp;pdev-&gt;dev);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        err = register_sja1000dev(dev);
+</I>&gt;&gt;&gt;<i>        if (err) {
+</I>&gt;&gt;&gt;<i> -               dev_err(pdev, &quot;registering %s failed (err=%d)\n&quot;,
+</I>&gt;&gt;&gt;<i> +               dev_err(&amp;pdev-&gt;dev, &quot;registering %s failed (err=%d)\n&quot;,
+</I>&gt;&gt;&gt;<i>                        DRV_NAME, err);
+</I>&gt;&gt;&gt;<i>                goto exit_unmap;
+</I>&gt;&gt;&gt;<i>        }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -       dev_info(pdev, &quot;%s device registered (reg_base=0x%p, irq=%d)\n&quot;,
+</I>&gt;&gt;&gt;<i> +       dev_info(&amp;pdev-&gt;dev, &quot;%s device registered (reg_base=0x%p, irq=%d)\n&quot;,
+</I>&gt;&gt;&gt;<i>                 DRV_NAME, priv-&gt;reg_base, dev-&gt;irq);
+</I>&gt;&gt;&gt;<i>        return 0;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> @@ -229,13 +220,14 @@ static int __devinit sja1000_isa_probe(struct device *pdev, unsigned int idx)
+</I>&gt;&gt;&gt;<i>        return err;
+</I>&gt;&gt;&gt;<i>  }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -static int __devexit sja1000_isa_remove(struct device *pdev, unsigned int idx)
+</I>&gt;&gt;&gt;<i> +static int __devexit sja1000_isa_remove(struct platform_device *pdev)
+</I>&gt;&gt;&gt;<i>  {
+</I>&gt;&gt;&gt;<i> -       struct net_device *dev = dev_get_drvdata(pdev);
+</I>&gt;&gt;&gt;<i> +       struct net_device *dev = dev_get_drvdata(&amp;pdev-&gt;dev);
+</I>&gt;&gt;&gt;<i>        struct sja1000_priv *priv = netdev_priv(dev);
+</I>&gt;&gt;&gt;<i> +       int idx = pdev-&gt;id;
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        unregister_sja1000dev(dev);
+</I>&gt;&gt;&gt;<i> -       dev_set_drvdata(pdev, NULL);
+</I>&gt;&gt;&gt;<i> +       dev_set_drvdata(&amp;pdev-&gt;dev, NULL);
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>        if (mem[idx]) {
+</I>&gt;&gt;&gt;<i>                iounmap(priv-&gt;reg_base);
+</I>&gt;&gt;&gt;<i> @@ -251,29 +243,65 @@ static int __devexit sja1000_isa_remove(struct device *pdev, unsigned int idx)
+</I>&gt;&gt;&gt;<i>        return 0;
+</I>&gt;&gt;&gt;<i>  }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -static struct isa_driver sja1000_isa_driver = {
+</I>&gt;&gt;&gt;<i> -       .match = sja1000_isa_match,
+</I>&gt;&gt;&gt;<i> +static struct platform_driver sja1000_isa_driver = {
+</I>&gt;&gt;&gt;<i>        .probe = sja1000_isa_probe,
+</I>&gt;&gt;&gt;<i>        .remove = __devexit_p(sja1000_isa_remove),
+</I>&gt;&gt;&gt;<i>        .driver = {
+</I>&gt;&gt;&gt;<i>                .name = DRV_NAME,
+</I>&gt;&gt;&gt;<i> +               .owner = THIS_MODULE,
+</I>&gt;&gt;&gt;<i>        },
+</I>&gt;&gt;&gt;<i>  };
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  static int __init sja1000_isa_init(void)
+</I>&gt;&gt;&gt;<i>  {
+</I>&gt;&gt;&gt;<i> -       int err = isa_register_driver(&amp;sja1000_isa_driver, MAXDEV);
+</I>&gt;&gt;&gt;<i> +       int idx, err;
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       for (idx = 0; idx &lt; MAXDEV; idx++) {
+</I>&gt;&gt;&gt;<i> +               if ((port[idx] || mem[idx]) &amp;&amp; irq[idx]) {
+</I>&gt;&gt;&gt;<i> +                       sja1000_isa_devs[idx] =
+</I>&gt;&gt;&gt;<i> +                               platform_device_alloc(DRV_NAME, idx);
+</I>&gt;&gt;&gt;<i> +                       if (!sja1000_isa_devs[idx]) {
+</I>&gt;&gt;&gt;<i> +                               err = -ENOMEM;
+</I>&gt;&gt;&gt;<i> +                               goto exit_free_devices;
+</I>&gt;&gt;&gt;<i> +                       }
+</I>&gt;&gt;&gt;<i> +                       err = platform_device_add(sja1000_isa_devs[idx]);
+</I>&gt;&gt;&gt;<i> +                       if (err) {
+</I>&gt;&gt;&gt;<i> +                               platform_device_put(sja1000_isa_devs[idx]);
+</I>&gt;&gt;&gt;<i> +                               goto exit_free_devices;
+</I>&gt;&gt;&gt;<i> +                       }
+</I>&gt;&gt;&gt;<i> +               } else {
+</I>&gt;&gt;&gt;<i> +                       pr_err(&quot;%s: insufficient parameters supplied\n&quot;,
+</I>&gt;&gt;&gt;<i> +                              DRV_NAME);
+</I>&gt;&gt;&gt;<i> +                       goto exit_free_devices;
+</I>&gt;&gt;&gt;<i> +       }
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       err = platform_driver_register(&amp;sja1000_isa_driver);
+</I>&gt;&gt;&gt;<i> +       if (err)
+</I>&gt;&gt;&gt;<i> +               goto exit_free_devices;
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       pr_info(&quot;Legacy %s driver for max. %d devices registered\n&quot;,
+</I>&gt;&gt;&gt;<i> +               DRV_NAME, MAXDEV);
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       return 0;
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +exit_free_devices:
+</I>&gt;&gt;&gt;<i> +       while (--idx &gt;= 0) {
+</I>&gt;&gt;&gt;<i> +               if (sja1000_isa_devs[idx])
+</I>&gt;&gt;&gt;<i> +                       platform_device_unregister(sja1000_isa_devs[idx]);
+</I>&gt;&gt;&gt;<i> +       }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> -       if (!err)
+</I>&gt;&gt;&gt;<i> -               printk(KERN_INFO
+</I>&gt;&gt;&gt;<i> -                      &quot;Legacy %s driver for max. %d devices registered\n&quot;,
+</I>&gt;&gt;&gt;<i> -                      DRV_NAME, MAXDEV);
+</I>&gt;&gt;&gt;<i>        return err;
+</I>&gt;&gt;&gt;<i>  }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  static void __exit sja1000_isa_exit(void)
+</I>&gt;&gt;&gt;<i>  {
+</I>&gt;&gt;&gt;<i> -       isa_unregister_driver(&amp;sja1000_isa_driver);
+</I>&gt;&gt;&gt;<i> +       int idx;
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       platform_driver_unregister(&amp;sja1000_isa_driver);
+</I>&gt;&gt;&gt;<i> +       for (idx = 0; idx &lt; MAXDEV; idx++) {
+</I>&gt;&gt;&gt;<i> +               if (sja1000_isa_devs[idx])
+</I>&gt;&gt;&gt;<i> +                       platform_device_unregister(sja1000_isa_devs[idx]);
+</I>&gt;&gt;&gt;<i> +       }
+</I>&gt;&gt;&gt;<i>  }
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>  module_init(sja1000_isa_init);
+</I>&gt;&gt;&gt;<i> --
+</I>&gt;&gt;&gt;<i> 1.7.4.1
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I failed to apply the patch, is it for 2.6.38.8 kernels ?
+</I>
+No, it's for up-to-date *mainline* linux version 3.1.x. Any chance to
+switch to David Miller's &quot;net-nex-2.6&quot; tree?. Otherwise I'm going to
+adapt the patch to 2.6.38.8.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002201.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+	<LI>Next message: <A HREF="002203.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2202">[ date ]</a>
+              <a href="thread.html#2202">[ thread ]</a>
+              <a href="subject.html#2202">[ subject ]</a>
+              <a href="author.html#2202">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can0 doesn't show after modprobe at91_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C4B1D5FB5.6070704%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001197.html">
+   <LINK REL="Next"  HREF="001201.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can0 doesn't show after modprobe at91_can</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C4B1D5FB5.6070704%40grandegger.com%3E"
+       TITLE="[Socketcan-users] can0 doesn't show after modprobe at91_can">wg at grandegger.com
+       </A><BR>
+    <I>Mon Dec  7 21:04:05 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001197.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+        <LI>Next message: <A HREF="001201.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1198">[ date ]</a>
+              <a href="thread.html#1198">[ thread ]</a>
+              <a href="subject.html#1198">[ subject ]</a>
+              <a href="author.html#1198">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Chris Verges wrote:
+&gt;&gt;<i> I'm a bit puzzled, also your previous error message indicates, that
+</I>&gt;&gt;<i> can-&gt;bittiming_const is not defined. How do you build your modules?
+</I>&gt;<i> 
+</I>&gt;<i> I'm using OpenEmbedded to handle the build.  The kernel is v2.6.28, libc
+</I>&gt;<i> headers are v2.6.31.  I'm using the socketcan-modules recipe to actually
+</I>&gt;<i> do the build.  Attached are the log files of the build.
+</I>&gt;<i> 
+</I>&gt;<i> There's a good chance the recipes from OE need to updated.  I've patched
+</I>&gt;<i> them so that only the at91_can driver and can-raw module are built.
+</I>&gt;<i> (Simplifies things for me.)
+</I>
+You need to define the CONFIG option on the make command line. Here is
+what I use for the MSCAN PowerPC driver:
+
+ make ARCH=powerpc $* \
+    KERNELDIR=$KSRC CONFIG_CAN_DEBUG_DEVICES=y \
+    CONFIG_CAN_DEV=m \
+    CONFIG_CAN_MSCAN=m CONFIG_CAN_MPC52XX=m CONFIG_CAN_MPC5XXX=m \
+    CONFIG_CAN_SJA1000_OF_PLATFORM=m \
+    CONFIG_CAN_EMS_PCI=m \
+    CONFIG_CAN_EMS_USB=m \
+    CONFIG_CAN_PEAK_PCI=m \
+    CONFIG_CAN_IXXAT_PCI=m \
+    CONFIG_CAN_KVASER_PCI=m \
+    CONFIG_CAN_ESD_PCI=m \
+    CONFIG_CAN_ESD_PCI331=m \
+    CONFIG_CAN_CC770=m \
+    CONFIG_CAN_CC770_OF_PLATFORM=m \
+
+Maybe CONFIG_CAN_DEV=m is missing, at least.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001197.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+	<LI>Next message: <A HREF="001201.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1198">[ date ]</a>
+              <a href="thread.html#1198">[ thread ]</a>
+              <a href="subject.html#1198">[ subject ]</a>
+              <a href="author.html#1198">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

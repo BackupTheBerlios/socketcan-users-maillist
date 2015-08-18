@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kvaser usbcanII
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kvaser%20usbcanII&In-Reply-To=%3C14d050040904130457q6395c115seca1c7e32fb62ae1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000768.html">
+   <LINK REL="Next"  HREF="000770.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kvaser usbcanII</H1>
+    <B>Pier-Luc Caron St-Pierre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kvaser%20usbcanII&In-Reply-To=%3C14d050040904130457q6395c115seca1c7e32fb62ae1%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Kvaser usbcanII">pierluc.caronstpierre at gmail.com
+       </A><BR>
+    <I>Mon Apr 13 13:57:14 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000768.html">[Socketcan-users] Kvaser usbcanII
+</A></li>
+        <LI>Next message: <A HREF="000770.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#769">[ date ]</a>
+              <a href="thread.html#769">[ thread ]</a>
+              <a href="subject.html#769">[ subject ]</a>
+              <a href="author.html#769">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Sun, Apr 12, 2009 at 5:49 AM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+&gt;<i> Pier-Luc Caron St-Pierre wrote:
+</I>&gt;&gt;<i> Hello awesome team,
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> :-))
+</I>&gt;<i>
+</I>&gt;&gt;<i> Second, I'm looking
+</I>&gt;&gt;<i> for a way to use socketCan with the kvaser usbcanII. Does it exists a way?
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hello Pier-Luc,
+</I>&gt;<i>
+</I>&gt;<i> AFAIK there is only the Kvaser PCI board currently supported as these kinds of
+</I>&gt;<i> 'passive' PCI adaptors (from IXXAT, PEAK, KVASER, etc.) are quite similar and
+</I>&gt;<i> provide a SJA1000 CAN controller somewhere in the PCI I/O space.
+</I>&gt;<i>
+</I>&gt;<i> Unfortunataly the other Kvaser hardware does not support the network device
+</I>&gt;<i> driver model so far.
+</I>&gt;<i>
+</I>&gt;<i> I supported an external patch for the PEAK Linux driver for a long time, and
+</I>&gt;<i> there i just grabbed the CAN frame before it was enqueued to the character
+</I>&gt;<i> device queue and pushed it into a netdevice queue of my CAN network device.
+</I>&gt;<i>
+</I>&gt;<i> This was not *very* tricky as i only needed to identify the data flow paths
+</I>&gt;<i> inside the PEAK driver to find the correct connection points for my netdevice.
+</I>&gt;<i> You may take a look into the current PEAK Linux driver for details.
+</I>&gt;<i>
+</I>&gt;<i> But i don't know the effort to 'convert' the current Linux Kvaser driver to
+</I>&gt;<i> support it ...
+</I>&gt;<i>
+</I>&gt;<i> I just got an ugly idea to create an application that creates a 'bridge'
+</I>&gt;<i> between the Kvaser SDK driver API and a virtual CAN driver. So all your
+</I>&gt;<i> applications would use the virtual CAN - and only the 'bridge' would take the
+</I>&gt;<i> frames from the VCAN and put this into the Kvaser driver and vice versa.
+</I>&gt;<i>
+</I>&gt;<i> But this smells bad and i don't have any impression about the performance
+</I>&gt;<i> issues you might have to deal with ...
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+Hello Oliver,
+
+Thanks for your quick response. It's really appreciated. Also, thanks
+for your idea of hack :).
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000768.html">[Socketcan-users] Kvaser usbcanII
+</A></li>
+	<LI>Next message: <A HREF="000770.html">[Socketcan-users] CAN with switchable power
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#769">[ date ]</a>
+              <a href="thread.html#769">[ thread ]</a>
+              <a href="subject.html#769">[ subject ]</a>
+              <a href="author.html#769">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

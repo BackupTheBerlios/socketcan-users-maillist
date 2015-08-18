@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [Xenomai-help] Re: send error:	permission	denied
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BXenomai-help%5D%20Re%3A%20send%20error%3A%0A%09permission%09denied&In-Reply-To=%3C44EAA684.3060506%40web.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000007.html">
+   <LINK REL="Next"  HREF="000006.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [Xenomai-help] Re: send error:	permission	denied</H1>
+    <B>Jan Kiszka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BXenomai-help%5D%20Re%3A%20send%20error%3A%0A%09permission%09denied&In-Reply-To=%3C44EAA684.3060506%40web.de%3E"
+       TITLE="[Socketcan-users] [Xenomai-help] Re: send error:	permission	denied">jan.kiszka at web.de
+       </A><BR>
+    <I>Tue Aug 22 08:39:00 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000007.html">[Socketcan-users] [Xenomai-help] Re: send error:	permission	denied
+</A></li>
+        <LI>Next message: <A HREF="000006.html">[Socketcan-users] [Xenomai-help] Re: send error: permission	denied
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#8">[ date ]</a>
+              <a href="thread.html#8">[ thread ]</a>
+              <a href="subject.html#8">[ subject ]</a>
+              <a href="author.html#8">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Jan Kiszka wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Hi Daniel,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Daniel Schnell wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am new to socket can.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I wanted to test the rtcan driver in combination with Linux and
+</I>&gt;&gt;&gt;&gt;<i> Xenomai and made a little program according to the rtcansend program
+</I>&gt;&gt;&gt;&gt;<i> but with some response time measurements.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> However after setting up the socket I get &#8211;EPERM when trying to send a
+</I>&gt;&gt;&gt;&gt;<i> packet to the can device. As the documentation doesn&#8217;t state anything
+</I>&gt;&gt;&gt;&gt;<i> about this error when calling rt_dev_send() I wonder why the error if
+</I>&gt;&gt;&gt;&gt;<i> at all doesn&#8217;t appear earlier if I try to setup the socket. The test
+</I>&gt;&gt;&gt;&gt;<i> program already ran nicely when I tested the peak can drivers for
+</I>&gt;&gt;&gt;&gt;<i> linux. I just changed the driver specific calls.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Attached you find the complete test file, the function task() is the
+</I>&gt;&gt;&gt;&gt;<i> one to blame.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am a bit stuck with this, so maybe someone can give me a slight hint
+</I>&gt;&gt;&gt;&gt;<i> in what i am doing wrong.
+</I>&gt;&gt;&gt;<i> I tried your program on my system and got the same error. The problem
+</I>&gt;&gt;&gt;<i> is, that rt_dev_send() is called from non-RT context, which is illegal.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> ...but should not matter if the caller is a Xenomai thread in &quot;Linux&quot;
+</I>&gt;&gt;<i> mode.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> At a first glance, it's not obvious to me why. Therefore I added the
+</I>&gt;&gt;&gt;<i> Xenomai Help ML to the CCs.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> How did you all compile the program [1]? Using xeno-config
+</I>&gt;&gt;<i> --posix-cflags / --posix-ldflags?
+</I>&gt;<i> 
+</I>&gt;<i> No, ah, oh. It works using the above flags, indeed. I see, that it calls
+</I>&gt;<i> _rtdm_sendmsg in secondary execution mode (none-RT) first, which
+</I>&gt;<i> returned -ENOSYS (-38). Then I guess, the context is switch to primary
+</I>&gt;<i> mode and _rtdm_sendmsg is called again, correct?
+</I>&gt;<i> 
+</I>
+Exactly, that's how it works.
+
+&gt;&gt;<i> Jan
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> PS: Daniel, if you go the POSIX way, you don't have to use rt_dev_, you
+</I>&gt;&gt;<i> can use the normal POSIX API directly. That services will be wrapped on
+</I>&gt;&gt;<i> the Xenomai core just like pthread&amp;friends.
+</I>&gt;<i> 
+</I>&gt;<i> Cool. I was not yet aware of that.
+</I>
+Yes, and one should try to keep the sources clean (though mixing is
+technically fine): either go native and pick real-time related services
+from this API (would include task creation here) or go POSIX and use
+only that API. If unsure about the status of some particular function,
+see the docs or &lt;xeno-installation&gt;/lib/posix.wrappers for the list of
+available bindings. (*)
+
+&gt;<i> 
+</I>&gt;&gt;<i> [1]<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20060821/ff454f48/cantest_rt.obj">https://lists.berlios.de/pipermail/socketcan-users/attachments/20060821/ff454f48/cantest_rt.obj</A>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for clarifying things.
+</I>&gt;<i> 
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i> 
+</I>
+Jan
+
+
+(*) Native has the charm of being more explicit (&quot;This is hard-RT, any
+    other service not.&quot;) and sometimes more handy to use. POSIX is
+    standard, thus far easier portable. And it may already be well known
+    to the programmer.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 250 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20060822/6ed38996/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20060822/6ed38996/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000007.html">[Socketcan-users] [Xenomai-help] Re: send error:	permission	denied
+</A></li>
+	<LI>Next message: <A HREF="000006.html">[Socketcan-users] [Xenomai-help] Re: send error: permission	denied
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#8">[ date ]</a>
+              <a href="thread.html#8">[ thread ]</a>
+              <a href="subject.html#8">[ subject ]</a>
+              <a href="author.html#8">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

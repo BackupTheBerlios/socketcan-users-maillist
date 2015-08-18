@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can next try
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20next%20try&In-Reply-To=%3C46961CCB.8060406%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000160.html">
+   <LINK REL="Next"  HREF="000163.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can next try</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can%20next%20try&In-Reply-To=%3C46961CCB.8060406%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan c_can next try">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Thu Jul 12 14:21:31 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000160.html">[Socketcan-users] socketcan c_can next try
+</A></li>
+        <LI>Next message: <A HREF="000163.html">[Socketcan-users] socketcan ccan new patch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#161">[ date ]</a>
+              <a href="thread.html#161">[ thread ]</a>
+              <a href="subject.html#161">[ subject ]</a>
+              <a href="author.html#161">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marc Kleine-Budde wrote:
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">simon.kallweit at intefo.ch</A> wrote:
+</I>&gt;&gt;<i> I've adapted the c_can driver to correctly handle multiple 
+</I>&gt;&gt;<i> platform_devices. Please review.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Best regards,
+</I>&gt;&gt;<i> Simon Kallweit
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> +static int ccan_stop(struct net_device *ndev)
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +    struct ccan_dev *cdev = ND2CAN(ndev)-&gt;priv;
+</I>&gt;&gt;<i> +    unsigned long flags;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +    netif_stop_queue(ndev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +    /* mask all IRQs */
+</I>&gt;&gt;<i> +    spin_lock_irqsave(&amp;cdev-&gt;lock, flags);
+</I>&gt;&gt;<i> +//    nios_write_reg(cdev-&gt;base_addr, NIOS_INTMASK, 0x0 | 
+</I>&gt;&gt;<i> NIOS_INTMASK_SET);
+</I>&gt;&gt;<i> +    spin_unlock_irqrestore(&amp;cdev-&gt;lock, flags);
+</I>&gt;<i>
+</I>&gt;<i> The idea behind    this was to mask all IRQs, so that the chip doesn't 
+</I>&gt;<i> throw any interrupts. I'm not in the CCAN, but is it possible to shut 
+</I>&gt;<i> up the chip propperly?
+</I>&gt;<i>
+</I>&gt;<i> Does the schedule_delayed clash with this, you probably have to call 
+</I>&gt;<i> these:
+</I>&gt;<i> cancel_delayed_work(&amp;ccdev-&gt;work);
+</I>&gt;<i> flush_scheduled_work();
+</I>
+ok, i've implemented a proper masking of all interrupts. thanks for the 
+hint!
+
+&gt;<i>
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +    free_irq(cdev-&gt;irq, ndev);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +    return 0;
+</I>&gt;&gt;<i> +}
+</I>&gt;<i>
+</I>&gt;<i> Marc
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000160.html">[Socketcan-users] socketcan c_can next try
+</A></li>
+	<LI>Next message: <A HREF="000163.html">[Socketcan-users] socketcan ccan new patch
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#161">[ date ]</a>
+              <a href="thread.html#161">[ thread ]</a>
+              <a href="subject.html#161">[ subject ]</a>
+              <a href="author.html#161">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

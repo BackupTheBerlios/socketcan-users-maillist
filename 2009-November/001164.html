@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091127090302.GB4721%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001163.html">
+   <LINK REL="Next"  HREF="001165.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091127090302.GB4721%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">l.fu at pengutronix.de
+       </A><BR>
+    <I>Fri Nov 27 10:03:02 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001163.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001165.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1164">[ date ]</a>
+              <a href="thread.html#1164">[ thread ]</a>
+              <a href="subject.html#1164">[ subject ]</a>
+              <a href="author.html#1164">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+On Thu, Nov 26, 2009 at 01:09:55PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; Hi Fu,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; Luotao Fu wrote:
+</I>&lt;snip&gt;
+&gt;<i> 
+</I>&gt;<i> Just looked to the code. scan_do_restart() just does the bus-off
+</I>&gt;<i> recovery if appropriate. But I realized that the scan_set_* functions do
+</I>&gt;<i>  stop the device before setting the property. That's dangerous and error
+</I>&gt;<i> prune and therefore we did not allow it in the kernel. It's up to the
+</I>&gt;<i> user/application to handle up/down properly. Furthermore, these
+</I>&gt;<i> functions seem to start the device even if it was not up before.
+</I>&gt;<i> 
+</I>
+I updated the GIT tree. Now we have
+scan_do_start/stop/restart
+callbacks to start/stop/restart the device. Also elimanated duplicated
+code and remove the internal starting/stoping the device in _set calls.
+canconfig is updated too. I will rename the library to simply
+libsocketcan and the API prefix to can_. All good with these names?
+
+cheers
+Fu
+
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091127/1a060ce9/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091127/1a060ce9/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001163.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001165.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1164">[ date ]</a>
+              <a href="thread.html#1164">[ thread ]</a>
+              <a href="subject.html#1164">[ subject ]</a>
+              <a href="author.html#1164">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

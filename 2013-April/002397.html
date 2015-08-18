@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2013-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan&In-Reply-To=%3C517A8D16.3020407%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002396.html">
+   <LINK REL="Next"  HREF="002398.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan&In-Reply-To=%3C517A8D16.3020407%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] socketcan">mkl at pengutronix.de
+       </A><BR>
+    <I>Fri Apr 26 16:20:06 CEST 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002396.html">[Socketcan-users] socketcan
+</A></li>
+        <LI>Next message: <A HREF="002398.html">[Socketcan-users] Socketcan-users Digest, Vol 74, Issue 1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2397">[ date ]</a>
+              <a href="thread.html#2397">[ thread ]</a>
+              <a href="subject.html#2397">[ subject ]</a>
+              <a href="author.html#2397">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 04/26/2013 03:03 PM, kedari appana wrote:
+&gt;<i> I am new to socketcan and i write a socketcan driver based on the
+</I>&gt;<i> standard can drivers now i want to compile that driver how to compile
+</I>
+Add your driver to your linux kernel under:
+
+    drivers/net/can/
+
+and add an option to
+
+    drivers/net/can/Kconfig
+    drivers/net/can/Makefile
+
+follow an existing driver like e.g. flexcan [1][2].
+
+&gt;<i> it and please help me how to write user space applications and how to
+</I>&gt;<i> test my hardware so that  my driver code is correct .please help me
+</I>&gt;<i> regarding this issue
+</I>
+There are existing userspace applications, e.g. the can-utils, which can
+be downlaoded at gitorious.org [3]. Use cansend and candump to send and
+receive can messages. Use &quot;ip&quot; of the iproute2 package to configure the
+bitrate of your can interface[4]. See that document for more information
+about CAN under Linux.
+
+hth,
+Marc
+
+[1] <A HREF="http://lxr.free-electrons.com/source/drivers/net/can/Kconfig#L99">http://lxr.free-electrons.com/source/drivers/net/can/Kconfig#L99</A>
+[2] <A HREF="http://lxr.free-electrons.com/source/drivers/net/can/Makefile#L23">http://lxr.free-electrons.com/source/drivers/net/can/Makefile#L23</A>
+[3] <A HREF="https://gitorious.org/linux-can/can-utils">https://gitorious.org/linux-can/can-utils</A>
+[4]
+<A HREF="http://lxr.free-electrons.com/source/Documentation/networking/can.txt#L854">http://lxr.free-electrons.com/source/Documentation/networking/can.txt#L854</A>
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 263 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20130426/6b014f74/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20130426/6b014f74/attachment.pgp</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002396.html">[Socketcan-users] socketcan
+</A></li>
+	<LI>Next message: <A HREF="002398.html">[Socketcan-users] Socketcan-users Digest, Vol 74, Issue 1
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2397">[ date ]</a>
+              <a href="thread.html#2397">[ thread ]</a>
+              <a href="subject.html#2397">[ subject ]</a>
+              <a href="author.html#2397">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

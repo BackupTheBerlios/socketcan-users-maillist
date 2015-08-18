@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan force tty devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan%20force%20tty%20devices&In-Reply-To=%3C4A1003AD.7090802%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000842.html">
+   <LINK REL="Next"  HREF="000841.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan force tty devices</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan%20force%20tty%20devices&In-Reply-To=%3C4A1003AD.7090802%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] slcan force tty devices">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun May 17 14:31:41 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000842.html">[Socketcan-users] slcan force tty devices
+</A></li>
+        <LI>Next message: <A HREF="000841.html">[Socketcan-users] Socketcan hangs at mod 64K packets received packets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#843">[ date ]</a>
+              <a href="thread.html#843">[ thread ]</a>
+              <a href="subject.html#843">[ subject ]</a>
+              <a href="author.html#843">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Robert Haddon wrote:
+&gt;<i> We do have udev rules in place to guide our userspace applications onto the correct CAN busses.  This doesn't help with the device naming in the slcan module because it gets the TTY name from the kernel, which uses an ever increasing device number as the underlying hardware comes and goes.
+</I>&gt;<i> As far as we can tell, any system would have this problem if it has more than one slc device and it cannot always guarantee the order in which these devices are started (line discipline set).  
+</I>&gt;<i> 
+</I>&gt;<i> (..)
+</I>&gt;<i> The changes you referenced me to in slip.c, if applied to slcan.c would conflict with the patchfile I provided.
+</I>&gt;<i> We haven't found a reliable method that binds a slc adapter number to the underlaying hardware.
+</I>&gt;<i> 
+</I>&gt;<i> As our CAN adapters (USB -&gt; CAN) come and go, their slc adapter numbers migrate, which is a problem for us. That is why we implemented the fixed number solution.
+</I>&gt;<i> 
+</I>
+Hi Steve,
+
+it needed some time, but here is an idea:
+
+We had a similar problem with the PEAK USB Adaptors, we wanted to be
+configured with the correct bitrate at plug-in time.
+
+On idea was to use some kind of configuration data that's stored in the flash
+of the PEAK-USB-CAN adaptors and patch the PEAK driver to extract this
+information and configure the bitrate settings.
+
+But that was a very specific approach.
+
+Now we've done it like this:
+
+Every PEAK-USB-CAN adaptor has a 8-bit serial number that can be flashed with
+a Windows tool and can be read out via /proc/pcan
+
+e.g.
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwolkf320</A>:~$ cat /proc/pcan
+
+*------------ PEAK-Systems CAN interfaces (www.peak-system.com) -------------
+*--------------------------  Release_20090215_n  ----------------------------
+*---------------- [mod] [isa] [pci] [dng] [usb] [pcc] [net] -----------------
+*--------------------- 1 interfaces @ major 251 found -----------------------
+*n -type- ndev --base-- irq --btr- --read-- --write- --irqs-- -errors- status
+32    usb can2 ffffffff 016 0x001c 00000006 00000001 0000049c 00000000 0x0000
+
+This is our adapter #16 (see 'irq' column as USB adapters have no real irq).
+The default is #255 (not set).
+
+What we've done is creating a udev-script that has a configuration file
+containing:
+
+&lt;device number&gt; &lt;wanted netdev name&gt; &lt;bitrate&gt;
+
+and whenever a PEAK_USB_CAN adapter is plugged in, the script checks whether
+the device number is != 255 and then tries to rename the (automatic created)
+netdevice name to the name given in the configuration file.
+
+The renaming is done by the ip(8) tool (when the interface is down).
+
+e.g. ip link set slc0 name myspecialcan
+
+An approach for your setup would be:
+
+Let slcan_attach create a slcX device and rename this to a can0, can1,
+sensorcan, actorcan or whatever you like using an udev-script and ip(8).
+
+If you have a &quot;udev rules in place to guide our userspace applications onto
+the correct CAN busses&quot; you can surely extend this script to rename the slcX
+names to something reasonable for your applications, right?
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000842.html">[Socketcan-users] slcan force tty devices
+</A></li>
+	<LI>Next message: <A HREF="000841.html">[Socketcan-users] Socketcan hangs at mod 64K packets received packets
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#843">[ date ]</a>
+              <a href="thread.html#843">[ thread ]</a>
+              <a href="subject.html#843">[ subject ]</a>
+              <a href="author.html#843">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

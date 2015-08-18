@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can&In-Reply-To=%3C4694E40C.40400%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000150.html">
+   <LINK REL="Next"  HREF="000152.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can&In-Reply-To=%3C4694E40C.40400%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan c_can">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Wed Jul 11 16:07:08 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000150.html">[Socketcan-users] socketcan c_can
+</A></li>
+        <LI>Next message: <A HREF="000152.html">[Socketcan-users] socketcan c_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#151">[ date ]</a>
+              <a href="thread.html#151">[ thread ]</a>
+              <a href="subject.html#151">[ subject ]</a>
+              <a href="author.html#151">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marc Kleine-Budde wrote:
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">simon.kallweit at intefo.ch</A> wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> I have finished the adaption of the old c_can driver to the current 
+</I>&gt;&gt;<i> socketcan trunk. So far a driver for the hynix H7202 has been written 
+</I>&gt;&gt;<i> and successfully tested. I'd like to commit my changes to the current 
+</I>&gt;&gt;<i> development tree if possible. For that matter, i send you a patch as 
+</I>&gt;&gt;<i> an attachment. I just created a developer account on BerliOS 
+</I>&gt;&gt;<i> (Username: skallweit) so i could commit my changes myself if you add 
+</I>&gt;&gt;<i> me as a developer. But please, review my code before doing so :)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i> diff -Naur 
+</I>&gt;&gt;<i> socketcan.orig/kernel/2.6/drivers/net/can/c_can/h7202_can.c 
+</I>&gt;&gt;<i> socketcan/kernel/2.6/drivers/net/can/c_can/h7202_can.c
+</I>&gt;&gt;<i> --- socketcan.orig/kernel/2.6/drivers/net/can/c_can/h7202_can.c    
+</I>&gt;&gt;<i> 1970-01-01 01:00:00.000000000 +0100
+</I>&gt;&gt;<i> +++ socketcan/kernel/2.6/drivers/net/can/c_can/h7202_can.c    
+</I>&gt;&gt;<i> 2007-07-11 14:50:45.000000000 +0200
+</I>&gt;&gt;<i> @@ -0,0 +1,218 @@
+</I>&gt;&gt;<i> +/*
+</I>&gt;&gt;<i> + * drivers/can/h7202_can.c
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * Copyright (C) 2007
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * - Sascha Hauer, Marc Kleine-Budde, Pengutronix
+</I>&gt;&gt;<i> + * - Simon Kallweit, intefo AG
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * This program is free software; you can redistribute it and/or modify
+</I>&gt;&gt;<i> + * it under the terms of the version 2 of the GNU General Public 
+</I>&gt;&gt;<i> License
+</I>&gt;&gt;<i> + * as published by the Free Software Foundation
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * This program is distributed in the hope that it will be useful,
+</I>&gt;&gt;<i> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
+</I>&gt;&gt;<i> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+</I>&gt;&gt;<i> + * GNU General Public License for more details.
+</I>&gt;&gt;<i> + *
+</I>&gt;&gt;<i> + * You should have received a copy of the GNU General Public License
+</I>&gt;&gt;<i> + * along with this program; if not, write to the Free Software
+</I>&gt;&gt;<i> + * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  
+</I>&gt;&gt;<i> 02111-1307  USA
+</I>&gt;&gt;<i> + */
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#include &lt;linux/module.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/kernel.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/pci.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/init.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/ioport.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/delay.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/crc32.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/netdevice.h&gt;
+</I>&gt;&gt;<i> +#include &lt;linux/platform_device.h&gt;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#include &lt;asm/io.h&gt;
+</I>&gt;&gt;<i> +#include &lt;asm/hardware.h&gt;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#include &quot;c_can.h&quot;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +#define DRV_NAME      &quot;h7202can&quot;
+</I>&gt;&gt;<i> +#define DELAY         5
+</I>&gt;&gt;<i> +#define CAN_ENABLE    0x0e
+</I>&gt;&gt;<i> +#define NUM_CDEVS     2
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +static struct ccan_dev *cdevs[NUM_CDEVS];
+</I>&gt;<i>
+</I>&gt;<i> why do you need a global var here?
+</I>because as i understand there is only one platform_device structure per 
+device. as the hynix chip comes with two c_can ip's i needed some way to 
+store the c_can device pointers. of course i could dynamically allocate 
+a structure to store this data and assign it to the platform_device. 
+would this be the preferred way?, or is there another simple/correct way 
+to use several chips with a single platform_devices?
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000150.html">[Socketcan-users] socketcan c_can
+</A></li>
+	<LI>Next message: <A HREF="000152.html">[Socketcan-users] socketcan c_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#151">[ date ]</a>
+              <a href="thread.html#151">[ thread ]</a>
+              <a href="subject.html#151">[ subject ]</a>
+              <a href="author.html#151">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

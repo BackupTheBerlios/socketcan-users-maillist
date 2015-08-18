@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v3 0/4] can: cc770: add support	for the Bosch CC770 and Intel AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v3%200/4%5D%20can%3A%20cc770%3A%20add%20support%0A%09for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C1322479858-4874-1-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002274.html">
+   <LINK REL="Next"  HREF="002260.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v3 0/4] can: cc770: add support	for the Bosch CC770 and Intel AN82527</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v3%200/4%5D%20can%3A%20cc770%3A%20add%20support%0A%09for%20the%20Bosch%20CC770%20and%20Intel%20AN82527&In-Reply-To=%3C1322479858-4874-1-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v3 0/4] can: cc770: add support	for the Bosch CC770 and Intel AN82527">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 28 12:30:54 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002274.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002260.html">[Socketcan-users] [PATCH net-next v3 1/4] can: cc770: add driver	core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2258">[ date ]</a>
+              <a href="thread.html#2258">[ thread ]</a>
+              <a href="subject.html#2258">[ subject ]</a>
+              <a href="author.html#2258">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Already since a while we have support for the Bosch CC770 and Intel
+AN82527 CAN controllers in our out-of-tree Socket-CAN repository.
+
+In the meantime I found a TQM855L board with two AN82527 on it,
+which allowed me to provide and test a generic platform driver
+as well.
+
+Changes since v1:
+
+- remove version.h includes
+- some minor corrections in the ISA bus driver
+- add platform header file to the driver core
+- add generic platform driver
+- add and update device tree nodes for tqm8xx and tqm8548
+
+Changes since v2:
+
+- correct license text as suggest by Oliver Hartkopp
+- use the new module_platform_driver function
+- provide get_berr_counter callback for cc770
+- improve CAN error state change handling
+- more comprehensive cc770_isa driver description
+
+It would be nice if somebody else could test the driver, especially
+the ISA driver (I don't have hardware at hand).
+
+Wolfgang.
+
+Wolfgang Grandegger (4):
+  can: cc770: add driver core for the Bosch CC770 and Intel AN82527
+  can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+  can: cc770: add platform bus driver for the CC770 and AN82527
+  powerpc: tqm8548/tqm8xx: add and update CAN device nodes
+
+ .../devicetree/bindings/net/can/cc770.txt          |   56 ++
+ arch/powerpc/boot/dts/tqm8548-bigflash.dts         |   19 +-
+ arch/powerpc/boot/dts/tqm8548.dts                  |   19 +-
+ arch/powerpc/boot/dts/tqm8xx.dts                   |   25 +
+ drivers/net/can/Kconfig                            |    2 +
+ drivers/net/can/Makefile                           |    1 +
+ drivers/net/can/cc770/Kconfig                      |   21 +
+ drivers/net/can/cc770/Makefile                     |    9 +
+ drivers/net/can/cc770/cc770.c                      |  900 ++++++++++++++++++++
+ drivers/net/can/cc770/cc770.h                      |  207 +++++
+ drivers/net/can/cc770/cc770_isa.c                  |  372 ++++++++
+ drivers/net/can/cc770/cc770_platform.c             |  280 ++++++
+ include/linux/can/platform/cc770.h                 |   33 +
+ 13 files changed, 1934 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/can/cc770.txt
+ create mode 100644 drivers/net/can/cc770/Kconfig
+ create mode 100644 drivers/net/can/cc770/Makefile
+ create mode 100644 drivers/net/can/cc770/cc770.c
+ create mode 100644 drivers/net/can/cc770/cc770.h
+ create mode 100644 drivers/net/can/cc770/cc770_isa.c
+ create mode 100644 drivers/net/can/cc770/cc770_platform.c
+ create mode 100644 include/linux/can/platform/cc770.h
+
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002274.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002260.html">[Socketcan-users] [PATCH net-next v3 1/4] can: cc770: add driver	core for the Bosch CC770 and Intel AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2258">[ date ]</a>
+              <a href="thread.html#2258">[ thread ]</a>
+              <a href="subject.html#2258">[ subject ]</a>
+              <a href="author.html#2258">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

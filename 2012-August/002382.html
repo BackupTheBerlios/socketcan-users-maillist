@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Error handling when writing socketcan drivers
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Error%20handling%20when%20writing%20socketcan%20drivers&In-Reply-To=%3CCABsbf%3DH3jFOOV0eGXNKLVybDauL_%3Di2C%3DKrxb7j9NYS%3DrqWZfg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="002383.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Error handling when writing socketcan drivers</H1>
+    <B>Austin Schuh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Error%20handling%20when%20writing%20socketcan%20drivers&In-Reply-To=%3CCABsbf%3DH3jFOOV0eGXNKLVybDauL_%3Di2C%3DKrxb7j9NYS%3DrqWZfg%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Error handling when writing socketcan drivers">austin.linux at gmail.com
+       </A><BR>
+    <I>Thu Aug  2 20:00:55 CEST 2012</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="002383.html">[Socketcan-users] sja1000_platform interrupt sharing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2382">[ date ]</a>
+              <a href="thread.html#2382">[ thread ]</a>
+              <a href="subject.html#2382">[ subject ]</a>
+              <a href="author.html#2382">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+I have been working on writing a socketcan driver for a usb device that I'm
+making, and I'm having trouble understanding how transmission errors are
+communicated back to userspace code.  From what I can currently see from
+reading working kernel modules and the docs, there is no mechanism for
+information from the USB device that a particular packet failed to send to
+be correlated back with which packet was sent.  Am I missing something, or
+is this correct?  To me, that also means that CAN traffic can't be treated
+as reliable.  Is that true?  I guess I find this surprising since, for
+example, the transceiver reports back if the packet wasn't ACKed, and could
+report that back up the chain so that the user can know if their packet was
+received by somebody or not.  That isn't the same as the correct client
+receiving the packet and responding back, but is better than nothing.
+
+Thanks!
+    Austin Schuh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20120802/d0bb5318/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20120802/d0bb5318/attachment.html</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="002383.html">[Socketcan-users] sja1000_platform interrupt sharing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2382">[ date ]</a>
+              <a href="thread.html#2382">[ thread ]</a>
+              <a href="subject.html#2382">[ subject ]</a>
+              <a href="author.html#2382">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

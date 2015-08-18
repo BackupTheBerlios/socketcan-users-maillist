@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4D3DA0CE.2070405%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001749.html">
+   <LINK REL="Next"  HREF="001755.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4D3DA0CE.2070405%40grandegger.com%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">wg at grandegger.com
+       </A><BR>
+    <I>Mon Jan 24 16:54:54 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001749.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="001755.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1750">[ date ]</a>
+              <a href="thread.html#1750">[ thread ]</a>
+              <a href="subject.html#1750">[ subject ]</a>
+              <a href="author.html#1750">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 01/24/2011 03:20 PM, uprinz wrote:
+&gt;<i> 
+</I>&gt;<i> Hi again,
+</I>&gt;<i> 
+</I>&gt;<i> I followed the manual and tried to set up some options via ip (iproute2). 
+</I>&gt;<i> First any can related command failed until I found out that the box used the
+</I>&gt;<i> busybox's ip derivate. So I downloaded the git repository as mentioned here
+</I>&gt;<i> in another thread:
+</I>&gt;<i> <A HREF="git://git.kernel.org/pub/scm/network/iproute2/iproute2.git">git://git.kernel.org/pub/scm/network/iproute2/iproute2.git</A> 
+</I>&gt;<i> I cross compiled it but besides the statistics none of the additional
+</I>&gt;<i> commands are supported. 
+</I>&gt;<i> ~ # ip link set can0 type can restart-ms 2000
+</I>&gt;<i> RTNETLINK answers: Operation not supported
+</I>&gt;<i> 
+</I>&gt;<i> ~ # ip -details -statistics link show can0
+</I>&gt;<i> 2: can0: &lt;NOARP,UP,LOWER_UP&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 64
+</I>&gt;<i>     link/can
+</I>&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i>     0          0        0       0       0       0
+</I>&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;<i>     1          1        0       0       0       0
+</I>&gt;<i> 
+</I>&gt;<i> Are there any special things to be taken care of when cross compiling
+</I>&gt;<i> iproute2 to make it support anything needed with can?
+</I>
+Are you sure you are using the new &quot;ip&quot; command?
+
+Wolfgang,
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001749.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="001755.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1750">[ date ]</a>
+              <a href="thread.html#1750">[ thread ]</a>
+              <a href="subject.html#1750">[ subject ]</a>
+              <a href="author.html#1750">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

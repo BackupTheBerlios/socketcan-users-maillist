@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] mscan: add non-polling rx
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20mscan%3A%20add%20non-polling%20rx&In-Reply-To=%3C1256902073-22328-1-git-send-email-l.fu%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001111.html">
+   <LINK REL="Next"  HREF="001113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] mscan: add non-polling rx</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20mscan%3A%20add%20non-polling%20rx&In-Reply-To=%3C1256902073-22328-1-git-send-email-l.fu%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] mscan: add non-polling rx">l.fu at pengutronix.de
+       </A><BR>
+    <I>Fri Oct 30 12:27:53 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001111.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+        <LI>Next message: <A HREF="001113.html">[Socketcan-users] [PATCH] mscan: add non-polling rx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1112">[ date ]</a>
+              <a href="thread.html#1112">[ thread ]</a>
+              <a href="subject.html#1112">[ subject ]</a>
+              <a href="author.html#1112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>This one adds an option to turn of napi and process rx directly in mscan isr. As
+for mpc52xx this feature can be turned on by setting a rx-irq property int the
+device tree, e.g:
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">can at 980</A> {
+    compatible = &quot;fsl,mpc5200b-mscan&quot;,&quot;fsl,mpc5200-mscan&quot;;
+    interrupts = &lt;2 18 0&gt;;
+    rx-irq;
+    reg = &lt;0x980 0x80&gt;;
+};
+Default is the polling rx.
+
+Signed-off-by: Luotao Fu &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">l.fu at pengutronix.de</A>&gt;
+---
+ kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c |   18 +++-
+ kernel/2.6/drivers/net/can/mscan/mscan.c       |  110 +++++++++++++++---------
+ kernel/2.6/drivers/net/can/mscan/mscan.h       |    5 +-
+ 3 files changed, 88 insertions(+), 45 deletions(-)
+
+diff --git a/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c b/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c
+index 6a3d608..98fca19 100644
+--- a/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c
++++ b/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c
+@@ -340,7 +340,7 @@ static int __devinit mpc52xx_can_probe(struct of_device *ofdev,
+ 	struct can_priv *priv;
+ 	struct resource res;
+ 	void __iomem *base;
+-	int err, irq, res_size, clock_src;
++	int err, irq, res_size, clock_src, rx_mode;
+ 
+ 	err = of_address_to_resource(np, 0, &amp;res);
+ 	if (err) {
+@@ -371,7 +371,13 @@ static int __devinit mpc52xx_can_probe(struct of_device *ofdev,
+ 		goto exit_unmap_mem;
+ 	}
+ 
+-	dev = alloc_mscandev();
++	if (of_get_property(np, &quot;rx-irq&quot;, NULL))
++		rx_mode = RX_IRQ;
++	else
++		rx_mode = RX_POLL;
++
++	dev = alloc_mscandev(rx_mode);
++
+ 	if (!dev) {
+ 		err = -ENOMEM;
+ 		goto exit_dispose_irq;
+@@ -411,9 +417,11 @@ static int __devinit mpc52xx_can_probe(struct of_device *ofdev,
+ 
+ 	dev_set_drvdata(&amp;ofdev-&gt;dev, dev);
+ 
+-	dev_info(&amp;ofdev-&gt;dev, &quot;MSCAN at 0x%lx, irq %d, clock %d Hz\n&quot;,
+-		 dev-&gt;base_addr, dev-&gt;irq, priv-&gt;clock.freq);
+-
++	dev_info(&amp;ofdev-&gt;dev, &quot;MSCAN at 0x%lx, irq %d,&quot;
++		 &quot; clock %d Hz, rx_mode: %s\n&quot;,
++		 dev-&gt;base_addr, dev-&gt;irq, priv-&gt;clock.freq, 
++		 rx_mode == RX_IRQ ? &quot;irq&quot; : &quot;polling&quot;);
++ 
+ 	return 0;
+ 
+ exit_free_mscan:
+diff --git a/kernel/2.6/drivers/net/can/mscan/mscan.c b/kernel/2.6/drivers/net/can/mscan/mscan.c
+index e5d5004..5b5fc54 100644
+--- a/kernel/2.6/drivers/net/can/mscan/mscan.c
++++ b/kernel/2.6/drivers/net/can/mscan/mscan.c
+@@ -101,6 +101,7 @@ struct mscan_priv {
+ 	u8 cur_pri;
+ 	u8 prev_buf_id;
+ 	u8 tx_active;
++	u8 rx_mode;
+ 
+ 	struct list_head tx_head;
+ 	struct tx_queue_entry tx_queue[TX_QUEUE_SIZE];
+@@ -331,22 +332,9 @@ static inline int check_set_state(struct net_device *dev, u8 canrflg)
+ 	return ret;
+ }
+ 
+-#if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+-static int mscan_rx_poll(struct napi_struct *napi, int quota)
+-#else
+-static int mscan_rx_poll(struct net_device *dev, int *budget)
+-#endif
++static int mscan_rx_process(struct net_device *dev, int quota)
+ {
+-#if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,28)
+-	struct mscan_priv *priv = container_of(napi, struct mscan_priv, napi);
+-	struct net_device *dev = napi-&gt;dev;
+-#elif LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+-	struct mscan_priv *priv = container_of(napi, struct mscan_priv, napi);
+-	struct net_device *dev = priv-&gt;dev;
+-#else
+ 	struct mscan_priv *priv = netdev_priv(dev);
+-	int quota = min(dev-&gt;quota, *budget);
+-#endif
+ 	struct mscan_regs *regs = (struct mscan_regs *)dev-&gt;base_addr;
+ #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,23)
+ 	struct net_device_stats *stats = can_get_stats(dev);
+@@ -361,8 +349,10 @@ static int mscan_rx_poll(struct net_device *dev, int *budget)
+ 	u8 canrflg;
+ 	int i;
+ 
+-	while (npackets &lt; quota &amp;&amp; ((canrflg = in_8(&amp;regs-&gt;canrflg)) &amp;
++	while (((canrflg = in_8(&amp;regs-&gt;canrflg)) &amp;
+ 				    (MSCAN_RXF | MSCAN_ERR_IF))) {
++		if (priv-&gt;rx_mode == RX_POLL &amp;&amp; npackets &gt;= quota)
++			break;
+ 
+ 		skb = alloc_can_skb(dev, &amp;frame);
+ 		if (!skb) {
+@@ -455,16 +445,22 @@ static int mscan_rx_poll(struct net_device *dev, int *budget)
+ 			out_8(&amp;regs-&gt;canrflg, MSCAN_ERR_IF);
+ 		}
+ 
+-		npackets++;
+-		netif_receive_skb(skb);
++		if (priv-&gt;rx_mode == RX_POLL) {
++			npackets++;
++			netif_receive_skb(skb);
++		} else
++			netif_rx(skb);
+ 	}
+ 
+ #if LINUX_VERSION_CODE &lt;= KERNEL_VERSION(2,6,23)
+-	*budget -= npackets;
+-	dev-&gt;quota -= npackets;
++	if (priv-&gt;rx_mode == RX_POLL) {
++		*budget -= npackets;
++		dev-&gt;quota -= npackets;
++	}
+ #endif
+ 
+-	if (!(in_8(&amp;regs-&gt;canrflg) &amp; (MSCAN_RXF | MSCAN_ERR_IF))) {
++	if ((priv-&gt;rx_mode == RX_POLL) &amp;&amp;
++		!(in_8(&amp;regs-&gt;canrflg) &amp; (MSCAN_RXF | MSCAN_ERR_IF))) {
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,28)
+ 		napi_complete(&amp;priv-&gt;napi);
+ #elif LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+@@ -476,10 +472,30 @@ static int mscan_rx_poll(struct net_device *dev, int *budget)
+ 		if (priv-&gt;can.state &lt; CAN_STATE_BUS_OFF)
+ 			out_8(&amp;regs-&gt;canrier, priv-&gt;shadow_canrier);
+ 		ret = 0;
+-	}
++	} else if (priv-&gt;rx_mode == RX_IRQ)
++		ret = 0;
++
+ 	return ret;
+ }
+ 
++#if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
++static int mscan_rx_poll(struct napi_struct *napi, int quota)
++#else
++static int mscan_rx_poll(struct net_device *dev, int *budget)
++#endif
++{
++#if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,28)
++	struct net_device *dev = napi-&gt;dev;
++#elif LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
++	struct mscan_priv *priv = container_of(napi, struct mscan_priv, napi);
++	struct net_device *dev = priv-&gt;dev;
++#else
++	struct mscan_priv *priv = netdev_priv(dev);
++	int quota = min(dev-&gt;quota, *budget);
++#endif
++	mscan_rx_process(dev, quota);
++}
++
+ #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,19)
+ static irqreturn_t mscan_isr(int irq, void *dev_id, struct pt_regs *r)
+ #else
+@@ -535,21 +551,28 @@ static irqreturn_t mscan_isr(int irq, void *dev_id)
+ 	}
+ 
+ 	canrflg = in_8(&amp;regs-&gt;canrflg);
+-	if ((canrflg &amp; ~MSCAN_STAT_MSK) &amp;&amp;
+-	    !test_and_set_bit(F_RX_PROGRESS, &amp;priv-&gt;flags)) {
+-		if (canrflg &amp; ~MSCAN_STAT_MSK) {
+-			priv-&gt;shadow_canrier = in_8(&amp;regs-&gt;canrier);
+-			out_8(&amp;regs-&gt;canrier, 0);
++	if (canrflg &amp; ~MSCAN_STAT_MSK) {
++		if (priv-&gt;rx_mode == RX_POLL
++			&amp;&amp; !test_and_set_bit(F_RX_PROGRESS, &amp;priv-&gt;flags)) {
++			if (canrflg &amp; ~MSCAN_STAT_MSK) {
++				priv-&gt;shadow_canrier = in_8(&amp;regs-&gt;canrier);
++				out_8(&amp;regs-&gt;canrier, 0);
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,28)
+-			napi_schedule(&amp;priv-&gt;napi);
++				napi_schedule(&amp;priv-&gt;napi);
+ #elif LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+-			netif_rx_schedule(dev, &amp;priv-&gt;napi);
++				netif_rx_schedule(dev, &amp;priv-&gt;napi);
+ #else
+-			netif_rx_schedule(dev);
++				netif_rx_schedule(dev);
+ #endif
++				ret = IRQ_HANDLED;
++			} else
++				clear_bit(F_RX_PROGRESS, &amp;priv-&gt;flags);
++		}
++
++		if (priv-&gt;rx_mode == RX_IRQ) {
++			mscan_rx_process(dev, 0);
+ 			ret = IRQ_HANDLED;
+-		} else
+-			clear_bit(F_RX_PROGRESS, &amp;priv-&gt;flags);
++		}
+ 	}
+ 	return ret;
+ }
+@@ -621,13 +644,15 @@ static int mscan_open(struct net_device *dev)
+ 		return ret;
+ 
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+-	napi_enable(&amp;priv-&gt;napi);
++	if (priv-&gt;rx_mode == RX_POLL)
++		napi_enable(&amp;priv-&gt;napi);
+ #endif
+ 
+ 	ret = request_irq(dev-&gt;irq, mscan_isr, 0, dev-&gt;name, dev);
+ 	if (ret &lt; 0) {
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+-		napi_disable(&amp;priv-&gt;napi);
++		if (priv-&gt;rx_mode == RX_POLL)
++			napi_disable(&amp;priv-&gt;napi);
+ #endif
+ 		printk(KERN_ERR &quot;%s - failed to attach interrupt\n&quot;,
+ 		       dev-&gt;name);
+@@ -654,7 +679,8 @@ static int mscan_close(struct net_device *dev)
+ 
+ 	netif_stop_queue(dev);
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+-	napi_disable(&amp;priv-&gt;napi);
++	if (priv-&gt;rx_mode == RX_POLL)
++		napi_disable(&amp;priv-&gt;napi);
+ #endif
+ 
+ 	out_8(&amp;regs-&gt;cantier, 0);
+@@ -718,7 +744,7 @@ void unregister_mscandev(struct net_device *dev)
+ }
+ EXPORT_SYMBOL_GPL(unregister_mscandev);
+ 
+-struct net_device *alloc_mscandev(void)
++struct net_device *alloc_mscandev(int rx_mode)
+ {
+ 	struct net_device *dev;
+ 	struct mscan_priv *priv;
+@@ -729,6 +755,8 @@ struct net_device *alloc_mscandev(void)
+ 		return NULL;
+ 	priv = netdev_priv(dev);
+ 
++	priv-&gt;rx_mode = rx_mode;
++
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,28)
+ 	dev-&gt;netdev_ops = &amp;mscan_netdev_ops;
+ #else
+@@ -740,13 +768,17 @@ struct net_device *alloc_mscandev(void)
+ 	dev-&gt;flags |= IFF_ECHO;	/* we support local echo */
+ 
+ #if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,28)
+-	netif_napi_add(dev, &amp;priv-&gt;napi, mscan_rx_poll, 8);
++	if (priv-&gt;rx_mode == RX_POLL)
++		netif_napi_add(dev, &amp;priv-&gt;napi, mscan_rx_poll, 8);
+ #elif LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,23)
+ 	priv-&gt;dev = dev;
+-	netif_napi_add(dev, &amp;priv-&gt;napi, mscan_rx_poll, 8);
++	if (priv-&gt;rx_mode == RX_POLL)
++		netif_napi_add(dev, &amp;priv-&gt;napi, mscan_rx_poll, 8);
+ #else
+-	dev-&gt;poll = mscan_rx_poll;
+-	dev-&gt;weight = 8;
++	if (priv-&gt;rx_mode == RX_POLL) {
++		dev-&gt;poll = mscan_rx_poll;
++		dev-&gt;weight = 8;
++	}
+ #endif
+ 
+ 	priv-&gt;can.bittiming_const = &amp;mscan_bittiming_const;
+diff --git a/kernel/2.6/drivers/net/can/mscan/mscan.h b/kernel/2.6/drivers/net/can/mscan/mscan.h
+index f352466..51b1c2f 100644
+--- a/kernel/2.6/drivers/net/can/mscan/mscan.h
++++ b/kernel/2.6/drivers/net/can/mscan/mscan.h
+@@ -238,7 +238,10 @@ struct mscan_platform_data {
+ };
+ #endif
+ 
+-struct net_device *alloc_mscandev(void);
++#define RX_POLL 0
++#define RX_IRQ 1
++struct net_device *alloc_mscandev(int rx_mode);
++
+ /*
+  * clock_src:
+  *	1 = The MSCAN clock source is the onchip Bus Clock.
+-- 
+1.6.5
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001111.html">[Socketcan-users] TSCAN1 driver
+</A></li>
+	<LI>Next message: <A HREF="001113.html">[Socketcan-users] [PATCH] mscan: add non-polling rx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1112">[ date ]</a>
+              <a href="thread.html#1112">[ thread ]</a>
+              <a href="subject.html#1112">[ subject ]</a>
+              <a href="author.html#1112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

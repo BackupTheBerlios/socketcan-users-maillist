@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B728646.2030900%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001267.html">
+   <LINK REL="Next"  HREF="001302.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B728646.2030900%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Feb 10 11:11:18 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001267.html">[PATCH] bus-error tec rec
+</A></li>
+        <LI>Next message: <A HREF="001302.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1301">[ date ]</a>
+              <a href="thread.html#1301">[ thread ]</a>
+              <a href="subject.html#1301">[ subject ]</a>
+              <a href="author.html#1301">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Oliver Hartkopp wrote:
+</I>
+&gt;&gt;<i> Two nitpicks:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1. I don't feel really comfortable with the naming of &quot;bus-error&quot; itself.
+</I>&gt;<i> 
+</I>&gt;<i> Well...
+</I>&gt;<i> 
+</I>&gt;&gt;<i> When i would see &quot;bus-error 1&quot; in my ip link show i would be confused, if my
+</I>&gt;&gt;<i> CAN controller currently has currently a bus-error or not.
+</I>&gt;<i> 
+</I>&gt;<i> You will not see &quot;bus-error 1&quot; but:
+</I>&gt;<i> 
+</I>&gt;<i>     $ ip -details -statistics link show can0
+</I>&gt;<i>     2: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UP qlen 10
+</I>&gt;<i>       link/can
+</I>&gt;<i>       can &lt;TRIPLE-SAMPLING,BUS-ERROR&gt; state ERROR-ACTIVE restart-ms 100
+</I>&gt;<i>  
+</I>&gt;<i> Would &quot;bus-errors&quot; be clearer (with a trailing &quot;s&quot;)?
+</I>
+Yes, at least.
+
+&gt;<i> 
+</I>&gt;&gt;<i> IMO it should be named like &quot;enable-bus-errors&quot; or &quot;enable-berr&quot; or
+</I>&gt;&gt;<i> &quot;berr-msgs&quot; or &quot;bus-err-msgs&quot; or something like this.
+</I>&gt;<i> 
+</I>&gt;<i> What about &quot;bus-error-reporting&quot; ?
+</I>
+I didn't dare to propose a 19 char string ;-)
+
+But this would fit best IMO.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001267.html">[PATCH] bus-error tec rec
+</A></li>
+	<LI>Next message: <A HREF="001302.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1301">[ date ]</a>
+              <a href="thread.html#1301">[ thread ]</a>
+              <a href="subject.html#1301">[ subject ]</a>
+              <a href="author.html#1301">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

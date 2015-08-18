@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] CAN bus receovery
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bus%20receovery&In-Reply-To=%3C200907311013.05648.oe%40port.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001007.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] CAN bus receovery</H1>
+    <B>Heinz-J&#252;rgen Oertel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20CAN%20bus%20receovery&In-Reply-To=%3C200907311013.05648.oe%40port.de%3E"
+       TITLE="[Socketcan-users] CAN bus receovery">oe at port.de
+       </A><BR>
+    <I>Fri Jul 31 10:13:01 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001007.html">[Socketcan-users] CAN bus receovery
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1009">[ date ]</a>
+              <a href="thread.html#1009">[ thread ]</a>
+              <a href="subject.html#1009">[ subject ]</a>
+              <a href="author.html#1009">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am Freitag, 31. Juli 2009 09:09:19 schrieb Oliver Hartkopp:
+&gt;<i> &gt; By the way, its not a good idea
+</I>&gt;<i> &gt; to let others than the application
+</I>&gt;<i> &gt; decide how to handle a bus-off condition.
+</I>&gt;<i>
+</I>&gt;<i> This is up to you.
+</I>&gt;<i>
+</I>&gt;<i> If you like to handle the buf-off condition with one dedicated application
+</I>&gt;<i> you can switch off the automatic bus-off recovery, wait for the error
+</I>&gt;<i> message and perform the CAN controller restart as you like.
+</I>&gt;<i>
+</I>&gt;<i> Some specifications (e.g. for automotive) specify that a bus-off condition
+</I>&gt;<i> leads to a controller restart after e.g. 200ms.
+</I>&gt;<i>
+</I>&gt;<i> But the biggest problem for your request might be, that there are CAN
+</I>&gt;<i> controllers in the market that recover from bus-off automatically on
+</I>&gt;<i> controller level and you do not have any influence on that.
+</I>I know.
+That's really a bad design and not according to ISO 11898-1
+
+
+&gt;<i> But for all controllers that do not recover like this you have the choice.
+</I>OK
+
+&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i> ps. One remark to &quot;to let others than the application&quot;:
+</I>&gt;<i> Assume to have many applications using a CAN interface simultaneously ...
+</I>
+
+Thanks
+ Heinz.
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 189 bytes
+Desc: This is a digitally signed message part.
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20090731/d1f37586/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20090731/d1f37586/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001007.html">[Socketcan-users] CAN bus receovery
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1009">[ date ]</a>
+              <a href="thread.html#1009">[ thread ]</a>
+              <a href="subject.html#1009">[ subject ]</a>
+              <a href="author.html#1009">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

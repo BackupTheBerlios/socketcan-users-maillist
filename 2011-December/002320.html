@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC PATCH 08/14] can: flexcan: consolidate	bus-off handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2008/14%5D%20can%3A%20flexcan%3A%20consolidate%0A%09bus-off%20handling&In-Reply-To=%3C1323269728-17491-9-git-send-email-wg%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002326.html">
+   <LINK REL="Next"  HREF="002313.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC PATCH 08/14] can: flexcan: consolidate	bus-off handling</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%20PATCH%2008/14%5D%20can%3A%20flexcan%3A%20consolidate%0A%09bus-off%20handling&In-Reply-To=%3C1323269728-17491-9-git-send-email-wg%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC PATCH 08/14] can: flexcan: consolidate	bus-off handling">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  7 15:55:22 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002326.html">[Socketcan-users] [RFC PATCH 07/14] can: flexcan: consolidate error	state handling
+</A></li>
+        <LI>Next message: <A HREF="002313.html">[Socketcan-users] [RFC PATCH 09/14] can: sja1000: consolidate error	state handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2320">[ date ]</a>
+              <a href="thread.html#2320">[ thread ]</a>
+              <a href="subject.html#2320">[ subject ]</a>
+              <a href="author.html#2320">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>The netdev queue is restarted not before the CAN error state has
+returned to error active.
+
+Here is an example output of &quot;candump -candump -td -e any,0:0,#FFFFFFFF&quot;
+for a bus-off recovery due to a short circiut (restart after 5s) for a
+Flexcan controller on the i.MX28 SOC:
+
+ (000.200433)  can0    D  [4] B5 97 EB 52
+ (000.200401)  can0  2000028C  [8] 00 20 08 00 00 00 91 00   ERRORFRAME
+        controller-problem{tx-error-passive}
+        protocol-violation{{tx-dominant-bit-error}{}}
+        bus-error
+        state-change{tx-error-passive}
+        error-counter-tx-rx{{145}{0}}
+ (000.001000)  can0  200002C8  [8] 00 00 08 00 00 00 0E 00   ERRORFRAME
+        protocol-violation{{tx-dominant-bit-error}{}}
+        bus-off
+        bus-error
+        state-change{}
+        error-counter-tx-rx{{14}{0}}
+ (005.006823)  can0  20000100  [8] 00 00 00 00 00 00 00 00   ERRORFRAME
+        restarted-after-bus-off
+ (000.001063)  can0  20000200  [8] 00 40 00 00 00 00 00 00   ERRORFRAME
+        state-change{back-to-error-active}
+ (000.006218)  can0   27  [2] 72 F3
+
+Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+---
+ drivers/net/can/flexcan.c |   10 ++++++++--
+ 1 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 73e0597..86b697c 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -376,6 +376,7 @@ static int flexcan_poll_error_state(struct net_device *dev, u32 reg_esr)
+ 		new_state = CAN_STATE_ERROR_PASSIVE;
+ 	} else {
+ 		new_state = CAN_STATE_BUS_OFF;
++		netif_stop_queue(dev);
+ 		can_bus_off(dev);
+ 	}
+ 
+@@ -675,7 +676,9 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	reg_mcr &amp;= ~FLEXCAN_MCR_HALT;
+ 	flexcan_write(reg_mcr, &amp;regs-&gt;mcr);
+ 
+-	priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
++	/* If from bus-off, wait for state change to error active */
++	if (priv-&gt;can.state != CAN_STATE_BUS_OFF)
++		priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+ 	/* enable FIFO interrupts */
+ 	flexcan_write(FLEXCAN_IFLAG_DEFAULT, &amp;regs-&gt;imask1);
+@@ -767,6 +770,7 @@ static int flexcan_close(struct net_device *dev)
+ 
+ static int flexcan_set_mode(struct net_device *dev, enum can_mode mode)
+ {
++	struct flexcan_priv *priv = netdev_priv(dev);
+ 	int err;
+ 
+ 	switch (mode) {
+@@ -775,7 +779,9 @@ static int flexcan_set_mode(struct net_device *dev, enum can_mode mode)
+ 		if (err)
+ 			return err;
+ 
+-		netif_wake_queue(dev);
++		/* If from bus-off, wait for state change to error active */
++		if (priv-&gt;can.state != CAN_STATE_BUS_OFF)
++			netif_wake_queue(dev);
+ 
+ 		break;
+ 
+-- 
+1.7.4.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002326.html">[Socketcan-users] [RFC PATCH 07/14] can: flexcan: consolidate error	state handling
+</A></li>
+	<LI>Next message: <A HREF="002313.html">[Socketcan-users] [RFC PATCH 09/14] can: sja1000: consolidate error	state handling
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2320">[ date ]</a>
+              <a href="thread.html#2320">[ thread ]</a>
+              <a href="subject.html#2320">[ subject ]</a>
+              <a href="author.html#2320">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

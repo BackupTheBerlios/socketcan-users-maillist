@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can raw write: No buffer space available
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20raw%20write%3A%20No%20buffer%20space%20available&In-Reply-To=%3C47D6D50D.9040104%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000296.html">
+   <LINK REL="Next"  HREF="000298.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can raw write: No buffer space available</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can%20raw%20write%3A%20No%20buffer%20space%20available&In-Reply-To=%3C47D6D50D.9040104%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] can raw write: No buffer space available">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Mar 11 19:53:01 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000296.html">[Socketcan-users] can raw write: No buffer space available
+</A></li>
+        <LI>Next message: <A HREF="000298.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#297">[ date ]</a>
+              <a href="thread.html#297">[ thread ]</a>
+              <a href="subject.html#297">[ subject ]</a>
+              <a href="author.html#297">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Neal Probert wrote:
+&gt;<i> I'm using PCAN-USB 6.7 with latest Socket-CAN from Subversion.
+</I>&gt;<i>
+</I>&gt;<i> Can anybody tell me what this means, and how to I get around it?
+</I>&gt;<i>
+</I>&gt;<i>     &quot;write: No buffer space available&quot;
+</I>&gt;<i>
+</I>&gt;<i> I don't get this with vcan0, but I do with can0.  Happens with cangen 
+</I>&gt;<i> and my own application.
+</I>&gt;<i>   
+</I>
+Hi Neal,
+
+when you try to write more data than the 'real' CAN hardware can put 
+onto the bus the tx-queue from the CAN netdevice simply runs over after 
+some time.
+
+If you have only 'peak' load you may try to pump up the tx_queue_len of 
+'can0' in the sysfs:
+
+echo 1000 &gt; /sys/class/net/can0/tx_queue_len
+
+But if your idea is to generate maximum load, you could ignore/handle 
+the -ENOBUF return value, wait an appropriate time (e.g. 500ns?) and 
+send your next CAN frame.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000296.html">[Socketcan-users] can raw write: No buffer space available
+</A></li>
+	<LI>Next message: <A HREF="000298.html">[Socketcan-users] Problems with cross-compilation using	&quot;powerpc-linux-gnu-gcc&quot;
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#297">[ date ]</a>
+              <a href="thread.html#297">[ thread ]</a>
+              <a href="subject.html#297">[ subject ]</a>
+              <a href="author.html#297">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3CDD39B5C3F4963040ADC9768BE7E430CB02AAE09F%40is-hdq-exchange.marel.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000226.html">
+   <LINK REL="Next"  HREF="000230.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Daniel Schnell</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3CDD39B5C3F4963040ADC9768BE7E430CB02AAE09F%40is-hdq-exchange.marel.net%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">daniel.schnell at marel.com
+       </A><BR>
+    <I>Thu Jan 31 13:52:53 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000226.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000230.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#229">[ date ]</a>
+              <a href="thread.html#229">[ thread ]</a>
+              <a href="subject.html#229">[ subject ]</a>
+              <a href="author.html#229">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+
+&gt;&gt;<i> I have this error since quite some time and it still persists in the
+</I>&gt;&gt;<i> actual socketcan-trunk (r658), which I backported to 2.6.23.1
+</I>&gt;&gt;<i> (anybody interested in the patch ?)
+</I>&gt;<i> 
+</I>&gt;<i> Do you have already a patch?
+</I>
+Yupp. I had to change quite a few things inside the socket-can project
+and used mkpatch and afterwards manually removed some incompatibilities
+inside the patch (remove include of compat.h,  adding struct
+net_device_stats net_stats to dev.h, removing 1st parameter from
+get_dev_by_index() ).
+But this cleanly applies now to 2.6.23.1 and works at least for the test
+programs I am using. The final patch is over 376kb uncompressed or 84kb
+compressed. Is this too large as an attachment to the list ?
+
+But the cleaner way of course would be to change the socketcan project
+and provide a diff to that. Is it okay if I change the socketcan-project
+locally which I got via svn and then provide you with what svn diff
+spits out ? Or how can I provide a better patch ?
+
+&gt;&gt;<i> There can be quite a long list of tx timeouts afterwards, but it will
+</I>&gt;&gt;<i> stop after some while.
+</I>&gt;<i> 
+</I>&gt;<i> Hm, do CAN messages get out to the bus?
+</I>&gt;<i> 
+</I>
+Generally yes. I have a test program that is communicating to a
+connected IO-unit and sets there a 6 bit output which itself is
+connected to the IO-units input and I read back this value, measure the
+time and compare the IO Input value with the previous set output value.
+The output is set as a binary counter value, which increases and
+decreases. This test more or less works fine all the time.
+
+In the Error scenario I send 64 SDO messages to different CAN-ID's to
+see if there are connected devices on the bus. And then this error
+appears. Because I don't have connected 64 units to the bus I don't know
+yet if all 64 messages are sent to the bus. Maybe it's time for our CAN
+sniffer (or could I use candump for that purpose as well ?).
+
+Is there maybe a correlation of how we setup our realtime tasks
+priorities under Preempt-RT and the CAN IRQ (which in my understanding
+will also be scheduled as RT task) ?
+
+
+Best regards,
+
+Daniel Schnell.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000226.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000230.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#229">[ date ]</a>
+              <a href="thread.html#229">[ thread ]</a>
+              <a href="subject.html#229">[ subject ]</a>
+              <a href="author.html#229">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

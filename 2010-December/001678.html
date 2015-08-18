@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBCB73.6000504%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001677.html">
+   <LINK REL="Next"  HREF="001679.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kenrel panic with CAN gateway on MPC5200</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kenrel%20panic%20with%20CAN%20gateway%20on%20MPC5200&In-Reply-To=%3C4CFBCB73.6000504%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Kenrel panic with CAN gateway on MPC5200">mkl at pengutronix.de
+       </A><BR>
+    <I>Sun Dec  5 18:27:15 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001677.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+        <LI>Next message: <A HREF="001679.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1678">[ date ]</a>
+              <a href="thread.html#1678">[ thread ]</a>
+              <a href="subject.html#1678">[ subject ]</a>
+              <a href="author.html#1678">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 12/05/2010 05:45 PM, Oliver Hartkopp wrote:
+&gt;<i> On 05.12.2010 16:15, Marc Kleine-Budde wrote:
+</I>&gt;&gt;<i> On 12/05/2010 10:54 AM, Michal Sojka wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;&gt;<i> diff --git a/net/can/gw.c b/net/can/gw.c
+</I>&gt;&gt;&gt;<i> index 94ba3f1..7779ca6 100644
+</I>&gt;&gt;&gt;<i> --- a/net/can/gw.c
+</I>&gt;&gt;&gt;<i> +++ b/net/can/gw.c
+</I>&gt;&gt;&gt;<i> @@ -822,11 +822,14 @@ static int cgw_create_job(struct sk_buff *skb,  struct nlmsghdr *nlh,
+</I>&gt;&gt;&gt;<i>         if (gwj-&gt;dst.dev-&gt;type != ARPHRD_CAN)
+</I>&gt;&gt;&gt;<i>                 goto put_src_dst_out;
+</I>&gt;&gt;&gt;<i>                 
+</I>&gt;&gt;&gt;<i> -       spin_lock(&amp;cgw_list_lock);
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>         err = cgw_register_filter(gwj);
+</I>&gt;&gt;&gt;<i> -       if (!err)
+</I>&gt;&gt;&gt;<i> -               hlist_add_head_rcu(&amp;gwj-&gt;list, &amp;cgw_list);
+</I>&gt;&gt;&gt;<i> +       if (err)
+</I>&gt;&gt;&gt;<i> +               goto put_src_dst_out;
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       spin_lock(&amp;cgw_list_lock);
+</I>&gt;&gt;&gt;<i> +
+</I>&gt;&gt;&gt;<i> +       hlist_add_head_rcu(&amp;gwj-&gt;list, &amp;cgw_list);
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i>         spin_unlock(&amp;cgw_list_lock);
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The fix looks good!
+</I>&gt;<i> 
+</I>&gt;<i> At least it fixes the issue, i had in my kernel log ... (in my other post).
+</I>&gt;<i> 
+</I>&gt;<i> My problem is, that the notifier in cgw_notifier() expects the registered CAN
+</I>&gt;<i> filter and the hlist entry to be available together.
+</I>&gt;<i> 
+</I>&gt;<i> That was the reason, why it put this together in the locked region.
+</I>
+then we must use the 2nd fix
+
+&gt;<i> diff --git a/net/can/af_can.c b/net/can/af_can.c
+</I>&gt;<i> index 702be5a..b046ff0 100644
+</I>&gt;<i> --- a/net/can/af_can.c
+</I>&gt;<i> +++ b/net/can/af_can.c
+</I>&gt;<i> @@ -418,7 +418,7 @@ int can_rx_register(struct net_device *dev, canid_t can_id, canid_t mask,
+</I>&gt;<i>         if (dev &amp;&amp; dev-&gt;type != ARPHRD_CAN)
+</I>&gt;<i>                 return -ENODEV;
+</I>&gt;<i>  
+</I>&gt;<i> -       r = kmem_cache_alloc(rcv_cache, GFP_KERNEL);
+</I>&gt;<i> +       r = kmem_cache_alloc(rcv_cache, GFP_ATOMIC);
+</I>&gt;<i>         if (!r)
+</I>&gt;<i>                 return -ENOMEM;
+</I>&gt;<i>  
+</I>
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101205/41c55932/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101205/41c55932/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001677.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+	<LI>Next message: <A HREF="001679.html">[Socketcan-users] Kenrel panic with CAN gateway on MPC5200
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1678">[ date ]</a>
+              <a href="thread.html#1678">[ thread ]</a>
+              <a href="subject.html#1678">[ subject ]</a>
+              <a href="author.html#1678">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

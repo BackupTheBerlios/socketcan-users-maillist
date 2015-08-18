@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Transport Protocol ISO-TP
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Transport%20Protocol%20ISO-TP&In-Reply-To=%3C4835C643.2060501%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000385.html">
+   <LINK REL="Next"  HREF="000388.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Transport Protocol ISO-TP</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Transport%20Protocol%20ISO-TP&In-Reply-To=%3C4835C643.2060501%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Transport Protocol ISO-TP">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu May 22 21:15:15 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000385.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+        <LI>Next message: <A HREF="000388.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#386">[ date ]</a>
+              <a href="thread.html#386">[ thread ]</a>
+              <a href="subject.html#386">[ subject ]</a>
+              <a href="author.html#386">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ren&#233; M&#252;ller wrote:
+&gt;<i> I found in the documentation for Socketcan a chapter about transport 
+</I>&gt;<i> protocols. There are some manufacture specific protocols (VAG TP1.6, 
+</I>&gt;<i> VAG TP2.0, ...) and the ISO-TP. In the documentation is stated, that 
+</I>&gt;<i> VW is working on ISO-TP and wants to publish it under the BSD/GPL. How 
+</I>&gt;<i> is the status of this? Is there an implementation available?
+</I>
+Hi Ren&#233;,
+
+indeed i'm working on it (currently only in my spare time) and have just 
+designed the receive path, which is fortunately pretty easy. The design 
+follows the UDP approach which is also an unreliable datagram protocol 
+like ISO-TP.
+
+My main concern is the 'direct feedback' to the application in the case 
+of failed PDU transmits, which are defined in the ISO15765-2 but do not 
+fit into the commonly known 'unreliable datagram' design.
+
+And having a blocking write for each PDU is also crude ... so i'm not 
+yet finished with the tx path. Finally  ISO-TP is a common standard and 
+therefore it can/will go into kernel under GPL.
+
+Are you currently working with ISO-TP? Maybe you can give some feedback 
+on my approach or you'd like to be an early adopter ;-)
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000385.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+	<LI>Next message: <A HREF="000388.html">[Socketcan-users] Transport Protocol ISO-TP
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#386">[ date ]</a>
+              <a href="thread.html#386">[ thread ]</a>
+              <a href="subject.html#386">[ subject ]</a>
+              <a href="author.html#386">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

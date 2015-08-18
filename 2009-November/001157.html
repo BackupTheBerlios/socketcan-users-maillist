@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091126075140.GA5173%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001156.html">
+   <LINK REL="Next"  HREF="001158.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091126075140.GA5173%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">l.fu at pengutronix.de
+       </A><BR>
+    <I>Thu Nov 26 08:51:41 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001156.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001158.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1157">[ date ]</a>
+              <a href="thread.html#1157">[ thread ]</a>
+              <a href="subject.html#1157">[ subject ]</a>
+              <a href="author.html#1157">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Vlasdiv,
+
+On Wed, Nov 25, 2009 at 06:30:07PM +0100, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">gribov at ixxat.de</A> wrote:
+&gt;<i> Hi,
+</I>&gt;<i> very nice idea!
+</I>&gt;<i> 
+</I>&gt;<i> The SocketCAN version of our IXXAT CANopen Stack SW is currently
+</I>&gt;<i> compatible 
+</I>&gt;<i> to the SysFS version. We need however to set CAN up and down directly 
+</I>&gt;<i> from the Stack, not using the ifconfig. So I was forced to implement 
+</I>&gt;<i> corresponding ioctl calls with IFF_UP etc. And netlink interface is 
+</I>&gt;<i> quite more complex, if you cannon use &quot;ip&quot; and need to make CAN control 
+</I>&gt;<i> stuff directly from your SW (I know, that is not UNIX-way, that's
+</I>&gt;<i> life)...
+</I>&gt;<i> 
+</I>
+there're actually if_up/down callbacks in the lib, which also uses
+netlink interface and awaits only the name of the device as parameter.
+It's however used as static internally for now, since it's not strict
+can-relevant. I think there'd be other libraries in the wild, which
+simply do if_up/down stuff, didn't check though.
+
+&gt;<i> Such a user space component can make things really easier for me, as a 
+</I>&gt;<i> CANopen SW maintainer under SocketCAN. If I can use someuser space
+</I>&gt;<i> library
+</I>&gt;<i> &quot;libsocketcan&quot; to:
+</I>&gt;<i> 
+</I>&gt;<i> - start/stop CAN
+</I>
+yeah, start with
+scan_do_restart(const char* name)
+stop alias driving down the interface is there but used as static, I'll
+make a wrapper with proper name for this.
+
+&gt;<i> - set bitrate
+</I>
+yes.
+scan_set_bitrate(const char *name, __u32 bitrate, __u32 sample_point)
+(sample point is optional)
+or
+scan_set_bittiming(const char *name, struct can_timing *bt)
+to use the expert mode.
+
+&gt;<i> - recover from bus-off
+</I>
+yes,
+scan_set_restart_ms(const char *name, __u32 restart_ms)
+can set/disable the bus-off autorecovery.
+
+&gt;<i> - ???
+</I>&gt;<i>
+</I>set/get control mode. get state/clockfrequency etc.
+
+cheers
+Luotao Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091126/b7352837/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091126/b7352837/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001156.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001158.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1157">[ date ]</a>
+              <a href="thread.html#1157">[ thread ]</a>
+              <a href="subject.html#1157">[ subject ]</a>
+              <a href="author.html#1157">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C4822F2DE.9040003%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000334.html">
+   <LINK REL="Next"  HREF="000337.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C4822F2DE.9040003%40grandegger.com%3E"
+       TITLE="[Socketcan-users] HW Clock">wg at grandegger.com
+       </A><BR>
+    <I>Thu May  8 14:32:30 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000334.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000337.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#336">[ date ]</a>
+              <a href="thread.html#336">[ thread ]</a>
+              <a href="subject.html#336">[ subject ]</a>
+              <a href="author.html#336">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Breno,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">breno at das.ufsc.br</A> wrote:
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;&gt;<i> Hi Wolfgang, I found  a message that seems somehow strange to me while the
+</I>&gt;&gt;&gt;<i> kernel is being loaded on my lite5200 board. It said at the end that the
+</I>&gt;&gt;&gt;<i> HW clock can't be read. Does it have any relevance? Could implicate on
+</I>&gt;&gt;&gt;<i> unexpected behavior for RT process?
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think it has nothing to do with Socket-CAN. Just disable Socket-CAN in
+</I>&gt;&gt;<i> your kernel to check. And please be more precise next time by providing
+</I>&gt;&gt;<i>   more information, e.g. log output.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do you mean with RT process? In case you are using Xenomai or
+</I>&gt;&gt;<i> RT-Soccket-CAN, you are off-topic here. Please send such questions to
+</I>&gt;&gt;<i> the Xenomai-help mailing list.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Wolfgang.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;<i> Hi Wolfgang, I'm trying to send can packages from CAN0 interface and
+</I>&gt;<i> receive them from CAN1 interface. I started two separated processes, one
+</I>&gt;<i> sending and another one receiving.  Unfortunately my read or recvfrom
+</I>&gt;<i> commands is blocked, I mean it seems that no bytes are read.
+</I>&gt;<i> The ifconfig command didn't return any packages sent or received at any
+</I>&gt;<i> interface.
+</I>&gt;<i> But the /proc/net/can/stats show messages like:
+</I>
+Hm, &quot;/proc/net/can/stats&quot; does not exist.
+
+&gt;<i> 17121725 transmitted frames (TXF)
+</I>&gt;<i>  17121724 received frames (RXF)
+</I>&gt;<i>  17121724 matched frames (RXMF)
+</I>&gt;<i> 
+</I>&gt;<i>       100 % total match ratio (RXMR)
+</I>&gt;<i>     30388 frames/s total tx rate (TXR)
+</I>&gt;<i>     30388 frames/s total rx rate (RXR)
+</I>&gt;<i> 
+</I>&gt;<i>       100 % current match ratio (CRXMR)
+</I>&gt;<i>     29635 frames/s current tx rate (CTXR)
+</I>&gt;<i>     29635 frames/s current rx rate (CRXR)
+</I>&gt;<i> 
+</I>&gt;<i>       100 % max match ratio (MRXMR)
+</I>&gt;<i>     30500 frames/s max tx rate (MTXR)
+</I>&gt;<i>     30501 frames/s max rx rate (MRXR)
+</I>&gt;<i> 
+</I>&gt;<i>         2 current receive list entries (CRCV)
+</I>&gt;<i>         2 maximum receive list entries (MRCV)
+</I>&gt;<i> 
+</I>&gt;<i>        10 statistic resets (STR)
+</I>&gt;<i> 
+</I>&gt;<i> Btw if I decide just run the send process, I mead stopping the receive,
+</I>&gt;<i> I still have received frames (RXF) different  of zero. Does it mean that
+</I>&gt;<i> any loopback is enable?
+</I>
+Please use &quot;candump any&quot; from the can-utils [1] to verify that messages
+are receive. What do you get?
+
+Wolfgang.
+
+[1] <A HREF="http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/">http://svn.berlios.de/svnroot/repos/socketcan/trunk/can-utils/</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000334.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000337.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#336">[ date ]</a>
+              <a href="thread.html#336">[ thread ]</a>
+              <a href="subject.html#336">[ subject ]</a>
+              <a href="author.html#336">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

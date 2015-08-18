@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Very NEWBIE needs help
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3Ced84ed090708260926l7f2da51etedf382bd862d28b6%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000185.html">
+   <LINK REL="Next"  HREF="000195.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Very NEWBIE needs help</H1>
+    <B>Fabrizio Garetto</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Very%20NEWBIE%20needs%20help&In-Reply-To=%3Ced84ed090708260926l7f2da51etedf382bd862d28b6%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Very NEWBIE needs help">rider4ever at gmail.com
+       </A><BR>
+    <I>Sun Aug 26 18:26:30 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000185.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+        <LI>Next message: <A HREF="000195.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#194">[ date ]</a>
+              <a href="thread.html#194">[ thread ]</a>
+              <a href="subject.html#194">[ subject ]</a>
+              <a href="author.html#194">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Sorry for the delay!
+
+Definitely THAT was the problem.
+After having set the aliases all started to work fine. Thanks very much to
+Ren&#233; for the hint, and to Oliver for the simple test example. I added
+another virtual driver simply by cloning vcan.c and doing some edits to it
+and the various Makefiles. All seems ok, so for the moment I'm happy ;)
+
+Thanks again,
+Fabrizio Garetto
+
+On 8/14/07, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt; In order to verify that everything is ok I only need to execute the
+</I>&gt;<i> &gt;&gt; programs
+</I>&gt;<i> &gt;&gt; contained in the &quot;test&quot; dir, right?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i>
+</I>&gt;<i> Hi Fabrizio,
+</I>&gt;<i>
+</I>&gt;<i> Ren&#233; is right. If you want the modules to be loaded _automatically_ his
+</I>&gt;<i> described way is needed (and recommended).
+</I>&gt;<i> For a simple test, the modules like e.g. can.ko can also be loaded with
+</I>&gt;<i> &quot;modprobe can&quot; (when the modules are installed in
+</I>&gt;<i> /lib/modules/2.6.xx/... and the depmod worked well).
+</I>&gt;<i>
+</I>&gt;<i> To test the basic CAN functionality, you can use the applications in
+</I>&gt;<i> trunk/can-utils, as the stuff below trunk/test is mainly for testing the
+</I>&gt;<i> CAN kernel modules and to give some examples how to write your own
+</I>&gt;<i> applications.
+</I>&gt;<i>
+</I>&gt;<i> For a simple test you can say ...
+</I>&gt;<i>
+</I>&gt;<i> &quot;ifconfig vcan0 up&quot; to enable the vcan0 netdevice interface.
+</I>&gt;<i> &quot;cangen vcan0&quot; to send some random data on vcan0
+</I>&gt;<i>
+</I>&gt;<i> In a *different* Terminal type &quot;candump any&quot; to display 'any'
+</I>&gt;<i> CAN-traffic on your linux box (candump can also be used with a specific
+</I>&gt;<i> CAN interface - see 'candump -?' for help).
+</I>&gt;<i>
+</I>&gt;<i> When you can see CAN traffic at least the vcan driver, the CAN core
+</I>&gt;<i> (can.ko) and the CAN RAW socket (can-raw.ko) is working fine and you
+</I>&gt;<i> might see several information in /proc/net/can/* or the standard netdev
+</I>&gt;<i> statistics in /proc/net/dev .
+</I>&gt;<i> And then it's time to get any real CAN-hardware :-)
+</I>&gt;<i>
+</I>&gt;<i> Have fun and feel free to ask more of these questions ;-)
+</I>&gt;<i>
+</I>&gt;<i> Best regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i> ps. When you are running the Kernel 2.6.23 there are no vcanX-devices
+</I>&gt;<i> created at vcan.ko module loading time as there is a recommended
+</I>&gt;<i> netlink-interface for creating software network devices in Kernel
+</I>&gt;<i> 2.6.23. In this case use the &quot;trunk/can-utils/vcan&quot; tool to create
+</I>&gt;<i> yourself as many vcans as you need.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20070826/46042f85/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20070826/46042f85/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000185.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+	<LI>Next message: <A HREF="000195.html">[Socketcan-users] Very NEWBIE needs help
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#194">[ date ]</a>
+              <a href="thread.html#194">[ thread ]</a>
+              <a href="subject.html#194">[ subject ]</a>
+              <a href="author.html#194">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

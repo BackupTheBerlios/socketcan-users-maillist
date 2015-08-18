@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] canconfig
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canconfig&In-Reply-To=%3C4BDB13E7.9080700%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001398.html">
+   <LINK REL="Next"  HREF="001400.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] canconfig</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canconfig&In-Reply-To=%3C4BDB13E7.9080700%40grandegger.com%3E"
+       TITLE="[Socketcan-users] canconfig">wg at grandegger.com
+       </A><BR>
+    <I>Fri Apr 30 19:31:19 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001398.html">[Socketcan-users] canconfig
+</A></li>
+        <LI>Next message: <A HREF="001400.html">[Socketcan-users] canconfig
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1399">[ date ]</a>
+              <a href="thread.html#1399">[ thread ]</a>
+              <a href="subject.html#1399">[ subject ]</a>
+              <a href="author.html#1399">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Nick Droogh wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> I got the latest GIT version of iproute.  I still get a segmentation fault.  I traced it to a function called get_link_kind in iplink.c.  It failed trying to open 
+</I>&gt;<i> /usr/lib/ip/link_can.so.   Is this a valid library?  If it is,  where do I get it or generate it?  Or is this the wrong place to ask these questions?
+</I>
+How do you build and install  the &quot;ip&quot; program? I use:
+
+$ cd iproute2
+$ make CC=ppc_6xx-gcc
+...
+$ cp ip/ip &lt;mpc5200-system-dir&gt;
+
+What kernel are you using?
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001398.html">[Socketcan-users] canconfig
+</A></li>
+	<LI>Next message: <A HREF="001400.html">[Socketcan-users] canconfig
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1399">[ date ]</a>
+              <a href="thread.html#1399">[ thread ]</a>
+              <a href="subject.html#1399">[ subject ]</a>
+              <a href="author.html#1399">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

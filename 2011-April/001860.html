@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Interrupts for canX interface don't want to	increase... again
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Interrupts%20for%20canX%20interface%20don%27t%20want%20to%0A%09increase...%20again&In-Reply-To=%3CBANLkTik5mucLRO2WGV7jXGHBdQLRWNZHPg%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001859.html">
+   <LINK REL="Next"  HREF="001861.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Interrupts for canX interface don't want to	increase... again</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Interrupts%20for%20canX%20interface%20don%27t%20want%20to%0A%09increase...%20again&In-Reply-To=%3CBANLkTik5mucLRO2WGV7jXGHBdQLRWNZHPg%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Interrupts for canX interface don't want to	increase... again">lambert.willy at gmail.com
+       </A><BR>
+    <I>Wed Apr 27 13:56:10 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001859.html">[Socketcan-users] Interrupts for canX interface don't want to	increase... again
+</A></li>
+        <LI>Next message: <A HREF="001861.html">[Socketcan-users] Interrupts for canX interface don't want to	increase... again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1860">[ date ]</a>
+              <a href="thread.html#1860">[ thread ]</a>
+              <a href="subject.html#1860">[ subject ]</a>
+              <a href="author.html#1860">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/4/27 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+
+&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 2011/4/27 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hi all,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> some time ago I had hard job turning my CPU+Can PC104 stack into a working
+</I>&gt;&gt;<i> state. Main problem was that I was beginning from nothing (doubts on BIOS,
+</I>&gt;&gt;<i> OS, hardware, wires, ...). For some day, I am trying to reinstall all this
+</I>&gt;&gt;<i> stuff on another brand new stack, BUT, I have a proper working hardware to
+</I>&gt;&gt;<i> isolate problems !
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I made documents last time to remind me all needed actions but it seems
+</I>&gt;&gt;<i> that I forgot something and I don't know where to look at and scratching my
+</I>&gt;&gt;<i> head :p
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here is the symptoms :
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have  :
+</I>&gt;&gt;<i> _ one set of can-wires, with resistors and a working second node (a CAN
+</I>&gt;&gt;<i> controller motor board)
+</I>&gt;&gt;<i> _ one PC104 CAN board with configured jumpers.
+</I>&gt;&gt;<i> _ 2 CPU with &quot;should be identical BIOS settings&quot; (checked by hand for some
+</I>&gt;&gt;<i> interesting sections), one is the old working one, the second is a brand new
+</I>&gt;&gt;<i> installation from 0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If I connect all this and the old CPU board everything working (the motor
+</I>&gt;&gt;<i> runs). If I change to the CPU board nothing works and the interrupts don't
+</I>&gt;&gt;<i> increase in /proc/interrupts. Last time this happened, it was about BIOS
+</I>&gt;&gt;<i> settings. But I am pretty sure it is not coming from BIOS (I am going to
+</I>&gt;&gt;<i> recheck).
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I confirm that BIOS settings are exactly equal (only the temperature and
+</I>&gt;<i> voltage values differs)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> *May this non increasing interrupts came from something else ? OS (linux
+</I>&gt;&gt;<i> 2.6.35.7) config ?*
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My* loading script* is this :
+</I>&gt;&gt;<i> modprobe sja1000_isa irq=11,11 mem=0xD0000,0xD0200 ocr=0x5e,0x5e cdr=0,0
+</I>&gt;&gt;<i> ip link set can0 type can bitrate 250000 restart-ms 1000
+</I>&gt;&gt;<i> ip link set can1 type can bitrate 250000 restart-ms 1000
+</I>&gt;&gt;<i> ifconfig can0 up
+</I>&gt;&gt;<i> ifconfig can1 up
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here is an extract of my *dmesg :*
+</I>&gt;&gt;<i> [    0.780221] vcan: Virtual CAN interface driver
+</I>&gt;&gt;<i> ....
+</I>&gt;&gt;<i> [    0.799991] can: controller area network core (rev 20090105 abi 8)
+</I>&gt;&gt;<i> ...
+</I>&gt;&gt;<i> [    0.800051] can: raw protocol (rev 20090105)
+</I>&gt;&gt;<i> ....
+</I>&gt;&gt;<i> [    0.800055] can: broadcast manager protocol (rev 20090105 t)
+</I>&gt;&gt;<i> ....
+</I>&gt;&gt;<i> [    9.117593] sja1000_isa sja1000_isa.0: sja1000_isa device registered
+</I>&gt;&gt;<i> (reg_base=0xc00d0000, irq=11)
+</I>&gt;&gt;<i> [    9.117751] sja1000_isa sja1000_isa.1: sja1000_isa device registered
+</I>&gt;&gt;<i> (reg_base=0xc00d0200, irq=11)
+</I>&gt;&gt;<i> [    9.117931] Legacy sja1000_isa driver for max. 8 devices registered
+</I>&gt;&gt;<i> [    9.128343] sja1000_isa sja1000_isa.0: setting BTR0=0x01 BTR1=0x1c
+</I>&gt;&gt;<i> [    9.129964] sja1000_isa sja1000_isa.1: setting BTR0=0x01 BTR1=0x1c
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> *lsmod says :*
+</I>&gt;&gt;<i> Module                  Size  Used by
+</I>&gt;&gt;<i> sja1000_isa             2439  -
+</I>&gt;&gt;<i> (because items are not compiled as modules)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~# *cat /proc/interrupts*
+</I>&gt;&gt;<i>            CPU0
+</I>&gt;&gt;<i>   0:    3013125   IO-APIC-edge      timer
+</I>&gt;&gt;<i>   1:          4   IO-APIC-edge      i8042
+</I>&gt;&gt;<i>   8:         81   IO-APIC-edge      rtc0
+</I>&gt;&gt;<i>   9:          0   IO-APIC-fasteoi   acpi
+</I>&gt;&gt;<i>  *11:          0   IO-APIC-edge      can0, can1*
+</I>&gt;&gt;<i>  12:          7   IO-APIC-edge      i8042
+</I>&gt;&gt;<i>  14:          0   IO-APIC-edge      ata_piix
+</I>&gt;&gt;<i>  15:       2327   IO-APIC-edge      ata_piix
+</I>&gt;&gt;<i>  19:          0   IO-APIC-fasteoi   uhci_hcd:usb3
+</I>&gt;&gt;<i>  23:          0   IO-APIC-fasteoi   ehci_hcd:usb1, uhci_hcd:usb2
+</I>&gt;&gt;<i>  40:       2859   PCI-MSI-edge      eth0
+</I>&gt;&gt;<i> NMI:          0   Non-maskable interrupts
+</I>&gt;&gt;<i> LOC:       4496   Local timer interrupts
+</I>&gt;&gt;<i> SPU:          0   Spurious interrupts
+</I>&gt;&gt;<i> PMI:          0   Performance monitoring interrupts
+</I>&gt;&gt;<i> PND:          0   Performance pending work
+</I>&gt;&gt;<i> TRM:          0   Thermal event interrupts
+</I>&gt;&gt;<i> THR:          0   Threshold APIC interrupts
+</I>&gt;&gt;<i> MCE:          0   Machine check exceptions
+</I>&gt;&gt;<i> MCP:         11   Machine check polls
+</I>&gt;&gt;<i> ERR:          0
+</I>&gt;&gt;<i> MIS:          0
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~# *cat /proc/iomem*
+</I>&gt;&gt;<i> 00000000-00000fff : reserved
+</I>&gt;&gt;<i> 00001000-0009fbff : System RAM
+</I>&gt;&gt;<i> 0009fc00-0009ffff : reserved
+</I>&gt;&gt;<i> 000a0000-000bffff : PCI Bus 0000:00
+</I>&gt;&gt;<i>   000a0000-000bffff : Video RAM area
+</I>&gt;&gt;<i> 000c0000-000c7fff : Video ROM
+</I>&gt;&gt;<i> 000d0000-000dffff : PCI Bus 0000:00
+</I>&gt;&gt;<i>   *000d0000-000d001f : sja1000_isa
+</I>&gt;&gt;<i>   000d0200-000d021f : sja1000_isa*
+</I>&gt;&gt;<i> 000e0000-000fffff : reserved
+</I>&gt;&gt;<i>   000f0000-000fffff : System ROM
+</I>&gt;&gt;<i> .......
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The BIOS has the Boot up from lan desactivated (it takes the ISA memory),
+</I>&gt;&gt;<i> and the PnP section with a reserved Irq 11
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> This may also help to debug :
+</I>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~# ip -d -s link show can0
+3: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen
+10
+    link/can
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 1000
+    bitrate 250000 sample-point 0.875
+    tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+    sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+    clock 8000000
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          0          0          0          0
+    RX: bytes  packets  errors  dropped overrun mcast
+    0          0        0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    0          0        0       0       0       0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~# ip -d -s link show can1
+4: can1: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen
+10
+    link/can
+    can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 1000
+    bitrate 250000 sample-point 0.875
+    tq 250 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+    sja1000: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+    clock 8000000
+    re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          0          0          0          0
+    RX: bytes  packets  errors  dropped overrun mcast
+    0          0        0       0       0       0
+    TX: bytes  packets  errors  dropped carrier collsns
+    0          0        0       0       0       0
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at beta</A>:~#
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110427/b6d3b342/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110427/b6d3b342/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001859.html">[Socketcan-users] Interrupts for canX interface don't want to	increase... again
+</A></li>
+	<LI>Next message: <A HREF="001861.html">[Socketcan-users] Interrupts for canX interface don't want to	increase... again
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1860">[ date ]</a>
+              <a href="thread.html#1860">[ thread ]</a>
+              <a href="subject.html#1860">[ subject ]</a>
+              <a href="author.html#1860">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

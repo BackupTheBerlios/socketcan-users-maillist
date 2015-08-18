@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can0 doesn't show after modprobe at91_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C4B1F509C.4050707%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001201.html">
+   <LINK REL="Next"  HREF="001203.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can0 doesn't show after modprobe at91_can</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%20modprobe%20at91_can&In-Reply-To=%3C4B1F509C.4050707%40grandegger.com%3E"
+       TITLE="[Socketcan-users] can0 doesn't show after modprobe at91_can">wg at grandegger.com
+       </A><BR>
+    <I>Wed Dec  9 08:24:12 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001201.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+        <LI>Next message: <A HREF="001203.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1202">[ date ]</a>
+              <a href="thread.html#1202">[ thread ]</a>
+              <a href="subject.html#1202">[ subject ]</a>
+              <a href="author.html#1202">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Chris,
+
+Chris Verges wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> I've upgraded to v2.6.32 and am building the entire SocketCAN subsystem
+</I>&gt;<i> into the kernel (monolithic).  Our electrical engineer has confirmed
+</I>&gt;<i> that this is the proper initialization command for the can0 interface:
+</I>&gt;<i> 
+</I>&gt;<i> 	ip link set can0 \
+</I>&gt;<i> 		type can \
+</I>&gt;<i> 			tq 90 \
+</I>&gt;<i> 			prop-seg 1 \
+</I>&gt;<i> 			phase-seg1 5 \
+</I>&gt;<i> 			phase-seg2 4 \
+</I>&gt;<i> 			sjw 2
+</I>&gt;<i> 
+</I>&gt;<i> This results in the following:
+</I>&gt;<i> 
+</I>&gt;<i> # ip link set can0 type can tq 90 prop-seg 1 phase-seg1 5 phase-seg2 4
+</I>&gt;<i> sjw 2
+</I>&gt;<i> at91_can at91_can: writing AT91_BR: 0x00081043
+</I>&gt;<i> 
+</I>&gt;<i> # ip -d -s link show can0
+</I>&gt;<i> 2: can0: &lt;NOARP,ECHO&gt; mtu 16 qdisc pfifo_fast state DOWN qlen 1000
+</I>&gt;<i>     link/can
+</I>&gt;<i>     can state STOPPED restart-ms 0
+</I>&gt;<i>     bitrate 1003313 sample-point 0.636
+</I>&gt;<i>     tq 90 prop-seg 1 phase-seg1 5 phase-seg2 4 sjw 2
+</I>&gt;<i>     : tseg1 4..16 tseg2 2..8 sjw 1..4 brp 2..128 brp-inc 1
+</I>&gt;<i>     clock 99328000
+</I>&gt;<i>     re-started bus-errors arbit-lost error-warn error-pass bus-off
+</I>&gt;<i>     0          0          0          0          0          0
+</I>&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i>     0          0        0       0       0       0
+</I>&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;<i>     0          0        0       0       0       0
+</I>&gt;<i> 
+</I>&gt;<i> Unfortunately, we still see cansend hang:
+</I>&gt;<i> 
+</I>&gt;<i> # cansend can0 123#
+</I>&gt;<i> BUG: soft lockup - CPU#0 stuck for 61s! [cansend:1424]
+</I>&gt;<i> Modules linked in:
+</I>&gt;<i> 
+</I>&gt;<i> Pid: 1424, comm:              cansend
+</I>&gt;<i> CPU: 0    Not tainted  (2.6.32 #1)
+</I>&gt;<i> PC is at at91_poll+0x294/0x4d8
+</I>&gt;<i> LR is at net_rx_action+0xa0/0x218
+</I>&gt;<i> pc : [&lt;c0199440&gt;]    lr : [&lt;c0218ba8&gt;]    psr: 00000013
+</I>&gt;<i> sp : c3979d98  ip : c3979dd8  fp : 4026e000
+</I>&gt;<i> r10: 0000000c  r9 : c03ae1f0  r8 : 00000000
+</I>&gt;<i> r7 : 4426e000  r6 : c39be2c0  r5 : 0000000c  r4 : c39be000
+</I>&gt;<i> r3 : 04000000  r2 : c3978000  r1 : 0000000c  r0 : 00000000
+</I>&gt;<i> Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
+</I>&gt;<i> Control: 0005317f  Table: 23b4c000  DAC: 00000015
+</I>&gt;<i> 
+</I>&gt;<i> There definitely seems to be interaction with the at91_poll() function
+</I>&gt;<i> in this &quot;hang&quot; time.  I'm wondering why the driver isn't failing
+</I>&gt;<i> gracefully.  I'll start diving into the code, but hopefully someone else
+</I>&gt;<i> with more experience on the at91_can driver will have a quicker insight.
+</I>
+Hm, the hang is not OK, of course, and might be due to a software issue.
+Nevertheless, to you see any message going out to the wire?
+
+Wolfgang.
+
+&gt;<i> Thanks,
+</I>&gt;<i> Chris
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001201.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+	<LI>Next message: <A HREF="001203.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1202">[ date ]</a>
+              <a href="thread.html#1202">[ thread ]</a>
+              <a href="subject.html#1202">[ subject ]</a>
+              <a href="author.html#1202">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

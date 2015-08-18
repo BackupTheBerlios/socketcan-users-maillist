@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%0A%20tell%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D1430582045%40MSXHOME.rack.racksaver.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001382.html">
+   <LINK REL="Next"  HREF="001381.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb</H1>
+    <B>Stephen Hellriegel</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan.c%20patch%20which%20supports%20stty%20flag%20to%0A%20tell%20which%20can%23%20%28or%20slc%23%29%20you%20want%20the%20driver%20to%20plumb&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D1430582045%40MSXHOME.rack.racksaver.com%3E"
+       TITLE="[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb">Stephen.Hellriegel at verari.com
+       </A><BR>
+    <I>Fri Apr 16 22:19:41 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001382.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+        <LI>Next message: <A HREF="001381.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1383">[ date ]</a>
+              <a href="thread.html#1383">[ thread ]</a>
+              <a href="subject.html#1383">[ subject ]</a>
+              <a href="author.html#1383">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver,
+There is a real problem with udev and TTYUSB device handle assignment, which is why we need this workaround. As a separate effort, I will try to work with the udev developers to get our functionally problem fixed so we can do this remapping thru udev rules instead of the swtch hack. But until then, shell on!
+-Steve
+
+
+-----Original Message-----
+From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>] 
+Sent: Friday, April 16, 2010 12:49 PM
+To: Stephen Hellriegel
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+
+Stephen Hellriegel wrote:
+&gt;<i> Oliver,
+</I>&gt;<i> #define SLC_CHECK_TRANSMIT when set causes the linux kernel to panic. With this feature turned off, we are able to get timeouts which allow us to know that the remote hardware is not responsive.  As far as I can tell, something enabled by SLC_CHECK_TRANSMIT is broken code, I haven't dug in to find the problem. 
+</I>&gt;<i> 
+</I>&gt;<i> slcan does not imply only low cost hardware.  Low cost does not imply low performance. Your observations are accurate for older immature USB implementations that used HID drivers instead of BULK streaming endpoints.
+</I>&gt;<i> Our slcan based hardware supports full streaming at 1mbit CAN rate, with negligible processor overhead. There is nothing in the slcan protocol that implies low cost or functionality. Our interface works as well, or better than SJA1000 based interfaces. We just happen to connect via a &quot;TTYUSB&quot; stream rather than read/writes of registers. 
+</I>&gt;<i> (We use a set of NXP 2368 ARM7 micros with 12mbit USB as the uplink, and dual SJA1000 controllers (embedded in the silicon) for the CAN attachment)
+</I>&gt;<i> 
+</I>&gt;<i> The acknowledges in the slcan protocol spec are bad news, and I don't know anyone who implements them. I would like to suggest we eliminate them, as they break the independent streaming output/input model that the linux tty environment expects.   To do them proper we would have to use the line discipline module, and have a way to escape the flow control characters so they don't appear in the stream of data for slcan.
+</I>&gt;<i> To do this in USB land, we would have to implement a USB CDC ACM (abstract control model). It's a pain, and way more obtuse than simply using the generic_serial driver that works fine for TTYUSB communication.
+</I>&gt;<i> 
+</I>
+Indeed. I had this feeling before. Thanks for pointing out the problem that
+clearly - removed the entire code for slcan.c transmit timeout handling :
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan/?rev=1168&amp;sc=1">http://svn.berlios.de/wsvn/socketcan/?rev=1168&amp;sc=1</A>
+
+Also changed slcX -&gt; canX
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan/?rev=1169&amp;sc=1">http://svn.berlios.de/wsvn/socketcan/?rev=1169&amp;sc=1</A>
+
+
+&gt;<i> Really the problem is focused around plugging and unplugging USB devices. SLCAN roots are true serial ports which don't have the dynamic features of USB.
+</I>&gt;<i> 
+</I>&gt;<i> The workaround presented in the patch does solve the problem; when a TTYUSB enumerates, you get an unknown number for the same physical interface.  You want the network of CAN hardware attached to a device to always be referred as the same CAN0. For example, the first time I plug in a &quot;dongle usb-&gt;can&quot; I get TTYUSB0. The second time, it may be TTYUSB1.  All the way up to TTYUSB127 (or whatever the kernel is configured for)
+</I>&gt;<i> 
+</I>&gt;<i> You need to be able know what interface enumeration you are going to come up on as a command line argument.  
+</I>&gt;<i> Putting the data in files doesn't tie will into a script that can be fired by udev rules.
+</I>&gt;<i> You see, we have 4 can interfaces, and when they are reset, they come back as different TTYUSBX. My can0 might be TTYUSB0, TTYUSB127, I don't know until the udev system fires, and my rule triggers which plumbs the hint to the slcan driver (via the swtch char)
+</I>&gt;<i> 
+</I>&gt;<i> slcan is not in the mainline so the issue about what we do can be tabled until the point mainline kernel developers want to take it on.  Logically, swtch is never going to be removed, as it is a valid required interface for an shell module.  No one will ever use a shell module on a serial port in use as a slcan interface, so the overload is safe.
+</I>&gt;<i> 
+</I>&gt;<i> We tried the ip link approach, but it doesn't work due to the dynamic nature of the interface names. This was our first approach, we wouldn't have modified a kernel driver if ip link could solve our problem! The udev naming rules are unable to match as under the covers, the kernel still uses the TTYUSB numbers, not the alias created by iplink.
+</I>&gt;<i> 
+</I>&gt;<i> The approach you suggested only works in a static configuration (like a true serial port), which isn't real world with TTYUSB.
+</I>
+I fixed up your SWTC code patch (whitespaces!!) and applied it to the SVN in a
+separate commit:
+
+<A HREF="http://svn.berlios.de/wsvn/socketcan/?rev=1170&amp;sc=1">http://svn.berlios.de/wsvn/socketcan/?rev=1170&amp;sc=1</A>
+
+Do yo have an idea, how the code can be made operational for Kernels &gt;= 2.6.33
+also?
+
+So far the patch is in a
+
+   #if LINUX_VERSION_CODE &lt; KERNEL_VERSION(2,6,32)
+
+section ...
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001382.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+	<LI>Next message: <A HREF="001381.html">[Socketcan-users] slcan.c patch which supports stty flag to tell which can# (or slc#) you want the driver to plumb
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1383">[ date ]</a>
+              <a href="thread.html#1383">[ thread ]</a>
+              <a href="subject.html#1383">[ subject ]</a>
+              <a href="author.html#1383">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

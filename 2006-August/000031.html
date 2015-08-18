@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Looping back TX messages
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C200608241132.k7OBWgl12956%40web10.manitu.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000039.html">
+   <LINK REL="Next"  HREF="000035.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Looping back TX messages</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Looping%20back%20TX%20messages&In-Reply-To=%3C200608241132.k7OBWgl12956%40web10.manitu.net%3E"
+       TITLE="[Socketcan-users] Looping back TX messages">wg at grandegger.com
+       </A><BR>
+    <I>Thu Aug 24 13:32:42 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000039.html">[Socketcan-users] Looping back TX messages
+</A></li>
+        <LI>Next message: <A HREF="000035.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#31">[ date ]</a>
+              <a href="thread.html#31">[ thread ]</a>
+              <a href="subject.html#31">[ subject ]</a>
+              <a href="author.html#31">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+&gt;<i> 
+</I>&gt;<i> Jan Kiszka wrote in
+</I>&gt;<i>
+</I><A HREF="https://lists.berlios.de/pipermail/socketcan-users/2006-August/000029.html">https://lists.berlios.de/pipermail/socketcan-users/2006-August/000029.html</A> :
+&gt;<i> 
+</I>&gt;<i> &gt; I thought you are using standard network devices. Isn't libpcap working
+</I>&gt;<i> &gt; for CAN yet? *That's* the way for sniffing frames. I think Pengutronix
+</I>&gt;<i> &gt; had once something running.
+</I>&gt;<i> 
+</I>&gt;<i> Hey Jan,
+</I>&gt;<i> 
+</I>&gt;<i> want kind of discussion would you like to start here? Maybe you should
+</I>look
+&gt;<i> on what has been done in the source, before shooting around.
+</I>&gt;<i> Yes, we're using standard network devices and this works fine with
+</I>libpcap.
+&gt;<i> 
+</I>&gt;<i> But you're always mixing addressing concepts &amp; tools you know from TCP/IP
+</I>&gt;<i> networking with the completely different addressing concept used by CAN.
+</I>&gt;<i> 
+</I>&gt;<i> E.g. there would never been something like a Ethernet promiscuous mode on
+</I>&gt;<i> CAN-network interfaces, as there are no ethernet-addresses. And there will
+</I>&gt;<i> never be something that compares to the routing of IP-packets, as
+</I>there are
+&gt;<i> no ARP, Ethernet, IP nor TCP-headers in CAN.
+</I>&gt;<i> 
+</I>&gt;<i> So what has to be accomplished here is to *transfer* the broken (from
+</I>normal
+&gt;<i> IT view) addressing concept of the CAN-bus *into* what the normal IT
+</I>&gt;<i> expects, when they want to use the CAN with established and well know
+</I>&gt;<i> interfaces like the BSD-socket interface.
+</I>&gt;<i> 
+</I>&gt;<i> If you face the network-layer (that makes the routing and the
+</I>protocols) the
+&gt;<i> current implementation does exactly this routing and the protocols.
+</I>&gt;<i> 
+</I>&gt;<i> You may rename the 'loopback' functionality and the receive-lists as the
+</I>&gt;<i> analogy of what you know from routing of other networking implementations.
+</I>&gt;<i> And it IS standard that several applications can communicate on the same
+</I>&gt;<i> machine via TCP/IP - so it has nothing to do with 'inventing some kind of
+</I>&gt;<i> new IPC'. And even if the *majority* of IP-applications are mostly
+</I>&gt;<i> communicating with other computers, the PF_INET networkstack is
+</I>implemented
+&gt;<i> to support this local communication also.
+</I>&gt;<i> 
+</I>&gt;<i> Sorry, but you are wrong here. Your suggestions do not lead to a 'standard
+</I>&gt;<i> behaviour'.
+</I>&gt;<i> 
+</I>&gt;<i> If you do not need 'local CAN-routing' - fine. But this depends on YOUR
+</I>&gt;<i> application and YOUR testbed.
+</I>&gt;<i> 
+</I>&gt;<i> As long as even experienced peoples like Wolfgang do not use the fancy
+</I>&gt;<i> filter possibilities in kernel space, that really reduces system load, a
+</I>&gt;<i> discussion about the overhead created by skb_clone() and netif_rx()
+</I>becomes
+&gt;<i> absurd. And these two functions are Linux core business and therefore
+</I>highly
+&gt;<i> efficient.
+</I>
+Be aware that I'm not an end user of CAN software. One of my jobs is 
+to provide core software _to_ CAN users. The socketcan driver is quite
+new and we have little experience. So far we used to well know 
+drivers like PCAN, OCAN, lincan, etc. with its limitations. In the
+CAN field there are plenty of use cases and I can imagine, that
+the loopback feature is not wanted in every application, especially
+if they use the socketcan driver as before (one application,
+no filters, etc.). On the other hand, I already know some people
+liking the feature.
+
+&gt;<i> 
+</I>&gt;<i> In my opinion disabling the 'local CAN-routing' that cares for the common
+</I>&gt;<i> known network behaviour is depending on applications &amp; testbeds. So if you
+</I>&gt;<i> do not need 'local CAN-routing' in your environment and this really boosts
+</I>&gt;<i> your performance(?), this is an option for experts to disable the 'local
+</I>&gt;<i> CAN-routing' - nothing more. And if you disable the 'local CAN
+</I>routing' you
+&gt;<i> have to know what you're doing even when you leave the path of common
+</I>&gt;<i> expectations of other users.
+</I>&gt;<i> 
+</I>&gt;<i> Thinking about disabling this feature i would suggest a commandline
+</I>&gt;<i> parameter for can.ko (e.g. disable_loopback = 1) and we can add it to
+</I>&gt;<i> /proc/net/can/disable_loopback ...
+</I>
+Fine for me. I would just switch it off by default because it then
+behaves as expected (from the normal CAN driver stand-point).
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000039.html">[Socketcan-users] Looping back TX messages
+</A></li>
+	<LI>Next message: <A HREF="000035.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#31">[ date ]</a>
+              <a href="thread.html#31">[ thread ]</a>
+              <a href="subject.html#31">[ subject ]</a>
+              <a href="author.html#31">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] command: ip -details -statistics link show can0
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2013-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20command%3A%20ip%20-details%20-statistics%20link%20show%20can0&In-Reply-To=%3CCAOD0pekqhUyksDAGyU4OBJ51D-gjkZx5Jxw1NQCT7ZrGxohdPQ%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002418.html">
+   <LINK REL="Next"  HREF="002420.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] command: ip -details -statistics link show can0</H1>
+    <B>Ernast Sevo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20command%3A%20ip%20-details%20-statistics%20link%20show%20can0&In-Reply-To=%3CCAOD0pekqhUyksDAGyU4OBJ51D-gjkZx5Jxw1NQCT7ZrGxohdPQ%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] command: ip -details -statistics link show can0">ersevs at gmail.com
+       </A><BR>
+    <I>Wed May 15 20:33:05 CEST 2013</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002418.html">[Socketcan-users] CANutilities
+</A></li>
+        <LI>Next message: <A HREF="002420.html">[Socketcan-users] Getting error while setting bitrate in CAN	interface for ICS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2419">[ date ]</a>
+              <a href="thread.html#2419">[ thread ]</a>
+              <a href="subject.html#2419">[ subject ]</a>
+              <a href="author.html#2419">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+ I am quite new to socket can and I had a question about the output of the
+command: ip -details -statistics link show can0. When I run the above
+command I get the following output:
+
+re-started bus-errors arbit-lost error-warn error-pass bus-off
+    0          0          0          0          0          0
+    RX: bytes  packets  errors  dropped overrun mcast
+    3956387    948121    11      0           11          0
+    TX: bytes  packets  errors  dropped carrier collsns
+    100        44       0       0       0       0
+
+
+I see that I received 11 errors packets (all of them being rx overrun
+errors) and that no packets were dropped. Does the dropped field refer to
+packets lost in userspace (i.e because they weren't being read fast enough
+and the socket receive buffer overflowed) or does the dropped packet field
+refer to dropped packets being dropped somewhere other than userspace?
+
+Thanks,
+
+Ernast
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20130515/d2a7c1fe/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20130515/d2a7c1fe/attachment.html</A>&gt;
+</PRE>
+
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002418.html">[Socketcan-users] CANutilities
+</A></li>
+	<LI>Next message: <A HREF="002420.html">[Socketcan-users] Getting error while setting bitrate in CAN	interface for ICS
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2419">[ date ]</a>
+              <a href="thread.html#2419">[ thread ]</a>
+              <a href="subject.html#2419">[ subject ]</a>
+              <a href="author.html#2419">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

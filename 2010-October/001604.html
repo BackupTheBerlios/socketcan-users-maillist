@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp251x: repeated frames while sending
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CBF3A49.3040903%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001603.html">
+   <LINK REL="Next"  HREF="001611.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp251x: repeated frames while sending</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp251x%3A%20repeated%20frames%20while%20sending&In-Reply-To=%3C4CBF3A49.3040903%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mcp251x: repeated frames while sending">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 20 20:51:53 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001603.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+        <LI>Next message: <A HREF="001611.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1604">[ date ]</a>
+              <a href="thread.html#1604">[ thread ]</a>
+              <a href="subject.html#1604">[ subject ]</a>
+              <a href="author.html#1604">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/20/2010 08:41 PM, Marc Kleine-Budde wrote:
+&gt;<i> I'm seeing repeated frames with the mcp251x driver at 1Mbit, too. The async
+</I>
+The problem occurs with the 2.6.35 mainline as well with my patches
+which are now in net-next-2.6.
+
+&gt;<i> driver works fine. If you want to test:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/mcp251x-async">http://git.pengutronix.de/?p=mkl/linux-2.6.git;a=shortlog;h=refs/heads/can/mcp251x-async</A>
+</I>
+Use the driver &quot;mcp2515&quot; instead of &quot;mcp251x&quot; in order to test the async
+driver. They can be both compiled as modules, just load the driver you
+want to use.
+
+_note_:
+  the mcp2515 doesn't support the callback to phy, power and init yet
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101020/5d0a9ec9/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101020/5d0a9ec9/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001603.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+	<LI>Next message: <A HREF="001611.html">[Socketcan-users] mcp251x: repeated frames while sending
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1604">[ date ]</a>
+              <a href="thread.html#1604">[ thread ]</a>
+              <a href="subject.html#1604">[ subject ]</a>
+              <a href="author.html#1604">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20mscan%20mpc52xx%20driver%20fixed%20for%202.6.28&In-Reply-To=%3C1232434274-25714-1-git-send-email-sojkam1%40fel.cvut.cz%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000630.html">
+   <LINK REL="Next"  HREF="000635.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28</H1>
+    <B>Michal Sojka</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20mscan%20mpc52xx%20driver%20fixed%20for%202.6.28&In-Reply-To=%3C1232434274-25714-1-git-send-email-sojkam1%40fel.cvut.cz%3E"
+       TITLE="[Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28">sojkam1 at fel.cvut.cz
+       </A><BR>
+    <I>Tue Jan 20 07:51:14 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000630.html">[Socketcan-users] Fixed crash on re-attaching slcan netdevices ...
+</A></li>
+        <LI>Next message: <A HREF="000635.html">[Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#634">[ date ]</a>
+              <a href="thread.html#634">[ thread ]</a>
+              <a href="subject.html#634">[ subject ]</a>
+              <a href="author.html#634">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>All kernels &gt; 2.6.27 use ARCH=powerpc so CONFIG_PPC_MERGE was removed. To be
+able to compile the driver for both older and newer kernel, we define
+CONFIG_PPC_MERGE internally for newer kernels.
+
+Signed-off-by: Michal Sojka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">sojkam1 at fel.cvut.cz</A>&gt;
+---
+ kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c |    6 ++++++
+ 1 files changed, 6 insertions(+), 0 deletions(-)
+
+diff --git a/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c b/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c
+index 7762f26..20e063d 100644
+--- a/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c
++++ b/kernel/2.6/drivers/net/can/mscan/mpc52xx_can.c
+@@ -179,6 +179,12 @@ static struct platform_driver mpc52xx_can_driver = {
+ #endif
+ };
+ 
++/* All kernels &gt; 2.6.27 use ARCH=powerpc so CONFIG_PPC_MERGE was
++ * removed. */
++#if LINUX_VERSION_CODE &gt; KERNEL_VERSION(2,6,27)
++#define CONFIG_PPC_MERGE
++#endif
++
+ #ifdef CONFIG_PPC_MERGE
+ static int __init mpc52xx_of_to_pdev(void)
+ {
+-- 
+1.5.6.5
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000630.html">[Socketcan-users] Fixed crash on re-attaching slcan netdevices ...
+</A></li>
+	<LI>Next message: <A HREF="000635.html">[Socketcan-users] [PATCH] mscan mpc52xx driver fixed for 2.6.28
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#634">[ date ]</a>
+              <a href="thread.html#634">[ thread ]</a>
+              <a href="subject.html#634">[ subject ]</a>
+              <a href="author.html#634">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

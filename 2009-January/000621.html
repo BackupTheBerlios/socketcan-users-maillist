@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BXenomai-help%5D%20rtcanconfig%20rtcansend%20rtcanrecv&In-Reply-To=%3CCF7FB0793253794F9F45991443E5FE2004DF7841B2%40us194mx002.tycoelectronics.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000619.html">
+   <LINK REL="Next"  HREF="000622.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv</H1>
+    <B>Charlton, John</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BXenomai-help%5D%20rtcanconfig%20rtcansend%20rtcanrecv&In-Reply-To=%3CCF7FB0793253794F9F45991443E5FE2004DF7841B2%40us194mx002.tycoelectronics.net%3E"
+       TITLE="[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv">john.charlton at tycoelectronics.com
+       </A><BR>
+    <I>Mon Jan 12 19:47:29 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000619.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+        <LI>Next message: <A HREF="000622.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#621">[ date ]</a>
+              <a href="thread.html#621">[ thread ]</a>
+              <a href="subject.html#621">[ subject ]</a>
+              <a href="author.html#621">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I agree that rtcan1 transmit interrupt request is set as is rtcan0 receive request in sja1000 base + 3, but I notice that neither interrupt is enabled in the control register (offset 0).  I think the command register should be 0x06 so that TIE and RIE interrupt enable bits are set.  I am relying on the xeno_can_sja1000 module to set the interrupt enable bits since the xeno_can_tscan1 module should just provide access to the sja1000 registers.  I don't think the xeno_can_tscan1 should program any of the sja1000 registers itself--is that assumption correct?  I am specifying the correct interrupts which are jumper selected to be 5 and 7 for rtcan0 and rtcan1 respectively.  The jumper settings can be checked using the TS-CAN1 base + 6 to but the driver doesn't do that yet.
+
+Wolfgang mentioned that the rtcan_tscan1.c driver doesn't set the offset + 4 register to zero as does the lincan driver.  I will correct that just in case but it is supposed to default to zero according to the TS-CAN1 documentation.
+
+--John
+
+-----Original Message-----
+From: Sebastian Smolorz [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Sebastian.Smolorz at gmx.de</A>] 
+Sent: Monday, January 12, 2009 12:11 PM
+To: Charlton, John
+Cc: Wolfgang Grandegger; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">xenomai-help at gna.org</A>; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Xenomai-help] [Socketcan-users] rtcanconfig rtcansend rtcanrecv
+
+Charlton, John wrote:
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at oelinux-nano</A>:~$ cat /proc/rtcan/rtcan1/registers SJA1000 
+</I>&gt;<i> registers
+</I>&gt;<i> 00: 00 00 0c 02 ff 00 03 1c 1a 00 00 00 00 60 00 00
+</I>&gt;<i> 10: 08 00 20 01 02 03 04 05 06 07 08 ff 20 00 00 c8 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at oelinux-nano</A>:~$ cat /proc/rtcan/rtcan0/registers SJA1000 
+</I>&gt;<i> registers
+</I>&gt;<i> 00: 00 00 0d 01 ff 00 03 1c 1a 00 00 00 00 60 00 00
+</I>&gt;<i> 10: 08 00 20 01 02 03 04 05 06 07 08 bf 00 01 00 c8
+</I>
+Register 0x03 reflects the exact interrupt bits. They mean that a RX interrupt occured on rtcan0 (0x01) and a TX interrupt on rtcan1 (0x02). Now this is interesting as it seems that your system does not get those interrrupts the SJA1000s generate. Are you sure your IRQs that you specify on insmod are really the correct ones?
+
+-- 
+Sebastian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000619.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+	<LI>Next message: <A HREF="000622.html">[Socketcan-users] [Xenomai-help] rtcanconfig rtcansend rtcanrecv
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#621">[ date ]</a>
+              <a href="thread.html#621">[ thread ]</a>
+              <a href="subject.html#621">[ subject ]</a>
+              <a href="author.html#621">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

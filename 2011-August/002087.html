@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd:  socketcan utilities download?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20%20socketcan%20utilities%20download%3F&In-Reply-To=%3CCAAQm8iNCV_s7JiRVSjkEWKxGWkzhqsXYQrkE2i8pKCCmGpvWUA%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002118.html">
+   <LINK REL="Next"  HREF="002088.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd:  socketcan utilities download?</H1>
+    <B>Padma Chavala</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20%20socketcan%20utilities%20download%3F&In-Reply-To=%3CCAAQm8iNCV_s7JiRVSjkEWKxGWkzhqsXYQrkE2i8pKCCmGpvWUA%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Fwd:  socketcan utilities download?">padmachavala at gmail.com
+       </A><BR>
+    <I>Tue Aug 16 16:19:44 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002118.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+        <LI>Next message: <A HREF="002088.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2087">[ date ]</a>
+              <a href="thread.html#2087">[ thread ]</a>
+              <a href="subject.html#2087">[ subject ]</a>
+              <a href="author.html#2087">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Everyone!
+
+I'm not able to get clock on SPI_CLK pin.
+So my candump is just getting stuck.
+
+I need to configure the pins properply.
+But all the SPI1 pins are coming directly  from the processor, no GPIO
+settings required.
+Did anyone face this issue of clock not coming on the SPI_CLK pin.
+
+General information:
+Processor used - omap3730
+
+Master:
+SPI bus used - SPI1
+Chip select - CS0
+MODE - 0
+
+Slave:
+CAN device - mcp215
+MODE 0
+
+I don't  know what  I'm missing.
+
+Thank you,
+Regards,
+Padma.
+
+
+
+
+
+On Fri, Aug 12, 2011 at 12:17 AM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;wrote:
+
+&gt;<i> Hi Padma,
+</I>&gt;<i>
+</I>&gt;<i> i'm not a specialist on the MCP2515 but can help you on general problems
+</I>&gt;<i> with
+</I>&gt;<i> the network layer - which is obviously ok on your system.
+</I>&gt;<i>
+</I>&gt;<i> If you get 'no buffer space available' usually the CAN frames can not be
+</I>&gt;<i> sent
+</I>&gt;<i> by the CAN controller. This could be, if ...
+</I>&gt;<i>
+</I>&gt;<i> 1. you only have _one_ CAN node (you need at least two CAN nodes!!)
+</I>&gt;<i> 2. you use different bitrates on sender / receiver
+</I>&gt;<i> 3. your CAN bus is not terminated properly
+</I>&gt;<i>
+</I>&gt;<i> Please check these things first. If you have a reliable CAN traffic source
+</I>&gt;<i> reading this traffic is also a good thing (before sending).
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> On 11.08.2011 14:28, Padma Chavala wrote:
+</I>&gt;<i> &gt; Hi Oliver,
+</I>&gt;<i> &gt; I need your help again.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I tried loopback test on the board and its working fine.
+</I>&gt;<i> &gt; I executed  test_netlayer.sh and test is successful.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; But when I connect a real CAN device to tranceiver end and transfer
+</I>&gt;<i> data(used
+</I>&gt;<i> &gt; cangen) to the connected device by checking
+</I>&gt;<i> &gt; candump can0 it was getting stuck always.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; After sometime sender gives me a message
+</I>&gt;<i> &gt; write: No buffer space available
+</I>&gt;<i> &gt; First time  write was successfull and read was stuck
+</I>&gt;<i> &gt; Now write is not happenning,it is always throwing me below message..
+</I>&gt;<i> &gt; write: No buffer space available
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Board 1:
+</I>&gt;<i> &gt; /sbin/ip link set can0 type can bitrate 125000 triple-sampling on
+</I>&gt;<i> &gt; ifconfig can0 up
+</I>&gt;<i> &gt; cansend can0 5A1#11.22.33.44.55.66.77.88
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Board 2:
+</I>&gt;<i> &gt; /sbin/ip link set can0 type can bitrate 125000 triple-sampling on
+</I>&gt;<i> &gt; ifconfig can0 up
+</I>&gt;<i> &gt; candump can0
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; And also I'm not getting any interrupt in
+</I>&gt;<i> &gt; cat  /proc/interrupts
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; What might be the issue?
+</I>&gt;<i> &gt; Am I missing anything?
+</I>&gt;<i> &gt; Can you please tell me.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Waiting for your reply..
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Thank you so much for your help.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On Mon, Aug 8, 2011 at 8:58 PM, Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>
+</I>&gt;<i> &gt; &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;&gt; wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     Hi Padma,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     you first should try to work on the virtual CAN driver 'vcan' to make
+</I>&gt;<i> sure
+</I>&gt;<i> &gt;     whether it depends on the CAN hardware driver or the CAN networking
+</I>&gt;<i> stack.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     Please check the 'test_netlayer.sh' script in socketcan/trunk/test :
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     Build the test tools ('make') and then run ./test_netlayer.sh as
+</I>&gt;<i> root.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     If everything is fine then, you have a problem with the hardware
+</I>&gt;<i> driver.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     Regards,
+</I>&gt;<i> &gt;     Oliver
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;     On 08.08.2011 16:22, Padma Chavala wrote:
+</I>&gt;<i> &gt;     &gt; Hi Oliver,
+</I>&gt;<i> &gt;     &gt; I'm able to cross compile can-utils and copy to target filesystem.
+</I>&gt;<i> &gt;     &gt; I want to check loopback testing for CAN.
+</I>&gt;<i> &gt;     &gt; when I give
+</I>&gt;<i> &gt;     &gt; candump can0
+</I>&gt;<i> &gt;     &gt; board gets stuck.
+</I>&gt;<i> &gt;     &gt; I wrote a simple code but it is also getting stuck in read
+</I>&gt;<i> function.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110816/b2dfcefa/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110816/b2dfcefa/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002118.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+	<LI>Next message: <A HREF="002088.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2087">[ date ]</a>
+              <a href="thread.html#2087">[ thread ]</a>
+              <a href="subject.html#2087">[ subject ]</a>
+              <a href="author.html#2087">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

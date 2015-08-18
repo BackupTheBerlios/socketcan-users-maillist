@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp2515 frames with ID 004 and 000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3C4CBCC325.8080902%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001586.html">
+   <LINK REL="Next"  HREF="001588.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp2515 frames with ID 004 and 000</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3C4CBCC325.8080902%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] mcp2515 frames with ID 004 and 000">mkl at pengutronix.de
+       </A><BR>
+    <I>Mon Oct 18 23:59:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001586.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+        <LI>Next message: <A HREF="001588.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1587">[ date ]</a>
+              <a href="thread.html#1587">[ thread ]</a>
+              <a href="subject.html#1587">[ subject ]</a>
+              <a href="author.html#1587">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 10/18/2010 11:42 PM, Jargalan Nermunkh wrote:
+&gt;<i> I am pretty new to CAN / linux kernel and I have been working with a custom
+</I>&gt;<i> board with the mcp2515. I managed to get it up and running with the help of
+</I>&gt;<i> this and the socket-core mailing list. The boards use the TI OMAP-L138 and
+</I>&gt;<i> using the davinci spi driver found here:
+</I>
+We have a omap (i.e. beagle board) somewhere in our lab, I'll ask the
+hardware guy to if he can attach the mcp2515 to it.
+
+&gt;<i> <A HREF="http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite">http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite</A>
+</I>
+&gt;<i> The patch seems to fix another issue I was having with missing frames
+</I>&gt;<i> (mcp2515 auto clears rx0, rx1 flags after its read):
+</I>&gt;<i> <A HREF="http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.html">http://www.mail-archive.com/socketcan-core@lists.berlios.de/msg01747.html</A>
+</I>
+You mean without the patches mentioned above, I mean the unpachted
+2.6.35.x, your can controller was missing frames? After applying these
+patches that problem was fixed?
+
+&gt;<i> The CAN interface is brought up by &quot;ip link set can0 up txqueuelen 1000 type
+</I>&gt;<i> can bitrate 1000000&quot;
+</I>
+&gt;<i> One board collects incoming can frames with &quot;candump -l can0&quot; and another
+</I>&gt;<i> board sends data using &quot;cangen -vv -g 0 -I 255 -L 8 -D i can0&quot;.
+</I>&gt;<i> Snippet from candump:
+</I>
+Can you ensure with a 3rd system, preferred with a different CAN core,
+that the frames send to the bus are correct?
+
+Which driver is active in your setup? Does this happen with both
+versions of the driver?
+
+&gt;<i> (1273660526.261745) can0 255#6B00000000000000
+</I>&gt;<i> (1273660526.262940) can0 255#6C00000000000000
+</I>&gt;<i> (1273660526.264550) can0 255#6D00000000000000
+</I>&gt;<i> (1273660526.266156) can0 255#6E00000000000000
+</I>&gt;<i> (1273660526.267738) can0 255#6F00000000000000
+</I>&gt;<i> (1273660526.268450) can0 255#6F00000000000000
+</I>&gt;<i> (1273660526.269255) can0 004#0001000000000000 &lt;--
+</I>&gt;<i> (1273660526.270810) can0 255#7100000000000000
+</I>&gt;<i> (1273660526.272564) can0 255#7200000000000000
+</I>&gt;<i> (1273660526.274213) can0 255#7300000000000000
+</I>&gt;<i> (1273660526.275806) can0 255#7400000000000000
+</I>&gt;<i> (1273660526.277356) can0 255#7500000000000000
+</I>&gt;<i> (1273660526.278987) can0 255#7600000000000000
+</I>&gt;<i> (1273660526.280579) can0 255#7700000000000000
+</I>&gt;<i> ...
+</I>&gt;<i> (1273660526.679990) can0 255#D600000000000000
+</I>&gt;<i> (1273660526.681331) can0 255#D700000000000000
+</I>&gt;<i> (1273660526.682890) can0 255#D800000000000000
+</I>&gt;<i> (1273660526.684471) can0 255#D900000000000000
+</I>&gt;<i> (1273660526.686086) can0 255#DA00000000000000
+</I>&gt;<i> (1273660526.687702) can0 255#DB00000000000000
+</I>&gt;<i> (1273660526.688442) can0 255#DB00000000000000
+</I>&gt;<i> (1273660526.689668) can0 000#0000000000000000 &lt;--
+</I>&gt;<i> (1273660526.690836) can0 255#DD00000000000000
+</I>&gt;<i> (1273660526.692557) can0 255#DE00000000000000
+</I>&gt;<i> (1273660526.694161) can0 255#DF00000000000000
+</I>&gt;<i> (1273660526.695781) can0 255#E000000000000000
+</I>&gt;<i> (1273660526.697432) can0 255#E100000000000000
+</I>&gt;<i> (1273660526.699022) can0 255#E200000000000000
+</I>&gt;<i> (1273660526.700622) can0 255#E300000000000000
+</I>&gt;<i> (1273660526.702224) can0 255#E400000000000000
+</I>
+&gt;<i> Not sure where this could be coming from any guidance on how to debug this
+</I>&gt;<i> would be grateful.
+</I>
+I'm going now to bed, but tomorrow I'm going to do some stress tests
+with 1 Mbit.
+
+g'night,
+Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101018/6daee743/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101018/6daee743/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001586.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+	<LI>Next message: <A HREF="001588.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1587">[ date ]</a>
+              <a href="thread.html#1587">[ thread ]</a>
+              <a href="subject.html#1587">[ subject ]</a>
+              <a href="author.html#1587">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

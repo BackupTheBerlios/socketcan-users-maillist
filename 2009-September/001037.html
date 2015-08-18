@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan and LinCAN benchmarks
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20and%20LinCAN%20benchmarks&In-Reply-To=%3C4A9E9F46.2030207%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001036.html">
+   <LINK REL="Next"  HREF="001038.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan and LinCAN benchmarks</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20and%20LinCAN%20benchmarks&In-Reply-To=%3C4A9E9F46.2030207%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Socketcan and LinCAN benchmarks">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Sep  2 18:37:26 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001036.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+        <LI>Next message: <A HREF="001038.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1037">[ date ]</a>
+              <a href="thread.html#1037">[ thread ]</a>
+              <a href="subject.html#1037">[ subject ]</a>
+              <a href="author.html#1037">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Michal Sojka wrote:
+
+
+&gt;<i> while working on a paper for the eleventh Real-Time Linux Workshop, we
+</I>&gt;<i> have compared timing properties of two Linux CAN drivers (Socketcan
+</I>&gt;<i> and Lincan). For those who are interested in the results, they can be
+</I>&gt;<i> seen at [<A HREF="http://rtime.felk.cvut.cz/can/benchmark/1/">http://rtime.felk.cvut.cz/can/benchmark/1/</A>]. See also comments
+</I>&gt;<i> to some testcases bellow.
+</I>
+
+Hi Michal and Pavel,
+
+thanks for this benchmark!
+
+
+&gt;<i> The main goal of this work was to find whether and how socketcan's
+</I>&gt;<i> integration with Linux networking layer influences negatively
+</I>&gt;<i> communication latencies.
+</I>
+
+I did some benchmarks with a 2.6.30 LTTng Kernel some weeks ago. But i did not
+add any (remarkable) Ethernet traffic to check that influence also. Good idea.
+
+
+&gt;<i> The results is, in brief, that there is some
+</I>&gt;<i> impact, but still socketcan it is suitable for most of our CAN-related
+</I>&gt;<i> projects.
+</I>
+
+Very good. This was also my conclusion.
+
+
+&gt;<i> The testbed was a Pentium 4 box with a Kvaser quad-head PCI card
+</I>&gt;<i> (SJA1000 based). We have simply connected output 1 to output 2 and
+</I>&gt;<i> measured the time how long it takes for the message to go forth and
+</I>&gt;<i> back.
+</I>
+
+The idea behind my setup was to benchmark the chardev vs netdev in general.
+For that reason, i used a PEAK PCMCIA card (which had an exclusive IRQ line)
+and compiled the same driver with and without netdev support:
+
+make KERNEL LOCATION=/home/hartko/linux-2.6-lttng NET=NETDEV SUPPORT
+make KERNEL LOCATION=/home/hartko/linux-2.6-lttng NET=NO NETDEV SUPPORT
+
+As i only wanted to measure the receive path timings with a moderate CAN
+traffic source, i activated these markers in LTTng:
+
+chardev:
+C1 /mnt/debugfs/ltt/markers/kernel/irq entry/enable
+C2 /mnt/debugfs/ltt/markers/fs/ioctl/enable
+
+netdev:
+N1 /mnt/debugfs/ltt/markers/kernel/irq entry/enable
+N2 /mnt/debugfs/ltt/markers/net/dev receive/enable
+N3 /mnt/debugfs/ltt/markers/fs/read/enable
+
+In userspace i used 'candump' for SocketCAN and 'receivetest' from PEAK for
+the chardev version - as both are finally using copy_to_user() where the
+marker is located.
+
+The results:
+
+Measure    Average   min     max    standard deviation
+C1 -&gt; C2    112us    67us   188us       22,4us
+
+N1 -&gt; N3     93us    61us   160us        9,8us
+N2 -&gt; N3     26us    11us   90us         4,8us
+N1 -&gt; N2     67us    54us   92us         7,2us
+
+As the PEAK driver used exactly the same IRQ handler code, i was quite
+astonished that the netdev concept was indeed faster than the chardev!
+
+Regarding the much higher standard deviation of the chardev my assuption is
+that the FIFO in the chardev driver causes this problem, as the FIFO is filled
+in IRQ-context. When the CAN frame is pulled from the FIFO the lock needs to
+be irq-safe. On the netdev side the IRQ-context is only to access the
+controller registers and to fill the skbuff which is handled in soft-irq
+context from there.
+
+Finally the RX path was faster with netdev and the impact of different driver
+implementations or the performance of the drivers TX-handling on the SJA1000
+was excluded in this benchmark.
+
+
+&gt;<i> We have used canping [1] tool to generate CAN traffic.
+</I>&gt;<i> Canping uses our VCA (virtual CAN API) library, which provides common
+</I>&gt;<i> API for different driver back-ends. If somebody feels this tool might
+</I>&gt;<i> be useful for socketcan we will simplify it to have no external
+</I>&gt;<i> dependencies so that it can be included to socketcan/tools.
+</I>
+
+I tried to figure out how canping was used with SocketCAN in your testbed. But
+i didn't find any socket() call :-)
+
+
+&gt;<i> 1.5 2.6.26 virtual driver problem 
+</I>&gt;<i> ----------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> According to
+</I>&gt;<i> [<A HREF="http://rtime.felk.cvut.cz/can/benchmark/1/by-clck/2400/rtt-virtual/2.6.26-2-686//rtt-virtual.png">http://rtime.felk.cvut.cz/can/benchmark/1/by-clck/2400/rtt-virtual/2.6.26-2-686//rtt-virtual.png</A>],
+</I>&gt;<i> under Debian's 2.6.26 kernel, socketcan's virtual driver introduces
+</I>&gt;<i> very high delays (0.5 second). We do not have explanation for this.
+</I>
+
+I don't have any explanation for this either - when it would be on the 2.6.26
+only.
+
+The vcan makes a loopback for the CAN frame in can_send() in af_can.c
+
+So when you write a CAN frame into a raw-socket (e.g. on vcan0) this skb is
+directly(!) delivered via several callback functions to the socket receive
+buffers of the listening sockets.
+
+When you kick in a bulk of CAN frames, i assume the system to read as much
+data as possible (and deliver the skbs) until the stream is torn off e.g. by
+scheduling the sender of the data.
+
+And *then* the other applications begin to read the stuff that's probably
+quite old (as you can see).
+
+IMO this behaviour depends heavily on the scheduling algorithm of the system,
+which may explain this measurement values especially on the 2.6.26 ... ?!?
+
+
+&gt;<i> 1.6 Kernel 2.6.31-rc7 has very good performance 
+</I>&gt;<i> ------------------------------------------------
+</I>&gt;<i> 
+</I>&gt;<i> The graphs at
+</I>&gt;<i> [<A HREF="http://rtime.felk.cvut.cz/can/benchmark/1/kern-2.6.31-rc7.html">http://rtime.felk.cvut.cz/can/benchmark/1/kern-2.6.31-rc7.html</A>] look
+</I>&gt;<i> almost the same as graphs for rt_preempt (-rt) kernels and socketcan
+</I>&gt;<i> often perform as fast as Lincan. It seems that there are no relevant
+</I>&gt;<i> changes in networking code as well as in socketcan. Therefore we guess
+</I>&gt;<i> this might be related to some changes in RCU and socketbuffers.
+</I>
+
+Yep!
+
+As from my chardev vs. netdev benchmark i really felt that the network stuff
+is always under surveillance of so many people in the world that need the
+network stack to be as fast and performant as possible.
+
+So with all this per-cpu locking and other fine granular locking the network
+people will always help the CAN stuff to run faster also :-)
+
+Again many thanks for your benchmarks.
+
+If you have some slides for the eleventh Real-Time Linux Workshop i would
+highly appreciate if you could send a notification.
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001036.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+	<LI>Next message: <A HREF="001038.html">[Socketcan-users] Socketcan and LinCAN benchmarks
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1037">[ date ]</a>
+              <a href="thread.html#1037">[ thread ]</a>
+              <a href="subject.html#1037">[ subject ]</a>
+              <a href="author.html#1037">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

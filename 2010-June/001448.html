@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SJA 1000 bit timing
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SJA%201000%20bit%20timing&In-Reply-To=%3CAANLkTikNbM8A7Pd_F2M7RX2nyA5rZ2-lQnOWERFfPWt-%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001447.html">
+   <LINK REL="Next"  HREF="001449.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SJA 1000 bit timing</H1>
+    <B>Daniel Baluta</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SJA%201000%20bit%20timing&In-Reply-To=%3CAANLkTikNbM8A7Pd_F2M7RX2nyA5rZ2-lQnOWERFfPWt-%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] SJA 1000 bit timing">daniel.baluta at gmail.com
+       </A><BR>
+    <I>Fri Jun 25 20:37:24 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001447.html">[Socketcan-users]  SJA 1000 bit timing
+</A></li>
+        <LI>Next message: <A HREF="001449.html">[Socketcan-users] SJA 1000 bit timing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1448">[ date ]</a>
+              <a href="thread.html#1448">[ thread ]</a>
+              <a href="subject.html#1448">[ subject ]</a>
+              <a href="author.html#1448">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Dan,
+
+On Fri, Jun 25, 2010 at 6:52 PM, Dan Toganel &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">dantoganel at gmail.com</A>&gt; wrote:
+&gt;<i> Hi all,
+</I>&gt;<i>
+</I>&gt;<i> I need to develop a CAN driver for SJA 1000 controller.
+</I>&gt;<i> What is not very clear for me is the interpretation of Bit Timing Registers.
+</I>&gt;<i> More exactly what is the connection between BTR0 (Baud Rate Prescaler
+</I>&gt;<i> and Synchronization Jump Width) and BTR1 (Time Segment 1 and Time
+</I>&gt;<i> Segment 2) with the Nominal Bit Time (Synchronization, Propation Time,
+</I>&gt;<i> Phase Buffer 1, Phase Buffer2 Segments) from CAN specification.
+</I>
+Isn't Bus Timing Register instead of Bit Timing Register?
+
+I think you can find the relation between BTR registers and Nominal Bit Time
+having a look at C 6.5.1 and 6.5.2 ([1]), and in SJA1000 source code ([2]).
+
+&gt;<i> And how can I calculate the Nominal Bit Time for a certain speed (for
+</I>&gt;<i> example 10 Kb/second).
+</I>
+I don't know exactly how to do this, perhaps someone can help here,
+but I can provide you some useful pointers ([3], [4], [5])
+&gt;<i>
+</I>&gt;<i> Can you help me?
+</I>
+HTH,
+Daniel
+
+[1] <A HREF="http://www.nxp.com/documents/data_sheet/SJA1000.pdf">http://www.nxp.com/documents/data_sheet/SJA1000.pdf</A>
+[2] <A HREF="http://lxr.linux.no/#linux+v2.6.34/drivers/net/can/sja1000/sja1000.c#L189">http://lxr.linux.no/#linux+v2.6.34/drivers/net/can/sja1000/sja1000.c#L189</A>
+[3]<A HREF="http://www.port.de/downloads/pdf/CAN_Bit_Timing.pdf">http://www.port.de/downloads/pdf/CAN_Bit_Timing.pdf</A>
+[4]<A HREF="http://www.esacademy.com/en/library/calculators/sja1000-timing-calculator.html">http://www.esacademy.com/en/library/calculators/sja1000-timing-calculator.html</A>
+[5]<A HREF="http://old.nabble.com/Bittiming-SJA1000-td27843225.html">http://old.nabble.com/Bittiming-SJA1000-td27843225.html</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001447.html">[Socketcan-users]  SJA 1000 bit timing
+</A></li>
+	<LI>Next message: <A HREF="001449.html">[Socketcan-users] SJA 1000 bit timing
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1448">[ date ]</a>
+              <a href="thread.html#1448">[ thread ]</a>
+              <a href="subject.html#1448">[ subject ]</a>
+              <a href="author.html#1448">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

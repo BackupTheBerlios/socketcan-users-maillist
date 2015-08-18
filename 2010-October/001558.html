@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Detection of CAN frame actually sent?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CB58118.5040802%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001556.html">
+   <LINK REL="Next"  HREF="001563.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Detection of CAN frame actually sent?</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Detection%20of%20CAN%20frame%20actually%20sent%3F&In-Reply-To=%3C4CB58118.5040802%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] Detection of CAN frame actually sent?">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Oct 13 11:51:20 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001556.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+        <LI>Next message: <A HREF="001563.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1558">[ date ]</a>
+              <a href="thread.html#1558">[ thread ]</a>
+              <a href="subject.html#1558">[ subject ]</a>
+              <a href="author.html#1558">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/13/2010 11:39 AM, Alexander Stein wrote:
+&gt;&gt;<i> I'm following the discussion and realized that it will not work for
+</I>&gt;&gt;<i> devices doing the local loopback in hardware, like the flexcan
+</I>&gt;&gt;<i> controller. Strictly speaking it will only work properly for drivers
+</I>&gt;&gt;<i> doing the local loopback in software when the TX done interrupt is
+</I>&gt;&gt;<i> handled. Also some USB devices are not able to do that properly.
+</I>
+&gt;<i> Thanks for the information so far.
+</I>&gt;<i> I would need to get this info actually on flexcan hardware. What does it 
+</I>&gt;<i> actually mean in flexcan hardware? Does it receive it's own message like 
+</I>&gt;<i> normal ones? Or do they get discarded as they are known to be own messages?
+</I>&gt;<i> Is there a way to detect if the hardware/driver allows local loopback?
+</I>
+As Wolfgang pointed out, it doesn't work, i.e. they show up as &quot;normal&quot;
+messages. You cannot distinguish between loopback'ed messages and normal
+ones. But that can be fixed in the driver.
+
+I think we (the socketcan people) originally thought it's a better
+solution to loop the CAN frames back in hardware (if available), as it
+represents what's happening on the wire far better than software
+loopback. But it turns out that many people need the receive own
+messages feature (for whatever reason).
+
+Send patches or contact your favourite embedded linux support company :)))
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101013/eb7360a1/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101013/eb7360a1/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001556.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+	<LI>Next message: <A HREF="001563.html">[Socketcan-users] Detection of CAN frame actually sent?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1558">[ date ]</a>
+              <a href="thread.html#1558">[ thread ]</a>
+              <a href="subject.html#1558">[ subject ]</a>
+              <a href="author.html#1558">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

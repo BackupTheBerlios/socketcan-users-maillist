@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3C4E67CCE4.3020405%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002129.html">
+   <LINK REL="Next"  HREF="002130.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3C4E67CCE4.3020405%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR">mkl at pengutronix.de
+       </A><BR>
+    <I>Wed Sep  7 21:58:28 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002129.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+        <LI>Next message: <A HREF="002130.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2127">[ date ]</a>
+              <a href="thread.html#2127">[ thread ]</a>
+              <a href="subject.html#2127">[ subject ]</a>
+              <a href="author.html#2127">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hallo,
+
+On 09/07/2011 06:28 PM, Francois Bouchard wrote:
+&gt;<i> Attempting to create heavy traffic with M54418TWR CAN interface, S socket is
+</I>
+It's a coldfire processor isn't it? IIRC it has the old flexcan core.
+The mainline driver doesn't support that core, so I think it's provided
+by flexcan.
+
+&gt;<i> used to write and read consecutively in a while loop.  Therefor I have no
+</I>&gt;<i> problem creating the socket and communicating between the can1 I/F and a
+</I>&gt;<i> second device, but the program reset by itself after a while.
+</I>
+Like Oliver asked, what does that mean exactly?
+
+&gt;<i> CODE:
+</I>&gt;<i> *while(numofmsg)
+</I>&gt;<i> {
+</I>&gt;<i>         nbytes = write(can_socket, &amp;tx_frame, sizeof(struct can_frame));
+</I>&gt;<i>         numofmsg--;
+</I>&gt;<i> 
+</I>&gt;<i>         // recv()
+</I>&gt;<i>         nbytes = recv(can_socket, &amp;rx_frame, sizeof(struct can_frame),
+</I>&gt;<i> MSG_DONTWAIT );
+</I>&gt;<i> 
+</I>&gt;<i>         // ...
+</I>&gt;<i> }
+</I>
+
+&gt;<i> Is there some coding rules or prevention when doing something like that?
+</I>&gt;<i> It is also hardware dependent, so I should check that also.
+</I>
+What does &quot;hardware dependent&quot; mean?
+
+&gt;<i> target: ( Freescale 54418TWR );
+</I>&gt;<i> Linux version 2.6.29 (gcc version 4.4.1 (Sourcery G++ Lite 4.4-54) ) #49 Wed
+</I>&gt;<i> Aug 10 15:50:50 EDT 2011
+</I>
+Can you send me where you downloaded the BSP/kernel?
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/c39b1305/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/c39b1305/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002129.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+	<LI>Next message: <A HREF="002130.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2127">[ date ]</a>
+              <a href="thread.html#2127">[ thread ]</a>
+              <a href="subject.html#2127">[ subject ]</a>
+              <a href="author.html#2127">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%20for%0A%20received%20CAN%20messages%3F&In-Reply-To=%3C491001EB.9050003%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000550.html">
+   <LINK REL="Next"  HREF="000552.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%20for%0A%20received%20CAN%20messages%3F&In-Reply-To=%3C491001EB.9050003%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Tue Nov  4 09:03:55 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000550.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+        <LI>Next message: <A HREF="000552.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#551">[ date ]</a>
+              <a href="thread.html#551">[ thread ]</a>
+              <a href="subject.html#551">[ subject ]</a>
+              <a href="author.html#551">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Christopher Lapointe wrote:
+</I>&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;<i> Hello list,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I am a new user of socketcan under Linux/386 with 2.6.24 kernel. I 
+</I>&gt;&gt;&gt;&gt;<i> am in
+</I>&gt;&gt;&gt;&gt;<i> the process of writing a multi-threaded application that uses CAN and
+</I>&gt;&gt;&gt;&gt;<i> wanted to ask the list what people use to check efficiently for new
+</I>&gt;&gt;&gt;&gt;<i> received CAN messages. Is only polling supported? Ideally I am looking
+</I>&gt;&gt;&gt;&gt;<i> for a way to &quot;peek&quot; for new incoming frames without reading them 
+</I>&gt;&gt;&gt;&gt;<i> such as
+</I>&gt;&gt;&gt;&gt;<i> by using a Linux signal with socketcan.
+</I>&gt;&gt;&gt;&gt;<i>     
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> You can receive CAN messages from a socket as usual with recv() and
+</I>&gt;&gt;&gt;<i> alike functions. By default the function will block but the 
+</I>&gt;&gt;&gt;<i> MSG_DONTWAIT
+</I>&gt;&gt;&gt;<i> is support as well. Read &quot;man recv&quot; for further information. It seems
+</I>&gt;&gt;&gt;<i> that MSG_PEEK is not supported but it would be a nice to have. Oliver,
+</I>&gt;&gt;&gt;<i> what do you think.
+</I>&gt;&gt;&gt;<i>   
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>
+Please forget my mail from yesterday. :-]
+
+AFAICS MSG_PEEK is already working in the current mainline implementation!
+
+I added an '-p' peek option to tst-raw-filter.c (that already uses 
+recvfrom()) ...
+
+Index: tst-raw-filter.c
+===================================================================
+--- tst-raw-filter.c    (revision 863)
++++ tst-raw-filter.c    (working copy)
+@@ -71,14 +71,18 @@
+     char *ifname = &quot;any&quot;;
+     int ifindex;
+     int opt;
++    int peek = 0;
+     int nfilters = 0;
+     int deflt = 0;
+ 
+-    while ((opt = getopt(argc, argv, &quot;i:f:d&quot;)) != -1) {
++    while ((opt = getopt(argc, argv, &quot;i:p:f:d&quot;)) != -1) {
+         switch (opt) {
+         case 'i': /* specify different interface than default */
+             ifname = optarg;
+             break;
++        case 'p': /* MSG_PEEK 'p' times before consuming the frame */
++            peek = atoi(optarg);
++            break;
+         case 'd': /* use default settings from CAN_RAW socket */
+             deflt = 1;
+             break;
+@@ -129,8 +133,15 @@
+ 
+     while (1) {
+         socklen_t len = sizeof(addr);
++        int flags;
++
++        if (peek &amp;&amp; peek--)
++            flags = MSG_PEEK;
++        else
++            flags = 0;
++
+         nbytes = recvfrom(s, &amp;frame, sizeof(struct can_frame),
+-                  0, (struct sockaddr*)&amp;addr, &amp;len);
++                  flags, (struct sockaddr*)&amp;addr, &amp;len);
+         if (nbytes &lt; 0) {
+             perror(&quot;read&quot;);
+             return 1;
+@@ -154,6 +165,8 @@
+             }
+             if (frame.can_id &amp; CAN_RTR_FLAG)
+                 printf(&quot;remote request&quot;);
++            if (flags &amp; MSG_PEEK)
++                printf(&quot; (MSG_PEEK)&quot;);
+             printf(&quot;\n&quot;);
+             fflush(stdout);
+         }
+
+
+So if you run the test app with -p &lt;number-of-peeks&gt; now, you can see:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at b4</A>:~/socketcan/trunk/test$ ./tst-raw-filter -d -p 2
+./tst-raw-filter: using CAN_RAW socket default filter.
+ vcan0 123  [3] 11 22 33  (MSG_PEEK)
+ vcan0 123  [3] 11 22 33  (MSG_PEEK)
+ vcan0 123  [3] 11 22 33
+ vcan0 123  [4] 11 22 33 44
+ vcan0 123  [5] 11 22 33 44 55
+^C
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at b4</A>:~/socketcan/trunk/test$
+
+Which is, what you would expect, right?
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000550.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+	<LI>Next message: <A HREF="000552.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#551">[ date ]</a>
+              <a href="thread.html#551">[ thread ]</a>
+              <a href="subject.html#551">[ subject ]</a>
+              <a href="author.html#551">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

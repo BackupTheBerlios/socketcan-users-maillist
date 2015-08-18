@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Newest Socketcan on 2.6.24 ?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C4906E733.5090405%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000525.html">
+   <LINK REL="Next"  HREF="000536.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Newest Socketcan on 2.6.24 ?</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Newest%20Socketcan%20on%202.6.24%20%3F&In-Reply-To=%3C4906E733.5090405%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Newest Socketcan on 2.6.24 ?">wg at grandegger.com
+       </A><BR>
+    <I>Tue Oct 28 11:19:31 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000525.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+        <LI>Next message: <A HREF="000536.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#526">[ date ]</a>
+              <a href="thread.html#526">[ thread ]</a>
+              <a href="subject.html#526">[ subject ]</a>
+              <a href="author.html#526">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Wolfgang Grandegger wrote:
+&gt;<i> Daniel Schnell wrote:
+</I>&gt;&gt;<i> On Mon, 2008-10-27 at 23:25 +0100, Oliver Hartkopp wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hm - i took a look into these tools and i wonder, if we should move 
+</I>&gt;&gt;&gt;<i> canconfig and cansequence to the SocketCAN SVN to have it in one place 
+</I>&gt;&gt;&gt;<i> and forget the rest ...
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> candump and cansend (what a bunch of options ... 8-) are just double 
+</I>&gt;&gt;&gt;<i> work and canecho is made obsolete by the (bridge) '-b' option of BerliOS 
+</I>&gt;&gt;&gt;<i> candump. Feel free to use the BerliOS stuff in your OSELAS BSPs also. 
+</I>&gt;&gt;&gt;<i> New ideas and extensions are always welcome.
+</I>&gt;&gt;<i> Yes I used the Pengutronix canconfig utility and blindly supposed that
+</I>&gt;&gt;<i> canconfig is a standard socketcan utility ...
+</I>&gt;&gt;<i> I think it does make sense to unify the tools which present a certain
+</I>&gt;&gt;<i> &quot;uniqueness&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> Note that the Pengutronix tools also support there own old Socket-CAN
+</I>&gt;<i> implementation, at least the did in the past.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Concerning ABI compatibility. You said, that ioctls are not supported
+</I>&gt;&gt;<i> anymore, so is that the reason why starting/stopping the interface with
+</I>&gt;&gt;<i> ioctl(can_fd, SIOCSCANMODE, &amp;ifr) now returns error (errno -EPERM) ?
+</I>&gt;<i> 
+</I>&gt;<i> The CAN specific IOCTL request do not exist any more but I wonder why
+</I>&gt;<i> the error returned is -EPERM.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Is there any readme where the /proc or /sys interface is described ?
+</I>&gt;<i> 
+</I>&gt;<i> It's on my to-do list. For the time being read the following mail:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/pipermail/socketcan-core/2008-September/001850.html">https://lists.berlios.de/pipermail/socketcan-core/2008-September/001850.html</A>
+</I>
+Here some additional updated info's from the rather old mail with the
+subject &quot;Summary of the new device interface implementation&quot;, which
+rises some old issues which I labeled with &quot;*******&quot;
+
+o SYSFS support
+
+  IOCTL request have been removed in favor of the following SYSFS files:
+
+    # cd /sys/class/net/can0
+    # ls -1 `find  -name 'can_*'`
+    ./can_ctrlmode
+    ./can_echo
+    ./can_restart
+    ./can_restart_ms
+    ./can_state
+
+    ./can_statistics:
+    arbitration_lost
+    bus_error
+    data_overrun
+    error_passive
+    error_warning
+    restarts
+    wakeup
+
+    ./can_bittiming
+    ... described elsewhere ...
+
+*******
+  We need to discuss sometime later what we really want to list under
+  &quot;can_statistics&quot;. The current implementation is biased by the
+  SJA1000.
+*******
+
+o CAN start, stop, re-start and bus-off recovery:
+
+  The CAN device must be started with &quot;ifconfig up&quot; and stopped with
+  &quot;ifconfig down&quot;. In case of bus-off it can be re-started manually by
+  writing to the SYSFS file &quot;/sys/class/net/can*/can_restart&quot;. And if
+  /sys/class/net/can*/can_restart_ms&quot; is greater than 0, it gets
+  re-started automatically after the specified time.
+
+  Bus-off and automatic re-start is handled by a common interface:
+
+  - In case of bus-off, the device driver calls can_bus_off(), which
+    calls netif_carrier_off() and eventually adds a timer to schedule
+    the automatic re-start. At manual or automatic restart time, the
+    function can_restart_now() mainly calls:
+
+    * can_flush_echo_skb(dev);
+    * priv-&gt;do_set_mode(dev, CAN_MODE_START);
+    * netif_carrier_on(dev);
+    * priv-&gt;can_stats.restarts++;
+    * format a CAN_ERR_RESTARTED error frame and send it upstream.
+    * update statistics
+
+  This means that the device driver has to perform the bus-off recovery
+  or re-start in its do_set_mode() function. When the device is closed
+  the device driver should call can_close_cleanup() to stop the timer.
+
+  This interface may need refinement in case of delayed bus-off
+  recovery. I have to check the doc more carefully first. Maybe
+  we need an additional can_bus_on() function when the bus-off
+  recovery interrupt finally arrives.
+
+o Echoing skbs:
+
+  There is now a simple common interface using an array of skb pointers:
+
+    struct can_priv {
+          ...
+	  struct sk_buff *echo_skb[CAN_ECHO_SKB_MAX];
+
+  - The drivers start_xmit function calls before returning:
+
+      can_put_echo_skb(skb, dev, idx):
+
+  - When TX is done the corrsponding ISR should call:
+
+      can_get_echo_skb(dev, idx);
+
+  - can_flush_echo_skb(dev) is called when the device is restarted
+    or closed. The device driver should call can_close_cleanup() in its
+    stop function.
+
+  - The driver should enable support for echoing skbs in its
+    registration function:
+
+      dev-&gt;flags |= IFF_ECHO;
+
+  - It can be disabled/enabled using the SYSFS file can_echo.
+
+  So far, this works fine for SJA1000 and MSCAN.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000525.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+	<LI>Next message: <A HREF="000536.html">[Socketcan-users] Newest Socketcan on 2.6.24 ?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#526">[ date ]</a>
+              <a href="thread.html#526">[ thread ]</a>
+              <a href="subject.html#526">[ subject ]</a>
+              <a href="author.html#526">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

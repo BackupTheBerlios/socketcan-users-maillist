@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Performance issues with MPC5200B and socketcan
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB53822C%40Zuse1.tracetronic.local%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002098.html">
+   <LINK REL="Next"  HREF="002102.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Performance issues with MPC5200B and socketcan</H1>
+    <B>&quot;M&#252;ller, Ren&#233;&quot;</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Performance%20issues%20with%20MPC5200B%20and%20socketcan&In-Reply-To=%3CFE9B105D239FC44DA94BE331320F88DB53822C%40Zuse1.tracetronic.local%3E"
+       TITLE="[Socketcan-users] Performance issues with MPC5200B and socketcan">Rene.Mueller at tracetronic.de
+       </A><BR>
+    <I>Tue Aug 23 12:04:13 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002098.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+        <LI>Next message: <A HREF="002102.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2101">[ date ]</a>
+              <a href="thread.html#2101">[ thread ]</a>
+              <a href="subject.html#2101">[ subject ]</a>
+              <a href="author.html#2101">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Am 22.08.2011 18:55, schrieb Oliver Hartkopp:
+&gt;<i> On 22.08.2011 17:04, &quot;M&#252;ller, Ren&#233;&quot; wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Am 19.08.2011 17:27, schrieb &quot;M&#252;ller, Ren&#233;&quot;:
+</I>&gt;&gt;&gt;<i> Am 17.08.2011 11:43, schrieb Oliver Hartkopp:
+</I>&gt;&gt;&gt;&gt;<i> Am 17.08.2011 10:38, schrieb &quot;M&#252;ller, Ren&#233;&quot;:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I have an performance issue with socketcan and an MPC5200B. My setup looks like this:
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - MPC5200B board (TQM5200)
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - custom base board with two PCA82C251, one for each can controller
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - linux-2.6.27.18-denx, I use the mpc52xx driver
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - booted with uboot and kernel from flash
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - mount root filesystem via NFS
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - can0 with 1Mbit/s
+</I>&gt;&gt;&gt;&gt;&gt;<i>   - candump -l can0 to tmpfs 
+</I>&gt;&gt;&gt;&gt;<i> Hi Ren&#233;,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> can you check if the frames are dropped on socket-level? I assume, that the candump is not able to dump the stuff into tmpfs at full speed.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> See details at:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> <A HREF="http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00170.html">http://www.mail-archive.com/socketcan-users@lists.berlios.de/msg00170.html</A>
+</I>&gt;&gt;&gt;<i> Hi Oliver,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> thanks for the hint. I tried it, and indeed I lose my frames because I'm to slow with fetching them. I will take a look, if I find a better mechanism to dump the frames.
+</I>&gt;&gt;<i> Hi Oliver,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I made some tests with increased rx buffer size and a hacked candump. I want to dump every frame in an 30 second time span, so I increased the rx buffer with candump -r to 20000000. In candump I disabled the live-dump to the log file. When I press a key, I set a &quot;nothing passes&quot; filter, so that the socket rx buffer contains the last ~25s (1Mbit/s with &gt;90% busload). Then I start writing the frames to my candump log file until the buffer is empty. So far this solution is fine (no data is lost), but it eats my memory. For this ~25s I need ~100MB ram. My board has only 128MB, so this is way too much and I cannot increase the buffer further (I'm still missing ~5s).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I took a look at the kernel code and I think the socket buffer has some &quot;slight&quot; overhead in case of can. There is an huge structure used to store the 8 bytes of one can frame. I'm afraid that this structure is needed.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think my main problem is the system call overhead of recv/recvmsg, because I tried to store the data in an circular buffer (from boost libraries) entirely in ram and I'm still losing data. The only way I get the frames without data loss seems to increase the socket buffer.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> At the moment I see 3 options:
+</I>&gt;&gt;<i> 1. Decrease memory demand of the socket buffer (to fit my 30s into &lt;30MB)
+</I>&gt;&gt;<i> 2. Put more than one can frame into one socket buffer structure to minimize the overhead
+</I>&gt;&gt;<i> 3. Try lincan with hopefully less system call overhead
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do you think I should try? Do you see another option to get the frames at such high busload without data loss?
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi Ren&#233;,
+</I>&gt;<i>
+</I>&gt;<i> i would try move the problem into userspace.
+</I>&gt;<i>
+</I>&gt;<i> The skbuff struct contains indeed much more than just the 16 bytes used by the
+</I>&gt;<i> can_frame. If you can make an estimation about how many frames you receive in
+</I>&gt;<i> this 30 seconds, you could create a big array of struct can_frames in
+</I>&gt;<i> userspace that holds the (binary) CAN frames in userspace.
+</I>&gt;<i>
+</I>&gt;<i> After the 30 seconds, you can dump the binary frames into a file. IMO not
+</I>&gt;<i> getting the frames from the socket is the problem, but writing to a file.
+</I>&gt;<i>
+</I>&gt;<i> An increased socket buffer size still gives you some additional safety, that
+</I>&gt;<i> you don't lose frames, when writing the file.
+</I>&gt;<i>
+</I>&gt;<i> Do you also need the timestamps?
+</I>&gt;<i>
+</I>&gt;<i> If so, i would add them to an other new big array containing the the (64 bit)
+</I>&gt;<i> timestamps. I don't know if it's better to save timestamp offsets, as this
+</I>&gt;<i> would probably cost more CPU time than just copying the timestamps.
+</I>&gt;<i>
+</I>&gt;<i> What do you think about this idea?
+</I>Hi Oliver,
+
+I like this idea. I liked it so much, that I just tried it :)
+
+But the results are not exactly what I want. I used candump as base and created a simple array, as you suggested (only for the frames, none for the timestamps. I need them, but for testing purposes I can life without them). Now the problem is the cpu load, again. I have ~18-20% idle time and ~60% for candump. Basically I can dump the frames this way, but in my application dumping the frames is not the only task. I need a bit more cpu time than the remaining 20%.
+
+When I used the increased socket buffer size I had plenty cpu time available (&gt;70%), but no memory for my application left. With an simple buffer I have plenty of memory available (&gt;90MB), but not enough cpu time left. :(
+
+It seems, that I have to optimize either the memory consumption of the socket buffer or the cpu load of the frame fetching. Maybe the right tradeoff between user space and socket is the clue.
+
+I'm familiar with linux, but I'm no kernel hacker. I think, you have way more experience in this area (at least you implemented many stuff in kernel space for socketcan ;) ), so do you think I can get my application running with one of the three options from above? Or I'm missing some &quot;simple&quot; other option? (beside from switching the cpu, of course)
+
+
+Best regards,
+Ren&#233;
+
+&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002098.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+	<LI>Next message: <A HREF="002102.html">[Socketcan-users] Performance issues with MPC5200B and socketcan
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2101">[ date ]</a>
+              <a href="thread.html#2101">[ thread ]</a>
+              <a href="subject.html#2101">[ subject ]</a>
+              <a href="author.html#2101">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

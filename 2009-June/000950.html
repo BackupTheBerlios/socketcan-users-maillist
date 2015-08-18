@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] merging branches/netlink: please test
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20merging%20branches/netlink%3A%20please%20test&In-Reply-To=%3C20090617130300.GB6850%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000936.html">
+   <LINK REL="Next"  HREF="000951.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] merging branches/netlink: please test</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20merging%20branches/netlink%3A%20please%20test&In-Reply-To=%3C20090617130300.GB6850%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] merging branches/netlink: please test">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Wed Jun 17 15:03:00 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000936.html">[Socketcan-users] [PATCH 5/5]: softing CAN card
+</A></li>
+        <LI>Next message: <A HREF="000951.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#950">[ date ]</a>
+              <a href="thread.html#950">[ thread ]</a>
+              <a href="subject.html#950">[ subject ]</a>
+              <a href="author.html#950">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I got rid of SECTION mismatch warnings.
+
+---
+ kernel/2.6/drivers/net/can/sja1000/ems_104m.c   |    2 +-
+ kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+Index: netlink/kernel/2.6/drivers/net/can/sja1000/ems_104m.c
+===================================================================
+--- netlink.orig/kernel/2.6/drivers/net/can/sja1000/ems_104m.c	2009-06-17 14:57:33.000000000 +0200
++++ netlink/kernel/2.6/drivers/net/can/sja1000/ems_104m.c	2009-06-17 14:58:05.000000000 +0200
+@@ -47,7 +47,7 @@
+ #define EMS_104M_MAX_DEV  4
+ 
+ static unsigned long __devinitdata mem[EMS_104M_MAX_DEV];
+-static int __devinitdata irq[EMS_104M_MAX_DEV];
++static int irq[EMS_104M_MAX_DEV];
+ 
+ module_param_array(mem, ulong, NULL, S_IRUGO);
+ MODULE_PARM_DESC(mem, &quot;I/O memory address&quot;);
+Index: netlink/kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c
+===================================================================
+--- netlink.orig/kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c	2009-06-17 14:57:42.000000000 +0200
++++ netlink/kernel/2.6/drivers/net/can/sja1000/ems_pcmcia.c	2009-06-17 14:59:40.000000000 +0200
+@@ -362,7 +362,7 @@
+ /*
+  * Configure PCMCIA socket
+  */
+-static void ems_pcmcia_config(struct pcmcia_device *dev)
++static void __devinit ems_pcmcia_config(struct pcmcia_device *dev)
+ {
+ 	win_req_t req;
+ 	memreq_t mem;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000936.html">[Socketcan-users] [PATCH 5/5]: softing CAN card
+</A></li>
+	<LI>Next message: <A HREF="000951.html">[Socketcan-users] merging branches/netlink: please test
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#950">[ date ]</a>
+              <a href="thread.html#950">[ thread ]</a>
+              <a href="subject.html#950">[ subject ]</a>
+              <a href="author.html#950">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

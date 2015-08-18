@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan over ethernet?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3C529CBBE4D13E1646913A58B9C572B184718311%40hemail.rack.racksaver.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000632.html">
+   <LINK REL="Next"  HREF="000630.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan over ethernet?</H1>
+    <B>Robert Haddon</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3C529CBBE4D13E1646913A58B9C572B184718311%40hemail.rack.racksaver.com%3E"
+       TITLE="[Socketcan-users] Socketcan over ethernet?">robert.haddon at verari.com
+       </A><BR>
+    <I>Mon Jan 19 20:44:08 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000632.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+        <LI>Next message: <A HREF="000630.html">[Socketcan-users] Fixed crash on re-attaching slcan netdevices ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#633">[ date ]</a>
+              <a href="thread.html#633">[ thread ]</a>
+              <a href="subject.html#633">[ subject ]</a>
+              <a href="author.html#633">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>As for use-case, I can share the advantages that we were seeking from
+this design:
+- Better concurrency across multiple busses
+- Offloading to make redundant CANopen clients transparent to the
+application
+- Easy to pack as many CAN controllers as we desire onto a custom
+assembly (single chip Ethernet switches are cheap)
+ 
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>
+[mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of Oliver
+Hartkopp
+Sent: Monday, January 19, 2009 8:47 AM
+To: Sven Geggus
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] Socketcan over ethernet?
+
+Sven Geggus wrote:
+&gt;<i> Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>&gt;&gt;<i> - get's CAN frames via virtual CAN interfaces (vcan) and put's them
+</I>into 
+&gt;&gt;<i> a UDP/IP socket - or alternatively you can write bare ethernet frames
+</I>
+&gt;&gt;<i> using packet sockets (AF_PACKET) - or whatever needed
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> - gets UDP (or whatever) packets and push them into the approriate
+</I>vcan 
+&gt;&gt;<i> interface
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This is a very easy thing to do. Are you familiar with virtual CAN 
+</I>&gt;&gt;<i> netdevices?
+</I>&gt;&gt;<i>     
+</I>&gt;<i>
+</I>&gt;<i> Could'nt this be done more elegantly by some kind of tunneling
+</I>interface
+&gt;<i> driver in kernelspace as well?
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+Most ideas what you can encapsulate has already been done in Linux ;-)
+
+So i won't be surprised if there is a much better approach than routing 
+the data via userspace.
+
+&gt;<i> I don't know if there is some standard way of sending can-frames via
+</I>&gt;<i> ethernet,
+</I>
+I don't know either. You need to define the use-case for this, if you
+need:
+
+- only the struct can_frame content
+- the timestamp information
+- the CAN interface (name)
+
+&gt;<i>  but one could shurely implement something equivalent to the
+</I>&gt;<i> IPv6-in-IPv4 Interface.
+</I>&gt;<i>
+</I>&gt;<i> All you would need to setup something like this would be the address
+</I>of the
+&gt;<i> tunnel endpoint and the ip command for setting up such an interface.
+</I>&gt;<i>
+</I>&gt;<i> Such a tunneling interface could then provide you with all the CAN
+</I>specific
+&gt;<i> socket-stuff just like an IPv6-in-IPv4 Interface does provide AF_INET6
+</I>&gt;<i> sockets on a machine without native ipv6 Interfaces.
+</I>&gt;<i>
+</I>&gt;<i>   
+</I>
+The idea is also interesting, because you would be able to create a JAVA
+
+application using IP Sockets with no need to create a AF_CAN JNI.
+
+For me the question is:
+
+1. Do we want to have the SocketCAN features (different CAN Protocols 
+and CAN Filter support) available on the remote site? (Some kind of 
+remote control)
+
+2. Do we only want CAN traffic to be encapsulated into IP?
+2a. If so: Who sets the configuration about the CAN interface(s) and the
+
+filters?
+2b. How can a sending of CAN frames be implemented?
+
+For (2) i wrote a tool called 'canlogserver' which is also in SocketCAN 
+SVN. The canlogserver has the old commandline parameters from candump 
+and becomes a server listening on port 28700. When you connect this 
+port, you get the CAN frames according the given commandline (as ASCII 
+logfile format)
+
+I still feel unsure how the use-case and the CAN specifics can come 
+together with a CAN-in-IPv4 tunnel :-/
+
+Regards,
+Oliver
+
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000632.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+	<LI>Next message: <A HREF="000630.html">[Socketcan-users] Fixed crash on re-attaching slcan netdevices ...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#633">[ date ]</a>
+              <a href="thread.html#633">[ thread ]</a>
+              <a href="subject.html#633">[ subject ]</a>
+              <a href="author.html#633">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

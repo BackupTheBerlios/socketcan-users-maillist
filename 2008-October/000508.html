@@ -1,0 +1,85 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] setting timming at sja1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20setting%20timming%20at%20sja1000&In-Reply-To=%3C9cf2ca450810210745v645476adna3c68e7fcb4effbc%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000506.html">
+   <LINK REL="Next"  HREF="000507.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] setting timming at sja1000</H1>
+    <B>g a</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20setting%20timming%20at%20sja1000&In-Reply-To=%3C9cf2ca450810210745v645476adna3c68e7fcb4effbc%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] setting timming at sja1000">aguirre.citcea at gmail.com
+       </A><BR>
+    <I>Tue Oct 21 16:45:50 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000506.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+        <LI>Next message: <A HREF="000507.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#508">[ date ]</a>
+              <a href="thread.html#508">[ thread ]</a>
+              <a href="subject.html#508">[ subject ]</a>
+              <a href="author.html#508">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;&gt;&gt;<i> If not, please give some feedback about your chips on your PCI card (and
+</I>&gt;&gt;&gt;<i> it's PCI Identifiers) if anyone knows it here on the ML.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The PCI/104 card is iEi Tech. PM-1680-CBM: PLX 9052 pci to io bus
+</I>&gt;&gt;<i> bridge, sja1000 can controller and pca82c251 can transceiver. Tell me
+</I>&gt;&gt;<i> if you need some information about /sys/devices/pci...
+</I>&gt;<i>
+</I>&gt;<i> The command &quot;lspci -vv&quot; should list all relevant information. Could you
+</I>&gt;<i> show use the output please? Unfortunately, all SJA1000 PCI interfaces
+</I>&gt;<i> have their specialties and I'm afraid it's true for this card as well.
+</I>
+
+00:09.0 Network controller: PLX Technology, Inc. PCI &lt;-&gt; IOBus Bridge (rev 02)
+	Subsystem: PLX Technology, Inc. Device 2540
+	Control: I/O+ Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop- ParErr-
+Stepping- SERR- FastB2B- DisINTx-
+	Status: Cap- 66MHz- UDF- FastB2B+ ParErr- DEVSEL=medium &gt;TAbort-
+&lt;TAbort- &lt;MAbort- &gt;SERR- &lt;PERR- INTx-
+	Interrupt: pin A routed to IRQ 10
+	Region 0: Memory at effff000 (32-bit, non-prefetchable) [size=128]
+	Region 1: I/O ports at ff00 [size=128]
+	Region 2: Memory at efffe000 (32-bit, non-prefetchable) [size=1K]
+	[virtual] Expansion ROM at 40000000 [disabled] [size=2K]
+	Kernel modules: hisax, com20020-pci
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000506.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+	<LI>Next message: <A HREF="000507.html">[Socketcan-users] setting timming at sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#508">[ date ]</a>
+              <a href="thread.html#508">[ thread ]</a>
+              <a href="subject.html#508">[ subject ]</a>
+              <a href="author.html#508">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

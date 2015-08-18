@@ -1,0 +1,153 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47AAED0F.2040901%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000276.html">
+   <LINK REL="Next"  HREF="000275.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47AAED0F.2040901%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Thu Feb  7 12:35:43 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000276.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000275.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#278">[ date ]</a>
+              <a href="thread.html#278">[ thread ]</a>
+              <a href="subject.html#278">[ subject ]</a>
+              <a href="author.html#278">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Strange. Look at the following output:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  140.162689] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  140.170131] can0: TX on=1 pend=3
+</I>&gt;<i> [  140.708753] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  140.713950] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  150.374377] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  150.382972] can0: TX on=1 pend=3
+</I>&gt;<i> [  151.708763] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  151.713951] mscan_tx_timeout
+</I>&gt;<i> [  160.164884] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  160.172303] can0: TX on=1 pend=3
+</I>&gt;<i> [  160.708754] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  160.713947] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  670.215210] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  670.222618] can0: TX on=1 pend=3
+</I>&gt;<i> [  671.004789] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  671.009990] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  680.216259] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  680.223670] can0: TX on=1 pend=3
+</I>&gt;<i> [  681.004772] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  681.009958] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  690.255938] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  690.264495] can0: TX on=1 pend=3
+</I>&gt;<i> [  691.004763] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  691.009949] mscan_tx_timeout
+</I>&gt;<i> [  700.218838] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  700.226252] can0: TX on=1 pend=3
+</I>&gt;<i> [  701.004759] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  701.009947] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  710.219882] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  710.228577] can0: TX on=1 pend=3
+</I>&gt;<i> [  711.004759] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  711.009948] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  720.220417] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  720.227837] can0: TX on=1 pend=3
+</I>&gt;<i> [  721.004756] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  721.009949] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  730.221787] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  730.230506] can0: TX on=1 pend=3
+</I>&gt;<i> [  731.004755] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  731.009949] mscan_tx_timeout
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at Marel-V38C</A>:~ cansend can0 --loop=10000 0x1 0x2 0x3 0x4 0x5 0x6 0x7
+</I>&gt;<i> 0x8
+</I>&gt;<i> [  760.225117] mpc52xx-mscan mpc52xx-mscan.0: BUG! Tx Ring full when
+</I>&gt;<i> queue awake!
+</I>&gt;<i> [  760.232526] can0: TX on=1 pend=3
+</I>&gt;<i> [  761.004756] NETDEV WATCHDOG: can0: transmit timed out
+</I>&gt;<i> [  761.009948] mscan_tx_timeout
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> What does come to your eyes ?
+</I>&gt;<i> 
+</I>&gt;<i> It happens basically every 10 secs, or rather: if it happens, it happens
+</I>&gt;<i> exactly at 10 secs boundaries .... ?!
+</I>&gt;<i> 
+</I>&gt;<i> So now: what does happen in a system for every 10. full sec ?
+</I>
+You seem to have some board specific watchdogs running, e.g.:
+
+  CONFIG_MAREL_VXXX_WATCHDOG=y
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000276.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000275.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#278">[ date ]</a>
+              <a href="thread.html#278">[ thread ]</a>
+              <a href="subject.html#278">[ subject ]</a>
+              <a href="author.html#278">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

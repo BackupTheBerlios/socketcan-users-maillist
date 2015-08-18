@@ -1,0 +1,232 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] At91_can transmitting error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3COF3E4B45F8.E9685204-ONC125749D.003CE34B-C125749D.003EB33A%40cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000471.html">
+   <LINK REL="Next"  HREF="000473.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] At91_can transmitting error</H1>
+    <B>jorgefm at cirsa.com</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20At91_can%20transmitting%20error&In-Reply-To=%3COF3E4B45F8.E9685204-ONC125749D.003CE34B-C125749D.003EB33A%40cirsa.com%3E"
+       TITLE="[Socketcan-users] At91_can transmitting error">jorgefm at cirsa.com
+       </A><BR>
+    <I>Wed Aug  6 13:22:45 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000471.html">[Socketcan-users] unwanted signal comming after enabling can0
+</A></li>
+        <LI>Next message: <A HREF="000473.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#472">[ date ]</a>
+              <a href="thread.html#472">[ thread ]</a>
+              <a href="subject.html#472">[ subject ]</a>
+              <a href="author.html#472">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+This is my first mail to the list and I would like to ask if someone has 
+had the same problem.
+
+I'm trying to use the can interface that I've in my atmel at91sam9263 
+evaluation board. I'm
+using the linux 2.6.25 with the socket can layer. I've download the latest 
+patches that 
+Hans J. Koch posted (from 
+<A HREF="http://www.nabble.com/AT91-SoC-CAN-controller-device-driver-status-td15482867.html">http://www.nabble.com/AT91-SoC-CAN-controller-device-driver-status-td15482867.html</A>)
+
+To test the can interface I've two canopen modules in my can network. I 
+can receive ok but 
+I'm not able to send any frame. I would like to put the modules in 
+operational state but the frame
+is not sent. I'm using the can-utils tools to do the test.
+
+This is the info I see on my minicom connection:
+
+at91sam9263ek login: root
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~$ modprobe can-raw
+can: raw protocol (rev 20071116)
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~$ modprobe at91_can speed=1000 debug=3
+AT91-AT91_CAN driver v0.0.1 (2007-10-26)
+AT91-AT91_CAN - options [clk 100.000000 MHz] [restart_ms 100ms] [debug 3]
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~$ ifconfig can0 up
+net can0: can_open called
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: irq: SR=0x00a1ff01 IMR=0x1f0800ff [0x00000001]
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~$ net can0: irq: SR=0x00e1ff01 IMR=0x1f0800ff 
+[0x00000001]
+net can0: irq: SR=0x00e1ff01 IMR=0x1f0800ff [0x00000001]
+net can0: irq: SR=0x00e1ff01 IMR=0x1f0800ff [0x00000001]
+net can0: irq: SR=0x00e1ff01 IMR=0x1f0800ff [0x00000001]
+net can0: irq: SR=0x00e1ff01 IMR=0x1f0800ff [0x00000001]
+
+The receive interrupts are comming from the preoperational frames sent by 
+the modules.
+But if I try to send a frame:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cangen can0
+...
+net can0: irq: SR=0x44a6fe00 IMR=0x1f0801ff [0x04000000]
+net can0: AERR irq
+net can0: irq: SR=0x44a6fe00 IMR=0x1f0801ff [0x04000000]
+net can0: AERR irq
+net can0: irq: SR=0x44a6fe00 IMR=0x1f0801ff [0x04000000]
+net can0: AERR irq
+net can0: irq: SR=0x44a6fe00 IMR=0x1f0801ff [0x04000000]
+...
+
+I get and endless loop of 'Acknowlegment errors'. I've commented out both 
+messages
+from the at91_can.c in order to get a cleaner error log. Then I can see, 
+when I read
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ./candump -a can0
+  can0  714  [1] 7F                        '.'
+  can0  70C  [1] 7F                        '.'
+  can0  714  [1] 7F                        '.'
+  can0  70C  [1] 7F                        '.'
+
+and the write error:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ./cangen can0
+net can0: TX start for mb #8
+net can0: BOFF irq
+net can0: can_restart_on (9509)
+net can0: BOFF irq
+net can0: can_restart_on already active (9509)
+net can0: BOFF irq
+net can0: can_restart_on already active (9510)
+net can0: can_restart_dev (9519)
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: TX start for mb #8
+net can0: TX start for mb #8
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: TX start for mb #12
+net can0: TX start for mb #13
+net can0: TX start for mb #14
+net can0: TX start for mb #15
+NETDEV WATCHDOG: can0: transmit timed out
+net can0: TX timeout!
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: SERR irq
+net can0: TX start for mb #8
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: TX start for mb #12
+net can0: TX start for mb #13
+net can0: TX start for mb #14
+net can0: TX start for mb #15
+NETDEV WATCHDOG: can0: transmit timed out
+net can0: TX timeout!
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: TX start for mb #8
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: TX start for mb #12
+
+
+BOFF errors (bit stuffing) errors?? and all the tx mailboxes are used but 
+no frame is sent,
+then when the 15 mailbox is used go to the first tx mailbox, the 8. If I 
+run the command again:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ ./cangen can0
+net can0: TX start for mb #14
+net can0: TX start for mb #15
+NETDEV WATCHDOG: can0: transmit timed out
+net can0: TX timeout!
+net can0: set_baud, baud=1000000, clock=100000000
+net can0: 16 time quanta, brp=5, sjw=3, propag=6, phase1=5, phase2=4
+net can0: Setting CAN_BR to 0x00053543
+net can0: SERR irq
+net can0: TX start for mb #8
+net can0: TX start for mb #9
+net can0: TX start for mb #10
+net can0: TX start for mb #11
+net can0: TX start for mb #12
+
+the loop continues. Taking a look to proc info I can see the frames are 
+counted as sent.
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at at91sam9263ek</A>:~/can-utils$ cat /proc/net/can/stats
+
+       34 transmitted frames (TXF)
+      374 received frames (RXF)
+        8 matched frames (RXMF)
+
+        2 % total match ratio (RXMR)
+        0 frames/s total tx rate (TXR)
+        2 frames/s total rx rate (RXR)
+
+        0 % current match ratio (CRXMR)
+        0 frames/s current tx rate (CTXR)
+        2 frames/s current rx rate (CRXR)
+
+      100 % max match ratio (MRXMR)
+        5 frames/s max tx rate (MTXR)
+        7 frames/s max rx rate (MRXR)
+
+        0 current receive list entries (CRCV)
+        1 maximum receive list entries (MRCV)
+
+Sorry for this huge email but I wanted to show all the clues I have. Any 
+comment is welcome
+in order to get the driver working.
+
+Thanks!
+Jorge
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20080806/412af285/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20080806/412af285/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000471.html">[Socketcan-users] unwanted signal comming after enabling can0
+</A></li>
+	<LI>Next message: <A HREF="000473.html">[Socketcan-users] At91_can transmitting error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#472">[ date ]</a>
+              <a href="thread.html#472">[ thread ]</a>
+              <a href="subject.html#472">[ subject ]</a>
+              <a href="author.html#472">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

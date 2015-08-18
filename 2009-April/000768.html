@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Kvaser usbcanII
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kvaser%20usbcanII&In-Reply-To=%3C49E1B929.40303%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000766.html">
+   <LINK REL="Next"  HREF="000769.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Kvaser usbcanII</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Kvaser%20usbcanII&In-Reply-To=%3C49E1B929.40303%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Kvaser usbcanII">socketcan at hartkopp.net
+       </A><BR>
+    <I>Sun Apr 12 11:49:29 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000766.html">[Socketcan-users] Kvaser usbcanII
+</A></li>
+        <LI>Next message: <A HREF="000769.html">[Socketcan-users] Kvaser usbcanII
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#768">[ date ]</a>
+              <a href="thread.html#768">[ thread ]</a>
+              <a href="subject.html#768">[ subject ]</a>
+              <a href="author.html#768">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Pier-Luc Caron St-Pierre wrote:
+&gt;<i> Hello awesome team,
+</I>&gt;<i> 
+</I>
+:<i>-))
+</I>
+&gt;<i> Second, I'm looking
+</I>&gt;<i> for a way to use socketCan with the kvaser usbcanII. Does it exists a way?
+</I>&gt;<i>
+</I>
+Hello Pier-Luc,
+
+AFAIK there is only the Kvaser PCI board currently supported as these kinds of
+'passive' PCI adaptors (from IXXAT, PEAK, KVASER, etc.) are quite similar and
+provide a SJA1000 CAN controller somewhere in the PCI I/O space.
+
+Unfortunataly the other Kvaser hardware does not support the network device
+driver model so far.
+
+I supported an external patch for the PEAK Linux driver for a long time, and
+there i just grabbed the CAN frame before it was enqueued to the character
+device queue and pushed it into a netdevice queue of my CAN network device.
+
+This was not *very* tricky as i only needed to identify the data flow paths
+inside the PEAK driver to find the correct connection points for my netdevice.
+You may take a look into the current PEAK Linux driver for details.
+
+But i don't know the effort to 'convert' the current Linux Kvaser driver to
+support it ...
+
+I just got an ugly idea to create an application that creates a 'bridge'
+between the Kvaser SDK driver API and a virtual CAN driver. So all your
+applications would use the virtual CAN - and only the 'bridge' would take the
+frames from the VCAN and put this into the Kvaser driver and vice versa.
+
+But this smells bad and i don't have any impression about the performance
+issues you might have to deal with ...
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000766.html">[Socketcan-users] Kvaser usbcanII
+</A></li>
+	<LI>Next message: <A HREF="000769.html">[Socketcan-users] Kvaser usbcanII
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#768">[ date ]</a>
+              <a href="thread.html#768">[ thread ]</a>
+              <a href="subject.html#768">[ subject ]</a>
+              <a href="author.html#768">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Find identifier in the can_id
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3C4E7C929D.1050606%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002142.html">
+   <LINK REL="Next"  HREF="002144.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Find identifier in the can_id</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Find%20identifier%20in%20the%20can_id&In-Reply-To=%3C4E7C929D.1050606%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] Find identifier in the can_id">socketcan at hartkopp.net
+       </A><BR>
+    <I>Fri Sep 23 16:07:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002142.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+        <LI>Next message: <A HREF="002144.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2143">[ date ]</a>
+              <a href="thread.html#2143">[ thread ]</a>
+              <a href="subject.html#2143">[ subject ]</a>
+              <a href="author.html#2143">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 09/23/11 15:27, Damien R. wrote:
+
+&gt;<i> On 23/09/11 11:11, Damien R. wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I'm using socket can with the raw socket protocol and I receive messages
+</I>&gt;&gt;<i> with a 11bits identifier (eg: 0x1C) but the can_id in the raw frame has
+</I>&gt;&gt;<i> a size of 32bits. So, I have the following questions:
+</I>&gt;&gt;<i> - How can I retrieve the 11bits identifier in the can_id ?
+</I>&gt;&gt;<i> - Can you explain the meaning of each bit in the cand_id ?
+</I>&gt;&gt;<i> - j1939 use a 29bits identifier, how can I retrieve the 29bits
+</I>&gt;&gt;<i> identifier in the can_id ?
+</I>&gt;<i> 
+</I>&gt;<i> Sorry, I did not see the following part of the linux/can.h
+</I>&gt;<i> 
+</I>&gt;<i> /*
+</I>&gt;<i>  * Controller Area Network Identifier structure
+</I>&gt;<i>  *
+</I>&gt;<i>  * bit 0-28    : CAN identifier (11/29 bit)
+</I>&gt;<i>  * bit 29    : error frame flag (0 = data frame, 1 = error frame)
+</I>&gt;<i>  * bit 30    : remote transmission request flag (1 = rtr frame)
+</I>&gt;<i>  * bit 31    : frame format flag (0 = standard 11 bit, 1 = extended 29 bit)
+</I>&gt;<i>  */
+</I>&gt;<i> typedef __u32 canid_t;
+</I>&gt;<i> 
+</I>&gt;<i> So can someone explain how bits are arranged with a 11 bits identifier? Is it
+</I>&gt;<i> this 0...0 identifier or identifier 0...0 or something else?
+</I>
+
+Hello Damien,
+
+you may look into
+
+<A HREF="http://lxr.linux.no/#linux+v3.0.4/Documentation/networking/can.txt">http://lxr.linux.no/#linux+v3.0.4/Documentation/networking/can.txt</A>
+
+as well as into some sample programs you can find in the trunk/test directory
+of the SocketCAN SVN on BerliOS:
+
+<A HREF="http://developer.berlios.de/svn/?group_id=6475">http://developer.berlios.de/svn/?group_id=6475</A>
+
+The identifier is always a 32 bit value you can access as shown in the
+examples. No need to think about the endianess of this operations on
+application level.
+
+Regards,
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002142.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+	<LI>Next message: <A HREF="002144.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2143">[ date ]</a>
+              <a href="thread.html#2143">[ thread ]</a>
+              <a href="subject.html#2143">[ subject ]</a>
+              <a href="author.html#2143">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

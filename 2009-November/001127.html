@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mscan: RXACT never got cleared
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF19DB3.7060503%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001126.html">
+   <LINK REL="Next"  HREF="001128.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mscan: RXACT never got cleared</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mscan%3A%20RXACT%20never%20got%20cleared&In-Reply-To=%3C4AF19DB3.7060503%40grandegger.com%3E"
+       TITLE="[Socketcan-users] mscan: RXACT never got cleared">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov  4 16:28:51 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001126.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+        <LI>Next message: <A HREF="001128.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1127">[ date ]</a>
+              <a href="thread.html#1127">[ thread ]</a>
+              <a href="subject.html#1127">[ subject ]</a>
+              <a href="author.html#1127">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi,
+</I>&gt;<i> 
+</I>&gt;<i> On Wed, Nov 04, 2009 at 03:25:16PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On Wed, Nov 04, 2009 at 09:30:18AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;<i> ....
+</I>&gt;&gt;&gt;<i> As I already said, I use an old MPC5200 (without *B*). Will try later
+</I>&gt;&gt;&gt;<i> today with a MPC5200B.
+</I>&gt;&gt;<i> I switched to &quot;MPC5200B v2.2, Core v1.4 at 396 MHz&quot; and the problem does
+</I>&gt;&gt;<i> *not* show up any more. Before I used a &quot;MPC5200 v1.2, Core v1.1 at 396
+</I>&gt;&gt;<i> MHz&quot;. Now I remember vaguely, that I was indeed fighting with this
+</I>&gt;&gt;<i> strange behavior.
+</I>&gt;<i> 
+</I>&gt;<i> Ah, great to get confirmation that I was not hallucinating :-). It
+</I>&gt;<i> indeed took me some time to sort out what was going wrong in this
+</I>&gt;<i> strange issue. We shall probably ask freescale if this issue is konwn.
+</I>
+Good luck ;-).
+
+&gt;<i> BTW. I just checked the datasheet of mpc5200. The slprq should always
+</I>&gt;<i> acked, just like in mpc5200b, and otherwise the controller should be in
+</I>&gt;<i> idle mode with slprq set. It looks really strange that your mpc5200
+</I>&gt;<i> board works properly without being able to get the slpack. Could you do
+</I>&gt;<i> some more inspection on this one by occassion (don't have a mpc5200
+</I>&gt;<i> board here)?
+</I>
+I don't think it's related to my board. I'm quite sure that it's like
+that on all mpc5200a. Oliver has a board with such a processor, IIRC.
+I will try to find another mpc5200a board.
+
+&gt;&gt;<i> The manual instructs to enter sleep mode first and thereafter the init
+</I>&gt;&gt;<i> mode, but as that did'nt work, sleep and init are set in one step.
+</I>&gt;<i> 
+</I>&gt;<i> Well, usually it works already. In case of a failed slprq the we now
+</I>&gt;<i> just force the init.
+</I>
+Well, the mpc5200a obviously does not enter properly the sleep mode.
+Nevertheless, the board still works fine after an &quot;ifconfig up&quot;.
+
+&gt;&gt;<i> Maybe we simply do s/dev_err/dev_dbg/. What do you think?
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> Fail to enter sleep mode could indeed be a trouble. I personally would
+</I>&gt;<i> prefer a dev_err here, since it's nevertheless a little hacky here. In
+</I>&gt;<i> the end the message would not appear to frequently since it occures only
+</I>&gt;<i> when we (re)initialize the interface, so it should not be too annoying.
+</I>
+But if it shows up on all mpc5200a, it would be confusing for the users.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001126.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+	<LI>Next message: <A HREF="001128.html">[Socketcan-users] mscan: RXACT never got cleared
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1127">[ date ]</a>
+              <a href="thread.html#1127">[ thread ]</a>
+              <a href="subject.html#1127">[ subject ]</a>
+              <a href="author.html#1127">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%0A%20in%09i.MX%20devices&In-Reply-To=%3C4C62BDE7.1070007%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001476.html">
+   <LINK REL="Next"  HREF="001478.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20selecting%20the%20clock%20source%20for%20FlexCAN%0A%20in%09i.MX%20devices&In-Reply-To=%3C4C62BDE7.1070007%40grandegger.com%3E"
+       TITLE="[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug 11 17:12:39 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001476.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+        <LI>Next message: <A HREF="001478.html">[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1477">[ date ]</a>
+              <a href="thread.html#1477">[ thread ]</a>
+              <a href="subject.html#1477">[ subject ]</a>
+              <a href="author.html#1477">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+On 08/11/2010 04:45 PM, Heinz-J&#252;rgen Oertel wrote:
+&gt;<i> Am Dienstag, 10. August 2010 15:23:30 schrieb Marc Kleine-Budde:
+</I>&gt;&gt;<i> Heinz-J&#252;rgen Oertel wrote:
+</I>&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;<i> can please someone confirm that the more stable crystal oscillator
+</I>&gt;&gt;&gt;<i> frequency can be used to drive the FlexCAN module instead of the 66.5 MHz
+</I>&gt;&gt;&gt;<i> PLL clock?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> According to the datasheet the CLK_SRC Bit of the CTRL reg selects the
+</I>&gt;&gt;<i> CAN engine clock. I don't know which clock is more stable.
+</I>&gt;<i> 
+</I>&gt;<i> From the manual:
+</I>&gt;<i> 
+</I>&gt;<i>    13   This bit selects the clock source to the CAN protocol interface 
+</I>&gt;<i>         (CPI) to be either the peripheral clock (driven by CLK_SRC
+</I>&gt;<i>         the PLL) or the crystal oscillator clock.
+</I>&gt;<i>         The selected clock is the one fed to the prescaler to generate
+</I>&gt;<i>         the SCLK (SCLK). In order to guarantee reliable operation,
+</I>&gt;<i>         this bit must only be changed while the module is in disable
+</I>&gt;<i>         mode. See Section 24.4.8.4, &quot;Protocol Timing,&quot; for more information.
+</I>&gt;<i>         0 The CAN engine clock source is the oscillator clock (24.576 MHz)
+</I>&gt;<i>         1 The CAN engine clock source is the bus clock (66.5 MHz)
+</I>&gt;<i> 
+</I>&gt;<i> and in &quot;24.4.8.4 Protocol Timing&quot;
+</I>&gt;<i> 
+</I>&gt;<i>     The crystal oscillator clock must be selected
+</I>&gt;<i>     whenever a tight tolerance (up to 0.1%) is required in the CAN bus timing.
+</I>&gt;<i>     The crystal oscillator clock has better jitter performance
+</I>&gt;<i>     than PLL-generated clocks.
+</I>
+I found similar comments for the MSCAN in the MPC5200 manual.
+
+&gt;<i> especially with 1 Mbit/s it's better to use the crystal oscillator clock.
+</I>&gt;<i> 
+</I>&gt;<i>  
+</I>&gt;&gt;<i> However the mainline driver only supports the bus clock.
+</I>&gt;<i> 
+</I>&gt;<i> and with this clock, if it is 66.5 MHz, one Mbit/s can not be reached.
+</I>
+OK. Another problem might be that 66.5 MHz does not give *good*
+bit-timing parameters as confirmed by my can-calc-bit-timing:
+
+ $ ./can-calc-bit-timing -c 66500000 flexcan
+ Bit timing parameters for flexcan using 66500000Hz
+ Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error
+ 1000000     90   4    3    3   1   6 72.7%  0.8% !!
+  800000    180   2    2    2   1  12 71.4%  1.0%
+  500000    105   8    7    3   1   7 84.2%  0.0%
+  250000    285   8    3    2   1  19 85.7%  0.0%
+  125000    571   8    3    2   1  38 85.7%  0.0%
+  100000    526   8    7    3   1  35 84.2%  0.0%
+   50000   1428   8    3    2   1  95 85.7%  0.0%
+   20000   2631   8    7    3   1 175 84.2%  0.0%
+
+It it's even worse with worse with 24.576MHz:
+
+ $ ./can-calc-bit-timing -c 24576000 flexcan
+ Bit timing parameters for flexcan using 24576000Hz
+ Bitrate TQ[ns] PrS PhS1 PhS2 SJW BRP SampP Error
+ 1000000     40   8    8    8   1   1 68.0%  1.7% !!!!
+  800000    122   5    2    2   1   3 80.0%  2.4%
+  500000    284   2    2    2   1   7 71.4%  0.3%
+  250000    569   2    2    2   1  14 71.4%  0.3%
+  125000   1139   2    2    2   1  28 71.4%  0.3%
+  100000   1424   2    2    2   1  35 71.4%  0.3%
+   50000   1668   7    2    2   1  41 83.3%  0.1%
+   20000   5004   5    2    2   1 123 80.0%  0.1%
+   10000   7690   8    2    2   1 189 84.6%  0.0%
+
+Marc, what's happened with your optimized version of
+can-calc-bit-timing? Does it find better values?
+
+&gt;&gt;<i> Patches are, as
+</I>&gt;&gt;<i> always, welcome.
+</I>&gt;<i> 
+</I>&gt;<i> Once I know how to do it, than let's  see.
+</I>
+It should be selectable via platform data.
+
+&gt;<i> For now it's really difficult to dive into such system internals.
+</I>&gt;<i> It's difficult to read the hardware manual describing the clocks and even more 
+</I>&gt;<i> difficult to find and _use_ the already available BSP functions and consider 
+</I>&gt;<i> all side effects. That is may problem. Only setting bit 13 in the clock 
+</I>&gt;<i> control register seems not to be the solution. Doing it, my system freezes 
+</I>&gt;<i> completely (kernel 2.6.32.)
+</I>
+Just setting bit 13 is not enough. You also need to provide the proper
+CAN clock frequency. Nevertheless, real CAN hardware experts are *able*
+to analyze the CAN signals with an oscilloscope and find proper
+bit-timing parameters. me == software guy!
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001476.html">[Socketcan-users] selecting the clock source for FlexCAN in i.MX devices
+</A></li>
+	<LI>Next message: <A HREF="001478.html">[Socketcan-users] selecting the clock source for FlexCAN in	i.MX devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1477">[ date ]</a>
+              <a href="thread.html#1477">[ thread ]</a>
+              <a href="subject.html#1477">[ subject ]</a>
+              <a href="author.html#1477">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

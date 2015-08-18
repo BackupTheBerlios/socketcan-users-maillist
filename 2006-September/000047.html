@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Using socketcan the first time
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20socketcan%20the%20first%20time&In-Reply-To=%3C451BDCE1.5040000%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000046.html">
+   <LINK REL="Next"  HREF="000048.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Using socketcan the first time</H1>
+    <B>Hartkopp, Oliver (K-GEFE/E)</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Using%20socketcan%20the%20first%20time&In-Reply-To=%3C451BDCE1.5040000%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Using socketcan the first time">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Thu Sep 28 16:32:01 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000046.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+        <LI>Next message: <A HREF="000048.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#47">[ date ]</a>
+              <a href="thread.html#47">[ thread ]</a>
+              <a href="subject.html#47">[ subject ]</a>
+              <a href="author.html#47">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marco Cavallini [KOAN] wrote:
+&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hello,
+</I>&gt;<i> I am trying to understand how socketcan works.
+</I>&gt;<i> Documentation is unfortunately in german language
+</I>Ehm - yes sorry. I didn't find any time to make it in english. The idea is
+to create some man pages.
+
+&gt;<i> I can guess it say reading only the code and commands I see in the
+</I>&gt;<i> document, however I have some difficulties to understand the global
+</I>design.
+
+Have you read the PDF-documentation under <A HREF="http://www.llcf.de">http://www.llcf.de</A> ? In the
+introduction there's a picture.
+&gt;<i> 
+</I>&gt;<i> I installed socketcan (cvs-27-06-2006) on kernel 2.6.18
+</I>&gt;<i> I have an ISA card (let's suppose a Peak SJA1000 based) at 0xE000 IRQ5
+</I>&gt;<i> I successfully compiled the kernel and I can see the basic driver is
+</I>&gt;<i> loaded during boot.
+</I>
+You'll have to load can.ko, and e.g. for RAW-sockets can-raw.ko .
+If you said 'ifconfig can0 up' it should be possible to run the utils like
+'candump'
+
+&gt;<i> I compiled all the drivers statically.
+</I>
+??? - kernel-modules statically?
+
+&gt;<i> 
+</I>&gt;<i> I read (guessed) that the driver must be created as module and loaded
+</I>&gt;<i> run-time because it has to load its configuration from /etc/llcf
+</I>&gt;<i> Is this right ?
+</I>
+The file 'llcf' has to be added to /etc/modprobe.d directory i think, to
+have the autoload functionality after saying 'depmod -a' or
+update-modules.modutils under debian linux systems.
+
+&gt;<i> 
+</I>&gt;<i> Could someone (who understand german) please give me some hints about to
+</I>&gt;<i> configute, load, and test this driver ?
+</I>
+If you compiled all the modules in trunk/kernel/2.6/net/can and
+trunk/kernel/2.6/drivers/net/can (also the sja1000 driver) you may 'insmod'
+the kernel modules (beginning with can.ko, candev.ko, can-raw.ko,
+can-bcm.ko, vcan.ko)
+
+So it should look something like this:
+
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">hartko at vwagwockfe40</A>:~$ lsmod
+Module                  Size  Used by
+sg                     31008  0
+efs                    15108  0
+nfsd                  201220  13
+exportfs                8704  1 nfsd
+lockd                  58504  2 nfsd
+sunrpc                128188  8 nfsd,lockd
+loop                   16776  3
+can_raw                16388  0
+can_bcm                25864  0
+can                    30612  2 can_raw,can_bcm
+vcan                    6544  0
+ipt_state               5760  1
+ipt_MASQUERADE          6912  1
+pcan                   38724  0
+
+
+Check for command line options when you're loading the sja1000 driver to
+specify the correct base address &amp; irq.
+After saying e.g. 'ifconfig can0 up' you should see CAN traffic with tools
+like candump.
+
+I hope that will lead you to the first steps in next-generation CAN access
+under Linux :-)
+The PDF-document mostly describes the Kernel 2.4 behaviour for compiling and
+loading the modules.
+
+Best regards,
+
+Oliver
+
+&gt;<i> 
+</I>&gt;<i> TIA
+</I>&gt;<i> -- 
+</I>&gt;<i> Marco Cavallini
+</I>&gt;<i> Koan s.a.s. - Bergamo - ITALIA
+</I>&gt;<i> Embedded and Real-Time Software Engineering
+</I>&gt;<i>   - Atmel Third Party Consultant
+</I>&gt;<i> Tel. +39-(0)35-255.235 - Fax +39-178-223.9748
+</I>&gt;<i> www.KoanSoftware.com   |    www.KaeilOS.com
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>&gt;<i> 
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000046.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+	<LI>Next message: <A HREF="000048.html">[Socketcan-users] Using socketcan the first time
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#47">[ date ]</a>
+              <a href="thread.html#47">[ thread ]</a>
+              <a href="subject.html#47">[ subject ]</a>
+              <a href="author.html#47">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

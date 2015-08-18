@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Minimum interface to sja1000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Minimum%20interface%20to%20sja1000&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D459C608C%40NTMBOX.central.cirsa.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001807.html">
+   <LINK REL="Next"  HREF="001810.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Minimum interface to sja1000</H1>
+    <B>Jorge Fernandez Monteagudo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Minimum%20interface%20to%20sja1000&In-Reply-To=%3CAB277FB27524F74C87ACAFF84F2767490D459C608C%40NTMBOX.central.cirsa.com%3E"
+       TITLE="[Socketcan-users] Minimum interface to sja1000">jorgefm at cirsa.com
+       </A><BR>
+    <I>Mon Feb 28 14:41:37 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001807.html">[Socketcan-users] Minimum interface to sja1000
+</A></li>
+        <LI>Next message: <A HREF="001810.html">[Socketcan-users] Minimum interface to sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1809">[ date ]</a>
+              <a href="thread.html#1809">[ thread ]</a>
+              <a href="subject.html#1809">[ subject ]</a>
+              <a href="author.html#1809">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+
+&gt;<i> -----Mensaje original-----
+</I>&gt;<i> De: Marc Kleine-Budde [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>]
+</I>&gt;<i> Enviado el: Monday, February 28, 2011 1:40 PM
+</I>&gt;<i> Para: Jorge Fernandez Monteagudo
+</I>&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> Asunto: Re: [Socketcan-users] Minimum interface to sja1000
+</I>&gt;<i>
+</I>&gt;<i> On 02/28/2011 12:59 PM, Jorge Fernandez Monteagudo wrote:
+</I>&gt;<i> &gt; Hi again,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; What's the minimum interface I've to implement in order to use a
+</I>&gt;<i> &gt; SJA1000 can controller I've embedded in a FPGA which implements a PCI
+</I>&gt;<i> &gt; device? I'm studying the ems_pci.c code, is it a good starting point?
+</I>&gt;<i> I have custom base address, irq and so on.
+</I>&gt;<i>
+</I>&gt;<i> If you want to connect a SJA1000 to a PCI Bus you have to use or
+</I>&gt;<i> implement a PCI Bridge. A bridges from &quot;PLX&quot; are often used to do this.
+</I>&gt;<i> Do you already have a FPGA connected to PCI?
+</I>&gt;<i>
+</I>&gt;<i> cheers, Marc
+</I>&gt;<i> --
+</I>&gt;<i> Pengutronix e.K.                  | Marc Kleine-Budde           |
+</I>&gt;<i> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+</I>&gt;<i> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+</I>&gt;<i> Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+</I>
+Yes, the FPGA implements the PCI bus controller and gives access to the
+SJA1000 can controller. I must enable the memory windows where the SJA1000
+is mapped and enable the interrupts. Then, I have to provide the base
+address where the read and write operations must be done. Then, the
+'ems_pci.c' is a good start?
+
+Regards,
+Jorge
+
+Este mensaje se dirige exclusivamente a su destinatario y puede contener informaci&#243;n privilegiada o CONFIDENCIAL. Si no es vd. el destinatario indicado, queda notificado de que la utilizaci&#243;n, divulgaci&#243;n y/o copia sin autorizaci&#243;n est&#225; prohibida en virtud de la legislaci&#243;n vigente. Si ha recibido este mensaje por error, le rogamos que nos lo comunique inmediatamente por esta misma v&#237;a y proceda a su destrucci&#243;n.
+
+This message is intended exclusively for its addressee and may contain information that is CONFIDENTIAL and protected by professional privilege.
+If you are not the intended recipient you are hereby notified that any dissemination, copy or disclosure of this communication is strictly prohibited by law. If this message has been received in error, please immediately notify us via e-mail and delete it.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001807.html">[Socketcan-users] Minimum interface to sja1000
+</A></li>
+	<LI>Next message: <A HREF="001810.html">[Socketcan-users] Minimum interface to sja1000
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1809">[ date ]</a>
+              <a href="thread.html#1809">[ thread ]</a>
+              <a href="subject.html#1809">[ subject ]</a>
+              <a href="author.html#1809">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

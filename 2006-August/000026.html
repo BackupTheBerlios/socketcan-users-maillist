@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Select on a RTCAN socket
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Select%20on%20a%20RTCAN%20socket&In-Reply-To=%3C44ECAD74.2000205%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000025.html">
+   <LINK REL="Next"  HREF="000030.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Select on a RTCAN socket</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Select%20on%20a%20RTCAN%20socket&In-Reply-To=%3C44ECAD74.2000205%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Select on a RTCAN socket">wg at grandegger.com
+       </A><BR>
+    <I>Wed Aug 23 21:33:08 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000025.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+        <LI>Next message: <A HREF="000030.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Jan Kiszka wrote:
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Jan Kiszka wrote:
+</I>&gt;&gt;&gt;&gt;<i> Hi all,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Daniel,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Daniel Schnell wrote:
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Hi,
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>  
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> I wanted to use select() on a socket to find out how many messages
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> are available. I have opened this socket to access the RTCAN
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> sockets under Xenomai. According to /usr/xenomai/lib/posix.wrappers
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> select is not &quot;supported&quot; by the realtime kernel. Accordingly it
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> doesn't work. If i start the according task under SCHED_FIFO, the
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> task simply hangs when initiating select(), in SCHED_OTHER it is
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> simply returning: bad file descriptor.
+</I>&gt;&gt;&gt;&gt;&gt;<i> select is not supported and cannot be used, indeed.
+</I>&gt;&gt;&gt;&gt;<i> And select is tricky to provide under hard-RT constraints.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> Any ideas ? Is there any other way to find out, how many messages
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> are waiting ?
+</I>&gt;&gt;&gt;&gt;&gt;<i> Select returns the sockets which have data but it does not tell you
+</I>&gt;&gt;&gt;&gt;&gt;<i> how many messages are waiting. You could use separate threads to
+</I>&gt;&gt;&gt;&gt;&gt;<i> read from sockets.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> BTW: this mail is off-topic on the socketcan MLs.
+</I>&gt;&gt;&gt;&gt;<i> Mmh, do you mean it the other way around?
+</I>&gt;&gt;&gt;<i> Well, I think this is a RTDM/Xenomai related questions and sending it
+</I>&gt;&gt;&gt;<i> to xenomai-help is OK. CAN related questions should go to the
+</I>&gt;&gt;&gt;<i> socketcan-users maling-list. Am I wrong?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Anyway, is there a mechanism of the standard socket API the obtain the
+</I>&gt;&gt;&gt;&gt;<i> current incoming queue length? Don't think so actually, but it wouldn't
+</I>&gt;&gt;&gt;&gt;<i> be the first time I'm blind.
+</I>&gt;&gt;&gt;<i> Not that I know of. For normal file I/O I remember vague some ioctl()
+</I>&gt;&gt;&gt;<i> or fnctl(). Does POSIX define a function for this purpose?
+</I>&gt;&gt;<i> Got it! In Linux it can be done with ioctl FIONREAD, which returns the
+</I>&gt;&gt;<i> number of bytes that are immediately available to be read on a file
+</I>&gt;&gt;<i> descriptor. It could be implemented, if useful.
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> [dropping Xenomai from CC - it's becoming clear CAN-socket stuff]
+</I>&gt;<i> 
+</I>&gt;<i> Hold on! FIONREAD maps to SIOCINQ on Linux, and that one returns the
+</I>&gt;<i> size of the next pending packet, not the sum of all packet lengths or
+</I>&gt;<i> the number of pending packets. Still looks to me like we are on new
+</I>&gt;<i> terrain here. And this makes me wonder why no one implemented something
+</I>&gt;<i> yet... (do we really need it?)
+</I>
+Ah, you are write. At least it tells you, that there is a message 
+pending. And Daniel ask for a replacement of select, which also does not 
+provide this information.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000025.html">[Socketcan-users] Select on a RTCAN socket
+</A></li>
+	<LI>Next message: <A HREF="000030.html">[Socketcan-users] Looping back TX messages
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

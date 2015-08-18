@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] HW Clock
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48232D17.7000008%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000341.html">
+   <LINK REL="Next"  HREF="000344.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] HW Clock</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20HW%20Clock&In-Reply-To=%3C48232D17.7000008%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] HW Clock">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu May  8 18:40:55 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000341.html">[Socketcan-users] HW Clock
+</A></li>
+        <LI>Next message: <A HREF="000344.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#342">[ date ]</a>
+              <a href="thread.html#342">[ thread ]</a>
+              <a href="subject.html#342">[ subject ]</a>
+              <a href="author.html#342">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Breno wrote:
+&gt;<i>
+</I>&gt;<i> Anyway, I'm attaching my cansend and canrcv file so that you can 
+</I>&gt;<i> analyze whether  there is a  implementation error or not.
+</I>
+    	 
+    	 setsockopt(s1, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+    	 
+      	while(1)
+      	{
+      		printf(&quot;%d\n&quot;,nbytes1);
+      		nbytes1 = read(s1,&amp;frame1,sizeof(struct can_frame));
+      		perror(&quot;read&quot;);
+
+
+
+Hm, you are disabling *all* the receive filters and try to receive CAN 
+frames ;-)
+
+This can not work.
+
+Please remove the setsockopt() in your canrcv.c.
+
+Per default (when no setsockopt() is invoked) there is one filter set 
+that receives everything.
+
+In your cansend.c you make double work:
+
+    	 if (bind(s0, (struct sockaddr *)&amp;addr0, sizeof(addr0)) &lt; 0)
+    	 {
+      		perror(&quot;bind&quot;);
+      		exit(1);
+    	 }
+    	 
+    	 //setsockopt(s1, SOL_CAN_RAW, CAN_RAW_FILTER, NULL, 0);
+    	 
+    	     /*Frame CAN*/
+    	frame0.can_id  = 0x150;
+    	frame0.can_dlc = 8;
+    	frame0.data[0] = 'a';
+    	frame0.data[1] = 'b';
+    	frame0.data[2] = 'c';
+    	frame0.data[3] = 'd';
+    	frame0.data[4] = 'e';
+    	frame0.data[5] = 'f';
+	frame0.data[6] = 'g';
+    	frame0.data[7] = 'h';
+    	
+    	nbytes0 = sendto(s0, &amp;frame0, sizeof(struct can_frame), 0, (struct sockaddr*)&amp;addr0, sizeof(addr0));
+      	perror(&quot;sendto&quot;);
+
+When you bound the socket to a specific interface (here: can0) using sendto() is superflous. Try write().
+
+Anyway you should try the applications &quot;cansend&quot; and &quot;candump&quot; as Wolfgang stated before.
+These tools are working surely.
+
+Regards,
+Oliver
+      	
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000341.html">[Socketcan-users] HW Clock
+</A></li>
+	<LI>Next message: <A HREF="000344.html">[Socketcan-users] HW Clock
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#342">[ date ]</a>
+              <a href="thread.html#342">[ thread ]</a>
+              <a href="subject.html#342">[ subject ]</a>
+              <a href="author.html#342">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

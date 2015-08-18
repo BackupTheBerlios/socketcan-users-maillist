@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Socketcan over ethernet?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3Cgl21ub%24ein%241%40ultimate100.geggus.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000629.html">
+   <LINK REL="Next"  HREF="000632.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Socketcan over ethernet?</H1>
+    <B>Sven Geggus</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Socketcan%20over%20ethernet%3F&In-Reply-To=%3Cgl21ub%24ein%241%40ultimate100.geggus.net%3E"
+       TITLE="[Socketcan-users] Socketcan over ethernet?">lists at fuchsschwanzdomain.de
+       </A><BR>
+    <I>Mon Jan 19 15:15:39 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000629.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+        <LI>Next message: <A HREF="000632.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#631">[ date ]</a>
+              <a href="thread.html#631">[ thread ]</a>
+              <a href="subject.html#631">[ subject ]</a>
+              <a href="author.html#631">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt; wrote:
+
+&gt;<i> - get's CAN frames via virtual CAN interfaces (vcan) and put's them into 
+</I>&gt;<i> a UDP/IP socket - or alternatively you can write bare ethernet frames 
+</I>&gt;<i> using packet sockets (AF_PACKET) - or whatever needed
+</I>&gt;<i> 
+</I>&gt;<i> - gets UDP (or whatever) packets and push them into the approriate vcan 
+</I>&gt;<i> interface
+</I>&gt;<i> 
+</I>&gt;<i> This is a very easy thing to do. Are you familiar with virtual CAN 
+</I>&gt;<i> netdevices?
+</I>
+Could'nt this be done more elegantly by some kind of tunneling interface
+driver in kernelspace as well?
+
+I don't know if there is some standard way of sending can-frames via
+ethernet, but one could shurely implement something equivalent to the
+IPv6-in-IPv4 Interface.
+
+All you would need to setup something like this would be the address of the
+tunnel endpoint and the ip command for setting up such an interface.
+
+Such a tunneling interface could then provide you with all the CAN specific
+socket-stuff just like an IPv6-in-IPv4 Interface does provide AF_INET6
+sockets on a machine without native ipv6 Interfaces.
+
+
+Sven
+
+-- 
+&quot;Every time you use Google, you're using a Linux machine&quot;
+                             (Chris DiBona, a programs manager for Google)
+
+/me is <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">giggls at ircnet</A>, <A HREF="http://sven.gegg.us/">http://sven.gegg.us/</A> on the Web
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000629.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+	<LI>Next message: <A HREF="000632.html">[Socketcan-users] Socketcan over ethernet?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#631">[ date ]</a>
+              <a href="thread.html#631">[ thread ]</a>
+              <a href="subject.html#631">[ subject ]</a>
+              <a href="author.html#631">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

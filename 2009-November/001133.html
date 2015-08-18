@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%0A%20slprq%09timeout&In-Reply-To=%3C20091105155734.GC4612%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001132.html">
+   <LINK REL="Next"  HREF="001134.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%5D%20%5BV2%5D%20mscan%3A%20do%20not%20set%20err%20value%20on%0A%20slprq%09timeout&In-Reply-To=%3C20091105155734.GC4612%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout">l.fu at pengutronix.de
+       </A><BR>
+    <I>Thu Nov  5 16:57:34 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001132.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+        <LI>Next message: <A HREF="001134.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1133">[ date ]</a>
+              <a href="thread.html#1133">[ thread ]</a>
+              <a href="subject.html#1133">[ subject ]</a>
+              <a href="author.html#1133">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+On Thu, Nov 05, 2009 at 03:55:15PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Luotao Fu wrote:
+</I>&gt;<i> &gt; On Thu, Nov 05, 2009 at 08:55:20AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt;&gt; Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; ....
+</I>...
+&gt;<i> &gt; 
+</I>&gt;<i> &gt; hmm, this means that normal_mode get through somehow. This is not the
+</I>&gt;<i> &gt; case on the mpc5200b here.
+</I>&gt;<i> 
+</I>&gt;<i> Yes.
+</I>&gt;<i> 
+</I>
+/me scratch my head.... just a wild guess: the slprq disappears on a
+mpc5200a somehow later by itself?
+
+....
+
+&gt;<i> If you agree, I will apply it with some minor nitpicking:
+</I>&gt;<i> 
+</I>
+I'm certainly fine with this.
+
+&gt;<i> - Remove &quot;XXX:&quot; and spelling:
+</I>&gt;<i> 			/*
+</I>&gt;<i> 			 * The mscan controller will fail to enter sleep
+</I>&gt;<i> 			 * mode, while there are irregular activities on bus,
+</I>&gt;<i> 			 * like somebody keeps retransmitting. This behavior
+</I>&gt;<i> 			 ...
+</I>
+Doh! thx. ..ooOO(Next time I'd write comment in chinese pinyin, no chance for
+misspelling then. Yeah!)
+
+&gt;<i> - Improve printout:
+</I>&gt;<i> 
+</I>&gt;<i>   dev_dbg(dev-&gt;dev.parent,
+</I>&gt;<i>           &quot;device failed to enter sleep mode. 
+</I>&gt;<i> 	  &quot;We proceed to enter init mode anyhow.\n&quot;);
+</I>&gt;<i> 
+</I>
+/me nitpicks back: theoretically we could also proceed to cswai or
+simply sleep. These modes are actually not used, however &quot;proceed to
+init mode&quot; is still not accurate. Let's stay at &quot;we will proceed anyhow.&quot;
+
+cheers
+Luotao Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091105/4f970b39/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091105/4f970b39/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001132.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+	<LI>Next message: <A HREF="001134.html">[Socketcan-users] [PATCH] [V2] mscan: do not set err value on slprq	timeout
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1133">[ date ]</a>
+              <a href="thread.html#1133">[ thread ]</a>
+              <a href="subject.html#1133">[ subject ]</a>
+              <a href="author.html#1133">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Need help starting socketCAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C561453779232B648829350EBCA189B2106F1D638%40EUREVS1.eur.ci.root%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002104.html">
+   <LINK REL="Next"  HREF="002106.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Need help starting socketCAN</H1>
+    <B>Ansell, John</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Need%20help%20starting%20socketCAN&In-Reply-To=%3C561453779232B648829350EBCA189B2106F1D638%40EUREVS1.eur.ci.root%3E"
+       TITLE="[Socketcan-users] Need help starting socketCAN">John.Ansell at CooperIndustries.com
+       </A><BR>
+    <I>Wed Aug 24 08:08:42 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002104.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+        <LI>Next message: <A HREF="002106.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2105">[ date ]</a>
+              <a href="thread.html#2105">[ thread ]</a>
+              <a href="subject.html#2105">[ subject ]</a>
+              <a href="author.html#2105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ulrich,
+
+I get the same errors with either method.
+
+Only difference is the final message, instead of RNETLINK moaning, ifconfig does:
+
+setting trigger mode 2 for irq 157 failed (gpio_irq_type+0x0/0x2c)
+mcp251x spi0.1: failed to acquire irq 157
+ifconfig: SIOCSIFFLAGS: Invalid argument
+
+Nice try, keep 'em coming!
+
+Cheers
+
+&gt;<i> -----Original Message-----
+</I>&gt;<i> From: Ulrich Prinz [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">ulrich.prinz at googlemail.com</A>]
+</I>&gt;<i> Sent: 23 August 2011 23:39
+</I>&gt;<i> To: Ansell, John
+</I>&gt;<i> Subject: Re: [Socketcan-users] Need help starting socketCAN
+</I>&gt;<i> 
+</I>&gt;<i> Hi!
+</I>&gt;<i> 
+</I>&gt;<i> Could you try &quot;ifconfig can0 up&quot; instead of the ip tool?
+</I>&gt;<i> 
+</I>&gt;<i> I had the same thing, ip tool works fine for the configuration, but not
+</I>&gt;<i> for starting/stopping it. My scripts now use this configuration and I
+</I>&gt;<i> never checked again, if ip tool could do the job.
+</I>&gt;<i> 
+</I>&gt;<i> Kind Regards
+</I>&gt;<i> Ulrich
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 23.08.2011 17:02, Ansell, John wrote:
+</I>&gt;<i> &gt; Some progress at last, thanks to Oliver and Rene!
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I built the ip tool from the 2.6.38 tag. Decided to ignore its
+</I>&gt;<i> struggles with the misc directory and found that the ip tool does seem
+</I>&gt;<i> to work. So, I can set the bitrate etc.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; On to the next problem...
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; When I try to bring the interface up (ip link set can0 up) I get two
+</I>&gt;<i> error messages:
+</I>&gt;<i> &gt; &quot;setting trigger mode 2 for irq 157 failed (gpio_irq_type+0x0/0x2c)&quot;
+</I>&gt;<i> and
+</I>&gt;<i> &gt; &quot;mcp251x spi0.1: failed to acquire irq157&quot;
+</I>&gt;<i> &gt; RNETLINK answers: Invalid argument
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Now, 157 corresponds to port D pin 29 which is where the irq is wired
+</I>&gt;<i> to. So I guess the fault may be in the board setup.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Any ideas guys?
+</I>&gt;<i> &gt;
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002104.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+	<LI>Next message: <A HREF="002106.html">[Socketcan-users] Need help starting socketCAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2105">[ date ]</a>
+              <a href="thread.html#2105">[ thread ]</a>
+              <a href="subject.html#2105">[ subject ]</a>
+              <a href="author.html#2105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

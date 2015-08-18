@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] LPC2478 CAN driver
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20LPC2478%20CAN%20driver&In-Reply-To=%3C49CA4AF1.7080906%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000719.html">
+   <LINK REL="Next"  HREF="000724.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] LPC2478 CAN driver</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20LPC2478%20CAN%20driver&In-Reply-To=%3C49CA4AF1.7080906%40grandegger.com%3E"
+       TITLE="[Socketcan-users] LPC2478 CAN driver">wg at grandegger.com
+       </A><BR>
+    <I>Wed Mar 25 16:17:05 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000719.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+        <LI>Next message: <A HREF="000724.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#720">[ date ]</a>
+              <a href="thread.html#720">[ thread ]</a>
+              <a href="subject.html#720">[ subject ]</a>
+              <a href="author.html#720">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+please keep the CC to the Socket-CAN-Users mailing list.
+
+Szentp&#233;tery Istv&#225;n wrote:
+&gt;<i> Thanks for your answer.
+</I>&gt;<i> This mean if i rewrite the sja1000_platform.c i could use it as a can driver.
+</I>&gt;<i> 
+</I>&gt;<i> the registers are accessed continuously but they are defined whit the
+</I>&gt;<i> base address
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> /* CAN CONTROLLERS AND ACCEPTANCE FILTER */
+</I>&gt;<i> #define CAN_ACCEPT_BASE_ADDR		0xE003C000
+</I>&gt;<i> #define CAN_AFMR		(*(volatile unsigned long *)(CAN_ACCEPT_BASE_ADDR + 0x00))  	
+</I>&gt;<i> #define CAN_SFF_SA 		(*(volatile unsigned long *)(CAN_ACCEPT_BASE_ADDR + 0x04))
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for your help.
+</I>
+Looking to the user manual, &quot;Chapter 18: LPC24XX CAN controllers
+CAN1/2&quot;, it seem not to be that simple or even feasible to use the
+existing SJA1000 driver. The SJA1000 derivative on this chip seems to
+have some specialties.
+
+&gt;<i> And how can i access the can driver or communicate whit it ?
+</I>&gt;<i> Just like whit the socketcan driver whit socket ?
+</I>
+Yes, if you have the driver working properly.
+
+&gt;&gt;<i> Socket-CAN does not (yet) use the acceptance filtering provided by the hardware.
+</I>&gt;<i> I don't relay know what does this mean, but without this can i
+</I>&gt;<i> communicate on CAN ?
+</I>
+Form my current knowledge, I can't tell either. Unfortunately, I'm
+afraid that Chris is right:
+
+ &quot;the LPC24xx CAN controller is just like  the SJA1000, except it is
+  totally different...&quot; :-(.
+
+You need to support it by a dedicated driver.
+
+Wolfgang.
+
+
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000719.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+	<LI>Next message: <A HREF="000724.html">[Socketcan-users] LPC2478 CAN driver
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#720">[ date ]</a>
+              <a href="thread.html#720">[ thread ]</a>
+              <a href="subject.html#720">[ subject ]</a>
+              <a href="author.html#720">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

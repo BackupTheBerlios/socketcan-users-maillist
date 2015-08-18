@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Compile Fails On 2.6.39-2
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Compile%20Fails%20On%202.6.39-2&In-Reply-To=%3C4E0C204A.4030904%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001937.html">
+   <LINK REL="Next"  HREF="001934.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Compile Fails On 2.6.39-2</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Compile%20Fails%20On%202.6.39-2&In-Reply-To=%3C4E0C204A.4030904%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Compile Fails On 2.6.39-2">wg at grandegger.com
+       </A><BR>
+    <I>Thu Jun 30 09:05:46 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001937.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+        <LI>Next message: <A HREF="001934.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1933">[ date ]</a>
+              <a href="thread.html#1933">[ thread ]</a>
+              <a href="subject.html#1933">[ subject ]</a>
+              <a href="author.html#1933">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 06/30/2011 01:51 AM, Stu Statman wrote:
+&gt;<i> 
+</I>&gt;<i> After the repeated failures on Ubuntu, we decided to try to get
+</I>
+What did fail with Ubuntu? Likely not a kernel issue!? I think it's not
+a good idea to switch distro just because you did not get it working
+quickly enough. What kernel are you using under Ubuntu?
+
+  ~$ uname -r
+  2.6.38-8-generic
+
+That's what I have and I will try to get the problem fixed. Will try to
+find a time slot this week.
+
+&gt;<i> SocketCAN to work on CentOS, using kernel-ml to get the latest kernel
+</I>&gt;<i> (2.6.39-2.el5.elrepo-i686). That failed too :
+</I>&gt;<i> 
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A> 2.6]# pwd
+</I>&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6
+</I>&gt;<i> 
+</I>&gt;<i> [<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">root at localhost</A> 2.6]# make
+</I>&gt;<i> KERNELDIR=/usr/src/kernels/2.6.39-2.el5.elrepo-i686
+</I>&gt;<i> make -C /usr/src/kernels/2.6.39-2.el5.elrepo-i686
+</I>&gt;<i> M=/home/wgn/socketcan/trunk/kernel/2.6 modules
+</I>&gt;<i> TOPDIR=/home/wgn/socketcan/trunk/kernel/2.6
+</I>&gt;<i> make[1]: Entering directory `/usr/src/kernels/2.6.39-2.el5.elrepo-i686'
+</I>&gt;<i> CC [M] /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.o
+</I>&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.c: In
+</I>&gt;<i> function &#8216;mcp251x_can_probe&#8217;:
+</I>&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.c:1009:
+</I>&gt;<i> error: implicit declaration of function &#8216;create_freezeable_workqueue&#8217;
+</I>&gt;<i> /home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.c:1009:
+</I>&gt;<i> warning: assignment makes pointer from integer without a cast
+</I>&gt;<i> make[3]: ***
+</I>&gt;<i> [/home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can/mcp251x.o] Error 1
+</I>&gt;<i> make[2]: *** [/home/wgn/socketcan/trunk/kernel/2.6/drivers/net/can] Error 2
+</I>&gt;<i> make[1]: *** [_module_/home/wgn/socketcan/trunk/kernel/2.6] Error 2
+</I>&gt;<i> make[1]: Leaving directory `/usr/src/kernels/2.6.39-2.el5.elrepo-i686'
+</I>&gt;<i> make: *** [modules] Error 2
+</I>
+You should not use the Socket-CAN repos as it is out-dated or not
+up-to-date to some extend. The 2.6.39 kernel coming with CentOS is just
+fine. Have you checked if CONFIG_CAN_CALC_BITTIMING is set on the Linux
+kernel coming CentOS?
+
+&gt;<i> Any suggestions? Or should we give up on SocketCAN?
+</I>
+Be more patient.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001937.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+	<LI>Next message: <A HREF="001934.html">[Socketcan-users] Compile Fails On 2.6.39-2
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1933">[ date ]</a>
+              <a href="thread.html#1933">[ thread ]</a>
+              <a href="subject.html#1933">[ subject ]</a>
+              <a href="author.html#1933">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

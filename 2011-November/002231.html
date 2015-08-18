@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd:  sja1000 BasicCAN mode
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20%20sja1000%20BasicCAN%20mode&In-Reply-To=%3C20111117161120.GE366%40e-circ.dyndns.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002229.html">
+   <LINK REL="Next"  HREF="002233.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd:  sja1000 BasicCAN mode</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20%20sja1000%20BasicCAN%20mode&In-Reply-To=%3C20111117161120.GE366%40e-circ.dyndns.org%3E"
+       TITLE="[Socketcan-users] Fwd:  sja1000 BasicCAN mode">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Thu Nov 17 17:11:20 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002229.html">[Socketcan-users] Fwd:  sja1000 BasicCAN mode
+</A></li>
+        <LI>Next message: <A HREF="002233.html">[Socketcan-users] Fwd:  sja1000 BasicCAN mode
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2231">[ date ]</a>
+              <a href="thread.html#2231">[ thread ]</a>
+              <a href="subject.html#2231">[ subject ]</a>
+              <a href="author.html#2231">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Thu, Nov 17, 2011 at 07:58:09PM +0400, Yuriy Kiselev wrote:
+&gt;<i> 2011/11/15 Heinz-J&#252;rgen Oertel &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oe at port.de</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; &gt; -----Original Message-----
+</I>&gt;<i> &gt; &gt; From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:socketcan-users-
+</I>&gt;<i> &gt; &gt; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bounces at lists.berlios.de</A>] On Behalf Of Kurt Van Dijck
+</I>&gt;<i> &gt; &gt; Sent: Tuesday, November 15, 2011 9:22 AM
+</I>&gt;<i> &gt; &gt; To: Yuriy Kiselev
+</I>&gt;<i> &gt; &gt; Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>; <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A>
+</I>&gt;<i> &gt; &gt; Subject: Re: [Socketcan-users] sja1000 BasicCAN mode
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; On Mon, Nov 14, 2011 at 09:08:29PM +0400, Yuriy Kiselev wrote:
+</I>&gt;<i> &gt; &gt; &gt; Hello!
+</I>&gt;<i> &gt; &gt; &gt; Implementation of BasicCAN mode for SJA1000 is in attachment.
+</I>&gt;<i> &gt; &gt; &gt; Now SJA1000_PELICAN_MODE macros in sja1000.h is used for definition
+</I>&gt;<i> &gt; &gt; PeliCAN
+</I>&gt;<i> &gt; &gt; &gt; or BasicCAN mode. It would be nice to create some menuconfig-wrapper, I
+</I>&gt;<i> &gt; &gt; &gt; think.
+</I>&gt;<i> &gt; &gt; &gt; I use this code for a few weeks and it looks stable.
+</I>&gt;<i> &gt; &gt; I see no reason to use BasicCAN mode instead of PeliCAN mode.
+</I>&gt;<i> &gt; &gt; Instead, I do see reasons to use PeliCAN mode:
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; * no problems when 29bit frames appear on the bus
+</I>&gt;<i> &gt; &gt; * rx queue of 64 byte.
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; What is your motivation not to use PeliCAN mode?
+</I>&gt;<i> &gt; &gt;
+</I>&gt;<i> &gt; &gt; Kurt
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Kurt is correct. For my understanding, the so-called basic CAN mode of the
+</I>&gt;<i> &gt; SJA1000 is a compatibility mode for the 82c200. It makes no sense to
+</I>&gt;<i> &gt; support it any more with SJA1000 devices.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;  Heinz
+</I>&gt;<i> &gt;
+</I>&gt;<i> 
+</I>&gt;<i> Yes, BasicCAN mode is for specific designed devices. My device has only
+</I>&gt;<i> 5-bits address bus and I can't use PeliCAN mode.
+</I>Still, properly attached SJA1000 is better used in PELICAN mode. I'm sure
+you agree.
+
+But I see your point.
+Must your hardware be supported by SJA1000?
+Or by a completely seperate 82c200 driver?
+You probably can start from the SJA1000.
+
+Kurt
+
+&gt;<i> _______________________________________________
+</I>&gt;<i> Socketcan-users mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002229.html">[Socketcan-users] Fwd:  sja1000 BasicCAN mode
+</A></li>
+	<LI>Next message: <A HREF="002233.html">[Socketcan-users] Fwd:  sja1000 BasicCAN mode
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2231">[ date ]</a>
+              <a href="thread.html#2231">[ thread ]</a>
+              <a href="subject.html#2231">[ subject ]</a>
+              <a href="author.html#2231">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

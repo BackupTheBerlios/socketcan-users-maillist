@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] can0 doesn't show after	modprobe	at91_can[SOLVED]
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%0A%09modprobe%09at91_can%5BSOLVED%5D&In-Reply-To=%3C4B1D555B.9080106%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001195.html">
+   <LINK REL="Next"  HREF="001197.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] can0 doesn't show after	modprobe	at91_can[SOLVED]</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20can0%20doesn%27t%20show%20after%0A%09modprobe%09at91_can%5BSOLVED%5D&In-Reply-To=%3C4B1D555B.9080106%40grandegger.com%3E"
+       TITLE="[Socketcan-users] can0 doesn't show after	modprobe	at91_can[SOLVED]">wg at grandegger.com
+       </A><BR>
+    <I>Mon Dec  7 20:19:55 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001195.html">[Socketcan-users] can0 doesn't show after	modprobe	at91_can[SOLVED]
+</A></li>
+        <LI>Next message: <A HREF="001197.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1196">[ date ]</a>
+              <a href="thread.html#1196">[ thread ]</a>
+              <a href="subject.html#1196">[ subject ]</a>
+              <a href="author.html#1196">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Chris Verges wrote:
+&gt;&gt;<i> Does it work with other bitrates?  Does your &quot;ip&quot; understand
+</I>&gt;&gt;<i> the type CAN? What does the following command show:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>  ip -d -s link show can0
+</I>&gt;<i> 
+</I>&gt;<i> # ip -d -s link show can0
+</I>&gt;<i> 3: can0: &lt;NOARP,ECHO&gt; mtu 16 qdisc noop state DOWN qlen 1000
+</I>&gt;<i>     link/can
+</I>&gt;<i>     RX: bytes  packets  errors  dropped overrun mcast
+</I>&gt;<i>     0          0        0       0       0       0
+</I>&gt;<i>     TX: bytes  packets  errors  dropped carrier collsns
+</I>&gt;<i>     0          0        0       0       0       0
+</I>&gt;<i> 
+</I>&gt;<i> It understands the type CAN, but for some reason, all of the details are
+</I>&gt;<i> missing now.  Using iproute2 from GIT tag
+</I>&gt;<i> 274ba1a52a4076388018744cc3d828d1ac29628d.  (That was the first w/ CAN
+</I>&gt;<i> support, IIRC.)
+</I>
+I'm a bit puzzled, also your previous error message indicates, that
+can-&gt;bittiming_const is not defined. How do you build your modules?
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001195.html">[Socketcan-users] can0 doesn't show after	modprobe	at91_can[SOLVED]
+</A></li>
+	<LI>Next message: <A HREF="001197.html">[Socketcan-users] can0 doesn't show after modprobe at91_can
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1196">[ date ]</a>
+              <a href="thread.html#1196">[ thread ]</a>
+              <a href="subject.html#1196">[ subject ]</a>
+              <a href="author.html#1196">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

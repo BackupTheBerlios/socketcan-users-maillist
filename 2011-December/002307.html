@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EDE8435.5080100%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002306.html">
+   <LINK REL="Next"  HREF="002309.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20net-next%20v2%202/4%5D%20can%3A%20cc770%3A%20add%0A%20legacy%20ISA%20bus%20driver%20for%20the%20CC770%20and%20AN82527&In-Reply-To=%3C4EDE8435.5080100%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527">info at essax.com
+       </A><BR>
+    <I>Tue Dec  6 22:08:05 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002306.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+        <LI>Next message: <A HREF="002309.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2307">[ date ]</a>
+              <a href="thread.html#2307">[ thread ]</a>
+              <a href="subject.html#2307">[ subject ]</a>
+              <a href="author.html#2307">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i>
+</I>&gt;<i> On 12/04/2011 07:47 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> Hello Wolfgang,
+</I>&gt;<i> ...
+</I>&gt;&gt;&gt;<i> Wolfgang, I just sent out v4. Any chance to give this patch a try? It
+</I>&gt;&gt;&gt;<i> would be best to use a recent kernel version but I could also adapt the
+</I>&gt;&gt;&gt;<i> patch to your kernel version, 2.6.39, I think!?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Sorry for my delayed reply, but wasn't earlier possible.
+</I>&gt;&gt;<i> Yes, of course, as long as I have the hardware available I can do some
+</I>&gt;&gt;<i> tests, even
+</I>&gt;&gt;<i> on a recent kernel due the fact having the project so far completed,
+</I>&gt;&gt;<i> just another
+</I>&gt;&gt;<i> test run on the 9th of December.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Due the flood of emails I lost now track which version You would be
+</I>&gt;&gt;<i> interested in
+</I>&gt;&gt;<i> and maybe also which kernel version, so, please let me know and maybe
+</I>&gt;&gt;<i> were I may
+</I>&gt;&gt;<i> download the patches.
+</I>&gt;<i>
+</I>&gt;<i> Well, yes, I was spinning too fast but the patches have been accepted in
+</I>&gt;<i> the meantime (actually v6 made it). So you just need to clone the most
+</I>&gt;<i> recent version of Dave's net-next tree.
+</I>&gt;<i>
+</I>&gt;&gt;&gt;<i> As you are using a CC770 chip, I'm especially interested in the relevant
+</I>&gt;&gt;&gt;<i> kernel log (dmesg) and &quot;ip -d -s link show&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Should be not a problem at all.
+</I>&gt;<i>
+</I>&gt;<i> Great, thanks.
+</I>
+Ok, here we go:
+
+uname -r: 3.2.0-rc4
+
+modprobe cc770_isa irq=0xa port=0x384 indirect=1 cir=0x61 bcr=0x4A
+ip link set can0 up type can bitrate 500000;
+
+kern.log
+Dec  6 20:42:19 svserv01 kernel: [ 2111.900735] CAN device driver interface
+Dec  6 20:42:19 svserv01 kernel: [ 2111.903072] cc770: CAN netdevice driver
+Dec  6 20:42:19 svserv01 kernel: [ 2111.904692] cc770_isa: platform device 0: port=0x384, mem=0x0, irq=10
+Dec  6 20:42:19 svserv01 kernel: [ 2111.904726] cc770_isa cc770_isa.0: probing idx=0: port=0x384, mem=0x0, irq=10
+Dec  6 20:42:19 svserv01 kernel: [ 2111.904779] cc770_isa cc770_isa.0: (unregistered net_device): i82527 mode with additional functions
+Dec  6 20:42:19 svserv01 kernel: [ 2111.906407] cc770_isa cc770_isa.0: device registered (reg_base=0x00000384, irq=10)
+Dec  6 20:42:19 svserv01 kernel: [ 2111.906457] cc770_isa: driver for max. 8 devices registered
+   6 20:44:17 svserv01 kernel: [ 2229.886845] cc770_isa cc770_isa.0: can0: setting BTR0=0x00 BTR1=0x1c
+Dec  6 20:44:17 svserv01 kernel: [ 2229.886920] cc770_isa cc770_isa.0: can0: Message object 15 for RX data, RTR, SFF and EFF
+Dec  6 20:44:17 svserv01 kernel: [ 2229.886937] cc770_isa cc770_isa.0: can0: Message object 11 for TX data, RTR, SFF and EFF
+Dec  6 20:52:40 svserv01 kernel: [ 2733.172845] can: controller area network core (rev 20090105 abi 8)
+Dec  6 20:52:40 svserv01 kernel: [ 2733.172967] NET: Registered protocol family 29
+Dec  6 20:52:40 svserv01 kernel: [ 2733.178187] can: raw protocol (rev 20090105)
+
+
+ip -d -s link show
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     0          0        0       0       0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     0          0        0       0       0       0
+
+
+After rebooting the PLC with proprietary buggy kernel:
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     414        267      0       267     0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     0          0        0       0       0       0
+
+
+
+After sending 100,000 PDO's with 13ms displacement:
+4: can0: &lt;NOARP,UP,LOWER_UP,ECHO&gt; mtu 16 qdisc pfifo_fast state UNKNOWN qlen 10
+     link/can
+     can state ERROR-ACTIVE (berr-counter tx 0 rx 0) restart-ms 0
+     bitrate 500000 sample-point 0.875
+     tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1
+     cc770: tseg1 1..16 tseg2 1..8 sjw 1..4 brp 1..64 brp-inc 1
+     clock 8000000
+     re-started bus-errors arbit-lost error-warn error-pass bus-off
+     0          0          0          0          0          0
+     RX: bytes  packets  errors  dropped overrun mcast
+     4544       4284     0       331     0       0
+     TX: bytes  packets  errors  dropped carrier collsns
+     802660     202653   0       0       0       0
+
+
+The dropped ones of RX may be the not processed input packages and therefore ok.
+
+Let me know if You need more or some other tests.
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002306.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+	<LI>Next message: <A HREF="002309.html">[Socketcan-users] [PATCH net-next v2 2/4] can: cc770: add legacy ISA bus driver for the CC770 and AN82527
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2307">[ date ]</a>
+              <a href="thread.html#2307">[ thread ]</a>
+              <a href="subject.html#2307">[ subject ]</a>
+              <a href="author.html#2307">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

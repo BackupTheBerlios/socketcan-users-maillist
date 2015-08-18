@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%201/4%5D%20%5Bflexcan%5D%20Abstract%20off%20read/write%20for%0A%09big/little%20endian.&In-Reply-To=%3C1312488803-7523-2-git-send-email-holt%40sgi.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002065.html">
+   <LINK REL="Next"  HREF="002066.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.</H1>
+    <B>Robin Holt</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%201/4%5D%20%5Bflexcan%5D%20Abstract%20off%20read/write%20for%0A%09big/little%20endian.&In-Reply-To=%3C1312488803-7523-2-git-send-email-holt%40sgi.com%3E"
+       TITLE="[Socketcan-users] [PATCH 1/4] [flexcan] Abstract off read/write for	big/little endian.">holt at sgi.com
+       </A><BR>
+    <I>Thu Aug  4 22:13:20 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002065.html">[Socketcan-users] [RFC 0/4] [flexcan] Add support for powerpc	(freescale p1010) -V4
+</A></li>
+        <LI>Next message: <A HREF="002066.html">[Socketcan-users] [PATCH 2/4] [flexcan] Introduce a flexcan_clk set	of functions.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2069">[ date ]</a>
+              <a href="thread.html#2069">[ thread ]</a>
+              <a href="subject.html#2069">[ subject ]</a>
+              <a href="author.html#2069">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>First step in converting the flexcan driver from supporting just arm to
+supporting both arm and powerpc architectures.
+
+Signed-off-by: Robin Holt &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">holt at sgi.com</A>&gt;
+To: Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;
+To: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+---
+ drivers/net/can/flexcan.c |  140 ++++++++++++++++++++++++++------------------
+ 1 files changed, 83 insertions(+), 57 deletions(-)
+
+diff --git a/drivers/net/can/flexcan.c b/drivers/net/can/flexcan.c
+index 67d9fc0..74b1706 100644
+--- a/drivers/net/can/flexcan.c
++++ b/drivers/net/can/flexcan.c
+@@ -196,6 +196,31 @@ static struct can_bittiming_const flexcan_bittiming_const = {
+ };
+ 
+ /*
++ * Abstract off the read/write for arm versus ppc.
++ */
++#if defined(__BIG_ENDIAN)
++static inline u32 flexcan_read(void __iomem *addr)
++{
++	return in_be32(addr);
++}
++
++static inline void flexcan_write(u32 val, void __iomem *addr)
++{
++	out_be32(addr, val);
++}
++#else
++static inline u32 flexcan_read(void __iomem *addr)
++{
++	return readl(addr);
++}
++
++static inline void flexcan_write(u32 val, void __iomem *addr)
++{
++	writel(val, addr);
++}
++#endif
++
++/*
+  * Swtich transceiver on or off
+  */
+ static void flexcan_transceiver_switch(const struct flexcan_priv *priv, int on)
+@@ -216,9 +241,9 @@ static inline void flexcan_chip_enable(struct flexcan_priv *priv)
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+ 	u32 reg;
+ 
+-	reg = readl(&amp;regs-&gt;mcr);
++	reg = flexcan_read(&amp;regs-&gt;mcr);
+ 	reg &amp;= ~FLEXCAN_MCR_MDIS;
+-	writel(reg, &amp;regs-&gt;mcr);
++	flexcan_write(reg, &amp;regs-&gt;mcr);
+ 
+ 	udelay(10);
+ }
+@@ -228,9 +253,9 @@ static inline void flexcan_chip_disable(struct flexcan_priv *priv)
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+ 	u32 reg;
+ 
+-	reg = readl(&amp;regs-&gt;mcr);
++	reg = flexcan_read(&amp;regs-&gt;mcr);
+ 	reg |= FLEXCAN_MCR_MDIS;
+-	writel(reg, &amp;regs-&gt;mcr);
++	flexcan_write(reg, &amp;regs-&gt;mcr);
+ }
+ 
+ static int flexcan_get_berr_counter(const struct net_device *dev,
+@@ -238,7 +263,7 @@ static int flexcan_get_berr_counter(const struct net_device *dev,
+ {
+ 	const struct flexcan_priv *priv = netdev_priv(dev);
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+-	u32 reg = readl(&amp;regs-&gt;ecr);
++	u32 reg = flexcan_read(&amp;regs-&gt;ecr);
+ 
+ 	bec-&gt;txerr = (reg &gt;&gt; 0) &amp; 0xff;
+ 	bec-&gt;rxerr = (reg &gt;&gt; 8) &amp; 0xff;
+@@ -272,15 +297,15 @@ static int flexcan_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 
+ 	if (cf-&gt;can_dlc &gt; 0) {
+ 		u32 data = be32_to_cpup((__be32 *)&amp;cf-&gt;data[0]);
+-		writel(data, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].data[0]);
++		flexcan_write(data, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].data[0]);
+ 	}
+ 	if (cf-&gt;can_dlc &gt; 3) {
+ 		u32 data = be32_to_cpup((__be32 *)&amp;cf-&gt;data[4]);
+-		writel(data, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].data[1]);
++		flexcan_write(data, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].data[1]);
+ 	}
+ 
+-	writel(can_id, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].can_id);
+-	writel(ctrl, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].can_ctrl);
++	flexcan_write(can_id, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].can_id);
++	flexcan_write(ctrl, &amp;regs-&gt;cantxfg[FLEXCAN_TX_BUF_ID].can_ctrl);
+ 
+ 	kfree_skb(skb);
+ 
+@@ -468,8 +493,8 @@ static void flexcan_read_fifo(const struct net_device *dev,
+ 	struct flexcan_mb __iomem *mb = &amp;regs-&gt;cantxfg[0];
+ 	u32 reg_ctrl, reg_id;
+ 
+-	reg_ctrl = readl(&amp;mb-&gt;can_ctrl);
+-	reg_id = readl(&amp;mb-&gt;can_id);
++	reg_ctrl = flexcan_read(&amp;mb-&gt;can_ctrl);
++	reg_id = flexcan_read(&amp;mb-&gt;can_id);
+ 	if (reg_ctrl &amp; FLEXCAN_MB_CNT_IDE)
+ 		cf-&gt;can_id = ((reg_id &gt;&gt; 0) &amp; CAN_EFF_MASK) | CAN_EFF_FLAG;
+ 	else
+@@ -479,12 +504,12 @@ static void flexcan_read_fifo(const struct net_device *dev,
+ 		cf-&gt;can_id |= CAN_RTR_FLAG;
+ 	cf-&gt;can_dlc = get_can_dlc((reg_ctrl &gt;&gt; 16) &amp; 0xf);
+ 
+-	*(__be32 *)(cf-&gt;data + 0) = cpu_to_be32(readl(&amp;mb-&gt;data[0]));
+-	*(__be32 *)(cf-&gt;data + 4) = cpu_to_be32(readl(&amp;mb-&gt;data[1]));
++	*(__be32 *)(cf-&gt;data + 0) = cpu_to_be32(flexcan_read(&amp;mb-&gt;data[0]));
++	*(__be32 *)(cf-&gt;data + 4) = cpu_to_be32(flexcan_read(&amp;mb-&gt;data[1]));
+ 
+ 	/* mark as read */
+-	writel(FLEXCAN_IFLAG_RX_FIFO_AVAILABLE, &amp;regs-&gt;iflag1);
+-	readl(&amp;regs-&gt;timer);
++	flexcan_write(FLEXCAN_IFLAG_RX_FIFO_AVAILABLE, &amp;regs-&gt;iflag1);
++	flexcan_read(&amp;regs-&gt;timer);
+ }
+ 
+ static int flexcan_read_frame(struct net_device *dev)
+@@ -520,17 +545,17 @@ static int flexcan_poll(struct napi_struct *napi, int quota)
+ 	 * The error bits are cleared on read,
+ 	 * use saved value from irq handler.
+ 	 */
+-	reg_esr = readl(&amp;regs-&gt;esr) | priv-&gt;reg_esr;
++	reg_esr = flexcan_read(&amp;regs-&gt;esr) | priv-&gt;reg_esr;
+ 
+ 	/* handle state changes */
+ 	work_done += flexcan_poll_state(dev, reg_esr);
+ 
+ 	/* handle RX-FIFO */
+-	reg_iflag1 = readl(&amp;regs-&gt;iflag1);
++	reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
+ 	while (reg_iflag1 &amp; FLEXCAN_IFLAG_RX_FIFO_AVAILABLE &amp;&amp;
+ 	       work_done &lt; quota) {
+ 		work_done += flexcan_read_frame(dev);
+-		reg_iflag1 = readl(&amp;regs-&gt;iflag1);
++		reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
+ 	}
+ 
+ 	/* report bus errors */
+@@ -540,8 +565,8 @@ static int flexcan_poll(struct napi_struct *napi, int quota)
+ 	if (work_done &lt; quota) {
+ 		napi_complete(napi);
+ 		/* enable IRQs */
+-		writel(FLEXCAN_IFLAG_DEFAULT, &amp;regs-&gt;imask1);
+-		writel(priv-&gt;reg_ctrl_default, &amp;regs-&gt;ctrl);
++		flexcan_write(FLEXCAN_IFLAG_DEFAULT, &amp;regs-&gt;imask1);
++		flexcan_write(priv-&gt;reg_ctrl_default, &amp;regs-&gt;ctrl);
+ 	}
+ 
+ 	return work_done;
+@@ -555,9 +580,9 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+ 	u32 reg_iflag1, reg_esr;
+ 
+-	reg_iflag1 = readl(&amp;regs-&gt;iflag1);
+-	reg_esr = readl(&amp;regs-&gt;esr);
+-	writel(FLEXCAN_ESR_ERR_INT, &amp;regs-&gt;esr);	/* ACK err IRQ */
++	reg_iflag1 = flexcan_read(&amp;regs-&gt;iflag1);
++	reg_esr = flexcan_read(&amp;regs-&gt;esr);
++	flexcan_write(FLEXCAN_ESR_ERR_INT, &amp;regs-&gt;esr);	/* ACK err IRQ */
+ 
+ 	/*
+ 	 * schedule NAPI in case of:
+@@ -573,16 +598,16 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 		 * save them for later use.
+ 		 */
+ 		priv-&gt;reg_esr = reg_esr &amp; FLEXCAN_ESR_ERR_BUS;
+-		writel(FLEXCAN_IFLAG_DEFAULT &amp; ~FLEXCAN_IFLAG_RX_FIFO_AVAILABLE,
+-		       &amp;regs-&gt;imask1);
+-		writel(priv-&gt;reg_ctrl_default &amp; ~FLEXCAN_CTRL_ERR_ALL,
++		flexcan_write(FLEXCAN_IFLAG_DEFAULT &amp;
++			~FLEXCAN_IFLAG_RX_FIFO_AVAILABLE, &amp;regs-&gt;imask1);
++		flexcan_write(priv-&gt;reg_ctrl_default &amp; ~FLEXCAN_CTRL_ERR_ALL,
+ 		       &amp;regs-&gt;ctrl);
+ 		napi_schedule(&amp;priv-&gt;napi);
+ 	}
+ 
+ 	/* FIFO overflow */
+ 	if (reg_iflag1 &amp; FLEXCAN_IFLAG_RX_FIFO_OVERFLOW) {
+-		writel(FLEXCAN_IFLAG_RX_FIFO_OVERFLOW, &amp;regs-&gt;iflag1);
++		flexcan_write(FLEXCAN_IFLAG_RX_FIFO_OVERFLOW, &amp;regs-&gt;iflag1);
+ 		dev-&gt;stats.rx_over_errors++;
+ 		dev-&gt;stats.rx_errors++;
+ 	}
+@@ -591,7 +616,7 @@ static irqreturn_t flexcan_irq(int irq, void *dev_id)
+ 	if (reg_iflag1 &amp; (1 &lt;&lt; FLEXCAN_TX_BUF_ID)) {
+ 		/* tx_bytes is incremented in flexcan_start_xmit */
+ 		stats-&gt;tx_packets++;
+-		writel((1 &lt;&lt; FLEXCAN_TX_BUF_ID), &amp;regs-&gt;iflag1);
++		flexcan_write((1 &lt;&lt; FLEXCAN_TX_BUF_ID), &amp;regs-&gt;iflag1);
+ 		netif_wake_queue(dev);
+ 	}
+ 
+@@ -605,7 +630,7 @@ static void flexcan_set_bittiming(struct net_device *dev)
+ 	struct flexcan_regs __iomem *regs = priv-&gt;base;
+ 	u32 reg;
+ 
+-	reg = readl(&amp;regs-&gt;ctrl);
++	reg = flexcan_read(&amp;regs-&gt;ctrl);
+ 	reg &amp;= ~(FLEXCAN_CTRL_PRESDIV(0xff) |
+ 		 FLEXCAN_CTRL_RJW(0x3) |
+ 		 FLEXCAN_CTRL_PSEG1(0x7) |
+@@ -629,11 +654,11 @@ static void flexcan_set_bittiming(struct net_device *dev)
+ 		reg |= FLEXCAN_CTRL_SMP;
+ 
+ 	dev_info(dev-&gt;dev.parent, &quot;writing ctrl=0x%08x\n&quot;, reg);
+-	writel(reg, &amp;regs-&gt;ctrl);
++	flexcan_write(reg, &amp;regs-&gt;ctrl);
+ 
+ 	/* print chip status */
+ 	dev_dbg(dev-&gt;dev.parent, &quot;%s: mcr=0x%08x ctrl=0x%08x\n&quot;, __func__,
+-		readl(&amp;regs-&gt;mcr), readl(&amp;regs-&gt;ctrl));
++		flexcan_read(&amp;regs-&gt;mcr), flexcan_read(&amp;regs-&gt;ctrl));
+ }
+ 
+ /*
+@@ -654,10 +679,10 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	flexcan_chip_enable(priv);
+ 
+ 	/* soft reset */
+-	writel(FLEXCAN_MCR_SOFTRST, &amp;regs-&gt;mcr);
++	flexcan_write(FLEXCAN_MCR_SOFTRST, &amp;regs-&gt;mcr);
+ 	udelay(10);
+ 
+-	reg_mcr = readl(&amp;regs-&gt;mcr);
++	reg_mcr = flexcan_read(&amp;regs-&gt;mcr);
+ 	if (reg_mcr &amp; FLEXCAN_MCR_SOFTRST) {
+ 		dev_err(dev-&gt;dev.parent,
+ 			&quot;Failed to softreset can module (mcr=0x%08x)\n&quot;,
+@@ -679,12 +704,12 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	 * choose format C
+ 	 *
+ 	 */
+-	reg_mcr = readl(&amp;regs-&gt;mcr);
++	reg_mcr = flexcan_read(&amp;regs-&gt;mcr);
+ 	reg_mcr |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_FEN | FLEXCAN_MCR_HALT |
+ 		FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN |
+ 		FLEXCAN_MCR_IDAM_C;
+ 	dev_dbg(dev-&gt;dev.parent, &quot;%s: writing mcr=0x%08x&quot;, __func__, reg_mcr);
+-	writel(reg_mcr, &amp;regs-&gt;mcr);
++	flexcan_write(reg_mcr, &amp;regs-&gt;mcr);
+ 
+ 	/*
+ 	 * CTRL
+@@ -702,7 +727,7 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	 * (FLEXCAN_CTRL_ERR_MSK), too. Otherwise we don't get any
+ 	 * warning or bus passive interrupts.
+ 	 */
+-	reg_ctrl = readl(&amp;regs-&gt;ctrl);
++	reg_ctrl = flexcan_read(&amp;regs-&gt;ctrl);
+ 	reg_ctrl &amp;= ~FLEXCAN_CTRL_TSYN;
+ 	reg_ctrl |= FLEXCAN_CTRL_BOFF_REC | FLEXCAN_CTRL_LBUF |
+ 		FLEXCAN_CTRL_ERR_STATE | FLEXCAN_CTRL_ERR_MSK;
+@@ -710,38 +735,39 @@ static int flexcan_chip_start(struct net_device *dev)
+ 	/* save for later use */
+ 	priv-&gt;reg_ctrl_default = reg_ctrl;
+ 	dev_dbg(dev-&gt;dev.parent, &quot;%s: writing ctrl=0x%08x&quot;, __func__, reg_ctrl);
+-	writel(reg_ctrl, &amp;regs-&gt;ctrl);
++	flexcan_write(reg_ctrl, &amp;regs-&gt;ctrl);
+ 
+ 	for (i = 0; i &lt; ARRAY_SIZE(regs-&gt;cantxfg); i++) {
+-		writel(0, &amp;regs-&gt;cantxfg[i].can_ctrl);
+-		writel(0, &amp;regs-&gt;cantxfg[i].can_id);
+-		writel(0, &amp;regs-&gt;cantxfg[i].data[0]);
+-		writel(0, &amp;regs-&gt;cantxfg[i].data[1]);
++		flexcan_write(0, &amp;regs-&gt;cantxfg[i].can_ctrl);
++		flexcan_write(0, &amp;regs-&gt;cantxfg[i].can_id);
++		flexcan_write(0, &amp;regs-&gt;cantxfg[i].data[0]);
++		flexcan_write(0, &amp;regs-&gt;cantxfg[i].data[1]);
+ 
+ 		/* put MB into rx queue */
+-		writel(FLEXCAN_MB_CNT_CODE(0x4), &amp;regs-&gt;cantxfg[i].can_ctrl);
++		flexcan_write(FLEXCAN_MB_CNT_CODE(0x4),
++			&amp;regs-&gt;cantxfg[i].can_ctrl);
+ 	}
+ 
+ 	/* acceptance mask/acceptance code (accept everything) */
+-	writel(0x0, &amp;regs-&gt;rxgmask);
+-	writel(0x0, &amp;regs-&gt;rx14mask);
+-	writel(0x0, &amp;regs-&gt;rx15mask);
++	flexcan_write(0x0, &amp;regs-&gt;rxgmask);
++	flexcan_write(0x0, &amp;regs-&gt;rx14mask);
++	flexcan_write(0x0, &amp;regs-&gt;rx15mask);
+ 
+ 	flexcan_transceiver_switch(priv, 1);
+ 
+ 	/* synchronize with the can bus */
+-	reg_mcr = readl(&amp;regs-&gt;mcr);
++	reg_mcr = flexcan_read(&amp;regs-&gt;mcr);
+ 	reg_mcr &amp;= ~FLEXCAN_MCR_HALT;
+-	writel(reg_mcr, &amp;regs-&gt;mcr);
++	flexcan_write(reg_mcr, &amp;regs-&gt;mcr);
+ 
+ 	priv-&gt;can.state = CAN_STATE_ERROR_ACTIVE;
+ 
+ 	/* enable FIFO interrupts */
+-	writel(FLEXCAN_IFLAG_DEFAULT, &amp;regs-&gt;imask1);
++	flexcan_write(FLEXCAN_IFLAG_DEFAULT, &amp;regs-&gt;imask1);
+ 
+ 	/* print chip status */
+ 	dev_dbg(dev-&gt;dev.parent, &quot;%s: reading mcr=0x%08x ctrl=0x%08x\n&quot;,
+-		__func__, readl(&amp;regs-&gt;mcr), readl(&amp;regs-&gt;ctrl));
++		__func__, flexcan_read(&amp;regs-&gt;mcr), flexcan_read(&amp;regs-&gt;ctrl));
+ 
+ 	return 0;
+ 
+@@ -763,12 +789,12 @@ static void flexcan_chip_stop(struct net_device *dev)
+ 	u32 reg;
+ 
+ 	/* Disable all interrupts */
+-	writel(0, &amp;regs-&gt;imask1);
++	flexcan_write(0, &amp;regs-&gt;imask1);
+ 
+ 	/* Disable + halt module */
+-	reg = readl(&amp;regs-&gt;mcr);
++	reg = flexcan_read(&amp;regs-&gt;mcr);
+ 	reg |= FLEXCAN_MCR_MDIS | FLEXCAN_MCR_HALT;
+-	writel(reg, &amp;regs-&gt;mcr);
++	flexcan_write(reg, &amp;regs-&gt;mcr);
+ 
+ 	flexcan_transceiver_switch(priv, 0);
+ 	priv-&gt;can.state = CAN_STATE_STOPPED;
+@@ -860,24 +886,24 @@ static int __devinit register_flexcandev(struct net_device *dev)
+ 
+ 	/* select &quot;bus clock&quot;, chip must be disabled */
+ 	flexcan_chip_disable(priv);
+-	reg = readl(&amp;regs-&gt;ctrl);
++	reg = flexcan_read(&amp;regs-&gt;ctrl);
+ 	reg |= FLEXCAN_CTRL_CLK_SRC;
+-	writel(reg, &amp;regs-&gt;ctrl);
++	flexcan_write(reg, &amp;regs-&gt;ctrl);
+ 
+ 	flexcan_chip_enable(priv);
+ 
+ 	/* set freeze, halt and activate FIFO, restrict register access */
+-	reg = readl(&amp;regs-&gt;mcr);
++	reg = flexcan_read(&amp;regs-&gt;mcr);
+ 	reg |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_HALT |
+ 		FLEXCAN_MCR_FEN | FLEXCAN_MCR_SUPV;
+-	writel(reg, &amp;regs-&gt;mcr);
++	flexcan_write(reg, &amp;regs-&gt;mcr);
+ 
+ 	/*
+ 	 * Currently we only support newer versions of this core
+ 	 * featuring a RX FIFO. Older cores found on some Coldfire
+ 	 * derivates are not yet supported.
+ 	 */
+-	reg = readl(&amp;regs-&gt;mcr);
++	reg = flexcan_read(&amp;regs-&gt;mcr);
+ 	if (!(reg &amp; FLEXCAN_MCR_FEN)) {
+ 		dev_err(dev-&gt;dev.parent,
+ 			&quot;Could not enable RX FIFO, unsupported core\n&quot;);
+-- 
+1.7.2.1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002065.html">[Socketcan-users] [RFC 0/4] [flexcan] Add support for powerpc	(freescale p1010) -V4
+</A></li>
+	<LI>Next message: <A HREF="002066.html">[Socketcan-users] [PATCH 2/4] [flexcan] Introduce a flexcan_clk set	of functions.
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2069">[ date ]</a>
+              <a href="thread.html#2069">[ thread ]</a>
+              <a href="subject.html#2069">[ subject ]</a>
+              <a href="author.html#2069">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

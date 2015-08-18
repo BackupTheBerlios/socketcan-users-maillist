@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%20for%0A%20received%20CAN%20messages%3F&In-Reply-To=%3C490F0E1E.20800%40volkswagen.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000551.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Little%20OT%20and%20newbie%3A%20How%20to%20wait%20for%0A%20received%20CAN%20messages%3F&In-Reply-To=%3C490F0E1E.20800%40volkswagen.de%3E"
+       TITLE="[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?">oliver.hartkopp at volkswagen.de
+       </A><BR>
+    <I>Mon Nov  3 15:43:42 CET 2008</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000551.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#550">[ date ]</a>
+              <a href="thread.html#550">[ thread ]</a>
+              <a href="subject.html#550">[ subject ]</a>
+              <a href="author.html#550">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+&gt;<i> Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Christopher Lapointe wrote:
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;&gt;<i> Hello list,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I am a new user of socketcan under Linux/386 with 2.6.24 kernel. I 
+</I>&gt;&gt;&gt;<i> am in
+</I>&gt;&gt;&gt;<i> the process of writing a multi-threaded application that uses CAN and
+</I>&gt;&gt;&gt;<i> wanted to ask the list what people use to check efficiently for new
+</I>&gt;&gt;&gt;<i> received CAN messages. Is only polling supported? Ideally I am looking
+</I>&gt;&gt;&gt;<i> for a way to &quot;peek&quot; for new incoming frames without reading them 
+</I>&gt;&gt;&gt;<i> such as
+</I>&gt;&gt;&gt;<i> by using a Linux signal with socketcan.
+</I>&gt;&gt;&gt;<i>     
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> You can receive CAN messages from a socket as usual with recv() and
+</I>&gt;&gt;<i> alike functions. By default the function will block but the MSG_DONTWAIT
+</I>&gt;&gt;<i> is support as well. Read &quot;man recv&quot; for further information. It seems
+</I>&gt;&gt;<i> that MSG_PEEK is not supported but it would be a nice to have. Oliver,
+</I>&gt;&gt;<i> what do you think.
+</I>&gt;&gt;<i>   
+</I>&gt;<i>
+</I>
+Hi Wolfgang,
+
+i just took a look into af_packet.c ...
+
+ From what i can seek MSG_PEEK is just masked away in our raw.c.
+
+Please take a look, if this *relaxed* masking in raw_recvmsg() helps to 
+fit your needs.
+
+Best regards,
+Oliver
+
+
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: msg_peekdiff
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20081103/5f8c2ad7/attachment.ksh">https://lists.berlios.de/pipermail/socketcan-users/attachments/20081103/5f8c2ad7/attachment.ksh</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000551.html">[Socketcan-users] Little OT and newbie: How to wait for received CAN messages?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#550">[ date ]</a>
+              <a href="thread.html#550">[ thread ]</a>
+              <a href="subject.html#550">[ subject ]</a>
+              <a href="author.html#550">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

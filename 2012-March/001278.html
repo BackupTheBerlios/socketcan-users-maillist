@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> No subject
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-March/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.17.1331738234.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001173.html">
+   <LINK REL="Next"  HREF="000148.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>No subject</H1>
+    <B></B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20No%20subject&In-Reply-To=%3Cmailman.17.1331738234.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="No subject">
+       </A><BR>
+    <I>Wed Mar 14 16:17:01 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001173.html">No subject
+</A></li>
+        <LI>Next message: <A HREF="000148.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1278">[ date ]</a>
+              <a href="thread.html#1278">[ thread ]</a>
+              <a href="subject.html#1278">[ subject ]</a>
+              <a href="author.html#1278">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&quot;If a bus-off event occurs, the RX error counter is initialized to logic 0.&quot;
+&quot;If a bus-off event occurs, the TX error counter is initialized to 127 to 
+count the minimum protocol-defined time (128 occurrences of the bus-free
+signal). Reading the TX error counter during this time gives information
+about the status of the bus-off recovery.&quot;
+
+I think it makes little sense to adjust the RX/TX error counters by software,
+as the exact meaning is hardware dependent. We should just read and list the
+value from the hardware register.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001173.html">No subject
+</A></li>
+	<LI>Next message: <A HREF="000148.html">No subject
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1278">[ date ]</a>
+              <a href="thread.html#1278">[ thread ]</a>
+              <a href="subject.html#1278">[ subject ]</a>
+              <a href="author.html#1278">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

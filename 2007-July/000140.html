@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketCAN%20with%20PEAK%20PCAN-USB%20Dongle&In-Reply-To=%3C97fdf2d70707050751n1689e05w17e91d421a1e2fe4%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000139.html">
+   <LINK REL="Next"  HREF="000141.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle</H1>
+    <B>Teemu Ikonen</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketCAN%20with%20PEAK%20PCAN-USB%20Dongle&In-Reply-To=%3C97fdf2d70707050751n1689e05w17e91d421a1e2fe4%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle">tpikonen at gmail.com
+       </A><BR>
+    <I>Thu Jul  5 16:51:29 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000139.html">[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+</A></li>
+        <LI>Next message: <A HREF="000141.html">[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#140">[ date ]</a>
+              <a href="thread.html#140">[ thread ]</a>
+              <a href="subject.html#140">[ subject ]</a>
+              <a href="author.html#140">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 7/5/07, <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Uwe.Vogt at de.huettinger.com</A> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Uwe.Vogt at de.huettinger.com</A>&gt; wrote:
+&gt;<i> I am using a PEAK PCAN-USB dongle as a netdev device under openSUSE 10.2 and
+</I>&gt;<i> will write some CANopen programs using the socketCAN interface.
+</I>&gt;<i>
+</I>&gt;<i> Is it possible to use the defined ioctl requests like SIOC[GS]CANBAUDRATE,
+</I>&gt;<i> SIOC[GS]CANMODE; etc.? Is it possible to open the socket as an normal user,
+</I>&gt;<i> other than user 'root'?
+</I>
+I don't know about the IOctls, but if you want raw CAN packets as a
+normal user, you can configure the modules with CONFIG_CAN_RAW_USER.
+For some reason though I could not get this configuration working (I'm
+sure the fault is mine), so I just patched the module source directly
+like this:
+
+-----
+
+=== modified file 'kernel/2.6/net/can/raw.c'
+--- kernel/2.6/net/can/raw.c    2007-06-06 13:55:23 +0000
++++ kernel/2.6/net/can/raw.c    2007-06-07 16:57:47 +0000
+@@ -72,11 +72,14 @@
+ MODULE_PARM_DESC(debug, &quot;debug print mask: 1:debug, 2:frames, 4:skbs&quot;);
+ #endif
+
++/*
+ #ifdef CONFIG_CAN_RAW_USER
+ #define RAW_CAP (-1)
+ #else
+ #define RAW_CAP CAP_NET_RAW
+ #endif
++*/
++#define RAW_CAP (-1)
+
+ #define MASK_ALL 0
+
+-----
+
+Hope this helps,
+
+Teemu
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000139.html">[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+</A></li>
+	<LI>Next message: <A HREF="000141.html">[Socketcan-users] socketCAN with PEAK PCAN-USB Dongle
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#140">[ date ]</a>
+              <a href="thread.html#140">[ thread ]</a>
+              <a href="subject.html#140">[ subject ]</a>
+              <a href="author.html#140">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

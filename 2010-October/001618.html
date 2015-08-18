@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] correct method for changing bitrate
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20correct%20method%20for%20changing%20bitrate&In-Reply-To=%3C4CC6E219.4030709%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001617.html">
+   <LINK REL="Next"  HREF="001620.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] correct method for changing bitrate</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20correct%20method%20for%20changing%20bitrate&In-Reply-To=%3C4CC6E219.4030709%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] correct method for changing bitrate">mkl at pengutronix.de
+       </A><BR>
+    <I>Tue Oct 26 16:13:45 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001617.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+        <LI>Next message: <A HREF="001620.html">[Socketcan-users] canlink: link can SocketCAN interfaces over tcp
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1618">[ date ]</a>
+              <a href="thread.html#1618">[ thread ]</a>
+              <a href="subject.html#1618">[ subject ]</a>
+              <a href="author.html#1618">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 10/26/2010 04:04 PM, Alexander Stein wrote:
+&gt;<i> On Tuesday 26 October 2010, 15:44:26 Marc Kleine-Budde wrote:
+</I>&gt;&gt;<i> On 10/26/2010 03:16 PM, Alexander Stein wrote:
+</I>&gt;&gt;&gt;<i> I'm just wondering what's the correct way to change the bitrate. I
+</I>&gt;&gt;&gt;<i> already noticed I need to shutdown the can interface previously. So I
+</I>&gt;&gt;&gt;<i> use system() with &quot;ip link...&quot; to shutdown, set the new bitrate and
+</I>&gt;&gt;&gt;<i> restart the interface. I kept my sockets during bitrate change and the
+</I>&gt;&gt;&gt;<i> first read() or write() call return ENETDOWN once. Afterwards those
+</I>&gt;&gt;&gt;<i> sockets work normally.
+</I>&gt;&gt;&gt;<i> So, how can I get rid of this ENETDOWN? Close the sockets on this
+</I>&gt;&gt;&gt;<i> interface previously?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Yes. Shuttig down the interface causes all sockets bind()ed to that
+</I>&gt;&gt;<i> interface to get an -ENETDOWN. Either don't bind() to a specific can
+</I>&gt;&gt;<i> interface or close the sockets prior to shutdown and reopen them after.
+</I>&gt;<i> 
+</I>&gt;<i> Unbound sockets receive frames from all interfaces, right? Well, this is 
+</I>&gt;<i> unusable in a test software on a multi channel hardware.
+</I>
+ACK :)
+
+Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101026/71d8cc22/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101026/71d8cc22/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001617.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+	<LI>Next message: <A HREF="001620.html">[Socketcan-users] canlink: link can SocketCAN interfaces over tcp
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1618">[ date ]</a>
+              <a href="thread.html#1618">[ thread ]</a>
+              <a href="subject.html#1618">[ subject ]</a>
+              <a href="author.html#1618">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

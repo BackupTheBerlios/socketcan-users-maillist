@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] mcp2515 frames with ID 004 and 000
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3CAANLkTikKqZJaz%3D%2B5kA3utnLEBOp2wYhGy2X-xZkdksSK%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001592.html">
+   <LINK REL="Next"  HREF="001596.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] mcp2515 frames with ID 004 and 000</H1>
+    <B>Jargalan Nermunkh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20mcp2515%20frames%20with%20ID%20004%20and%20000&In-Reply-To=%3CAANLkTikKqZJaz%3D%2B5kA3utnLEBOp2wYhGy2X-xZkdksSK%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] mcp2515 frames with ID 004 and 000">jargalan.nermunkh at criticallink.com
+       </A><BR>
+    <I>Tue Oct 19 20:25:05 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001592.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+        <LI>Next message: <A HREF="001596.html">[Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1594">[ date ]</a>
+              <a href="thread.html#1594">[ thread ]</a>
+              <a href="subject.html#1594">[ subject ]</a>
+              <a href="author.html#1594">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tue, Oct 19, 2010 at 12:24 PM, Marc Kleine-Budde &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">mkl at pengutronix.de</A>&gt;wrote:
+
+&gt;<i> On 10/19/2010 06:12 PM, Jargalan Nermunkh wrote:
+</I>&gt;<i> &gt;&gt; You mean without the patches mentioned above, I mean the unpachted
+</I>&gt;<i> &gt;&gt; 2.6.35.x, your can controller was missing frames? After applying these
+</I>&gt;<i> &gt;&gt; patches that problem was fixed?
+</I>&gt;<i>
+</I>&gt;<i> &gt; That is correct. The patch added proper handling of RX1 when there is a
+</I>&gt;<i> &gt; rollover from RX0 to RX1.
+</I>&gt;<i>
+</I>&gt;<i> Hmmm, does it? But it's good as it improves your situation.
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt; Can you ensure with a 3rd system, preferred with a different CAN core,
+</I>&gt;<i> &gt;&gt; that the frames send to the bus are correct?
+</I>&gt;<i>
+</I>&gt;<i> &gt; I connected a board to a lawicel CAN dongle and receiving on the board
+</I>&gt;<i> &gt; (sending from dongle) is fine but sending (with cangen) from the board to
+</I>&gt;<i> &gt; the dongle produces repeated frames.
+</I>&gt;<i>
+</I>&gt;<i> We're talking about sending on the mc251x? This is even a different
+</I>&gt;<i> problem.
+</I>&gt;<i>
+</I>
+Yes this is a different problem.
+
+
+&gt;<i>  &gt;&gt; Which driver is active in your setup? Does this happen with both
+</I>&gt;<i> &gt;&gt; versions of the driver?
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; I am currently using the inline driver.
+</I>&gt;<i>
+</I>&gt;<i> What do you mean? Are you using net-next-2.6/master with my series
+</I>&gt;<i> applied or 2.6.35.x?
+</I>&gt;<i>
+</I>
+I am a bit new to this sorry about the confusion. I am using 2.6.36-rc4
+found here:
+<A HREF="http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite">http://arago-project.org/git/people/?p=sneha/linux-davinci-staging.git;a=shortlog;h=refs/heads/davinci-spi-rewrite</A>
+
+cheers,
+&gt;<i> Marc
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> Pengutronix e.K.                  | Marc Kleine-Budde           |
+</I>&gt;<i> Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+</I>&gt;<i> Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+</I>&gt;<i> Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-- 
+Jargalan Nermunkh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/b7048c26/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20101019/b7048c26/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001592.html">[Socketcan-users] mcp2515 frames with ID 004 and 000
+</A></li>
+	<LI>Next message: <A HREF="001596.html">[Socketcan-users] mcp251x: repeated frames while sending (was: Re: mcp2515 frames with ID 004 and 000)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1594">[ date ]</a>
+              <a href="thread.html#1594">[ thread ]</a>
+              <a href="subject.html#1594">[ subject ]</a>
+              <a href="author.html#1594">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

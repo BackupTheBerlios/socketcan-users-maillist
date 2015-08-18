@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ems-usb%2C%202.6.31%2C%20unknown%20symbols%2C%20refused%20to%20load&In-Reply-To=%3Chv7jqb%244fn%241%40dough.gmane.org%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001442.html">
+   <LINK REL="Next"  HREF="001432.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load</H1>
+    <B>Markus Plessing</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20ems-usb%2C%202.6.31%2C%20unknown%20symbols%2C%20refused%20to%20load&In-Reply-To=%3Chv7jqb%244fn%241%40dough.gmane.org%3E"
+       TITLE="[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load">plessing at ems-wuensche.com
+       </A><BR>
+    <I>Tue Jun 15 12:14:35 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001442.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+        <LI>Next message: <A HREF="001432.html">[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1431">[ date ]</a>
+              <a href="thread.html#1431">[ thread ]</a>
+              <a href="subject.html#1431">[ subject ]</a>
+              <a href="author.html#1431">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi there,
+
+I'm trying to get the SocketCAN driver ems-usb running with
+a kernel 2.6.31-19, but fail.
+
+I've updated my local version with the svn repository files
+and compiled the socket can drivers against the running kernel
+2.6.31-19-generic on a ubuntu box.
+
+Running &quot;make modules&quot; and &quot;make modules install&quot; compiles all
+the modules fine, modpostes 24 modules and installs them. Afterwards the
+driver is found under
+/lib/modules/2.6.31-19-generic/extra/drivers/net/can/usb/ems_usb.ko
+
+All fine, but if I try to load the driver, it is refused.
+
+# modprobe ems_usb
+FATAL: Error inserting ems_usb 
+(/lib/modules/2.6.31-19-generic/extra/drivers/net/can/usb/ems_usb.ko): 
+Unknown symbol in module, or unknown parameter (see dmesg)
+
+# lsmod | grep can
+can_dev                 7004  0
+can_raw                 7164  0
+can                    23068  1 can_raw
+
+#tail -n 13 /var/log/messages
+Jun 15 11:48:31 freya kernel: [ 1699.264333] can: controller area 
+network core (rev 20090105 abi 8)
+Jun 15 11:48:31 freya kernel: [ 1699.264453] NET: Registered protocol 
+family 29
+Jun 15 11:48:47 freya kernel: [ 1714.986724] can: raw protocol (rev 
+20090105)
+Jun 15 11:49:03 freya kernel: [ 1730.878233] CAN device driver interface
+Jun 15 11:49:03 freya kernel: [ 1730.879362] ems_usb: Unknown symbol 
+can_free_echo_skb
+Jun 15 11:49:03 freya kernel: [ 1730.879574] ems_usb: disagrees about 
+version of symbol can_put_echo_skb
+Jun 15 11:49:03 freya kernel: [ 1730.879581] ems_usb: Unknown symbol 
+can_put_echo_skb
+Jun 15 11:49:03 freya kernel: [ 1730.880040] ems_usb: disagrees about 
+version of symbol can_get_echo_skb
+Jun 15 11:49:03 freya kernel: [ 1730.880046] ems_usb: Unknown symbol 
+can_get_echo_skb
+Jun 15 11:49:03 freya kernel: [ 1730.881232] ems_usb: Unknown symbol 
+alloc_can_skb
+Jun 15 11:49:03 freya kernel: [ 1730.883261] ems_usb: disagrees about 
+version of symbol alloc_candev
+Jun 15 11:49:03 freya kernel: [ 1730.883268] ems_usb: Unknown symbol 
+alloc_candev
+Jun 15 11:49:03 freya kernel: [ 1730.883751] ems_usb: Unknown symbol 
+alloc_can_err_skb
+
+What I'm doing wrong?
+
+The ems_usb driver is in the mainline kernel for 2.6.32, also the 
+mentioned functioned are added for this kernel in drivers/net/can/dev.c
+but they are there also within the socketcan repository. Aren't they
+available afterwards?
+
+Thanks for your help!
+
+Markus
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001442.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC) not indicated in	rev1181
+</A></li>
+	<LI>Next message: <A HREF="001432.html">[Socketcan-users] ems-usb, 2.6.31, unknown symbols, refused to load
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1431">[ date ]</a>
+              <a href="thread.html#1431">[ thread ]</a>
+              <a href="subject.html#1431">[ subject ]</a>
+              <a href="author.html#1431">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

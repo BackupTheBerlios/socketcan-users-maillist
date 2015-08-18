@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTimcJ0qxuY%2BDdRipMmXO8nFwrYiOuxa_JdGQAzvW%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001715.html">
+   <LINK REL="Next"  HREF="001719.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104</H1>
+    <B>Willy Lambert</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Trying%20to%20use%20socketCan%20on%20an%20Ixxat%20PC-I%0A%0904/104&In-Reply-To=%3CAANLkTimcJ0qxuY%2BDdRipMmXO8nFwrYiOuxa_JdGQAzvW%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104">lambert.willy at gmail.com
+       </A><BR>
+    <I>Thu Jan 13 14:00:13 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001715.html">[Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104
+</A></li>
+        <LI>Next message: <A HREF="001719.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1716">[ date ]</a>
+              <a href="thread.html#1716">[ thread ]</a>
+              <a href="subject.html#1716">[ subject ]</a>
+              <a href="author.html#1716">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>2011/1/13 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+
+&gt;<i> On 01/13/2011 12:25 AM, Willy Lambert wrote:
+</I>&gt;<i> &gt; 2011/1/12 Willy Lambert &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lambert.willy at gmail.com</A>&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt; Because after lots of tests of moving jumpers it ended in this config.
+</I>&gt;<i> As I
+</I>&gt;<i> &gt;&gt; don't have serial yet it should work no ? Anyway I'll change because it
+</I>&gt;<i> is
+</I>&gt;<i> &gt;&gt; not an accurate choice
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; 2011/1/12 Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; Hi Willy,
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; On 01/12/2011 01:55 AM, Willy Lambert wrote:
+</I>&gt;<i> &gt;&gt;&gt;&gt; Hi all,
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; for memory I have been trying to makes socketCan working on my Ixxat
+</I>&gt;<i> &gt;&gt;&gt; board
+</I>&gt;<i> &gt;&gt;&gt;&gt; for some time. It is stacked on a PC104 cpu module with a linux debian
+</I>&gt;<i> &gt;&gt;&gt;&gt; squeeze. After having a fully hardware configuration (a proper node +
+</I>&gt;<i> &gt;&gt;&gt; can
+</I>&gt;<i> &gt;&gt;&gt;&gt; analyser) I tried Ixxat drivers and succeed after soldering a jumper
+</I>&gt;<i> on
+</I>&gt;<i> &gt;&gt;&gt; the
+</I>&gt;<i> &gt;&gt;&gt;&gt; board and setting some BIOS values. After this I quickly tested a
+</I>&gt;<i> &gt;&gt;&gt; socketCan
+</I>&gt;<i> &gt;&gt;&gt;&gt; version from svn and it seems to works (at least interrupts were
+</I>&gt;<i> &gt;&gt;&gt; triggered).
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; Cleaning time arrived and I complety reinstall the linux with only the
+</I>&gt;<i> &gt;&gt;&gt;&gt; required kernel configuration. The choosed kernel is a 2.6.35.7.
+</I>&gt;<i> &gt;&gt;&gt;&gt; My first question is : may I use kernel official sources of socketCan
+</I>&gt;<i> ?
+</I>&gt;<i> &gt;&gt;&gt; or
+</I>&gt;<i> &gt;&gt;&gt;&gt; do I need to checkout something ?
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; I activated theses options :
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; [*] Networking Support --&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; --- [*] CAN bus subsystem support --&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------[*] Raw Can Protocol (raw access with CAN-ID filtering)
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------[*] Broadcast Manager CAN Protocol (with content filtering)
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------     CAN Device Drivers ---&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------------- [*] Virtual Local CAN Interface (vcan)
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------------- [*] Platform CAN drivers with Netlonk support
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------------- [*] CAN bit-timing calculation
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; ----------------- [*] Philips/NXP SJA1000 devices --&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; -------------------------[M] ISA Bus based legacy SJA1000 driver
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt; All remark is welcome (espacially if I need to choose &quot;M&quot; instead of
+</I>&gt;<i> &quot;*&quot;
+</I>&gt;<i>
+</I>&gt;<i> If you select &quot;M&quot;, the drive will be built as module otherwise it's
+</I>&gt;<i> statically linked into the kernel.
+</I>&gt;<i>
+</I>&gt;<i> &gt; Is this usable from the current 2.6.35.7 official Linux tree ? or do I
+</I>&gt;<i> need
+</I>&gt;<i> &gt; other sources ?
+</I>&gt;<i>
+</I>&gt;<i> Should be fine.
+</I>&gt;<i>
+</I>&gt;<i> &gt;&gt;&gt; I setup my can0 interface in the rc.local script :
+</I>&gt;<i> &gt;&gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt;&gt;&gt; modprobe sja1000_isa irq=3 mem=0XD0000
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;&gt; Why do you use irq=3 now. IIRC, it's used for the serial port. Why not
+</I>&gt;<i> &gt;&gt;&gt; irq=5?
+</I>&gt;<i> &gt;&gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt; same with irq5. I have the same problem with Ixxat drivers. so it's again
+</I>&gt;<i> an
+</I>&gt;<i> &gt; interrupt problem. Do I need to activate some option into the kernel ?
+</I>&gt;<i>
+</I>&gt;<i> I'm a bit confused. What is the current status of using CAN on you
+</I>&gt;<i> system. Does the BCI driver from IXXAT now work properly?
+</I>&gt;<i>
+</I>
+So am I :)
+
+I reinstalled Ixxat drivers and manage to find my a working state for both
+Ixxat and SocketCan drivers. A missed a jumper positionning and had some
+BIOS problems.
+
+In conclusion I have :
+_ a proper HW wiring and 2nd node
+_ a particular IRQ jumper working configuration on my board
+_ a particuliar BIOS config with uncertainty about what option made things
+working.
+_ a brand new 2.6.35.7 system with only the few required kernel options to
+made things working.
+
+I will now test BIOS options one by one to check which are required, change
+IRQs to test several configuration, test the second CAN controller and set
+up a test case with canplayer. I will report this as soon as i finished.
+
+
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110113/f63b32a9/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110113/f63b32a9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001715.html">[Socketcan-users] Trying to use socketCan on an Ixxat	PC-I	04/104
+</A></li>
+	<LI>Next message: <A HREF="001719.html">[Socketcan-users] Trying to use socketCan on an Ixxat PC-I	04/104
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1716">[ date ]</a>
+              <a href="thread.html#1716">[ thread ]</a>
+              <a href="subject.html#1716">[ subject ]</a>
+              <a href="author.html#1716">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

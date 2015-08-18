@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC: How to deal with bus-error
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B69DB9E.3080602%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001248.html">
+   <LINK REL="Next"  HREF="001250.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC: How to deal with bus-error</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RFC%3A%20How%20to%20deal%20with%20bus-error&In-Reply-To=%3C4B69DB9E.3080602%40grandegger.com%3E"
+       TITLE="[Socketcan-users] RFC: How to deal with bus-error">wg at grandegger.com
+       </A><BR>
+    <I>Wed Feb  3 21:25:02 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001248.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+        <LI>Next message: <A HREF="001250.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1249">[ date ]</a>
+              <a href="thread.html#1249">[ thread ]</a>
+              <a href="subject.html#1249">[ subject ]</a>
+              <a href="author.html#1249">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Oliver Hartkopp wrote:
+&gt;<i> Kurt Van Dijck wrote:
+</I>&gt;&gt;<i> On Wed, Feb 03, 2010 at 08:34:50AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> Hello,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> as Marc mentioned in another thread, our current bus-error handling is
+</I>&gt;&gt;&gt;<i> weak. It does make trouble frequently, especially on low-end systems.
+</I>&gt;&gt;&gt;<i> How could we improve our current bus-error handling? I proposed a quite
+</I>&gt;&gt;&gt;<i> simple solution allowing the user to switch off bus-error generation using:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>   ./ip link set can0 up type can bitrate 500000 bus-errors 0
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> This is usually easy to implement by just not enabling the bus-error
+</I>&gt;&gt;&gt;<i> interrupt of the CAN controller. Marc proposed:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> A possible solution might be to switch of the error interrupt and poll
+</I>&gt;&gt;&gt;&gt;<i> it e.g. with delayed work.
+</I>&gt;&gt;&gt;<i> Detecting a high rate and throttling the rate is not trivial and I
+</I>&gt;&gt;&gt;<i> hesitate to add a complex solution, also because bus-errors are only
+</I>&gt;&gt;&gt;<i> available on a few CAN controllers, e.g. SJA1000 and AT91. Marc, what do
+</I>&gt;&gt;&gt;<i> you have in mind?
+</I>&gt;<i> 
+</I>&gt;<i> Have you ever thought about ratelimit?
+</I>&gt;<i> 
+</I>&gt;<i> In
+</I>&gt;<i> 
+</I>&gt;<i>     <A HREF="http://lxr.linux.no/#linux+v2.6.32/lib/ratelimit.c">http://lxr.linux.no/#linux+v2.6.32/lib/ratelimit.c</A>
+</I>&gt;<i> 
+</I>&gt;<i> there is an implementation that's usually used e.g. as net_ratelimit() to slow
+</I>&gt;<i> down printks at several locations inside the kernel.
+</I>&gt;<i> 
+</I>&gt;<i> As we are already in interrupt context there's no spin_lock_irqsave() needed,
+</I>&gt;<i> but we might implement an extra can_ratelimit() using a private
+</I>&gt;<i> 
+</I>&gt;<i>    struct ratelimit_state buserr_ratelimit;
+</I>&gt;<i> 
+</I>&gt;<i> we could add to the in the can_priv structure.
+</I>
+Hm, this will only help partially. We need to decrease the interrupt
+rate not just the delivery rate. Or have I missed something? Also,
+bus-errors in sequence might provide useful information.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001248.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+	<LI>Next message: <A HREF="001250.html">[Socketcan-users] RFC: How to deal with bus-error
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1249">[ date ]</a>
+              <a href="thread.html#1249">[ thread ]</a>
+              <a href="subject.html#1249">[ subject ]</a>
+              <a href="author.html#1249">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

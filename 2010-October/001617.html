@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] correct method for changing bitrate
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20correct%20method%20for%20changing%20bitrate&In-Reply-To=%3C201010261605.20731.alexander.stein%40systec-electronic.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001616.html">
+   <LINK REL="Next"  HREF="001618.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] correct method for changing bitrate</H1>
+    <B>Alexander Stein</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20correct%20method%20for%20changing%20bitrate&In-Reply-To=%3C201010261605.20731.alexander.stein%40systec-electronic.com%3E"
+       TITLE="[Socketcan-users] correct method for changing bitrate">alexander.stein at systec-electronic.com
+       </A><BR>
+    <I>Tue Oct 26 16:04:55 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001616.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+        <LI>Next message: <A HREF="001618.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1617">[ date ]</a>
+              <a href="thread.html#1617">[ thread ]</a>
+              <a href="subject.html#1617">[ subject ]</a>
+              <a href="author.html#1617">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Tuesday 26 October 2010, 15:44:26 Marc Kleine-Budde wrote:
+&gt;<i> On 10/26/2010 03:16 PM, Alexander Stein wrote:
+</I>&gt;<i> &gt; I'm just wondering what's the correct way to change the bitrate. I
+</I>&gt;<i> &gt; already noticed I need to shutdown the can interface previously. So I
+</I>&gt;<i> &gt; use system() with &quot;ip link...&quot; to shutdown, set the new bitrate and
+</I>&gt;<i> &gt; restart the interface. I kept my sockets during bitrate change and the
+</I>&gt;<i> &gt; first read() or write() call return ENETDOWN once. Afterwards those
+</I>&gt;<i> &gt; sockets work normally.
+</I>&gt;<i> &gt; So, how can I get rid of this ENETDOWN? Close the sockets on this
+</I>&gt;<i> &gt; interface previously?
+</I>&gt;<i> 
+</I>&gt;<i> Yes. Shuttig down the interface causes all sockets bind()ed to that
+</I>&gt;<i> interface to get an -ENETDOWN. Either don't bind() to a specific can
+</I>&gt;<i> interface or close the sockets prior to shutdown and reopen them after.
+</I>
+Unbound sockets receive frames from all interfaces, right? Well, this is 
+unusable in a test software on a multi channel hardware.
+
+&gt;<i> BTW: If you don't want to use that ugly system(&quot;ip link ...&quot;) call you
+</I>&gt;<i> can use libsocketcan:
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://www.pengutronix.de/software/libsocketcan/download/">http://www.pengutronix.de/software/libsocketcan/download/</A>
+</I>&gt;<i> <A HREF="http://git.pengutronix.de/?p=tools/libsocketcan.git;a=blob;f=include/libsoc">http://git.pengutronix.de/?p=tools/libsocketcan.git;a=blob;f=include/libsoc</A>
+</I>&gt;<i> ketcan.h
+</I>
+Thanks for the hint, I'm already aware of that lib.
+
+Best regards,
+Alexander
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001616.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+	<LI>Next message: <A HREF="001618.html">[Socketcan-users] correct method for changing bitrate
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1617">[ date ]</a>
+              <a href="thread.html#1617">[ thread ]</a>
+              <a href="subject.html#1617">[ subject ]</a>
+              <a href="author.html#1617">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

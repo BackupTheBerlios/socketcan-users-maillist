@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd:  data not been recieved correctly
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-June/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20%20data%20not%20been%20recieved%20correctly&In-Reply-To=%3CAANLkTimJUFazi-ciQJZ8BcgcyH0xV6GoFgSANXXlffOa%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001424.html">
+   <LINK REL="Next"  HREF="001426.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd:  data not been recieved correctly</H1>
+    <B>Lei Luo</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20%20data%20not%20been%20recieved%20correctly&In-Reply-To=%3CAANLkTimJUFazi-ciQJZ8BcgcyH0xV6GoFgSANXXlffOa%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] Fwd:  data not been recieved correctly">nudtrobert at gmail.com
+       </A><BR>
+    <I>Fri Jun 11 17:16:01 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001424.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+        <LI>Next message: <A HREF="001426.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC)	not indicated in rev1181
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1425">[ date ]</a>
+              <a href="thread.html#1425">[ thread ]</a>
+              <a href="subject.html#1425">[ subject ]</a>
+              <a href="author.html#1425">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>---------- Forwarded message ----------
+From: Lei Luo &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nudtrobert at gmail.com</A>&gt;
+Date: Thu, 10 Jun 2010 17:43:02 +0800
+Subject: Re: [Socketcan-users] data not been recieved correctly
+To: christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt;
+
+Hi,
+
+2010/6/10 christian pellegrin &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">chripell at gmail.com</A>&gt;
+
+&gt;<i> On Thu, Jun 10, 2010 at 6:00 AM, Lei Luo &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nudtrobert at gmail.com</A>&gt; wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> &gt; The bitrate is 500000, the SPI speed is 5*1000*1000. Is That too high?
+</I>&gt;<i>
+</I>&gt;<i> the maximum SPI speed for mcp2510 is 5 Mhz, for 2515 is 10 Mhz. Try to
+</I>&gt;<i> lower a bit to see if something improves please.
+</I>
+
+What  I  am using is  mcp2510, the problem is still after set SPI speed to
+2MHz.  I set it in kernel/arch/arm/board-dk.c as follows, then re-compiled
+the kernel, is that right?
+static struct spi_board_info dk_spi_devices[] = {
+{
+.modalias =&quot;mcp251x&quot;,
+.platform_data = &amp;mcp251x_info,
+.irq = AT91_PIN_PC14,
+.max_speed_hz = 2*1000*1000,
+.chip_select = 2,
+.controller_data = (void *) AT_91_PIN_PA5,
+},
+...
+
+
+
+&gt;<i>
+</I>&gt;<i> Another thing to try is to add
+</I>&gt;<i>
+</I>&gt;<i> .delay_usecs = 1,
+</I>&gt;<i>
+</I>&gt;<i>
+</I>It does not affect too.
+
+
+&gt;<i>
+</I>&gt;<i> ASAP I will do some tests, unfortunately right now I don't have the
+</I>&gt;<i> hardware (this is the sad life of consultants, when you finish a job
+</I>&gt;<i> you are thrown on something else and left without hardware).
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>Thanks for your helps!
+
+Regards
+Robert
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001424.html">[Socketcan-users] data not been recieved correctly
+</A></li>
+	<LI>Next message: <A HREF="001426.html">[Socketcan-users] error active (CAN_ERR_CRTL / CAN_ERR_CRTL_UNSPEC)	not indicated in rev1181
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1425">[ date ]</a>
+              <a href="thread.html#1425">[ thread ]</a>
+              <a href="subject.html#1425">[ subject ]</a>
+              <a href="author.html#1425">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

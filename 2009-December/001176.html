@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-December/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B14E0D0.3010604%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001175.html">
+   <LINK REL="Next"  HREF="001177.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C4B14E0D0.3010604%40grandegger.com%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">wg at grandegger.com
+       </A><BR>
+    <I>Tue Dec  1 10:24:32 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001175.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001177.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1176">[ date ]</a>
+              <a href="thread.html#1176">[ thread ]</a>
+              <a href="subject.html#1176">[ subject ]</a>
+              <a href="author.html#1176">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Luotao Fu wrote:
+&gt;<i> Hi Wolfgang,
+</I>&gt;<i> 
+</I>&gt;<i> On Sat, Nov 28, 2009 at 09:17:57PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;<i> Hi Fu,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Luotao Fu wrote:
+</I>&gt;&gt;&gt;<i> Hi Wolfgang,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On Fri, Nov 27, 2009 at 11:14:57AM +0100, Wolfgang Grandegger wrote:
+</I>&gt;&gt;&gt;<i> ...
+</I>&gt;&gt;&gt;&gt;<i> I don't want to invite people playing with the sample-point. To be
+</I>&gt;&gt;&gt;&gt;<i> clear, sample_point==0 will not be ignored. It means using CIA
+</I>&gt;&gt;&gt;&gt;<i> recommended sample points for the specified bit-rate.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> The function is now splitte up in a simple set_bitrate and a expert
+</I>&gt;&gt;&gt;<i> set_bitrate_samplepoint as you suggested. I Also changed name prefix
+</I>&gt;&gt;&gt;<i> to can_ in API and renamed the library to libsocketcan. Hence the lib
+</I>&gt;&gt;&gt;<i> is now available at:
+</I>&gt;&gt;&gt;<i> <A HREF="git://git.pengutronix.de/git/tools/libsocketcan.git">git://git.pengutronix.de/git/tools/libsocketcan.git</A>
+</I>&gt;&gt;&gt;<i> The old URL still exists as a link for convenience though.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I pinned the lib version to 0.0.4 and the updated canutils to 4.0.2.
+</I>&gt;&gt;&gt;<i> There're tarballs for ready to use source on our ftp server.
+</I>&gt;&gt;<i> I finally had a closer look. I have attached two patches showing my
+</I>&gt;&gt;<i> enhancements and fixes. 
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for the patches, comment see below.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Futhermore, I would change the name &quot;mode&quot; to &quot;ctrlmode&quot;. &quot;mode&quot; is
+</I>&gt;&gt;<i> reserved for CAN operation modes like start, stop, or sleep.
+</I>&gt;<i> 
+</I>&gt;<i> agreed.
+</I>&gt;<i> 
+</I>&gt;&gt;<i> It would also be nice to allow:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> $ canconfig can0 bitrate 125000 restart-ms 100 start
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> This'd be indeed nice to have. Though we might have to change the parameter
+</I>&gt;<i> parsing quite a littel. Let's see...
+</I>
+Yes, as-is, an option without args means &quot;show&quot; instead of &quot;set&quot;, which
+makes it a bit more tricky.
+
+&gt;&gt;<i> Add can_get_bittiming_const()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> Acked-by: Luotao Fu &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">l.fu at pengutronix.de</A>&gt;
+</I>&gt;<i> 
+</I>&gt;<i> applied, thx.
+</I>&gt;<i> 
+</I>&gt;<i> &lt;snip&gt;
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Add can_get_bittiming_const() and further fixes and improvements
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> - s/can_modes/can_states/
+</I>&gt;&gt;<i> - Use proper names for CAN error states
+</I>&gt;&gt;<i> - Use &quot;-&quot; as name seperator for input and output consequently
+</I>&gt;&gt;<i> - Add some more useful output to cmd_show_interface()
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Signed-off-by: Wolfgang Grandegger &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> minor nitpick see below. otherwise
+</I>&gt;<i> Acked-by: Luotao Fu &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">l.fu at pengutronix.de</A>&gt;
+</I>&gt;<i> 
+</I>&gt;&gt;<i> diff --git a/src/canconfig.c b/src/canconfig.c
+</I>&gt;&gt;<i> index d8b9167..0139a1c 100644
+</I>&gt;&gt;<i> --- a/src/canconfig.c
+</I>&gt;&gt;<i> +++ b/src/canconfig.c
+</I>&gt;&gt;<i> @@ -37,11 +37,11 @@
+</I>&gt;&gt;<i>  #define MIN(a, b) ((a) &lt; (b) ? (a) : (b))
+</I>&gt;&gt;<i>  #endif
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i> -const char *can_modes[CAN_STATE_MAX] = {
+</I>&gt;&gt;<i> -	&quot;ACTIVE&quot;,
+</I>&gt;&gt;<i> -	&quot;WARNING&quot;,
+</I>&gt;&gt;<i> -	&quot;PASSIVE&quot;,
+</I>&gt;&gt;<i> -	&quot;BUS OFF&quot;,
+</I>&gt;&gt;<i> +const char *can_states[CAN_STATE_MAX] = {
+</I>&gt;&gt;<i> +	&quot;ERROR-ACTIVE&quot;,
+</I>&gt;&gt;<i> +	&quot;ERROR-WARNING&quot;,
+</I>&gt;&gt;<i> +	&quot;ERROR-PASSIVE&quot;,
+</I>&gt;&gt;<i> +	&quot;BUS-OFF&quot;,
+</I>&gt;&gt;<i>  	&quot;STOPPED&quot;,
+</I>&gt;&gt;<i>  	&quot;SLEEPING&quot;
+</I>&gt;&gt;<i>  };
+</I>&gt;&gt;<i> @@ -59,23 +59,24 @@ const char *can_modes[CAN_STATE_MAX] = {
+</I>&gt;&gt;<i>  static void help(void)
+</I>&gt;&gt;<i>  {
+</I>&gt;&gt;<i>  	fprintf(stderr, &quot;usage:\n\t&quot;
+</I>&gt;&gt;<i> -		&quot;canconfig &lt;dev&gt; bitrate { BR } [sample_point { SP }]\n\t\t&quot;
+</I>&gt;&gt;<i> +		&quot;canconfig &lt;dev&gt; bitrate { BR } [sample-point { SP }]\n\t\t&quot;
+</I>&gt;&gt;<i>  		&quot;BR := &lt;bitrate in Hz&gt;\n\t\t&quot;
+</I>&gt;&gt;<i> -		&quot;SP := &lt;sample point {0...0.999}&gt; (optional)\n\t&quot;
+</I>&gt;&gt;<i> +		&quot;SP := &lt;sample-point {0...0.999}&gt; (optional)\n\t&quot;
+</I>&gt;&gt;<i>  		&quot;canconfig &lt;dev&gt; bittiming [ VALs ]\n\t\t&quot;
+</I>&gt;&gt;<i>  		&quot;VALs := &lt;tq | prop-seg | phase-seg1 | phase-seg2 | sjw&gt;\n\t\t&quot;
+</I>&gt;&gt;<i>  		&quot;tq &lt;time quantum in ns&gt;\n\t\t&quot;
+</I>&gt;&gt;<i> -		&quot;prop_seg &lt;no. in tq&gt;\n\t\t&quot;
+</I>&gt;&gt;<i> -		&quot;phase_seg1 &lt;no. in tq&gt;\n\t\t&quot;
+</I>&gt;&gt;<i> -		&quot;phase_seg2 &lt;no. in tq\n\t\t&quot;
+</I>&gt;&gt;<i> +		&quot;prop-seg &lt;no. in tq&gt;\n\t\t&quot;
+</I>&gt;&gt;<i> +		&quot;phase-seg1 &lt;no. in tq&gt;\n\t\t&quot;
+</I>&gt;&gt;<i> +		&quot;phase-seg2 &lt;no. in tq\n\t\t&quot;
+</I>&gt;&gt;<i>  		&quot;sjw &lt;no. in tq&gt; (optional)\n\t&quot;
+</I>&gt;&gt;<i> -		&quot;canconfig &lt;dev&gt; restart-ms { RESTART_MS }\n\t\t&quot;
+</I>&gt;&gt;<i> -		&quot;RESTART_MS := &lt;autorestart interval in ms&gt;\n\t&quot;
+</I>&gt;&gt;<i> +		&quot;canconfig &lt;dev&gt; restart-ms { RESTART-MS }\n\t\t&quot;
+</I>&gt;&gt;<i> +		&quot;RESTART-MS := &lt;autorestart interval in ms&gt;\n\t&quot;
+</I>&gt;&gt;<i>  		&quot;canconfig &lt;dev&gt; mode { MODE }\n\t\t&quot;
+</I>&gt;&gt;<i>  		&quot;MODE := &lt;[loopback | listen-only | triple-sampling] [on|off]&gt;\n\t&quot;
+</I>&gt;&gt;<i>  		&quot;canconfig &lt;dev&gt; {ACTION}\n\t\t&quot;
+</I>&gt;&gt;<i> -		&quot;ACTION := &lt;[start|stop|restart]&gt;&quot;
+</I>&gt;&gt;<i> -		&quot;canconfig &lt;dev&gt; clockfreq\n&quot;
+</I>&gt;&gt;<i> +		&quot;ACTION := &lt;[start|stop|restart]&gt;\n\t&quot;
+</I>&gt;&gt;<i> +		&quot;canconfig &lt;dev&gt; clockfreq\n\t&quot;
+</I>&gt;&gt;<i> +		&quot;canconfig &lt;dev&gt; bittiming-constants\n&quot;
+</I>&gt;&gt;<i>  		);
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  	exit(EXIT_FAILURE);
+</I>&gt;&gt;<i> @@ -90,7 +91,7 @@ static void do_show_bitrate(int argc, char* argv[])
+</I>&gt;&gt;<i>  		exit(EXIT_FAILURE);
+</I>&gt;&gt;<i>  	} else
+</I>&gt;&gt;<i>  		fprintf(stdout,
+</I>&gt;&gt;<i> -			&quot;%s bitrate: %u, sample point: %0.3f\n&quot;,
+</I>&gt;&gt;<i> +			&quot;%s bitrate: %u, sample-point: %0.3f\n&quot;,
+</I>&gt;&gt;<i>  			argv[1], bt.bitrate,
+</I>&gt;&gt;<i>  			(float)((float)bt.sample_point / 1000));
+</I>&gt;&gt;<i>  }
+</I>&gt;&gt;<i> @@ -202,6 +203,24 @@ static void do_show_bittiming(int argc, char *argv[])
+</I>&gt;&gt;<i>  			bt.sjw, bt.brp);
+</I>&gt;&gt;<i>  }
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i> +static void do_show_bittiming_const(int argc, char *argv[])
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	const char *name = argv[1];
+</I>&gt;&gt;<i> +	struct can_bittiming_const btc;
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	if (can_get_bittiming_const(name, &amp;btc) &lt; 0) {
+</I>&gt;&gt;<i> +		fprintf(stderr, &quot;%s: failed to get bittiming_const\n&quot;, argv[1]);
+</I>&gt;&gt;<i> +		exit(EXIT_FAILURE);
+</I>&gt;&gt;<i> +	} else
+</I>&gt;&gt;<i> +		fprintf(stdout, &quot;%s bittiming-constants: name %s,\n\t&quot;
+</I>&gt;&gt;<i> +			&quot;tseg1_min: %u, tseg1_max: %u, &quot;
+</I>&gt;&gt;<i> +			&quot;tseg2_min: %u, tseg2_max: %u,\n\t&quot;
+</I>&gt;&gt;<i> +			&quot;sjw_max %u, brp_min: %u, brp_max: %u, brp_inc: %u,\n&quot;,
+</I>&gt;&gt;<i> +			name, btc.name, btc.tseg1_min, btc.tseg1_max,
+</I>&gt;&gt;<i> +			btc.tseg2_min, btc.tseg2_max, btc.sjw_max,
+</I>&gt;&gt;<i> +			btc.brp_min, btc.brp_max, btc.brp_inc);
+</I>&gt;&gt;<i> +}
+</I>&gt;&gt;<i> +
+</I>&gt;<i> 
+</I>&gt;<i> to be consequent, we might also want &quot;-&quot;s instead of &quot;_&quot;s in the print
+</I>&gt;<i> too. If you agree I'll change this here directly to avoid a resend.
+</I>
+Yes, of course. Me not being consequent applying my suggested rules :-(.
+
+&gt;&gt;<i>  static void cmd_bittiming(int argc, char *argv[])
+</I>&gt;&gt;<i>  {
+</I>&gt;&gt;<i>  	if (argc &gt;= 4) {
+</I>&gt;&gt;<i> @@ -223,7 +242,7 @@ static void do_show_state(int argc, char *argv[])
+</I>&gt;&gt;<i>  	}
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  	if (state &gt;= 0 &amp;&amp; state &lt; CAN_STATE_MAX)
+</I>&gt;&gt;<i> -		fprintf(stdout, &quot;%s state: %s\n&quot;, argv[1], can_modes[state]);
+</I>&gt;&gt;<i> +		fprintf(stdout, &quot;%s state: %s\n&quot;, argv[1], can_states[state]);
+</I>&gt;&gt;<i>  	else
+</I>&gt;&gt;<i>  		fprintf(stderr, &quot;%s: unknown state\n&quot;, argv[1]);
+</I>&gt;&gt;<i>  }
+</I>&gt;&gt;<i> @@ -257,6 +276,13 @@ static void cmd_clockfreq(int argc, char *argv[])
+</I>&gt;&gt;<i>  	exit(EXIT_SUCCESS);
+</I>&gt;&gt;<i>  }
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i> +static void cmd_bittiming_const(int argc, char *argv[])
+</I>&gt;&gt;<i> +{
+</I>&gt;&gt;<i> +	do_show_bittiming_const(argc, argv);
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i> +	exit(EXIT_SUCCESS);
+</I>&gt;&gt;<i> +}
+</I>&gt;&gt;<i> +
+</I>&gt;&gt;<i>  static void do_restart(int argc, char *argv[])
+</I>&gt;&gt;<i>  {
+</I>&gt;&gt;<i>  	if (can_do_restart(argv[1]) &lt; 0) {
+</I>&gt;&gt;<i> @@ -395,7 +421,7 @@ static void do_show_restart_ms(int argc, char* argv[])
+</I>&gt;&gt;<i>  		exit(EXIT_FAILURE);
+</I>&gt;&gt;<i>  	} else
+</I>&gt;&gt;<i>  		fprintf(stdout,
+</I>&gt;&gt;<i> -			&quot;%s restart_ms: %u\n&quot;, argv[1], restart_ms);
+</I>&gt;&gt;<i> +			&quot;%s restart-ms: %u\n&quot;, argv[1], restart_ms);
+</I>&gt;&gt;<i>  }
+</I>&gt;&gt;<i>  
+</I>&gt;&gt;<i>  static void do_set_restart_ms(int argc, char* argv[])
+</I>&gt;&gt;<i> @@ -430,10 +456,12 @@ static void cmd_baudrate(int argc, char *argv[])
+</I>&gt;&gt;<i>  static void cmd_show_interface(int argc, char *argv[])
+</I>&gt;&gt;<i>  {
+</I>&gt;&gt;<i>  	do_show_bitrate(argc, argv);
+</I>&gt;&gt;<i> +	do_show_bittiming(argc, argv);
+</I>&gt;&gt;<i>  	do_show_state(argc, argv);
+</I>&gt;&gt;<i>  	do_show_restart_ms(argc, argv);
+</I>&gt;&gt;<i> -	do_show_clockfreq(argc, argv);
+</I>&gt;&gt;<i>  	do_show_ctrlmode(argc, argv);
+</I>&gt;&gt;<i> +	do_show_clockfreq(argc, argv);
+</I>&gt;&gt;<i> +	do_show_bittiming_const(argc, argv);
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> I kept the bittiming information out of show_interface to keep the
+</I>&gt;<i> common output simple as possible. But you are so far right that these
+</I>&gt;<i> are also essential informations. I might later add a verbose mode for
+</I>&gt;<i> all these informations. In the common mode only the most important
+</I>&gt;<i> infos like bitrate/state will be displayed than.
+</I>
+I verbose mode would be useful, indeed.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001175.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001177.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1176">[ date ]</a>
+              <a href="thread.html#1176">[ thread ]</a>
+              <a href="subject.html#1176">[ subject ]</a>
+              <a href="author.html#1176">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

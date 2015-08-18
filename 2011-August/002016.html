@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] On Linux two applications use the same bus?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-August/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E398179.8020406%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002015.html">
+   <LINK REL="Next"  HREF="002033.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] On Linux two applications use the same bus?</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20On%20Linux%20two%20applications%20use%20the%20same%20bus%3F&In-Reply-To=%3C4E398179.8020406%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] On Linux two applications use the same bus?">socketcan at hartkopp.net
+       </A><BR>
+    <I>Wed Aug  3 19:12:25 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002015.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+        <LI>Next message: <A HREF="002033.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2016">[ date ]</a>
+              <a href="thread.html#2016">[ thread ]</a>
+              <a href="subject.html#2016">[ subject ]</a>
+              <a href="author.html#2016">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Ulrich,
+
+here are code sniplets for the cross routing idea, if you want to do it
+with C-code - only if the cangw solution on the commandline does not
+fit your needs for some reasons:
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;signal.h&gt;
+#include &lt;string.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;libgen.h&gt;
+
+#include &lt;sys/types.h&gt;
+#include &lt;sys/time.h&gt;
+#include &lt;sys/socket.h&gt;
+#include &lt;sys/ioctl.h&gt;
+
+#include &lt;linux/if.h&gt;
+#include &lt;linux/netlink.h&gt;
+#include &lt;linux/rtnetlink.h&gt;
+
+#include &lt;linux/can.h&gt;
+#include &lt;linux/can/raw.h&gt;
+#include &lt;linux/can/gw.h&gt;
+
+#define VERB(args...) (verbose ? printf(args) : 0)
+
+(..)
+
+int s; /* raw socket */
+int nl; /* rtnetlink socket */
+
+char candevice[IFNAMSIZ] = {0};
+char appdevice[IFNAMSIZ] = {0};
+
+(..)
+
+/* netlink helpers */
+#define NLMSG_TAIL(nmsg)                                                \
+        ((struct rtattr *)(((void *) (nmsg)) + NLMSG_ALIGN((nmsg)-&gt;nlmsg_len)))
+
+int addattr_l(struct nlmsghdr *n, int maxlen, int type, const void *data,
+              int alen)
+{
+        int len = RTA_LENGTH(alen);
+        struct rtattr *rta;
+
+        if (NLMSG_ALIGN(n-&gt;nlmsg_len) + RTA_ALIGN(len) &gt; maxlen) {
+                fprintf(stderr, &quot;addattr_l: message exceeded bound of %d\n&quot;,
+                        maxlen);
+                return -1;
+        }
+        rta = NLMSG_TAIL(n);
+        rta-&gt;rta_type = type;
+        rta-&gt;rta_len = len;
+        memcpy(RTA_DATA(rta), data, alen);
+        n-&gt;nlmsg_len = NLMSG_ALIGN(n-&gt;nlmsg_len) + RTA_ALIGN(len);
+        return 0;
+}
+
+(..)
+
+/* some helpers to handle the CAN interfaces */
+int set_if_up(int s, char *name)
+{
+        struct ifreq ifr;
+        int err;
+
+        /* get interface flags */
+        strcpy(ifr.ifr_name, name);
+        err = ioctl(s, SIOCGIFFLAGS, &amp;ifr);
+        if (err &lt; 0)
+                return err;
+
+        /* check if interface is currently up */
+        if (!(ifr.ifr_flags &amp; IFF_UP)) {
+                strcpy(ifr.ifr_name, name);
+                ifr.ifr_flags |= (IFF_UP | IFF_RUNNING);
+                ioctl(s, SIOCSIFFLAGS, &amp;ifr);
+                VERB(&quot;setting %s interface flags to UP\n&quot;, name);
+        } else
+                VERB(&quot;%s interface flags were already UP\n&quot;, name);
+
+        return 0;
+}
+
+int set_if_down(int s, char *name)
+{
+        struct ifreq ifr;
+        int err;
+
+        /* get interface flags */
+        strcpy(ifr.ifr_name, name);
+        err = ioctl(s, SIOCGIFFLAGS, &amp;ifr);
+        if (err &lt; 0)
+                return err;
+
+        /* check if interface is currently down */
+        if (ifr.ifr_flags &amp; IFF_UP) {
+                strcpy(ifr.ifr_name, name);
+                ifr.ifr_flags &amp;= ~IFF_UP;
+                ioctl(s, SIOCSIFFLAGS, &amp;ifr);
+                VERB(&quot;setting %s interface flags to DOWN\n&quot;, name);
+        } else
+                VERB(&quot;%s interface flags were already DOWN\n&quot;, name);
+
+        return 0;
+}
+
+/* some helpers to handle the CAN routing */
+int config_routing(int nl, u_int32_t src, u_int32_t dst, int mode)
+{
+        struct sockaddr_nl nladdr;
+        char rxbuf[8192]; /* netlink receive buffer */
+        struct {
+                struct nlmsghdr nh;
+                struct rtcanmsg rtcan;
+                char buf[200];
+
+        } req;
+        struct nlmsghdr *nlh;
+        struct nlmsgerr *rte;
+        int err = 0;
+
+        memset(&amp;req, 0, sizeof(req));
+
+        req.nh.nlmsg_flags = NLM_F_REQUEST | NLM_F_ACK;
+        req.nh.nlmsg_type  = mode;
+        req.nh.nlmsg_len   = NLMSG_LENGTH(sizeof(struct rtcanmsg));
+        req.nh.nlmsg_seq   = 0;
+
+        req.rtcan.can_family  = AF_CAN;
+        req.rtcan.gwtype = CGW_TYPE_CAN_CAN;
+        req.rtcan.flags = CGW_FLAGS_CAN_ECHO;
+
+        addattr_l(&amp;req.nh, sizeof(req), CGW_SRC_IF, &amp;src, sizeof(src));
+        addattr_l(&amp;req.nh, sizeof(req), CGW_DST_IF, &amp;dst, sizeof(dst));
+
+        memset(&amp;nladdr, 0, sizeof(nladdr));
+        nladdr.nl_family = AF_NETLINK;
+        nladdr.nl_pid    = 0;
+        nladdr.nl_groups = 0;
+
+        err = sendto(nl, &amp;req, req.nh.nlmsg_len, 0,
+                     (struct sockaddr*)&amp;nladdr, sizeof(nladdr));
+        if (err &lt; 0) {
+                perror(&quot;netlink sendto&quot;);
+                return err;
+        }
+
+        /* clean netlink receive buffer */
+        bzero(rxbuf, sizeof(rxbuf));
+
+        /* Parse the requested netlink acknowledge return values. */
+        
+        err = recv(nl, &amp;rxbuf, sizeof(rxbuf), 0);
+        if (err &lt; 0) {
+                perror(&quot;netlink recv&quot;);
+                return err;
+        }
+        nlh = (struct nlmsghdr *)rxbuf;
+        if (nlh-&gt;nlmsg_type != NLMSG_ERROR) {
+                fprintf(stderr, &quot;unexpected netlink answer of type %d\n&quot;, nlh-&gt;nlmsg_type);
+                return -EINVAL;
+        }
+        rte = (struct nlmsgerr *)NLMSG_DATA(nlh);
+        err = rte-&gt;error;
+        if (err &lt; 0)
+                fprintf(stderr, &quot;netlink error %d (%s)\n&quot;, err, strerror(abs(err)));
+
+        return err;
+}
+
+int enable_routing(void)
+{
+        int err = 0;
+
+        if (!routing_active) {
+                if (err = config_routing(nl, can_ifidx, app_ifidx, RTM_NEWROUTE))
+                        return err;
+
+                if (err = config_routing(nl, app_ifidx, can_ifidx, RTM_NEWROUTE))
+                        return err;
+
+                routing_active = 1;
+        }
+
+        return err;
+}
+
+int disable_routing(void)
+{
+        int err = 0;
+
+        if (routing_active) {
+                if (err = config_routing(nl, can_ifidx, app_ifidx, RTM_DELROUTE))
+                        return err;
+
+                if (err = config_routing(nl, app_ifidx, can_ifidx, RTM_DELROUTE))
+                        return err;
+
+                routing_active = 0;
+        }
+
+        return err;
+}
+
+void sigterm(int signo)
+{
+        running = 0;
+
+        if (app_ifidx)
+                disable_routing();
+}
+
+(..)
+
+main() {
+
+(..)
+
+        strcpy(ifr.ifr_name, candevice);
+        ioctl(s, SIOCGIFINDEX, &amp;ifr);
+        addr.can_ifindex = can_ifidx = ifr.ifr_ifindex;
+        addr.can_family = AF_CAN;
+ 
+        if (bind(s, (struct sockaddr *)&amp;addr, sizeof(addr)) &lt; 0) {
+                perror(&quot;raw bind&quot;);
+                exit(1);
+        }
+
+        /* make our VWNM device surely working */
+        ret = set_if_up(s, candevice);
+        if (ret)
+                return ret;
+
+        /* check if routing of CAN traffic for CAN applications is needed */
+        if (appdevice[0]) {
+                strcpy(ifr.ifr_name, appdevice);
+                ioctl(s, SIOCGIFINDEX, &amp;ifr);
+                app_ifidx = ifr.ifr_ifindex;
+
+                /* app_ifidx is now our *indication* for routing facility */
+
+                if (app_ifidx) {
+                        ret = set_if_up(s, appdevice);
+                        if (ret)
+                                return ret;
+
+                        /* open netlink socket for acces to the CAN routing tables */
+                        if ((nl = socket(PF_NETLINK, SOCK_RAW, NETLINK_ROUTE)) &lt; 0) {
+                                perror(&quot;netlink socket&quot;);
+                                exit(1);
+                        }
+                }
+        }
+
+(..)
+
+exit:
+
+        if (app_ifidx)
+                disable_routing();
+
+        close(s);
+
+        return 0;
+}
+
+
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002015.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+	<LI>Next message: <A HREF="002033.html">[Socketcan-users] On Linux two applications use the same bus?
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2016">[ date ]</a>
+              <a href="thread.html#2016">[ thread ]</a>
+              <a href="subject.html#2016">[ subject ]</a>
+              <a href="author.html#2016">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

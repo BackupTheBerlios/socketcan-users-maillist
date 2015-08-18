@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BANNOUNCE2%5D%20Rework%20of%20command%20line%20parameters%20in%0A%09candump&In-Reply-To=%3C4826F5AE.5000907%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000354.html">
+   <LINK REL="Next"  HREF="000366.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BANNOUNCE2%5D%20Rework%20of%20command%20line%20parameters%20in%0A%09candump&In-Reply-To=%3C4826F5AE.5000907%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump">oliver at hartkopp.net
+       </A><BR>
+    <I>Sun May 11 15:33:34 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000354.html">[Socketcan-users] [ANNOUNCE] Rework of command line parameters in	cangen
+</A></li>
+        <LI>Next message: <A HREF="000366.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#355">[ date ]</a>
+              <a href="thread.html#355">[ thread ]</a>
+              <a href="subject.html#355">[ subject ]</a>
+              <a href="author.html#355">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+last week i checked-in new versions of the tools candump &amp; cangen in
+socketcan/trunk/can-utils that should fix some usability issues before
+they probably get spread into a bigger user group through commonly known
+Linux Distros.
+
+
+Changes in candump (the tool to display &amp; log CAN frames):
+
+Support up to 16 different CAN interfaces specified on the command line.
+Allow up to 30 different filters and an error frame filter for *each* 
+interface.
+
+Formerly only 6 different CAN interfaces could be specified, each with 
+only one filter and one error filter.
+
+Removed -m -v -i -e options which were needed for the former definition 
+of CAN ID filters and error frame filters. The filters are now specified 
+directly behind the given specific CAN interface with &lt;ifname&gt;[,filter]*
+
+For example to display all error frames from can0 you now need to invoke
+
+candump can0,#FFFF
+
+which was formerly 'candump -e FFFF can0'.
+
+Finally the colorized output (option '-c') and the interface name cache 
+can handle up to 30 different CAN interfaces. The interface name cache 
+is used to massively reduce the ioctl(SIOCGIFNAME) system calls to 
+determine the interface name from the given interface index.
+
+For the complete list of command line options invoke candump without any 
+options, which displays this help text:
+
+-------------------------
+
+Usage: candump [options] &lt;CAN interface&gt;+
+  (use CTRL-C to terminate candump)
+
+Options: -t &lt;type&gt;   (timestamp: (a)bsolute/(d)elta/(z)ero/(A)bsolute w 
+date)
+         -c          (increment color mode level)
+         -a          (enable additional ASCII output)
+         -s &lt;level&gt;  (silent mode - 1: animation 2: completely silent)
+         -b &lt;can&gt;    (bridge mode - send received frames to &lt;can&gt;)
+         -B &lt;can&gt;    (bridge mode - like '-b' with disabled loopback)
+         -l          (log CAN-frames into file)
+         -L          (use log file format on stdout)
+
+Up to 16 CAN interfaces with optional filter sets can be specified
+on the commandline in the form: &lt;ifname&gt;[,filter]*
+
+Up to 30 comma separated filters can be specified for each given CAN 
+interface:
+ &lt;can_id&gt;:&lt;can_mask&gt; (matches when &lt;received_can_id&gt; &amp; mask == can_id &amp; 
+mask)
+ &lt;can_id&gt;~&lt;can_mask&gt; (matches when &lt;received_can_id&gt; &amp; mask != can_id &amp; 
+mask)
+ #&lt;error_mask&gt;       (set error frame filter, see include/linux/can/error.h)
+
+Use interface name 'any' to receive from all CAN interfaces.
+CAN IDs, masks and data content are given and expected in hexadecimal 
+values.
+
+Examples:
+candump -c -c -ta can0,123:7FF,400:700,#000000FF can2,400~7F0 can3 can8
+candump -l any,0~0,#FFFFFFFF    (log only error frames but no(!) data 
+frames)
+candump vcan2,92345678:9FFFFFFF (match only for extended CAN ID 12345678)
+
+-------------------------
+
+Have fun!
+
+Oliver
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000354.html">[Socketcan-users] [ANNOUNCE] Rework of command line parameters in	cangen
+</A></li>
+	<LI>Next message: <A HREF="000366.html">[Socketcan-users] RTCAN &amp; RT-Socket CAN
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#355">[ date ]</a>
+              <a href="thread.html#355">[ thread ]</a>
+              <a href="subject.html#355">[ subject ]</a>
+              <a href="author.html#355">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

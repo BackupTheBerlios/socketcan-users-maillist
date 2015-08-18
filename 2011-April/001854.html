@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] MCP2515 design opinion
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP2515%20design%20opinion&In-Reply-To=%3C4D95B78D.60107%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="001855.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] MCP2515 design opinion</H1>
+    <B>Marc Kleine-Budde</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20MCP2515%20design%20opinion&In-Reply-To=%3C4D95B78D.60107%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] MCP2515 design opinion">mkl at pengutronix.de
+       </A><BR>
+    <I>Fri Apr  1 13:31:25 CEST 2011</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="001855.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1854">[ date ]</a>
+              <a href="thread.html#1854">[ thread ]</a>
+              <a href="subject.html#1854">[ subject ]</a>
+              <a href="author.html#1854">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 03/30/2011 08:05 PM, bruce bushby wrote:
+&gt;<i> I'm hoping the list could offer some quick advice. I'm having a board
+</I>&gt;<i> designed and have decided to use 2x MCP2515 but first wanted to hear how the
+</I>&gt;<i> list felt about:
+</I>&gt;<i> 
+</I>&gt;<i> 1. Support for the device in the 2.6.38 Linux kernel
+</I>&gt;<i> 2. Opinions regarding having both devices on the same SPI interface?
+</I>&gt;<i> 
+</I>&gt;<i> Any comments good or bad would be appreciated!!
+</I>
+My advice:
+Avoid using a SPI can controller if you can. I've seen ~30% system load
+on a mx35 (~500 MHz ARM11, which has probably not the best
+SPI-controller), while the internal CAN controller of the mx35 produces
+just a load of 1-3%.
+
+There are a couple of arm controllers with two CAN cores on chip, e.g.
+MX25, MX35, MX28, which are already supported by the mainline kernel.
+There are probably other vendors that have such controllers.
+
+The other alternative would be to attach two SJA1000 to one or two chip
+selects of your CPU. If you have a PCI bus you can attach them via a PLX
+bridge.
+
+Last but not least Andre coded and I improved an optimized driver for
+the mcp2515. But I have had no time to mainline the driver, yet.
+
+cheers, Marc
+
+-- 
+Pengutronix e.K.                  | Marc Kleine-Budde           |
+Industrial Linux Solutions        | Phone: +49-231-2826-924     |
+Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
+Amtsgericht Hildesheim, HRA 2686  | <A HREF="http://www.pengutronix.de">http://www.pengutronix.de</A>   |
+
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 262 bytes
+Desc: OpenPGP digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110401/81574262/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110401/81574262/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="001855.html">[Socketcan-users] MCP2515 design opinion
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1854">[ date ]</a>
+              <a href="thread.html#1854">[ thread ]</a>
+              <a href="subject.html#1854">[ subject ]</a>
+              <a href="author.html#1854">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

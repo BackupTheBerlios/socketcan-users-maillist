@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [PATCH] rec tec
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BPATCH%5D%20rec%20tec&In-Reply-To=%3Cmailman.15.1331738233.11887.socketcan-users%40lists.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001263.html">
+   <LINK REL="Next"  HREF="001267.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[PATCH] rec tec</H1>
+    <B>Christian Pellegrin</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BPATCH%5D%20rec%20tec&In-Reply-To=%3Cmailman.15.1331738233.11887.socketcan-users%40lists.berlios.de%3E"
+       TITLE="[PATCH] rec tec">chripell at fsfe.org
+       </A><BR>
+    <I>Sun Feb  7 09:57:47 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001263.html">[PATCH] reenable reporting of bus errors
+</A></li>
+        <LI>Next message: <A HREF="001267.html">[PATCH] bus-error tec rec
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1265">[ date ]</a>
+              <a href="thread.html#1265">[ thread ]</a>
+              <a href="subject.html#1265">[ subject ]</a>
+              <a href="author.html#1265">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>---
+ drivers/net/can/dev.c       |    3 +++
+ drivers/net/can/mcp251x.c   |   13 +++++++++++++
+ include/linux/can/dev.h     |    1 +
+ include/linux/can/netlink.h |    2 ++
+ 4 files changed, 19 insertions(+), 0 deletions(-)
+
+diff --git a/drivers/net/can/dev.c b/drivers/net/can/dev.c
+index f08f120..900a467 100644
+--- a/drivers/net/can/dev.c
++++ b/drivers/net/can/dev.c
+@@ -688,6 +688,9 @@ static int can_fill_xstats(struct sk_buff *skb,
+const struct net_device *dev)
+ {
+ 	struct can_priv *priv = netdev_priv(dev);
+
++	if (priv-&gt;do_update_stats)
++		priv-&gt;do_update_stats(dev);
++
+ 	NLA_PUT(skb, IFLA_INFO_XSTATS,
+ 		sizeof(priv-&gt;can_stats), &amp;priv-&gt;can_stats);
+
+diff --git a/drivers/net/can/mcp251x.c b/drivers/net/can/mcp251x.c
+index 2608817..e343bbf 100644
+--- a/drivers/net/can/mcp251x.c
++++ b/drivers/net/can/mcp251x.c
+@@ -506,6 +506,18 @@ static int mcp251x_do_set_mode(struct net_device
+*net, enum can_mode mode)
+ 	return 0;
+ }
+
++static int mcp251x_do_update_stats(struct net_device *net)
++{
++	struct mcp251x_priv *priv = netdev_priv(net);
++
++	mutex_lock(&amp;priv-&gt;mcp_lock);
++	priv-&gt;can.can_stats.tec = mcp251x_read_reg(priv-&gt;spi, TEC);
++	priv-&gt;can.can_stats.rec = mcp251x_read_reg(priv-&gt;spi, REC);
++	mutex_unlock(&amp;priv-&gt;mcp_lock);
++	return 0;
++}
++
++
+ static int mcp251x_set_normal_mode(struct spi_device *spi)
+ {
+ 	struct mcp251x_priv *priv = dev_get_drvdata(&amp;spi-&gt;dev);
+@@ -1015,6 +1027,7 @@ static int __devinit mcp251x_can_probe(struct
+spi_device *spi)
+ 	priv = netdev_priv(net);
+ 	priv-&gt;can.bittiming_const = &amp;mcp251x_bittiming_const;
+ 	priv-&gt;can.do_set_mode = mcp251x_do_set_mode;
++	priv-&gt;can.do_update_stats = mcp251x_do_update_stats;
+ 	priv-&gt;can.clock.freq = pdata-&gt;oscillator_frequency / 2;
+ 	priv-&gt;can.ctrlmode_supported = CAN_CTRLMODE_3_SAMPLES |
+ 		CAN_CTRLMODE_LOOPBACK | CAN_CTRLMODE_LISTENONLY |
+diff --git a/include/linux/can/dev.h b/include/linux/can/dev.h
+index 4cb4f72..2bfecab 100644
+--- a/include/linux/can/dev.h
++++ b/include/linux/can/dev.h
+@@ -47,6 +47,7 @@ struct can_priv {
+ 	int (*do_set_mode)(struct net_device *dev, enum can_mode mode);
+ 	int (*do_get_state)(const struct net_device *dev,
+ 			    enum can_state *state);
++	int (*do_update_stats)(const struct net_device *dev);
+
+ 	unsigned int echo_skb_max;
+ 	struct sk_buff **echo_skb;
+diff --git a/include/linux/can/netlink.h b/include/linux/can/netlink.h
+index 49960e4..ef6fbf1 100644
+--- a/include/linux/can/netlink.h
++++ b/include/linux/can/netlink.h
+@@ -93,6 +93,8 @@ struct can_device_stats {
+ 	__u32 bus_off;		/* Changes to bus off state */
+ 	__u32 arbitration_lost; /* Arbitration lost errors */
+ 	__u32 restarts;		/* CAN controller re-starts */
++	__u8 tec;
++	__u8 rec;
+ };
+
+ /*
+-- 
+1.5.6.5
+-- 
+Christian Pellegrin, see <A HREF="http://www.evolware.org/chri/">http://www.evolware.org/chri/</A>
+&quot;Real Programmers don't play tennis, or any other sport which requires
+you to change clothes. Mountain climbing is OK, and Real Programmers
+wear their climbing boots to work in case a mountain should suddenly
+spring up in the middle of the computer room.&quot;
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001263.html">[PATCH] reenable reporting of bus errors
+</A></li>
+	<LI>Next message: <A HREF="001267.html">[PATCH] bus-error tec rec
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1265">[ date ]</a>
+              <a href="thread.html#1265">[ thread ]</a>
+              <a href="subject.html#1265">[ subject ]</a>
+              <a href="author.html#1265">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

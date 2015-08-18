@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [CAN] kernel 2.6.28 integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A41E07.7070500%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000678.html">
+   <LINK REL="Next"  HREF="000682.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [CAN] kernel 2.6.28 integration</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A41E07.7070500%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] [CAN] kernel 2.6.28 integration">socketcan at hartkopp.net
+       </A><BR>
+    <I>Tue Feb 24 17:19:19 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000678.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+        <LI>Next message: <A HREF="000682.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#680">[ date ]</a>
+              <a href="thread.html#680">[ thread ]</a>
+              <a href="subject.html#680">[ subject ]</a>
+              <a href="author.html#680">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hector Oron wrote:
+&gt;<i> Hello,
+</I>&gt;<i>
+</I>&gt;<i>    I am new user to this list and also a new user for socket-can. First 
+</I>&gt;<i> of all I'd like to thank you for all your work.
+</I>&gt;<i>
+</I>&gt;<i>    I have seen you had an argument with netdev people and your code is 
+</I>&gt;<i> partially migrated into kernel sources. I have been using quilt and 
+</I>&gt;<i> using patch-series/net-2.6.29 under socket can SVN. I have also seen 
+</I>&gt;<i> kernel/ files but i have not apply it yet.
+</I>&gt;<i>
+</I>&gt;<i>    While i am trying to cross compile the kernel, i get this error:
+</I>&gt;<i>
+</I>&gt;<i> error: 'CAN_BITRATE_DEFAULT' undeclared here (not in a function)
+</I>&gt;<i>
+</I>&gt;<i>    that it is using proper kernel headers, I have seen that this define 
+</I>&gt;<i> it's under include/linux/can/ioctl.h (in your repsository).
+</I>&gt;<i>
+</I>&gt;<i>    So before walking farther, i'd like to ask you for some hints on how 
+</I>&gt;<i> to use your code in a 2.6.28 kernel. Should i just copy kernel/2.6/* on 
+</I>&gt;<i> top of my kernel tree? Should I apply quilt patches instead? What is the 
+</I>&gt;<i> preferred way?
+</I>&gt;<i>   
+</I>
+Hello Hector,
+
+the patch series are based on the current net-next-2.6 GIT tree from 
+David Miller 
+(<A HREF="http://git.kernel.org/?p=linux/kernel/git/davem/net-next-2.6.git;a=summary">http://git.kernel.org/?p=linux/kernel/git/davem/net-next-2.6.git;a=summary</A>) 
+which probably does not suit your needs.
+
+In general there are at least two ways to get it working with your 2.6.28:
+
+----
+
+1. Go into socketcan/trunk/kernel/2.6 and say
+
+make KERNELDIR=&lt;path-to-your-2.6.28-kernel&gt;
+
+make KERNELDIR=&lt;path-to-your-2.6.28-kernel&gt; modules_install
+
+I assume your kernel is already supporting CAN, so you might omit 
+compiling some of the already (Mainline) available parts:
+
+make KERNELDIR=&lt;path-to-your-2.6.28-kernel&gt; CONFIG_CAN=n 
+CONFIG_CAN_RAW=n CONFIG_CAN_BCM=n CONFIG_CAN_VCAN=n
+
+make KERNELDIR=&lt;path-to-your-2.6.28-kernel&gt; CONFIG_CAN=n 
+CONFIG_CAN_RAW=n CONFIG_CAN_BCM=n CONFIG_CAN_VCAN=n modules_install
+
+This will install the new external build modules in 
+/lib/modules/2.6.28.whatever/extra/drivers/net/can/*
+
+----
+
+2. Create a patch for your  2.6.28 kernel:
+
+Assuming you only want to add the driver stuff (right?), go to
+
+socketcan/trunk and say
+
+./mkpatch 2.6.28 &lt; FILES-2.6.25x-DRIVERS &gt; mypatch
+
+This is the theory ;-)
+
+Indeed i only tested this up to 2.6.27 :-/
+
+The idea is to create a patch that
+
+1. removes the mainline vcan driver from your tree
+2. Adds a patch that consists of the files that are contained in 
+FILES-2.6.25x-DRIVERS
+
+The patch to remove the original vcan driver (for point 1.) is placed in 
+socketcan/trunk/patches/2.6.28.diff which i would need to create there ;-)
+I have to look, if creating a symlink like for 2.6.27 is just enough there.
+
+The other thing is that i'm not aware if FILES-2.6.25x-DRIVERS is 
+up-to-date due to the latest driver developments. Maybe it needs some 
+update or you can take it as a basis for your own file list that's 
+passed to ./mkpatch ...
+
+----
+
+In general these hints should help you for the first steps.
+
+But please check first, if you still have compilation problems, when 
+compiling the external modules as suggested in (1). If so we are 
+probably having a different issue on your side.
+
+Regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000678.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+	<LI>Next message: <A HREF="000682.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#680">[ date ]</a>
+              <a href="thread.html#680">[ thread ]</a>
+              <a href="subject.html#680">[ subject ]</a>
+              <a href="author.html#680">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

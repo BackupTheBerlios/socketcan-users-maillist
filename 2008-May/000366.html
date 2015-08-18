@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RTCAN &amp; RT-Socket CAN
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RTCAN%20%26%20RT-Socket%20CAN&In-Reply-To=%3C200805130852.27994.Sebastian.Smolorz%40gmx.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000355.html">
+   <LINK REL="Next"  HREF="000367.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RTCAN &amp; RT-Socket CAN</H1>
+    <B>Sebastian Smolorz</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20RTCAN%20%26%20RT-Socket%20CAN&In-Reply-To=%3C200805130852.27994.Sebastian.Smolorz%40gmx.de%3E"
+       TITLE="[Socketcan-users] RTCAN &amp; RT-Socket CAN">Sebastian.Smolorz at gmx.de
+       </A><BR>
+    <I>Tue May 13 08:52:27 CEST 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000355.html">[Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump
+</A></li>
+        <LI>Next message: <A HREF="000367.html">[Socketcan-users] PCAN no longer works
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#366">[ date ]</a>
+              <a href="thread.html#366">[ thread ]</a>
+              <a href="subject.html#366">[ subject ]</a>
+              <a href="author.html#366">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>You dropped the mailing list ...
+
+Breno wrote:
+&gt;<i> Sebastian Smolorz wrote:
+</I>&gt;<i> &gt; Breno wrote:
+</I>&gt;<i> &gt;&gt; Hi Wolfgang, where do you have defined on your files the functions:
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt; rt_dev_close
+</I>&gt;<i> &gt;&gt; rt_dev_sendmsg
+</I>&gt;<i> &gt;&gt; rt_dev_socket
+</I>&gt;<i> &gt;&gt; rt_dev_ioctl
+</I>&gt;<i> &gt;&gt; rt_dev_ioctl
+</I>&gt;<i> &gt;&gt; rt_dev_bind
+</I>&gt;<i> &gt;&gt; rt_dev_ioctl
+</I>&gt;<i> &gt;&gt; rt_dev_setsockopt
+</I>&gt;<i> &gt;&gt; rt_dev_ioctl
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Those are RTDM functions defined in rtdm/rtdm.h. But you probably want to
+</I>&gt;<i> &gt; #include &lt;rtdm/rtcan.h&gt;
+</I>&gt;<i> &gt; for RT-Socket-CAN applications as rtcan.h already includes rtdm.h.
+</I>&gt;<i>
+</I>&gt;<i> Sebastian, thanks your support. Mu concern is in the fact that all
+</I>&gt;<i> declaration on rtdm.h is inside a #ifdef _KERNEL_ #endif structure.
+</I>
+That's not true. There are different declarations for the KERNEL and !KERNEL 
+case. Please read the file and the preprocessor macros carefully.
+
+&gt;<i> So, 
+</I>&gt;<i> when I get compilation it couldn't find the function declared in file.
+</I>&gt;<i>
+</I>&gt;<i> How to solve it? Can I remove the #ifdef in order to make it visible?
+</I>
+This would be absolutely wrong. There must be another issue.
+
+-- 
+Sebastian
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000355.html">[Socketcan-users] [ANNOUNCE2] Rework of command line parameters in	candump
+</A></li>
+	<LI>Next message: <A HREF="000367.html">[Socketcan-users] PCAN no longer works
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#366">[ date ]</a>
+              <a href="thread.html#366">[ thread ]</a>
+              <a href="subject.html#366">[ subject ]</a>
+              <a href="author.html#366">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

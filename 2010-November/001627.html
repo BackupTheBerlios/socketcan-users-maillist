@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Failed%20to%20load%20sja1000_isa.ko%20on%20a%20PC104%0A%20proc%2Bcan%20stack&In-Reply-To=%3C4CDAA492.9030608%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001626.html">
+   <LINK REL="Next"  HREF="001628.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Fwd%3A%20Failed%20to%20load%20sja1000_isa.ko%20on%20a%20PC104%0A%20proc%2Bcan%20stack&In-Reply-To=%3C4CDAA492.9030608%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack">wg at grandegger.com
+       </A><BR>
+    <I>Wed Nov 10 14:56:34 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001626.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104	proc+can stack
+</A></li>
+        <LI>Next message: <A HREF="001628.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1627">[ date ]</a>
+              <a href="thread.html#1627">[ thread ]</a>
+              <a href="subject.html#1627">[ subject ]</a>
+              <a href="author.html#1627">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/10/2010 02:44 PM, Willy Lambert wrote:
+&gt;<i> Hi all,
+</I>&gt;<i> 
+</I>&gt;<i> the short story is that &quot;insmod sja1000_isa.ko irq=5,7 mem=0xd000,0xd200&quot;
+</I>&gt;<i> failed in dmesg with :
+</I>&gt;<i> [ 3260.818929] sja1000_isa: probe of sja1000_isa.0 failed with error -16
+</I>&gt;<i> [ 3260.819455] sja1000_isa: probe of sja1000_isa.1 failed with error -16
+</I>&gt;<i> [ 3260.820225] Legacy sja1000_isa driver for max. 8 devices registered
+</I>&gt;<i> 
+</I>&gt;<i> The long one is :
+</I>&gt;<i> 
+</I>&gt;<i> I just receive my brand new Ixxat Can PC104 Interface, I tried to put
+</I>&gt;<i> everything in order tonigth on my Linux 2.6.32.11 Debian system. but I'm
+</I>&gt;<i> stuck with kernel modules loading. Be sure that I rake the web in order to
+</I>&gt;<i> find any piece of information, but I did not find anything like
+</I>&gt;<i> &quot;installation instructions&quot;. I tried to compile the latex documentation
+</I>&gt;<i> (even in my Windows) but it's quite in German :) Please redirect me to any
+</I>&gt;<i> existing documentation if it exists. (this didn't helped :
+</I>&gt;<i> <A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#635">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#635</A>)
+</I>&gt;<i> 
+</I>&gt;<i> Then here is my config :
+</I>&gt;<i> _ <A HREF="http://www.ableway.com.cn/wp-content/uploads/2009/12/pcm-3362.pdf">http://www.ableway.com.cn/wp-content/uploads/2009/12/pcm-3362.pdf</A> (there
+</I>&gt;<i> is a bus cartography)
+</I>&gt;<i> _ <A HREF="http://www.ixxat.com/pc_i_04_104_en.html">http://www.ixxat.com/pc_i_04_104_en.html</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> What I did :
+</I>&gt;<i> _ As I am on a PC104 module,my can interface is on a ISA bus and It is
+</I>&gt;<i> connected to the chipset via a pci-isa bridge. I  activated ISA bus
+</I>&gt;<i> management in .config file. (I don't know if I have something to do for
+</I>&gt;<i> making the bus working).
+</I>&gt;<i> _ I add socket can options in .config and sja1000 drivers (on isa bus).
+</I>&gt;<i> _ I compiled my kernel on my host PC and copied it to my target. I now have
+</I>&gt;<i> sja1000.ko sja1000_isa.ko in lib/.../driver/net/can/sja1000
+</I>&gt;<i> 
+</I>&gt;<i> I tried to load theses modules :
+</I>&gt;<i> _ insmod can.ko
+</I>&gt;<i> _ insmod candev.ko
+</I>&gt;<i> _ insmod sja1000.ko
+</I>&gt;<i> _ insmod sja1000_isa.ko irq=5,7 mem=0xd000,0xd200
+</I>
+&gt;<i> 
+</I>&gt;<i> And then I have the error :
+</I>&gt;<i> [ 3260.818929] sja1000_isa: probe of sja1000_isa.0 failed with error -16
+</I>&gt;<i> [ 3260.819455] sja1000_isa: probe of sja1000_isa.1 failed with error -16
+</I>&gt;<i> [ 3260.820225] Legacy sja1000_isa driver for max. 8 devices registered
+</I>&gt;<i> 
+</I>&gt;<i> Can someone help me finding what's wrong with it ?
+</I>
+The error &quot;-16&quot; means -EBUSY! See:
+
+
+<A HREF="http://lxr.linux.no/#linux+v2.6.36/drivers/net/can/sja1000/sja1000_isa.c#L139">http://lxr.linux.no/#linux+v2.6.36/drivers/net/can/sja1000/sja1000_isa.c#L139</A>
+
+It seems that the region you request is already occupied. Check in
+/proc/iomem who is using that address. Note the device might also be
+accessible via ioport.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001626.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104	proc+can stack
+</A></li>
+	<LI>Next message: <A HREF="001628.html">[Socketcan-users] Fwd: Failed to load sja1000_isa.ko on a PC104 proc+can stack
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1627">[ date ]</a>
+              <a href="thread.html#1627">[ thread ]</a>
+              <a href="subject.html#1627">[ subject ]</a>
+              <a href="author.html#1627">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

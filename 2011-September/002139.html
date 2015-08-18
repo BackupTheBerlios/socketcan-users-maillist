@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [CANLIST] socketcan and codesys (rollover?)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCANLIST%5D%20socketcan%20and%20codesys%20%28rollover%3F%29&In-Reply-To=%3C4E79EA13.2070601%40tke.fi%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002140.html">
+   <LINK REL="Next"  HREF="002141.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [CANLIST] socketcan and codesys (rollover?)</H1>
+    <B>Bertil B&#228;ck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCANLIST%5D%20socketcan%20and%20codesys%20%28rollover%3F%29&In-Reply-To=%3C4E79EA13.2070601%40tke.fi%3E"
+       TITLE="[Socketcan-users] [CANLIST] socketcan and codesys (rollover?)">bertil.back at tke.fi
+       </A><BR>
+    <I>Wed Sep 21 15:43:47 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002140.html">[Socketcan-users] socketcan and codesys
+</A></li>
+        <LI>Next message: <A HREF="002141.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2139">[ date ]</a>
+              <a href="thread.html#2139">[ thread ]</a>
+              <a href="subject.html#2139">[ subject ]</a>
+              <a href="author.html#2139">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i> I have a problem when using codesys v3 with SocketCAN on a ARM module
+</I>&gt;&gt;<i> using Linux kernel 3.0.2 with 2 SJA1000 CAN controllers.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have two of these modules. I use a CAN messages to monitor if the
+</I>&gt;&gt;<i> other module is alive.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> This is done by a toggle bit in one message that is sent every 100ms. If
+</I>&gt;&gt;<i> the toggle bit is not changed within 500ms. I send a alarm.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After about 36h of uptime I start getting alarms about one or the other
+</I>&gt;&gt;<i> module is missing and then the alarm starts to go away but gets
+</I>&gt;&gt;<i> triggered again. This happens about every 1-3 sec after the first alarm
+</I>&gt;&gt;<i> has been sent. The only way the solve the problem is to restart the that
+</I>&gt;&gt;<i> gives the alarm. Ie not the one that is sending the alarm.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I have used a external CAN logger to test the CAN messages. It seems
+</I>&gt;&gt;<i> like the messages are both sent and toggled. This makes me believe that
+</I>&gt;&gt;<i> the TX side is ok.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I also made a test codesys ping pong application. The messages are
+</I>&gt;&gt;<i> always sent on the CAN network verified with CANoe but codesys does not
+</I>&gt;&gt;<i> always receive them.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think that the problem is in codesys v3. But how can I prove this? Any
+</I>&gt;&gt;<i> suggestions. So far I have only been successful in getting this error on
+</I>&gt;&gt;<i> the entire test system. Not standalone or with other test applications.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Bertil B&#228;ck
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> p.s
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Another side note that I have seen is that the following.
+</I>&gt;&gt;<i> I ran ip -d -s link show can1
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> It says that I have 3702 arbit-lost and also 3702 TX: errors.
+</I>&gt;&gt;<i> Is one of these a bug? In my head a arbitration loss is not a tx error.
+</I>&gt;&gt;<i> Tx error is like not getting a ACK bit or a error active frame after
+</I>&gt;&gt;<i> transmission. I.e causing the frame to be resent.
+</I>
+
+&gt;&gt;&gt;<i>   After about 36h of uptime I start getting alarms
+</I>&gt;&gt;&gt;<i>   then the alarm starts to go away but gets triggered again.
+</I>&gt;&gt;&gt;<i>   This happens about every 1-3 sec after the first alarm
+</I>&gt;<i>
+</I>&gt;<i> Maybe the timer that checks for &quot;500 ms&quot; is based on a counter-timer that doesn't handle rollover well.
+</I>&gt;<i>
+</I>&gt;<i> Perhaps, once it is mangled, it stays broken in some way that re-triggers every 1-3 seconds.
+</I>&gt;<i>
+</I>&gt;<i> You could narrow down the cause by logging the last 10-20 messages received into a circular array, with the state of the toggle bit and a timestamp.  Maybe also save the values that is used to compare to the timer, or the value of the base timer when the check is done.  For example:
+</I>&gt;<i> ...
+</I>&gt;<i> 64500
+</I>&gt;<i> 65000
+</I>&gt;<i> 65500
+</I>&gt;<i> strange things
+</I>&gt;<i> ...
+</I>&gt;<i> you might look for something that overflowed 0xFFFF.
+</I>&gt;<i>
+</I>&gt;<i> That seems more likely than &quot;lost messages&quot; that always start getting lost after 129,600 seconds, or 0x3F480 intervals of 500 ms.  A counter that rolls over at 0x40000?  I think that's 18 bits, a funny number for rollover.
+</I>&gt;<i>
+</I>&gt;<i> But make sure that no messages were lost right before each alarm.  With a circular array, and a breakpoint or &quot;stop logging&quot; on the alarm, the array would hold the last 10-20 messages of interest.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Rick Corey  | Software Engineer | Crane Aerospace&amp;  Electronics
+</I>
+Thanks for the input Rick.
+
+I forgot to mention that I was able to recreate the alarm behavior by 
+increasing the busload from normal 10% @ 125kbps to 70% @ 125kbps. This 
+got me thinking that this would be CPU or memory dependent. We tried to 
+make a test application that does the same toggling as in our control 
+system and logged memory and CPU. But we did not find any problems.
+
+Seems like there might be something else in the control application that 
+causing the alarm message to be generated. Seems like I need to make it 
+possible to run the complete control system here at the office.
+Ie rest bus simulating the entire network.
+
+Side note
+Anybody know how I can look at the commit messages between Linux kernel 
+3.0.2 to 3.0.4 with kernel.org down. Do I need to do a git checkout?
+
+
+Bertil B&#196;CK R&amp;D Manager Hardware
+T +358 6 357 6305, M +358 50 588 6895, F +358 6 357 6320
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">bertil.back at tke.fi</A>, www.tke.fi - www.canopen.fi
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002140.html">[Socketcan-users] socketcan and codesys
+</A></li>
+	<LI>Next message: <A HREF="002141.html">[Socketcan-users] Find identifier in the can_id
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2139">[ date ]</a>
+              <a href="thread.html#2139">[ thread ]</a>
+              <a href="subject.html#2139">[ subject ]</a>
+              <a href="author.html#2139">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,230 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-October/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%3D%3Fiso-8859-1%3Fq%3FRFC_interframe_drop_cmsg_f%3DFCr_C%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3FAN-RAW_sockets%3D3F_-_was%3D3A_af%3D5Fpacket%3D3A_add_interframe_d%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3Frop_cmsg_%3D28v6%3D29%3F%3D&In-Reply-To=%3C4AC9B569.5010708%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001069.html">
+   <LINK REL="Next"  HREF="001071.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%3D%3Fiso-8859-1%3Fq%3FRFC_interframe_drop_cmsg_f%3DFCr_C%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3FAN-RAW_sockets%3D3F_-_was%3D3A_af%3D5Fpacket%3D3A_add_interframe_d%3F%3D%0A%20%3D%3Fiso-8859-1%3Fq%3Frop_cmsg_%3D28v6%3D29%3F%3D&In-Reply-To=%3C4AC9B569.5010708%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Oct  5 10:59:21 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001069.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+        <LI>Next message: <A HREF="001071.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1070">[ date ]</a>
+              <a href="thread.html#1070">[ thread ]</a>
+              <a href="subject.html#1070">[ subject ]</a>
+              <a href="author.html#1070">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+Neil Horman introduced a new control message to detect dropped rx messages in
+the packet socket, which has been committed to Mainline upstream today.
+
+<A HREF="http://marc.info/?l=linux-netdev&amp;m=125450261121971&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=125450261121971&amp;w=2</A>
+
+Is this an interesting idea for CAN-RAW users also?
+Does anyone would like to have something like that in CAN-RAW sockets?
+
+Regards,
+Oliver
+
+
+
+========================================================================
+
+Add Ancilliary data to better represent loss information
+
+I've had a few requests recently to provide more detail regarding frame loss
+during an AF_PACKET packet capture session.  Specifically the requestors want to
+see where in a packet sequence frames were lost, i.e. they want to see that 40
+frames were lost between frames 302 and 303 in a packet capture file.  In order
+to do this we need:
+
+1) The kernel to export this data to user space
+2) The applications to make use of it
+
+This patch addresses item (1).  It does this by doing the following:
+
+A) Anytime we drop a frame for which we would increment po-&gt;stats.tp_drops, we
+also no increment a stats called po-&gt;stats.tp_gap.
+
+B) Every time we successfully enqueue a frame to sk_receive_queue, we record the
+value of po-&gt;stats.tp_gap in skb-&gt;mark.  skb-&gt;cb would nominally be the place to
+record this, but since all the space there is used up, we're overloading
+skb-&gt;mark.  Its safe to do since any enqueued packet is guaranteed to be
+unshared at this point, and skb-&gt;mark isn't used for anything else in the rx
+path to the application.  After we record tp_gap in the skb, we zero
+po-&gt;stats.tp_gap.  This allows us to keep a counter of the number of frames lost
+between any two enqueued packets
+
+C) When the application goes to dequeue a frame from the packet socket, we look
+at skb-&gt;mark for that frame.  If it is non-zero, we add a cmsg chunk to the
+msghdr of level SOL_PACKET and type PACKET_GAPDATA.  Its a 32 bit integer that
+represents the number of frames lost between this packet and the last previous
+frame received.
+
+Note there is a chance that if there is frame loss after a receive, and then the
+socket is closed, some gap data might be lost.  This is covered by the use of
+the PACKET_AUXDATA socket option, which gives total loss data.  With a bit of
+math, the final gap can be determined that way.
+
+
+I've tested this patch myself, and it works well.
+
+Signed-off-by: Neil Horman &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">nhorman at tuxdriver.com</A>&gt;
+
+
+ include/linux/if_packet.h |    2 ++
+ net/packet/af_packet.c    |   33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/include/linux/if_packet.h b/include/linux/if_packet.h
+index dea7d6b..e5d200f 100644
+--- a/include/linux/if_packet.h
++++ b/include/linux/if_packet.h
+@@ -48,11 +48,13 @@ struct sockaddr_ll
+ #define PACKET_RESERVE			12
+ #define PACKET_TX_RING			13
+ #define PACKET_LOSS			14
++#define PACKET_GAPDATA			15
+
+ struct tpacket_stats
+ {
+ 	unsigned int	tp_packets;
+ 	unsigned int	tp_drops;
++	unsigned int    tp_gap;
+ };
+
+ struct tpacket_auxdata
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index d3d52c6..ae049f6 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -524,6 +524,31 @@ static inline unsigned int run_filter(struct sk_buff
+*skb, struct sock *sk,
+ }
+
+ /*
++ * If we've lost frames since the last time we queued one to the
++ * sk_receive_queue, we need to record it here.
++ * This must be called under the protection of the socket lock
++ * to prevent racing with other softirqs and user space
++ */
++static inline void record_packet_gap(struct sk_buff *skb,
++					struct packet_sock *po)
++{
++	/*
++	 * We overload the mark field here, since we're about
++	 * to enqueue to a receive queue and no body else will
++	 * use this field at this point
++	 */
++	skb-&gt;mark = po-&gt;stats.tp_gap;
++	po-&gt;stats.tp_gap = 0;
++	return;
++
++}
++
++static inline __u32 check_packet_gap(struct sk_buff *skb)
++{
++	return skb-&gt;mark;
++}
++
++/*
+    This function makes lazy skb cloning in hope that most of packets
+    are discarded by BPF.
+
+@@ -626,6 +651,7 @@ static int packet_rcv(struct sk_buff *skb, struct
+net_device *dev,
+
+ 	spin_lock(&amp;sk-&gt;sk_receive_queue.lock);
+ 	po-&gt;stats.tp_packets++;
++	record_packet_gap(skb, po);
+ 	__skb_queue_tail(&amp;sk-&gt;sk_receive_queue, skb);
+ 	spin_unlock(&amp;sk-&gt;sk_receive_queue.lock);
+ 	sk-&gt;sk_data_ready(sk, skb-&gt;len);
+@@ -634,6 +660,7 @@ static int packet_rcv(struct sk_buff *skb, struct
+net_device *dev,
+ drop_n_acct:
+ 	spin_lock(&amp;sk-&gt;sk_receive_queue.lock);
+ 	po-&gt;stats.tp_drops++;
++	po-&gt;stats.tp_gap++;
+ 	spin_unlock(&amp;sk-&gt;sk_receive_queue.lock);
+
+ drop_n_restore:
+@@ -811,6 +838,7 @@ drop:
+
+ ring_is_full:
+ 	po-&gt;stats.tp_drops++;
++	po-&gt;stats.tp_gap++;
+ 	spin_unlock(&amp;sk-&gt;sk_receive_queue.lock);
+
+ 	sk-&gt;sk_data_ready(sk, 0);
+@@ -1418,6 +1446,7 @@ static int packet_recvmsg(struct kiocb *iocb, struct
+socket *sock,
+ 	struct sk_buff *skb;
+ 	int copied, err;
+ 	struct sockaddr_ll *sll;
++	__u32 gap;
+
+ 	err = -EINVAL;
+ 	if (flags &amp; ~(MSG_PEEK|MSG_DONTWAIT|MSG_TRUNC|MSG_CMSG_COMPAT))
+@@ -1496,6 +1525,10 @@ static int packet_recvmsg(struct kiocb *iocb, struct
+socket *sock,
+ 		put_cmsg(msg, SOL_PACKET, PACKET_AUXDATA, sizeof(aux), &amp;aux);
+ 	}
+
++	gap = check_packet_gap(skb);
++	if (gap)
++		put_cmsg(msg, SOL_PACKET, PACKET_GAPDATA, sizeof(__u32), &amp;gap);
++
+ 	/*
+ 	 *	Free or return the buffer as appropriate. Again this
+ 	 *	hides all the races and re-entrancy issues from us.
+--
+To unsubscribe from this list: send the line &quot;unsubscribe netdev&quot; in
+the body of a message to <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">majordomo at vger.kernel.org</A>
+More majordomo info at  <A HREF="http://vger.kernel.org/majordomo-info.html">http://vger.kernel.org/majordomo-info.html</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001069.html">[Socketcan-users] CAN communication with MCP2515
+</A></li>
+	<LI>Next message: <A HREF="001071.html">[Socketcan-users] RFC interframe drop cmsg f&#252;r CAN-RAW sockets? - was: af_packet: add interframe drop cmsg (v6)
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1070">[ date ]</a>
+              <a href="thread.html#1070">[ thread ]</a>
+              <a href="subject.html#1070">[ subject ]</a>
+              <a href="author.html#1070">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

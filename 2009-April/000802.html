@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socket CAN error handling
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%20CAN%20error%20handling&In-Reply-To=%3C49F0AB54.4020509%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000814.html">
+   <LINK REL="Next"  HREF="000804.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socket CAN error handling</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socket%20CAN%20error%20handling&In-Reply-To=%3C49F0AB54.4020509%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] socket CAN error handling">socketcan at hartkopp.net
+       </A><BR>
+    <I>Thu Apr 23 19:54:28 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000814.html">[Socketcan-users] socket CAN error handling
+</A></li>
+        <LI>Next message: <A HREF="000804.html">[Socketcan-users] Test - please ignore
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#802">[ date ]</a>
+              <a href="thread.html#802">[ thread ]</a>
+              <a href="subject.html#802">[ subject ]</a>
+              <a href="author.html#802">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Heinz,
+
+Heinz-J&#252;rgen Oertel wrote:
+
+&gt;<i> My application is already working, it can send and receive CAN frames.
+</I>
+Fine :-)
+
+&gt;<i> But I have no idea how to handle CAN bus errors.
+</I>&gt;<i> Are there any examples in the can-utils/ showing how to handle CAN errors
+</I>&gt;<i> like rx buffer overflow or CAN bus state ?
+</I>
+The error states that can be produced by a CAN controller are defined in
+
+include/linux/can/error.h
+
+which is hopefully really complete.
+
+&gt;<i> It would also be nice to have read access to the CAN controllers,
+</I>&gt;<i> in this case msCAN, error counters.
+</I>&gt;<i> 
+</I>
+Hm - we had a discussion about errors and also on error counters that were
+suggested to be available via the sysfs interface.
+
+The error conditions provided by the CAN controller driver(!) create a special
+CAN error frame that is passed to the userspace the same way as 'usual data
+frames'. But error frames have a CAN_ERR_FLAG set in the can_id that
+identifies the error frame. See e.g. the sja1000 driver for details, how the
+CAN network driver creates error frames when it has some problems.
+
+If you want to enable error frames on your can_raw socket, this is done by a
+/special/ setsockopt() syscall, where you can set an error mask that allows
+you to filter e.g. for bus-errors (or not). It's similar to the per-socket
+CAN-ID filters but only deals with error masks.
+
+An example how to use this in source code is in trunk/test/tst-err.c
+
+Most of the stuff in trunk/test is better for an example than the stuff in
+trunk/can-utils.
+
+If you want to filter for error frames with 'candump', you need to enable the
+per-socket error mask like
+
+candump -l any,0~0,#FFFFFFFF    (log only error frames but no(!) data frames)
+
+candump -l any,0:0,#FFFFFFFF    (log error frames and also all data frames)
+
+see with 'candump -?'
+
+I hope this information is able to help you so far.
+
+Best regards,
+Oliver
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000814.html">[Socketcan-users] socket CAN error handling
+</A></li>
+	<LI>Next message: <A HREF="000804.html">[Socketcan-users] Test - please ignore
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#802">[ date ]</a>
+              <a href="thread.html#802">[ thread ]</a>
+              <a href="subject.html#802">[ subject ]</a>
+              <a href="author.html#802">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

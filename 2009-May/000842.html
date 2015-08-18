@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] slcan force tty devices
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-May/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan%20force%20tty%20devices&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D13E630DD22%40MSXHOME.rack.racksaver.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000840.html">
+   <LINK REL="Next"  HREF="000843.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] slcan force tty devices</H1>
+    <B>Robert Haddon</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20slcan%20force%20tty%20devices&In-Reply-To=%3C56E1951C7943BE4AA18946742D10FD8D13E630DD22%40MSXHOME.rack.racksaver.com%3E"
+       TITLE="[Socketcan-users] slcan force tty devices">robert.haddon at verari.com
+       </A><BR>
+    <I>Thu May 14 18:01:36 CEST 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000840.html">[Socketcan-users] slcan force tty devices
+</A></li>
+        <LI>Next message: <A HREF="000843.html">[Socketcan-users] slcan force tty devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#842">[ date ]</a>
+              <a href="thread.html#842">[ thread ]</a>
+              <a href="subject.html#842">[ subject ]</a>
+              <a href="author.html#842">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>We do have udev rules in place to guide our userspace applications onto the correct CAN busses.  This doesn't help with the device naming in the slcan module because it gets the TTY name from the kernel, which uses an ever increasing device number as the underlying hardware comes and goes.
+As far as we can tell, any system would have this problem if it has more than one slc device and it cannot always guarantee the order in which these devices are started (line discipline set).  
+
+-----Original Message-----
+From: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A> [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users-bounces at lists.berlios.de</A>] On Behalf Of Stephen Hellriegel
+Sent: Thursday, May 14, 2009 8:02 AM
+To: Oliver Hartkopp
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: Re: [Socketcan-users] slcan force tty devices
+
+Oliver,
+The changes you referenced me to in slip.c, if applied to slcan.c would conflict with the patchfile I provided.
+We haven't found a reliable method that binds a slc adapter number to the underlaying hardware.
+
+As our CAN adapters (USB -&gt; CAN) come and go, their slc adapter numbers migrate, which is a problem for us. That is why we implemented the fixed number solution.
+
+-Steve
+
+
+-----Original Message-----
+From: Oliver Hartkopp [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">oliver.hartkopp at volkswagen.de</A>]
+Sent: Wednesday, May 13, 2009 5:41 AM
+To: Stephen Hellriegel
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Subject: [Socketcan-users] slcan force tty devices
+
+Oliver Hartkopp wrote:
+&gt;<i> Stephen Hellriegel wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We use the slcand (recently committed back to the community ;) ) to
+</I>&gt;&gt;<i> bring up our interfaces. Along with some magic sauce that Oliver is
+</I>&gt;&gt;<i> previewing which allows us to define which slc number a connection gets.
+</I>&gt;<i>
+</I>&gt;<i> Which looks interesting. But i'm not a tty specialist and therefore we
+</I>&gt;<i> should ask people like Alan Cox, who is working on the slip.c driver.
+</I>&gt;<i> For that, i would be needed to have the slcan driver in mainline or
+</I>&gt;<i> provide a similar patch for the slip.c driver ...
+</I>&gt;<i> My assumption is that there are solutions for SLIP that do not need
+</I>&gt;<i> this 1:1 assignment.
+</I>
+Hi Steve,
+
+currently Alan Cox sent a RFC for the cleanup of the sl allocation code
+in slip.c :
+
+<A HREF="http://marc.info/?l=linux-netdev&amp;m=124164750919111&amp;w=2">http://marc.info/?l=linux-netdev&amp;m=124164750919111&amp;w=2</A>
+
+Does this hit your idea, as there was a code sniplet from you inside the
+removed area?
+
+Regards,
+Oliver
+
+
+_______________________________________________
+Socketcan-users mailing list
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">Socketcan-users at lists.berlios.de</A>
+<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">https://lists.berlios.de/mailman/listinfo/socketcan-users</A>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000840.html">[Socketcan-users] slcan force tty devices
+</A></li>
+	<LI>Next message: <A HREF="000843.html">[Socketcan-users] slcan force tty devices
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#842">[ date ]</a>
+              <a href="thread.html#842">[ thread ]</a>
+              <a href="subject.html#842">[ subject ]</a>
+              <a href="author.html#842">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

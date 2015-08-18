@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [CAN] kernel 2.6.28 integration
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A41038.1050902%40gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000673.html">
+   <LINK REL="Next"  HREF="000680.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [CAN] kernel 2.6.28 integration</H1>
+    <B>Hector Oron</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BCAN%5D%20kernel%202.6.28%20integration&In-Reply-To=%3C49A41038.1050902%40gmail.com%3E"
+       TITLE="[Socketcan-users] [CAN] kernel 2.6.28 integration">hector.oron at gmail.com
+       </A><BR>
+    <I>Tue Feb 24 16:20:24 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000673.html">[Socketcan-users] mcp251x remove module when there is CAN	activity
+</A></li>
+        <LI>Next message: <A HREF="000680.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#678">[ date ]</a>
+              <a href="thread.html#678">[ thread ]</a>
+              <a href="subject.html#678">[ subject ]</a>
+              <a href="author.html#678">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello,
+
+   I am new user to this list and also a new user for socket-can. First 
+of all I'd like to thank you for all your work.
+
+   I have seen you had an argument with netdev people and your code is 
+partially migrated into kernel sources. I have been using quilt and 
+using patch-series/net-2.6.29 under socket can SVN. I have also seen 
+kernel/ files but i have not apply it yet.
+
+   While i am trying to cross compile the kernel, i get this error:
+
+error: 'CAN_BITRATE_DEFAULT' undeclared here (not in a function)
+
+   that it is using proper kernel headers, I have seen that this define 
+it's under include/linux/can/ioctl.h (in your repsository).
+
+   So before walking farther, i'd like to ask you for some hints on how 
+to use your code in a 2.6.28 kernel. Should i just copy kernel/2.6/* on 
+top of my kernel tree? Should I apply quilt patches instead? What is the 
+preferred way?
+
+Kind regards,
+
+   H&#233;ctor Or&#243;n
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000673.html">[Socketcan-users] mcp251x remove module when there is CAN	activity
+</A></li>
+	<LI>Next message: <A HREF="000680.html">[Socketcan-users] [CAN] kernel 2.6.28 integration
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#678">[ date ]</a>
+              <a href="thread.html#678">[ thread ]</a>
+              <a href="subject.html#678">[ subject ]</a>
+              <a href="author.html#678">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Virtual can is OK, but the real one is KO...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE19C6E.5020802%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001650.html">
+   <LINK REL="Next"  HREF="001652.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Virtual can is OK, but the real one is KO...</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Virtual%20can%20is%20OK%2C%20but%20the%20real%20one%20is%20KO...&In-Reply-To=%3C4CE19C6E.5020802%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Virtual can is OK, but the real one is KO...">wg at grandegger.com
+       </A><BR>
+    <I>Mon Nov 15 21:47:42 CET 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001650.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+        <LI>Next message: <A HREF="001652.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1651">[ date ]</a>
+              <a href="thread.html#1651">[ thread ]</a>
+              <a href="subject.html#1651">[ subject ]</a>
+              <a href="author.html#1651">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On 11/15/2010 08:55 PM, Willy Lambert wrote:
+&gt;<i> Arg, I can't read German (at least not Technical German) so I makes things
+</I>&gt;<i> more complicate for me :)
+</I>
+Well, apart from the OCR setting, this document is not really useful.
+
+&gt;<i> I am going to read this. It makes me thinking about time quantas as describe
+</I>&gt;<i> in Documentation/networking/can.txt:
+</I>&gt;<i> 
+</I>&gt;<i> 708 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#708">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#708</A>&gt;	
+</I>&gt;<i>    &quot;tq 125 prop-seg 6 phase-seg1 7 phase-seg2 2 sjw 1&quot;
+</I>&gt;<i> 709 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#709">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#709</A>&gt;		Shows
+</I>&gt;<i> the time quanta in ns, propagation segment, phase buffer
+</I>&gt;<i> 710 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#710">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#710</A>&gt;		segment
+</I>&gt;<i> 1 and 2 and the synchronisation jump width in units of
+</I>&gt;<i> 711 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#711">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#711</A>&gt;		tq.
+</I>&gt;<i> They allow to define the CAN bit-timing in a hardware
+</I>&gt;<i> 712 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#712">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#712</A>&gt;		independent
+</I>&gt;<i> format as proposed by the Bosch CAN 2.0 spec (see
+</I>&gt;<i> 713 &lt;<A HREF="http://www.mjmwired.net/kernel/Documentation/networking/can.txt#713">http://www.mjmwired.net/kernel/Documentation/networking/can.txt#713</A>&gt;		chapter
+</I>&gt;<i> 8 of <A HREF="http://www.semiconductors.bosch.de/pdf/can2spec.pdf">http://www.semiconductors.bosch.de/pdf/can2spec.pdf</A>).
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Could I have something to precise after defining baudrate ?
+</I>
+No. If the chips is mapped correctly, it should work like with any other
+SJA1000 hardware.
+
+To be honest, I'm not even sure if this IXXAT card is supported properly
+by the sja1000_isa driver. I still think there is a problem with the irq
+setup or the ocr and cdr setting. Or it needs some special treatment.
+You could try contacting the IXXAT service. Maybe they can tell you more.
+
+Also, a CAN analyzer would be useful.
+
+Wolfgang.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001650.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+	<LI>Next message: <A HREF="001652.html">[Socketcan-users] Virtual can is OK, but the real one is KO...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1651">[ date ]</a>
+              <a href="thread.html#1651">[ thread ]</a>
+              <a href="subject.html#1651">[ subject ]</a>
+              <a href="author.html#1651">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

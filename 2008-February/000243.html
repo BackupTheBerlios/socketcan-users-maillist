@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2008-February/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A34E9E.8090209%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000239.html">
+   <LINK REL="Next"  HREF="000250.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Mscan%3A%20BUG%21%20Tx%20Ring%20full%20when%20queue%20awake%21&In-Reply-To=%3C47A34E9E.8090209%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!">wg at grandegger.com
+       </A><BR>
+    <I>Fri Feb  1 17:53:50 CET 2008</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000239.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+        <LI>Next message: <A HREF="000250.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#243">[ date ]</a>
+              <a href="thread.html#243">[ thread ]</a>
+              <a href="subject.html#243">[ subject ]</a>
+              <a href="author.html#243">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Daniel Schnell wrote:
+&gt;<i> Can you (Oliver, Wolfgang) maybe provide a bit of light into the
+</I>&gt;<i> functionality of how the socketcan, the netdev layer, the CAN driver and
+</I>&gt;<i> the hardware interact when either issuing a send or receive ?
+</I>&gt;<i> 
+</I>&gt;<i> I try to understand the mscan code, but my understanding of the above
+</I>&gt;<i> layers is rather limited.
+</I>&gt;<i> 
+</I>&gt;<i> Especially I would like to know, how a consecutive filling of the CAN
+</I>&gt;<i> buffer by multiple send will be handled by the kernel. And when and
+</I>&gt;<i> where the buffers will be cleared.
+</I>
+OK, thats my understanding: The netdev layer sends messages down to the
+driver using dev-&gt;hard_start_xmit(). If the hardware can not digest any
+more messages, the driver should call netif_stop_queue() and
+netif_wake_queue() if it should continue. For the SJA1000 it's rather
+simple: dev-&gt;hard_start_xmit() calls netif_stop_queue() and the TX done
+interrupt code netif_wake_queue(). For the MSCAN it's more tricky as the
+driver use all three TX buffers to keep the MSCAN hardware happy.
+
+A TX timeout is triggered when the netdev layer detects:
+
+ dev-&gt;start_trans + dev-&gt;watchdog_timeo &gt; jiffies
+
+&gt;<i> Do you have test scenarios where you can send a bunch of packets to the
+</I>&gt;<i> CAN and filling up the buffers doesn't cause the error I am experiencing
+</I>&gt;<i> ?
+</I>
+I uses cansequence from the Pengutronix Socket-CAN utilities.
+
+&gt;<i> If I use
+</I>&gt;<i> cansend can0 --loop=16 0x1 0x2 0x3 0x4 0x5
+</I>&gt;<i> 
+</I>&gt;<i> I will get &quot;write: No buffer space available&quot; but there is no TX
+</I>&gt;<i> timeout. On the other side we use the send() call. Does this make a
+</I>&gt;<i> difference ?
+</I>
+When the TX socket buffer is full, write, and friends will return EAGAIN
+and the application code should handle that condition properly. The size
+of the TX buffer can be adjusted with &quot;ifconfig can0 up txqueuelen
+&lt;lenght&gt;&quot; or by updating the corresponding SYSFS entry. The default
+queue lenght is 1000.
+
+Wolfgang.
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000239.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+	<LI>Next message: <A HREF="000250.html">[Socketcan-users] Mscan: BUG! Tx Ring full when queue awake!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#243">[ date ]</a>
+              <a href="thread.html#243">[ thread ]</a>
+              <a href="subject.html#243">[ subject ]</a>
+              <a href="author.html#243">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

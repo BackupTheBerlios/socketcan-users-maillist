@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] device transmission statistics
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20device%20transmission%20statistics&In-Reply-To=%3C46EEBCF3.6040800%40hartkopp.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000196.html">
+   <LINK REL="Next"  HREF="000198.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] device transmission statistics</H1>
+    <B>Oliver Hartkopp</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20device%20transmission%20statistics&In-Reply-To=%3C46EEBCF3.6040800%40hartkopp.net%3E"
+       TITLE="[Socketcan-users] device transmission statistics">socketcan at hartkopp.net
+       </A><BR>
+    <I>Mon Sep 17 19:44:19 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000196.html">[Socketcan-users] device transmission statistics
+</A></li>
+        <LI>Next message: <A HREF="000198.html">[Socketcan-users] FYI: Socket-CAN now integrated into linux-2.6-denx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#197">[ date ]</a>
+              <a href="thread.html#197">[ thread ]</a>
+              <a href="subject.html#197">[ subject ]</a>
+              <a href="author.html#197">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>juanba romance wrote:
+&gt;<i> Hello all, i am currently developing a driver for the mcf5282 Flex
+</I>&gt;<i> canbus device under uClinux and i have a question related with the
+</I>&gt;<i> .dlc field management
+</I>&gt;<i> i have verified that the current drivers (sja100/mscan) update the
+</I>&gt;<i> typical &quot; stats.tx_bytes&quot; counter field based on the dlc  &quot;can_frame&quot;
+</I>&gt;<i> input value.
+</I>&gt;<i> Our application defines  messages with the zeroed dlc, and of course
+</I>&gt;<i> they are still considered as &quot;network packets&quot;
+</I>&gt;<i> so it's a bit confusing to monitor the physical device and see that
+</I>&gt;<i> the tx count doesn't have in care these ones.
+</I>&gt;<i>
+</I>&gt;<i> Is this a general policy of the socket-can stack ?
+</I>
+Hi,
+
+if you look around in the Linux kernel, you'll see that this is a
+networking policy in general.
+
+stats.tx_packets : counts the transmitted packets
+stats.tx_bytes : counts the transmitted packet payload in bytes
+
+So if your (not very usual) use-case mostly works without any payload
+(what can_frame.data[] definitely is) you probably need to 'pimp' your
+networking monitor to display and count the packets and not only the
+payload ...
+
+I assume your network monitor to be open source :-)
+
+Regards,
+Oliver
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000196.html">[Socketcan-users] device transmission statistics
+</A></li>
+	<LI>Next message: <A HREF="000198.html">[Socketcan-users] FYI: Socket-CAN now integrated into linux-2.6-denx
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#197">[ date ]</a>
+              <a href="thread.html#197">[ thread ]</a>
+              <a href="subject.html#197">[ subject ]</a>
+              <a href="author.html#197">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

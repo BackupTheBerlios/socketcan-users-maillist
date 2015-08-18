@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] What are you doing if the TX buffer overflows?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20What%20are%20you%20doing%20if%20the%20TX%20buffer%20overflows%3F&In-Reply-To=%3C20120919102640.GB1612%40vandijck-laurijssen.be%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002386.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] What are you doing if the TX buffer overflows?</H1>
+    <B>Kurt Van Dijck</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20What%20are%20you%20doing%20if%20the%20TX%20buffer%20overflows%3F&In-Reply-To=%3C20120919102640.GB1612%40vandijck-laurijssen.be%3E"
+       TITLE="[Socketcan-users] What are you doing if the TX buffer overflows?">kurt.van.dijck at eia.be
+       </A><BR>
+    <I>Wed Sep 19 12:26:40 CEST 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002386.html">[Socketcan-users] What are you doing if the TX buffer overflows?
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2387">[ date ]</a>
+              <a href="thread.html#2387">[ thread ]</a>
+              <a href="subject.html#2387">[ subject ]</a>
+              <a href="author.html#2387">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>On Wed, Sep 19, 2012 at 12:02:37PM +0200, Steffen Rose wrote:
+&gt;<i> Hallo,
+</I>
+Please use <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A> mailing list :-)
+
+&gt;<i> 
+</I>&gt;<i> more a question to this discussion then a meaning:
+</I>(small english vocabulary fix: s/meaning/opinion/)
+&gt;<i> 
+</I>&gt;<i> &gt; &gt;&gt; a) clear the TX-queue in Linux
+</I>&gt;<i> [...]
+</I>&gt;<i> &gt; Yes, if it's a hardware limitation so be it. But if we design an
+</I>&gt;<i> &gt; interface it should support &quot;clear everything&quot; (a+b+c), but also just
+</I>&gt;<i> &gt; only c.
+</I>&gt;<i> &gt; 
+</I>&gt;<i> 
+</I>&gt;<i> Example:
+</I>&gt;<i>  I use more than one program, e.g.3 to communicate over one interface, 
+</I>&gt;<i> e.g.can0.
+</I>&gt;<i> 
+</I>&gt;<i> Question:
+</I>&gt;<i> The TX Queue is interface related, not program related, right?
+</I>&gt;<i> 
+</I>&gt;<i> This would mean, if my program (one of the 3) clear the TX queue as part of an 
+</I>&gt;<i> internal communication reset it would also destroy the messages of the other 
+</I>&gt;<i> programs.
+</I>&gt;<i> 
+</I>&gt;<i> Is this idea right?
+</I>
+Yes, you're right.
+That's an aspect of 'multi-user' environment,
+with a flexible 'user' interpretation.
+
+Kind regards,
+Kurt
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002386.html">[Socketcan-users] What are you doing if the TX buffer overflows?
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2387">[ date ]</a>
+              <a href="thread.html#2387">[ thread ]</a>
+              <a href="subject.html#2387">[ subject ]</a>
+              <a href="author.html#2387">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

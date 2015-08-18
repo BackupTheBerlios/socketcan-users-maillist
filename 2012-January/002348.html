@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [PATCH wg-linux-can-next devel 1/1] can: cc770: Fix indirect access deadlock on ISA cards
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2012-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20wg-linux-can-next%20devel%201/1%5D%20can%3A%0A%20cc770%3A%20Fix%20indirect%20access%20deadlock%20on%20ISA%20cards&In-Reply-To=%3C4F15653A.2050904%40essax.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002347.html">
+   <LINK REL="Next"  HREF="002349.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [PATCH wg-linux-can-next devel 1/1] can: cc770: Fix indirect access deadlock on ISA cards</H1>
+    <B>Wolfgang Zarre</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BPATCH%20wg-linux-can-next%20devel%201/1%5D%20can%3A%0A%20cc770%3A%20Fix%20indirect%20access%20deadlock%20on%20ISA%20cards&In-Reply-To=%3C4F15653A.2050904%40essax.com%3E"
+       TITLE="[Socketcan-users] [PATCH wg-linux-can-next devel 1/1] can: cc770: Fix indirect access deadlock on ISA cards">lkdev at essax.com
+       </A><BR>
+    <I>Tue Jan 17 13:10:34 CET 2012</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002347.html">[Socketcan-users] [PATCH wg-linux-can-next devel 1/1] can: cc770: Fix indirect access deadlock on ISA cards
+</A></li>
+        <LI>Next message: <A HREF="002349.html">[Socketcan-users] increase buffer size
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2348">[ date ]</a>
+              <a href="thread.html#2348">[ thread ]</a>
+              <a href="subject.html#2348">[ subject ]</a>
+              <a href="author.html#2348">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Wolfgang,
+
+&gt;<i> On 01/15/2012 01:21 PM, Wolfgang Zarre wrote:
+</I>&gt;&gt;<i> This fix avoids a deadlock if an interrupt occurs
+</I>&gt;&gt;<i> during consecutive port operations on ISA cards
+</I>&gt;&gt;<i> utilising indirect access via address and data
+</I>&gt;&gt;<i> port.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Tested on a B&amp;R ISA card.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">linux-can at vger.kernel.org</A>
+</I>&gt;&gt;<i> CC: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">netdev at vger.kernel.org</A>
+</I>&gt;&gt;<i> Signed-off-by: Wolfgang Zarre&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">lkdev at essax.com</A>&gt;
+</I>&gt;<i>
+</I>&gt;<i> Acked-by: Wolfgang Grandegger&lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>&gt;
+</I>
+Thanks.
+
+&gt;<i>
+</I>&gt;<i> Next time, please drop the CC to the old BerliOS Socketcan mailing
+</I>&gt;<i> lists. Marc, Oliver? Do we, should we, still send patches to the
+</I>&gt;<i> &quot;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">netdev at vger.kernel.org</A>&quot; as well.
+</I>
+Hmmm, actually I dropped to the old BerliOS Socketcan mailing list but
+not as CC statement in the email body , however, please let me know
+if You prefer to have it there included as well.
+
+Thanks.
+
+&gt;<i>
+</I>&gt;<i> Wolfgang.
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002347.html">[Socketcan-users] [PATCH wg-linux-can-next devel 1/1] can: cc770: Fix indirect access deadlock on ISA cards
+</A></li>
+	<LI>Next message: <A HREF="002349.html">[Socketcan-users] increase buffer size
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2348">[ date ]</a>
+              <a href="thread.html#2348">[ thread ]</a>
+              <a href="subject.html#2348">[ subject ]</a>
+              <a href="author.html#2348">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

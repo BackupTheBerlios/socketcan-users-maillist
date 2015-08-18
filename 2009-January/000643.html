@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] Problems with Transmission Complete Interrupt
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%20Transmission%20Complete%20Interrupt&In-Reply-To=%3C49834242.4010906%40grandegger.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000642.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] Problems with Transmission Complete Interrupt</H1>
+    <B>Wolfgang Grandegger</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20Problems%20with%20Transmission%20Complete%20Interrupt&In-Reply-To=%3C49834242.4010906%40grandegger.com%3E"
+       TITLE="[Socketcan-users] Problems with Transmission Complete Interrupt">wg at grandegger.com
+       </A><BR>
+    <I>Fri Jan 30 19:09:06 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000642.html">[Socketcan-users] Problems with Transmission Complete Interrupt
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#643">[ date ]</a>
+              <a href="thread.html#643">[ thread ]</a>
+              <a href="subject.html#643">[ subject ]</a>
+              <a href="author.html#643">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Horst Kautschitz wrote:
+&gt;<i> Hey!
+</I>&gt;<i> 
+</I>&gt;<i> I'm playing around with socket can since two months. In the this week i
+</I>&gt;<i> make checks for sending of messages and find following behavior.
+</I>&gt;<i> 
+</I>&gt;<i> Hardware:
+</I>&gt;<i> - Industrial PC with AMD LX800
+</I>&gt;<i> - PCI-to-ISA Bridge IT8888
+</I>&gt;<i> - PC-104 Card with Adress Latch Enabled
+</I>
+What CAN hardware and driver are you using?
+
+&gt;<i> After a while (the time when it happen is independent) sending a message
+</I>&gt;<i> i don't get a transmission complete interrupt.
+</I>
+What exactly does work? Why do you think the transmission complete
+interrupt did not come?
+
+&gt;<i> So to check, if this really happen and when it happen i make a select in
+</I>&gt;<i> my program and and add a status query with a flag.
+</I>&gt;<i> Flag is set to true at the end of sja1000_start_xmit. While flag is true
+</I>&gt;<i> the program is not allowed to send a new message.
+</I>&gt;<i> When enter in transmission control interrupt flag is set to false.
+</I>&gt;<i> 
+</I>&gt;<i> So my program will not send messages if this error happen - which
+</I>&gt;<i> happens in this case. Receiving is no problem.
+</I>&gt;<i> 
+</I>&gt;<i> I tried this on 3 different interrupts -&gt; same situation
+</I>&gt;<i> 
+</I>&gt;<i> In my log after this error occurs i get following entries in registers:
+</I>&gt;<i> 
+</I>&gt;<i> REG_CMR=0x00
+</I>&gt;<i> REG_SR=0x1D
+</I>&gt;<i> REG_IR=0x01
+</I>&gt;<i> REG_IER=0xFF
+</I>
+Hm, there is no TX message pending. Just a RX message.
+
+&gt;<i> So all looks fine, but why the flag is not set back to false? What can
+</I>&gt;<i> happen that in REG_IR the transmission interrupt bit is not set but the
+</I>&gt;<i> transmission is already completed for a while?
+</I>
+The transmission interrupt gets served quickly.
+
+Wolfgang.
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000642.html">[Socketcan-users] Problems with Transmission Complete Interrupt
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#643">[ date ]</a>
+              <a href="thread.html#643">[ thread ]</a>
+              <a href="subject.html#643">[ subject ]</a>
+              <a href="author.html#643">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

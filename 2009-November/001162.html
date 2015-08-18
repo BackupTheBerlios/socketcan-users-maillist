@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2009-November/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091126132902.GD5173%40pengutronix.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001161.html">
+   <LINK REL="Next"  HREF="001163.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl</H1>
+    <B>Luotao Fu</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20%5BRFC%5D%20%5BANNOUNCEMENT%5D%20libsocketcan-nl&In-Reply-To=%3C20091126132902.GD5173%40pengutronix.de%3E"
+       TITLE="[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl">l.fu at pengutronix.de
+       </A><BR>
+    <I>Thu Nov 26 14:29:56 CET 2009</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001161.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+        <LI>Next message: <A HREF="001163.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1162">[ date ]</a>
+              <a href="thread.html#1162">[ thread ]</a>
+              <a href="subject.html#1162">[ subject ]</a>
+              <a href="author.html#1162">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang
+On Thu, Nov 26, 2009 at 02:06:42PM +0100, Wolfgang Grandegger wrote:
+&gt;<i> Hi Fu,
+</I>&gt;<i> 
+</I>&gt;<i> Luotao Fu wrote:
+</I>&gt;<i> &gt; Hi,
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; On Thu, Nov 26, 2009 at 01:09:55PM +0100, Wolfgang Grandegger wrote:
+</I>&gt;<i> &gt; Wolfgang Grandegger wrote:
+</I>&lt;snip&gt;
+&gt;<i> &gt; 
+</I>&gt;<i> &gt; Certain things like set_bitrate or ctrlmode are anyway not allowed while
+</I>&gt;<i> &gt; the device is up and running. I think that it's a question of policy,
+</I>&gt;<i> &gt; that we if we take care of if_up down in the library or let the user do
+</I>&gt;<i> &gt; it in the application. imho if an application is allowed to change bitrate
+</I>&gt;<i> &gt; while there're communication running, the application is all the way
+</I>&gt;<i> &gt; errnoues, it won't help much to put the if_up/down into the application.
+</I>&gt;<i> &gt; I personally prefer to hide these things from user. Since the usage is
+</I>&gt;<i> &gt; this way much simpler. Another possiblitiy is to expose two kind of
+</I>&gt;<i> &gt; _set functions, one is in the way of do-it-yourself, where the library
+</I>&gt;<i> &gt; relies on that the user has put off the device prioly. The other is the
+</I>&gt;<i> &gt; way &quot;we-do-it-for-you&quot;, as we have now.
+</I>&gt;<i> 
+</I>&gt;<i> I disagree. Setting up the device is usually part of the startup phase
+</I>&gt;<i> and it should be done before the device is actually started. It does
+</I>&gt;<i> help the user if he gets an error message because the device is already
+</I>&gt;<i> running, which can happen by accident. Be aware that the device might be
+</I>&gt;<i> accessed by more than one process/thread. If the user wants to change
+</I>&gt;<i> the device properties while the device is already up (on the fly) he can
+</I>&gt;<i> still call scan_stop, scan_set_bitrate, scan_start in his application,
+</I>&gt;<i> but it's then *his* responsibility to make sure that it does not harm.
+</I>&gt;<i> Hiding down/up is error prune, I believe and exactly for that reason
+</I>&gt;<i> it's not done by the kernel code any more.
+</I>&gt;<i> 
+</I>
+all right, agreed, will change this.
+
+&gt;<i> &gt;&gt; Furthermore, these
+</I>&gt;<i> &gt;&gt; functions seem to start the device even if it was not up before.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt; 
+</I>&gt;<i> &gt; good point, I didn't thought about this, will add a verification into
+</I>&gt;<i> &gt; that.
+</I>&gt;<i> 
+</I>&gt;<i> I also realized, that the scan_get_* functions use duplicated code. A
+</I>&gt;<i> &quot;get_link&quot; function, similar to &quot;set_link&quot;, would make sense.
+</I>&gt;<i> 
+</I>&gt;<i> &gt; Thanks for reviewing
+</I>&gt;<i> 
+</I>
+set_link was supposed to be the part with if_up/down, while
+do_set_nl_link does the real work. Since the if_up/down stuffs are to be
+exported separately, I will surely replace the now obsolete set_link
+code with do_set_nl_link.
+
+&gt;<i> Just started. One more quick remake: The library consists of just one
+</I>&gt;<i> source file, which is not even big:
+</I>&gt;<i> 
+</I>&gt;<i>   $ wc -l socketcan_netlink.c
+</I>&gt;<i>   679 socketcan_netlink.c
+</I>&gt;<i> 
+</I>&gt;<i> That's really nice, but I wonder why you do not simply add it to the
+</I>&gt;<i> canutils.
+</I>&gt;<i> 
+</I>
+If I just knew why... ;-). I started this for a customer application and
+began with canutils later. At that time I should have merged it into
+canutils directly....missed this though...what ever. Merging the stuffs
+is apparently any way on the scheduele, we probably can do this for some
+coming releases.
+
+cheers
+Fu
+-- 
+Pengutronix e.K.                           | Dipl.-Ing. Luotao Fu        |
+Industrial Linux Solutions                 | <A HREF="http://www.pengutronix.de/">http://www.pengutronix.de/</A>  |
+Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 197 bytes
+Desc: Digital signature
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20091126/d111f7a6/attachment.pgp">https://lists.berlios.de/pipermail/socketcan-users/attachments/20091126/d111f7a6/attachment.pgp</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001161.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+	<LI>Next message: <A HREF="001163.html">[Socketcan-users] [RFC] [ANNOUNCEMENT] libsocketcan-nl
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1162">[ date ]</a>
+              <a href="thread.html#1162">[ thread ]</a>
+              <a href="subject.html#1162">[ subject ]</a>
+              <a href="author.html#1162">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

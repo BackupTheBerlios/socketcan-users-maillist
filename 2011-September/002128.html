@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3CCAAZiaZcuCXGStC-yLQjkqOWksR-XMaPHd%2B%2BEuRY-_%2BZdWDiF1Q%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002126.html">
+   <LINK REL="Next"  HREF="002129.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR</H1>
+    <B>Francois Bouchard</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3CCAAZiaZcuCXGStC-yLQjkqOWksR-XMaPHd%2B%2BEuRY-_%2BZdWDiF1Q%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR">francois.bouchard at mpbc.ca
+       </A><BR>
+    <I>Wed Sep  7 22:29:37 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002126.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+        <LI>Next message: <A HREF="002129.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2128">[ date ]</a>
+              <a href="thread.html#2128">[ thread ]</a>
+              <a href="subject.html#2128">[ subject ]</a>
+              <a href="author.html#2128">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+
+
+&gt;<i> what does &quot;the program reset by itself after a while&quot; mean?
+</I>I mean yes the whole system seems to reboots apparently because of the test
+program.
+
+
+&gt;<i> Do you have a vanilla 2.6.29 Kernel or are there any patches from your BSP
+</I>&gt;<i> provider?
+</I>Maybe there is a patch from Freescale, I'm checking right now.    What is
+vanilla?
+
+
+&gt;<i> How do you set up your bitrate for your CAN bus? Using 'ip'?
+</I>For setting the bit rate this command is typed to the target's terminal:
+echo 1000000 &gt;
+/sys/devices/platform/mcf-flexcan.1/net\:can1/can_bittiming/bitrate
+
+
+
+&gt;<i>While searching for 54418TWR i was reading this:
+</I>&gt;<i><A HREF="http://www.mail-archive.com/ltib@nongnu.org/msg00250.html&lt;http://www.mail-archive.com/ltib@nongnu.org/msg00250.html">http://www.mail-archive.com/ltib@nongnu.org/msg00250.html&lt;http://www.mail-archive.com/ltib@nongnu.org/msg00250.html</A>&gt;
+</I>Oh this is an old message from me, its ok now.
+
+
+
+Francois
+
+
+
+2011/9/7 Oliver Hartkopp &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan at hartkopp.net</A>&gt;
+
+&gt;<i> On 07.09.2011 18:28, Francois Bouchard wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt; Hi all,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; Attempting to create heavy traffic with M54418TWR CAN interface, S socket
+</I>&gt;<i> is
+</I>&gt;<i> &gt; used to write and read consecutively in a while loop.  Therefor I have no
+</I>&gt;<i> &gt; problem creating the socket and communicating between the can1 I/F and a
+</I>&gt;<i> &gt; second device, but the program reset by itself after a while.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hi Francois,
+</I>&gt;<i>
+</I>&gt;<i> what does &quot;the program reset by itself after a while&quot; mean?
+</I>&gt;<i>
+</I>&gt;<i> Does your system reboot? (If so it smells indeed like a driver issue)
+</I>&gt;<i>
+</I>&gt;<i> Do you have a vanilla 2.6.29 Kernel or are there any patches from your BSP
+</I>&gt;<i> provider?
+</I>&gt;<i>
+</I>&gt;<i> While searching for 54418TWR i was reading this:
+</I>&gt;<i> <A HREF="http://www.mail-archive.com/ltib@nongnu.org/msg00250.html">http://www.mail-archive.com/ltib@nongnu.org/msg00250.html</A>
+</I>&gt;<i>
+</I>&gt;<i> Urgs.
+</I>&gt;<i>
+</I>&gt;<i> How do you set up your bitrate for your CAN bus? Using 'ip'?
+</I>&gt;<i>
+</I>&gt;<i> Regards,
+</I>&gt;<i> Oliver
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; target: ( Freescale 54418TWR );
+</I>&gt;<i> &gt; Linux version 2.6.29 (gcc version 4.4.1 (Sourcery G++ Lite 4.4-54) ) #49
+</I>&gt;<i> Wed
+</I>&gt;<i> &gt; Aug 10 15:50:50 EDT 2011
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/2b4169bf/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/2b4169bf/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002126.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+	<LI>Next message: <A HREF="002129.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2128">[ date ]</a>
+              <a href="thread.html#2128">[ thread ]</a>
+              <a href="subject.html#2128">[ subject ]</a>
+              <a href="author.html#2128">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

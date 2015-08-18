@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] socketcan c_can
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2007-July/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can&In-Reply-To=%3C4694EA13.80507%40intefo.ch%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000152.html">
+   <LINK REL="Next"  HREF="000154.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] socketcan c_can</H1>
+    <B>simon.kallweit at intefo.ch</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20socketcan%20c_can&In-Reply-To=%3C4694EA13.80507%40intefo.ch%3E"
+       TITLE="[Socketcan-users] socketcan c_can">simon.kallweit at intefo.ch
+       </A><BR>
+    <I>Wed Jul 11 16:32:51 CEST 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000152.html">[Socketcan-users] socketcan c_can
+</A></li>
+        <LI>Next message: <A HREF="000154.html">[Socketcan-users] socketcan c_can next try
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#153">[ date ]</a>
+              <a href="thread.html#153">[ thread ]</a>
+              <a href="subject.html#153">[ subject ]</a>
+              <a href="author.html#153">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Marc Kleine-Budde wrote:
+&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">simon.kallweit at intefo.ch</A> wrote:
+</I>&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> +static struct ccan_dev *cdevs[NUM_CDEVS];
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> why do you need a global var here?
+</I>&gt;<i>
+</I>&gt;&gt;<i> because as i understand there is only one platform_device structure 
+</I>&gt;&gt;<i> per device. as the hynix chip comes with two c_can ip's i needed some 
+</I>&gt;&gt;<i> way to 
+</I>&gt;<i>
+</I>&gt;<i> right
+</I>&gt;<i>
+</I>&gt;&gt;<i> store the c_can device pointers. of course i could dynamically 
+</I>&gt;&gt;<i> allocate a structure to store this data and assign it to the 
+</I>&gt;&gt;<i> platform_device. would this be the preferred way?, or is there 
+</I>&gt;&gt;<i> another simple/correct way to use several chips with a single 
+</I>&gt;&gt;<i> platform_devices?
+</I>&gt;<i>
+</I>&gt;<i> The concept of the drivermodel is to have exactly one 
+</I>&gt;<i> (platform_)device per hardware. And only one driver. So in your case 
+</I>&gt;<i> of 2 can devices (which is a special case of &quot;any&quot; number of can 
+</I>&gt;<i> devices) you just have to add 2 platform_devices to you board specific 
+</I>&gt;<i> file in the kernel (along with the irq and mem resources).
+</I>&gt;<i>
+</I>&gt;<i> Have a look how the original drivers handles this, no usage of global 
+</I>&gt;<i> variables. The platform_driver.probe function is calles one per 
+</I>&gt;<i> platform drice which matches the driver.
+</I>ah great, i didn't know that. i'll change the implementation. thanks for 
+the input!
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000152.html">[Socketcan-users] socketcan c_can
+</A></li>
+	<LI>Next message: <A HREF="000154.html">[Socketcan-users] socketcan c_can next try
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#153">[ date ]</a>
+              <a href="thread.html#153">[ thread ]</a>
+              <a href="subject.html#153">[ subject ]</a>
+              <a href="author.html#153">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

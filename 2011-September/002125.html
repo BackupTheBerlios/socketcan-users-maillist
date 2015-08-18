@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-September/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3CCAAZiaZePv4h%3DROnjTWr44yNhOtXyo5pszouaa6%3DsOjso9QuWMw%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="002124.html">
+   <LINK REL="Next"  HREF="002126.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR</H1>
+    <B>Francois Bouchard</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20rapid%20socket%20Write%20%26%20read%20crash%20on%20M54418TWR&In-Reply-To=%3CCAAZiaZePv4h%3DROnjTWr44yNhOtXyo5pszouaa6%3DsOjso9QuWMw%40mail.gmail.com%3E"
+       TITLE="[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR">francois.bouchard at mpbc.ca
+       </A><BR>
+    <I>Wed Sep  7 18:28:19 CEST 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="002124.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+        <LI>Next message: <A HREF="002126.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2125">[ date ]</a>
+              <a href="thread.html#2125">[ thread ]</a>
+              <a href="subject.html#2125">[ subject ]</a>
+              <a href="author.html#2125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+Attempting to create heavy traffic with M54418TWR CAN interface, S socket is
+used to write and read consecutively in a while loop.  Therefor I have no
+problem creating the socket and communicating between the can1 I/F and a
+second device, but the program reset by itself after a while.
+
+
+CODE:
+*while(numofmsg)
+{
+        nbytes = write(can_socket, &amp;tx_frame, sizeof(struct can_frame));
+        numofmsg--;
+
+        // recv()
+        nbytes = recv(can_socket, &amp;rx_frame, sizeof(struct can_frame),
+MSG_DONTWAIT );
+
+        // ...
+}
+*
+
+Is there some coding rules or prevention when doing something like that?
+It is also hardware dependent, so I should check that also.
+
+target: ( Freescale 54418TWR );
+Linux version 2.6.29 (gcc version 4.4.1 (Sourcery G++ Lite 4.4-54) ) #49 Wed
+Aug 10 15:50:50 EDT 2011
+
+thanks,
+
+Francois
+
+
+
+
+
+
+P.S.
+socket creation code
+    // create socket
+    if ((can_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW)) &lt; 0) {
+        int err_num = errno;
+        if(verbose)fprintf(stderr, &quot;CAN_Open_Socket() socket() %d&quot;,
+err_num);
+        return -1; // error socket
+    }
+
+
+    // bind to specific address
+    strcpy(ifr.ifr_name, &quot;can1&quot; );
+    ioctl(can_socket, SIOCGIFINDEX, &amp;ifr);
+
+    addr.can_family = AF_CAN;
+    addr.can_ifindex = ifr.ifr_ifindex;
+
+    // bind
+    if (bind(can_socket, (struct sockaddr*) &amp;addr, sizeof(addr)) != 0) {
+        int err_num  = errno;
+        if(verbose)fprintf(stderr,&quot;CAN_Open_Socket() bind() %d&quot;, err_num);
+        return -1; // error socket
+    }
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/05f00d2f/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20110907/05f00d2f/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="002124.html">[Socketcan-users] Using sja1000_isa on a 64b system
+</A></li>
+	<LI>Next message: <A HREF="002126.html">[Socketcan-users] rapid socket Write &amp; read crash on M54418TWR
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#2125">[ date ]</a>
+              <a href="thread.html#2125">[ thread ]</a>
+              <a href="subject.html#2125">[ subject ]</a>
+              <a href="author.html#2125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

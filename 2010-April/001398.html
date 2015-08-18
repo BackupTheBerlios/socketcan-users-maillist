@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] canconfig
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2010-April/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canconfig&In-Reply-To=%3C20100430170642.cc1ba677%40mail.cadlink.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001397.html">
+   <LINK REL="Next"  HREF="001399.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] canconfig</H1>
+    <B>Nick Droogh</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20canconfig&In-Reply-To=%3C20100430170642.cc1ba677%40mail.cadlink.com%3E"
+       TITLE="[Socketcan-users] canconfig">ndroogh at cadlink.com
+       </A><BR>
+    <I>Fri Apr 30 19:06:42 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001397.html">[Socketcan-users] canconfig
+</A></li>
+        <LI>Next message: <A HREF="001399.html">[Socketcan-users] canconfig
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1398">[ date ]</a>
+              <a href="thread.html#1398">[ thread ]</a>
+              <a href="subject.html#1398">[ subject ]</a>
+              <a href="author.html#1398">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Wolfgang,
+
+I got the latest GIT version of iproute.  I still get a segmentation fault.  I traced it to a function called get_link_kind in iplink.c.  It failed trying to open 
+/usr/lib/ip/link_can.so.   Is this a valid library?  If it is,  where do I get it or generate it?  Or is this the wrong place to ask these questions?
+
+Thanks,
+
+Nick
+  _____  
+
+From: Wolfgang Grandegger [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">wg at grandegger.com</A>]
+To: Nick Droogh [mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">ndroogh at cadlink.com</A>]
+Cc: <A HREF="https://lists.berlios.de/mailman/listinfo/socketcan-users">socketcan-users at lists.berlios.de</A>
+Sent: Fri, 30 Apr 2010 10:13:40 -0400
+Subject: Re: [Socketcan-users] canconfig
+
+Nick Droogh wrote:
+  &gt; Hi Wolfgang,
+  &gt; 
+  &gt; I downloaded iproute2-2.6.33.tar.bz2.  I built it with my toolset (DENX).  When I issue 
+  &gt; 
+  &gt;  ip link set can0 up type can bitrate 500000 berr-reporting on
+  &gt; 
+  &gt; I get a segmentation fault.
+  &gt; 
+  &gt; would you or anyone else have a working ip for the mpc5200?  I would like to get the interface working for testing and figure out the building of this tool later.
+  
+  Please retry with the git version of iproute2. Also, the MSCAN of the
+  MPC5200 does not support &quot;berr-reporting&quot;.
+  
+  Wolfgang.
+    
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/socketcan-users/attachments/20100430/0f349a33/attachment.html">https://lists.berlios.de/pipermail/socketcan-users/attachments/20100430/0f349a33/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001397.html">[Socketcan-users] canconfig
+</A></li>
+	<LI>Next message: <A HREF="001399.html">[Socketcan-users] canconfig
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1398">[ date ]</a>
+              <a href="thread.html#1398">[ thread ]</a>
+              <a href="subject.html#1398">[ subject ]</a>
+              <a href="author.html#1398">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>

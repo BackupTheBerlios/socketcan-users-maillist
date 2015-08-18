@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Socketcan-users] SLCAN serial baudrate...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/socketcan-users/2011-January/index.html" >
+   <LINK REL="made" HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C20110108071954.65820%40gmx.net%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="001705.html">
+   <LINK REL="Next"  HREF="001707.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Socketcan-users] SLCAN serial baudrate...</H1>
+    <B>Thorsten Godau</B> 
+    <A HREF="mailto:socketcan-users%40lists.berlios.de?Subject=Re%3A%20%5BSocketcan-users%5D%20SLCAN%20serial%20baudrate...&In-Reply-To=%3C20110108071954.65820%40gmx.net%3E"
+       TITLE="[Socketcan-users] SLCAN serial baudrate...">dl9sec at gmx.net
+       </A><BR>
+    <I>Sat Jan  8 08:19:54 CET 2011</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="001705.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+        <LI>Next message: <A HREF="001707.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1706">[ date ]</a>
+              <a href="thread.html#1706">[ thread ]</a>
+              <a href="subject.html#1706">[ subject ]</a>
+              <a href="author.html#1706">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Oliver,
+
+thanks for the reply.
+
+&gt;<i> FYI: The slcan driver just hit the mainline kernel for 2.6.38.
+</I>
+Using the Debian &quot;squeeze&quot; kernel 2.6.32-5 actually...
+
+&gt;<i> &gt; How is the can baudrate configured with slcand (S0..8)? This
+</I>&gt;<i> &gt; configuration possibility seems also be omitted now...
+</I>&gt;<i> 
+</I>&gt;<i> Was it ever in slcand ?
+</I>
+Yes it was :-)
+There was a patch (slcand_sl20100408.patch) which alowed to set
+the CAN baudrate with slcand (don't know who released this patch
+but it worked great ;-)) ).
+
+&gt;<i> AFAIK the baudrate setting (S0..8) is only available in
+</I>&gt;<i> slcan_attach.c ...
+</I>
+Now it is, yes.
+
+&gt;<i> this S0..8 has nothing to do with the serial baudrate of the host
+</I>&gt;<i> system.
+</I>
+I am aware of that. Actually i have to call stty to set the serial
+baudrate of ttyUSB0 to 460800 Bd, then call slcan_attach to set the
+can baudrate, then call slcand and bring the interface up with
+ifconfig.
+
+&gt;<i> I think it's just for setting the baudrate on the adapters side to
+</I>&gt;<i> persist the setting for the next power-on cycle.
+</I>
+Hmm, at the moment i am a bit confused with my SLCAN-IF. Seems that
+the CAN baudrate isn't set correctly with the slcan_attach...
+
+Regards, Thorsten
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="001705.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+	<LI>Next message: <A HREF="001707.html">[Socketcan-users] SLCAN serial baudrate...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#1706">[ date ]</a>
+              <a href="thread.html#1706">[ thread ]</a>
+              <a href="subject.html#1706">[ subject ]</a>
+              <a href="author.html#1706">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/socketcan-users">More information about the Socketcan-users
+mailing list</a><br>
+</body></html>
